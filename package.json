@@ -4,12 +4,9 @@
     "start": "start-storybook -p 9001 -c .storybook",
     "bootstrap": "lerna bootstrap --hoist",
     "test": "lerna run test --stream",
-    "build": "lerna run build --toposort --stream --since master",
-    "build:all": "lerna run build --toposort --stream",
-    "publish": "yarn test && yarn build && lerna publish"
-  },
-  "publishConfig": {
-    "access": "public"
+    "build": "lerna run build --parallel --since master",
+    "build:all": "lerna run build --parallel",
+    "release": "yarn test && yarn build:all && lerna publish"
   },
   "license": "MIT",
   "dependencies": {
@@ -41,7 +38,6 @@
     "postcss-loader": "^2.1.5",
     "prettier": "^1.13.5",
     "pretty-bytes": "^5.1.0",
-    "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "style-loader": "^0.21.0",
     "rollup": "^0.63.4",

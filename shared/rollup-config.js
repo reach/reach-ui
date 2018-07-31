@@ -24,7 +24,7 @@ const config = {
     }),
     resolve(),
     commonjs({
-      include: /node_modules/
+      include: ["node_modules/**", `${__dirname}/../packages/**`]
     }),
     replace({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)

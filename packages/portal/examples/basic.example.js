@@ -1,5 +1,5 @@
 import React from "react";
-import Portal from "../index";
+import Portal from "../src/index";
 
 export let name = "Basic";
 

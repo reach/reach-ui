@@ -1,5 +1,5 @@
 import React from "react";
-import Rect from "../index";
+import Rect from "../src/index";
 
 export let name = "Pin element to another";
 

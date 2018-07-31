@@ -1,18 +1,19 @@
 {
   "name": "@reach/portal",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Declarative portals for React",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\""
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^1.0.0"
+    "@reach/component-component": "^0.0.0"
   },
   "peerDependencies": {
     "react": "15.x || 16.x",
     "react-dom": "15.x || 16.x"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }

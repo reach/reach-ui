@@ -31,7 +31,7 @@ yarn test         # runs tests in all packages
 
 yarn build        # builds all packages
 
-yarn publish      # publishes changed packages
+yarn release      # publishes changed packages
 
 yarn site:start   # starts the website dev server
 

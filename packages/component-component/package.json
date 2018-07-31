@@ -1,7 +1,7 @@
 {
   "name": "@reach/component-component",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Declarative React Component Definitions",
   "main": "index.js",
   "scripts": {
     "test": "jest",

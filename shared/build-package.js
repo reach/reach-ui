@@ -26,17 +26,19 @@ exec(`${babel} src -d . --ignore *.test.js`, {
   BABEL_ENV: "cjs"
 });
 
-console.log("\nBuilding UMD ...");
-exec(`${rollup} -c ${rollupConfig} -f umd -o umd/reach-${pkg}.js`, {
-  BABEL_ENV: "umd",
-  NODE_ENV: "development"
-});
+// Not building UMD for now...
 
-console.log("\nBuilding UMD min.js ...");
-exec(`${rollup} -c ${rollupConfig} -f umd -o umd/reach-${pkg}.min.js`, {
-  BABEL_ENV: "umd",
-  NODE_ENV: "production"
-});
+// console.log("\nBuilding UMD ...");
+// exec(`${rollup} -c ${rollupConfig} -f umd -o umd/reach-${pkg}.js`, {
+//   BABEL_ENV: "umd",
+//   NODE_ENV: "development"
+// });
 
-const size = gzipSize.sync(fs.readFileSync(`umd/reach-${pkg}.min.js`));
-console.log(`\n${pkg} UMD build is %s`, prettyBytes(size));
+// console.log("\nBuilding UMD min.js ...");
+// exec(`${rollup} -c ${rollupConfig} -f umd -o umd/reach-${pkg}.min.js`, {
+//   BABEL_ENV: "umd",
+//   NODE_ENV: "production"
+// });
+
+// const size = gzipSize.sync(fs.readFileSync(`umd/reach-${pkg}.min.js`));
+// console.log(`\n${pkg} UMD build is %s`, prettyBytes(size));

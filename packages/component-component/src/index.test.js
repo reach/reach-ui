@@ -12,7 +12,11 @@ let snapshot = element => {
 
 describe("rendering", () => {
   it("renders without figuritively exploding", () => {
-    snapshot(<Component>Heyyyooooo</Component>);
+    snapshot(
+      <Component>
+        <div>Heyyyooooo</div>
+      </Component>
+    );
   });
   // it("prefers `render` over `children`");
   // it("renders without children");
