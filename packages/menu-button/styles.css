@@ -1,0 +1,37 @@
+reach-menu {
+  font-family: sans-serif;
+  display: block;
+  position: absolute;
+}
+
+reach-menu [role="menu"] {
+  white-space: nowrap;
+  border: solid 1px #ccc;
+  background: hsla(0, 100%, 100%, 0.95);
+  outline: none;
+  list-style-type: none;
+  padding: 10px 0;
+  margin: 0;
+  font-size: 85%;
+  box-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.15);
+}
+
+reach-menu [role="menuitem"] {
+  /* li */
+  cursor: pointer;
+
+  /* a */
+  display: block;
+  color: inherit;
+  font: inherit;
+  text-decoration: initial;
+
+  /* both */
+  padding: 5px 20px;
+}
+
+reach-menu [data-reach-selected] {
+  background: hsl(211, 81%, 36%);
+  color: white;
+  outline: none;
+}

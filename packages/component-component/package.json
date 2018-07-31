@@ -1,0 +1,23 @@
+{
+  "name": "@reach/component-component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
+  },
+  "devDependencies": {
+    "jest": "^23.4.2",
+    "react-test-renderer": "^16.4.1"
+  },
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
+  "jest": {
+    "testRegex": ".+\\.test\\.js$",
+    "testURL": "http://localhost"
+  }
+}

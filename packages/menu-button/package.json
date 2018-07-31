@@ -1,0 +1,22 @@
+{
+  "name": "@reach/menu-button",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\""
+  },
+  "dependencies": {
+    "@reach/router": "^1.1.0",
+    "@reach/rect": "^1.0.0",
+    "@reach/component-component": "^1.0.0",
+    "@reach/window-size": "^1.0.0",
+    "@reach/portal": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
+  },
+  "author": "",
+  "license": "ISC"
+}

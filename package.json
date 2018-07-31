@@ -1,0 +1,35 @@
+{
+  "scripts": {
+    "start": "start-storybook -p 9001 -c .storybook",
+    "bootstrap": "lerna bootstrap --hoist",
+    "test": "lerna run test --stream"
+  },
+  "dependencies": {
+    "@storybook/react": "^3.4.7",
+    "autoprefixer": "^8.6.2",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.14",
+    "css-loader": "^0.28.11",
+    "eslint": "4.10.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-loader": "1.9.0",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-react": "7.4.0",
+    "lerna": "^2.11.0",
+    "postcss-flexbugs-fixes": "^3.3.1",
+    "postcss-loader": "^2.1.5",
+    "prettier": "^1.13.5",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "style-loader": "^0.21.0"
+  },
+  "prettier": {}
+}

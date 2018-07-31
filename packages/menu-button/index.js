@@ -1,0 +1,365 @@
+import React, { createContext } from "react";
+import Portal from "@reach/portal";
+import { Link } from "@reach/router";
+import Rect from "@reach/rect";
+import WindowSize from "@reach/window-size";
+import Component from "@reach/component-component";
+
+let { Provider, Consumer } = createContext();
+
+let wrapEvent = (handler, cb) => event => {
+  handler && handler(event);
+  if (!event.defaultPrevented) {
+    return cb(event);
+  }
+};
+
+let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
+  if (!state.isOpen && prevState.isOpen) {
+    return !refs.menu.contains(document.activeElement);
+  }
+  return false;
+};
+
+let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
+  if (state.isOpen && !prevState.isOpen) {
+    if (state.selectionIndex !== -1) {
+      refs.items[state.selectionIndex].focus();
+    } else {
+      refs.menu.focus();
+    }
+  } else if (!state.isOpen && prevState.isOpen) {
+    if (!appManagedFocus) {
+      refs.button.focus();
+    }
+  } else if (state.selectionIndex !== prevState.selectionIndex) {
+    refs.items[state.selectionIndex].focus();
+  }
+};
+
+let openAtFirstItem = state => ({ isOpen: true, selectionIndex: 0 });
+
+let close = state => ({
+  isOpen: false,
+  selectionIndex: -1,
+  closingWithClick: false
+});
+
+let selectItemAtIndex = index => state => ({
+  selectionIndex: index
+});
+
+let genId = prefix =>
+  `${prefix}-${Math.random()
+    .toString(32)
+    .substr(2, 8)}`;
+
+////////////////////////////////////////////////////////////////////////
+let getMenuRefs = () => ({
+  button: null,
+  menu: null,
+  items: []
+});
+
+let getInitialMenuState = () => ({
+  isOpen: false,
+  buttonRect: undefined,
+  selectionIndex: -1,
+  closingWithClick: false,
+  menuId: genId("menu"),
+  buttonId: genId("button")
+});
+
+let Menu = ({ children }) => (
+  <Component
+    getRefs={getMenuRefs}
+    getInitialState={getInitialMenuState}
+    didUpdate={manageFocusOnUpdate}
+    getSnapshotBeforeUpdate={checkIfAppManagedFocus}
+  >
+    {context => <Provider value={context}>{children}</Provider>}
+  </Component>
+);
+
+////////////////////////////////////////////////////////////////////////
+let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
+  <Consumer>
+    {({ refs, state, setState }) => (
+      <Rect
+        observe={state.isOpen}
+        onChange={buttonRect => setState({ buttonRect })}
+      >
+        {({ ref: rectRef }) => (
+          <button
+            id={state.buttonId}
+            aria-haspopup="true"
+            aria-controls={state.menuId}
+            aria-expanded={state.isOpen}
+            ref={node => {
+              rectRef(node);
+              ref && ref(node);
+              refs.button = node;
+            }}
+            onMouseDown={event => {
+              if (state.isOpen) {
+                setState({ closingWithClick: true });
+              }
+            }}
+            onClick={wrapEvent(onClick, event => {
+              if (state.isOpen) {
+                setState(close);
+              } else {
+                setState(openAtFirstItem);
+              }
+            })}
+            onKeyDown={wrapEvent(onKeyDown, event => {
+              if (event.key === "ArrowDown") {
+                event.preventDefault(); // prevent scroll
+                setState(openAtFirstItem);
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault(); // prevent scroll
+                setState(openAtFirstItem);
+              }
+            })}
+            {...props}
+          />
+        )}
+      </Rect>
+    )}
+  </Consumer>
+));
+
+////////////////////////////////////////////////////////////////////////
+let MenuItems = props => (
+  <Consumer>
+    {({ refs, state, setState }) =>
+      state.isOpen && (
+        <Portal>
+          <WindowSize>
+            {() => (
+              <Rect>
+                {({ rect: menuRect, ref: menuRef }) => (
+                  <reach-menu
+                    ref={menuRef}
+                    style={getStyles(state.buttonRect, menuRect)}
+                  >
+                    <MenuItemsList
+                      {...props}
+                      setState={setState}
+                      state={state}
+                      refs={refs}
+                    />
+                  </reach-menu>
+                )}
+              </Rect>
+            )}
+          </WindowSize>
+        </Portal>
+      )
+    }
+  </Consumer>
+);
+
+let MenuItemsList = React.forwardRef(
+  ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => (
+    <ul
+      {...rest}
+      role="menu"
+      id={state.menuId}
+      aria-labelledby={state.buttonId}
+      tabIndex="-1"
+      ref={node => {
+        refs.menu = node;
+        ref && ref(node);
+      }}
+      onBlur={event => {
+        if (
+          !state.closingWithClick &&
+          !refs.menu.contains(event.relatedTarget)
+        ) {
+          setState(close);
+        }
+      }}
+      onKeyDown={wrapEvent(onKeyDown, event => {
+        if (event.key === "Escape") {
+          setState(close);
+        } else if (event.key === "ArrowDown") {
+          event.preventDefault(); // prevent window scroll
+          let nextIndex = state.selectionIndex + 1;
+          if (nextIndex !== React.Children.count(children)) {
+            setState({ selectionIndex: nextIndex });
+          }
+        } else if (event.key === "ArrowUp") {
+          event.preventDefault(); // prevent window scroll
+          let nextIndex = state.selectionIndex - 1;
+          if (nextIndex !== -1) {
+            setState({ selectionIndex: nextIndex });
+          }
+        } else if (event.key === "Tab") {
+          event.preventDefault(); // prevent leaving
+        }
+      })}
+    >
+      {React.Children.map(children, (child, index) => {
+        if (child.type === MenuItem || child.type === MenuLink) {
+          return React.cloneElement(child, {
+            setState,
+            state,
+            index,
+            _ref: node => (refs.items[index] = node)
+          });
+        } else {
+          return child;
+        }
+      })}
+    </ul>
+  )
+);
+
+////////////////////////////////////////////////////////////////////////
+let MenuItem = React.forwardRef(
+  (
+    {
+      onSelect,
+      onClick,
+      role = "menuitem",
+      state,
+      setState,
+      index,
+      onKeyDown,
+      onMouseMove,
+      _ref,
+      ...rest
+    },
+    ref
+  ) => {
+    let isSelected = index === state.selectionIndex;
+    let select = () => {
+      onSelect();
+      setState(close);
+    };
+    return (
+      <li
+        {...rest}
+        ref={node => {
+          ref && ref(node);
+          _ref(node);
+        }}
+        role={role}
+        tabIndex="-1"
+        data-reach-selected={
+          role === "menuitem" && isSelected ? true : undefined
+        }
+        onClick={wrapEvent(onClick, event => {
+          select();
+        })}
+        onKeyDown={wrapEvent(onKeyDown, event => {
+          if (event.key === "Enter") {
+            // prevent the button from being "clicked" by
+            // this "Enter" keydown
+            event.preventDefault();
+            select();
+          }
+        })}
+        onMouseMove={wrapEvent(onMouseMove, event => {
+          if (!isSelected) {
+            setState(selectItemAtIndex(index));
+          }
+        })}
+      />
+    );
+  }
+);
+
+MenuItem.propTypes = {
+  onSelect: () => {}
+};
+
+let k = () => {};
+
+////////////////////////////////////////////////////////////////////////
+let MenuLink = React.forwardRef(
+  (
+    {
+      onKeyDown,
+      onClick,
+      component: Comp = Link,
+      style,
+      setState,
+      state,
+      index,
+      _ref,
+      ...props
+    },
+    ref
+  ) => (
+    <MenuItem
+      role="none"
+      state={state}
+      setState={setState}
+      index={index}
+      onSelect={k}
+      _ref={k}
+    >
+      <Comp
+        role="menuitem"
+        tabIndex="-1"
+        data-reach-selected={index === state.selectionIndex ? true : undefined}
+        onClick={wrapEvent(onClick, event => {
+          setState(close);
+        })}
+        onKeyDown={wrapEvent(onKeyDown, event => {
+          if (event.key === "Enter") {
+            // prevent MenuItem's preventDefault from firing,
+            // allowing this link to work w/ the keyboard
+            event.stopPropagation();
+          }
+        })}
+        ref={node => {
+          _ref(node);
+          ref && ref(node);
+        }}
+        style={{ ...style }}
+        {...props}
+      />
+    </MenuItem>
+  )
+);
+
+// TODO: Deal with collisions on the bottom, though not as important
+// since focus causes a scroll and will then scroll the page down
+// to the item.
+let getStyles = (buttonRect, menuRect) => {
+  let haventMeasuredButtonYet = !buttonRect;
+  if (haventMeasuredButtonYet) {
+    return { opacity: 0 };
+  }
+
+  let haventMeasuredMenuYet = !menuRect;
+  let styles = {
+    left: `${buttonRect.left + window.scrollX}px`,
+    top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
+  };
+
+  if (haventMeasuredMenuYet) {
+    return {
+      ...styles,
+      opacity: 0
+    };
+  }
+
+  let collisionRight = window.innerWidth < buttonRect.left + menuRect.width;
+  // let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
+
+  if (collisionRight) {
+    return {
+      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
+      top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
+    };
+    // } else if (collisionBottom) {
+  } else {
+    return styles;
+  }
+};
+
+export { Menu, MenuItems, MenuButton, MenuLink, MenuItem };
