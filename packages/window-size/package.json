@@ -15,5 +15,12 @@
     "react-dom": "15.x || 16.x"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
 }
