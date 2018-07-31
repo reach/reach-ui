@@ -7,25 +7,17 @@
     "test": "jest",
     "build": "node ../../shared/build-package"
   },
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
   "peerDependencies": {
     "react": "15.x || 16.x",
     "react-dom": "15.x || 16.x"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "6",
     "jest": "^23.4.2",
     "react": "^16.4.1",
-    "react-test-renderer": "^16.4.1",
-    "rollup": "^0.63.4",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.4",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^4.0.0"
+    "react-test-renderer": "^16.4.1"
   },
-  "author": "Ryan Florence <@ryanflorence>",
-  "license": "MIT",
   "jest": {
     "testRegex": ".+\\.test\\.js$",
     "testURL": "http://localhost"

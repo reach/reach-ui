@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuItems, MenuButton, MenuItem } from "../index";
+import { Menu, MenuItems, MenuButton, MenuItem } from "../src/index";
 
 export let name = "Basic";
 

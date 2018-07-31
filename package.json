@@ -1,13 +1,23 @@
 {
+  "name": "reach-ui",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
     "bootstrap": "lerna bootstrap --hoist",
     "test": "lerna run test --stream",
-    "build": "lerna run build --stream"
+    "build": "lerna run build --toposort --stream --since master",
+    "build:all": "lerna run build --toposort --stream",
+    "publish": "yarn test && yarn build && lerna publish"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
   "dependencies": {
     "@storybook/react": "^3.4.7",
     "autoprefixer": "^8.6.2",
+    "jest": "^23.4.2",
+    "react": "^16.4.1",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "7.2.3",
     "babel-plugin-dev-expression": "^0.2.1",
@@ -33,7 +43,13 @@
     "pretty-bytes": "^5.1.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "style-loader": "^0.21.0"
+    "style-loader": "^0.21.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^4.0.0"
   },
   "prettier": {}
 }

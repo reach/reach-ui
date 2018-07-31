@@ -2,9 +2,12 @@
   "name": "@reach/menu-button",
   "version": "1.0.0",
   "description": "",
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\""
+    "test": "jest",
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
     "@reach/router": "^1.1.0",
@@ -17,6 +20,13 @@
     "react": "15.x || 16.x",
     "react-dom": "15.x || 16.x"
   },
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "jest": "^23.4.2",
+    "react": "^16.4.1",
+    "react-test-renderer": "^16.4.1"
+  },
+  "jest": {
+    "testRegex": ".+\\.test\\.js$",
+    "testURL": "http://localhost"
+  }
 }

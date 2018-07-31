@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuItems, MenuButton, MenuLink, MenuItem } from "../index";
+import { Menu, MenuItems, MenuButton, MenuLink, MenuItem } from "../src/index";
 import {
   Router,
   Link,
