@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Measure the window size in React",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^0.0.1"
+    "@reach/component-component": "^0.0.2"
   },
   "peerDependencies": {
     "react": "15.x || 16.x",
