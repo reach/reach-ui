@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import Component from "../index";
+import Component from "../src/index";
 
 export let name = "Kitchen Sink Todo List";
 

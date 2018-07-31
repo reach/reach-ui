@@ -2,7 +2,8 @@
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
     "bootstrap": "lerna bootstrap --hoist",
-    "test": "lerna run test --stream"
+    "test": "lerna run test --stream",
+    "build": "lerna run build --stream"
   },
   "dependencies": {
     "@storybook/react": "^3.4.7",
@@ -10,6 +11,7 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "7.2.3",
     "babel-plugin-dev-expression": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
@@ -23,10 +25,13 @@
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
+    "gzip-size": "^5.0.0",
+    "inflection": "^1.12.0",
     "lerna": "^2.11.0",
     "postcss-flexbugs-fixes": "^3.3.1",
     "postcss-loader": "^2.1.5",
     "prettier": "^1.13.5",
+    "pretty-bytes": "^5.1.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "style-loader": "^0.21.0"

@@ -1,4 +1,4 @@
 {
-  "presets": [ "../../babel-preset" ]
+  "presets": [ "../../shared/babel-preset" ]
 }
 

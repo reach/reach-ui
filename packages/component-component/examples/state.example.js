@@ -1,5 +1,5 @@
 import React from "react";
-import Component from "../index";
+import Component from "../src/index";
 
 export let name = "Basic State";
 
