@@ -11,7 +11,7 @@ let pkg = path.basename(process.env.PWD);
 const config = {
   input: "src/index.js",
   output: {
-    name: "Reach" + inflection.classify(pkg),
+    name: `@reach/${pkg}`,
     globals: {
       react: "React",
       "react-dom": "ReactDOM"
