@@ -1,0 +1,15 @@
+{
+  "name": "x0-configuration-example",
+  "private": true,
+  "scripts": {
+    "start": "x0 pages -o",
+    "build": "x0 build pages"
+  },
+  "dependencies": {
+    "@compositor/x0": "^5.0.0"
+  },
+  "x0": {
+    "title": "x0 Configuration Example",
+    "description": "Just a simple example"
+  }
+}

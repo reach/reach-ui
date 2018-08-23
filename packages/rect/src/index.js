@@ -1,11 +1,16 @@
 import React from "react";
 import Component from "@reach/component-component";
 import observeRect from "@reach/observe-rect";
+import { func, bool } from "prop-types";
 
 let render = ({ refs, props: { children }, state: { rect } }) =>
   children({ ref: node => (refs.node = node), rect });
 
 let didMount = ({ setState, refs, props }) => {
+  if (!refs.node) {
+    console.warn("You need to place the ref");
+    return;
+  }
   refs.observer = observeRect(refs.node, rect => {
     props.onChange && props.onChange(rect);
     setState({ rect });
@@ -45,8 +50,9 @@ let Rect = props => (
 );
 
 Rect.propTypes = {
-  onChange: () => {},
-  observe: () => {}
+  children: func,
+  observe: bool,
+  onChange: func
 };
 
 Rect.defaultProps = {

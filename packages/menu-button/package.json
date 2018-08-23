@@ -14,7 +14,8 @@
     "@reach/portal": "^0.0.2",
     "@reach/rect": "^0.0.2",
     "@reach/router": "^1.1.0",
-    "@reach/window-size": "^0.0.2"
+    "@reach/window-size": "^0.0.2",
+    "warning": "^4.0.2"
   },
   "peerDependencies": {
     "react": "15.x || 16.x",

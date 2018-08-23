@@ -1,0 +1,12 @@
+{
+  "name": "x0-jsx-example",
+  "private": true,
+  "scripts": {
+    "start": "x0 pages",
+    "build": "x0 build pages"
+  },
+  "dependencies": {
+    "@compositor/x0": "^5.0.0",
+    "rebass": "^2.0.0-2"
+  }
+}

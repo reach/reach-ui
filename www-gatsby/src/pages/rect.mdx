@@ -1,0 +1,74 @@
+# Rect
+
+Calls back with the measurements of a dom node (aka. bounding client rect). See also [Element.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
+
+```.jsx
+<Rect>
+  {({ rect, ref }) => console.log(rect) || (
+    <div>
+      <pre>{JSON.stringify(rect, null, 2)}</pre>
+      <div
+        ref={ref}
+        contentEditable
+        style={{
+          display: 'inline-block',
+          padding: 10,
+          border: 'solid 1px'
+        }}
+        dangerouslySetInnerHTML={{
+          __html: "Edit this to change the size!" }
+        }
+      />
+    </div>
+  )}
+</Rect>
+```
+
+## Installation
+
+```bash
+npm install @reach/rect
+# or
+yarn add @reach/rect
+```
+
+And then import it:
+
+```js
+import Rect from "@reach/rect";
+```
+
+## Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [children](#children)  | func   |
+| [observe](#observe)    | bool   |
+| [onChange](#onchange)  | func   |
+
+### children
+
+*Type*: `func: ({ ref, rect }) => undefined`
+
+A function that calls back to you with a `ref` to place on an element and the `rect` measurements of the dom node.
+
+
+**Note**: On the first render `rect` will be `undefined` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
+
+### observe
+
+*Type*: `bool` default `true`
+
+Tells `Rect` to observe the position of the node or not. While observing, the `children` render prop may call back very quickly (especially while scrolling) so it can be important for performance to avoid observing when you don't need to.
+
+This is typically used for elements that pop over other elements (like a dropdown menu), so you don't need to observe all the time, only when the popup is active.
+
+Pass `true` to observe, `false` to ignore.
+
+
+### onChange
+
+*Type*: `func: (rect) => undefined`
+
+Calls back whenever the `rect` of the element changes.
+

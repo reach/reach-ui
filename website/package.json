@@ -1,16 +1,18 @@
 {
-  "name": "website",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
-  },
+  "name": "website-x0",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "vendor/x0/cli.js docs",
+    "build": "vendor/x0/cli.js build docs",
+    "deploy": "now --static dist"
+  },
+  "dependencies": {
+    "docz": "^0.9.6",
+    "styled-components": "^3.4.2"
+  },
+  "x0": {
+    "title": "Reach UI"
   }
 }

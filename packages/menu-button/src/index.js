@@ -4,6 +4,8 @@ import { Link } from "@reach/router";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
+import warning from "warning";
+import { node, func } from "prop-types";
 
 let { Provider, Consumer } = createContext();
 
@@ -24,7 +26,11 @@ let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
 let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   if (state.isOpen && !prevState.isOpen) {
     if (state.selectionIndex !== -1) {
-      refs.items[state.selectionIndex].focus();
+      // haven't measured the popover yet, give it a frame otherwise
+      // we'll scroll to the bottom of the page >.<
+      requestAnimationFrame(() => {
+        refs.items[state.selectionIndex].focus();
+      });
     } else {
       refs.menu.focus();
     }
@@ -70,16 +76,43 @@ let getInitialMenuState = () => ({
   buttonId: genId("button")
 });
 
+let checkIfStylesIncluded = () => {
+  warning(
+    parseInt(
+      window.getComputedStyle(document.body).getPropertyValue("--reach-menu"),
+      10
+    ) === 1,
+    `@reach/menu-button styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
+
+    import "@reach/menu-button/styles.css";
+
+Otherwise you'll need to include them some other way:
+
+    <link rel="stylesheet" type="text/css" href="node_modules/@reach/menu-button/styles.css" />
+
+For more information visit https://ui.reach.tech/styles.
+`
+  );
+
+  // only do this once
+  checkIfStylesIncluded = () => {};
+};
+
 let Menu = ({ children }) => (
   <Component
     getRefs={getMenuRefs}
     getInitialState={getInitialMenuState}
+    didMount={checkIfStylesIncluded}
     didUpdate={manageFocusOnUpdate}
     getSnapshotBeforeUpdate={checkIfAppManagedFocus}
   >
     {context => <Provider value={context}>{children}</Provider>}
   </Component>
 );
+
+Menu.propTypes = {
+  children: node
+};
 
 ////////////////////////////////////////////////////////////////////////
 let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
@@ -95,6 +128,7 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
             aria-haspopup="true"
             aria-controls={state.menuId}
             aria-expanded={state.isOpen}
+            type="button"
             ref={node => {
               rectRef(node);
               ref && ref(node);
@@ -129,8 +163,14 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
   </Consumer>
 ));
 
+MenuButton.propTypes = {
+  onClick: func,
+  onKeyDown: func
+};
+
 ////////////////////////////////////////////////////////////////////////
-let MenuItems = props => (
+
+let MenuList = props => (
   <Consumer>
     {({ refs, state, setState }) =>
       state.isOpen && (
@@ -139,17 +179,18 @@ let MenuItems = props => (
             {() => (
               <Rect>
                 {({ rect: menuRect, ref: menuRef }) => (
-                  <reach-menu
+                  <div
+                    data-reach-menu
                     ref={menuRef}
                     style={getStyles(state.buttonRect, menuRect)}
                   >
-                    <MenuItemsList
+                    <MenuListImpl
                       {...props}
                       setState={setState}
                       state={state}
                       refs={refs}
                     />
-                  </reach-menu>
+                  </div>
                 )}
               </Rect>
             )}
@@ -160,9 +201,14 @@ let MenuItems = props => (
   </Consumer>
 );
 
-let MenuItemsList = React.forwardRef(
+MenuList.propTypes = {
+  children: node
+};
+
+let MenuListImpl = React.forwardRef(
   ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => (
-    <ul
+    <div
+      data-reach-menu-list
       {...rest}
       role="menu"
       id={state.menuId}
@@ -212,7 +258,7 @@ let MenuItemsList = React.forwardRef(
           return child;
         }
       })}
-    </ul>
+    </div>
   )
 );
 
@@ -239,17 +285,16 @@ let MenuItem = React.forwardRef(
       setState(close);
     };
     return (
-      <li
+      <div
         {...rest}
         ref={node => {
           ref && ref(node);
           _ref(node);
         }}
+        data-reach-menu-item={role === "menuitem" ? true : undefined}
         role={role}
         tabIndex="-1"
-        data-reach-selected={
-          role === "menuitem" && isSelected ? true : undefined
-        }
+        data-selected={role === "menuitem" && isSelected ? true : undefined}
         onClick={wrapEvent(onClick, event => {
           select();
         })}
@@ -272,7 +317,7 @@ let MenuItem = React.forwardRef(
 );
 
 MenuItem.propTypes = {
-  onSelect: () => {}
+  onSelect: func
 };
 
 let k = () => {};
@@ -303,8 +348,9 @@ let MenuLink = React.forwardRef(
     >
       <Comp
         role="menuitem"
+        data-reach-menu-item
         tabIndex="-1"
-        data-reach-selected={index === state.selectionIndex ? true : undefined}
+        data-selected={index === state.selectionIndex ? true : undefined}
         onClick={wrapEvent(onClick, event => {
           setState(close);
         })}
@@ -336,6 +382,7 @@ let getStyles = (buttonRect, menuRect) => {
   }
 
   let haventMeasuredMenuYet = !menuRect;
+
   let styles = {
     left: `${buttonRect.left + window.scrollX}px`,
     top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
@@ -348,11 +395,16 @@ let getStyles = (buttonRect, menuRect) => {
     };
   }
 
+  if (buttonRect.width < 500) {
+    styles.minWidth = buttonRect.width;
+  }
+
   let collisionRight = window.innerWidth < buttonRect.left + menuRect.width;
   // let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
 
   if (collisionRight) {
     return {
+      ...styles,
       left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
       top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
     };
@@ -362,4 +414,4 @@ let getStyles = (buttonRect, menuRect) => {
   }
 };
 
-export { Menu, MenuItems, MenuButton, MenuLink, MenuItem };
+export { Menu, MenuList, MenuButton, MenuLink, MenuItem };

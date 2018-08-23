@@ -1,0 +1,351 @@
+# Component
+
+A dynamic version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
+
+```.jsx
+<Component initialState={{ hue: 0 }}>
+  {({ setState, state }) => (
+    <div style={{ textAlign: 'center'}}>
+      <button onClick={() => setState({ hue: Math.random() * 360 })}>
+        Generate Triad Colorscheme
+      </button>
+      <br/>
+      {[1, 2, 3].map(n => (
+        <div
+          key={n}
+          style={{
+            display: "inline-block",
+            margin: 10,
+            width: "2em",
+            height: "2em",
+            borderRadius: "50%",
+            background: `hsl(${state.hue + (n * 120)}, 50%, 50%)`,
+            transition: "background-color 200ms ease"
+          }}
+        />
+      ))}
+    </div>
+  )}
+</Component>
+```
+
+## Installation
+
+```bash
+npm install @reach/component-component
+# or
+yarn add @reach/component-component
+```
+
+And then import it:
+
+```js
+import Component from "@reach/component-component";
+```
+
+
+## Props
+
+| Prop                                                  | Type   |
+| ----------------------------------------------------- | ------ |
+| [initialState](#initialstate)                         | object |  |
+| [ getInitialState ](#getinitialstate)                 | func   |
+| [ refs ](#refs)                                       | object |
+| [ getRefs ](#getrefs)                                 | func   |
+| [ didMount ](#didmount)                               | func   |
+| [ didUpdate ](#didupdate)                             | func   |
+| [ willUnmount ](willunmount)                          | func   |
+| [ getSnapshotBeforeUpdate ](#getSnapshotBeforeUpdate) | func   |
+| [ shouldUpdate ](#shouldupdate)                       | func   |
+| [ render ](#render)                                   | func   |
+| [ children ](#children)                               | func   |
+
+### initialState
+
+*Type*: `object`
+
+An object of initial state.
+
+```.jsx
+<Component initialState={{ count: 10 }}>
+  {({ state }) => <div>Count is {state.count}</div>}
+</Component>
+```
+
+### getInitialState
+
+*Type*: `func: () => object`
+
+A function to return intitial state.  Use this when initial state is computed.
+
+In the following example, `Date.now()` will _not_ be called every time a parent component causes this component to re-render.
+
+```.jsx
+<Component getInitialState={() => ({ now: Date.now() })}>
+  {({ state }) => <div>Now is: {state.now}</div>}
+</Component>
+```
+
+However, in the next example, `Date.now()` would be called with every re-render, which is not what we want.
+
+```jsx
+// 😭
+<Component initialState={{ now: Date.now() }} />
+```
+
+### refs
+
+*Type*: `object`
+
+Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
+
+```.jsx
+<Component refs={{ input: null }}>
+  {({ refs }) => (
+    <form onSubmit={(event) => {
+      event.preventDefault()
+      alert(refs.input.value)
+    }}>
+      <input
+        ref={node => (refs.input = node)}
+        type="text"
+      /> <button type="submit">Go</button>
+    </form>
+  )}
+</Component>
+```
+
+### getRefs
+
+*Type*: `func: () => object`
+
+Use this when any of your refs are computed.
+
+```jsx
+<Component
+  getRefs={() => {
+    return {
+      input: React.createRef(),
+      popupContainer: document.createElement("div")
+    };
+  }}
+/>
+```
+
+### didMount
+
+*Type*: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
+
+Called when the component mounts.
+
+Perhaps you want some async data but don't want to make an entirely new component just for the lifecycles to get it:
+
+```.jsx
+<Component
+  initialState={{ gists: null }}
+  didMount={({ setState }) => {
+    fetch("https://api.github.com/gists?per_page=5")
+      .then(res => res.json())
+      .then(gists => setState({ gists }));
+  }}
+>
+  {({ state }) =>
+    state.gists ? (
+      <ul>
+        {state.gists.map(gist => (
+          <li key={gist.id}>
+            <a href={gist.html_url}>{gist.description || gist.id}</a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>Loading...</div>
+    )
+  }
+</Component>
+```
+
+See also [React Docs](https://reactjs.org/docs/react-component.html#componentdidmount).
+
+### didUpdate
+
+*Type*: `func: ({ state, props, refs, setState, forceUpdate, nextProps, nextState }) => undefined`
+
+Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
+
+### willUnmount
+
+*Type*: `func: ({ state, props, refs }) => undefined`
+
+Called when the component will be removed from the page. See [React Docs](https://reactjs.org/docs/react-component.html#componentwillunmount).
+
+### getSnapshotBeforeUpdate
+
+*Type*: `func: ({ state, props, refs, prevProps, prevState }) => any`
+
+See [React Docs](https://reactjs.org/docs/react-component.html#getsnapshotbeforeupdate).
+
+### shouldUpdate
+
+*Type*: `func: ({ state, props, nextProps, nextState }) => bool`
+
+Return `true` to signify the component needs an update, `false` if it does not. Useful for wrapping up expensive parts of your app without having to refactor to new components.
+
+For example: often you find just one part of your component is expensive to render, maybe because of a large SVG with a dynamic style or two. Rather than pulling the elements out of your component and putting them in a new `PureComponent`, you can inline a `shoudlUpdate` check:
+
+```.jsx
+<Component initialState={{ hue: 0 }}>
+  {({ setState, state }) => (
+    <div>
+      <button onClick={() => {
+        setState({ hue: Math.random() * 360 })
+      }}>
+        Change Color
+      </button>
+
+      <Component
+        hue={state.hue}
+        shouldUpdate={({ nextProps, props }) => {
+          return nextProps.hue !== props.hue
+        }}
+      >
+        <div>
+          <svg width="100" height="100">
+            <path
+              d="M20,30 Q40,5 50,30 T90,30"
+              fill="none"
+              stroke={`hsl(${state.hue}, 50%, 50%)`}
+              strokeWidth="5"
+            />
+          </svg>
+        </div>
+      </Component>
+    </div>
+  )}
+</Component>
+```
+
+See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcomponentupdate).
+
+### children
+
+*Type*: `node`
+
+Usual React children prop.
+
+```.jsx
+<Component>
+  <div>Hey, I am the child</div>
+</Component>
+```
+
+*Type*: `func: ({ state, props, refs, setState, forceUpdate }) => node`
+
+A render prop callback to provide the stateful parts of your component at render time.
+
+```.jsx
+<Component initialState={{ hue: 0 }}>
+  {({ setState, state }) => (
+    <div>
+      <button onClick={() => (
+        setState({ hue: Math.random() * 360 })
+      )}>
+        Generate Color
+      </button>
+      <br/>
+      <svg width="100" height="100">
+        <path
+          d="M20,30 Q40,5 50,30 T90,30"
+          fill="none"
+          stroke={`hsl(${state.hue}, 50%, 50%)`}
+          strokeWidth="5"
+        />
+      </svg>
+    </div>
+  )}
+</Component>
+```
+
+## Todo App Example
+
+Here is a pretty involved example showing just how composable this component is:
+
+- "App state" containing all todos
+- "Todo state" containing state for a specific todo
+- Saving state to localStorage
+- Updates the document title to the number of todos in the list
+- Optimized todo rendering, avoiding updates if the color has not changed
+- Tracked refs
+
+```.jsx
+<Component
+  getRefs={() => ({
+    input: React.createRef()
+  })}
+  getInitialState={() => ({
+    todos: JSON.parse(
+      localStorage.getItem("todos") || '["quit making weird components"]'
+    )
+  })}
+>
+  {({ state, setState, refs }) => (
+    <>
+      <Component
+        didUpdate={() =>
+          localStorage.setItem("todos", JSON.stringify(state.todos))
+        }
+      />
+      <Component
+        didUpdate={() => (document.title = state.todos.length + " Todos")}
+      />
+      <div style={{ fontFamily: "sans-serif" }}>
+        <h4>Todo List</h4>
+        <form
+          onSubmit={event => {
+            event.preventDefault();
+            let node = refs.input.current;
+            setState({ todos: state.todos.concat([node.value]) });
+            node.value = "";
+          }}
+        >
+          <input ref={refs.input} />
+        </form>
+        <div>
+          {state.todos.map((todo, index) => (
+            <Component
+              key={index}
+              getInitialState={() => ({ hue: Math.random() * 360 })}
+              todo={todo}
+              shouldUpdate={({ nextProps, nextState, props, state }) => {
+                return (
+                  nextProps.todo !== props.todo || nextState.hue !== state.hue
+                );
+              }}
+            >
+              {({ setState, state }) => (
+                <div style={{ color: `hsl(${state.hue}, 50%, 50%)` }}>
+                  <button
+                    onClick={() => {
+                      setState({ hue: Math.random() * 360 });
+                    }}
+                  >
+                    Change Color
+                  </button>{" "}
+                  {todo}
+                </div>
+              )}
+            </Component>
+          ))}
+        </div>
+        <p>
+          <button onClick={() => setState({ todos: [] })}>
+            Clear all
+          </button>
+        </p>
+      </div>
+    </>
+  )}
+</Component>
+```
+
+

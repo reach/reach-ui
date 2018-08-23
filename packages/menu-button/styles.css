@@ -1,23 +1,42 @@
-reach-menu {
+/* Used to detect in JavaScript if apps have loaded styles or not. */
+:root {
+  --reach-menu: 1;
+}
+
+[data-reach-menu] {
   font-family: sans-serif;
   display: block;
   position: absolute;
 }
 
-reach-menu [role="menu"] {
+[data-reach-menu-list] {
+  display: block;
   white-space: nowrap;
-  border: solid 1px #ccc;
-  background: hsla(0, 100%, 100%, 0.95);
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+  background: hsla(0, 100%, 100%, 0.99);
   outline: none;
-  list-style-type: none;
-  padding: 10px 0;
-  margin: 0;
+  padding: 1rem 0;
   font-size: 85%;
-  box-shadow: 0 1px 4px hsla(0, 0%, 0%, 0.15);
 }
 
-reach-menu [role="menuitem"] {
-  /* li */
+[data-reach-menu-item] {
+  display: block;
+}
+
+/*
+ The dom structure of a MenuLink is reach-menu-item > a,
+ so to target all items we can use `data-reach-menu-item`
+*/
+[data-reach-menu-item] {
+  /*
+    These are styled in one rule instead of something like a[data-reach-menu-item]
+    and li[data-reach-menu-item] so that apps don't have to fight specificity and
+    can style both li and a menu items with one rule,
+    ie: `[data-selected] { background: red; }`.
+    Otherwise they'd have to define two styles, one for a and one for li.
+  */
+
+  /* reach-menu-item */
   cursor: pointer;
 
   /* a */
@@ -30,7 +49,8 @@ reach-menu [role="menuitem"] {
   padding: 5px 20px;
 }
 
-reach-menu [data-reach-selected] {
+/* pseudo pseudo selector */
+[data-reach-menu-item][data-selected] {
   background: hsl(211, 81%, 36%);
   color: white;
   outline: none;

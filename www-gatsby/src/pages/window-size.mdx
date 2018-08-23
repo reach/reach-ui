@@ -1,0 +1,39 @@
+# WindowSize
+
+```.jsx
+<WindowSize>
+  {(size) => (
+    <div>
+      <div>Resize your window.</div>
+      <pre>{JSON.stringify(size, null, 2)}</pre>
+    </div>
+  )}
+</WindowSize>
+```
+
+## Installation
+
+```bash
+npm install @reach/window-size
+# or
+yarn add @reach/window-size
+```
+
+And then import it:
+
+```js
+import WindowSize from "@reach/window-size";
+```
+
+## Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [children](#children)  | func   |
+
+### children
+
+*Type*: `func: (({ width, height })) => undefined`
+
+A function that calls back to you with the window size.
+

@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
+
+button {
+  background: #fff;
+  position: relative;
+  top: -1px;
+}
+
+button:active {
+  top: 0px;
+  left: 1px;
+}
+
+button:focus {
+  outline: none;
+  border: 1px solid rgb(30, 174, 219);
+}
+
+body {
+  background: #fafafa;
+}
+
+pre[contenteditable] {
+  padding: 10px;
+  background: #fff;
+}
+
+pre[contenteditable] {
+  margin: 0;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+pre[contenteditable]:focus {
+  outline: 1px solid rgb(30, 174, 219);
+}
+
+pre,
+code {
+  font-family: "Source Code Pro", monospace;
+}
+
+div.react-live {
+  background: #fff;
+  margin-bottom: 2.5rem;
+  border: solid 1px hsla(0, 0%, 0%, 0.1);
+}
+
+.react-live-preview:before {
+  content: "Preview";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+  text-align: center;
+  font-size: 80%;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.react-live-preview {
+  position: relative;
+  padding: 30px 20px 20px 20px;
+  border-top: solid 1px hsla(0, 0%, 0%, 0.1);
+}
+
+.react-live-error {
+  padding: 20px;
+  background: hsl(5, 50%, 50%);
+  color: white;
+}
+
+pre > code {
+  margin: 0;
+}
+
+h1 {
+  color: hsl(211, 81%, 36%);
+}
+
+h1:not(:first-child) {
+  border-bottom: solid 1px hsla(0, 0%, 0%, 0.25);
+  margin-top: 10rem;
+}
+
+h2 {
+  margin-top: 5rem;
+}
+
+h3 {
+  margin-top: 5rem;
+}
+
+reach-menu li {
+  margin: 0;
+}
+
+.gray-bg {
+  background: #eee;
+}
+
+a {
+  color: hsl(211, 100%, 50%);
+}
+
+a:active {
+  color: hsl(211, 81%, 36%);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.red-highlight[data-reach-menu-item][data-selected] {
+  background: red;
+}
+
+.kittys [data-reach-menu-item] {
+  font-size: 120%;
+  display: flex;
+  align-items: center;
+}
+
+.kittys img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+
+.kittys [data-reach-menu-item][data-selected] {
+  background: #eee;
+  color: inherit;
+}
+
+/* reach-menu [data-selected] { */
+/*   background: red; */
+/*   color: white; */
+/* } */
