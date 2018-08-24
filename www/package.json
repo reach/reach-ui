@@ -14,7 +14,11 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
-    "react-live": "^1.11.0"
+    "react-live": "^1.11.0",
+    "remark-autolink-headings": "^5.0.0",
+    "remark-emoji": "^2.0.1",
+    "remark-images": "^0.8.1",
+    "remark-slug": "^5.1.0"
   },
   "keywords": [
     "gatsby"
@@ -32,5 +36,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "prettier": {
+    "printWidth": 60
   }
 }

@@ -1,5 +1,0 @@
----
-ignore: true
----
-
-# Examples

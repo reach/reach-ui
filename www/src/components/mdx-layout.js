@@ -1,29 +1,93 @@
-import React from 'react'
-import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live'
-import { MDXProvider } from '@mdx-js/tag'
-import Component from '../../../packages/component-component/src'
+import "../../../packages/menu-button/styles.css";
+import "./normalize.css";
+import "./skeleton.css";
+import "./syntax.css";
+import "./app.css";
 
-const MyCodeComponent = ({ children, className }) =>
-  className.split('-')[1][0] === '.' ? (
-    <LiveProvider code={children} scope={{ Component }}>
-      <LiveEditor />
+import React from "react";
+import {
+  LiveProvider,
+  LiveEditor,
+  LiveError,
+  LivePreview
+} from "react-live";
+import { MDXProvider } from "@mdx-js/tag";
+import Layout from "./layout";
+
+import GatsbyLink from "gatsby-link";
+import Component from "../../../packages/component-component/src";
+import Rect from "../../../packages/rect/src";
+import WindowSize from "../../../packages/window-size/src";
+import Portal from "../../../packages/portal/src";
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  MenuLink
+} from "../../../packages/menu-button/src";
+import VisuallyHidden from "../../../packages/visually-hidden/src";
+
+const PreComponent = ({ className, ...props }) =>
+  props.children.props.props &&
+  props.children.props.props.className ===
+    "language-.jsx" ? (
+    <LiveProvider
+      mountStylesheet={false}
+      code={props.children.props.children}
+      scope={{
+        GatsbyLink,
+        Component,
+        Rect,
+        WindowSize,
+        Portal,
+        Menu,
+        MenuList,
+        MenuButton,
+        MenuItem,
+        MenuLink,
+        VisuallyHidden
+      }}
+    >
+      <LiveEditor tabIndex="-1" />
       <LiveError />
       <LivePreview />
     </LiveProvider>
   ) : (
-    children
-  )
+    <pre {...props} className="WHAT_THE_CRAP" />
+  );
 
-let Fart = () => <div>FART</div>
+const Table = props => (
+  <table className="u-full-width" {...props} />
+);
 
-export default class MDXLayout extends React.Component {
+let firstLoad = true;
+
+export default class MyPageLayout extends React.Component {
+  componentDidMount() {
+    if (firstLoad) {
+      firstLoad = false;
+    } else {
+      this.node.focus();
+    }
+  }
+
   render() {
     return (
-      <div style={{ padding: 20 }}>
-        <MDXProvider components={{ code: Fart }}>
-          <div>{this.props.children}</div>
+      <Layout>
+        <MDXProvider
+          components={{ pre: PreComponent, table: Table }}
+        >
+          <main
+            ref={n => (this.node = n)}
+            tabIndex="-1"
+            style={{ outline: "none" }}
+            role="group"
+          >
+            {this.props.children}
+          </main>
         </MDXProvider>
-      </div>
-    )
+      </Layout>
+    );
   }
 }

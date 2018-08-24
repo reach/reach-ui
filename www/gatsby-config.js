@@ -8,6 +8,12 @@ module.exports = {
       options: {
         extensions: ['.mdx', '.md'],
         defaultLayout: require.resolve('./src/components/mdx-layout.js'),
+        mdPlugins: [
+          require('remark-images'),
+          require('remark-emoji'),
+          require('remark-slug'),
+          require('remark-autolink-headings'),
+        ],
       },
     },
     'gatsby-plugin-react-helmet',
