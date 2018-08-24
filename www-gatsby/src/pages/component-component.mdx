@@ -272,7 +272,6 @@ Here is a pretty involved example showing just how composable this component is:
 
 - "App state" containing all todos
 - "Todo state" containing state for a specific todo
-- Saving state to localStorage
 - Updates the document title to the number of todos in the list
 - Optimized todo rendering, avoiding updates if the color has not changed
 - Tracked refs
@@ -282,19 +281,14 @@ Here is a pretty involved example showing just how composable this component is:
   getRefs={() => ({
     input: React.createRef()
   })}
-  getInitialState={() => ({
-    todos: JSON.parse(
-      localStorage.getItem("todos") || '["quit making weird components"]'
-    )
-  })}
+  getInitialState={() => {
+    return {
+      todos: ["This is kinda weird"]
+    }
+  }}
 >
   {({ state, setState, refs }) => (
     <>
-      <Component
-        didUpdate={() =>
-          localStorage.setItem("todos", JSON.stringify(state.todos))
-        }
-      />
       <Component
         didUpdate={() => (document.title = state.todos.length + " Todos")}
       />

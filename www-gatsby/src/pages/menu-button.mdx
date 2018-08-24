@@ -1,13 +1,20 @@
 # Dropdown Menu Button
 
-An accessible dropdown menu for the common "actions dropdown" design pattern.
+[Menu](#menu) - 
+[MenuButton](#menubutton) - 
+[MenuList](#menulist) - 
+[MenuItem](#menuitem) - 
+[MenuLink](#menulink)
+
+
+An accessible dropdown menu for the common dropdown menu button design pattern.
 
 Please note that the buttons on this page are styled by this website. They are just buttons, so they will appear the same as any other button in your app.
 
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden="true">▾</span>
+    Actions <span aria-hidden>▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem onSelect={() => alert("Download")}>Download</MenuItem>
@@ -21,6 +28,10 @@ Please note that the buttons on this page are styled by this website. They are j
   </MenuList>
 </Menu>
 ```
+
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
 
 ## Installation
 
@@ -112,7 +123,7 @@ Any props not listed above will be spread onto the underlying button element. Yo
     className="button-primary"
     style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
   >
-    Actions <span aria-hidden="true">▾</span>
+    Actions <span aria-hidden>▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
@@ -125,9 +136,11 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 *Type*: `node`
 
+Accepts any renderable content.
+
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden="true"><Gear /></span>
+  Actions <span aria-hidden><Gear /></span>
 </MenuButton>
 ```
 
@@ -168,7 +181,7 @@ All props are spread to the underlying  element. Here we apply a `className` and
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden="true">▾</span>
+    Actions <span aria-hidden>▾</span>
   </MenuButton>
   <MenuList
     className="gray-bg"
@@ -235,7 +248,7 @@ The following example has this css applied:
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden="true">▾</span>
+    Actions <span aria-hidden>▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem className="red-highlight" onSelect={() => {}}>
@@ -265,22 +278,30 @@ The following example has this css applied:
 
 All props are spread to the underlying element.
 
-In this example the title attribute is passed down the element.
+In this example the `onFocus` prop is passed down to the element.
 
 ```.jsx
-<Menu>
-  <MenuButton>
-    Actions <span aria-hidden="true">▾</span>
-  </MenuButton>
-  <MenuList>
-    <MenuItem
-      title="Start a video with your friends"
-      onSelect={() => {}}
-    >Start Video</MenuItem>
-    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
-    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
-  </MenuList>
-</Menu>
+<Component initialState={{ focusCount: 0 }}>
+  {({ setState, state: { focusCount } }) => (
+    <Menu>
+      <MenuButton>
+        Actions
+      </MenuButton>
+      <MenuList>
+        <MenuItem
+          onFocus={() => {
+            setState(state => ({
+              focusCount: state.focusCount + 1
+            }))
+          }}
+          onSelect={() => {}}
+        >Focused {focusCount} Times</MenuItem>
+        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  )}
+</Component>
 ```
 
 
@@ -293,7 +314,7 @@ You can put any type of content inside of a `<MenuItem>`.
 ```.jsx
 <Menu>
   <MenuButton>
-    Your Cats <span aria-hidden="true">▾</span>
+    Your Cats <span aria-hidden>▾</span>
   </MenuButton>
   <MenuList className="kittys">
     <MenuItem onSelect={() => {}}>
@@ -317,7 +338,7 @@ You can put any type of content inside of a `<MenuItem>`.
 
 # MenuLink
 
-Handles linking to a different page in the menu. By default it works with Reach Router, but also accepts any other kind of Link.
+Handles linking to a different page in the menu. By default it works with Reach Router, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
 
 Must be a direct child of a `<MenuList>`.
 
@@ -407,7 +428,7 @@ By default, `MenuLink` renders a Reach Router Link, but if you have external lin
 </Menu>
 ```
 
-Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well.
+Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t it won't work because we will not be able to manage focus on the element the component renders.
 
 ```jsx
 import GatsbyLink from "gatsby/link"
@@ -503,7 +524,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden="true">▾</span>
+  Actions <span aria-hidden>▾</span>
 </MenuButton>
 ```
 
@@ -516,10 +537,11 @@ However, if you have no text and only an icon, please make sure your icon has a 
   <span aria-label="Actions">▾</span>
 </MenuButton>
 
-// give your SVGs a title
+// add screen reader only text for svgs
+import AriaText from "@reach/aria-text"
 <MenuButton>
-  <svg>
-    <title>Actions</title>
+  <AriaText>Actions</AriaText>
+  <svg aria-hidden>
     <polygon points="0,0 20,0 10,10 " />
   </svg>
 </MenuButton>
@@ -531,7 +553,7 @@ However, if you have no text and only an icon, please make sure your icon has a 
 
 // Or just label the button and hide everything
 <MenuButton aria-label="Actions">
-  <span aria-hidden="true">
+  <span aria-hidden>
     <TripleDots/>
   </span>
 </MenuButton>

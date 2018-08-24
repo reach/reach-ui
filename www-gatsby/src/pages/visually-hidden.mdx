@@ -1,0 +1,43 @@
+# VisuallyHidden
+
+Provides text for screen readers that is visually hidden. It is the logical opposite of the `aria-hidden` attribute.
+
+In the following example, screen readers will announce "Save" and will ignore the icon; the browser displays the icon and ignores the text.
+
+```.jsx
+<button>
+  <VisuallyHidden>Save</VisuallyHidden>
+  <svg aria-hidden width="32" height="32">
+    <path d="M16 18l8-8h-6v-8h-4v8h-6zM23.273 14.727l-2.242 2.242 8.128 3.031-13.158 4.907-13.158-4.907 8.127-3.031-2.242-2.242-8.727 3.273v8l16 6 16-6v-8z"></path>
+  </svg>
+</button>
+```
+
+Implementation from https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+
+Further reading: https://a11yproject.com/posts/how-to-hide-content/
+
+## Installation
+
+```bash
+npm install @reach/visually-hidden
+# or
+yarn add @reach/visually-hidden
+```
+
+And then import it:
+
+```js
+import VisuallyHidden from "@reach/VisuallyHidden";
+```
+
+## Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [children](#children)  | func   |
+
+### children
+
+*Type*: `node`
+

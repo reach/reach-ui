@@ -7,9 +7,18 @@ Original Base16 color scheme by Chris Kempson (https://github.com/chriskempson/b
 pre > code {
   display: block;
 }
-code[class*='language-'],
-pre[class*='language-'] {
-  font-size: 14px;
+
+  pre, code[class*="language-"] {
+    font-size: 14px;
+  }
+
+@media (max-width: 550px) {
+  pre, code[class*="language-"] {
+    font-size: 12px;
+  }
+}
+
+code[class*="language-"] {
   line-height: 1.375;
   direction: ltr;
   text-align: left;
@@ -26,27 +35,27 @@ pre[class*='language-'] {
   border-left: solid 5px #eee;
   background: #fff;
   color: #303030;
-}
-pre[class*='language-']::-moz-selection,
-pre[class*='language-'] ::-moz-selection,
-code[class*='language-']::-moz-selection,
-code[class*='language-'] ::-moz-selection {
-  text-shadow: none;
-  background: #e0e0e0;
-}
-pre[class*='language-']::selection,
-pre[class*='language-'] ::selection,
-code[class*='language-']::selection,
-code[class*='language-'] ::selection {
-  text-shadow: none;
-  background: #e0e0e0;
-} /* Code blocks */
-pre[class*='language-'] {
   padding: 1em;
   margin: 0.5em 0;
   overflow: auto;
+}
+pre[class*="language-"]::-moz-selection,
+pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection,
+code[class*="language-"] ::-moz-selection {
+  text-shadow: none;
+  background: #e0e0e0;
+}
+pre[class*="language-"]::selection,
+pre[class*="language-"] ::selection,
+code[class*="language-"]::selection,
+code[class*="language-"] ::selection {
+  text-shadow: none;
+  background: #e0e0e0;
+} /* Code blocks */
+pre[class*="language-"] {
 } /* Inline code */
-:not(pre) > code[class*='language-'] {
+:not(pre) > code[class*="language-"] {
   padding: 0.1em;
   border-radius: 0.3em;
 }
@@ -146,11 +155,4 @@ pre > code.highlight {
     rgba(21, 21, 21, 0.2) 70%,
     rgba(21, 21, 21, 0)
   ) !important;
-}
-.markdown p > code {
-  background: #fafafa;
-  color: #454545;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size-adjust: 0.45;
 }

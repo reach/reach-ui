@@ -4,15 +4,16 @@ import Component from "@reach/component-component";
 
 let Portal = ({ children, type = "reach-portal" }) => (
   <Component
-    getRefs={() => ({ node: document.createElement(type) })}
-    didMount={({ refs: { node } }) => {
-      document.body.appendChild(node);
+    getRefs={() => ({ node: null })}
+    didMount={({ refs }) => {
+      refs.node = document.createElement(type);
+      document.body.appendChild(refs.node);
     }}
     willUnmount={({ refs: { node } }) => {
       document.body.removeChild(node);
     }}
     render={({ refs: { node } }) => {
-      return createPortal(children, node);
+      return node ? createPortal(children, node) : null;
     }}
   />
 );

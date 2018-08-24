@@ -1,3 +1,9 @@
+import "../../../packages/menu-button/styles.css";
+import "./normalize.css";
+import "./skeleton.css";
+import "./syntax.css";
+import "./app.css";
+
 import React from "react";
 import {
   LiveProvider,
@@ -6,6 +12,8 @@ import {
   LivePreview
 } from "react-live";
 import { MDXProvider } from "@mdx-js/tag";
+import Layout from "./layout";
+
 import GatsbyLink from "gatsby-link";
 import Component from "../../../packages/component-component/src";
 import Rect from "../../../packages/rect/src";
@@ -18,10 +26,12 @@ import {
   MenuItem,
   MenuLink
 } from "../../../packages/menu-button/src";
+import VisuallyHidden from "../../../packages/visually-hidden/src";
 
-const PreComponent = props =>
+const PreComponent = ({ className, ...props }) =>
+  props.children.props.props &&
   props.children.props.props.className ===
-  "language-.jsx" ? (
+    "language-.jsx" ? (
     <LiveProvider
       mountStylesheet={false}
       code={props.children.props.children}
@@ -35,7 +45,8 @@ const PreComponent = props =>
         MenuList,
         MenuButton,
         MenuItem,
-        MenuLink
+        MenuLink,
+        VisuallyHidden
       }}
     >
       <LiveEditor tabIndex="-1" />
@@ -43,29 +54,40 @@ const PreComponent = props =>
       <LivePreview />
     </LiveProvider>
   ) : (
-    <pre {...props} />
+    <pre {...props} className="WHAT_THE_CRAP" />
   );
 
 const Table = props => (
   <table className="u-full-width" {...props} />
 );
 
+let firstLoad = true;
+
 export default class MyPageLayout extends React.Component {
+  componentDidMount() {
+    if (firstLoad) {
+      firstLoad = false;
+    } else {
+      this.node.focus();
+    }
+  }
+
   render() {
     return (
-      <div
-        style={{
-          padding: 20,
-          maxWidth: 800,
-          margin: "auto"
-        }}
-      >
+      <Layout>
         <MDXProvider
           components={{ pre: PreComponent, table: Table }}
         >
-          <div>{this.props.children}</div>
+          <main
+            ref={n => (this.node = n)}
+            tabIndex="-1"
+            style={{ outline: "none" }}
+            role="group"
+          >
+            {this.props.children}
+          </main>
         </MDXProvider>
-      </div>
+      </Layout>
     );
   }
 }

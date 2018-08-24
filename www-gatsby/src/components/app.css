@@ -1,5 +1,47 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
 
+#container {
+}
+
+#nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow: scroll;
+  width: 250px;
+  background: hsl(211, 81%, 36%);
+}
+
+#content {
+  margin-left: 250px;
+  padding: 20px 80px 80px 80px;
+  max-width: 800px;
+}
+
+.NavLink {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 2px 20px;
+  font-size: 18px;
+  font-weight: 200
+}
+
+.NavLink:hover {
+  background: hsla(0, 100%, 100%, 0.15);
+}
+
+.NavLink:active {
+  color: white;
+  background: hsla(0, 100%, 100%, 0.1);
+}
+
+.NavTitle {
+  color: white;
+  text-transform: uppercase;
+  text-align: center;
+}
+
 button {
   background: #fff;
   position: relative;
@@ -40,10 +82,24 @@ code {
   font-family: "Source Code Pro", monospace;
 }
 
-div.react-live {
+.react-live {
   background: #fff;
   margin-bottom: 2.5rem;
   border: solid 1px hsla(0, 0%, 0%, 0.1);
+  position: relative;
+  padding-top: 10px;
+}
+
+.react-live:before {
+  content: "Editable Example";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0px;
+  text-align: center;
+  font-size: 80%;
+  text-transform: uppercase;
+  opacity: 0.5;
 }
 
 .react-live-preview:before {

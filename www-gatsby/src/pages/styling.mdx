@@ -1,0 +1,106 @@
+# Styling
+
+[Including Base Styles](#including-base-styles) - 
+[Overriding and Adding New Styles](#overriding--adding-new-styles)
+
+Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.  
+
+# Including Base Styles
+
+Reach UI uses stylesheets for the components' base styles. You must include these styles in your app for the components to work properly
+
+## Automatically Including Styles
+
+A webpack plugin is in development that will automatically bundle the styles so you don't have to.
+
+## Using a Bundler (webpack, parcel, etc.)
+
+If you are using a module bundler like webpack or parcel, you can import them where you import the component.
+
+```jsx
+// import the components
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
+} from "@reach/menu-button"
+
+// and the styles
+import "@reach/menu-button/styles.css"
+
+// now you're good!
+```
+
+You will need to configure the [webpack CSS](https://webpack.js.org/loaders/css-loader) loader if you haven't already. Parcel requires no configuration.
+
+## Not Using a Bundler
+
+If you’re not using a bundler you can find the styles at:
+
+`your-app/node_modules/@reach/<package-name>/styles.css`
+
+Include those files however you include the rest of your stylesheets.  Alternatively, you can use a CDN like Unpkg, but this is not recommended for production apps.
+
+```html
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://unpkg.com/@reach/<package-name>@<version>/styles.css"
+/>
+```
+
+# Overriding &amp; Adding New Styles
+
+You should be able to style Reach UI components like any other element in your app. If not, report a bug!
+
+```jsx
+// Emotion and styled components
+let YourMenuList = styled(MenuList)`
+  border: solid 2px black;
+  background: black;
+  color: red;
+  > [data-reach-menu-item][data-selected] {
+    background: red;
+    color: white;
+  }
+`
+
+// normal className
+<MenuList className="yep"/>
+
+// normal style
+<MenuList style={sure}/>
+
+// glamor CSS prop
+<MenuList css={absolutely}/>
+```
+
+## CSS Selectors
+
+Because Reach UI uses regular stylesheets for its own styles you can override them like any other element. All styles use the lowest possible "specificity score", so as long as you include the component styles before your own app styles you should not run into any specificity problems.
+
+There are two types of selectors, "element" and "pseudo". The documentation for each component lists the selectors that apply to the component, but we're using `MenuItem` from `@reach/menu-button` as an example here.
+
+### "Element" Selectors
+
+Each component has a `data-reach-*` attribute on the underlying DOM element that you can think of as the "element" for the component. For example, to style all dropdown menu items, you can use this CSS:
+
+```css
+[data-reach-menu-item] {
+  color: blue;
+}
+```
+
+### "Pseudo" Selectors
+
+There are certain states an element can go into like "selected". To target these styles use a "psuedo" selector (more like a pseudo-pseudo selector!). For example, to style all dropdown menu items in their highlighted, or selected state, use this CSS:
+
+```css
+[data-reach-menu-item][data-selected] {
+  background: red;
+}
+```
+
+
+

@@ -4,7 +4,7 @@ Calls back with the measurements of a dom node (aka. bounding client rect). See 
 
 ```.jsx
 <Rect>
-  {({ rect, ref }) => console.log(rect) || (
+  {({ rect, ref }) => (
     <div>
       <pre>{JSON.stringify(rect, null, 2)}</pre>
       <div
@@ -65,10 +65,29 @@ This is typically used for elements that pop over other elements (like a dropdow
 
 Pass `true` to observe, `false` to ignore.
 
+```.jsx
+<Rect observe={false}>
+  {({ rect, ref }) => (
+    <div ref={ref}>
+      <div>Will not measure the element when false</div>
+      <div>Edit this code and change it to <code>true</code></div>
+      <pre>{JSON.stringify(rect, null, 2)}</pre>
+    </div>
+  )}
+</Rect>
+```
 
 ### onChange
 
 *Type*: `func: (rect) => undefined`
 
 Calls back whenever the `rect` of the element changes.
+
+```jsx
+<Rect onChange={rect => console.log(rect)}/>
+  {({ rect, ref }) => (
+    <div ref={ref}/>
+  )}
+</Rect>
+```
 
