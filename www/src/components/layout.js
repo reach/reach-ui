@@ -39,7 +39,7 @@ let Nav = () => (
         <hr />
 
         <NavLink to="/menu-button">
-          Dropdown Menu Button
+          MenuButton (Dropdown)
         </NavLink>
         <NavLink to="/visually-hidden">
           VisuallyHidden
@@ -56,7 +56,7 @@ let Nav = () => (
       <footer
         style={{
           marginTop: 100,
-          color: "hsla(0, 100%, 100%, 0.5)",
+          color: "hsla(0, 100%, 100%, 0.75)",
           textAlign: "center",
           fontSize: "80%",
           padding: 5
