@@ -5,9 +5,10 @@ import Component from "@reach/component-component";
 let Portal = ({ children, type = "reach-portal" }) => (
   <Component
     getRefs={() => ({ node: null })}
-    didMount={({ refs }) => {
+    didMount={({ refs, forceUpdate }) => {
       refs.node = document.createElement(type);
       document.body.appendChild(refs.node);
+      forceUpdate();
     }}
     willUnmount={({ refs: { node } }) => {
       document.body.removeChild(node);
