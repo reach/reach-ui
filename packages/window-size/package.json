@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Measure the window size in React",
   "main": "index.js",
+  "module": "es/index.js",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package"

@@ -20,12 +20,13 @@ var Portal = function Portal(_ref) {
       type = _ref$type === undefined ? "reach-portal" : _ref$type;
   return _react2.default.createElement(_componentComponent2.default, {
     getRefs: function getRefs() {
-      return { node: document.createElement(type) };
+      return { node: null };
     },
     didMount: function didMount(_ref2) {
-      var node = _ref2.refs.node;
+      var refs = _ref2.refs;
 
-      document.body.appendChild(node);
+      refs.node = document.createElement(type);
+      document.body.appendChild(refs.node);
     },
     willUnmount: function willUnmount(_ref3) {
       var node = _ref3.refs.node;
@@ -35,7 +36,7 @@ var Portal = function Portal(_ref) {
     render: function render(_ref4) {
       var node = _ref4.refs.node;
 
-      return (0, _reactDom.createPortal)(children, node);
+      return node ? (0, _reactDom.createPortal)(children, node) : null;
     }
   });
 };

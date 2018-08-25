@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Declarative portals for React",
   "main": "index.js",
+  "module": "es/index.js",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package"

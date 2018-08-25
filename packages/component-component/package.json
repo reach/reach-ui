@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "Declarative React Component Definitions",
   "main": "index.js",
+  "module": "es/index.js",
   "scripts": {
     "test": "jest",
     "build": "node ../../shared/build-package"
