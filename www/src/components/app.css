@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  overflow: scroll;
+  overflow: auto;
   width: 250px;
   background: hsl(211, 81%, 36%);
 }
@@ -16,7 +16,7 @@
 }
 
 #nav hr {
-  border-color: hsla(0, 100%, 100%, 0.15)
+  border-color: hsla(0, 100%, 100%, 0.15);
 }
 
 .NavLink {
@@ -25,7 +25,7 @@
   text-decoration: none;
   padding: 2px 20px;
   font-size: 18px;
-  font-weight: 200
+  font-weight: 200;
 }
 
 .NavLink:hover {
