@@ -127,7 +127,7 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
         {({ ref: rectRef }) => (
           <button
             id={state.buttonId}
-            aria-haspopup="true"
+            aria-haspopup="menu"
             aria-controls={state.menuId}
             aria-expanded={state.isOpen}
             type="button"
