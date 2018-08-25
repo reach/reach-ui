@@ -8,15 +8,17 @@ This project uses
 
 - [Lerna](https://lernajs.io/) to manage multiple libs
 - [Storybook](https://storybook.js.org/) for a great development experience
+- [Gatsby](https://gatsbyjs.org/) for a blazing fast website.
 - [Jest](https://jest?.com) for painless testing.
 
-So it goes a little something like this:
+Before doing anything else, run these commands:
 
 ```
-git clone <repo-url>
+git clone git@github.com:reach/reach-ui.git
 cd reach-ui
 yarn install
 yarn bootstrap
+yarn build
 ```
 
 ## Root Repo Scripts:
@@ -32,17 +34,25 @@ yarn test         # runs tests in all packages
 yarn build        # builds all packages
 
 yarn release      # publishes changed packages
+```
 
-yarn site:start   # starts the website dev server
+## `www` directory scripts
 
-yarn site:build   # builds the website
+The website uses [Gatsby](https://gatsbyjs.org) v2 with [Gatsby MDX](https://github.com/ChristopherBiscardi/gatsby-mdx) powering most of the pages. It is deployed with [now](https://now.sh)
 
-yarn site:deploy  # deploys the website
+```
+yarn start        # starts the website
+
+yarn build        # builds the production site to "public/"
+
+yarn stage        # deploys the site with now.sh
+
+yarn deploy       # alias the latest deploy to production
 ```
 
 ## Running / Writing Examples
 
-First do the steps in "Getting Started", then:
+First do the steps in "Getting started", then start the Storybook server:
 
 ```
 yarn start
@@ -60,6 +70,8 @@ export let Example = () => <div>Cool cool cool</div>;
 
 Now you can edit the files in `packages/*` and storybook will automatically reload your changes.
 
+**Note**: If you change an internal dependency you will need to run `yarn build` again. For example, if working on `MenuButton` requires a change to `Rect` (an internal dependency of `MenuButton`), you will need to run `yarn build` for the changes to `Rect` to show up in your `MenuButton` example.
+
 ## Running / Writing Tests
 
 First do the steps in "Getting Started", then:
@@ -74,7 +86,7 @@ Or if you want to run the tests as you edit files:
 yarn test --watch
 ```
 
-Usually you'll want to just test the component you're working on:
+Often you'll want to just test the component you're working on:
 
 ```
 cd packages/<component-path>
