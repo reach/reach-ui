@@ -1,8 +1,4 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby default starter",
-  "version": "1.0.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@mdx-js/mdx": "^0.15.0",
     "@mdx-js/tag": "^0.15.0",
@@ -21,24 +17,20 @@
     "remark-images": "^0.8.1",
     "remark-slug": "^5.1.0"
   },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
   "scripts": {
+    "start": "gatsby develop",
     "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write '**/*.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "stage": "now public",
+    "deploy": "now alias"
   },
   "devDependencies": {
     "prettier": "^1.14.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
   "prettier": {
     "printWidth": 60
+  },
+  "now": {
+    "name": "reach-ui",
+    "alias": "ui.reach.tech"
   }
 }
