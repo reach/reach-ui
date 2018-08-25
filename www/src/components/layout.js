@@ -44,14 +44,17 @@ let Nav = () => (
 
         <hr />
 
-        <NavLink to="/component-component">
-          Component²
-        </NavLink>
-        <NavLink to="/menu-button">MenuButton</NavLink>
-        <NavLink to="/rect">Rect</NavLink>
+        <NavLink to="/menu-button">Dropdown Menu Button</NavLink>
         <NavLink to="/visually-hidden">
           VisuallyHidden
         </NavLink>
+
+        <hr />
+
+        <NavLink to="/component-component">
+          Component²
+        </NavLink>
+        <NavLink to="/rect">Rect</NavLink>
         <NavLink to="/window-size">WindowSize</NavLink>
       </div>
       <footer
@@ -63,17 +66,13 @@ let Nav = () => (
           padding: 5
         }}
       >
-        &copy; 2018 MOGHOUSE LLC
+        &copy; 2018 Reach
       </footer>
     </div>
   </div>
 );
 
 class Layout extends React.Component {
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   render() {
     let { children, data, meta, title } = this.props;
     return (

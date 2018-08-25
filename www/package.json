@@ -8,6 +8,7 @@
     "@mdx-js/tag": "^0.15.0",
     "gatsby": "next",
     "gatsby-mdx": "^0.0.11",
+    "gatsby-plugin-google-analytics": "^1.0.31",
     "gatsby-plugin-manifest": "next",
     "gatsby-plugin-offline": "next",
     "gatsby-plugin-react-helmet": "next",

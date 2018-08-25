@@ -4,6 +4,12 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-121796914-2"
+      }
+    },
+    {
       resolve: `gatsby-mdx`,
       options: {
         extensions: ['.mdx', '.md'],
@@ -23,10 +29,10 @@ module.exports = {
         name: 'gatsby-starter-default',
         short_name: 'starter',
         start_url: '/',
-        background_color: '#663399',
-        theme_color: '#663399',
+        background_color: '#1159a6',
+        theme_color: '#1159a6',
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+        icon: 'src/images/reach-icon.png', // This path is relative to the root of the site.
       },
     },
     'gatsby-plugin-offline',

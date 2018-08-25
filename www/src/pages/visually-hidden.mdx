@@ -1,4 +1,17 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - VisuallyHidden"
+  meta={[
+    { name: 'description', content: "Provides text for screen readers that is visually hidden" }
+  ]}
+/>
+
 # VisuallyHidden
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/visually-hidden
+- Origin: https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+- Further reading: https://a11yproject.com/posts/how-to-hide-content/
 
 Provides text for screen readers that is visually hidden. It is the logical opposite of the `aria-hidden` attribute.
 
@@ -12,10 +25,6 @@ In the following example, screen readers will announce "Save" and will ignore th
   </svg>
 </button>
 ```
-
-Implementation from https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
-
-Further reading: https://a11yproject.com/posts/how-to-hide-content/
 
 ## Installation
 
