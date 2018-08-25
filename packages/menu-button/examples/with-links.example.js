@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuItems, MenuButton, MenuLink, MenuItem } from "../src/index";
+import { Menu, MenuList, MenuButton, MenuLink, MenuItem } from "../src/index";
 import {
   Router,
   Link,
@@ -19,11 +19,11 @@ const Home = () => (
       <MenuButton>
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
-      <MenuItems>
+      <MenuList>
         <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
         <MenuLink to="/settings">View Settings</MenuLink>
         <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
-      </MenuItems>
+      </MenuList>
     </Menu>
   </div>
 );
