@@ -1,10 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
-import { StaticQuery, graphql } from "gatsby";
 import Link from "gatsby-link";
 
-import Header from "./header";
 import "../../../packages/menu-button/styles.css";
 import "./normalize.css";
 import "./skeleton.css";
@@ -12,10 +10,6 @@ import "./syntax.css";
 import "./app.css";
 
 import Logo from "./Logo";
-
-let NavTitle = props => (
-  <div className="NavTitle" {...props} />
-);
 
 let NavLink = props => (
   <Link className="NavLink" {...props} />
@@ -44,7 +38,9 @@ let Nav = () => (
 
         <hr />
 
-        <NavLink to="/menu-button">Dropdown Menu Button</NavLink>
+        <NavLink to="/menu-button">
+          Dropdown Menu Button
+        </NavLink>
         <NavLink to="/visually-hidden">
           VisuallyHidden
         </NavLink>

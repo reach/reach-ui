@@ -73,7 +73,6 @@ export default class MyPageLayout extends React.Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <Layout>
         <MDXProvider
