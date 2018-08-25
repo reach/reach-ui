@@ -23,10 +23,12 @@ var Portal = function Portal(_ref) {
       return { node: null };
     },
     didMount: function didMount(_ref2) {
-      var refs = _ref2.refs;
+      var refs = _ref2.refs,
+          forceUpdate = _ref2.forceUpdate;
 
       refs.node = document.createElement(type);
       document.body.appendChild(refs.node);
+      forceUpdate();
     },
     willUnmount: function willUnmount(_ref3) {
       var node = _ref3.refs.node;

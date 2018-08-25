@@ -27,10 +27,6 @@ var _componentComponent = require("@reach/component-component");
 
 var _componentComponent2 = _interopRequireDefault(_componentComponent);
 
-var _warning = require("warning");
-
-var _warning2 = _interopRequireDefault(_warning);
-
 var _propTypes = require("prop-types");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -50,10 +46,10 @@ var wrapEvent = function wrapEvent(handler, cb) {
   };
 };
 
-var checkIfAppManagedFocus = function checkIfAppManagedFocus(_ref) {
-  var refs = _ref.refs,
-      state = _ref.state,
-      prevState = _ref.prevState;
+var checkIfAppManagedFocus = function checkIfAppManagedFocus(_ref2) {
+  var refs = _ref2.refs,
+      state = _ref2.state,
+      prevState = _ref2.prevState;
 
   if (!state.isOpen && prevState.isOpen) {
     return !refs.menu.contains(document.activeElement);
@@ -61,10 +57,10 @@ var checkIfAppManagedFocus = function checkIfAppManagedFocus(_ref) {
   return false;
 };
 
-var manageFocusOnUpdate = function manageFocusOnUpdate(_ref2, appManagedFocus) {
-  var refs = _ref2.refs,
-      state = _ref2.state,
-      prevState = _ref2.prevState;
+var manageFocusOnUpdate = function manageFocusOnUpdate(_ref3, appManagedFocus) {
+  var refs = _ref3.refs,
+      state = _ref3.state,
+      prevState = _ref3.prevState;
 
   if (state.isOpen && !prevState.isOpen) {
     if (state.selectionIndex !== -1) {
@@ -130,14 +126,16 @@ var getInitialMenuState = function getInitialMenuState() {
 };
 
 var _checkIfStylesIncluded = function checkIfStylesIncluded() {
-  process.env.NODE_ENV !== "production" ? (0, _warning2.default)(parseInt(window.getComputedStyle(document.body).getPropertyValue("--reach-menu"), 10) === 1, "@reach/menu-button styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:\n\n    import \"@reach/menu-button/styles.css\";\n\nOtherwise you'll need to include them some other way:\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"node_modules/@reach/menu-button/styles.css\" />\n\nFor more information visit https://ui.reach.tech/styles.\n") : void 0;
+  if (parseInt(window.getComputedStyle(document.body).getPropertyValue("--reach-menu"), 10) !== 1) {
+    console.warn("@reach/menu-button styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:\n\n    import \"@reach/menu-button/styles.css\";\n\n  Otherwise you'll need to include them some other way:\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"node_modules/@reach/menu-button/styles.css\" />\n\n  For more information visit https://ui.reach.tech/styles.\n  ");
+  }
 
   // only do this once
   _checkIfStylesIncluded = function checkIfStylesIncluded() {};
 };
 
-var Menu = function Menu(_ref3) {
-  var children = _ref3.children;
+var Menu = function Menu(_ref4) {
+  var children = _ref4.children;
   return _react2.default.createElement(
     _componentComponent2.default,
     {
@@ -162,18 +160,18 @@ process.env.NODE_ENV !== "production" ? Menu.propTypes = {
 } : void 0;
 
 ////////////////////////////////////////////////////////////////////////
-var MenuButton = _react2.default.forwardRef(function (_ref4, _ref7) {
-  var onClick = _ref4.onClick,
-      onKeyDown = _ref4.onKeyDown,
-      props = _objectWithoutProperties(_ref4, ["onClick", "onKeyDown"]);
+var MenuButton = _react2.default.forwardRef(function (_ref5, _ref8) {
+  var onClick = _ref5.onClick,
+      onKeyDown = _ref5.onKeyDown,
+      props = _objectWithoutProperties(_ref5, ["onClick", "onKeyDown"]);
 
   return _react2.default.createElement(
     Consumer,
     null,
-    function (_ref5) {
-      var refs = _ref5.refs,
-          state = _ref5.state,
-          setState = _ref5.setState;
+    function (_ref6) {
+      var refs = _ref6.refs,
+          state = _ref6.state,
+          setState = _ref6.setState;
       return _react2.default.createElement(
         _rect2.default,
         {
@@ -182,8 +180,8 @@ var MenuButton = _react2.default.forwardRef(function (_ref4, _ref7) {
             return setState({ buttonRect: buttonRect });
           }
         },
-        function (_ref6) {
-          var rectRef = _ref6.ref;
+        function (_ref7) {
+          var rectRef = _ref7.ref;
           return _react2.default.createElement("button", _extends({
             id: state.buttonId,
             "aria-haspopup": "true",
@@ -192,7 +190,7 @@ var MenuButton = _react2.default.forwardRef(function (_ref4, _ref7) {
             type: "button",
             ref: function ref(node) {
               rectRef(node);
-              _ref7 && _ref7(node);
+              _ref8 && _ref8(node);
               refs.button = node;
             },
             onMouseDown: function onMouseDown(event) {
@@ -234,10 +232,10 @@ var MenuList = function MenuList(props) {
   return _react2.default.createElement(
     Consumer,
     null,
-    function (_ref8) {
-      var refs = _ref8.refs,
-          state = _ref8.state,
-          setState = _ref8.setState;
+    function (_ref9) {
+      var refs = _ref9.refs,
+          state = _ref9.state,
+          setState = _ref9.setState;
       return state.isOpen && _react2.default.createElement(
         _portal2.default,
         null,
@@ -248,9 +246,9 @@ var MenuList = function MenuList(props) {
             return _react2.default.createElement(
               _rect2.default,
               null,
-              function (_ref9) {
-                var menuRect = _ref9.rect,
-                    menuRef = _ref9.ref;
+              function (_ref10) {
+                var menuRect = _ref10.rect,
+                    menuRef = _ref10.ref;
                 return _react2.default.createElement(
                   "div",
                   {
@@ -277,14 +275,14 @@ process.env.NODE_ENV !== "production" ? MenuList.propTypes = {
   children: _propTypes.node
 } : void 0;
 
-var MenuListImpl = _react2.default.forwardRef(function (_ref10, _ref11) {
-  var refs = _ref10.refs,
-      state = _ref10.state,
-      setState = _ref10.setState,
-      children = _ref10.children,
-      onKeyDown = _ref10.onKeyDown,
-      onBlur = _ref10.onBlur,
-      rest = _objectWithoutProperties(_ref10, ["refs", "state", "setState", "children", "onKeyDown", "onBlur"]);
+var MenuListImpl = _react2.default.forwardRef(function (_ref11, _ref12) {
+  var refs = _ref11.refs,
+      state = _ref11.state,
+      setState = _ref11.setState,
+      children = _ref11.children,
+      onKeyDown = _ref11.onKeyDown,
+      onBlur = _ref11.onBlur,
+      rest = _objectWithoutProperties(_ref11, ["refs", "state", "setState", "children", "onKeyDown", "onBlur"]);
 
   return _react2.default.createElement(
     "div",
@@ -297,7 +295,7 @@ var MenuListImpl = _react2.default.forwardRef(function (_ref10, _ref11) {
       tabIndex: "-1",
       ref: function ref(node) {
         refs.menu = node;
-        _ref11 && _ref11(node);
+        _ref12 && _ref12(node);
       },
       onBlur: function onBlur(event) {
         if (!state.closingWithClick && !refs.menu.contains(event.relatedTarget)) {
@@ -342,18 +340,18 @@ var MenuListImpl = _react2.default.forwardRef(function (_ref10, _ref11) {
 });
 
 ////////////////////////////////////////////////////////////////////////
-var MenuItem = _react2.default.forwardRef(function (_ref12, _ref13) {
-  var onSelect = _ref12.onSelect,
-      onClick = _ref12.onClick,
-      _ref12$role = _ref12.role,
-      role = _ref12$role === undefined ? "menuitem" : _ref12$role,
-      state = _ref12.state,
-      setState = _ref12.setState,
-      index = _ref12.index,
-      onKeyDown = _ref12.onKeyDown,
-      onMouseMove = _ref12.onMouseMove,
-      _ref = _ref12._ref,
-      rest = _objectWithoutProperties(_ref12, ["onSelect", "onClick", "role", "state", "setState", "index", "onKeyDown", "onMouseMove", "_ref"]);
+var MenuItem = _react2.default.forwardRef(function (_ref13, _ref14) {
+  var onSelect = _ref13.onSelect,
+      onClick = _ref13.onClick,
+      _ref13$role = _ref13.role,
+      role = _ref13$role === undefined ? "menuitem" : _ref13$role,
+      state = _ref13.state,
+      setState = _ref13.setState,
+      index = _ref13.index,
+      onKeyDown = _ref13.onKeyDown,
+      onMouseMove = _ref13.onMouseMove,
+      _ref = _ref13._ref,
+      rest = _objectWithoutProperties(_ref13, ["onSelect", "onClick", "role", "state", "setState", "index", "onKeyDown", "onMouseMove", "_ref"]);
 
   var isSelected = index === state.selectionIndex;
   var select = function select() {
@@ -362,7 +360,7 @@ var MenuItem = _react2.default.forwardRef(function (_ref12, _ref13) {
   };
   return _react2.default.createElement("div", _extends({}, rest, {
     ref: function ref(node) {
-      _ref13 && _ref13(node);
+      _ref14 && _ref14(node);
       _ref(node);
     },
     "data-reach-menu-item": role === "menuitem" ? true : undefined,
@@ -395,17 +393,17 @@ process.env.NODE_ENV !== "production" ? MenuItem.propTypes = {
 var k = function k() {};
 
 ////////////////////////////////////////////////////////////////////////
-var MenuLink = _react2.default.forwardRef(function (_ref14, _ref15) {
-  var onKeyDown = _ref14.onKeyDown,
-      onClick = _ref14.onClick,
-      _ref14$component = _ref14.component,
-      Comp = _ref14$component === undefined ? _router.Link : _ref14$component,
-      style = _ref14.style,
-      setState = _ref14.setState,
-      state = _ref14.state,
-      index = _ref14.index,
-      _ref = _ref14._ref,
-      props = _objectWithoutProperties(_ref14, ["onKeyDown", "onClick", "component", "style", "setState", "state", "index", "_ref"]);
+var MenuLink = _react2.default.forwardRef(function (_ref15, _ref16) {
+  var onKeyDown = _ref15.onKeyDown,
+      onClick = _ref15.onClick,
+      _ref15$component = _ref15.component,
+      Comp = _ref15$component === undefined ? _router.Link : _ref15$component,
+      style = _ref15.style,
+      setState = _ref15.setState,
+      state = _ref15.state,
+      index = _ref15.index,
+      _ref = _ref15._ref,
+      props = _objectWithoutProperties(_ref15, ["onKeyDown", "onClick", "component", "style", "setState", "state", "index", "_ref"]);
 
   return _react2.default.createElement(
     MenuItem,
@@ -434,7 +432,7 @@ var MenuLink = _react2.default.forwardRef(function (_ref14, _ref15) {
       }),
       ref: function ref(node) {
         _ref(node);
-        _ref15 && _ref15(node);
+        _ref16 && _ref16(node);
       },
       style: _extends({}, style)
     }, props))
