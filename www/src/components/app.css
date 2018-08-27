@@ -206,3 +206,28 @@ a:active {
 /*   background: red; */
 /*   color: white; */
 /* } */
+
+[data-reach-dialog-content] {
+  position: relative;
+  padding-top: 40px;
+}
+
+[data-reach-dialog-content] > button.close-button {
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  padding: 5px;
+  border: none;
+  font-size: 150%;
+}
+
+[data-reach-dialog-content] > button.close-button:active {
+  position: absolute;
+  right: 9px;
+  top: 1px;
+  left: auto;
+}
+
+[data-reach-dialog-content] > button.close-button:focus {
+  color: hsl(211, 100%, 50%);
+}

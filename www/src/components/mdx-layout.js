@@ -1,5 +1,3 @@
-import "../../../packages/dialog/styles.css";
-import "../../../packages/menu-button/styles.css";
 import "./normalize.css";
 import "./skeleton.css";
 import "./syntax.css";

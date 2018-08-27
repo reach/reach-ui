@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import Link from "gatsby-link";
 
+import "../../../packages/dialog/styles.css";
 import "../../../packages/skip-nav/styles.css";
 import "../../../packages/menu-button/styles.css";
+
 import "./normalize.css";
 import "./skeleton.css";
 import "./syntax.css";
@@ -16,9 +18,12 @@ import {
   SkipNavContent
 } from "../../../packages/skip-nav";
 
-let NavLink = props => (
-  <Link className="NavLink" {...props} />
-);
+let NavLink = props =>
+  props.href ? (
+    <a className="NavLink" {...props} />
+  ) : (
+    <Link className="NavLink" {...props} />
+  );
 
 let Nav = () => (
   <div id="nav">
@@ -39,11 +44,16 @@ let Nav = () => (
 
         <NavLink to="/">Home</NavLink>
         <NavLink to="/funding">Funding</NavLink>
+        <NavLink href="https://spectrum.chag">
+          Spectrum Community ↗
+        </NavLink>
+        <NavLink href="https://github.com/reach/reach-ui">
+          Github ↗
+        </NavLink>
 
         <hr />
 
         <NavLink to="/styling">Styling</NavLink>
-        <NavLink to="/animation">Animation</NavLink>
 
         <hr />
 
@@ -51,10 +61,10 @@ let Nav = () => (
         <NavLink to="/menu-button">
           MenuButton (Dropdown)
         </NavLink>
+        <NavLink to="/skip-nav">SkipNav</NavLink>
         <NavLink to="/visually-hidden">
           VisuallyHidden
         </NavLink>
-        <NavLink to="/skip-nav">SkipNav</NavLink>
 
         <hr />
 

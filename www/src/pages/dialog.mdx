@@ -19,7 +19,73 @@ import Helmet from "react-helmet"
 - Source: https://github.com/reach/reach-ui/tree/master/packages/dialog
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog
 
-Blah blah
+An accessible dialog or "modal" window.
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Open Dialog
+      </button>
+
+      <Dialog isOpen={state.showDialog}>
+        <button
+          className="close-button"
+          onClick={() => setState({ showDialog: false })}
+        >
+          <VisuallyHidden>Close</VisuallyHidden>
+          <span aria-hidden>×</span>
+        </button>
+        <p>Hello there. I am a dialog</p>
+      </Dialog>
+    </div>
+  )}
+</Component>
+```
+
+## Installation
+
+```bash
+npm install @reach/dialog
+# or
+yarn add @reach/dialog
+```
+
+And then import the components you need:
+
+```js
+import {
+  Dialog,
+  DialogOverlay,
+  DialogContent
+} from "@reach/dialog";
+```
+
+# Dialog
+
+High-level component to render a modal dialog window over the top of the page (or another dialog).
+
+```jsx
+<Dialog>
+  <p>Some Content</p>
+</Dialog>
+```
+
+## Dialog Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [element props](#dialog-element-props)           | spread |
+| [isOpen](#dialog-isopen)           | bool |
+| [onDismiss](#dialog-ondismiss)           | func |
+| [children](#dialog-element-props)  | node   |
+
+### Dialog element props
+
+*Type*: `spread`
+
+Any props not listed above will be spread onto the underlying `DialogContent` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
 ```.jsx
 <Component initialState={{ showDialog: false }}>
@@ -29,16 +95,87 @@ Blah blah
         Show Dialog
       </button>
 
-      <Dialog isOpen={state.showDialog}>
+      <Dialog style={{ color: "red" }} isOpen={state.showDialog}>
+        <p>My text is red because the style prop got applied to the div</p>
         <button onClick={() => setState({ showDialog: false })}>
-          Close Dialog
+          Okay
         </button>
-        <p>This is killer!</p>
-        <input type="text" /><br/>
-        <input type="text" />
-        <button>Ayyyyyy</button>
       </Dialog>
+    </div>
+  )}
+</Component>
+```
 
+### Dialog isOpen
+
+*Type*: `bool` default: `true`
+
+Controls whether the dialog is open or not.
+
+```jsx
+<Dialog isOpen={true}>
+  <p>I will be open</p>
+</Dialog>
+
+<Dialog isOpen={false}>
+  <p>I will be closed</p>
+</Dialog>
+```
+
+If you'd rather not have the dialog always rendered, you can put a guard in front of it and only render when it should be open. In this case you don’t need the `isOpen` prop at all.
+
+Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. You should probably do this when your dialog contains a lot of elements.
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      {state.showDialog && (
+        <Dialog>
+          <p>
+            I don’t use <code>isOpen</code>, I just render when I should
+            and not when I shouldn’t.
+          </p>
+          <button onClick={() => setState({ showDialog: false })}>
+            Okay
+          </button>
+        </Dialog>
+      )}
+    </div>
+  )}
+</Component>
+```
+
+### Dialog onDismiss
+
+*Type*: `func`
+
+When the user clicks outside the modal or hits the escape key, this function will be called. If you want the modal to close, you’ll need to set state.
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <Dialog
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
+      >
+        <p>
+          It is your job to close this with state when the user
+          clicks outside or presses escape.
+        </p>
+        <button onClick={() => setState({ showDialog: false })}>
+          Okay
+        </button>
+      </Dialog>
     </div>
   )}
 </Component>
@@ -46,95 +183,189 @@ Blah blah
 
 
 
-## Installation
 
-```bash
-npm install @reach/menu-button
-# or
-yarn add @reach/menu-button
-```
-
-And then import the components you need:
-
-```js
-import {
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-  MenuLink
-} from "@reach/menu-button";
-```
-
-# MenuButton
-
-Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. Must be rendered inside of a `<Menu>`.
-
-```jsx
-<Menu>
-  <MenuButton>Profile</MenuButton>
-  {/* ... */}
-</Menu>
-```
-
-## MenuButton CSS Selectors
-
-Please see the [styling guide](/styles).
-
-No styles are applied to the underlying `button`, so style it like any other button in your app.
-
-```css
-button {
-  color: blue;
-}
-```
-
-## MenuButton Props
-
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [button props](#menubutton-button-props)           | spread |
-| [children](#menubutton-children)  | node   |
-| onClick  | preventableEventFunc |
-| onKeyDown  | preventableEventFunc |
-
-### MenuButton button props
-
-*Type*: `spread`
-
-Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
-
-```.jsx
-<Menu>
-  <MenuButton
-    className="button-primary"
-    style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
-  >
-    Actions <span aria-hidden>▾</span>
-  </MenuButton>
-  <MenuList>
-    <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
-  </MenuList>
-</Menu>
-```
-
-
-### MenuButton children
+### Dialog children
 
 *Type*: `node`
 
 Accepts any renderable content.
 
 ```jsx
-<MenuButton>
-  Actions <span aria-hidden><Gear /></span>
-</MenuButton>
+<Dialog>
+  <p>Anything you want, you got it.</p>
+</Dialog>
 ```
 
+# DialogOverlay
 
-## Examples
+Low-level component if you need more control over the styles or rendering of the dialog overlay.
 
-### Animated
+Note: You must render a `DialogContent` inside.
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <DialogOverlay
+        style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
+        isOpen={state.showDialog}
+      >
+        <DialogContent style={{ boxShadow: '0px 10px 50px hsla(0, 0%, 0%, 0.33)' }}>
+          <p>The overlay styles are a white fade instead of the default black fade.</p>
+          <button onClick={() => setState({ showDialog: false })}>
+            Very nice.
+          </button>
+        </DialogContent>
+      </DialogOverlay>
+    </div>
+  )}
+</Component>
+```
+
+## DialogOverlay CSS Selectors
+
+Please see the [styling guide](/styles).
+
+Use the following CSS to target the overlay:
+
+```css
+[data-reach-dialog-overlay] {
+  background: hsla(0, 0%, 0%, 0.2);
+}
+```
+
+## DialogOverlay Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [element props](#dialogoverlay-element-props)           | spread |
+| [isOpen](#dialogoverlay-isopen)           | bool |
+| [onDismiss](#dialogoverlay-ondismiss)           | func |
+| [children](#dialogoverlay-element-props)  | node   |
+
+### DialogOverlay element props
+
+*Type*: `spread`
+
+Any props not listed above will be spread onto the underlying `div`.
+
+```jsx
+<DialogOverlay className="light-modal">
+  <p>The underlying element will receive a class</p>
+</DialogOverlay>
+```
+
+### DialogOverlay isOpen
+
+*Type*: `bool`
+
+Same as [Dialog `isOpen`](#dialog-isopen)
+
+### DialogOverlay onDismiss
+
+*Type*: `func`
+
+Same as [Dialog `onDismiss`](#dialog-ondismiss)
+
+### DialogOverlay children
+
+*Type*: `node`
+
+Should be a `DialogContent`.
+
+```jsx
+<DialogOverlay>
+  <DialogContent>
+    Hey!
+  </DialogContent>
+</DialogOverlay>
+```
+
+# DialogContent
+
+Low-level component if you need more control over the styles or rendering of the dialog content.
+
+Note: Must be a child of `DialogOverlay`.
+
+Note: You only need to use this when you are also styling `DialogOverlay`, otherwise you can use the high-level `Dialog` component and pass the props to it. Any props passed to `Dialog` component (besides `isOpen` and `onDismiss`) will be spread onto `DialogContent`.
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <DialogOverlay isOpen={state.showDialog}>
+        <DialogContent
+          style={{
+            border: "solid 5px hsla(0, 0%, 0%, 0.5)",
+            borderRadius: "10px"
+          }}
+        >
+          <p>I have a nice border now.</p>
+          <p>Note that we could have used the simpler <code>Dialog</code> instead.</p>
+          <button onClick={() => setState({ showDialog: false })}>
+            Got it.
+          </button>
+        </DialogContent>
+      </DialogOverlay>
+    </div>
+  )}
+</Component>
+```
+
+## DialogOverlay CSS Selectors
+
+Please see the [styling guide](/styles).
+
+Use the following CSS to target the overlay:
+
+```css
+[data-reach-dialog-content] {
+  border: solid 5px hsla(0, 0%, 0%, 0.5);
+}
+```
+
+## DialogContent Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [element props](#dialogcontent-element-props)           | spread |
+| [children](#dialogcontent-element-props)  | node   |
+
+### DialogContent element props
+
+*Type*: `spread`
+
+Any props not listed above will be spread onto the underlying `div`.
+
+```jsx
+<DialogContent className="nice-border">
+  <p>The underlying element will receive a class</p>
+</DialogOverlay>
+```
+
+### DialogContent children
+
+*Type*: `node`
+
+Accepts any renderable content.
+
+```jsx
+<DialogContent>
+  <p>Anything you want, you got it.</p>
+</DialogContent>
+```
+
+## Animation Example
+
+If you'd like to animate the content, give [React Spring](https://github.com/drcmda/react-spring) a shot.
 
 ```.jsx
 <Component initialState={{ showDialog: false }}>
@@ -163,9 +394,6 @@ Accepts any renderable content.
                   Close Dialog
                 </button>
                 <p>React Spring makes it too easy!</p>
-                <input type="text" />
-                <br />
-                <input type="text" />
                 <button>Ayyyyyy</button>
               </DialogContent>
             </DialogOverlay>
@@ -175,3 +403,10 @@ Accepts any renderable content.
   )}
 </Component>
 ```
+
+
+
+
+
+
+
