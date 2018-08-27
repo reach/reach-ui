@@ -12,14 +12,14 @@ import Helmet from "react-helmet"
 
 # MenuButton (Dropdown)
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
-
 [Menu](#menu) - 
 [MenuButton](#menubutton) - 
 [MenuList](#menulist) - 
 [MenuItem](#menuitem) - 
 [MenuLink](#menulink)
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
 
 An accessible dropdown menu for the common dropdown menu button design pattern.
 
@@ -188,22 +188,39 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 *Type*: `spread`
 
-All props are spread to the underlying  element. Here we apply a `className` and `style` to the element.
+All props are spread to the underlying  element. Here we apply a `className` the element.
 
 ```.jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
   </MenuButton>
-  <MenuList
-    className="gray-bg"
-    style={{ boxShadow: "2px 2px 10px hsla(0, 0%, 0%, 0.25)" }}
-  >
+  <MenuList className="slide-down">
     <MenuItem onSelect={() => {}}>Start Video</MenuItem>
     <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
     <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
   </MenuList>
 </Menu>
+```
+
+The stylesheet contains these rules to create the animation.
+
+```css
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list] {
+  border-radius: 5px;
+  animation: slide-down 0.2s ease;
+}
 ```
 
 

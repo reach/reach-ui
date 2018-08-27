@@ -1,0 +1,39 @@
+{
+  "name": "@reach/dialog",
+  "version": "0.0.2",
+  "description": "Accessible React button dropdown menu.",
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package"
+  },
+  "dependencies": {
+    "@reach/component-component": "^0.0.2",
+    "@reach/portal": "^0.0.2",
+    "@reach/utils": "^0.0.0",
+    "focus-trap": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
+  },
+  "devDependencies": {
+    "jest": "^23.4.2",
+    "react": "^16.4.1",
+    "react-test-renderer": "^16.4.1"
+  },
+  "jest": {
+    "testRegex": ".+\\.test\\.js$",
+    "testURL": "http://localhost"
+  },
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
+}

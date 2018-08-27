@@ -1,3 +1,4 @@
+import "../../../packages/dialog/styles.css";
 import "../../../packages/menu-button/styles.css";
 import "./normalize.css";
 import "./skeleton.css";
@@ -15,10 +16,15 @@ import { MDXProvider } from "@mdx-js/tag";
 import Layout from "./layout";
 
 import GatsbyLink from "gatsby-link";
-import Component from "../../../packages/component-component/src";
-import Rect from "../../../packages/rect/src";
-import WindowSize from "../../../packages/window-size/src";
-import Portal from "../../../packages/portal/src";
+import Component from "../../../packages/component-component";
+import Rect from "../../../packages/rect";
+import WindowSize from "../../../packages/window-size";
+import Portal from "../../../packages/portal";
+import {
+  Dialog,
+  DialogOverlay,
+  DialogContent
+} from "../../../packages/dialog/src";
 import {
   Menu,
   MenuList,
@@ -27,6 +33,9 @@ import {
   MenuLink
 } from "../../../packages/menu-button/src";
 import VisuallyHidden from "../../../packages/visually-hidden/src";
+
+import { Transition } from "../../vendor/react-spring/src/targets/web";
+import Phased from "recondition/dist/Phased";
 
 const PreComponent = ({ className, ...props }) =>
   props.children.props.props &&
@@ -46,7 +55,12 @@ const PreComponent = ({ className, ...props }) =>
         MenuButton,
         MenuItem,
         MenuLink,
-        VisuallyHidden
+        VisuallyHidden,
+        Dialog,
+        DialogOverlay,
+        DialogContent,
+        Transition,
+        Phased
       }}
     >
       <LiveEditor tabIndex="-1" />

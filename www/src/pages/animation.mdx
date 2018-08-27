@@ -1,0 +1,98 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Animation"
+  meta={[
+    {
+      name: "description",
+      content: "Blah blah."
+    }
+  ]}
+/>
+
+# Animation
+
+Animation is usually boiled down to three phases: enter, update, exit. With Reach UI you're probably after the just the "enter" and "exit" phases.
+
+You can achieve animation with CSS and/or composing with other React components. On this page we'll look at a few different approaches.
+
+## CSS Animations
+
+You can animate the "enter" phase with just a little CSS.
+
+```css
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list] {
+  border-radius: 5px;
+  animation: slide-down 0.2s ease;
+}
+```
+
+And then add the class to your menu:
+
+```.jsx
+<Menu>
+  <MenuButton>
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList className="slide-down">
+    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+However, you can't animate the "exit" phase with just CSS because React removes the element from the DOM immediately.
+
+## React Spring
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <Transition
+        from={{ opacity: 0, y: -10 }}
+        enter={{ opacity: 1, y: 0 }}
+        leave={{ opacity: 0, y: 10 }}
+      >
+        {state.showDialog &&
+          (styles => (
+            <DialogOverlay style={{ opacity: styles.opacity }}>
+              <DialogContent
+                style={{
+                  transform: `translate3d(0px, ${styles.y}px, 0px)`,
+                  border: "4px solid hsla(0, 0%, 0%, 0.5)",
+                  borderRadius: 10
+                }}
+              >
+                <button onClick={() => setState({ showDialog: false })}>
+                  Close Dialog
+                </button>
+                <p>React Spring makes it too easy!</p>
+                <input type="text" />
+                <br />
+                <input type="text" />
+                <button>Ayyyyyy</button>
+              </DialogContent>
+            </DialogOverlay>
+          ))}
+      </Transition>
+    </div>
+  )}
+</Component>
+```

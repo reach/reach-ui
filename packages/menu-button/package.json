@@ -16,6 +16,7 @@
     "@reach/rect": "^0.0.2",
     "@reach/router": "^1.1.0",
     "@reach/window-size": "^0.0.2",
+    "@reach/utils": "^0.0.0",
     "warning": "^4.0.2"
   },
   "peerDependencies": {

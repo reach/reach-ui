@@ -5,15 +5,9 @@ import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
 import { node, func } from "prop-types";
+import { wrapEvent } from "@reach/utils";
 
 let { Provider, Consumer } = createContext();
-
-let wrapEvent = (handler, cb) => event => {
-  handler && handler(event);
-  if (!event.defaultPrevented) {
-    return cb(event);
-  }
-};
 
 let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
   if (!state.isOpen && prevState.isOpen) {

@@ -1,5 +1,21 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
 
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list] {
+  border-radius: 5px;
+  animation: slide-down 0.2s ease;
+}
+
 #nav {
   position: fixed;
   top: 0;
@@ -150,10 +166,6 @@ h3 {
 
 reach-menu li {
   margin: 0;
-}
-
-.gray-bg {
-  background: #eee;
 }
 
 a {

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import Link from "gatsby-link";
 
+import "../../../packages/skip-nav/styles.css";
 import "../../../packages/menu-button/styles.css";
 import "./normalize.css";
 import "./skeleton.css";
@@ -10,6 +11,10 @@ import "./syntax.css";
 import "./app.css";
 
 import Logo from "./Logo";
+import {
+  SkipNavLink,
+  SkipNavContent
+} from "../../../packages/skip-nav";
 
 let NavLink = props => (
   <Link className="NavLink" {...props} />
@@ -33,17 +38,23 @@ let Nav = () => (
         <div style={{ height: 10 }} />
 
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/styling">Styling</NavLink>
         <NavLink to="/funding">Funding</NavLink>
 
         <hr />
 
+        <NavLink to="/styling">Styling</NavLink>
+        <NavLink to="/animation">Animation</NavLink>
+
+        <hr />
+
+        <NavLink to="/dialog">Dialog (Modal)</NavLink>
         <NavLink to="/menu-button">
           MenuButton (Dropdown)
         </NavLink>
         <NavLink to="/visually-hidden">
           VisuallyHidden
         </NavLink>
+        <NavLink to="/skip-nav">SkipNav</NavLink>
 
         <hr />
 
@@ -70,26 +81,27 @@ let Nav = () => (
 
 class Layout extends React.Component {
   render() {
-    let { children, data, meta, title } = this.props;
+    let { children } = this.props;
     return (
       <>
         <Helmet
           title="Reach UI"
-          meta={
-            meta || [
-              {
-                name: "description",
-                content:
-                  "The accessible foundation of your React apps and design systems."
-              }
-            ]
-          }
+          meta={[
+            {
+              name: "description",
+              content:
+                "The accessible foundation of your React apps and design systems."
+            }
+          ]}
         >
           <html lang="en" />
         </Helmet>
+        <SkipNavLink />
         <div id="container">
           <Nav />
-          <div id="content">{children}</div>
+          <SkipNavContent>
+            <div id="content">{children}</div>
+          </SkipNavContent>
         </div>
       </>
     );

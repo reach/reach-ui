@@ -1,0 +1,110 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - SkipNav"
+  meta={[
+    { name: 'description', content: "Skip navigation link for screenreader and keyboard users." }
+  ]}
+/>
+
+# SkipNav
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/skip-nav
+- Further reading: https://webaim.org/techniques/skipnav/
+
+Skip navigation link for screenreader and keyboard users. Because the main content is not usually the first thing in the document, it's valuable to provide a shortcut for keyboard and screenreader users to skip to the content.
+
+If the user does not navigate with the keyboard, they won't see the link.
+
+For a demo, click some empty space on this page to move focus to the document body, then hit the "tab" key You'll see the link pop up. Hit enter, then tab again. Rather than cycling through the navigation, you are tabbing through the main content of the page.
+
+```jsx
+ReactDOM.render((
+  <React.Fragment>
+    {/* put the link at the top of your app */}
+    <SkipNavLink/>
+    <div>
+      <YourNav/>
+      {/* and the content next to your main content */}
+      <SkipNavContent/>
+      <YourMainContent/>
+    </div>
+  </React.Fragment>
+), rootNode)
+```
+
+## Installation
+
+```bash
+yarn add @reach/skip-nav
+```
+
+And then import it:
+
+```js
+import { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
+```
+
+# SkipNavLink
+
+Renders a link that remains hidden until focused to skip to the main content.
+
+## SkipNavLink CSS Selectors
+
+```css
+[data-reach-skip-nav-link] {  }
+[data-reach-skip-nav-link]:focus { }
+```
+
+## SkipNavLink Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [element props](#skipnavlink-element-props)  | spread |
+| [children](#skipnavlink-children)  | node |
+
+### SkipNavLink element props
+
+*Type*: `spread`
+
+Element props are spread to the underlying link.
+
+### SkipNavLink children
+
+*Type*: `node` default: `"Skip to content"`
+
+Allows you to change the text for your preferred phrase or localization.
+
+```jsx
+<SkipNavLink>saltar al contenido</SkipNavLink>
+```
+
+# SkipNavContent
+
+Renders a div as the target for the link.
+
+## SkipNavLink Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [children](#skipnavcontent-children)  | node |
+
+### SkipNavLink children
+
+*Type*: `node`
+
+You can place the `SkipNavContent` element as a sibling to your main content or as a wrapper:
+
+```jsx
+<SkipNavContent/>
+<YourMainContent/>
+
+// or
+
+<SkipNavContent>
+  <YourMainContent/>
+</SkipNavContent>
+```
+
+Keep in mind it renders a `div`, so it may mess with your CSS depending on where it’s placed.
+

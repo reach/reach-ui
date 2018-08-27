@@ -1,0 +1,177 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Dialog (Modal)"
+  meta={[
+    {
+      name: "description",
+      content: "Blah blah."
+    }
+  ]}
+/>
+
+# Dialog (Modal)
+
+[Dialog](#dialog) - 
+[DialogOverlay](#dialogoverlay) - 
+[DialogContent](#dialogcontent)
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/dialog
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog
+
+Blah blah
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <Dialog isOpen={state.showDialog}>
+        <button onClick={() => setState({ showDialog: false })}>
+          Close Dialog
+        </button>
+        <p>This is killer!</p>
+        <input type="text" /><br/>
+        <input type="text" />
+        <button>Ayyyyyy</button>
+      </Dialog>
+
+    </div>
+  )}
+</Component>
+```
+
+
+
+## Installation
+
+```bash
+npm install @reach/menu-button
+# or
+yarn add @reach/menu-button
+```
+
+And then import the components you need:
+
+```js
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  MenuLink
+} from "@reach/menu-button";
+```
+
+# MenuButton
+
+Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. Must be rendered inside of a `<Menu>`.
+
+```jsx
+<Menu>
+  <MenuButton>Profile</MenuButton>
+  {/* ... */}
+</Menu>
+```
+
+## MenuButton CSS Selectors
+
+Please see the [styling guide](/styles).
+
+No styles are applied to the underlying `button`, so style it like any other button in your app.
+
+```css
+button {
+  color: blue;
+}
+```
+
+## MenuButton Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [button props](#menubutton-button-props)           | spread |
+| [children](#menubutton-children)  | node   |
+| onClick  | preventableEventFunc |
+| onKeyDown  | preventableEventFunc |
+
+### MenuButton button props
+
+*Type*: `spread`
+
+Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
+
+```.jsx
+<Menu>
+  <MenuButton
+    className="button-primary"
+    style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
+  >
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList>
+    <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+
+### MenuButton children
+
+*Type*: `node`
+
+Accepts any renderable content.
+
+```jsx
+<MenuButton>
+  Actions <span aria-hidden><Gear /></span>
+</MenuButton>
+```
+
+
+## Examples
+
+### Animated
+
+```.jsx
+<Component initialState={{ showDialog: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <Transition
+        from={{ opacity: 0, y: -10 }}
+        enter={{ opacity: 1, y: 0 }}
+        leave={{ opacity: 0, y: 10 }}
+      >
+        {state.showDialog &&
+          (styles => (
+            <DialogOverlay style={{ opacity: styles.opacity }}>
+              <DialogContent
+                style={{
+                  transform: `translate3d(0px, ${styles.y}px, 0px)`,
+                  border: "4px solid hsla(0, 0%, 0%, 0.5)",
+                  borderRadius: 10
+                }}
+              >
+                <button onClick={() => setState({ showDialog: false })}>
+                  Close Dialog
+                </button>
+                <p>React Spring makes it too easy!</p>
+                <input type="text" />
+                <br />
+                <input type="text" />
+                <button>Ayyyyyy</button>
+              </DialogContent>
+            </DialogOverlay>
+          ))}
+      </Transition>
+    </div>
+  )}
+</Component>
+```

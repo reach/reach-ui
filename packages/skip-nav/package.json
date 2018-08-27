@@ -1,0 +1,24 @@
+{
+  "name": "@reach/skip-nav",
+  "version": "0.0.0",
+  "description": "Skip navigation links for screen reader and keyboard users.",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package"
+  },
+  "peerDependencies": {
+    "react": "15.x || 16.x",
+    "react-dom": "15.x || 16.x"
+  },
+  "author": "Ryan Florence",
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
+}
