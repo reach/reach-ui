@@ -1,11 +1,3 @@
-// import { configure } from "@storybook/react";
-
-// function loadStories() {
-//   require("../stories.js");
-// }
-
-// configure(loadStories, module);
-
 import "./styles.css";
 import React from "react";
 import path from "path";
@@ -19,6 +11,13 @@ let getPackageName = filePath =>
     .reverse()[1];
 
 configure(() => {
+  // Story book is SUPER SLOW so I tend to do just one example at a time.
+  // const {
+  //   name,
+  //   Example
+  // } = require("../packages/dialog/examples/nested.example.js");
+  // storiesOf("Dialog", module).add(name, () => <Example />);
+
   // Automatically import all examples
   const req = require.context(
     "../packages",

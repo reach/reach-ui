@@ -6,4 +6,5 @@ lerna-debug.log*
 /packages/*/umd
 /packages/*/index.js
 /packages/*/lib
+/foo.js
 

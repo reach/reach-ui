@@ -104,6 +104,7 @@ let DialogContent = React.forwardRef(
     <FocusContext.Consumer>
       {contentRef => (
         <div
+          aria-modal="true"
           data-reach-dialog-content
           tabIndex="-1"
           onClick={wrapEvent(onClick, stopPropagation)}
