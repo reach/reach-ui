@@ -1,6 +1,10 @@
-# Welcome
+# Welcome to Reach UI Developement ♿️
 
 Thanks for getting involved with Reach UI development!
+
+## Looking for the documentation?
+
+https://ui.reach.tech
 
 ## Getting Started
 
