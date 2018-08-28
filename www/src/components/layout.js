@@ -61,23 +61,7 @@ let Nav = ({ media }) => (
     }}
   >
     {({ setState, state, refs }) => (
-      <div
-        id="nav"
-        style={{
-          left:
-            state.isOpen == null
-              ? undefined
-              : state.isOpen
-                ? 0
-                : -250
-        }}
-        onFocus={() => {
-          setState({ isOpen: true });
-        }}
-        onBlur={() => {
-          setState({ isOpen: false });
-        }}
-      >
+      <React.Fragment>
         {media &&
           media.small && (
             <React.Fragment>
@@ -87,7 +71,7 @@ let Nav = ({ media }) => (
                   width: 40,
                   height: 40,
                   padding: 8,
-                  position: "fixed",
+                  position: "absolute",
                   left: 10,
                   top: 10,
                   border: "none",
@@ -95,8 +79,7 @@ let Nav = ({ media }) => (
                   textTransform: "none",
                   fontSize: "80%",
                   borderRadius: "50%",
-                  boxShadow:
-                    "0 2px 10px hsla(0, 0%, 0%, 0.25)"
+                  zIndex: 2
                 }}
                 onFocus={event => {
                   event.stopPropagation();
@@ -120,72 +103,94 @@ let Nav = ({ media }) => (
             </React.Fragment>
           )}
         <div
+          id="nav"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            minHeight: "100%"
+            left:
+              state.isOpen == null
+                ? undefined
+                : state.isOpen
+                  ? 0
+                  : -250
+          }}
+          onFocus={() => {
+            setState({ isOpen: true });
+          }}
+          onBlur={() => {
+            setState({ isOpen: false });
           }}
         >
-          <div style={{ flex: 1 }}>
-            <div style={{ padding: "30px 50px 20px 20px" }}>
-              <Logo />
-            </div>
-
-            <div style={{ height: 10 }} />
-
-            <NavLink
-              href="/"
-              ref={node => {
-                refs.navNode = node;
-              }}
-            >
-              Home
-            </NavLink>
-            <NavLink to="/funding">Funding</NavLink>
-            <NavLink href="https://spectrum.chat/reach">
-              Spectrum Community ↗
-            </NavLink>
-            <NavLink href="https://github.com/reach/reach-ui">
-              Github ↗
-            </NavLink>
-
-            <hr />
-
-            <NavLink to="/styling">Styling</NavLink>
-
-            <hr />
-
-            <NavLink to="/dialog">Dialog (Modal)</NavLink>
-            <NavLink to="/menu-button">
-              MenuButton (Dropdown)
-            </NavLink>
-            <NavLink to="/skip-nav">SkipNav</NavLink>
-            <NavLink to="/visually-hidden">
-              VisuallyHidden
-            </NavLink>
-
-            <hr />
-
-            <NavLink to="/component-component">
-              Component²
-            </NavLink>
-            <NavLink to="/rect">Rect</NavLink>
-            <NavLink to="/window-size">WindowSize</NavLink>
-          </div>
-          <footer
+          <div
             style={{
-              marginTop: 100,
-              color: "hsla(0, 100%, 100%, 0.75)",
-              textAlign: "center",
-              fontSize: "80%",
-              padding: 5
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              minHeight: "100%"
             }}
           >
-            &copy; 2018 Reach
-          </footer>
+            <div style={{ flex: 1 }}>
+              <div
+                style={{ padding: "30px 50px 20px 20px" }}
+              >
+                <Logo />
+              </div>
+
+              <div style={{ height: 10 }} />
+
+              <NavLink
+                href="/"
+                ref={node => {
+                  refs.navNode = node;
+                }}
+              >
+                Home
+              </NavLink>
+              <NavLink to="/funding">Funding</NavLink>
+              <NavLink href="https://spectrum.chat/reach">
+                Spectrum Community ↗
+              </NavLink>
+              <NavLink href="https://github.com/reach/reach-ui">
+                Github ↗
+              </NavLink>
+
+              <hr />
+
+              <NavLink to="/styling">Styling</NavLink>
+
+              <hr />
+
+              <NavLink to="/dialog">Dialog (Modal)</NavLink>
+              <NavLink to="/menu-button">
+                MenuButton (Dropdown)
+              </NavLink>
+              <NavLink to="/skip-nav">SkipNav</NavLink>
+              <NavLink to="/visually-hidden">
+                VisuallyHidden
+              </NavLink>
+
+              <hr />
+
+              <NavLink to="/component-component">
+                Component²
+              </NavLink>
+              <NavLink to="/rect">Rect</NavLink>
+              <NavLink to="/window-size">
+                WindowSize
+              </NavLink>
+            </div>
+            <footer
+              style={{
+                marginTop: 100,
+                color: "hsla(0, 100%, 100%, 0.75)",
+                textAlign: "center",
+                fontSize: "80%",
+                padding: 5
+              }}
+            >
+              &copy; 2018 Reach
+            </footer>
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     )}
   </Component>
 );
