@@ -1,4 +1,4 @@
-# Welcome to Reach UI Developement ♿️
+# Welcome to Reach UI Development ♿️
 
 Thanks for getting involved with Reach UI development!
 
