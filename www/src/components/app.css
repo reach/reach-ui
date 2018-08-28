@@ -257,3 +257,7 @@ button#hamburger {
 #hamburger:focus {
   background: hsl(211, 100%, 50%);
 }
+
+[data-reach-dialog-overlay] {
+  z-index: 1;
+}

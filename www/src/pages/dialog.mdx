@@ -406,7 +406,15 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 
 ## Accessibility
 
-The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screenreader users. Instaed, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog.
+### Tabbable Elements
+
+It is recommended to have at least one tabbable element in the dialog content. Ideally the first element in the dialog is a close button. If no tabbable elements are found, the dialog content element itself will receive focus.
+
+### Aria Hiding Other Elements
+
+The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screenreader users. Instead, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog. This traps the virtual cursor inside the dialog.
+
+This is a little unusual for a React component to traverse the DOM that it isn't a part of. Care has been taken to restore the manipulated attributes back to their original values.
 
 ### Keyboard Accessibility
 
