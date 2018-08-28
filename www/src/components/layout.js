@@ -22,12 +22,14 @@ import {
   SkipNavContent
 } from "../../../packages/skip-nav";
 
-let NavLink = props =>
-  props.href ? (
-    <a className="NavLink" {...props} />
-  ) : (
-    <Link className="NavLink" {...props} />
-  );
+let NavLink = React.forwardRef(
+  (props, ref) =>
+    props.href ? (
+      <a ref={ref} className="NavLink" {...props} />
+    ) : (
+      <Link ref={ref} className="NavLink" {...props} />
+    )
+);
 
 let Bar = () => (
   <div
@@ -39,25 +41,35 @@ let Bar = () => (
   />
 );
 
-let Nav = ({ small }) => (
+let Nav = ({ media }) => (
   <Component
+    media={media}
     refs={{ navNode: null }}
-    initialState={{ isOpen: false }}
+    initialState={{ isOpen: null }}
+    didMount={({ setState, props }) => {
+      setState({ isOpen: !props.media.small });
+    }}
+    didUpdate={({ prevProps, props, setState, state }) => {
+      if (prevProps.media.small && !props.media.small) {
+        setState({ isOpen: true });
+      } else if (
+        !prevProps.media.small &&
+        props.media.small
+      ) {
+        setState({ isOpen: false });
+      }
+    }}
   >
     {({ setState, state, refs }) => (
       <div
         id="nav"
         style={{
-          position: "fixed",
-          top: 0,
-          bottom: 0,
-          overflow: "auto",
-          width: 250,
-          paddingTop: small ? 50 : 0,
-          background: "hsl(211, 81%, 36%)",
-          left: state.isOpen ? 0 : small ? -250 : 0,
-          transition: "left 200ms ease",
-          zIndex: 1
+          left:
+            state.isOpen == null
+              ? undefined
+              : state.isOpen
+                ? 0
+                : -250
         }}
         onFocus={() => {
           setState({ isOpen: true });
@@ -66,50 +78,47 @@ let Nav = ({ small }) => (
           setState({ isOpen: false });
         }}
       >
-        {small && (
-          <React.Fragment>
-            <button
-              id="hamburger"
-              style={{
-                width: 40,
-                height: 40,
-                padding: 8,
-                position: "fixed",
-                left: 10,
-                top: 10,
-                border: "none",
-                font: "inherit",
-                textTransform: "none",
-                fontSize: "80%",
-                borderRadius: "50%",
-                boxShadow:
-                  "0 2px 10px hsla(0, 0%, 0%, 0.25)"
-              }}
-              onFocus={event => {
-                event.stopPropagation();
-              }}
-              onClick={() =>
-                setState(
-                  state => ({
-                    isOpen: !state.isOpen
-                  }),
-                  () => {
-                    if (state.isOpen) {
+        {media &&
+          media.small && (
+            <React.Fragment>
+              <button
+                id="hamburger"
+                style={{
+                  width: 40,
+                  height: 40,
+                  padding: 8,
+                  position: "fixed",
+                  left: 10,
+                  top: 10,
+                  border: "none",
+                  font: "inherit",
+                  textTransform: "none",
+                  fontSize: "80%",
+                  borderRadius: "50%",
+                  boxShadow:
+                    "0 2px 10px hsla(0, 0%, 0%, 0.25)"
+                }}
+                onFocus={event => {
+                  event.stopPropagation();
+                }}
+                onClick={() => {
+                  let nextState = !state.isOpen;
+                  setState({ isOpen: nextState }, () => {
+                    if (nextState) {
                       refs.navNode.focus();
                     }
-                  }
-                )
-              }
-            >
-              <div aria-hidden="true">
-                <Bar />
-                <Bar />
-                <Bar />
-              </div>
-              <VisuallyHidden>Toggle Nav</VisuallyHidden>
-            </button>
-          </React.Fragment>
-        )}
+                  });
+                }}
+              >
+                <div aria-hidden="true">
+                  <Bar />
+                  <Bar />
+                  <Bar />
+                </div>
+                <VisuallyHidden>Toggle Nav</VisuallyHidden>
+              </button>
+            </React.Fragment>
+          )}
         <div
           style={{
             display: "flex",
@@ -118,17 +127,21 @@ let Nav = ({ small }) => (
             minHeight: "100%"
           }}
         >
-          <div
-            style={{ flex: 1 }}
-            ref={node => (refs.navNode = node)}
-          >
+          <div style={{ flex: 1 }}>
             <div style={{ padding: "30px 50px 20px 20px" }}>
               <Logo />
             </div>
 
             <div style={{ height: 10 }} />
 
-            <NavLink to="/">Home</NavLink>
+            <NavLink
+              href="/"
+              ref={node => {
+                refs.navNode = node;
+              }}
+            >
+              Home
+            </NavLink>
             <NavLink to="/funding">Funding</NavLink>
             <NavLink href="https://spectrum.chag">
               Spectrum Community ↗
@@ -196,27 +209,16 @@ class Layout extends React.Component {
         </Helmet>
         <SkipNavLink style={{ zIndex: 2 }} />
         <MatchMedia
-          server={{ small: false }}
+          server={{ small: true }}
           media={{
             small: "(max-width: 800px)"
           }}
         >
           {media => (
             <div id="container">
-              <Nav small={media.small} />
+              <Nav media={media} />
               <SkipNavContent>
-                <div
-                  id="content"
-                  style={{
-                    marginLeft: media.small ? 0 : 250,
-                    padding: media.small
-                      ? "60px 20px"
-                      : "20px 80px 80px 80px",
-                    maxWidth: 800
-                  }}
-                >
-                  {children}
-                </div>
+                <div id="content">{children}</div>
               </SkipNavContent>
             </div>
           )}

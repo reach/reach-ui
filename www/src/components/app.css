@@ -16,7 +16,33 @@
   animation: slide-down 0.2s ease;
 }
 
+#nav {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  width: 250px;
+  background: hsl(211, 81%, 36%);
+  transition: left 200ms ease;
+  z-index: 1;
+}
+
 #content {
+  margin-left: 250px;
+  padding: 20px 80px 80px 80px;
+  max-width: 800px;
+}
+
+@media (max-width: 800px) {
+  #nav {
+    padding-top: 50px;
+    left: -250px;
+  }
+
+  #content {
+    margin-left: 0;
+    padding: 60px 20px;
+  }
 }
 
 #nav hr {

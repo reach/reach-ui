@@ -8,14 +8,13 @@ export default class MatchMedia extends React.Component {
     ? createMediaListener(this.props.media)
     : null;
 
-  state = canUseDOM
-    ? this.media.getState()
-    : this.props.server;
+  state = canUseDOM ? this.media.getState() : null;
 
   componentDidMount() {
     this.media.listen(state => {
       this.setState(state);
     });
+    this.setState(this.media.getState());
   }
 
   componentWillUnmount() {
