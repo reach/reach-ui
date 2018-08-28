@@ -143,7 +143,7 @@ let Nav = ({ media }) => (
               Home
             </NavLink>
             <NavLink to="/funding">Funding</NavLink>
-            <NavLink href="https://spectrum.chag">
+            <NavLink href="https://spectrum.chat/reach">
               Spectrum Community ↗
             </NavLink>
             <NavLink href="https://github.com/reach/reach-ui">
