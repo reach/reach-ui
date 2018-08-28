@@ -79,7 +79,7 @@ let Nav = ({ media }) => (
                   textTransform: "none",
                   fontSize: "80%",
                   borderRadius: "50%",
-                  zIndex: 2
+                  zIndex: 1
                 }}
                 onFocus={event => {
                   event.stopPropagation();
@@ -116,7 +116,9 @@ let Nav = ({ media }) => (
             setState({ isOpen: true });
           }}
           onBlur={() => {
-            setState({ isOpen: false });
+            if (media.small) {
+              setState({ isOpen: false });
+            }
           }}
         >
           <div

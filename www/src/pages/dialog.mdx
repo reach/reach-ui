@@ -404,9 +404,17 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 </Component>
 ```
 
+## Accessibility
 
+The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screenreader users. Instaed, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog.
 
+### Keyboard Accessibility
 
+| key | action |
+|-----|--------|
+| `Escape` | Dismisses the dialog (if the app allows) |
 
+## Z Index Wars
 
+Dialog does not set a z-index, it depends on the DOM order to be on top of the rest of the app (the overlay is inserted at the end of the document when it is opened). If your app is already battling in the z-index wars, be sure to add a z-index to the `<Dialog>` or `<DialogOverlay>` that you render.
 
