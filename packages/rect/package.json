@@ -13,8 +13,8 @@
     "@reach/observe-rect": "^1.0.3"
   },
   "peerDependencies": {
-    "react": "15.x || 16.x",
-    "react-dom": "15.x || 16.x"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "author": "",
   "license": "MIT",

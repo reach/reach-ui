@@ -12,8 +12,8 @@
     "@reach/component-component": "^0.0.2"
   },
   "peerDependencies": {
-    "react": "15.x || 16.x",
-    "react-dom": "15.x || 16.x"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "author": "",
   "license": "MIT",

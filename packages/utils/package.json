@@ -1,7 +1,7 @@
 {
   "name": "@reach/utils",
   "version": "0.0.0",
-  "description": "",
+  "description": "Internal, shared utilities for Reach UI.",
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "build": "node ../../shared/build-package"
   },
   "peerDependencies": {
-    "react": "15.x || 16.x",
-    "react-dom": "15.x || 16.x"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "author": "Ryan Florence",
   "license": "MIT",

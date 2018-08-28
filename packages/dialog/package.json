@@ -1,7 +1,7 @@
 {
   "name": "@reach/dialog",
   "version": "0.0.2",
-  "description": "Accessible React button dropdown menu.",
+  "description": "Accessible React Modal Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "main": "index.js",
@@ -17,8 +17,8 @@
     "focus-trap": "^3.0.0"
   },
   "peerDependencies": {
-    "react": "15.x || 16.x",
-    "react-dom": "15.x || 16.x"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "devDependencies": {
     "jest": "^23.4.2",
