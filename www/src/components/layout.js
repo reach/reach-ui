@@ -13,6 +13,10 @@ import "./syntax.css";
 import "./app.css";
 
 import Logo from "./Logo";
+import MatchMedia from "./MatchMedia";
+import Component from "../../../packages/component-component";
+import VisuallyHidden from "../../../packages/visually-hidden";
+
 import {
   SkipNavLink,
   SkipNavContent
@@ -25,68 +29,152 @@ let NavLink = props =>
     <Link className="NavLink" {...props} />
   );
 
-let Nav = () => (
-  <div id="nav">
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        minHeight: "100%"
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <div style={{ padding: "30px 50px 20px 20px" }}>
-          <Logo />
-        </div>
+let Bar = () => (
+  <div
+    style={{
+      height: 3,
+      background: "white",
+      margin: "3px 0"
+    }}
+  />
+);
 
-        <div style={{ height: 10 }} />
-
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/funding">Funding</NavLink>
-        <NavLink href="https://spectrum.chag">
-          Spectrum Community ↗
-        </NavLink>
-        <NavLink href="https://github.com/reach/reach-ui">
-          Github ↗
-        </NavLink>
-
-        <hr />
-
-        <NavLink to="/styling">Styling</NavLink>
-
-        <hr />
-
-        <NavLink to="/dialog">Dialog (Modal)</NavLink>
-        <NavLink to="/menu-button">
-          MenuButton (Dropdown)
-        </NavLink>
-        <NavLink to="/skip-nav">SkipNav</NavLink>
-        <NavLink to="/visually-hidden">
-          VisuallyHidden
-        </NavLink>
-
-        <hr />
-
-        <NavLink to="/component-component">
-          Component²
-        </NavLink>
-        <NavLink to="/rect">Rect</NavLink>
-        <NavLink to="/window-size">WindowSize</NavLink>
-      </div>
-      <footer
+let Nav = ({ small }) => (
+  <Component
+    refs={{ navNode: null }}
+    initialState={{ isOpen: false }}
+  >
+    {({ setState, state, refs }) => (
+      <div
+        id="nav"
         style={{
-          marginTop: 100,
-          color: "hsla(0, 100%, 100%, 0.75)",
-          textAlign: "center",
-          fontSize: "80%",
-          padding: 5
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          overflow: "auto",
+          width: 250,
+          paddingTop: small ? 50 : 0,
+          background: "hsl(211, 81%, 36%)",
+          left: state.isOpen ? 0 : small ? -250 : 0,
+          transition: "left 200ms ease",
+          zIndex: 1
+        }}
+        onFocus={() => {
+          setState({ isOpen: true });
+        }}
+        onBlur={() => {
+          setState({ isOpen: false });
         }}
       >
-        &copy; 2018 Reach
-      </footer>
-    </div>
-  </div>
+        {small && (
+          <React.Fragment>
+            <button
+              id="hamburger"
+              style={{
+                width: 40,
+                height: 40,
+                padding: 8,
+                position: "fixed",
+                left: 10,
+                top: 10,
+                border: "none",
+                font: "inherit",
+                textTransform: "none",
+                fontSize: "80%",
+                borderRadius: "50%",
+                boxShadow:
+                  "0 2px 10px hsla(0, 0%, 0%, 0.25)"
+              }}
+              onFocus={event => {
+                event.stopPropagation();
+              }}
+              onClick={() =>
+                setState(
+                  state => ({
+                    isOpen: !state.isOpen
+                  }),
+                  () => {
+                    if (state.isOpen) {
+                      refs.navNode.focus();
+                    }
+                  }
+                )
+              }
+            >
+              <div aria-hidden="true">
+                <Bar />
+                <Bar />
+                <Bar />
+              </div>
+              <VisuallyHidden>Toggle Nav</VisuallyHidden>
+            </button>
+          </React.Fragment>
+        )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            minHeight: "100%"
+          }}
+        >
+          <div
+            style={{ flex: 1 }}
+            ref={node => (refs.navNode = node)}
+          >
+            <div style={{ padding: "30px 50px 20px 20px" }}>
+              <Logo />
+            </div>
+
+            <div style={{ height: 10 }} />
+
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/funding">Funding</NavLink>
+            <NavLink href="https://spectrum.chag">
+              Spectrum Community ↗
+            </NavLink>
+            <NavLink href="https://github.com/reach/reach-ui">
+              Github ↗
+            </NavLink>
+
+            <hr />
+
+            <NavLink to="/styling">Styling</NavLink>
+
+            <hr />
+
+            <NavLink to="/dialog">Dialog (Modal)</NavLink>
+            <NavLink to="/menu-button">
+              MenuButton (Dropdown)
+            </NavLink>
+            <NavLink to="/skip-nav">SkipNav</NavLink>
+            <NavLink to="/visually-hidden">
+              VisuallyHidden
+            </NavLink>
+
+            <hr />
+
+            <NavLink to="/component-component">
+              Component²
+            </NavLink>
+            <NavLink to="/rect">Rect</NavLink>
+            <NavLink to="/window-size">WindowSize</NavLink>
+          </div>
+          <footer
+            style={{
+              marginTop: 100,
+              color: "hsla(0, 100%, 100%, 0.75)",
+              textAlign: "center",
+              fontSize: "80%",
+              padding: 5
+            }}
+          >
+            &copy; 2018 Reach
+          </footer>
+        </div>
+      </div>
+    )}
+  </Component>
 );
 
 class Layout extends React.Component {
@@ -106,13 +194,32 @@ class Layout extends React.Component {
         >
           <html lang="en" />
         </Helmet>
-        <SkipNavLink />
-        <div id="container">
-          <Nav />
-          <SkipNavContent>
-            <div id="content">{children}</div>
-          </SkipNavContent>
-        </div>
+        <SkipNavLink style={{ zIndex: 2 }} />
+        <MatchMedia
+          media={{
+            small: "(max-width: 800px)"
+          }}
+        >
+          {media => (
+            <div id="container">
+              <Nav small={media.small} />
+              <SkipNavContent>
+                <div
+                  id="content"
+                  style={{
+                    marginLeft: media.small ? 0 : 250,
+                    padding: media.small
+                      ? "60px 20px"
+                      : "20px 80px 80px 80px",
+                    maxWidth: 800
+                  }}
+                >
+                  {children}
+                </div>
+              </SkipNavContent>
+            </div>
+          )}
+        </MatchMedia>
       </>
     );
   }

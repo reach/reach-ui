@@ -16,19 +16,7 @@
   animation: slide-down 0.2s ease;
 }
 
-#nav {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  overflow: auto;
-  width: 250px;
-  background: hsl(211, 81%, 36%);
-}
-
 #content {
-  margin-left: 250px;
-  padding: 20px 80px 80px 80px;
-  max-width: 800px;
 }
 
 #nav hr {
@@ -104,7 +92,10 @@ code {
   margin-bottom: 2.5rem;
   border: solid 1px hsla(0, 0%, 0%, 0.1);
   position: relative;
-  padding-top: 10px;
+}
+
+.react-live > pre {
+  padding-top: 15px;
 }
 
 .react-live:before {
@@ -230,4 +221,12 @@ a:active {
 
 [data-reach-dialog-content] > button.close-button:focus {
   color: hsl(211, 100%, 50%);
+}
+
+button#hamburger {
+  background: hsl(211, 81%, 36%);
+}
+
+#hamburger:focus {
+  background: hsl(211, 100%, 50%);
 }

@@ -55,6 +55,52 @@ And then add the class to your menu:
 
 However, you can't animate the "exit" phase with just CSS because React removes the element from the DOM immediately.
 
+## CSS + reCONDITION Phase
+
+You may want to use CSS for both the enter and exit phases. For this, we can combine some CSS with the `Phase` component from reCONDITION.
+
+First add the CSS to define the animation:
+
+```css
+.slide-down  {
+  transition-property: transform, opacity; 
+  transition-duration: 300ms;
+  
+  opacity: 0;
+  transform: translateY(-10px); 
+}
+
+.slide-down.enter {
+  opacity: 1;
+  transform: translateY(0px); 
+}   
+
+.slide-down.exit {
+  opacity: 0;
+}  
+```
+
+Then import the Phased component:
+
+```jsx
+import { Phased } from "recondition";
+```
+
+Now we're ready to go:
+
+```.jsx
+<Menu>
+  <MenuButton>
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList className="slide-down">
+    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+  </MenuList>
+</Menu>
+```
+
 ## React Spring
 
 ```.jsx
