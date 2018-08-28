@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Accessible React Modal Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -11,9 +11,9 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^0.0.2",
-    "@reach/portal": "^0.0.2",
-    "@reach/utils": "^0.0.0",
+    "@reach/component-component": "^0.1.0",
+    "@reach/portal": "^0.1.0",
+    "@reach/utils": "^0.1.0",
     "focus-trap": "^3.0.0"
   },
   "peerDependencies": {
