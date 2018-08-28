@@ -1,10 +1,16 @@
 import React from "react";
 import createMediaListener from "./createMediaListener";
 
-export default class MatchMedia extends React.Component {
-  media = createMediaListener(this.props.media);
+let canUseDOM = typeof window !== "undefined";
 
-  state = this.media.getState();
+export default class MatchMedia extends React.Component {
+  media = canUseDOM
+    ? createMediaListener(this.props.media)
+    : null;
+
+  state = canUseDOM
+    ? this.media.getState()
+    : this.props.server;
 
   componentDidMount() {
     this.media.listen(state => {

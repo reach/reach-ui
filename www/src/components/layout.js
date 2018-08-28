@@ -196,6 +196,7 @@ class Layout extends React.Component {
         </Helmet>
         <SkipNavLink style={{ zIndex: 2 }} />
         <MatchMedia
+          server={{ small: false }}
           media={{
             small: "(max-width: 800px)"
           }}

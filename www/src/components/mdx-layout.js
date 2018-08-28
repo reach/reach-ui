@@ -22,15 +22,15 @@ import {
   Dialog,
   DialogOverlay,
   DialogContent
-} from "../../../packages/dialog/src";
+} from "../../../packages/dialog";
 import {
   Menu,
   MenuList,
   MenuButton,
   MenuItem,
   MenuLink
-} from "../../../packages/menu-button/src";
-import VisuallyHidden from "../../../packages/visually-hidden/src";
+} from "../../../packages/menu-button";
+import VisuallyHidden from "../../../packages/visually-hidden";
 
 import { Transition } from "../../vendor/react-spring/src/targets/web";
 import Phased from "recondition/dist/Phased";
