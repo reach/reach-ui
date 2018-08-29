@@ -12,10 +12,10 @@ import Helmet from "react-helmet"
 
 # MenuButton (Dropdown)
 
-[Menu](#menu) - 
-[MenuButton](#menubutton) - 
-[MenuList](#menulist) - 
-[MenuItem](#menuitem) - 
+[Menu](#menu) -
+[MenuButton](#menubutton) -
+[MenuList](#menulist) -
+[MenuItem](#menuitem) -
 [MenuLink](#menulink)
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
@@ -28,7 +28,7 @@ Please note that the buttons on this page are styled by this website. They are j
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem onSelect={() => alert("Download")}>Download</MenuItem>
@@ -135,7 +135,7 @@ Any props not listed above will be spread onto the underlying button element. Yo
     className="button-primary"
     style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
   >
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
@@ -152,7 +152,7 @@ Accepts any renderable content.
 
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden><Gear /></span>
+  Actions <span aria-hidden="true"><Gear /></span>
 </MenuButton>
 ```
 
@@ -193,7 +193,7 @@ All props are spread to the underlying  element. Here we apply a `className` the
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList className="slide-down">
     <MenuItem onSelect={() => {}}>Start Video</MenuItem>
@@ -277,7 +277,7 @@ The following example has this css applied:
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList>
     <MenuItem className="red-highlight" onSelect={() => {}}>
@@ -343,7 +343,7 @@ You can put any type of content inside of a `<MenuItem>`.
 ```.jsx
 <Menu>
   <MenuButton>
-    Your Cats <span aria-hidden>▾</span>
+    Your Cats <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList className="kittys">
     <MenuItem onSelect={() => {}}>
@@ -553,7 +553,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden>▾</span>
+  Actions <span aria-hidden="true">▾</span>
 </MenuButton>
 ```
 
@@ -570,7 +570,7 @@ However, if you have no text and only an icon, please make sure your icon has a 
 import AriaText from "@reach/aria-text"
 <MenuButton>
   <AriaText>Actions</AriaText>
-  <svg aria-hidden>
+  <svg aria-hidden="true">
     <polygon points="0,0 20,0 10,10 " />
   </svg>
 </MenuButton>
@@ -582,7 +582,7 @@ import AriaText from "@reach/aria-text"
 
 // Or just label the button and hide everything
 <MenuButton aria-label="Actions">
-  <span aria-hidden>
+  <span aria-hidden="true">
     <TripleDots/>
   </span>
 </MenuButton>
@@ -599,6 +599,3 @@ import AriaText from "@reach/aria-text"
 | `Escape` | Close |
 | `Tab` | No effect |
 | TODO: Type characters | Highlights matching item |
-
-
-

@@ -43,7 +43,7 @@ And then add the class to your menu:
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList className="slide-down">
     <MenuItem onSelect={() => {}}>Start Video</MenuItem>
@@ -63,21 +63,21 @@ First add the CSS to define the animation:
 
 ```css
 .slide-down  {
-  transition-property: transform, opacity; 
+  transition-property: transform, opacity;
   transition-duration: 300ms;
-  
+
   opacity: 0;
-  transform: translateY(-10px); 
+  transform: translateY(-10px);
 }
 
 .slide-down.enter {
   opacity: 1;
-  transform: translateY(0px); 
-}   
+  transform: translateY(0px);
+}
 
 .slide-down.exit {
   opacity: 0;
-}  
+}
 ```
 
 Then import the Phased component:
@@ -91,7 +91,7 @@ Now we're ready to go:
 ```.jsx
 <Menu>
   <MenuButton>
-    Actions <span aria-hidden>▾</span>
+    Actions <span aria-hidden="true">▾</span>
   </MenuButton>
   <MenuList className="slide-down">
     <MenuItem onSelect={() => {}}>Start Video</MenuItem>
