@@ -11,7 +11,7 @@ let didMount = ({ refs, setState }) => {
     });
   window.addEventListener("resize", resize);
   refs.removeEvent = () => {
-    window.addEventListener("resize", resize);
+    window.removeEventListener("resize", resize);
   };
 };
 
