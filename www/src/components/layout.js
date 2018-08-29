@@ -151,7 +151,7 @@ let Nav = ({ media }) => (
                 Spectrum Community ↗
               </NavLink>
               <NavLink href="https://github.com/reach/reach-ui">
-                Github ↗
+                GitHub ↗
               </NavLink>
 
               <hr />
