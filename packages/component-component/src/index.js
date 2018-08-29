@@ -39,9 +39,7 @@ class Component extends React.Component {
   };
 
   state = this.props.initialState || this.props.getInitialState(this.props);
-  _refs = this.props.refs || this.props.
-  
-  (this.getArgs());
+  _refs = this.props.refs || this.props.getRefs(this.getArgs());
   _setState = (...args) => this.setState(...args);
   _forceUpdate = (...args) => this.forceUpdate(...args);
 
