@@ -35,11 +35,13 @@ class Component extends React.Component {
 
   static defaultProps = {
     getInitialState: () => {},
-    getRefs: () => ({})
+    getRefs: () => {}
   };
 
   state = this.props.initialState || this.props.getInitialState(this.props);
-  _refs = this.props.refs || this.props.getRefs(this.getArgs());
+  _refs = this.props.refs || this.props.
+  
+  (this.getArgs());
   _setState = (...args) => this.setState(...args);
   _forceUpdate = (...args) => this.forceUpdate(...args);
 
@@ -72,7 +74,7 @@ class Component extends React.Component {
         nextProps: cleanProps(nextProps),
         nextState
       });
-    else return true;
+    return true;
   }
 
   componentWillUnmount() {
@@ -103,9 +105,8 @@ class Component extends React.Component {
           prevState
         })
       );
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
