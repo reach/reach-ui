@@ -65,7 +65,6 @@ let getInitialMenuState = () => ({
   buttonRect: undefined,
   selectionIndex: -1,
   closingWithClick: false,
-  menuId: genId("menu"),
   buttonId: genId("button")
 });
 
@@ -122,7 +121,6 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
           <button
             id={state.buttonId}
             aria-haspopup="menu"
-            aria-controls={state.menuId}
             aria-expanded={state.isOpen}
             type="button"
             ref={node => {
@@ -207,7 +205,6 @@ let MenuListImpl = React.forwardRef(
       data-reach-menu-list
       {...rest}
       role="menu"
-      id={state.menuId}
       aria-labelledby={state.buttonId}
       tabIndex="-1"
       ref={node => {
