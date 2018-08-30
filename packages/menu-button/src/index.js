@@ -5,7 +5,7 @@ import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
 import { node, func } from "prop-types";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, checkStyles } from "@reach/utils";
 
 let { Provider, Consumer } = createContext();
 
@@ -68,30 +68,7 @@ let getInitialMenuState = () => ({
   buttonId: genId("button")
 });
 
-let checkIfStylesIncluded = () => {
-  if (
-    parseInt(
-      window.getComputedStyle(document.body).getPropertyValue("--reach-menu"),
-      10
-    ) !== 1
-  ) {
-    console.warn(
-      `@reach/menu-button styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
-
-    import "@reach/menu-button/styles.css";
-
-  Otherwise you'll need to include them some other way:
-
-    <link rel="stylesheet" type="text/css" href="node_modules/@reach/menu-button/styles.css" />
-
-  For more information visit https://ui.reach.tech/styles.
-  `
-    );
-  }
-
-  // only do this once
-  checkIfStylesIncluded = () => {};
-};
+let checkIfStylesIncluded = () => checkStyles("menu");
 
 let Menu = ({ children }) => (
   <Component
