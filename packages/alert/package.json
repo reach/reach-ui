@@ -1,0 +1,27 @@
+{
+  "name": "@reach/alert",
+  "version": "0.0.0",
+  "description": "Screenreader friendly alert messages.",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package"
+  },
+  "dependencies": {
+    "@reach/component-component": "^0.1.0",
+    "@reach/visually-hidden": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
+  "author": "Ryan Florence",
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js"
+  ]
+}

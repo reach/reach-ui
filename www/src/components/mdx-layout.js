@@ -14,6 +14,7 @@ import { MDXProvider } from "@mdx-js/tag";
 import Layout from "./layout";
 
 import GatsbyLink from "gatsby-link";
+
 import Component from "../../../packages/component-component";
 import Rect from "../../../packages/rect";
 import WindowSize from "../../../packages/window-size";
@@ -31,6 +32,7 @@ import {
   MenuLink
 } from "../../../packages/menu-button";
 import VisuallyHidden from "../../../packages/visually-hidden";
+import Alert from "../../../packages/alert";
 
 import { Transition } from "../../vendor/react-spring/src/targets/web";
 import Phased from "recondition/dist/Phased";
@@ -58,7 +60,8 @@ const PreComponent = ({ className, ...props }) =>
         DialogOverlay,
         DialogContent,
         Transition,
-        Phased
+        Phased,
+        Alert
       }}
     >
       <LiveEditor tabIndex="-1" />

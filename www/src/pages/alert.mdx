@@ -1,0 +1,124 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Alert"
+  meta={[
+    {
+      name: "description",
+      content: "Accessible alert messages."
+    }
+  ]}
+/>
+
+# Alert
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/alert
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#alert
+
+Screenreader friendly alert messages. In many apps developers add "alert" messages when network events or other things happen. Users with assistive technologies may not know about the message unless you develop for it.
+
+The Alert component will announce to assistive technologies whatever you render to the screen. If you don't have a screenreader on you won't notice a difference between rendering `<Alert>` vs. a `<div>`.
+
+```.jsx
+<Component initialState={{ messages: [] }}>
+  {({ setState, state }) => (
+    <div>
+      <button
+        onClick={() => {
+          setState(
+            state => ({
+              messages: state.messages.concat([
+                `Message #${state.messages.length + 1}`
+              ])
+            }),
+            () => {
+              setTimeout(() => {
+                setState(state => ({
+                  messages: state.messages.slice(1)
+                }));
+              }, 5000);
+            }
+          );
+        }}
+      >
+        Add a message
+      </button>
+      <div>
+        {state.messages.map((message, index) => (
+          <Alert key={index}>{message}</Alert>
+        ))}
+      </div>
+    </div>
+  )}
+</Component>
+```
+
+## Installation
+
+```bash
+npm install @reach/alert
+# or
+yarn add @reach/alert
+```
+
+And then import the components you need:
+
+```js
+import Alert from "@reach/alert"
+```
+
+## Alert Props
+
+| Prop                   | Type   |
+| -----------------------| ------ |
+| [element props](#element-props)           | spread |
+| [type](#type)           | enum "assertive" or "polite"|
+| [children](#children)           | node |
+
+### element props
+
+*Type*: `spread`
+
+Any props not listed above will be spread onto the underlying `div` element.
+
+```.jsx
+<Alert style={{
+  background: "hsla(10, 50%, 50%, .10)",
+  padding: "10px"
+}}>
+  ❗️ Woah! Something went wrong.
+</Alert>
+```
+
+### type
+
+*Type*: `enum` `"assertive" | "polite"` default: `"polite"`
+
+Controls whether the assistive technology should read immediately ("assertive") or wait until the user is idle ("polite").
+
+```jsx
+<Alert type="polite">
+  This is the default
+</Alert>
+
+<Dialog type="assertive">
+  If a screenreader is currently reading something and
+  you render this, it will interrupt the user and read
+  this immediately.
+</Dialog>
+```
+
+You should probably stick with polite most of the time.
+
+### children
+
+*Type*: `node`
+
+Regular React children.
+
+```.jsx
+<Alert>
+  <p>Whatever you want here</p>
+  <p>Is fine.</p>
+</Alert>
+```
