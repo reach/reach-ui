@@ -4,10 +4,10 @@
     "start": "start-storybook -p 9001 -c .storybook",
     "bootstrap": "lerna bootstrap --hoist",
     "test": "lerna run test --stream",
-    "build": "lerna run build --parallel --since master",
+    "build": "lerna run build --parallel --since origin/master",
     "build:all": "lerna run build --parallel",
     "precommit": "pretty-quick --staged",
-    "release": "yarn test && yarn build:all && lerna publish"
+    "release": "lerna run test --since origin/master && yarn build && lerna publish --since origin/master"
   },
   "license": "MIT",
   "dependencies": {
