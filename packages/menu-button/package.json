@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Accessible React button dropdown menu.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
