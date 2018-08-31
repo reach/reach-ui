@@ -68,7 +68,7 @@ let getInitialMenuState = () => ({
   buttonId: genId("button")
 });
 
-let checkIfStylesIncluded = () => checkStyles("menu");
+let checkIfStylesIncluded = () => checkStyles("menu-button");
 
 let Menu = ({ children }) => (
   <Component

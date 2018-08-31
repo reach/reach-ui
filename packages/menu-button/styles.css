@@ -1,6 +1,6 @@
 /* Used to detect in JavaScript if apps have loaded styles or not. */
 :root {
-  --reach-menu: 1;
+  --reach-menu-button: 1;
 }
 
 [data-reach-menu] {
