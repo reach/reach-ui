@@ -283,7 +283,7 @@ let MenuItem = React.forwardRef(
 );
 
 MenuItem.propTypes = {
-  onSelect: func
+  onSelect: func.isRequired
 };
 
 let k = () => {};
