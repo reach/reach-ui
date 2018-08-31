@@ -217,16 +217,12 @@ let MenuListImpl = React.forwardRef(
       })}
     >
       {React.Children.map(children, (child, index) => {
-        if (child.type === MenuItem || child.type === MenuLink) {
-          return React.cloneElement(child, {
-            setState,
-            state,
-            index,
-            _ref: node => (refs.items[index] = node)
-          });
-        } else {
-          return child;
-        }
+        return React.cloneElement(child, {
+          setState,
+          state,
+          index,
+          _ref: node => (refs.items[index] = node)
+        });
       })}
     </div>
   )
