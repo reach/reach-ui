@@ -34,7 +34,7 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
     "gzip-size": "^5.0.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.13",
     "lerna": "^2.11.0",
     "postcss-flexbugs-fixes": "^3.3.1",
     "postcss-loader": "^2.1.5",
@@ -50,5 +50,10 @@
     "rollup-plugin-replace": "^2.0.0",
     "rollup-plugin-uglify": "^4.0.0"
   },
-  "prettier": {}
+  "prettier": {},
+  "husky": {
+    "hooks": {
+      "pre-push": "lerna run lint"
+    }
+  }
 }

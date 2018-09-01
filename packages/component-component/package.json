@@ -6,7 +6,8 @@
   "module": "es/index.js",
   "scripts": {
     "test": "jest",
-    "build": "node ../../shared/build-package"
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
   },
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",

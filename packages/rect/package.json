@@ -6,7 +6,8 @@
   "module": "es/index.js",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
-    "build": "node ../../shared/build-package"
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
     "@reach/component-component": "^0.1.0",
