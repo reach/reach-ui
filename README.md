@@ -62,9 +62,11 @@ First do the steps in "Getting started", then start the Storybook server:
 yarn start
 ```
 
-Next, put a file in `<component-dir>/examples/<name>.example.js` and make it look like this:
+Next, put a file in `packages/<component-dir>/examples/<name>.example.js` and make it look like this:
 
 ```jsx
+import React from "react";
+
 // The name of the example, you must export it as `name`
 export let name = "Basic";
 
