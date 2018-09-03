@@ -1,6 +1,6 @@
 {
   "name": "@reach/rect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Measure React elements position in the DOM",
   "main": "index.js",
   "module": "es/index.js",
@@ -10,7 +10,7 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.0",
+    "@reach/component-component": "^0.1.1",
     "@reach/observe-rect": "^1.0.3"
   },
   "peerDependencies": {

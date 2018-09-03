@@ -1,6 +1,6 @@
 {
   "name": "@reach/visually-hidden",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Render text that is announced to screen readers but visually hidden.",
   "main": "index.js",
   "module": "es/index.js",
