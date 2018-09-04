@@ -245,6 +245,7 @@ Use the following CSS to target the overlay:
 | [element props](#dialogoverlay-element-props)           | spread |
 | [isOpen](#dialogoverlay-isopen)           | bool |
 | [onDismiss](#dialogoverlay-ondismiss)           | func |
+| [initialFocusRef](#dialogoverlay-initialfocusref)           | ref |
 | [children](#dialogoverlay-element-props)  | node   |
 
 ### DialogOverlay element props
@@ -270,6 +271,56 @@ Same as [Dialog `isOpen`](#dialog-isopen)
 *Type*: `func`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss)
+
+### DialogContent initialFocus
+
+*Type*: `ref`
+
+By default the first focusable element will receive focus when the dialog opens but you can provide a ref to focus instead.
+
+```.jsx
+() => {
+  class App extends React.Component {
+
+    constructor() {
+      super()
+      this.buttonRef = React.createRef();
+      this.state = { showDialog: false };
+      this.open = () => this.setState({ showDialog: true });
+      this.close = () => this.setState({ showDialog: false });
+    }
+
+    render() {
+      return (
+        <div>
+          <button onClick={this.open}>Show Dialog</button>
+
+          {this.state.showDialog && (
+            <DialogOverlay initialFocusRef={this.buttonRef}>
+              <DialogContent>
+                <p>
+                  Pass the button ref to DialogOverlay and
+                  the button.
+                </p>
+                <button onClick={this.close}>Not me</button>{" "}
+                <button
+                  ref={this.buttonRef}
+                  onClick={this.close}
+                >
+                  Got me!
+                </button>
+              </DialogContent>
+            </DialogOverlay>
+          )}
+        </div>
+      );
+    }
+  }
+
+  return <App />;
+};
+```
+
 
 ### DialogOverlay children
 
@@ -320,7 +371,7 @@ Note: You only need to use this when you are also styling `DialogOverlay`, other
 </Component>
 ```
 
-## DialogOverlay CSS Selectors
+## DialogContent CSS Selectors
 
 Please see the [styling guide](/styling).
 
