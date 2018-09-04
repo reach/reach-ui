@@ -4,7 +4,7 @@ import { Link } from "@reach/router";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
-import { node, func } from "prop-types";
+import { node, func, object, string, number } from "prop-types";
 import { wrapEvent, checkStyles } from "@reach/utils";
 
 let { Provider, Consumer } = createContext();
@@ -137,7 +137,8 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
 
 MenuButton.propTypes = {
   onClick: func,
-  onKeyDown: func
+  onKeyDown: func,
+  children: node
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -229,6 +230,15 @@ let MenuListImpl = React.forwardRef(
   )
 );
 
+MenuListImpl.propTypes = {
+  refs: object,
+  state: object,
+  setState: func,
+  children: node,
+  onKeyDown: func,
+  onBlur: func
+};
+
 ////////////////////////////////////////////////////////////////////////
 let MenuItem = React.forwardRef(
   (
@@ -284,7 +294,15 @@ let MenuItem = React.forwardRef(
 );
 
 MenuItem.propTypes = {
-  onSelect: func.isRequired
+  onSelect: func.isRequired,
+  onClick: func,
+  role: string,
+  state: object,
+  setState: func,
+  index: number,
+  onKeyDown: func,
+  onMouseMove: func,
+  _ref: func
 };
 
 let k = () => {};
@@ -338,6 +356,18 @@ let MenuLink = React.forwardRef(
     </MenuItem>
   )
 );
+
+MenuLink.propTypes = {
+  to: string.isRequired,
+  onKeyDown: func,
+  onClick: func,
+  component: node,
+  style: object,
+  setState: func,
+  state: object,
+  index: number,
+  _ref: func
+};
 
 // TODO: Deal with collisions on the bottom, though not as important
 // since focus causes a scroll and will then scroll the page down
