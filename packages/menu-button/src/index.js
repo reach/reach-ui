@@ -361,7 +361,7 @@ MenuLink.propTypes = {
   to: string.isRequired,
   onKeyDown: func,
   onClick: func,
-  component: node,
+  component: string,
   style: object,
   setState: func,
   state: object,
