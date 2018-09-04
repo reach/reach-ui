@@ -29,6 +29,7 @@ let NavLink = React.forwardRef(
         ref={ref}
         className="NavLink"
         target="_blank"
+        rel="noopener"
         {...props}
       />
     ) : (
