@@ -132,7 +132,6 @@ input[type="button"] {
   text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
-  border-radius: 4px;
   border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box;
@@ -149,7 +148,6 @@ input[type="reset"]:focus,
 input[type="button"]:focus {
   color: #333;
   border-color: #888;
-  outline: 0;
 }
 .button.button-primary,
 button.button-primary,
@@ -190,7 +188,6 @@ select {
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
   background-color: #fff;
   border: 1px solid #d1d1d1;
-  border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box;
 }
@@ -222,7 +219,6 @@ input[type="password"]:focus,
 textarea:focus,
 select:focus {
   border: 1px solid #33c3f0;
-  outline: 0;
 }
 label,
 legend {
