@@ -369,9 +369,6 @@ MenuLink.propTypes = {
   _ref: func
 };
 
-// TODO: Deal with collisions on the bottom, though not as important
-// since focus causes a scroll and will then scroll the page down
-// to the item.
 let getStyles = (buttonRect, menuRect) => {
   let haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
@@ -397,15 +394,27 @@ let getStyles = (buttonRect, menuRect) => {
   }
 
   let collisionRight = window.innerWidth < buttonRect.left + menuRect.width;
-  // let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
+  let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
+  let collisionRightAndBottom = collisionRight && collisionBottom;
 
-  if (collisionRight) {
+  if (collisionRightAndBottom) {
+    return {
+      ...styles,
+      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
+      top: `${buttonRect.top - menuRect.height + window.scrollY}px`
+    };
+  } else if (collisionRight) {
     return {
       ...styles,
       left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
       top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
     };
-    // } else if (collisionBottom) {
+  } else if (collisionBottom) {
+    return {
+      ...styles,
+      left: `${buttonRect.left + window.scrollX}px`,
+      top: `${buttonRect.top - menuRect.height + window.scrollY}px`
+    };
   } else {
     return styles;
   }
