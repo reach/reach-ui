@@ -4,7 +4,6 @@ let checkStyles = () => {};
 
 if (__DEV__) {
   checkStyles = pkg => {
-    if (!__DEV__) return;
     // only check once per package
     if (checkedPkgs[pkg]) return;
     checkedPkgs[pkg] = true;
