@@ -106,10 +106,18 @@ Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. 
 
 Please see the [styling guide](/styling).
 
-No styles are applied to the underlying `button`, so style it like any other button in your app.
+A `<MenuButton>` wraps a normal `<button>` and no styles are applied to it, so any global button styles you have will be applied.
 
 ```css
 button {
+  /* your normal button styles will be applied */
+}
+```
+
+You can use the `[data-reach-menu-button]` selector to style only the dropdown buttons:
+
+```css
+[data-reach-menu-button] {
   color: blue;
 }
 ```
@@ -117,7 +125,7 @@ button {
 If you'd like to target when the menu is open use `aria-expanded`:
 
 ```css
-button[aria-expanded="true"] {
+[data-reach-menu-button][aria-expanded="true"] {
   background: #000;
   color: white;
 }
