@@ -4,7 +4,7 @@ import { Link } from "@reach/router";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
-import { node, func, object, string, number } from "prop-types";
+import { node, func, object, string, number, oneOfType } from "prop-types";
 import { wrapEvent, checkStyles } from "@reach/utils";
 
 let { Provider, Consumer } = createContext();
@@ -361,7 +361,7 @@ MenuLink.propTypes = {
   to: string.isRequired,
   onKeyDown: func,
   onClick: func,
-  component: string,
+  component: oneOfType([string, node]),
   style: object,
   setState: func,
   state: object,
