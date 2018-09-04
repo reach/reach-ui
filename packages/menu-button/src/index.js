@@ -99,6 +99,7 @@ let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
             id={state.buttonId}
             aria-haspopup="menu"
             aria-expanded={state.isOpen}
+            data-reach-menu-button
             type="button"
             ref={node => {
               rectRef(node);
