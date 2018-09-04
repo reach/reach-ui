@@ -71,9 +71,9 @@ The wrapper component for the other components. No DOM element is rendered.
 
 ## Menu Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [children](#menu-children)  | node |
+| Prop                        | Type | Required |
+| --------------------------- | ---- | -------- |
+| [children](#menu-children)  | node | false    |
 
 ### Menu children
 
@@ -133,12 +133,12 @@ If you'd like to target when the menu is open use `aria-expanded`:
 
 ## MenuButton Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [button props](#menubutton-button-props)           | spread |
-| [children](#menubutton-children)  | node   |
-| onClick  | preventableEventFunc |
-| onKeyDown  | preventableEventFunc |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [button props](#menubutton-button-props) | spread               | n/a
+| [children](#menubutton-children)         | node                 | false
+| onClick                                  | preventableEventFunc | false
+| onKeyDown                                | preventableEventFunc | false
 
 ### MenuButton button props
 
@@ -196,10 +196,10 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 ## MenuList Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#menuitems-element-props)           | spread |
-| [children](#menuitems-children)  | node   |
+| Prop                                      | Type   | Required |
+| ----------------------------------------- | ------ | -------- |
+| [element props](#menuitems-element-props) | spread | n/a      |
+| [children](#menuitems-children)           | node   | false    |
 
 ### MenuList element props
 
@@ -310,13 +310,14 @@ The following example has this css applied:
 
 ## MenuItem Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#menuitem-element-props)           | spread |
-| [children](#menuitem-children)  | node   |
-| onClick  | preventableEventFunc |
-| onKeyDown  | preventableEventFunc |
-| onMouseMove  | preventableEventFunc |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [element props](#menuitem-element-props) | spread               | n/a      |
+| [children](#menuitem-children)           | node                 | false    |
+| onClick                                  | preventableEventFunc | false    |
+| onKeyDown                                | preventableEventFunc | false    |
+| onMouseMove                              | preventableEventFunc | false    |
+| onSelect                                 | preventableEventFunc | true     |
 
 ### MenuItem element props
 
