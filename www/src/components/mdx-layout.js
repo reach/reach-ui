@@ -33,6 +33,13 @@ import {
 } from "../../../packages/menu-button";
 import VisuallyHidden from "../../../packages/visually-hidden";
 import Alert from "../../../packages/alert";
+import {
+  AlertDialog,
+  AlertDialogLabel,
+  AlertDialogDescription,
+  AlertDialogOverlay,
+  AlertDialogContent
+} from "../../../packages/alert-dialog";
 
 import { Transition } from "../../vendor/react-spring/src/targets/web";
 import Phased from "recondition/dist/Phased";
@@ -61,7 +68,12 @@ const PreComponent = ({ className, ...props }) =>
         DialogContent,
         Transition,
         Phased,
-        Alert
+        Alert,
+        AlertDialog,
+        AlertDialogDescription,
+        AlertDialogLabel,
+        AlertDialogOverlay,
+        AlertDialogContent
       }}
     >
       <LiveEditor tabIndex="-1" />

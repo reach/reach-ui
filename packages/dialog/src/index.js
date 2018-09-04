@@ -8,22 +8,19 @@ let createAriaHider = dialogNode => {
   let originalValues = [];
   let rootNodes = [];
 
-  Array.prototype.forEach.call(
-    document.querySelectorAll("body > *"),
-    node => {
-      if (node === dialogNode.parentNode) {
-        return;
-      }
-      let attr = node.getAttribute("aria-hidden");
-      let alreadyHidden = attr !== null && attr !== "false";
-      if (alreadyHidden) {
-        return;
-      }
-      originalValues.push(attr);
-      rootNodes.push(node);
-      node.setAttribute("aria-hidden", "true");
+  Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
+    if (node === dialogNode.parentNode) {
+      return;
     }
-  );
+    let attr = node.getAttribute("aria-hidden");
+    let alreadyHidden = attr !== null && attr !== "false";
+    if (alreadyHidden) {
+      return;
+    }
+    originalValues.push(attr);
+    rootNodes.push(node);
+    node.setAttribute("aria-hidden", "true");
+  });
 
   return () => {
     rootNodes.forEach((node, index) => {
@@ -44,9 +41,7 @@ let checkDialogStyles = () => checkStyles("dialog");
 let portalDidMount = (refs, initialFocusRef) => {
   refs.disposeAriaHider = createAriaHider(refs.overlayNode);
   refs.trap = createFocusTrap(refs.overlayNode, {
-    initialFocus: initialFocusRef
-      ? () => initialFocusRef.current
-      : undefined,
+    initialFocus: initialFocusRef ? () => initialFocusRef.current : undefined,
     fallbackFocus: refs.contentNode,
     escapeDeactivates: false,
     clickOutsideDeactivates: false
@@ -84,9 +79,7 @@ let DialogOverlay = React.forwardRef(
             willUnmount={contentWillUnmount}
           >
             {({ refs }) => (
-              <FocusContext.Provider
-                value={node => (refs.contentNode = node)}
-              >
+              <FocusContext.Provider value={node => (refs.contentNode = node)}>
                 <div
                   data-reach-dialog-overlay
                   onClick={wrapEvent(onClick, event => {
