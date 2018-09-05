@@ -272,7 +272,6 @@ code {
   font-size: 90%;
   white-space: nowrap;
   background: white;
-  border: 1px solid #e1e1e1;
   border-radius: 4px;
 }
 
@@ -282,7 +281,7 @@ th,
 td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #e1e1e1;
+  border-bottom: 1px solid #eee;
 }
 th:first-child,
 td:first-child {
