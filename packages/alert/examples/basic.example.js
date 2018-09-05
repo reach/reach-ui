@@ -44,15 +44,17 @@ export let Example = () => (
         </button>
         <div>
           {state.messages.map((message, index) => (
-            <Alert key={index}>{message}</Alert>
+            <Alert type="assertive" key={index}>
+              {message}
+            </Alert>
           ))}
 
           <div>
             <VisuallyHidden>
               {state.bestFriendIsOnline ? (
-                <Alert>Your best friend is online!</Alert>
+                <Alert key="online">Your best friend is online!</Alert>
               ) : (
-                <Alert type="polite">Dang, your best friend is offline.</Alert>
+                <Alert key="offline">Dang, your best friend is offline.</Alert>
               )}
             </VisuallyHidden>
             <span

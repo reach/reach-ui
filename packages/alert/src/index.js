@@ -44,7 +44,10 @@ let renderAlerts = () => {
       if (container) {
         render(
           <VisuallyHidden>
-            <div role="alert" aria-live={type}>
+            <div
+              role={type === "assertive" ? "alert" : "status"}
+              aria-live={type}
+            >
               {Object.keys(elements[type]).map(key =>
                 React.cloneElement(elements[type][key], {
                   key
