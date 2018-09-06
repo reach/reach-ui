@@ -15,6 +15,7 @@ import React from "react";
 import { render } from "react-dom";
 import Component from "@reach/component-component";
 import VisuallyHidden from "@reach/visually-hidden";
+import { node, string } from "prop-types";
 
 // singleton state is fine because you don't server render
 // an alert (SRs don't read them on first load anyway)
@@ -91,7 +92,7 @@ let createMirror = type => {
   return { mount, update, unmount };
 };
 
-let Alert = ({ children, type = "polite", ...props }) => {
+let Alert = ({ children, type, ...props }) => {
   let element = (
     <div {...props} data-reach-alert>
       {children}
@@ -115,6 +116,15 @@ let Alert = ({ children, type = "polite", ...props }) => {
       children={element}
     />
   );
+};
+
+Alert.propTypes = {
+  children: node,
+  type: string
+};
+
+Alert.defaultProps = {
+  type: "polite"
 };
 
 export default Alert;
