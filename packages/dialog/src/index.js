@@ -2,7 +2,9 @@ import React from "react";
 import Component from "@reach/component-component";
 import Portal from "@reach/portal";
 import { checkStyles, wrapEvent } from "@reach/utils";
+import { Consumer as IdConsumer } from "@reach/utils/lib/IdContext";
 import createFocusTrap from "focus-trap";
+import invariant from "invariant";
 
 let createAriaHider = dialogNode => {
   let originalValues = [];
@@ -71,36 +73,53 @@ let DialogOverlay = React.forwardRef(
     <Component didMount={checkDialogStyles}>
       {isOpen ? (
         <Portal data-reach-dialog-wrapper>
-          <Component
-            refs={{ overlayNode: null, contentNode: null }}
-            didMount={({ refs }) => {
-              portalDidMount(refs, initialFocusRef);
-            }}
-            willUnmount={contentWillUnmount}
-          >
-            {({ refs }) => (
-              <FocusContext.Provider value={node => (refs.contentNode = node)}>
-                <div
-                  data-reach-dialog-overlay
-                  onClick={wrapEvent(onClick, event => {
-                    event.stopPropagation();
-                    onDismiss();
-                  })}
-                  onKeyDown={wrapEvent(onKeyDown, event => {
-                    if (event.key === "Escape") {
-                      event.stopPropagation();
-                      onDismiss();
-                    }
-                  })}
-                  ref={node => {
-                    refs.overlayNode = node;
-                    forwardRef && forwardRef(node);
-                  }}
-                  {...props}
-                />
-              </FocusContext.Provider>
+          <IdConsumer>
+            {genId => (
+              <Component
+                refs={{
+                  labelId: `dialog-${genId()}`,
+                  overlayNode: null,
+                  contentNode: null
+                }}
+                didMount={({ refs }) => {
+                  portalDidMount(refs, initialFocusRef);
+                  invariant(
+                    document.getElementById(refs.labelId),
+                    `@reach/dialog: \`<Dialog />\` must render a \`<DialogLabel />\`.`
+                  );
+                }}
+                willUnmount={contentWillUnmount}
+              >
+                {({ refs }) => (
+                  <FocusContext.Provider
+                    value={{
+                      labelId: refs.labelId,
+                      contentRef: node => (refs.contentNode = node)
+                    }}
+                  >
+                    <div
+                      data-reach-dialog-overlay
+                      onClick={wrapEvent(onClick, event => {
+                        event.stopPropagation();
+                        onDismiss();
+                      })}
+                      onKeyDown={wrapEvent(onKeyDown, event => {
+                        if (event.key === "Escape") {
+                          event.stopPropagation();
+                          onDismiss();
+                        }
+                      })}
+                      ref={node => {
+                        refs.overlayNode = node;
+                        forwardRef && forwardRef(node);
+                      }}
+                      {...props}
+                    />
+                  </FocusContext.Provider>
+                )}
+              </Component>
             )}
-          </Component>
+          </IdConsumer>
         </Portal>
       ) : null}
     </Component>
@@ -116,9 +135,10 @@ let stopPropagation = event => event.stopPropagation();
 let DialogContent = React.forwardRef(
   ({ onClick, onKeyDown, ...props }, forwardRef) => (
     <FocusContext.Consumer>
-      {contentRef => (
+      {({ labelId, contentRef }) => (
         <div
           aria-modal="true"
+          aria-labelledby={labelId}
           data-reach-dialog-content
           tabIndex="-1"
           onClick={wrapEvent(onClick, stopPropagation)}
@@ -133,10 +153,16 @@ let DialogContent = React.forwardRef(
   )
 );
 
+let DialogLabel = props => (
+  <FocusContext.Consumer>
+    {({ labelId }) => <div id={labelId} data-reach-dialog-label {...props} />}
+  </FocusContext.Consumer>
+);
+
 let Dialog = ({ isOpen, onDismiss = k, ...props }) => (
   <DialogOverlay isOpen={isOpen} onDismiss={onDismiss}>
     <DialogContent {...props} />
   </DialogOverlay>
 );
 
-export { DialogOverlay, DialogContent, Dialog };
+export { DialogOverlay, DialogContent, DialogLabel, Dialog };

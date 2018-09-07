@@ -16,15 +16,19 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@reach/component-component@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.0.2.tgz#4c4ffef9c00d22034d44cb01f5727106ebf34f4d"
+"@reach/component-component@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.1.1.tgz#62ea2ec290da32f5e3a9872fb51f9a3ae4370cc4"
 
-"@reach/portal@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.0.2.tgz#de6b4f26c3b60f85b6f8c74865fb267ba5f480ba"
+"@reach/portal@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.1.1.tgz#94f3f9b999c5a0dfb819309912ec23e36807e70b"
   dependencies:
-    "@reach/component-component" "^0.0.2"
+    "@reach/component-component" "^0.1.1"
+
+"@reach/utils@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.1.2.tgz#72f547b5c9b0401a56de303d9e508abf6d3fa56a"
 
 abab@^2.0.0:
   version "2.0.0"
