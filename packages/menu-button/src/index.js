@@ -393,31 +393,25 @@ let getStyles = (buttonRect, menuRect) => {
     styles.minWidth = buttonRect.width;
   }
 
-  let collisionRight = window.innerWidth < buttonRect.left + menuRect.width;
-  let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
-  let collisionRightAndBottom = collisionRight && collisionBottom;
+  let collisions = {
+    top: buttonRect.top - menuRect.height < 0,
+    right: window.innerWidth < buttonRect.left + menuRect.width,
+    bottom: window.innerHeight < buttonRect.top + menuRect.height,
+    left: buttonRect.left - menuRect.width < 0
+  };
 
-  if (collisionRightAndBottom) {
-    return {
-      ...styles,
-      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
-      top: `${buttonRect.top - menuRect.height + window.scrollY}px`
-    };
-  } else if (collisionRight) {
-    return {
-      ...styles,
-      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
-      top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
-    };
-  } else if (collisionBottom) {
-    return {
-      ...styles,
-      left: `${buttonRect.left + window.scrollX}px`,
-      top: `${buttonRect.top - menuRect.height + window.scrollY}px`
-    };
-  } else {
-    return styles;
-  }
+  const directionRight = collisions.right && !collisions.left;
+  const directionUp = collisions.bottom && !collisions.top;
+
+  return {
+    ...styles,
+    left: directionRight
+      ? `${buttonRect.right - menuRect.width + window.scrollX}px`
+      : `${buttonRect.left + window.scrollX}px`,
+    top: directionUp
+      ? `${buttonRect.top - menuRect.height + window.scrollY}px`
+      : `${buttonRect.top + buttonRect.height + window.scrollY}px`
+  };
 };
 
 export { Menu, MenuList, MenuButton, MenuLink, MenuItem };
