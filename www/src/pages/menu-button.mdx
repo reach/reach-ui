@@ -387,6 +387,8 @@ You can put any type of content inside of a `<MenuItem>`.
 
 Handles linking to a different page in the menu. By default it works with Reach Router, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
 
+Note that this reliance on `forwardRef` means, as of September 2018, `react-router`'s `<Link />` component is not compatible.
+
 Must be a direct child of a `<MenuList>`.
 
 ```jsx
