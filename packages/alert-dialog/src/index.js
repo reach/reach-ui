@@ -3,6 +3,7 @@ import Component from "@reach/component-component";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { Consumer as IdConsumer } from "@reach/utils/lib/IdContext";
 import invariant from "invariant";
+import { func, bool, node } from "prop-types";
 
 let AlertDialogContext = createContext();
 
@@ -29,6 +30,15 @@ let AlertDialogOverlay = ({ leastDestructiveRef, ...props }) => (
     )}
   </IdConsumer>
 );
+
+let alertDialogPropTypes = {
+  isOpen: bool,
+  onDismiss: func,
+  leastDestructiveRef: func,
+  children: node
+};
+
+AlertDialogOverlay.propType = alertDialogPropTypes;
 
 let AlertDialogContent = ({ children, ...props }) => (
   <AlertDialogContext.Consumer>
@@ -60,6 +70,10 @@ let AlertDialogContent = ({ children, ...props }) => (
   </AlertDialogContext.Consumer>
 );
 
+AlertDialogContent.propTypes = {
+  children: node
+};
+
 let AlertDialogLabel = props => (
   <AlertDialogContext.Consumer>
     {({ labelId }) => (
@@ -81,6 +95,8 @@ let AlertDialog = ({ isOpen, onDismiss, leastDestructiveRef, ...props }) => (
     <AlertDialogContent {...props} />
   </AlertDialogOverlay>
 );
+
+AlertDialog.propType = alertDialogPropTypes;
 
 export {
   AlertDialog,
