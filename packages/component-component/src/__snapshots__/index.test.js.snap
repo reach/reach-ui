@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`rendering prefers \`render\` over \`children\` 1`] = `
+<div>
+  !
+</div>
+`;
+
+exports[`rendering renders with children render prop 1`] = `
+<div>
+  !
+</div>
+`;
+
 exports[`rendering renders without figuritively exploding 1`] = `
 <div>
   Heyyyooooo
