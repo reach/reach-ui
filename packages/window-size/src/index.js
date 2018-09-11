@@ -1,5 +1,6 @@
 import React from "react";
 import Component from "@reach/component-component";
+import { func } from "prop-types";
 
 let hasWindow = typeof window !== "undefined";
 
@@ -31,5 +32,9 @@ let WindowSize = ({ children }) => (
     render={({ state }) => children(state)}
   />
 );
+
+WindowSize.propTypes = {
+  children: func.isRequired
+};
 
 export default WindowSize;
