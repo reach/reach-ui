@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`refs maintains refs from render to render 1`] = `
+<button
+  onClick={[Function]}
+>
+  !
+</button>
+`;
+
 exports[`rendering prefers \`render\` over \`children\` 1`] = `
 <div>
   !
@@ -16,4 +24,11 @@ exports[`rendering renders without figuritively exploding 1`] = `
 <div>
   Heyyyooooo
 </div>
+`;
+
+exports[`state updates state 1`] = `
+<div
+  lang="en"
+  onMouseEnter={[Function]}
+/>
 `;

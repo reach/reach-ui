@@ -53,15 +53,67 @@ describe("rendering", () => {
   });
 });
 
-// describe("refs", () => {
-//   it("maintains refs from render to render");
-// });
+describe.skip("refs", () => {
+  it("maintains refs from render to render", () => {
+    let wrapper = renderer.create(
+      <Component
+        getRefs={() => ({ button: React.createRef() })}
+        initialState={{ value: "!" }}
+        didUpdate={({ refs }) => {
+          // refs.button.current.focus()
+        }}
+        render={({ refs, state, setState }) => (
+          <button
+            ref={refs.button}
+            onClick={() => {
+              setState(prevState => ({ value: prevState.value + "!" }));
+            }}
+          >
+            {state.value}
+          </button>
+        )}
+      />
+    );
+    let tree = wrapper.toJSON();
+    expect(tree).toMatchSnapshot();
+    tree.props.onClick();
+    tree = wrapper.toJSON();
+    expect(tree.children).toEqual(["!!"]);
+  });
+});
 
-// describe("state", () => {
-//   it("receives initialState");
-//   it("calls getInitialState");
-//   it("updates state");
-// });
+describe("state", () => {
+  it("receives initialState", () => {
+    let wrapper = renderer.create(<Component initialState={{ value: "!" }} />);
+    expect(wrapper.toTree().props.initialState).toEqual({ value: "!" });
+  });
+  it("calls getInitialState", () => {
+    let wrapper = renderer.create(
+      <Component getInitialState={() => ({ value: "!" })} />
+    );
+    expect(wrapper.toTree().props.getInitialState()).toEqual({ value: "!" });
+  });
+  it("updates state", () => {
+    let wrapper = renderer.create(
+      <Component
+        initialState={{ lang: "en" }}
+        render={({ state, setState }) => (
+          <div
+            lang={state.lang}
+            onMouseEnter={() => {
+              setState({ lang: "fr" });
+            }}
+          />
+        )}
+      />
+    );
+    let tree = wrapper.toJSON();
+    expect(tree).toMatchSnapshot();
+    tree.props.onMouseEnter();
+    tree = wrapper.toJSON();
+    expect(wrapper.root.findByProps({ lang: "fr" })).toBeTruthy();
+  });
+});
 
 // describe("didMount", () => {
 //   it("does not require it");
