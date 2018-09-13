@@ -7,7 +7,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
+    "test": "jest",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
