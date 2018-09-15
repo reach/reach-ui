@@ -4,7 +4,7 @@
   "description": "Render text that is announced to screen readers but visually hidden.",
   "main": "index.js",
   "module": "es/index.js",
-  "typings": "typings/index.d.ts",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
