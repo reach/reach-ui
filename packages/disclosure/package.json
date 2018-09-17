@@ -1,0 +1,24 @@
+{
+  "name": "@reach/disclosure",
+  "version": "0.0.1",
+  "description": "Accessible React Disclosure Element",
+  "main": "index.js",
+  "author": "Luke Glazebrook<@glazy>",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
+  },
+  "devDependencies": {
+    "jest": "^23.4.2",
+    "react": "^16.4.1",
+    "react-test-renderer": "^16.4.1"
+  },
+  "jest": {
+    "testRegex": ".+\\.test\\.js$",
+    "testURL": "http://localhost"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
