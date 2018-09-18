@@ -12,6 +12,8 @@ let snapshot = element => {
 
 describe("<Disclosure />", () => {
   test("renders without crashing", () => {
-    snapshot(<Disclosure>Hello world</Disclosure>);
+    snapshot(
+      <Disclosure buttonLabel={"Friendly message"}>Hello world</Disclosure>
+    );
   });
 });

@@ -16,7 +16,9 @@ const Disclosure = ({ buttonLabel, children }) => (
           <span aria-hidden={true}>{state.isExpanded ? "▼" : "►"}</span>
           {buttonLabel}
         </button>
-        {state.isExpanded && <div>{children}</div>}
+        {state.isExpanded && (
+          <div data-reach-disclosure-content>{children}</div>
+        )}
       </React.Fragment>
     )}
   </Component>
