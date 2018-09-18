@@ -1,5 +1,10 @@
 import React from "react";
+import Component from "@reach/component-component";
 
-const Disclosure = () => <h1>Hello world</h1>;
+class Disclosure extends Component {
+  render() {
+    return <h1>Hello world</h1>;
+  }
+}
 
 export default Disclosure;

@@ -3,11 +3,15 @@
   "version": "0.0.1",
   "description": "Accessible React Disclosure Element",
   "main": "index.js",
+  "module": "es/index.js",
   "author": "Luke Glazebrook<@glazy>",
   "license": "MIT",
   "peerDependencies": {
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
+  },
+  "dependencies": {
+    "@reach/component-component": "^0.1.1"
   },
   "devDependencies": {
     "jest": "^23.4.2",
@@ -19,6 +23,15 @@
     "testURL": "http://localhost"
   },
   "scripts": {
-    "test": "jest"
-  }
+    "test": "jest",
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
 }
