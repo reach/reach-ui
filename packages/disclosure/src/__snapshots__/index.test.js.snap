@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Disclosure /> buttonLabel is rendered inside a trigger button 1`] = `
+<h1>
+  Hello world
+</h1>
+`;
+
 exports[`<Disclosure /> renders without crashing 1`] = `
 <h1>
   Hello world

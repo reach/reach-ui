@@ -1,0 +1,16 @@
+/* Used to detect in JavaScript if apps have loaded styles or not. */
+:root {
+  --reach-disclosure: 1;
+}
+
+[data-reach-disclosure-button] {
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+[data-reach-disclosure-button]:hover,
+[data-reach-disclosure-button]:focus {
+  background-color: lightgrey;
+  text-decoration: underline;
+}
