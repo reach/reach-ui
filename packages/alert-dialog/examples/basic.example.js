@@ -21,7 +21,10 @@ export let Example = () => (
         </button>
 
         {state.showDialog && (
-          <AlertDialog leastDestructiveRef={refs.close}>
+          <AlertDialog
+            leastDestructiveRef={refs.close}
+            onDismiss={() => setState({ showDialog: false })}
+          >
             <AlertDialogLabel>Confirmation!</AlertDialogLabel>
             <AlertDialogDescription>
               Are you sure you want to have that milkshake?

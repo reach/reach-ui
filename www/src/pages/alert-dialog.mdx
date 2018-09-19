@@ -51,7 +51,7 @@ This is built on top of [Dialog](/dialog), so `AlertDialog` spreds its props and
           </button>
 
           {this.state.showDialog && (
-            <AlertDialog leastDestructiveRef={this.cancelRef}>
+            <AlertDialog leastDestructiveRef={this.cancelRef} onDismiss={this.close}>
               <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
               <AlertDialogDescription>
