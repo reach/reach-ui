@@ -1,5 +1,5 @@
 import React from "react";
-import { createPortal } from "react-dom";
+import ReactDOM from "react-dom";
 import Component from "@reach/component-component";
 
 let Portal = ({ children, type = "reach-portal" }) => (
@@ -14,7 +14,7 @@ let Portal = ({ children, type = "reach-portal" }) => (
       document.body.removeChild(node);
     }}
     render={({ refs: { node } }) => {
-      return node ? createPortal(children, node) : null;
+      return node ? ReactDOM.createPortal(children, node) : null;
     }}
   />
 );

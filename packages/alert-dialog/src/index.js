@@ -1,10 +1,10 @@
-import React, { createContext, forwardRef } from "react";
+import React from "react";
 import Component from "@reach/component-component";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { Consumer as IdConsumer } from "@reach/utils/lib/IdContext";
 import invariant from "invariant";
 
-let AlertDialogContext = createContext();
+let AlertDialogContext = React.createContext();
 
 let AlertDialogOverlay = ({ leastDestructiveRef, ...props }) => (
   <IdConsumer>
