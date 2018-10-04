@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Component from "../src/index";
 
 export let name = "Kitchen Sink Todo List";
@@ -15,7 +15,7 @@ export let Example = () => (
     })}
   >
     {({ state, setState, refs }) => (
-      <Fragment>
+      <React.Fragment>
         <Component
           didUpdate={() =>
             localStorage.setItem("todos", JSON.stringify(state.todos))
@@ -70,7 +70,7 @@ export let Example = () => (
             </button>
           </p>
         </div>
-      </Fragment>
+      </React.Fragment>
     )}
   </Component>
 );
