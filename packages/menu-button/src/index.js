@@ -78,12 +78,18 @@ let Menu = ({ children }) => (
     didUpdate={manageFocusOnUpdate}
     getSnapshotBeforeUpdate={checkIfAppManagedFocus}
   >
-    {context => <Provider value={context}>{children}</Provider>}
+    {context => (
+      <Provider value={context}>
+        {typeof children === "function"
+          ? children({ isOpen: context.state.isOpen })
+          : children}
+      </Provider>
+    )}
   </Component>
 );
 
 Menu.propTypes = {
-  children: node
+  children: oneOfType([func, node])
 };
 
 ////////////////////////////////////////////////////////////////////////
