@@ -77,7 +77,7 @@ The wrapper component for the other components. No DOM element is rendered.
 
 ### Menu children
 
-*Type*: `node`
+*Type*: `oneOfType(node, function)`
 
 Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
@@ -89,6 +89,24 @@ Requires two children: a `<MenuButton>` and a `<MenuList>`.
     <MenuLink to="view">View</MenuLink>
   </MenuList>
 </Menu>
+```
+
+ Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
+
+```jsx
+  <Menu>
+    {({ isOpen }) => (
+      <React.Fragment>
+        <MenuButton>
+          {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+        </MenuButton>
+        <MenuList>
+          <MenuItem>Download</MenuItem>
+          <MenuItem>Create a Copy</MenuItem>
+        </MenuList>
+      </React.Fragment>
+    )}
+  </Menu>
 ```
 
 # MenuButton
