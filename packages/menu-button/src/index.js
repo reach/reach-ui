@@ -147,106 +147,6 @@ MenuButton.propTypes = {
   children: node
 };
 
-////////////////////////////////////////////////////////////////////////
-
-let MenuList = React.forwardRef((props, ref) => (
-  <Consumer>
-    {({ refs, state, setState }) =>
-      state.isOpen && (
-        <Portal>
-          <WindowSize>
-            {() => (
-              <Rect>
-                {({ rect: menuRect, ref: menuRef }) => (
-                  <div
-                    data-reach-menu
-                    ref={menuRef}
-                    style={getStyles(state.buttonRect, menuRect)}
-                  >
-                    <MenuListImpl
-                      {...props}
-                      setState={setState}
-                      state={state}
-                      refs={refs}
-                      ref={ref}
-                    />
-                  </div>
-                )}
-              </Rect>
-            )}
-          </WindowSize>
-        </Portal>
-      )
-    }
-  </Consumer>
-));
-
-MenuList.propTypes = {
-  children: node
-};
-
-let MenuListImpl = React.forwardRef(
-  ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => (
-    <div
-      data-reach-menu-list
-      {...rest}
-      role="menu"
-      aria-labelledby={state.buttonId}
-      tabIndex="-1"
-      ref={node => {
-        refs.menu = node;
-        ref && ref(node);
-      }}
-      onBlur={event => {
-        if (
-          !state.closingWithClick &&
-          !refs.menu.contains(event.relatedTarget)
-        ) {
-          setState(close);
-        }
-      }}
-      onKeyDown={wrapEvent(onKeyDown, event => {
-        if (event.key === "Escape") {
-          setState(close);
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault(); // prevent window scroll
-          let nextIndex = state.selectionIndex + 1;
-          if (nextIndex !== React.Children.count(children)) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault(); // prevent window scroll
-          let nextIndex = state.selectionIndex - 1;
-          if (nextIndex !== -1) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "Tab") {
-          event.preventDefault(); // prevent leaving
-        }
-      })}
-    >
-      {React.Children.map(children, (child, index) => {
-        return React.cloneElement(child, {
-          setState,
-          state,
-          index,
-          _ref: node => (refs.items[index] = node)
-        });
-      })}
-    </div>
-  )
-);
-
-MenuListImpl.propTypes = {
-  refs: object,
-  state: object,
-  setState: func,
-  children: node,
-  onKeyDown: func,
-  onBlur: func
-};
-
-////////////////////////////////////////////////////////////////////////
 let MenuItem = React.forwardRef(
   (
     {
@@ -374,6 +274,120 @@ MenuLink.propTypes = {
   state: object,
   index: number,
   _ref: func
+};
+///////////////////////////////////////////////////////////////////
+
+let MenuList = React.forwardRef((props, ref) => (
+  <Consumer>
+    {({ refs, state, setState }) =>
+      state.isOpen && (
+        <Portal>
+          <WindowSize>
+            {() => (
+              <Rect>
+                {({ rect: menuRect, ref: menuRef }) => (
+                  <div
+                    data-reach-menu
+                    ref={menuRef}
+                    style={getStyles(state.buttonRect, menuRect)}
+                  >
+                    <MenuListImpl
+                      {...props}
+                      setState={setState}
+                      state={state}
+                      refs={refs}
+                      ref={ref}
+                    />
+                  </div>
+                )}
+              </Rect>
+            )}
+          </WindowSize>
+        </Portal>
+      )
+    }
+  </Consumer>
+));
+
+MenuList.propTypes = {
+  children: node
+};
+
+let focusableChildrenTypes = [MenuItem, MenuLink];
+
+let isFocusableChildType = child => focusableChildrenTypes.includes(child.type);
+let getFocusableMenuChildren = children => {
+  return children.filter(child => isFocusableChildType(child));
+};
+
+let MenuListImpl = React.forwardRef(
+  ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => {
+    let focusableChildren = getFocusableMenuChildren(children);
+    return (
+      <div
+        data-reach-menu-list
+        {...rest}
+        role="menu"
+        aria-labelledby={state.buttonId}
+        tabIndex="-1"
+        ref={node => {
+          refs.menu = node;
+          ref && ref(node);
+        }}
+        onBlur={event => {
+          if (
+            !state.closingWithClick &&
+            !refs.menu.contains(event.relatedTarget)
+          ) {
+            setState(close);
+          }
+        }}
+        onKeyDown={wrapEvent(onKeyDown, event => {
+          if (event.key === "Escape") {
+            setState(close);
+          } else if (event.key === "ArrowDown") {
+            event.preventDefault(); // prevent window scroll
+            let nextIndex = state.selectionIndex + 1;
+            if (nextIndex !== focusableChildren.length) {
+              setState({ selectionIndex: nextIndex });
+            }
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault(); // prevent window scroll
+            let nextIndex = state.selectionIndex - 1;
+            if (nextIndex !== -1) {
+              setState({ selectionIndex: nextIndex });
+            }
+          } else if (event.key === "Tab") {
+            event.preventDefault(); // prevent leaving
+          }
+        })}
+      >
+        {React.Children.map(children, (child, index) => {
+          if (isFocusableChildType(child)) {
+            let focusIndex = focusableChildren.indexOf(child);
+
+            return React.cloneElement(child, {
+              setState,
+              state,
+              index: focusIndex,
+              _ref: node => (refs.items[focusIndex] = node)
+            });
+          }
+
+          return child;
+        })}
+      </div>
+    );
+  }
+);
+
+MenuListImpl.propTypes = {
+  refs: object,
+  state: object,
+  setState: func,
+  children: node,
+  onKeyDown: func,
+  onBlur: func
 };
 
 let getStyles = (buttonRect, menuRect) => {
