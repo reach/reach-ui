@@ -29,7 +29,7 @@ When a Dialog opens, the *least destructive* action should be focused so that if
 
 Every dialog must render an `AlertDialogLabel` so the screen reader knows what to say about the dialog. If an `AlertDialogDescription` is also rendered, the screen reader will also announce that. If you render more than these two elements and some buttons, the screen reader might not announce it so it's important to keep the content inside of `AlertDialogLabel` and `AlertDialogDescription`.
 
-This is built on top of [Dialog](/dialog), so `AlertDialog` spreds its props and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and `AlertDialogContent` to `DialogContent`.
+This is built on top of [Dialog](/dialog), so `AlertDialog` spreads its props and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and `AlertDialogContent` to `DialogContent`.
 
 ```.jsx
 () => {
