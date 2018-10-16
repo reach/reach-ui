@@ -12,5 +12,5 @@ let style = {
 };
 
 export default ({ children }) => {
-  return <div style={style} children={children} />;
+  return <span style={style} children={children} />;
 };
