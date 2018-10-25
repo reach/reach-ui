@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { string } from "prop-types";
+import { arrayOf, bool, func, number, string } from "prop-types";
 
 class Tabs extends Component {
   constructor(props) {
@@ -43,12 +43,16 @@ class Tabs extends Component {
   }
 }
 
+Tabs.propTypes = {
+  activeIndex: number
+};
+
 Tabs.defaultProps = {
   activeIndex: 0
 };
 
 let TabBar = ({ activeIndex, onClick, panelIds, ...props }) => {
-  const maxIndex = props.children && props.children.length - 1;
+  const maxIndex = React.Children.count(props.children);
 
   return (
     <ul role="tablist" {...props}>
@@ -63,6 +67,12 @@ let TabBar = ({ activeIndex, onClick, panelIds, ...props }) => {
       )}
     </ul>
   );
+};
+
+TabBar.propTypes = {
+  activeIndex: number.isRequired,
+  onClick: func.isRequired,
+  panelIds: arrayOf(string).isRequired
 };
 
 class Tab extends Component {
@@ -89,7 +99,6 @@ class Tab extends Component {
   render() {
     const {
       active,
-      index,
       onClick,
       onKeyDown,
       onNextTab,
@@ -117,7 +126,12 @@ class Tab extends Component {
 }
 
 Tab.propTypes = {
-  id: string.isRequired
+  id: string.isRequired,
+  active: bool.isRequired,
+  onKeyDown: func.isRequired,
+  onNextTab: func.isRequired,
+  onPreviousTab: func.isRequired,
+  panelId: string.isRequired
 };
 
 let TabPanels = ({ activeIndex, tabIds, ...props }) => {
@@ -135,6 +149,11 @@ let TabPanels = ({ activeIndex, tabIds, ...props }) => {
       })}
     </Fragment>
   );
+};
+
+TabPanels.prop = {
+  activeIndex: number.isRequired,
+  tabIds: arrayOf(string).isRequired
 };
 
 export { Tabs, TabBar, Tab, TabPanels };
