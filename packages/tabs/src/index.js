@@ -151,7 +151,7 @@ let TabPanels = ({ activeIndex, tabIds, ...props }) => {
   );
 };
 
-TabPanels.prop = {
+TabPanels.propTypes = {
   activeIndex: number.isRequired,
   tabIds: arrayOf(string).isRequired
 };
