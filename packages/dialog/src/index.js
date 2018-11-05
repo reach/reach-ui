@@ -59,6 +59,7 @@ let FocusContext = React.createContext();
 let DialogOverlay = React.forwardRef(
   (
     {
+      container,
       isOpen = true,
       onDismiss = k,
       initialFocusRef,
@@ -70,7 +71,7 @@ let DialogOverlay = React.forwardRef(
   ) => (
     <Component didMount={checkDialogStyles}>
       {isOpen ? (
-        <Portal data-reach-dialog-wrapper>
+        <Portal container={container} data-reach-dialog-wrapper>
           <Component
             refs={{ overlayNode: null, contentNode: null }}
             didMount={({ refs }) => {
@@ -133,8 +134,8 @@ let DialogContent = React.forwardRef(
   )
 );
 
-let Dialog = ({ isOpen, onDismiss = k, ...props }) => (
-  <DialogOverlay isOpen={isOpen} onDismiss={onDismiss}>
+let Dialog = ({ container, isOpen, onDismiss = k, ...props }) => (
+  <DialogOverlay container={container} isOpen={isOpen} onDismiss={onDismiss}>
     <DialogContent {...props} />
   </DialogOverlay>
 );
