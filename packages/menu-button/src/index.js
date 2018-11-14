@@ -143,7 +143,7 @@ MenuButton.propTypes = {
 
 ////////////////////////////////////////////////////////////////////////
 
-let MenuList = props => (
+let MenuList = ({ setPosition = null, ...props }) => (
   <Consumer>
     {({ refs, state, setState }) =>
       state.isOpen && (
@@ -155,7 +155,7 @@ let MenuList = props => (
                   <div
                     data-reach-menu
                     ref={menuRef}
-                    style={getStyles(state.buttonRect, menuRect)}
+                    style={getStyles(state.buttonRect, menuRect, setPosition)}
                   >
                     <MenuListImpl
                       {...props}
@@ -175,7 +175,8 @@ let MenuList = props => (
 );
 
 MenuList.propTypes = {
-  children: node
+  children: node,
+  setPosition: func
 };
 
 let MenuListImpl = React.forwardRef(
@@ -369,10 +370,15 @@ MenuLink.propTypes = {
   _ref: func
 };
 
+let getStyles = (buttonRect, menuRect, setPosition = null) => {
+  let styles = getInitialStyles(buttonRect, menuRect);
+  return setPosition ? setPosition(styles, { buttonRect, menuRect }) : styles;
+};
+
 // TODO: Deal with collisions on the bottom, though not as important
 // since focus causes a scroll and will then scroll the page down
 // to the item.
-let getStyles = (buttonRect, menuRect) => {
+let getInitialStyles = (buttonRect, menuRect) => {
   let haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
     return { opacity: 0 };
@@ -381,8 +387,8 @@ let getStyles = (buttonRect, menuRect) => {
   let haventMeasuredMenuYet = !menuRect;
 
   let styles = {
-    left: `${buttonRect.left + window.scrollX}px`,
-    top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
+    left: `${buttonRect.left + window.scrollX}`,
+    top: `${buttonRect.top + buttonRect.height + window.scrollY}`
   };
 
   if (haventMeasuredMenuYet) {
@@ -402,8 +408,8 @@ let getStyles = (buttonRect, menuRect) => {
   if (collisionRight) {
     return {
       ...styles,
-      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
-      top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
+      left: `${buttonRect.right - menuRect.width + window.scrollX}`,
+      top: `${buttonRect.top + buttonRect.height + window.scrollY}`
     };
     // } else if (collisionBottom) {
   } else {
