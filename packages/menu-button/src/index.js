@@ -143,7 +143,7 @@ MenuButton.propTypes = {
 
 ////////////////////////////////////////////////////////////////////////
 
-let MenuList = props => (
+let MenuList = React.forwardRef((props, ref) => (
   <Consumer>
     {({ refs, state, setState }) =>
       state.isOpen && (
@@ -162,6 +162,7 @@ let MenuList = props => (
                       setState={setState}
                       state={state}
                       refs={refs}
+                      ref={ref}
                     />
                   </div>
                 )}
@@ -172,7 +173,7 @@ let MenuList = props => (
       )
     }
   </Consumer>
-);
+));
 
 MenuList.propTypes = {
   children: node
