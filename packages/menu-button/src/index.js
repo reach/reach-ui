@@ -99,57 +99,68 @@ Menu.propTypes = {
 };
 
 ////////////////////////////////////////////////////////////////////////
-let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
-  <Consumer>
-    {({ refs, state, setState }) => (
-      <Rect
-        observe={state.isOpen}
-        onChange={buttonRect => setState({ buttonRect })}
-      >
-        {({ ref: rectRef }) => (
-          <button
-            id={state.buttonId}
-            aria-haspopup="menu"
-            aria-expanded={state.isOpen}
-            data-reach-menu-button
-            type="button"
-            ref={node => {
-              rectRef(node);
-              ref && ref(node);
-              refs.button = node;
-            }}
-            onMouseDown={event => {
-              if (state.isOpen) {
-                setState({ closingWithClick: true });
-              }
-            }}
-            onClick={wrapEvent(onClick, event => {
-              if (state.isOpen) {
-                setState(close);
-              } else {
-                setState(openAtFirstItem);
-              }
-            })}
-            onKeyDown={wrapEvent(onKeyDown, event => {
-              if (event.key === "ArrowDown") {
-                event.preventDefault(); // prevent scroll
-                setState(openAtFirstItem);
-              } else if (event.key === "ArrowUp") {
-                event.preventDefault(); // prevent scroll
-                setState(openAtFirstItem);
-              }
-            })}
-            {...props}
-          />
-        )}
-      </Rect>
-    )}
-  </Consumer>
-));
+let MenuButton = React.forwardRef(
+  (
+    {
+      onClick,
+      onKeyDown,
+      asAccessibleButtonComponent: Comp = "button",
+      ...props
+    },
+    ref
+  ) => (
+    <Consumer>
+      {({ refs, state, setState }) => (
+        <Rect
+          observe={state.isOpen}
+          onChange={buttonRect => setState({ buttonRect })}
+        >
+          {({ ref: rectRef }) => (
+            <Comp
+              id={state.buttonId}
+              aria-haspopup="menu"
+              aria-expanded={state.isOpen}
+              data-reach-menu-button
+              type="button"
+              ref={node => {
+                rectRef(node);
+                ref && ref(node);
+                refs.button = node;
+              }}
+              onMouseDown={event => {
+                if (state.isOpen) {
+                  setState({ closingWithClick: true });
+                }
+              }}
+              onClick={wrapEvent(onClick, event => {
+                if (state.isOpen) {
+                  setState(close);
+                } else {
+                  setState(openAtFirstItem);
+                }
+              })}
+              onKeyDown={wrapEvent(onKeyDown, event => {
+                if (event.key === "ArrowDown") {
+                  event.preventDefault(); // prevent scroll
+                  setState(openAtFirstItem);
+                } else if (event.key === "ArrowUp") {
+                  event.preventDefault(); // prevent scroll
+                  setState(openAtFirstItem);
+                }
+              })}
+              {...props}
+            />
+          )}
+        </Rect>
+      )}
+    </Consumer>
+  )
+);
 
 MenuButton.propTypes = {
   onClick: func,
   onKeyDown: func,
+  asAccessibleButtonComponent: oneOfType([string, node]),
   children: node
 };
 

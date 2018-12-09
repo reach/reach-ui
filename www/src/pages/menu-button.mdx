@@ -151,12 +151,13 @@ If you'd like to target when the menu is open use `aria-expanded`:
 
 ## MenuButton Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [button props](#menubutton-button-props) | spread               | n/a
-| [children](#menubutton-children)         | node                 | false
-| onClick                                  | preventableEventFunc | false
-| onKeyDown                                | preventableEventFunc | false
+| Prop                                                                   | Type                 | Required |
+| ---------------------------------------------------------------------- | -------------------- | -------- |
+| [button props](#menubutton-button-props)                               | spread               | n/a
+| [asAccessibleButtonComponent](#menubutton-asaccessiblebuttoncomponent) | node | string        | false
+| [children](#menubutton-children)                                       | node                 | false
+| onClick                                                                | preventableEventFunc | false
+| onKeyDown                                                              | preventableEventFunc | false
 
 ### MenuButton button props
 
@@ -176,6 +177,19 @@ Any props not listed above will be spread onto the underlying button element. Yo
     <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
   </MenuList>
 </Menu>
+```
+
+
+### MenuButton asAccessibleButtonComponent
+
+*Type*: `oneOfType(string, component)`
+
+By default, `MenuButton` renders a `button`.
+
+```.jsx
+<MenuButton asAccessibleButtonComponent={MyFancyButton}>
+  Actions <span aria-hidden>▾</span>
+</MenuButton>
 ```
 
 
