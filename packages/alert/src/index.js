@@ -12,7 +12,7 @@
 // later.
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import Component from "@reach/component-component";
 import VisuallyHidden from "@reach/visually-hidden";
 
@@ -42,7 +42,7 @@ let renderAlerts = () => {
     Object.keys(elements).forEach(type => {
       let container = liveRegions[type];
       if (container) {
-        ReactDOM.render(
+        render(
           <VisuallyHidden>
             <div
               role={type === "assertive" ? "alert" : "status"}
