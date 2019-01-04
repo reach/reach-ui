@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import Portal from "@reach/portal";
 import { Link } from "@reach/router";
 import Rect from "@reach/rect";
@@ -7,7 +7,7 @@ import Component from "@reach/component-component";
 import { node, func, object, string, number, oneOfType } from "prop-types";
 import { wrapEvent, checkStyles } from "@reach/utils";
 
-let { Provider, Consumer } = React.createContext();
+let { Provider, Consumer } = createContext();
 
 let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
   if (!state.isOpen && prevState.isOpen) {
