@@ -32,7 +32,13 @@ let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
       refs.button.focus();
     }
   } else if (state.selectionIndex !== prevState.selectionIndex) {
-    refs.items[state.selectionIndex].focus();
+    if (state.selectionIndex === -1) {
+      // clear highlight when mousing over non-menu items, but focus the menu
+      // so the the keyboard will work after a mouseover
+      refs.menu.focus();
+    } else {
+      refs.items[state.selectionIndex].focus();
+    }
   }
 };
 
@@ -158,6 +164,7 @@ let MenuItem = React.forwardRef(
       index,
       onKeyDown,
       onMouseMove,
+      onMouseLeave,
       _ref,
       ...rest
     },
@@ -194,6 +201,10 @@ let MenuItem = React.forwardRef(
           if (!isSelected) {
             setState(selectItemAtIndex(index));
           }
+        })}
+        onMouseLeave={wrapEvent(onMouseLeave, event => {
+          // clear out selection when mouse over a non-menu item child
+          setState({ selectionIndex: -1 });
         })}
       />
     );
