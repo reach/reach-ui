@@ -25,7 +25,13 @@ import {
 let NavLink = React.forwardRef(
   (props, ref) =>
     props.href ? (
-      <a ref={ref} className="NavLink" {...props} />
+      <a
+        ref={ref}
+        className="NavLink"
+        target="_blank"
+        rel="noopener"
+        {...props}
+      />
     ) : (
       <Link ref={ref} className="NavLink" {...props} />
     )
@@ -139,7 +145,7 @@ let Nav = ({ media }) => (
               <div style={{ height: 10 }} />
 
               <NavLink
-                href="/"
+                to="/"
                 ref={node => {
                   refs.navNode = node;
                 }}

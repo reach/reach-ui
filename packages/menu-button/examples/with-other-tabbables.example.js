@@ -7,10 +7,14 @@ export let name = "With Other Tabbables";
 
 export let Example = () => (
   <div>
-    <select>
-      <option>one</option>
-      <option>two</option>
-    </select>
+    <p>
+      <label for="cheers">How many cheers for Reach?</label>
+      <select id="cheers">
+        <option>one</option>
+        <option>two</option>
+        <option>three</option>
+      </select>
+    </p>
     <Menu>
       <MenuButton>
         Actions <span aria-hidden="true">▾</span>

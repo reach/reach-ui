@@ -3,6 +3,7 @@ import Component from "@reach/component-component";
 import Portal from "@reach/portal";
 import { checkStyles, wrapEvent } from "@reach/utils";
 import createFocusTrap from "focus-trap";
+import { func, bool } from "prop-types";
 
 let createAriaHider = dialogNode => {
   let originalValues = [];
@@ -138,5 +139,10 @@ let Dialog = ({ isOpen, onDismiss = k, ...props }) => (
     <DialogContent {...props} />
   </DialogOverlay>
 );
+
+Dialog.propTypes = {
+  isOpen: bool,
+  onDismiss: func
+};
 
 export { DialogOverlay, DialogContent, Dialog };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import Portal from "@reach/portal";
 import { Link } from "@reach/router";
 import Rect from "@reach/rect";
@@ -7,7 +7,7 @@ import Component from "@reach/component-component";
 import { node, func, object, string, number, oneOfType } from "prop-types";
 import { wrapEvent, checkStyles } from "@reach/utils";
 
-let { Provider, Consumer } = React.createContext();
+let { Provider, Consumer } = createContext();
 
 let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
   if (!state.isOpen && prevState.isOpen) {
@@ -369,9 +369,6 @@ MenuLink.propTypes = {
   _ref: func
 };
 
-// TODO: Deal with collisions on the bottom, though not as important
-// since focus causes a scroll and will then scroll the page down
-// to the item.
 let getStyles = (buttonRect, menuRect) => {
   let haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
@@ -396,19 +393,25 @@ let getStyles = (buttonRect, menuRect) => {
     styles.minWidth = buttonRect.width;
   }
 
-  let collisionRight = window.innerWidth < buttonRect.left + menuRect.width;
-  // let collisionBottom = window.innerHeight < buttonRect.top + menuRect.height;
+  let collisions = {
+    top: buttonRect.top - menuRect.height < 0,
+    right: window.innerWidth < buttonRect.left + menuRect.width,
+    bottom: window.innerHeight < buttonRect.top + menuRect.height,
+    left: buttonRect.left - menuRect.width < 0
+  };
 
-  if (collisionRight) {
-    return {
-      ...styles,
-      left: `${buttonRect.right - menuRect.width + window.scrollX}px`,
-      top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
-    };
-    // } else if (collisionBottom) {
-  } else {
-    return styles;
-  }
+  const directionRight = collisions.right && !collisions.left;
+  const directionUp = collisions.bottom && !collisions.top;
+
+  return {
+    ...styles,
+    left: directionRight
+      ? `${buttonRect.right - menuRect.width + window.scrollX}px`
+      : `${buttonRect.left + window.scrollX}px`,
+    top: directionUp
+      ? `${buttonRect.top - menuRect.height + window.scrollY}px`
+      : `${buttonRect.top + buttonRect.height + window.scrollY}px`
+  };
 };
 
 export { Menu, MenuList, MenuButton, MenuLink, MenuItem };

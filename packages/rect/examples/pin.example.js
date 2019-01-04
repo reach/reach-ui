@@ -17,7 +17,7 @@ export class Example extends React.Component {
         <Rect observe={this.state.pin}>
           {({ ref, rect }) => (
             <div>
-              <textarea>resize this</textarea>
+              <textarea defaultValue="resize this" />
               <span
                 ref={ref}
                 contentEditable

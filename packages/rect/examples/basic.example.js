@@ -8,7 +8,7 @@ export let Example = () => (
     {({ ref, rect }) => (
       <div>
         <pre>{JSON.stringify(rect, null, 2)}</pre>
-        <textarea>resize this</textarea>
+        <textarea defaultValue="resize this" />
         <span
           ref={ref}
           contentEditable
