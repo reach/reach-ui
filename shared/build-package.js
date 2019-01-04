@@ -5,7 +5,7 @@ const prettyBytes = require("pretty-bytes");
 const gzipSize = require("gzip-size");
 const path = require("path");
 
-let pkg = path.basename(process.env.PWD);
+let pkg = path.basename(process.env.PWD || process.cwd());
 let babel = `${__dirname}/../node_modules/.bin/babel`;
 let rollup = `${__dirname}/../node_modules/.bin/rollup`;
 let rollupConfig = `${__dirname}/rollup-config.js`;
