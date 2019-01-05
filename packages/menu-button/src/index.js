@@ -195,6 +195,10 @@ let MenuItem = React.forwardRef(
             // this "Enter" keydown
             event.preventDefault();
             select();
+          } else if (event.key === " ") {
+            // prevent scrolling when using "Space" key to select a menu item
+            event.preventDefault();
+            select();
           }
         })}
         onMouseMove={wrapEvent(onMouseMove, event => {
