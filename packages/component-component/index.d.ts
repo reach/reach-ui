@@ -1,48 +1,54 @@
 import * as React from "react";
-declare type ComponentState = any;
+
 export declare type Renderable<Props> =
   | ((props: Props) => React.ReactNode)
   | React.ReactNode
   | React.ReactNodeArray
   | React.Component<Props, any>;
-export declare type ComponentProps = {
-  initialState?: ComponentState;
-  getInitialState?: (props: ComponentProps) => ComponentState;
+
+declare type ComponentState<T> = T;
+
+export declare type ComponentProps<T> = {
+  initialState?: T;
+  getInitialState?: (props: ComponentProps<T>) => ComponentState<T>;
   refs?: React.Component["refs"];
-  getRefs?: (args: Args) => React.Component["refs"];
-  didMount?: (args: Args) => void;
-  didUpdate?: (args: ArgsWithPrev, snapshot: any) => void;
-  willUnmount?: (args: ArgsWithoutMutators) => void;
-  getSnapshotBeforeUpdate?: (args: ArgsWithPrev) => null | any;
-  didCatch?: (args: Args, error: any, info: any) => void;
-  shouldUpdate?: (args: ArgsWithNextWithoutMutators) => boolean;
-  render?: Renderable<Args>;
-  children?: Renderable<Args>;
+  getRefs?: (args: Args<T>) => React.Component["refs"];
+  didMount?: (args: Args<T>) => void;
+  didUpdate?: (args: ArgsWithPrev<T>, snapshot: any) => void;
+  willUnmount?: (args: ArgsWithoutMutators<T>) => void;
+  getSnapshotBeforeUpdate?: (args: ArgsWithPrev<T>) => null | any;
+  didCatch?: (args: Args<T>, error: any, info: any) => void;
+  shouldUpdate?: (args: ArgsWithNextWithoutMutators<T>) => boolean;
+  render?: Renderable<Args<T>>;
+  children?: Renderable<Args<T>>;
   [otherProps: string]: any;
 };
-interface Args {
-  state: any;
-  props: ComponentProps;
-  setState: React.Component["setState"];
+interface Args<T> {
+  state: ComponentState<T>;
+  props: ComponentProps<T>;
+  setState: React.Component<ComponentProps<T>, ComponentState<T>>["setState"];
   forceUpdate: React.Component["forceUpdate"];
   refs: React.Component["refs"];
 }
-interface ArgsWithoutMutators {
-  state: ComponentState;
-  props: ComponentProps;
+interface ArgsWithoutMutators<T> {
+  state: ComponentState<T>;
+  props: ComponentProps<T>;
   refs: React.Component["refs"];
 }
-interface ArgsWithPrev extends Args {
-  prevProps: ComponentProps;
-  prevState: ComponentState;
+interface ArgsWithPrev<T> extends Args<T> {
+  prevProps: ComponentProps<T>;
+  prevState: ComponentState<T>;
 }
-interface ArgsWithNextWithoutMutators {
-  state: ComponentState;
-  props: ComponentProps;
-  nextProps: ComponentProps;
-  nextState: ComponentState;
+interface ArgsWithNextWithoutMutators<T> {
+  state: ComponentState<T>;
+  props: ComponentProps<T>;
+  nextProps: ComponentProps<T>;
+  nextState: ComponentState<T>;
 }
-export declare class Component extends React.Component<ComponentProps, any> {
+export declare class Component<T> extends React.Component<
+  ComponentProps<T>,
+  any
+> {
   static defaultProps: {
     getInitialState: () => void;
     getRefs: () => {};
@@ -53,25 +59,25 @@ export declare class Component extends React.Component<ComponentProps, any> {
   _forceUpdate: (callback?: (() => void) | undefined) => void;
   getArgs(): {
     state: any;
-    props: ComponentProps;
+    props: ComponentProps<T>;
     refs: any;
     setState: (newStateOrReducer: any, callback: () => void) => void;
     forceUpdate: (callback?: (() => void) | undefined) => void;
   };
   componentDidMount(): void;
   shouldComponentUpdate(
-    nextProps: ComponentProps,
-    nextState: ComponentState
+    nextProps: ComponentProps<T>,
+    nextState: ComponentState<T>
   ): boolean;
   componentWillUnmount(): void;
   componentDidUpdate(
-    prevProps: ComponentProps,
-    prevState: ComponentState,
+    prevProps: ComponentProps<T>,
+    prevState: ComponentState<T>,
     snapshot: any
   ): void;
   getSnapshotBeforeUpdate(
-    prevProps: ComponentProps,
-    prevState: ComponentState
+    prevProps: ComponentProps<T>,
+    prevState: ComponentState<T>
   ): any;
   componentDidCatch(error: any, info: any): void;
   render(): any;
