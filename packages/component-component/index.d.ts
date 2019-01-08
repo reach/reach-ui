@@ -3,7 +3,6 @@ declare type ComponentState = any;
 export declare type Renderable<Props> =
   | ((props: Props) => React.ReactNode)
   | React.ReactNode
-  | React.ReactNode
   | React.ReactNodeArray
   | React.Component<Props, any>;
 export declare type ComponentProps = {
