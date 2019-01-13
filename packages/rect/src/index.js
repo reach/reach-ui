@@ -34,7 +34,6 @@ let willUnmount = ({ refs }) => {
 
 let Rect = props => (
   <Component
-    {...props}
     refs={{
       node: undefined,
       observer: undefined
