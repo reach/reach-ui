@@ -1,5 +1,7 @@
 declare module "@reach/visually-hidden" {
-  const VisuallyHidden: React.SFC;
-
+  interface VisuallyHiddenProps {
+    children: React.ReactNode;
+  }
+  const VisuallyHidden: React.SFC<VisuallyHiddenProps>;
   export default VisuallyHidden;
 }
