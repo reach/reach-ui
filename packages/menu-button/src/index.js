@@ -365,7 +365,7 @@ let MenuListImpl = React.forwardRef(
           } else if (event.key === "ArrowUp") {
             event.preventDefault(); // prevent window scroll
             let nextIndex = state.selectionIndex - 1;
-            if (nextIndex !== -1) {
+            if (nextIndex > -1) {
               setState({ selectionIndex: nextIndex });
             }
           } else if (event.key === "Tab") {
