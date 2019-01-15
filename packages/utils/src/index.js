@@ -34,9 +34,7 @@ if (__DEV__) {
 
 export { checkStyles };
 
-export let wrapEvent = (handler, cb) => event => {
-  handler && handler(event);
-  if (!event.defaultPrevented) {
-    return cb(event);
-  }
-};
+export left wrapEvent = (handler, cb = () => {}) => event => {
+  handler && handler(event)
+  !event.defaultPrevented && cb(event);
+}
