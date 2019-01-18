@@ -348,7 +348,7 @@ let MenuListImpl = React.forwardRef(
         onBlur={event => {
           if (
             !state.closingWithClick &&
-            !refs.menu.contains(event.relatedTarget)
+            !refs.menu.contains(event.relatedTarget || document.activeElement)
           ) {
             setState(close);
           }
@@ -410,9 +410,10 @@ let getStyles = (buttonRect, menuRect) => {
   let haventMeasuredMenuYet = !menuRect;
 
   let styles = {
-    left: `${buttonRect.left + window.scrollX}px`,
-    top: `${buttonRect.top + buttonRect.height + window.scrollY}px`
+    left: `${buttonRect.left + window.pageXOffset}px`,
+    top: `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
+  console.log("styles: ", styles);
 
   if (haventMeasuredMenuYet) {
     return {
@@ -438,11 +439,11 @@ let getStyles = (buttonRect, menuRect) => {
   return {
     ...styles,
     left: directionRight
-      ? `${buttonRect.right - menuRect.width + window.scrollX}px`
-      : `${buttonRect.left + window.scrollX}px`,
+      ? `${buttonRect.right - menuRect.width + window.pageXOffset}px`
+      : `${buttonRect.left + window.pageXOffset}px`,
     top: directionUp
-      ? `${buttonRect.top - menuRect.height + window.scrollY}px`
-      : `${buttonRect.top + buttonRect.height + window.scrollY}px`
+      ? `${buttonRect.top - menuRect.height + window.pageYOffset}px`
+      : `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
 };
 
