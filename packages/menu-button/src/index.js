@@ -413,7 +413,6 @@ let getStyles = (buttonRect, menuRect) => {
     left: `${buttonRect.left + window.pageXOffset}px`,
     top: `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
-  console.log("styles: ", styles);
 
   if (haventMeasuredMenuYet) {
     return {
