@@ -32,6 +32,7 @@ export let Example = () => (
                   <button onClick={() => setState({ showDialog: false })}>
                     Close Dialog
                   </button>
+                  <button>Just button</button>
                   <p>Well, maybe you can</p>
                 </Dialog>
               </div>

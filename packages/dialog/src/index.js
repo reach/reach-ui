@@ -2,7 +2,8 @@ import React from "react";
 import Component from "@reach/component-component";
 import Portal from "@reach/portal";
 import { checkStyles, wrapEvent } from "@reach/utils";
-import createFocusTrap from "focus-trap";
+import FocusLock from "react-focus-lock";
+import { RemoveScroll } from "react-remove-scroll";
 import { func, bool } from "prop-types";
 
 let createAriaHider = dialogNode => {
@@ -39,19 +40,11 @@ let k = () => {};
 
 let checkDialogStyles = () => checkStyles("dialog");
 
-let portalDidMount = (refs, initialFocusRef) => {
+let portalDidMount = refs => {
   refs.disposeAriaHider = createAriaHider(refs.overlayNode);
-  refs.trap = createFocusTrap(refs.overlayNode, {
-    initialFocus: initialFocusRef ? () => initialFocusRef.current : undefined,
-    fallbackFocus: refs.contentNode,
-    escapeDeactivates: false,
-    clickOutsideDeactivates: false
-  });
-  refs.trap.activate();
 };
 
 let contentWillUnmount = ({ refs }) => {
-  refs.trap.deactivate();
   refs.disposeAriaHider();
 };
 
@@ -73,33 +66,42 @@ let DialogOverlay = React.forwardRef(
       {isOpen ? (
         <Portal data-reach-dialog-wrapper>
           <Component
-            refs={{ overlayNode: null, contentNode: null }}
+            refs={{ overlayNode: null }}
             didMount={({ refs }) => {
-              portalDidMount(refs, initialFocusRef);
+              portalDidMount(refs);
             }}
             willUnmount={contentWillUnmount}
           >
             {({ refs }) => (
-              <FocusContext.Provider value={node => (refs.contentNode = node)}>
-                <div
-                  data-reach-dialog-overlay
-                  onClick={wrapEvent(onClick, event => {
-                    event.stopPropagation();
-                    onDismiss();
-                  })}
-                  onKeyDown={wrapEvent(onKeyDown, event => {
-                    if (event.key === "Escape") {
+              <FocusLock
+                returnFocus
+                onActivation={() => {
+                  if (initialFocusRef) {
+                    initialFocusRef.current.focus();
+                  }
+                }}
+              >
+                <RemoveScroll>
+                  <div
+                    data-reach-dialog-overlay
+                    onClick={wrapEvent(onClick, event => {
                       event.stopPropagation();
                       onDismiss();
-                    }
-                  })}
-                  ref={node => {
-                    refs.overlayNode = node;
-                    forwardRef && forwardRef(node);
-                  }}
-                  {...props}
-                />
-              </FocusContext.Provider>
+                    })}
+                    onKeyDown={wrapEvent(onKeyDown, event => {
+                      if (event.key === "Escape") {
+                        event.stopPropagation();
+                        onDismiss();
+                      }
+                    })}
+                    ref={node => {
+                      refs.overlayNode = node;
+                      forwardRef && forwardRef(node);
+                    }}
+                    {...props}
+                  />
+                </RemoveScroll>
+              </FocusLock>
             )}
           </Component>
         </Portal>
@@ -116,26 +118,25 @@ let stopPropagation = event => event.stopPropagation();
 
 let DialogContent = React.forwardRef(
   ({ onClick, onKeyDown, ...props }, forwardRef) => (
-    <FocusContext.Consumer>
-      {contentRef => (
-        <div
-          aria-modal="true"
-          data-reach-dialog-content
-          tabIndex="-1"
-          onClick={wrapEvent(onClick, stopPropagation)}
-          ref={node => {
-            contentRef(node);
-            forwardRef && forwardRef(node);
-          }}
-          {...props}
-        />
-      )}
-    </FocusContext.Consumer>
+    <div
+      aria-modal="true"
+      data-reach-dialog-content
+      tabIndex="-1"
+      onClick={wrapEvent(onClick, stopPropagation)}
+      ref={node => {
+        forwardRef && forwardRef(node);
+      }}
+      {...props}
+    />
   )
 );
 
-let Dialog = ({ isOpen, onDismiss = k, ...props }) => (
-  <DialogOverlay isOpen={isOpen} onDismiss={onDismiss}>
+let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
+  <DialogOverlay
+    isOpen={isOpen}
+    onDismiss={onDismiss}
+    initialFocusRef={initialFocusRef}
+  >
     <DialogContent {...props} />
   </DialogOverlay>
 );
