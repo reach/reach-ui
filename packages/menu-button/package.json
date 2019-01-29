@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Accessible React button dropdown menu.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -12,12 +12,12 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.1",
-    "@reach/portal": "^0.1.1",
-    "@reach/rect": "^0.1.1",
+    "@reach/component-component": "^0.1.2",
+    "@reach/portal": "^0.1.2",
+    "@reach/rect": "^0.1.2",
     "@reach/router": "^1.1.0",
     "@reach/utils": "^0.1.2",
-    "@reach/window-size": "^0.1.1",
+    "@reach/window-size": "^0.1.2",
     "warning": "^4.0.2"
   },
   "peerDependencies": {
