@@ -276,7 +276,6 @@ let MenuLink = React.forwardRef(
 );
 
 MenuLink.propTypes = {
-  to: string.isRequired,
   onKeyDown: func,
   onClick: func,
   component: oneOfType([string, node]),
