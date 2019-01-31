@@ -327,7 +327,9 @@ let focusableChildrenTypes = [MenuItem, MenuLink];
 
 let isFocusableChildType = child => focusableChildrenTypes.includes(child.type);
 let getFocusableMenuChildren = children => {
-  return children.filter(child => isFocusableChildType(child));
+  return React.Children.toArray(children).filter(child =>
+    isFocusableChildType(child)
+  );
 };
 
 let MenuListImpl = React.forwardRef(
