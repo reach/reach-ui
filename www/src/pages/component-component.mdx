@@ -251,6 +251,20 @@ Usual React children prop.
 </Component>
 ```
 
+### render
+
+*Type*: `function`
+
+Similar to `children`, but must be a function
+
+```.jsx
+<Component>
+  {({ state, props, refs, setState, forceUpdate }) => (
+    <div>State: {JSON.stringify(state)}</div>
+  )}
+</Component>
+```
+
 *Type*: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
