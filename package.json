@@ -10,7 +10,7 @@
     "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
   },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "@storybook/react": "^3.4.7",
     "autoprefixer": "^8.6.2",
     "babel-cli": "^6.26.0",
