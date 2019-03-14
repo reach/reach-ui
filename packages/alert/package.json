@@ -9,8 +9,8 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.2",
-    "@reach/visually-hidden": "^0.1.2"
+    "@reach/component-component": "file:../component-component",
+    "@reach/visually-hidden": "file:../visually-hidden"
   },
   "peerDependencies": {
     "react": "^16.4.0",

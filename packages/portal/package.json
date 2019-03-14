@@ -10,7 +10,7 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.2"
+    "@reach/component-component": "file:../component-component"
   },
   "peerDependencies": {
     "react": "^16.4.0",

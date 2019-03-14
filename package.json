@@ -2,7 +2,6 @@
   "name": "reach-ui",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "bootstrap": "lerna bootstrap --hoist",
     "test": "lerna run test --stream",
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
@@ -42,6 +41,7 @@
     "pretty-quick": "^1.6.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.0",
+    "react-test-renderer": "^16.4.1",
     "rollup": "^0.63.4",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.4",
@@ -55,5 +55,18 @@
     "hooks": {
       "pre-push": "lerna run lint"
     }
+  },
+  "dependencies": {
+    "@reach/alert": "file:packages/alert",
+    "@reach/alert-dialog": "file:packages/alert-dialog",
+    "@reach/component-component": "file:packages/component-component",
+    "@reach/dialog": "file:packages/dialog",
+    "@reach/menu-button": "file:packages/menu-button",
+    "@reach/portal": "file:packages/portal",
+    "@reach/rect": "file:packages/rect",
+    "@reach/skip-nav": "file:packages/skip-nav",
+    "@reach/utils": "file:packages/utils",
+    "@reach/visually-hidden": "file:packages/visually-hidden",
+    "@reach/window-size": "file:packages/window-size"
   }
 }
