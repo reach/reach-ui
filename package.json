@@ -6,7 +6,9 @@
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "precommit": "pretty-quick --staged",
-    "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
+    "publish": "lerna publish from-package",
+    "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master",
+    "version": "lerna version --no-git-tag-version --no-push"
   },
   "license": "MIT",
   "devDependencies": {
