@@ -1,0 +1,26 @@
+[data-reach-tab-list] {
+  display: flex;
+  background: hsla(0, 0%, 0%, 0.05);
+}
+
+[data-reach-tab] {
+  display: inline-block;
+  border: none;
+  padding: 0.25em 0.5em;
+  margin: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-bottom: solid 1px transparent;
+}
+
+[data-reach-tab]:active {
+  background: hsla(0, 0%, 0%, 0.075);
+}
+
+[data-reach-tab][aria-selected="true"] {
+  border-bottom-color: inherit;
+}
