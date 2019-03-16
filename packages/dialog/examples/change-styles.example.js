@@ -8,8 +8,6 @@ import {
   config
 } from "../../../www/vendor/react-spring/src/targets/web";
 
-console.log(config);
-
 export let name = "Change Styles";
 
 let AnimatedDialogOverlay = animated(DialogOverlay);

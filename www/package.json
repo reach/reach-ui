@@ -1,40 +1,52 @@
 {
+  "name": "gatsby-starter-default",
+  "private": true,
+  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "version": "0.1.0",
+  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
-    "@babel/runtime": "7.0.0-rc.3",
-    "@mdx-js/mdx": "^0.15.0",
-    "@mdx-js/tag": "^0.15.0",
-    "gatsby": "next",
-    "gatsby-mdx": "^0.0.11",
-    "gatsby-plugin-google-analytics": "^1.0.31",
-    "gatsby-plugin-manifest": "next",
-    "gatsby-plugin-offline": "next",
-    "gatsby-plugin-react-helmet": "next",
-    "prop-types": "^15.6.2",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "@mdx-js/mdx": "^0.20.3",
+    "@mdx-js/tag": "^0.20.3",
+    "gatsby": "^2.1.31",
+    "gatsby-image": "^2.0.33",
+    "gatsby-mdx": "^0.4.3",
+    "gatsby-plugin-google-analytics": "^2.0.17",
+    "gatsby-plugin-manifest": "^2.0.24",
+    "gatsby-plugin-offline": "^2.0.25",
+    "gatsby-plugin-react-helmet": "^3.0.9",
+    "gatsby-plugin-sharp": "^2.0.28",
+    "gatsby-source-filesystem": "^2.0.24",
+    "gatsby-transformer-sharp": "^2.1.17",
+    "prop-types": "^15.7.2",
     "react-helmet": "^5.2.0",
-    "react-live": "^1.11.0",
-    "react-spring": "^5.6.9",
-    "recondition": "^1.2.1",
-    "remark-autolink-headings": "^5.0.0",
-    "remark-emoji": "^2.0.1",
-    "remark-images": "^0.8.1",
-    "remark-slug": "^5.1.0"
-  },
-  "scripts": {
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "stage": "now public",
-    "deploy": "now alias"
+    "react-live": "^1.12.0",
+    "react-spring": "^8.0.15",
+    "recondition": "1.2",
+    "remark-autolink-headings": "^5.1.0",
+    "remark-emoji": "^2.0.2",
+    "remark-images": "^0.18.0",
+    "remark-slug": "^5.1.1"
   },
   "devDependencies": {
-    "prettier": "^1.14.2"
+    "prettier": "^1.16.4"
   },
-  "prettier": {
-    "printWidth": 60
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },
-  "now": {
-    "name": "reach-ui",
-    "alias": "ui.reach.tech"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
   }
 }
