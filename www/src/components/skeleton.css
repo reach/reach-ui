@@ -114,7 +114,8 @@ p {
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .button,
-button:not([data-reach-*]),
+button:not([data-reach-tab]),
+button:not([data-reach-menu-button]),
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
