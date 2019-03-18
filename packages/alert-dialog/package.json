@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Accessible React Alert Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -12,9 +12,9 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.2",
-    "@reach/dialog": "^0.1.3",
-    "@reach/utils": "^0.1.2",
+    "@reach/component-component": "^0.1.3",
+    "@reach/dialog": "^0.1.4",
+    "@reach/utils": "^0.2.0",
     "invariant": "^2.2.4"
   },
   "peerDependencies": {
