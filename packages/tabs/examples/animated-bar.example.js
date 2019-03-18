@@ -40,22 +40,21 @@ function AnimatedTabs({ color, ...rest }) {
 }
 
 function AnimatedTab(props) {
-  // yeargh! this is private API, oh well!
-  const { isActive } = props;
+  const { isSelected } = props;
 
   // measure the size of our element, only listen to rect if active
   const ref = useRef();
-  const rect = useRect(ref, isActive);
+  const rect = useRect(ref, isSelected);
 
   // get the style changing function from context
   const setActiveRect = useContext(AnimatedContext);
 
   // callup to set styles whenever we're active
   useLayoutEffect(() => {
-    if (isActive) {
+    if (isSelected) {
       setActiveRect(rect);
     }
-  }, [isActive, rect]);
+  }, [isSelected, rect, setActiveRect]);
 
   return (
     <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
