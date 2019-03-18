@@ -137,13 +137,15 @@ input[type="button"] {
   box-sizing: border-box;
 }
 .button:hover,
-button:hover:not([data-reach-*]),
+button:hover:not([data-reach-tab]),
+button:hover:not([data-reach-menu-button]),
 button:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover,
 input[type="button"]:hover,
 .button:focus,
-button:focus:not([data-reach-*]),
+button:focus:not([data-reach-tab]),
+button:focus:not([data-reach-menu-button]),
 button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
