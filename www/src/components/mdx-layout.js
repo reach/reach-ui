@@ -10,31 +10,31 @@ import Layout from "./layout"
 
 import GatsbyLink from "gatsby-link"
 
-import Component from "../../../packages/component-component"
-import Rect, { useRect } from "../../../packages/rect"
-import WindowSize from "../../../packages/window-size"
-import Portal from "../../../packages/portal"
-import { Dialog, DialogOverlay, DialogContent } from "../../../packages/dialog"
+import Component from "@reach/component-component"
+import Rect, { useRect } from "@reach/rect"
+import WindowSize from "@reach/window-size"
+import Portal from "@reach/portal"
+import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog"
 import {
   Menu,
   MenuList,
   MenuButton,
   MenuItem,
   MenuLink,
-} from "../../../packages/menu-button"
-import VisuallyHidden from "../../../packages/visually-hidden"
-import Alert from "../../../packages/alert"
+} from "@reach/menu-button"
+import VisuallyHidden from "@reach/visually-hidden"
+import Alert from "@reach/alert"
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
   AlertDialogOverlay,
   AlertDialogContent,
-} from "../../../packages/alert-dialog"
+} from "@reach/alert-dialog"
 
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "../../../packages/tabs"
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
 
-import { useId } from "../../../packages/auto-id"
+import { useId } from "@reach/auto-id"
 
 import { Transition } from "../../vendor/react-spring/src/targets/web"
 import { Phased } from "recondition"

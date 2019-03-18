@@ -3,10 +3,10 @@ import PropTypes from "prop-types"
 import Helmet from "react-helmet"
 import Link from "gatsby-link"
 
-import "../../../packages/dialog/styles.css"
-import "../../../packages/skip-nav/styles.css"
-import "../../../packages/menu-button/styles.css"
-import "../../../packages/tabs/styles.css"
+import "@reach/dialog/styles.css"
+import "@reach/skip-nav/styles.css"
+import "@reach/menu-button/styles.css"
+import "@reach/tabs/styles.css"
 
 import "./normalize.css"
 import "./skeleton.css"
@@ -15,10 +15,10 @@ import "./app.css"
 
 import Logo from "./Logo"
 import MatchMedia from "./MatchMedia"
-import Component from "../../../packages/component-component"
-import VisuallyHidden from "../../../packages/visually-hidden"
+import Component from "@reach/component-component"
+import VisuallyHidden from "@reach/visually-hidden"
 
-import { SkipNavLink, SkipNavContent } from "../../../packages/skip-nav"
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
 
 let NavLink = React.forwardRef((props, ref) =>
   props.href ? (
