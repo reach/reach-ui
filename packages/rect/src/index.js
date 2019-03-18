@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import Component from "@reach/component-component";
 import observeRect from "@reach/observe-rect";
 import { func, bool } from "prop-types";
@@ -58,5 +58,20 @@ Rect.propTypes = {
 Rect.defaultProps = {
   observe: true
 };
+
+export function useRect(nodeRef, observe = true) {
+  let [rect, setRect] = useState(null);
+  let observerRef = useRef(null);
+  useLayoutEffect(() => {
+    if (!observerRef.current) {
+      observerRef.current = observeRect(nodeRef.current, setRect);
+    }
+    if (observe) {
+      observerRef.current.observe();
+    }
+    return () => observerRef.current.unobserve();
+  }, [observe]);
+  return rect;
+}
 
 export default Rect;
