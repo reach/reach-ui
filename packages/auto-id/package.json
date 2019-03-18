@@ -1,0 +1,24 @@
+{
+  "name": "@reach/auto-id",
+  "version": "0.1.0",
+  "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "author": "Ryan Florence",
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js"
+  ]
+}
