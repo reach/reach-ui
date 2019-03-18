@@ -74,17 +74,6 @@
   text-align: center;
 }
 
-button {
-  background: #fff;
-  position: relative;
-  top: -1px;
-}
-
-button:active {
-  top: 0px;
-  left: 1px;
-}
-
 body {
   background: #fafafa;
 }

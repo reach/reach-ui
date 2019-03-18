@@ -1,60 +1,56 @@
-import "./normalize.css";
-import "./skeleton.css";
-import "./syntax.css";
-import "./app.css";
+import "./normalize.css"
+import "./skeleton.css"
+import "./syntax.css"
+import "./app.css"
 
-import React from "react";
-import {
-  LiveProvider,
-  LiveEditor,
-  LiveError,
-  LivePreview
-} from "react-live";
-import { MDXProvider } from "@mdx-js/tag";
-import Layout from "./layout";
+import React from "react"
+import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live"
+import { MDXProvider } from "@mdx-js/tag"
+import Layout from "./layout"
 
-import GatsbyLink from "gatsby-link";
+import GatsbyLink from "gatsby-link"
 
-import Component from "../../../packages/component-component";
-import Rect from "../../../packages/rect";
-import WindowSize from "../../../packages/window-size";
-import Portal from "../../../packages/portal";
-import {
-  Dialog,
-  DialogOverlay,
-  DialogContent
-} from "../../../packages/dialog";
+import Component from "../../../packages/component-component"
+import Rect, { useRect } from "../../../packages/rect"
+import WindowSize from "../../../packages/window-size"
+import Portal from "../../../packages/portal"
+import { Dialog, DialogOverlay, DialogContent } from "../../../packages/dialog"
 import {
   Menu,
   MenuList,
   MenuButton,
   MenuItem,
-  MenuLink
-} from "../../../packages/menu-button";
-import VisuallyHidden from "../../../packages/visually-hidden";
-import Alert from "../../../packages/alert";
+  MenuLink,
+} from "../../../packages/menu-button"
+import VisuallyHidden from "../../../packages/visually-hidden"
+import Alert from "../../../packages/alert"
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
   AlertDialogOverlay,
-  AlertDialogContent
-} from "../../../packages/alert-dialog";
+  AlertDialogContent,
+} from "../../../packages/alert-dialog"
 
-import { Transition } from "../../vendor/react-spring/src/targets/web";
-import Phased from "recondition/dist/Phased";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "../../../packages/tabs"
+
+import { useId } from "../../../packages/auto-id"
+
+import { Transition } from "../../vendor/react-spring/src/targets/web"
+import { Phased } from "recondition"
 
 const PreComponent = ({ className, ...props }) =>
   props.children.props.props &&
-  props.children.props.props.className ===
-    "language-.jsx" ? (
+  props.children.props.props.className === "language-.jsx" ? (
     <LiveProvider
       mountStylesheet={false}
       code={props.children.props.children}
       scope={{
+        ...React,
         GatsbyLink,
         Component,
         Rect,
+        useRect,
         WindowSize,
         Portal,
         Menu,
@@ -73,7 +69,13 @@ const PreComponent = ({ className, ...props }) =>
         AlertDialogDescription,
         AlertDialogLabel,
         AlertDialogOverlay,
-        AlertDialogContent
+        AlertDialogContent,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel,
+        useId,
       }}
     >
       <LiveEditor tabIndex="-1" />
@@ -82,29 +84,25 @@ const PreComponent = ({ className, ...props }) =>
     </LiveProvider>
   ) : (
     <pre {...props} className="WHAT_THE_CRAP" />
-  );
+  )
 
-const Table = props => (
-  <table className="u-full-width" {...props} />
-);
+const Table = props => <table className="u-full-width" {...props} />
 
-let firstLoad = true;
+let firstLoad = true
 
 export default class MyPageLayout extends React.Component {
   componentDidMount() {
     if (firstLoad) {
-      firstLoad = false;
+      firstLoad = false
     } else {
-      this.node.focus();
+      this.node.focus()
     }
   }
 
   render() {
     return (
       <Layout>
-        <MDXProvider
-          components={{ pre: PreComponent, table: Table }}
-        >
+        <MDXProvider components={{ pre: PreComponent, table: Table }}>
           <main
             ref={n => (this.node = n)}
             tabIndex="-1"
@@ -115,6 +113,6 @@ export default class MyPageLayout extends React.Component {
           </main>
         </MDXProvider>
       </Layout>
-    );
+    )
   }
 }

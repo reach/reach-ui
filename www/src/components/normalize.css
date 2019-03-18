@@ -1,5 +1,9 @@
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /**
  * 1. Set default font family to sans-serif.
  * 2. Prevent iOS text size adjust after orientation change, without disabling
@@ -249,7 +253,6 @@ samp {
  * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
  */
 
-button,
 input,
 optgroup,
 select,
@@ -263,10 +266,6 @@ textarea {
  * Address `overflow` set to `hidden` in IE 8/9/10/11.
  */
 
-button {
-  overflow: visible;
-}
-
 /**
  * Address inconsistent `text-transform` inheritance for `button` and `select`.
  * All other form control elements do not inherit `text-transform` values.
@@ -274,7 +273,6 @@ button {
  * Correct `select` style inheritance in Firefox.
  */
 
-button,
 select {
   text-transform: none;
 }
@@ -287,7 +285,6 @@ select {
  *    `input` and others.
  */
 
-button,
 html input[type="button"], /* 1 */
 input[type="reset"],
 input[type="submit"] {
