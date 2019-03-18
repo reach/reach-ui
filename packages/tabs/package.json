@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.1.0",
-    "@reach/utils": "^0.2.0"
+    "@reach/utils": "^0.2.0",
+    "warning": "^4.0.2"
   },
   "peerDependencies": {
-    "prop-types": "*",
+    "prop-types": "^15.7.2",
     "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "warning": "^4.0.2"
+    "react-dom": "^16.8.0"
   },
   "author": "Ryan Florence",
   "license": "MIT",
