@@ -10,6 +10,7 @@
     "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
   },
   "license": "MIT",
+  "repository": "https://github.com/reach/reach-ui",
   "dependencies": {
     "@storybook/react": "^3.4.7",
     "autoprefixer": "^8.6.2",
