@@ -9,9 +9,15 @@
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
+  "dependencies": {
+    "@reach/utils": "^0.1.2",
+    "@reach/auto-id": "^0.1.0"
+  },
   "peerDependencies": {
     "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react-dom": "^16.8.0",
+    "prop-types": "*",
+    "warning": "^4.0.2"
   },
   "author": "Ryan Florence",
   "license": "MIT",

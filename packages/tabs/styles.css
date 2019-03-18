@@ -1,3 +1,7 @@
+[data-reach-tab-panel] {
+  outline: none;
+}
+
 [data-reach-tab-list] {
   display: flex;
   background: hsla(0, 0%, 0%, 0.05);
@@ -18,9 +22,14 @@
 }
 
 [data-reach-tab]:active {
-  background: hsla(0, 0%, 0%, 0.075);
+  background: hsla(0, 0%, 0%, 0.05);
 }
 
-[data-reach-tab][aria-selected="true"] {
+[data-reach-tab]:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+[data-reach-tab][data-selected] {
   border-bottom-color: inherit;
 }

@@ -1,0 +1,716 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Tabs"
+  meta={[
+    {
+      name: "description",
+      content: "Accessible Tabs",
+    },
+  ]}
+/>
+
+# @reach/tabs
+
+[Tabs](#tabs) -
+[TabList](#TabList) -
+[Tab](#Tab) -
+[TabPanels](#TabPanels) -
+[TabPanel](#TabPanel)
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/tabs
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
+
+An accessible tabs component.
+
+The `Tab` and `TabPanel` elements are associated by their order in the tree. None of the components are empty wrappers, each is associated with a real DOM element in the document, giving you maximum control over styling and composition.
+
+You can render any other elements you want inside of `Tabs`, but `TabList` should only render `Tab` elements, and `TabPanels` should only render `TabPanel` elements.
+
+```.jsx
+<Tabs>
+  <TabList>
+    <Tab>One</Tab>
+    <Tab>Two</Tab>
+    <Tab>Three</Tab>
+  </TabList>
+
+  <TabPanels>
+    <TabPanel>
+      <p>one!</p>
+    </TabPanel>
+    <TabPanel>
+      <p>two!</p>
+    </TabPanel>
+    <TabPanel>
+      <p>three!</p>
+    </TabPanel>
+  </TabPanels>
+</Tabs>
+```
+
+[Check out the animated demo](#animation-demo) for ideas on how to style and compose.
+
+## Installation
+
+```bash
+npm install @reach/tabs
+# or
+yarn add @reach/tabs
+```
+
+And then import the components:
+
+```js
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
+```
+
+# Tabs
+
+The parent component of the tab interface.
+
+## Tabs CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```
+[data-reach-tabs] { }
+```
+
+## Tabs Props
+
+| Prop                               | Type          | Required |
+| ---------------------------------- | ------------- | -------- |
+| [children](#tabs-children)         | node          | true     |
+| [onChange](#tabs-onChange)         | function      | false    |
+| [defaultIndex](#tabs-defaultindex) | number        | false    |
+| [index](#tabs-index)               | number        | false    |
+| [as](#tabs-as)                     | ComponentType | false    |
+| [rest](#tabs-rest)                 | HTMLDivProps  | false    |
+
+### Tabs children
+
+_Type_: `node`
+
+Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
+
+```.jsx
+<Tabs>
+  <TabList>
+    <Tab>Uno</Tab>
+    <Tab>Dos</Tab>
+  </TabList>
+
+  <div>Random</div>
+
+  <TabPanels>
+    <TabPanel>
+      Uno
+    </TabPanel>
+    <TabPanel>
+      Dos
+    </TabPanel>
+  </TabPanels>
+
+  <TabList>
+    <Tab>Uno</Tab>
+    <Tab>Dos</Tab>
+  </TabList>
+</Tabs>
+```
+
+### Tabs onChange
+
+_Type_: `function`
+
+Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
+
+```.jsx
+(() => {
+  const colors = ["firebrick", "goldenrod", "dodgerblue"];
+
+  function Example() {
+    const [tabIndex, setTabIndex] = useState(0);
+    const backgroundColor = colors[tabIndex];
+    return (
+      <Tabs
+        onChange={index => setTabIndex(index)}
+        style={{
+          color: "white",
+          background: backgroundColor
+        }}
+      >
+        <TabList>
+          <Tab>Red</Tab>
+          <Tab>Yellow</Tab>
+          <Tab>Blue</Tab>
+        </TabList>
+        <TabPanels style={{ padding: 20 }}>
+          <TabPanel>The Primary Colors</TabPanel>
+          <TabPanel>Are 1, 2, 3</TabPanel>
+          <TabPanel>Red, yellow and blue.</TabPanel>
+        </TabPanels>
+      </Tabs>
+    );
+  }
+
+  return <Example />;
+})();
+```
+
+### Tabs defaultIndex
+
+_Type_: `number`
+
+Starts the tabs at a specific index.
+
+```.jsx
+<Tabs defaultIndex={1}>
+  <TabPanels>
+    <TabPanel>
+      <img src="https://placekitten.com/400/200"/>
+    </TabPanel>
+    <TabPanel>
+      <img src="https://placecage.com/400/200"/>
+    </TabPanel>
+  </TabPanels>
+  <TabList>
+    <Tab>Kitten</Tab><Tab>Cage</Tab>
+  </TabList>
+</Tabs>
+```
+
+### Tabs index
+
+_Type_: `number`
+
+Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
+
+```.jsx
+(() => {
+  function ControlledExample() {
+    const [tabIndex, setTabIndex] = useState(0);
+
+    const handleSliderChange = event => {
+      setTabIndex(parseInt(event.target.value, 10));
+    }
+
+    const handleTabsChange = index => {
+      setTabIndex(index)
+    }
+
+    return (
+      <div>
+        <input
+          type="range"
+          min="0"
+          max="2"
+          value={tabIndex}
+          onChange={handleSliderChange}
+        />
+
+        <Tabs
+          index={tabIndex}
+          onChange={handleTabsChange}
+        >
+          <TabList>
+            <Tab>One</Tab>
+            <Tab>Two</Tab>
+            <Tab>Three</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <p>Click the tabs or pull the slider around</p>
+            </TabPanel>
+            <TabPanel>
+              <p>Yeah yeah. What's up?</p>
+            </TabPanel>
+            <TabPanel>
+              <p>Oh, hello there.</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </div>
+    );
+  }
+
+  return <ControlledExample />;
+})();
+```
+
+### Tabs as
+
+_Type_: `ComponentType`
+
+Please see the ["as" props documentation](/as-props)
+
+### Tabs rest
+
+_Type_: `rest`
+
+All other props are passed to the underlying `div` (or component passed to `as`).
+
+Please see the ["as" prop documentation](/as-prop) for more information
+
+# TabList
+
+The parent component of the tabs.
+
+```jsx
+<TabList>
+  <Tab>Tacos</Tab>
+  <Tab>Tortas</Tab>
+</TabList>
+```
+
+## TabList CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```
+[data-reach-tab-list] { }
+```
+
+## TabList Props
+
+| Prop                          | Type           | Required |
+| ----------------------------- | -------------- | -------- |
+| [children](#tablist-children) | node           | false    |
+| [as](#tablist-as)             | ComponentType  | false    |
+| rest                          | ForwardedProps | false    |
+
+### TabList children
+
+`TabList` expects multiple `Tab` elements as children.
+
+```jsx
+<TabList>
+  <Tab>One</Tab>
+  <Tab>Two</Tab>
+</TabList>
+```
+
+But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via `cloneElement`).
+
+```jsx
+const RedTab = props => <Tab {...props} style={{ color: "red" }} />
+
+const TabPage = () => (
+  <Tabs>
+    <TabList>
+      <RedTab>This is red</RedTab>
+      <Tab>This is normal</Tab>
+    </TabList>
+    <TabPanels>
+      <TabPanel>...</TabPanel>
+      <TabPanel>...</TabPanel>
+    </TabPanels>
+  </Tabs>
+)
+```
+
+### TabList as
+
+_Type_: `ComponentType`
+
+Tabs will render a `div` unless you specify a different element.
+
+```jsx
+<TabList as={View} />
+```
+
+Please see the ["as" prop documentation](/as-prop) for justification and potential accessibility issues with using this prop.
+
+### TabList rest
+
+_Type_: `rest`
+
+All other props are passed to the underlying `div` (or component passed to `as`).
+
+Please see the ["as" prop documentation](/as-prop) for more information
+
+# TabPanels
+
+The parent component of the panels.
+
+```jsx
+<TabPanels>
+  <TabPanel>My favorite</TabPanel>
+  <TabPanel>My other favorite</TabPanel>
+</TabPanels>
+```
+
+## TabPanels CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```
+[data-reach-tab-panels] { }
+```
+
+## TabPanels Props
+
+| Prop                            | Type          | Required |
+| ------------------------------- | ------------- | -------- |
+| [children](#tabpanels-children) | node          | false    |
+| [as](#tabpanels-as)             | ComponentType | false    |
+| rest                            | HTMLDivProps  | false    |
+
+### TabPanels children
+
+`TabPanels` expects multiple `TabPanel` elements as children.
+
+```jsx
+<TabPanels>
+  <TabPanel>One</TaPanelb>
+  <TaPanelb>Two</TaPanelb>
+</TabPanels>
+```
+
+But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via `cloneElement`).
+
+```jsx
+const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />
+
+const TabPage = () => (
+  <Tabs>
+    <TabList>
+      <Tab>...</Tab>
+      <Tab>..</Tab>
+    </TabList>
+    <TabPanels>
+      <BoldPanel>...</BoldPanel>
+      <TabPanel>...</TabPanel>
+    </TabPanels>
+  </Tabs>
+)
+```
+
+### TabPanels as
+
+_Type_: `ComponentType`
+
+Tabs will render a `div` unless you specify a different element.
+
+```jsx
+<TabPanels as={View} />
+```
+
+Please see the ["as" prop documentation](/as-prop) for justification and potential accessibility issues with using this prop.
+
+### TabPanels rest
+
+_Type_: `rest`
+
+All other props are passed to the underlying `div` (or component passed to `as`).
+
+Please see the ["as" prop documentation](/as-prop) for more information
+
+# Tab
+
+The interactive element that changes the selected panel.
+
+```jsx
+<Tab>Coconut Korma</Tab>
+```
+
+## Tab CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```
+/* styles all tabs */
+[data-reach-tab] { }
+
+/* styles only the selected tab */
+[data-reach-tab][data-selected] { }
+```
+
+## Tab Props
+
+| Prop                      | Type          | Required |
+| ------------------------- | ------------- | -------- |
+| [children](#tab-children) | node          | false    |
+| [disabled](#tab-disabled) | boolean       | false    |
+| [as](#tab-as)             | ComponentType | false    |
+| rest                      | rest          | false    |
+
+## Tab Clone Props
+
+| Prop                          | Type    | Required |
+| ----------------------------- | ------- | -------- |
+| [isSelected](#tab-isselected) | boolean | false    |
+
+### Tab children
+
+`Tab` can receive any type of children.
+
+```jsx
+<Tab>
+  <HouseIcon /> Home
+</Tab>
+```
+
+### Tab disabled
+
+Disables a tab when true. Clicking will not work and keyboard navigation will skip over it.
+
+```jsx
+<Tab disabled />
+```
+
+### Tab as
+
+_Type_: `ComponentType`
+
+Tab will render a `button` unless you specify a different element.
+
+```jsx
+<Tab as={ReactNativeWebButton} />
+```
+
+Please see the ["as" prop documentation](/as-prop) for justification and potential accessibility issues with using this prop.
+
+### Tab rest
+
+_Type_: `rest`
+
+All other props are passed to the underlying `button` (or component passed to `as`).
+
+Please see the ["as" prop documentation](/as-prop) for more information
+
+### Tab isSelected
+
+_Type_: `number` - cloned
+
+Because TabList needs to know the order of hte children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
+
+```.jsx
+(() => {
+  function CoolTab(props) {
+    // `isSelected` comes from `TabList` cloning the `CoolTab`.
+    const { isSelected, children } = props;
+
+    // make sure to forward *all* props received from TabList
+    return (
+      <Tab {...props}>
+        {isSelected ? "😎" : "😐"}
+        {children}
+      </Tab>
+    );
+  }
+
+  return (
+    <Tabs>
+      <TabList>
+        <CoolTab>One</CoolTab>
+        <CoolTab>Two</CoolTab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>1</TabPanel>
+        <TabPanel>2</TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+})();
+```
+
+# TabPanel
+
+The panel that displays when it's corresponding tab is active.
+
+```jsx
+<TabPanel>
+  <h2>The Best Food</h2>
+  <p>The best food is either Mexican or Indian.</p>
+</TabPanel>
+```
+
+## TabPanel CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```
+/* styles all tabs */
+[data-reach-tab-panel] { }
+```
+
+## TabPanel Props
+
+| Prop                      | Type          | Required |
+| ------------------------- | ------------- | -------- |
+| [children](#tab-children) | node          | false    |
+| [as](#tab-as)             | ComponentType | false    |
+| rest                      | rest          | false    |
+
+### TabPanel children
+
+`TabPanel` can receive any type of children.
+
+```jsx
+<TabPanel>
+  <h2>Whatever you want</h2>
+  <p>In here</p>
+</TabPanel>
+```
+
+### TabPanel as
+
+_Type_: `ComponentType`
+
+TabPanel will render a `div` unless you specify a different element.
+
+```jsx
+<Tab as={View} />
+```
+
+Please see the ["as" prop documentation](/as-prop) for justification and potential accessibility issues with using this prop.
+
+### TabPanel rest
+
+_Type_: `rest`
+
+All other props are passed to the underlying `div` (or component passed to `as`).
+
+Please see the ["as" prop documentation](/as-prop) for more information
+
+# Demos
+
+These demos show off how you can add quite a bit of behavior to your Tabs interfaces.
+
+## Animation
+
+With a little composition we can animate the selected tab bar.
+
+```.jsx
+(() => {
+  const AnimatedContext = React.createContext();
+
+  function AnimatedTabs(props) {
+
+    // need to store the position of the selected Tab so we can
+    // animate the bar to its position
+    const [selectedRect, setSelectedRect] = useState(null);
+
+    // need to measure the parent element so we can measure
+    // the relative "left" for the bar
+    const tabsRef = useRef();
+    const tabsRect = useRect(tabsRef);
+
+    // Put the function to change the positions on context so the
+    // Tabs down the tree can easily access it
+    return (
+      <AnimatedContext.Provider value={setSelectedRect}>
+        <Tabs
+          {...props}
+          ref={tabsRef}
+          style={{ ...props.style, position: "relative" }}
+        >
+          {props.children[0]}
+
+          {/* put the bar inbetween the TabList and TabPanels */}
+          <div
+            style={{
+              position: "absolute",
+              height: 2,
+              background: "red",
+              marginTop: -2,
+
+              // Here is the actual animation part, we use the
+              // rect from the selected tab to set the styles of the bar
+              transition: "all 300ms ease",
+              left: selectedRect && selectedRect.left - tabsRect.left,
+              width: selectedRect && selectedRect.width
+            }}
+          />
+
+          {props.children[1]}
+        </Tabs>
+      </AnimatedContext.Provider>
+    );
+  }
+
+  function AnimatedTab(props) {
+    const { isSelected } = props;
+
+    // Each tab measures itself
+    const ref = useRef();
+    const rect = useRect(ref, isSelected);
+
+    // and calls up to the parent when it becomes selected
+    // we useLayoutEffect to avoid flicker
+    const setSelectedRect = useContext(AnimatedContext);
+    useLayoutEffect(() => {
+      if (isSelected) setSelectedRect(rect);
+    }, [isSelected, rect, setSelectedRect]);
+
+    return (
+      <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
+    );
+  }
+
+  // And that's it! It's not a small amount of code, but it's not a ton
+  // either, and it's all composed on top, instead of built in.
+  return (
+    <AnimatedTabs color="red" style={{ width: 400 }}>
+      <TabList style={{ justifyContent: "space-around" }}>
+        <AnimatedTab style={{ flex: 1 }}>The First</AnimatedTab>
+        <AnimatedTab style={{ flex: 2 }}>This has longer text</AnimatedTab>
+        <AnimatedTab style={{ flex: 1 }}>Three</AnimatedTab>
+      </TabList>
+      <TabPanels style={{ padding: 10 }}>
+        <TabPanel>
+          <p>Check it out! It's ~animated~</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Yeah yeah. What's up?</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Oh, hello there.</p>
+        </TabPanel>
+      </TabPanels>
+    </AnimatedTabs>
+  );
+})();
+```
+
+## Local Storage
+
+This will save and read the index from local storage so that if you refresh the page you will be on the same tab as before.
+
+```.jsx
+(() => {
+  function LocalStorageDemo() {
+    const [tabIndex, setTabIndex] = useState(null);
+
+    // initialize from localStorage
+    if (tabIndex == null) {
+      const storedValue = localStorage.getItem("tabIndex");
+      setTabIndex(parseInt(storedValue, 10));
+    }
+
+    const setValueWithStorage = index => {
+      localStorage.setItem("tabIndex", String(index));
+      setTabIndex(index);
+    };
+
+    return (
+      <Tabs index={tabIndex} onChange={setValueWithStorage}>
+        <TabList>
+          <Tab>One</Tab>
+          <Tab>Two</Tab>
+          <Tab>Three</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>Click the tabs, then refresh the page.</TabPanel>
+          <TabPanel>It should remember it.</TabPanel>
+          <TabPanel>Sorry about the scrolling, we should fix that.</TabPanel>
+        </TabPanels>
+      </Tabs>
+    );
+  }
+
+  return <LocalStorageDemo />;
+})();
+```
+
