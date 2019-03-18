@@ -49,7 +49,7 @@ You can render any other elements you want inside of `Tabs`, but `TabList` shoul
 </Tabs>
 ```
 
-[Check out the animated demo](#animation-demo) for ideas on how to style and compose.
+[Check out the demos](#demos) for ideas on how to style and compose.
 
 ## Installation
 
@@ -578,6 +578,44 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 These demos show off how you can add quite a bit of behavior to your Tabs interfaces.
 
+## DataTabs
+
+If you'd like to drive your tabs with data you can create a `DataTabs` component.
+
+```.jsx
+(() => {
+  function DataTabs({ data }) {
+    return (
+      <Tabs>
+        <TabList>
+          {data.map((tab, index) => (
+            <Tab key={index}>{tab.label}</Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          {data.map((tab, index) => (
+            <TabPanel key={index}>{tab.content}</TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    );
+  }
+
+  // now if you have an array of data...
+  const tabData = [
+    { label: "Taco", content: "Perhaps the greatest dish ever invented." },
+    {
+      label: "Burrito",
+      content:
+        "Perhaps the greatest dish ever invented but bigger and with rice."
+    }
+  ];
+
+  // you can just pass it in:
+  return <DataTabs data={tabData} />
+})();
+```
+
 ## Animation
 
 With a little composition we can animate the selected tab bar.
@@ -673,3 +711,4 @@ With a little composition we can animate the selected tab bar.
   );
 })();
 ```
+
