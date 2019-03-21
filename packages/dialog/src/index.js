@@ -4,6 +4,7 @@ import Portal from "@reach/portal";
 import { checkStyles, wrapEvent } from "@reach/utils";
 import createFocusTrap from "focus-trap";
 import { func, bool } from "prop-types";
+import useComposedRef from "use-composed-ref";
 
 let createAriaHider = dialogNode => {
   let originalValues = [];
@@ -40,10 +41,10 @@ let k = () => {};
 let checkDialogStyles = () => checkStyles("dialog");
 
 let portalDidMount = (refs, initialFocusRef) => {
-  refs.disposeAriaHider = createAriaHider(refs.overlayNode);
-  refs.trap = createFocusTrap(refs.overlayNode, {
+  refs.disposeAriaHider = createAriaHider(refs.overlayRef.current);
+  refs.trap = createFocusTrap(refs.overlayRef.current, {
     initialFocus: initialFocusRef ? () => initialFocusRef.current : undefined,
-    fallbackFocus: refs.contentNode,
+    fallbackFocus: refs.contentRef.current,
     escapeDeactivates: false,
     clickOutsideDeactivates: false
   });
@@ -68,44 +69,46 @@ let DialogOverlay = React.forwardRef(
       ...props
     },
     forwardRef
-  ) => (
-    <Component didMount={checkDialogStyles}>
-      {isOpen ? (
-        <Portal data-reach-dialog-wrapper>
-          <Component
-            refs={{ overlayNode: null, contentNode: null }}
-            didMount={({ refs }) => {
-              portalDidMount(refs, initialFocusRef);
-            }}
-            willUnmount={contentWillUnmount}
-          >
-            {({ refs }) => (
-              <FocusContext.Provider value={node => (refs.contentNode = node)}>
-                <div
-                  data-reach-dialog-overlay
-                  onClick={wrapEvent(onClick, event => {
-                    event.stopPropagation();
-                    onDismiss();
-                  })}
-                  onKeyDown={wrapEvent(onKeyDown, event => {
-                    if (event.key === "Escape") {
+  ) => {
+    const overlayRef = React.useRef();
+    const contentRef = React.useRef();
+    const composedRef = useComposedRef(overlayRef, forwardRef);
+    return (
+      <Component didMount={checkDialogStyles}>
+        {isOpen ? (
+          <Portal data-reach-dialog-wrapper>
+            <Component
+              refs={{ overlayRef, contentRef }}
+              didMount={({ refs }) => {
+                portalDidMount(refs, initialFocusRef);
+              }}
+              willUnmount={contentWillUnmount}
+            >
+              {({ refs }) => (
+                <FocusContext.Provider value={contentRef}>
+                  <div
+                    data-reach-dialog-overlay
+                    onClick={wrapEvent(onClick, event => {
                       event.stopPropagation();
                       onDismiss();
-                    }
-                  })}
-                  ref={node => {
-                    refs.overlayNode = node;
-                    forwardRef && forwardRef(node);
-                  }}
-                  {...props}
-                />
-              </FocusContext.Provider>
-            )}
-          </Component>
-        </Portal>
-      ) : null}
-    </Component>
-  )
+                    })}
+                    onKeyDown={wrapEvent(onKeyDown, event => {
+                      if (event.key === "Escape") {
+                        event.stopPropagation();
+                        onDismiss();
+                      }
+                    })}
+                    ref={composedRef}
+                    {...props}
+                  />
+                </FocusContext.Provider>
+              )}
+            </Component>
+          </Portal>
+        ) : null}
+      </Component>
+    );
+  }
 );
 
 DialogOverlay.propTypes = {
@@ -115,23 +118,21 @@ DialogOverlay.propTypes = {
 let stopPropagation = event => event.stopPropagation();
 
 let DialogContent = React.forwardRef(
-  ({ onClick, onKeyDown, ...props }, forwardRef) => (
-    <FocusContext.Consumer>
-      {contentRef => (
-        <div
-          aria-modal="true"
-          data-reach-dialog-content
-          tabIndex="-1"
-          onClick={wrapEvent(onClick, stopPropagation)}
-          ref={node => {
-            contentRef(node);
-            forwardRef && forwardRef(node);
-          }}
-          {...props}
-        />
-      )}
-    </FocusContext.Consumer>
-  )
+  ({ onClick, onKeyDown, ...props }, forwardRef) => {
+    const contentRef = React.useContext(FocusContext);
+    const composedRef = useComposedRef(contentRef, forwardRef);
+
+    return (
+      <div
+        aria-modal="true"
+        data-reach-dialog-content
+        tabIndex="-1"
+        onClick={wrapEvent(onClick, stopPropagation)}
+        ref={composedRef}
+        {...props}
+      />
+    );
+  }
 );
 
 let Dialog = ({ isOpen, onDismiss = k, ...props }) => (
