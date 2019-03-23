@@ -1,6 +1,6 @@
 {
   "name": "@reach/tabs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Accessible React Tabs Component",
   "main": "index.js",
   "module": "es/index.js",
@@ -10,7 +10,7 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.1.0",
+    "@reach/auto-id": "^0.2.0",
     "@reach/utils": "^0.2.0",
     "warning": "^4.0.2"
   },
