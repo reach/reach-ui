@@ -8,7 +8,6 @@ import React, {
 import "../styles.css";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "../src";
 import { useRect } from "../../rect/src";
-import { AutoIdProvider } from "@reach/auto-id";
 
 export const name = "Animated Bar";
 
@@ -63,25 +62,23 @@ function AnimatedTab(props) {
 
 export function Example() {
   return (
-    <AutoIdProvider>
-      <AnimatedTabs color="red" style={{ width: 400 }}>
-        <TabList style={{ justifyContent: "space-around" }}>
-          <AnimatedTab style={{ flex: 1 }}>The First</AnimatedTab>
-          <AnimatedTab style={{ flex: 2 }}>This has longer text</AnimatedTab>
-          <AnimatedTab style={{ flex: 1 }}>Three</AnimatedTab>
-        </TabList>
-        <TabPanels style={{ padding: 10 }}>
-          <TabPanel>
-            <p>Check it out! It's ~animated~</p>
-          </TabPanel>
-          <TabPanel>
-            <p>Yeah yeah. What's up?</p>
-          </TabPanel>
-          <TabPanel>
-            <p>Oh, hello there.</p>
-          </TabPanel>
-        </TabPanels>
-      </AnimatedTabs>
-    </AutoIdProvider>
+    <AnimatedTabs color="red" style={{ width: 400 }}>
+      <TabList style={{ justifyContent: "space-around" }}>
+        <AnimatedTab style={{ flex: 1 }}>The First</AnimatedTab>
+        <AnimatedTab style={{ flex: 2 }}>This has longer text</AnimatedTab>
+        <AnimatedTab style={{ flex: 1 }}>Three</AnimatedTab>
+      </TabList>
+      <TabPanels style={{ padding: 10 }}>
+        <TabPanel>
+          <p>Check it out! It's ~animated~</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Yeah yeah. What's up?</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Oh, hello there.</p>
+        </TabPanel>
+      </TabPanels>
+    </AnimatedTabs>
   );
 }
