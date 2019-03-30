@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "index.js",
   "module": "es/index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",

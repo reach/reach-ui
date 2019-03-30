@@ -4,6 +4,7 @@
   "description": "Declarative React Component Definitions",
   "main": "index.js",
   "module": "es/index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "node ../../shared/build-package",
