@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Accessible React Modal Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
