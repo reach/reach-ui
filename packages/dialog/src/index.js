@@ -86,12 +86,12 @@ let DialogOverlay = React.forwardRef(
                     data-reach-dialog-overlay
                     onClick={wrapEvent(onClick, event => {
                       event.stopPropagation();
-                      onDismiss();
+                      onDismiss(event);
                     })}
                     onKeyDown={wrapEvent(onKeyDown, event => {
                       if (event.key === "Escape") {
                         event.stopPropagation();
-                        onDismiss();
+                        onDismiss(event);
                       }
                     })}
                     ref={node => {
