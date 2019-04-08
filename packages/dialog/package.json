@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Accessible React Modal Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "react-dom": "^16.4.0"
   },
   "devDependencies": {
-    "@reach/menu-button": "^0.1.7",
+    "@reach/menu-button": "^0.1.10",
     "jest": "^23.4.2",
     "react": "^16.4.1",
     "react-test-renderer": "^16.4.1"
