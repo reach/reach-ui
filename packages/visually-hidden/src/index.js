@@ -11,6 +11,6 @@ let style = {
   position: "absolute"
 };
 
-export default ({ children }) => {
-  return <span style={style} children={children} />;
+export default props => {
+  return <div style={style} {...props} />;
 };
