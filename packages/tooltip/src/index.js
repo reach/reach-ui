@@ -172,10 +172,9 @@ function useMouseRest(delay = 100) {
   return (handler, props) => {
     let timer;
     let called = false;
-    let touching = false;
 
     const onMouseMove = wrapEvent(props.onMouseMove, event => {
-      if (called || touching) return;
+      if (called) return;
 
       const call = () => {
         called = true;
