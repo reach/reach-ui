@@ -124,7 +124,7 @@ export function useTooltip({
   onBlur,
   ref
 } = {}) {
-  const [isVisible, setIsShowing] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   // hopefully they always pass a ref if they ever pass one
   const triggerRef = ref || useRef();
@@ -133,8 +133,8 @@ export function useTooltip({
   const id = `tooltip:${useId()}`;
   const onMouseRest = useMouseRest();
 
-  const show = () => setIsShowing(true);
-  const hide = () => setIsShowing(false);
+  const show = () => setIsVisible(true);
+  const hide = () => setIsVisible(false);
 
   const trigger = {
     "aria-labelledby": id,
