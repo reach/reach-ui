@@ -1,6 +1,6 @@
 {
   "name": "@reach/rect",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Measure React elements position in the DOM",
   "main": "index.js",
   "module": "es/index.js",
