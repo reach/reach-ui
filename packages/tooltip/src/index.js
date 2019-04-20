@@ -107,7 +107,7 @@ const TooltipContent = forwardRef(function TooltipContent(
         }}
         {...rest}
       />
-      {ariaLabel && (
+      {useAriaLabel && (
         <VisuallyHidden role="tooltip" id={id}>
           {ariaLabel}
         </VisuallyHidden>
