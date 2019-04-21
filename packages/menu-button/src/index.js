@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, Children } from "react";
 import Portal from "@reach/portal";
 import { Link } from "@reach/router";
 import Rect from "@reach/rect";
@@ -327,7 +327,11 @@ let focusableChildrenTypes = [MenuItem, MenuLink];
 
 let isFocusableChildType = child => focusableChildrenTypes.includes(child.type);
 let getFocusableMenuChildren = children => {
-  return children.filter(child => isFocusableChildType(child));
+  let focusable = [];
+  Children.forEach(children, child => {
+    if (isFocusableChildType(child)) focusable.push(child);
+  });
+  return focusable;
 };
 
 let MenuListImpl = React.forwardRef(
@@ -372,7 +376,7 @@ let MenuListImpl = React.forwardRef(
           }
         })}
       >
-        {React.Children.map(children, (child, index) => {
+        {Children.map(children, (child, index) => {
           if (isFocusableChildType(child)) {
             let focusIndex = focusableChildren.indexOf(child);
 

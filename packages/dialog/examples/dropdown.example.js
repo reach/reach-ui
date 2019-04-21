@@ -1,9 +1,10 @@
 import React from "react";
 import Component from "@reach/component-component";
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
 import "../styles.css";
 import { Dialog } from "../src/index";
 
-export let name = "Long Content";
+export let name = "Dropdown";
 
 export let Example = () => (
   <Component initialState={{ showDialog: false }}>
@@ -13,19 +14,18 @@ export let Example = () => (
           Show Dialog
         </button>
 
-        {new Array(20).fill(1).map((x, index) => (
-          <div style={{ position: "absolute", top: (index + 1) * 100 + "px" }}>
-            - scroll -
-          </div>
-        ))}
-
         <Dialog isOpen={state.showDialog}>
           <button onClick={() => setState({ showDialog: false })}>
             Close Dialog
           </button>
-          <p>Yikes!</p>
-          <div style={{ height: 3000 }} />
-          <button>Ayyyyyy</button>
+          <Menu>
+            <MenuButton>Dropdown</MenuButton>
+            <MenuList>
+              <MenuItem>Test</MenuItem>
+              <MenuItem>Test</MenuItem>
+              <MenuItem>Test</MenuItem>
+            </MenuList>
+          </Menu>
         </Dialog>
       </div>
     )}
