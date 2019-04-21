@@ -1,8 +1,11 @@
 {
   "name": "reach-ui",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "bootstrap": "lerna bootstrap --hoist",
     "test": "lerna run test --stream",
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
