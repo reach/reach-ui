@@ -17,12 +17,12 @@ const exec = (command, extraEnv) =>
   });
 
 console.log("\nBuilding ES modules ...");
-exec(`${babel} src -d es --ignore *.test.js`, {
+exec(`${babel} --root-mode upward src -d es --ignore src/*.test.js`, {
   BABEL_ENV: "es"
 });
 
 console.log("Building CommonJS modules ...");
-exec(`${babel} src -d . --ignore *.test.js`, {
+exec(`${babel} --root-mode upward src -d . --ignore src/*.test.js`, {
   BABEL_ENV: "cjs"
 });
 

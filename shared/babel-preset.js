@@ -2,17 +2,11 @@ const BABEL_ENV = process.env.BABEL_ENV;
 const building = BABEL_ENV !== undefined && BABEL_ENV !== "cjs";
 
 const plugins = [
-  "transform-class-properties",
-  "transform-object-rest-spread",
-  "dev-expression",
+  "@babel/plugin-proposal-class-properties",
+  "@babel/plugin-proposal-object-rest-spread",
+  "babel-plugin-dev-expression",
   [
-    "transform-react-remove-prop-types",
-    {
-      mode: "unsafe-wrap"
-    }
-  ],
-  [
-    "transform-inline-environment-variables",
+    "babel-plugin-transform-inline-environment-variables",
     {
       include: ["COMPAT"]
     }
@@ -20,19 +14,23 @@ const plugins = [
 ];
 
 if (BABEL_ENV === "umd") {
-  plugins.push("external-helpers");
+  plugins.push("@babel/plugin-external-helpers");
 }
 
-module.exports = {
-  presets: [
-    [
-      "env",
-      {
-        loose: true,
-        modules: building ? false : "commonjs"
-      }
+module.exports = function(api) {
+  api.cache(true);
+
+  return {
+    presets: [
+      [
+        "@babel/preset-env",
+        {
+          loose: true,
+          modules: building ? false : "commonjs"
+        }
+      ],
+      "@babel/preset-react"
     ],
-    "react"
-  ],
-  plugins: plugins
+    plugins: plugins
+  };
 };
