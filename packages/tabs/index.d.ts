@@ -1,14 +1,14 @@
 declare module "@reach/tabs" {
   import { ComponentType } from "react";
 
-  export interface BaseTabProps<A> {
+  export interface BaseTabProps {
     children?: React.ReactNode;
     as?: ComponentType;
-    rest?: A;
   }
 
-  export interface TabsProps<A = React.HTMLAttributes<HTMLDivElement>>
-    extends BaseTabProps<A> {
+  export interface TabsProps
+    extends BaseTabProps,
+    React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
 
     defaultIndex?: number;
@@ -17,23 +17,18 @@ declare module "@reach/tabs" {
   }
   export class Tabs extends React.Component<TabsProps> {}
 
-  export type TabListProps<
-    A = React.HTMLAttributes<HTMLDivElement>
-  > = BaseTabProps<A>;
+  export type TabListProps = BaseTabProps & React.HTMLAttributes<HTMLDivElement>;
   export class TabList extends React.Component<TabListProps> {}
 
-  export type TabPanelsProps<
-    A = React.HTMLAttributes<HTMLDivElement>
-  > = BaseTabProps<A>;
+  export type TabPanelsProps = BaseTabProps & React.HTMLAttributes<HTMLDivElement>;
   export class TabPanels extends React.Component<TabPanelsProps> {}
 
-  export type TabPanelProps<
-    A = React.HTMLAttributes<HTMLDivElement>
-  > = BaseTabProps<A>;
+  export type TabPanelProps = BaseTabProps & React.HTMLAttributes<HTMLDivElement>;
   export class TabPanel extends React.Component<TabPanelProps> {}
 
-  export interface TabProps<A = React.HTMLAttributes<HTMLDivElement>>
-    extends BaseTabProps<A> {
+  export interface TabProps
+    extends BaseTabProps,
+    React.HTMLAttributes<HTMLDivElement> {
     disabled?: boolean;
   }
   export class Tab extends React.Component<TabProps> {}
