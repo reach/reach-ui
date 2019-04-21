@@ -1,6 +1,6 @@
 // rollup parses this with babel so we can use modules, etc.
 import babel from "rollup-plugin-babel";
-import { uglify } from "rollup-plugin-uglify";
+import { terser } from "rollup-plugin-terser";
 import replace from "rollup-plugin-replace";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
@@ -33,7 +33,7 @@ const config = {
 };
 
 if (process.env.NODE_ENV === "production") {
-  config.plugins.push(uglify());
+  config.plugins.push(terser());
 }
 
 export default config;

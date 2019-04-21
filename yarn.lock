@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@babel/code-frame@^7.0.0-beta.35", "@babel/code-frame@^7.0.0-beta.47":
+"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
   integrity sha512-OfC2uemaknXr87bdLUkWog7nYuliM9Ij5HUcajsVcMCpQrcLmtxRbVFTIqmcSkSeYRBFBRxs2FiUqFJDLdiebA==
@@ -5826,6 +5826,14 @@ jest-worker@^23.2.0:
   dependencies:
     merge-stream "^1.0.1"
 
+jest-worker@^24.0.0:
+  version "24.6.0"
+  resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-24.6.0.tgz#7f81ceae34b7cde0c9827a6980c35b7cdc0161b3"
+  integrity sha512-jDwgW5W9qGNvpI1tNnvajh0a5IE/PuGLFmHk6aR/BZFz8tSgGw17GsDPXAJ6p91IvYDjOw8GpFbvvZGAK+DPQQ==
+  dependencies:
+    merge-stream "^1.0.1"
+    supports-color "^6.1.0"
+
 jest@^23.4.2:
   version "23.6.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-23.6.0.tgz#ad5835e923ebf6e19e7a1d7529a432edfee7813d"
@@ -8682,13 +8690,15 @@ rollup-plugin-replace@^2.0.0:
     magic-string "^0.25.2"
     rollup-pluginutils "^2.4.1"
 
-rollup-plugin-uglify@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-uglify/-/rollup-plugin-uglify-4.0.0.tgz#6eb471738f1ce9ba7d9d4bc43b71cba02417c8fb"
-  integrity sha512-f6W31EQLzxSEYfN3x6/lyljHqXSoCjXKcTsnwz3evQvHgU1+qTzU2SE0SIG7tbAvaCewp2UaZ5x3k6nYsxOP9A==
+rollup-plugin-terser@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-4.0.4.tgz#6f661ef284fa7c27963d242601691dc3d23f994e"
+  integrity sha512-wPANT5XKVJJ8RDUN0+wIr7UPd0lIXBo4UdJ59VmlPCtlFsE20AM+14pe+tk7YunCsWEiuzkDBY3QIkSCjtrPXg==
   dependencies:
-    "@babel/code-frame" "^7.0.0-beta.47"
-    uglify-js "^3.3.25"
+    "@babel/code-frame" "^7.0.0"
+    jest-worker "^24.0.0"
+    serialize-javascript "^1.6.1"
+    terser "^3.14.1"
 
 rollup-pluginutils@^1.5.0:
   version "1.5.2"
@@ -8849,6 +8859,11 @@ serialize-javascript@^1.4.0:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-1.6.1.tgz#4d1f697ec49429a847ca6f442a2a755126c4d879"
   integrity sha512-A5MOagrPFga4YaKQSWHryl7AXvbQkEqpw4NNYMTNYUNV51bA8ABHgYFpqKx+YFFrw59xMV1qGH1R4AgoNIVgCw==
+
+serialize-javascript@^1.6.1:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-1.7.0.tgz#d6e0dfb2a3832a8c94468e6eb1db97e55a192a65"
+  integrity sha512-ke8UG8ulpFOxO8f8gRYabHQe/ZntKlcig2Mp+8+URDP1D8vJZ0KUt7LYo07q25Z/+JVSgpr/cui9PIp5H6/+nA==
 
 serve-favicon@^2.4.5:
   version "2.5.0"
@@ -9072,6 +9087,14 @@ source-map-support@^0.5.6:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.11.tgz#efac2ce0800355d026326a0ca23e162aeac9a4e2"
   integrity sha512-//sajEx/fGL3iw6fltKMdPvy8kL3kJ2O3iuYlRoT3k9Kb4BjOoZ+BZzaNHeuaruSt+Kf3Zk9tnfAQg9/AJqUVQ==
+  dependencies:
+    buffer-from "^1.0.0"
+    source-map "^0.6.0"
+
+source-map-support@~0.5.10:
+  version "0.5.12"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.12.tgz#b4f3b10d51857a5af0138d3ce8003b201613d599"
+  integrity sha512-4h2Pbvyy15EE02G+JOZpUCmqWJuqrs+sEkzewTm++BPi7Hvn/HwcqLAcNxYAyI0x13CpPPn+kMjl+hplXMHITQ==
   dependencies:
     buffer-from "^1.0.0"
     source-map "^0.6.0"
@@ -9404,6 +9427,13 @@ supports-color@^5.3.0, supports-color@^5.4.0:
   dependencies:
     has-flag "^3.0.0"
 
+supports-color@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-6.1.0.tgz#0764abc69c63d5ac842dd4867e8d025e880df8f3"
+  integrity sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
+  dependencies:
+    has-flag "^3.0.0"
+
 svg-tag-names@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/svg-tag-names/-/svg-tag-names-1.1.1.tgz#9641b29ef71025ee094c7043f7cdde7d99fbd50a"
@@ -9493,6 +9523,15 @@ tempfile@^1.1.1:
   dependencies:
     os-tmpdir "^1.0.0"
     uuid "^2.0.1"
+
+terser@^3.14.1:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.17.0.tgz#f88ffbeda0deb5637f9d24b0da66f4e15ab10cb2"
+  integrity sha512-/FQzzPJmCpjAH9Xvk2paiWrFq+5M6aVOf+2KRbwhByISDX/EujxsK+BAvrhb6H+2rtrLCHK9N01wO014vrIwVQ==
+  dependencies:
+    commander "^2.19.0"
+    source-map "~0.6.1"
+    source-map-support "~0.5.10"
 
 test-exclude@^4.2.1:
   version "4.2.3"
@@ -9713,7 +9752,7 @@ uglify-js@^2.8.29:
   optionalDependencies:
     uglify-to-browserify "~1.0.0"
 
-uglify-js@^3.1.4, uglify-js@^3.3.25:
+uglify-js@^3.1.4:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.5.3.tgz#d490bb5347f23025f0c1bc0dee901d98e4d6b063"
   integrity sha512-rIQPT2UMDnk4jRX+w4WO84/pebU2jiLsjgIyrCktYgSvx28enOE3iYQMr+BD1rHiitWnDmpu0cY/LfIEpKcjcw==
