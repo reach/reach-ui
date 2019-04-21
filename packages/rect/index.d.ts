@@ -1,5 +1,6 @@
 declare module "@reach/rect" {
-  interface IClientRect {
+  import { Ref } from "react"
+  interface ClientRect {
     x: number;
     y: number;
     width: number;
@@ -10,13 +11,14 @@ declare module "@reach/rect" {
     left: number;
   }
 
-  type IRectProps = {
+  type RectProps = {
     observe?: boolean;
-    onChange?: (rect: IClientRect) => void;
+    onChange?: (rect: ClientRect) => void;
     children?: React.ReactNode;
   };
 
-  const Rect: React.SFC<IRectProps>;
+  const Rect: React.FC<RectProps>
 
-  export default Rect;
+  export default Rect
+  export function useRect(rect: Ref, isSelected?: boolean): ClientRect
 }

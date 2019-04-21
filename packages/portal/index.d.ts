@@ -4,5 +4,5 @@ declare module "@reach/portal" {
     children?: React.ReactNode;
   };
 
-  export const Portal: React.SFC<PortalProps>;
+  export const Portal: React.FC<PortalProps>;
 }

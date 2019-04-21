@@ -13,8 +13,8 @@ declare module "@reach/alert-dialog" {
   } & DialogContentProps;
 
   export const AlertDialog: React.FC<AlertDialogProps>;
-  export const AlertDialogLabel: React.SFC<HTMLDivElement>;
-  export const AlertDialogDescription: React.SFC<HTMLDivElement>;
-  export const AlertDialogOverlay: React.SFC<AlertDialogProps>;
-  export const AlertDialogContent: React.SFC<AlertDialogContentProps>;
+  export const AlertDialogLabel: React.FC<HTMLDivElement>;
+  export const AlertDialogDescription: React.FC<HTMLDivElement>;
+  export const AlertDialogOverlay: React.FC<AlertDialogProps>;
+  export const AlertDialogContent: React.FC<AlertDialogContentProps>;
 }

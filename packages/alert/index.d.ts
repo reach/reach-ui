@@ -3,7 +3,7 @@ declare module "@reach/alert" {
     type?: "assertive" | "polite";
   } & HTMLDivElement;
 
-  const Alert: React.SFC<AlertProps>;
+  const Alert: React.FC<AlertProps>;
 
   export default Alert;
 }
