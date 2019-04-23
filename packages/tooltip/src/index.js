@@ -116,7 +116,7 @@ function transition(action, newContext) {
   const nextState = stateDef.on[action];
 
   // Really useful for debugging
-  console.log({ action, state, nextState, contextId: context.id });
+  // console.log({ action, state, nextState, contextId: context.id });
 
   if (!nextState) {
     throw new Error(
@@ -216,9 +216,12 @@ export function useTooltip({
   onBlur,
   onKeyDown,
   onMouseDown,
-  ref
+  ref,
+  DEBUG_STYLE
 } = {}) {
-  const [isVisible, setIsVisible] = useState(state === "visible");
+  const [isVisible, setIsVisible] = useState(
+    DEBUG_STYLE ? true : state === "visible"
+  );
 
   // hopefully they always pass a ref if they ever pass one
   const triggerRef = ref || useRef();
@@ -339,8 +342,14 @@ export function useTooltip({
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export default function Tooltip({ children, label, ariaLabel, ...rest }) {
-  const [trigger, tooltip] = useTooltip();
+export default function Tooltip({
+  children,
+  label,
+  ariaLabel,
+  DEBUG_STYLE,
+  ...rest
+}) {
+  const [trigger, tooltip] = useTooltip({ DEBUG_STYLE });
   return (
     <Fragment>
       {cloneElement(Children.only(children), trigger)}
