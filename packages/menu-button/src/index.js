@@ -287,7 +287,7 @@ MenuLink.propTypes = {
 };
 ///////////////////////////////////////////////////////////////////
 
-let MenuList = React.forwardRef((props, ref) => (
+let MenuList = React.forwardRef(({ className, ...props }, ref) => (
   <Consumer>
     {({ refs, state, setState }) =>
       state.isOpen && (
@@ -298,6 +298,7 @@ let MenuList = React.forwardRef((props, ref) => (
                 {({ rect: menuRect, ref: menuRef }) => (
                   <div
                     data-reach-menu
+                    className={className}
                     ref={menuRef}
                     style={getStyles(state.buttonRect, menuRect)}
                   >
