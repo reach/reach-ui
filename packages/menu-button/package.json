@@ -5,6 +5,7 @@
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "main": "index.js",
+  "types": "index.d.ts",
   "module": "es/index.js",
   "scripts": {
     "test": "echo \"Write some tests you bum!\"",
