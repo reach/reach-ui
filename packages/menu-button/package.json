@@ -34,5 +34,11 @@
     "testRegex": ".+\\.test\\.js$",
     "testURL": "http://localhost"
   },
-  "files": ["es", "src", "lib", "index.js", "styles.css"]
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
 }
