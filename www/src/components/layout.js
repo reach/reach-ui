@@ -7,6 +7,7 @@ import "@reach/dialog/styles.css"
 import "@reach/skip-nav/styles.css"
 import "@reach/menu-button/styles.css"
 import "@reach/tabs/styles.css"
+import "@reach/tooltip/styles.css"
 
 import "./normalize.css"
 import "./skeleton.css"
@@ -158,6 +159,7 @@ let Nav = ({ media }) => (
               <NavLink to="/menu-button">MenuButton (Dropdown)</NavLink>
               <NavLink to="/tabs">Tabs</NavLink>
               <NavLink to="/skip-nav">SkipNav</NavLink>
+              <NavLink to="/tooltip">Tooltip</NavLink>
               <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
 
               <hr />

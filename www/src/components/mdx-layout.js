@@ -36,7 +36,10 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
 
 import { useId } from "@reach/auto-id"
 
+import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
+
 import { Transition } from "../../vendor/react-spring/src/targets/web"
+
 import { Phased } from "recondition"
 
 const PreComponent = ({ className, ...props }) =>
@@ -76,6 +79,9 @@ const PreComponent = ({ className, ...props }) =>
         TabPanels,
         TabPanel,
         useId,
+        Tooltip,
+        TooltipPopup,
+        useTooltip,
       }}
     >
       <LiveEditor tabIndex="-1" />

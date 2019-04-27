@@ -1,0 +1,133 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Tooltip"
+  meta={[
+    {
+      name: "description",
+      content: "Accessible Tooltips for React.js",
+    },
+  ]}
+/>
+
+# Tooltip
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/tooltip
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+
+When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
+
+Do not use tooltips for information vital to task completion. The elements they are attached to should usually make sense on their own, but a tooltip can help provide a little bit more information--especially for new users of your app.
+
+Please see the [Tooltip Guidelines](https://www.nngroup.com/articles/tooltip-guidelines/) by the Nielson Norman group before using these, we've taken care of some of it, but some of it is up to you too :)
+
+```.jsx
+<div>
+  <Tooltip label="Notifications">
+    <button style={{ fontSize: 25 }}>
+      <span>🔔</span>
+    </button>
+  </Tooltip>
+  <Tooltip label="Settings">
+    <button style={{ fontSize: 25 }}>
+      <span aria-hidden>⚙️</span>
+    </button>
+  </Tooltip>
+
+  <div style={{ float: "right" }}>
+    <Tooltip label="Notifications" ariaLabel="3 Notifications">
+      <button style={{ fontSize: 25 }}>
+        <span>🔔</span>
+        <span>3</span>
+      </button>
+    </Tooltip>
+  </div>
+</div>;
+```
+
+## Installation
+
+```bash
+npm install @reach/tooltip
+# or
+yarn add @reach/tooltip
+```
+
+And then import the components you need:
+
+```js
+import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
+```
+
+## Usage
+
+High-level component to render a tooltip, likely the only component you need, unless you want to animate, then keep reading.
+
+```.jsx
+<Tooltip label="Save">
+  <button style={{ fontSize: 25 }}>💾</button>
+</Tooltip>
+```
+
+Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
+
+```.jsx
+<Tooltip
+  // What the tooltip renders
+  label="Notifications"
+
+  // What the screenreader announces
+  ariaLabel="3 Notifications"
+>
+  <button style={{ fontSize: 25 }}>
+    🔔 3
+  </button>
+</Tooltip>
+```
+
+## useTooltip, TooltipPopup and Animation
+
+Tooltip is built on top of the `useTooltip` hook and `TooltipPopup`. The usual reason to drop down to this level of API is to create animated tooltips. Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
+
+```jsx
+import React, { Fragment, cloneElement } from "react"
+import { useTooltip, TooltipPopup } from "@reach/tooltip"
+import { useTransition, animated } from "react-spring"
+
+animated.TooltipPopup = animated(TooltipPopup)
+animated.TooltipContent = animated(TooltipPopup)
+
+function AnimatedTooltip({ children, ...rest }) {
+  const [trigger, tooltip, isVisible] = useTooltip()
+
+  const transitions = useTransition(isVisible ? tooltip : false, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { mass: 1, tension: 500, friction: 40 },
+  })
+
+  return (
+    <Fragment>
+      {cloneElement(children, trigger)}
+
+      {transitions.map(
+        ({ item: tooltip, props: styles, key }) =>
+          tooltip && (
+            <animated.TooltipContent
+              key={key}
+              {...tooltip}
+              {...rest}
+              style={styles}
+            />
+          )
+      )}
+    </Fragment>
+  )
+}
+
+// Now you can replace `Tooltip` with `AnimatedTooltip`
+;<AnimatedTooltip label="Compose Message">
+  <button>📝</button>
+</AnimatedTooltip>
+```
