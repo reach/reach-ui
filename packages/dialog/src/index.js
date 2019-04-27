@@ -1,7 +1,7 @@
 import React from "react";
 import Component from "@reach/component-component";
 import Portal from "@reach/portal";
-import { checkStyles, wrapEvent } from "@reach/utils";
+import { checkStyles, wrapEvent, assignRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import { func, bool } from "prop-types";
@@ -60,7 +60,7 @@ let DialogOverlay = React.forwardRef(
       onKeyDown,
       ...props
     },
-    forwardRef
+    forwardedRef
   ) => (
     <Component didMount={checkDialogStyles}>
       {isOpen ? (
@@ -96,7 +96,7 @@ let DialogOverlay = React.forwardRef(
                     })}
                     ref={node => {
                       refs.overlayNode = node;
-                      forwardRef && forwardRef(node);
+                      assignRef(forwardedRef, node);
                     }}
                     {...props}
                   />
@@ -117,14 +117,14 @@ DialogOverlay.propTypes = {
 let stopPropagation = event => event.stopPropagation();
 
 let DialogContent = React.forwardRef(
-  ({ onClick, onKeyDown, ...props }, forwardRef) => (
+  ({ onClick, onKeyDown, ...props }, forwardedRef) => (
     <div
       aria-modal="true"
       data-reach-dialog-content
       tabIndex="-1"
       onClick={wrapEvent(onClick, stopPropagation)}
       ref={node => {
-        forwardRef && forwardRef(node);
+        assignRef(forwardedRef, node);
       }}
       {...props}
     />
