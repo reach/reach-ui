@@ -1,11 +1,16 @@
 import React, { createContext, Children } from "react";
 import Portal from "@reach/portal";
-import { Link } from "@reach/router";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
 import { node, func, object, string, number, oneOfType } from "prop-types";
-import { wrapEvent, checkStyles } from "@reach/utils";
+import {
+  wrapEvent,
+  checkStyles,
+  assignRef,
+  disableTooltips,
+  enableTooltips
+} from "@reach/utils";
 
 let { Provider, Consumer } = createContext();
 
@@ -18,6 +23,7 @@ let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
 
 let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   if (state.isOpen && !prevState.isOpen) {
+    disableTooltips();
     if (state.selectionIndex !== -1) {
       // haven't measured the popover yet, give it a frame otherwise
       // we'll scroll to the bottom of the page >.<
@@ -31,6 +37,7 @@ let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
     if (!appManagedFocus) {
       refs.button.focus();
     }
+    enableTooltips();
   } else if (state.selectionIndex !== prevState.selectionIndex) {
     if (state.selectionIndex === -1) {
       // clear highlight when mousing over non-menu items, but focus the menu
@@ -99,53 +106,55 @@ Menu.propTypes = {
 };
 
 ////////////////////////////////////////////////////////////////////////
-let MenuButton = React.forwardRef(({ onClick, onKeyDown, ...props }, ref) => (
-  <Consumer>
-    {({ refs, state, setState }) => (
-      <Rect
-        observe={state.isOpen}
-        onChange={buttonRect => setState({ buttonRect })}
-      >
-        {({ ref: rectRef }) => (
-          <button
-            id={state.buttonId}
-            aria-haspopup="menu"
-            aria-expanded={state.isOpen}
-            data-reach-menu-button
-            type="button"
-            ref={node => {
-              rectRef(node);
-              ref && ref(node);
-              refs.button = node;
-            }}
-            onMouseDown={event => {
-              if (state.isOpen) {
-                setState({ closingWithClick: true });
-              }
-            }}
-            onClick={wrapEvent(onClick, event => {
-              if (state.isOpen) {
-                setState(close);
-              } else {
-                setState(openAtFirstItem);
-              }
-            })}
-            onKeyDown={wrapEvent(onKeyDown, event => {
-              if (event.key === "ArrowDown") {
-                event.preventDefault(); // prevent scroll
-                setState(openAtFirstItem);
-              } else if (event.key === "ArrowUp") {
-                event.preventDefault(); // prevent scroll
-                setState(openAtFirstItem);
-              }
-            })}
-            {...props}
-          />
-        )}
-      </Rect>
-    )}
-  </Consumer>
-));
+let MenuButton = React.forwardRef(
+  ({ onClick, onKeyDown, onMouseDown, ...props }, ref) => (
+    <Consumer>
+      {({ refs, state, setState }) => (
+        <Rect
+          observe={state.isOpen}
+          onChange={buttonRect => setState({ buttonRect })}
+        >
+          {({ ref: rectRef }) => (
+            <button
+              id={state.buttonId}
+              aria-haspopup="menu"
+              aria-expanded={state.isOpen}
+              data-reach-menu-button
+              type="button"
+              ref={node => {
+                rectRef(node);
+                assignRef(ref, node);
+                refs.button = node;
+              }}
+              onMouseDown={wrapEvent(onMouseDown, () => {
+                if (state.isOpen) {
+                  setState({ closingWithClick: true });
+                }
+              })}
+              onClick={wrapEvent(onClick, () => {
+                if (state.isOpen) {
+                  setState(close);
+                } else {
+                  setState(openAtFirstItem);
+                }
+              })}
+              onKeyDown={wrapEvent(onKeyDown, event => {
+                if (event.key === "ArrowDown") {
+                  event.preventDefault(); // prevent scroll
+                  setState(openAtFirstItem);
+                } else if (event.key === "ArrowUp") {
+                  event.preventDefault(); // prevent scroll
+                  setState(openAtFirstItem);
+                }
+              })}
+              {...props}
+            />
+          )}
+        </Rect>
+      )}
+    </Consumer>
+  )
+);
 
 MenuButton.propTypes = {
   onClick: func,
@@ -179,8 +188,8 @@ let MenuItem = React.forwardRef(
       <div
         {...rest}
         ref={node => {
-          ref && ref(node);
-          _ref(node);
+          assignRef(ref, node);
+          assignRef(_ref, node);
         }}
         data-reach-menu-item={role === "menuitem" ? true : undefined}
         role={role}
@@ -231,7 +240,7 @@ let MenuLink = React.forwardRef(
     {
       onKeyDown,
       onClick,
-      component: Comp = Link,
+      component: Comp,
       style,
       setState,
       state,
@@ -265,8 +274,8 @@ let MenuLink = React.forwardRef(
           }
         })}
         ref={node => {
-          _ref(node);
-          ref && ref(node);
+          assignRef(_ref, node);
+          assignRef(ref, node);
         }}
         style={{ ...style }}
         {...props}
@@ -346,7 +355,7 @@ let MenuListImpl = React.forwardRef(
         tabIndex="-1"
         ref={node => {
           refs.menu = node;
-          ref && ref(node);
+          assignRef(ref, node);
         }}
         onBlur={event => {
           if (

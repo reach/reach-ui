@@ -40,3 +40,37 @@ export let wrapEvent = (handler, cb) => event => {
     return cb(event);
   }
 };
+
+export const assignRef = (ref, value) => {
+  if (ref == null) return;
+  if (typeof ref === "function") {
+    ref(value);
+  } else {
+    try {
+      ref.current = value;
+    } catch (error) {
+      throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
+    }
+  }
+};
+
+// This suuuuuuuuuuuucks but I can't think of anything better rn, we could use
+// a default React Context, but I don't see how that's any different.
+//
+// If a Tooltip wraps a MenuButton and the menu returns focus to the button it
+// triggers the tooltip focus event and pops up the tooltip and that's gross
+// and this is a run-on sentence.  So, we've got this kind of global context
+// for tooltip to know if it should respond to focus or not.
+let ignoreTooltips = false;
+
+export function disableTooltips() {
+  ignoreTooltips = true;
+}
+
+export function enableTooltips() {
+  ignoreTooltips = false;
+}
+
+export function shouldIgnoreTooltips() {
+  return ignoreTooltips;
+}
