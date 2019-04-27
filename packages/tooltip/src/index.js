@@ -26,6 +26,13 @@
 //    resting and display immediately.
 //
 // 3. Tooltips stick around for a little bit after blur/mouseleave.
+//
+// TODO: Research longpress tooltips on Android, iOS
+// - Probably want to position it by default above, since your thumb
+//   is below and would cover it
+// - I'm thinking after longpress, display the tooltip and cancel any click
+//   events. Then on touchend, so they can read it display the tooltip for
+//   a little while longer in case their hand was obstructing the tooltip.
 
 /* eslint-disable default-case */
 
@@ -39,62 +46,83 @@ import React, {
   useEffect
 } from "react";
 import { useId } from "@reach/auto-id";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, checkStyles, shouldIgnoreTooltips } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import { node, string, func } from "prop-types";
 
 ////////////////////////////////////////////////////////////////////////////////
+// ~The states~
+
+// nothing goin' on
+const IDLE = "idle";
+
+// we're considering showing the tooltip, but we're gonna wait a sec
+const FOCUSED = "focused";
+
+// IT'S ON
+const VISIBLE = "visible";
+
+// Focus has left, but we want to keep it visible for a sec
+const LEAVING_VISIBLE = "leavingVisible";
+
+// The user clicked the tool, so we want to hide the thing, we can't just use
+// IDLE because we need to ignore mousemove, etc.
+const DISMISSED = "dismissed";
+
 const chart = {
-  initial: "idle",
+  initial: IDLE,
   states: {
-    idle: {
+    [IDLE]: {
       enter: clearContextId,
       on: {
-        mouseenter: "focused",
-        focus: "focused"
+        mouseenter: FOCUSED,
+        focus: FOCUSED
       }
     },
-    focused: {
+    [FOCUSED]: {
       enter: startRestTimer,
       leave: clearRestTimer,
       on: {
-        mousemove: "focused",
-        mouseleave: "idle",
-        mousedown: "dismissed",
-        blur: "idle",
-        rest: "visible"
+        mousemove: FOCUSED,
+        mouseleave: IDLE,
+        mousedown: DISMISSED,
+        blur: IDLE,
+        rest: VISIBLE
       }
     },
-    visible: {
+    [VISIBLE]: {
       on: {
-        mouseleave: "leavingVisible",
-        blur: "leavingVisible",
-        mousedown: "dismissed",
-        selectWithKeyboard: "dismissed"
+        focus: FOCUSED,
+        mouseenter: FOCUSED,
+        mouseleave: LEAVING_VISIBLE,
+        blur: LEAVING_VISIBLE,
+        mousedown: DISMISSED,
+        selectWithKeyboard: DISMISSED,
+        globalMouseMove: LEAVING_VISIBLE
       }
     },
-    leavingVisible: {
+    [LEAVING_VISIBLE]: {
       enter: startLeavingVisibleTimer,
       leave: () => {
         clearLeavingVisibleTimer();
         clearContextId();
       },
       on: {
-        mouseenter: "visible",
-        focus: "visible",
-        timecomplete: "idle"
+        mouseenter: VISIBLE,
+        focus: VISIBLE,
+        timecomplete: IDLE
       }
     },
-    dismissed: {
+    [DISMISSED]: {
       leave: () => {
         // allows us to come on back later w/o entering something else first
         context.id = null;
       },
       on: {
-        mouseleave: "idle",
-        blur: "idle"
+        mouseleave: IDLE,
+        blur: IDLE
       }
     }
   }
@@ -169,6 +197,7 @@ function notify() {
 // Manages when the user "rests" on an element. Keeps the interface from being
 // flashing tooltips all the time as the user moves the mouse around the screen.
 let restTimeout;
+
 function startRestTimer() {
   clearTimeout(restTimeout);
   restTimeout = setTimeout(() => transition("rest"), 100);
@@ -180,6 +209,7 @@ function clearRestTimer() {
 
 // Manages the delay to hide the tooltip after rest leaves.
 let leavingVisibleTimer;
+
 function startLeavingVisibleTimer() {
   clearTimeout(leavingVisibleTimer);
   leavingVisibleTimer = setTimeout(() => transition("timecomplete"), 500);
@@ -189,25 +219,14 @@ function clearLeavingVisibleTimer() {
   clearTimeout(leavingVisibleTimer);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Rando helpers
-
 // allows us to come on back later w/o entering something else first after the
 // user leaves or dismisses
 function clearContextId() {
   context.id = null;
 }
 
-// Avoids focus/mouseEnter from fighting with each other since you can have
-// one element focused and another mouseentered at the same time. The first
-// one sets the context.id and then the second one is ignored (for a single
-// element, most recent focus/mouseenter wins between elements).
-function isActive(id) {
-  return context.id === id;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
-// THE HOOK!
+// THE HOOK! It's about time we got to the goods!
 export function useTooltip({
   onMouseEnter,
   onMouseMove,
@@ -220,7 +239,7 @@ export function useTooltip({
   DEBUG_STYLE
 } = {}) {
   const [isVisible, setIsVisible] = useState(
-    DEBUG_STYLE ? true : state === "visible"
+    DEBUG_STYLE ? true : state === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
@@ -232,7 +251,7 @@ export function useTooltip({
     return subscribe(() => {
       if (
         context.id === id &&
-        (state === "visible" || state === "leavingVisible")
+        (state === VISIBLE || state === LEAVING_VISIBLE)
       ) {
         setIsVisible(true);
       } else {
@@ -241,18 +260,13 @@ export function useTooltip({
     });
   }, [id]);
 
-  const handleMouseEnter = () => {
-    if (
-      isActive(id) &&
-      // enables leaving then entering again before the times up
-      state !== "leavingVisible"
-    ) {
-      return;
-    }
+  useEffect(() => checkStyles("tooltip"));
 
+  const handleMouseEnter = () => {
     switch (state) {
-      case "idle":
-      case "leavingVisible": {
+      case IDLE:
+      case VISIBLE:
+      case LEAVING_VISIBLE: {
         transition("mouseenter", { id });
       }
     }
@@ -260,17 +274,18 @@ export function useTooltip({
 
   const handleMouseMove = () => {
     switch (state) {
-      case "focused": {
+      case FOCUSED: {
         transition("mousemove", { id });
       }
     }
   };
 
-  const handleFocus = () => {
-    if (isActive(id)) return;
+  const handleFocus = event => {
+    if (shouldIgnoreTooltips()) return;
     switch (state) {
-      case "idle":
-      case "leavingVisible": {
+      case IDLE:
+      case VISIBLE:
+      case LEAVING_VISIBLE: {
         transition("focus", { id });
       }
     }
@@ -278,9 +293,9 @@ export function useTooltip({
 
   const handleMouseLeave = () => {
     switch (state) {
-      case "focused":
-      case "visible":
-      case "dismissed": {
+      case FOCUSED:
+      case VISIBLE:
+      case DISMISSED: {
         transition("mouseleave");
       }
     }
@@ -290,9 +305,9 @@ export function useTooltip({
     // Allow quick click from one tool to another
     if (context.id !== id) return;
     switch (state) {
-      case "focused":
-      case "visible":
-      case "dismissed": {
+      case FOCUSED:
+      case VISIBLE:
+      case DISMISSED: {
         transition("blur");
       }
     }
@@ -302,8 +317,8 @@ export function useTooltip({
     // Allow quick click from one tool to another
     if (context.id !== id) return;
     switch (state) {
-      case "focused":
-      case "visible": {
+      case FOCUSED:
+      case VISIBLE: {
         transition("mousedown");
       }
     }
@@ -312,7 +327,7 @@ export function useTooltip({
   const handleKeyDown = event => {
     if (event.key === "Enter" || event.key === " ") {
       switch (state) {
-        case "visible": {
+        case VISIBLE: {
           transition("selectWithKeyboard");
         }
       }
@@ -449,15 +464,6 @@ const TooltipContent = forwardRef(function TooltipContent(
     </Fragment>
   );
 });
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO: research longpress tooltips on Android, iOS, implement here.
-// - Probably want to position it by default above, since your thumb
-//   is below and would cover it
-// - I'm thinking after longpress, display the tooltip and cancel any
-//   click events. Then on touchend, hide the tooltip after a timer
-//   in case their hand is obstructing it, then can remove and read
-//   the tooltip
 
 // feels awkward when it's perfectly aligned w/ the trigger
 const OFFSET = 8;
