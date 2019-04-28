@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
