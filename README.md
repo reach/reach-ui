@@ -101,7 +101,7 @@ yarn test --watch
 
 ## Development Plans
 
-The components to be build come from the the [Aria Practices Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices-1.1). Here is a table of the components and their status.
+The components to be built come from the the [Aria Practices Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices-1.1). Here is a table of the components and their status.
 
 ✅ - Released<br/>
 🛠 - Planning to Build<br/>
