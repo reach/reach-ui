@@ -9,7 +9,8 @@ export const name = "Triangle";
 const centered = (triggerRect, tooltipRect) => {
   const triggerCenter = triggerRect.left + triggerRect.width / 2;
   const left = triggerCenter - tooltipRect.width / 2;
-  const maxLeft = window.innerWidth - tooltipRect.width - 2;
+  // 17px is the max width of possible scrollbars on various platforms
+  const maxLeft = window.innerWidth - tooltipRect.width - 17;
   return {
     left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
     top: triggerRect.bottom + 8 + window.scrollY
