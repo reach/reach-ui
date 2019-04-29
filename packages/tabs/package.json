@@ -1,6 +1,6 @@
 {
   "name": "@reach/tabs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Accessible React Tabs Component",
   "main": "index.js",
   "module": "es/index.js",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.2.0",
-    "@reach/utils": "^0.2.1",
+    "@reach/utils": "^0.2.2",
     "warning": "^4.0.2"
   },
   "peerDependencies": {
