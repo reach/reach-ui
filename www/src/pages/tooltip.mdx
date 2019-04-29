@@ -61,8 +61,6 @@ import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
 
 ## Usage
 
-High-level component to render a tooltip, likely the only component you need, unless you want to animate, then keep reading.
-
 ```.jsx
 <Tooltip label="Save">
   <button style={{ fontSize: 25 }}>💾</button>
@@ -87,7 +85,7 @@ Sometimes the button contains information that is relevant to the user, like a b
 
 ## useTooltip, TooltipPopup and Animation
 
-Tooltip is built on top of the `useTooltip` hook and `TooltipPopup`. The usual reason to drop down to this level of API is to create animated tooltips. Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
+`Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`. The usual reason to drop down to this level of API is to create animated tooltips. Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
 
 ```jsx
 import React, { Fragment, cloneElement } from "react"
@@ -127,7 +125,11 @@ function AnimatedTooltip({ children, ...rest }) {
 }
 
 // Now you can replace `Tooltip` with `AnimatedTooltip`
-;<AnimatedTooltip label="Compose Message">
-  <button>📝</button>
-</AnimatedTooltip>
+function App() {
+  return (
+    <AnimatedTooltip label="Compose Message">
+      <button>📝</button>
+    </AnimatedTooltip>
+  )
+}
 ```
