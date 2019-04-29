@@ -465,6 +465,9 @@ const TooltipContent = forwardRef(function TooltipContent(
   );
 });
 
+// feels awkward when it's perfectly aligned w/ the trigger
+const OFFSET = 8;
+
 const getStyles = (position, triggerRect, tooltipRect) => {
   const haventMeasuredTooltipYet = !tooltipRect;
   if (haventMeasuredTooltipYet) {
@@ -482,7 +485,8 @@ const positionDefault = (triggerRect, tooltipRect) => {
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
-    bottom: window.innerHeight < triggerRect.bottom + tooltipRect.height,
+    bottom:
+      window.innerHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
     left: triggerRect.left - tooltipRect.width < 0
   };
 
@@ -492,10 +496,13 @@ const positionDefault = (triggerRect, tooltipRect) => {
   return {
     ...styles,
     left: directionRight
-      ? `${triggerRect.right - tooltipRect.width + window.scrollX}px`
-      : `${triggerRect.left + window.scrollX}px`,
+      ? `${triggerRect.right +
+          OFFSET / 2 -
+          tooltipRect.width +
+          window.scrollX}px`
+      : `${triggerRect.left - OFFSET / 2 + window.scrollX}px`,
     top: directionUp
-      ? `${triggerRect.top - tooltipRect.height + window.scrollY}px`
-      : `${triggerRect.top + triggerRect.height + window.scrollY}px`
+      ? `${triggerRect.top - OFFSET - tooltipRect.height + window.scrollY}px`
+      : `${triggerRect.top + OFFSET + triggerRect.height + window.scrollY}px`
   };
 };
