@@ -3,7 +3,7 @@ import Portal from "@reach/portal";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
-import { node, func, object, string, number, oneOfType } from "prop-types";
+import { node, func, object, string, number, oneOfType, any } from "prop-types";
 import {
   wrapEvent,
   checkStyles,
@@ -241,6 +241,7 @@ let MenuLink = React.forwardRef(
       onKeyDown,
       onClick,
       component: Comp,
+      as: AsComp = "a",
       style,
       setState,
       state,
@@ -249,45 +250,54 @@ let MenuLink = React.forwardRef(
       ...props
     },
     ref
-  ) => (
-    <MenuItem
-      role="none"
-      state={state}
-      setState={setState}
-      index={index}
-      onSelect={k}
-      _ref={k}
-    >
-      <Comp
-        role="menuitem"
-        data-reach-menu-item
-        tabIndex="-1"
-        data-selected={index === state.selectionIndex ? true : undefined}
-        onClick={wrapEvent(onClick, event => {
-          setState(close);
-        })}
-        onKeyDown={wrapEvent(onKeyDown, event => {
-          if (event.key === "Enter") {
-            // prevent MenuItem's preventDefault from firing,
-            // allowing this link to work w/ the keyboard
-            event.stopPropagation();
-          }
-        })}
-        ref={node => {
-          assignRef(_ref, node);
-          assignRef(ref, node);
-        }}
-        style={{ ...style }}
-        {...props}
-      />
-    </MenuItem>
-  )
+  ) => {
+    const Link = Comp || AsComp;
+    if (Comp) {
+      console.warn(
+        "[@reach/menu-button]: Please use the `as` prop instead of `component`."
+      );
+    }
+    return (
+      <MenuItem
+        role="none"
+        state={state}
+        setState={setState}
+        index={index}
+        onSelect={k}
+        _ref={k}
+      >
+        <Link
+          role="menuitem"
+          data-reach-menu-item
+          tabIndex="-1"
+          data-selected={index === state.selectionIndex ? true : undefined}
+          onClick={wrapEvent(onClick, event => {
+            setState(close);
+          })}
+          onKeyDown={wrapEvent(onKeyDown, event => {
+            if (event.key === "Enter") {
+              // prevent MenuItem's preventDefault from firing,
+              // allowing this link to work w/ the keyboard
+              event.stopPropagation();
+            }
+          })}
+          ref={node => {
+            assignRef(_ref, node);
+            assignRef(ref, node);
+          }}
+          style={{ ...style }}
+          {...props}
+        />
+      </MenuItem>
+    );
+  }
 );
 
 MenuLink.propTypes = {
   onKeyDown: func,
   onClick: func,
-  component: oneOfType([string, node]),
+  component: any,
+  as: any,
   style: object,
   setState: func,
   state: object,

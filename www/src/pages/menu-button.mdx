@@ -5,17 +5,18 @@ import Helmet from "react-helmet"
   meta={[
     {
       name: "description",
-      content: "An accessible dropdown menu for the common dropdown menu button design pattern."
-    }
+      content:
+        "An accessible dropdown menu for the common dropdown menu button design pattern.",
+    },
   ]}
 />
 
 # MenuButton (Dropdown)
 
-[Menu](#menu) - 
-[MenuButton](#menubutton) - 
-[MenuList](#menulist) - 
-[MenuItem](#menuitem) - 
+[Menu](#menu) -
+[MenuButton](#menubutton) -
+[MenuList](#menulist) -
+[MenuItem](#menuitem) -
 [MenuLink](#menulink)
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
@@ -36,14 +37,12 @@ Please note that the buttons on this page are styled by this website. They are j
     <MenuItem onSelect={() => alert("Mark as Draft")}>Mark as Draft</MenuItem>
     <MenuItem onSelect={() => alert("Delete")}>Delete</MenuItem>
     <MenuLink
-      component="a"
+      as="a"
       href="https://reach.tech/workshops"
     >Attend a Workshop</MenuLink>
   </MenuList>
 </Menu>
 ```
-
-
 
 ## Installation
 
@@ -61,8 +60,8 @@ import {
   MenuList,
   MenuButton,
   MenuItem,
-  MenuLink
-} from "@reach/menu-button";
+  MenuLink,
+} from "@reach/menu-button"
 ```
 
 # Menu
@@ -77,7 +76,7 @@ The wrapper component for the other components. No DOM element is rendered.
 
 ### Menu children
 
-*Type*: `oneOfType(node, function)`
+_Type_: `oneOfType(node, function)`
 
 Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
@@ -91,22 +90,22 @@ Requires two children: a `<MenuButton>` and a `<MenuList>`.
 </Menu>
 ```
 
- Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
+Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
 
 ```jsx
-  <Menu>
-    {({ isOpen }) => (
-      <React.Fragment>
-        <MenuButton>
-          {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
-        </MenuButton>
-        <MenuList>
-          <MenuItem>Download</MenuItem>
-          <MenuItem>Create a Copy</MenuItem>
-        </MenuList>
-      </React.Fragment>
-    )}
-  </Menu>
+<Menu>
+  {({ isOpen }) => (
+    <React.Fragment>
+      <MenuButton>
+        {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList>
+        <MenuItem>Download</MenuItem>
+        <MenuItem>Create a Copy</MenuItem>
+      </MenuList>
+    </React.Fragment>
+  )}
+</Menu>
 ```
 
 # MenuButton
@@ -153,14 +152,14 @@ If you'd like to target when the menu is open use `aria-expanded`:
 
 | Prop                                     | Type                 | Required |
 | ---------------------------------------- | -------------------- | -------- |
-| [button props](#menubutton-button-props) | spread               | n/a
-| [children](#menubutton-children)         | node                 | false
-| onClick                                  | preventableEventFunc | false
-| onKeyDown                                | preventableEventFunc | false
+| [button props](#menubutton-button-props) | spread               | n/a      |
+| [children](#menubutton-children)         | node                 | false    |
+| onClick                                  | preventableEventFunc | false    |
+| onKeyDown                                | preventableEventFunc | false    |
 
 ### MenuButton button props
 
-*Type*: `spread`
+_Type_: `spread`
 
 Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
 
@@ -178,16 +177,18 @@ Any props not listed above will be spread onto the underlying button element. Yo
 </Menu>
 ```
 
-
 ### MenuButton children
 
-*Type*: `node`
+_Type_: `node`
 
 Accepts any renderable content.
 
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden><Gear /></span>
+  Actions{" "}
+  <span aria-hidden>
+    <Gear />
+  </span>
 </MenuButton>
 ```
 
@@ -221,9 +222,9 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 ### MenuList element props
 
-*Type*: `spread`
+_Type_: `spread`
 
-All props are spread to the underlying  element. Here we apply a `className` the element.
+All props are spread to the underlying element. Here we apply a `className` the element.
 
 ```.jsx
 <Menu>
@@ -258,13 +259,11 @@ The stylesheet contains these rules to create the animation.
 }
 ```
 
-
 ### MenuList children
 
-*Type*: `node`
+_Type_: `node`
 
 Can contain only `MenuItem` or a `MenuLink`
-
 
 ```jsx
 <MenuList>
@@ -279,7 +278,7 @@ Handles menu selection. Must be a direct child of a `<MenuList>`.
 
 ```jsx
 <MenuList>
-  <MenuItem onSelect={() => alert('download!')}>Download</MenuItem>
+  <MenuItem onSelect={() => alert("download!")}>Download</MenuItem>
 </MenuList>
 ```
 
@@ -325,7 +324,6 @@ The following example has this css applied:
 </Menu>
 ```
 
-
 ## MenuItem Props
 
 | Prop                                     | Type                 | Required |
@@ -339,7 +337,7 @@ The following example has this css applied:
 
 ### MenuItem element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 All props are spread to the underlying element.
 
@@ -369,10 +367,9 @@ In this example the `onFocus` prop is passed down to the element.
 </Component>
 ```
 
-
 ### MenuItem children
 
-*Type*: `node`
+_Type_: `node`
 
 You can put any type of content inside of a `<MenuItem>`.
 
@@ -400,24 +397,22 @@ You can put any type of content inside of a `<MenuItem>`.
 </Menu>
 ```
 
-
 # MenuLink
 
-Handles linking to a different page in the menu. By default it works with Reach Router, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
+Handles linking to a different page in the menu. By default it renders `<a>`, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
 
 Must be a direct child of a `<MenuList>`.
 
 ```jsx
+improt { Link } from "@reach/router"
+
 <MenuList>
-  <MenuLink to="somewhere/else">Somewhere w/ Reach Router</MenuLink>
+  <MenuLink as={Link} to="somewhere/else">Somewhere w/ Reach Router</MenuLink>
+  <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
   <MenuLink
-    component="a"
-    href="https://reactjs.org"
-  >Official React Site</MenuLink>
-  <MenuLink
-    component={GatsbyLink}
+    as={GatsbyLink}
     to="/somewhere/with/gatsby"
-  >Official React Site</MenuLink>
+  >Some Gatsby Page</MenuLink>
 </MenuList>
 ```
 
@@ -444,52 +439,49 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 | Prop                                     | Type                 | Required |
 | ---------------------------------------- | -------------------- | -------- |
 | [element props](#menulink-element-props) | spread               | n/a      |
-| [component](#menulink-component)         | node | string        | false    |
+| [as](#menulink-as)                       | any                  | true     |
+| [component](#menulink-component)         | any                  | false    |
 | [children](#menulink-children)           | node                 | false    |
 | onClick                                  | preventableEventFunc | false    |
 | to                                       | string               | true     |
 
 ### MenuLink element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 All props are spread to the underlying element
 
 ```jsx
 // the `to` prop is spread onto the Reach Router Link
-<MenuLink to="somewhere/else">
+<MenuLink as={Link} to="somewhere/else">
   Somewhere
 </MenuLink>
 
 // the `href` prop is spread onto the underlying `a`
-<MenuLink
-  component="a"
-  href="https://reactjs.org"
->Official React Site</MenuLink>
+<MenuLink href="https://reactjs.org">Official React Site</MenuLink>
 ```
 
 ### MenuLink component
 
-*Type*: `oneOfType(string, component)`
+Deprecated, see `as` prop below.
 
-By default, `MenuLink` renders a Reach Router Link, but if you have external links you can use `component="a"`.
+### MenuLink as
 
+_Type_: `any`
 
-```.jsx
-<Menu>
-  <MenuButton>
-    Products
-  </MenuButton>
+By default, `MenuLink` renders an anchor, but if you are using a router you can use `as={Link}`.
+
+```jsx
+import { Link } from "@reach/router"
+
+;<Menu>
+  <MenuButton>Products</MenuButton>
   <MenuList>
-    <MenuLink component="a" href="https://reach.tech/workshops">
-      Workshops
+    <MenuLink as={Link} href="/settings">
+      Settings
     </MenuLink>
-    <MenuLink component="a" href="https://reach.tech/courses">
-      Online Courses
-    </MenuLink>
-    <MenuLink component="a" href="https://reach.tech/ui">
-      Reach UI
-    </MenuLink>
+    <MenuLink href="https://reacttraining.com/workshops">Workshops</MenuLink>
+    <MenuLink href="https://reacttraining.com/courses">Online Courses</MenuLink>
   </MenuList>
 </Menu>
 ```
@@ -499,18 +491,18 @@ Additionally, if other routers' `Link` component uses the `React.forwardRef` API
 ```jsx
 import GatsbyLink from "gatsby/link"
 
-<MenuLink component={GatsbyLink} to="/somewhere"/>
+;<MenuLink as={GatsbyLink} to="/somewhere" />
 ```
 
 ### MenuLink children
 
-*Type*: `node`
+_Type_: `node`
 
 You can render any kind of content inside of a MenuLink.
 
 ```jsx
 <MenuLink>
-  <ProfileImage userId="4"/>
+  <ProfileImage userId="4" />
   <UserName>Ryan Florence</UserName>
 </MenuLink>
 ```
@@ -583,7 +575,6 @@ Note the callbacks given to `setState` in the following demo app where focus is 
 })()
 ```
 
-
 ## Icons
 
 If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screenreaders will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
@@ -627,15 +618,12 @@ import AriaText from "@reach/aria-text"
 
 ## Keyboard Accessibility
 
-| Key | Action |
-| -------------|----------| ------ |
-| `Enter` | Open/close |
-| `ArrowUp` | Highlight previous item |
-| `ArrowDown` | Highlight next item |
-| `Enter` | Select item |
-| `Escape` | Close |
-| `Tab` | No effect |
+| Key                   | Action                   |
+| --------------------- | ------------------------ |
+| `Enter`               | Open/close               |
+| `ArrowUp`             | Highlight previous item  |
+| `ArrowDown`           | Highlight next item      |
+| `Enter`               | Select item              |
+| `Escape`              | Close                    |
+| `Tab`                 | No effect                |
 | TODO: Type characters | Highlights matching item |
-
-
-
