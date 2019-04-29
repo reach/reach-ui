@@ -10,8 +10,8 @@
     "lint": "eslint . --max-warnings=0"
   },
   "peerDependencies": {
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "author": "Ryan Florence",
   "license": "MIT",
