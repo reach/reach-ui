@@ -3,6 +3,7 @@
 }
 
 [data-reach-tooltip] {
+  z-index: 1;
   pointer-events: none;
   position: absolute;
   padding: 0.25em 0.5em;
