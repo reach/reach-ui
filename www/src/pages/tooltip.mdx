@@ -109,9 +109,110 @@ Please see the [styling guide](/styling).
 }
 ```
 
-## useTooltip, TooltipPopup and Animation
+## useTooltip, TooltipPopup
 
-`Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`. The usual reason to drop down to this level of API is to create animated tooltips. Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
+`Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`.
+
+You may want to drop down to this lower level API if you need animation or you want to add the triangles to the tooltip. We've provided code for both of these use-cases below:
+
+### Triangle pointers and custom styles
+
+```.jsx
+(() => {
+  // Center the tooltip, but collisions will win
+  const centered = (triggerRect, tooltipRect) => {
+    const triggerCenter = triggerRect.left + triggerRect.width / 2
+    const left = triggerCenter - tooltipRect.width / 2
+    const maxLeft = window.innerWidth - tooltipRect.width - 2
+    return {
+      left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
+      top: triggerRect.bottom + 8 + window.scrollY,
+    }
+  }
+
+  function TriangleTooltip({ children, label, ariaLabel }) {
+
+    // get the props from useTooltip
+    const [trigger, tooltip] = useTooltip()
+
+    // destructure off what we need to position the triangle
+    const { isVisible, triggerRect } = tooltip
+
+    return (
+      <Fragment>
+        {cloneElement(children, trigger)}
+
+        {isVisible && (
+          // The Triangle. We position it relative to the trigger, not the popup
+          // so that collisions don't have a triangle pointing off to nowhere.
+          // Using a Portal may seem a little extreme, but we can keep the
+          // positioning logic simpler here instead of needing to consider
+          // the popup's position relative to the trigger and collisions
+          <Portal>
+            <div
+              style={{
+                position: "absolute",
+                left:
+                  triggerRect && triggerRect.left - 10 + triggerRect.width / 2,
+                top: triggerRect && triggerRect.bottom + window.scrollY,
+                width: 0,
+                height: 0,
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderBottom: "10px solid black",
+              }}
+            />
+          </Portal>
+        )}
+        <TooltipPopup
+          {...tooltip}
+          label={label}
+          ariaLabel={ariaLabel}
+          style={{
+            background: "black",
+            color: "white",
+            border: "none",
+            borderRadius: "3px",
+            padding: "0.5em 1em",
+          }}
+          position={centered}
+        />
+      </Fragment>
+    )
+  }
+
+  return (
+    <div>
+      <TriangleTooltip label="Notifications Really Long to Trigger Collision">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>🔔</span>
+        </button>
+      </TriangleTooltip>
+      <TriangleTooltip label="Settings">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>⚙️</span>
+        </button>
+      </TriangleTooltip>
+
+      <div style={{ float: "right" }}>
+        <TriangleTooltip
+          label="Notifications Really Long to Trigger Collision"
+          ariaLabel="3 Notifications"
+        >
+          <button style={{ fontSize: 25 }}>
+            <span>🔔</span>
+            <span>3</span>
+          </button>
+        </TriangleTooltip>
+      </div>
+    </div>
+  )
+})()
+```
+
+### Animation
+
+Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
 
 ```jsx
 import React, { Fragment, cloneElement } from "react"
