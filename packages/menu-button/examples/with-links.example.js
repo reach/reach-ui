@@ -21,7 +21,9 @@ const Home = () => (
       </MenuButton>
       <MenuList>
         <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
-        <MenuLink to="/settings">View Settings</MenuLink>
+        <MenuLink as={Link} to="/settings">
+          View Settings
+        </MenuLink>
         <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
       </MenuList>
     </Menu>
