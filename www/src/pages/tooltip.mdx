@@ -83,6 +83,32 @@ Sometimes the button contains information that is relevant to the user, like a b
 </Tooltip>
 ```
 
+All props passed to `Tooltip` will go to the popover.
+
+```.jsx
+<Tooltip
+  label="Fall in love all over again"
+  style={{
+    background: "hsla(0, 0%, 0%, 0.75)",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "0.5em 1em"
+  }}
+>
+  <button style={{ fontSize: 25 }}>❤️</button>
+</Tooltip>
+```
+
+## Tooltip CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-tooltip] {
+}
+```
+
 ## useTooltip, TooltipPopup and Animation
 
 `Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`. The usual reason to drop down to this level of API is to create animated tooltips. Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):

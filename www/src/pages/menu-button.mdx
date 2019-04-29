@@ -473,7 +473,6 @@ By default, `MenuLink` renders an anchor, but if you are using a router you can 
 
 ```jsx
 import { Link } from "@reach/router"
-
 ;<Menu>
   <MenuButton>Products</MenuButton>
   <MenuList>
@@ -490,7 +489,6 @@ Additionally, if other routers' `Link` component uses the `React.forwardRef` API
 
 ```jsx
 import GatsbyLink from "gatsby/link"
-
 ;<MenuLink as={GatsbyLink} to="/somewhere" />
 ```
 
