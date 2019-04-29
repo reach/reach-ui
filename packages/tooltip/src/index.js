@@ -496,11 +496,8 @@ const positionDefault = (triggerRect, tooltipRect) => {
   return {
     ...styles,
     left: directionRight
-      ? `${triggerRect.right +
-          OFFSET / 2 -
-          tooltipRect.width +
-          window.scrollX}px`
-      : `${triggerRect.left - OFFSET / 2 + window.scrollX}px`,
+      ? `${triggerRect.right - tooltipRect.width + window.scrollX}px`
+      : `${triggerRect.left + window.scrollX}px`,
     top: directionUp
       ? `${triggerRect.top - OFFSET - tooltipRect.height + window.scrollY}px`
       : `${triggerRect.top + OFFSET + triggerRect.height + window.scrollY}px`
