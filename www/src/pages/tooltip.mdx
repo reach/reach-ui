@@ -17,9 +17,13 @@ import Helmet from "react-helmet"
 
 When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
 
-Do not use tooltips for information vital to task completion. The elements they are attached to should usually make sense on their own, but a tooltip can help provide a little bit more information--especially for new users of your app.
+A couple notes on using tooltips:
 
-Please see the [Tooltip Guidelines](https://www.nngroup.com/articles/tooltip-guidelines/) by the Nielson Norman group before using these, we've taken care of some of it, but some of it is up to you too :)
+- Do not use tooltips for information vital to task completion. The elements they are attached to should usually make sense on their own, but a tooltip can help provide a little bit more information--especially for new users of your app.
+- Keep the content minimal, they are not intended to hide critical content.
+- If you want interactive content, you can use a [Dialog](/dialog).
+
+_Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
 ```.jsx
 <div>
