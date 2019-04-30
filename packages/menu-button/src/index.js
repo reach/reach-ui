@@ -204,6 +204,9 @@ let MenuItem = React.forwardRef(
             // this "Enter" keydown
             event.preventDefault();
             select();
+          } else if (event.key === " ") {
+            event.preventDefault();
+            select();
           }
         })}
         onMouseMove={wrapEvent(onMouseMove, event => {
