@@ -18,6 +18,11 @@ export function Example() {
           <span aria-hidden>⚙️</span>
         </button>
       </Tooltip>
+      <Tooltip label="Your files are safe with us">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>💾</span> Save
+        </button>
+      </Tooltip>
 
       <div style={{ float: "right" }}>
         <Tooltip label="Notifications" ariaLabel="3 Notifications">
