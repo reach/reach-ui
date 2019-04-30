@@ -334,7 +334,7 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-labelledby": id,
+    "aria-describedby": id,
     "data-reach-tooltip-trigger": "",
     ref: triggerRef,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
