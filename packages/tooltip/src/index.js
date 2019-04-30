@@ -78,7 +78,7 @@ const chart = {
       enter: clearContextId,
       on: {
         mouseenter: FOCUSED,
-        focus: FOCUSED
+        focus: VISIBLE
       }
     },
     [FOCUSED]: {
