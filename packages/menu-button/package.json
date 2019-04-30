@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@reach/router": "^1.0.0",
-    "@reach/tooltip": "^0.1.7",
     "jest": "^23.4.2",
     "react": "^16.8.0",
     "react-test-renderer": "^16.8.0"
