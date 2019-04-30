@@ -3,9 +3,8 @@
 //
 // Quick definitions:
 //
-// - "on rest" or "rested on": describes when the element receives keyboard
-//   focus or mouse hover after a short delay (and hopefully soon, touch
-//   longpress).
+// - "on rest" or "rested on": describes when the element receives mouse hover
+//   after a short delay (and hopefully soon, touch longpress).
 //
 // - "activation": describes a mouse click, keyboard enter, or keyboard space.
 //
