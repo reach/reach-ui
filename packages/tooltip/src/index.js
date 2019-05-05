@@ -115,10 +115,7 @@ const chart = {
       }
     },
     [DISMISSED]: {
-      leave: () => {
-        // allows us to come on back later w/o entering something else first
-        context.id = null;
-      },
+      leave: clearContextId,
       on: {
         mouseleave: IDLE,
         blur: IDLE
