@@ -16,7 +16,7 @@
     "@reach/portal": "^0.2.1",
     "@reach/utils": "^0.2.2",
     "react-focus-lock": "^1.17.7",
-    "react-remove-scroll": "^1.0.2"
+    "react-remove-scroll": "^1.0.8"
   },
   "peerDependencies": {
     "react": "^16.8.0",
