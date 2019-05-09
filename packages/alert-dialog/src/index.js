@@ -7,29 +7,32 @@ import { func, bool, node, object, oneOfType } from "prop-types";
 
 let AlertDialogContext = createContext();
 
-function AlertDialogOverlay({ leastDestructiveRef, ...props }) {
-  const labelId = useId();
-  const descriptionId = useId();
-  return (
-    <Component
-      getRefs={() => ({
-        labelId: `alert-dialog-${labelId}`,
-        descriptionId: `alert-dialog-${descriptionId}`,
-        leastDestructiveRef
-      })}
-    >
-      {({ refs }) => (
-        <AlertDialogContext.Provider value={refs}>
-          <DialogOverlay
-            data-reach-alert-dialog-overlay
-            initialFocusRef={leastDestructiveRef}
-            {...props}
-          />
-        </AlertDialogContext.Provider>
-      )}
-    </Component>
-  );
-}
+let AlertDialogOverlay = React.forwardRef(
+  ({ leastDestructiveRef, ...props }, forwardRef) => {
+    const labelId = useId();
+    const descriptionId = useId();
+    return (
+      <Component
+        getRefs={() => ({
+          labelId: `alert-dialog-${labelId}`,
+          descriptionId: `alert-dialog-${descriptionId}`,
+          leastDestructiveRef
+        })}
+      >
+        {({ refs }) => (
+          <AlertDialogContext.Provider value={refs}>
+            <DialogOverlay
+              ref={forwardRef}
+              data-reach-alert-dialog-overlay
+              initialFocusRef={leastDestructiveRef}
+              {...props}
+            />
+          </AlertDialogContext.Provider>
+        )}
+      </Component>
+    );
+  }
+);
 
 AlertDialogOverlay.propTypes = {
   isOpen: bool,
@@ -38,34 +41,37 @@ AlertDialogOverlay.propTypes = {
   children: node
 };
 
-let AlertDialogContent = ({ children, ...props }) => (
-  <AlertDialogContext.Consumer>
-    {refs => (
-      <DialogContent
-        data-reach-alert-dialong-content
-        role="alertdialog"
-        aria-labelledby={refs.labelId}
-        {...props}
-      >
-        <Component
-          didMount={() => {
-            invariant(
-              document.getElementById(refs.labelId),
-              `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
+let AlertDialogContent = React.forwardRef(
+  ({ children, ...props }, forwardRef) => (
+    <AlertDialogContext.Consumer>
+      {refs => (
+        <DialogContent
+          ref={forwardRef}
+          data-reach-alert-dialong-content
+          role="alertdialog"
+          aria-labelledby={refs.labelId}
+          {...props}
+        >
+          <Component
+            didMount={() => {
+              invariant(
+                document.getElementById(refs.labelId),
+                `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
               inside an \`<AlertDialog/>\`.`
-            );
-            invariant(
-              refs.leastDestructiveRef,
-              `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
+              );
+              invariant(
+                refs.leastDestructiveRef,
+                `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
               \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
               https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
-            );
-          }}
-          children={children}
-        />
-      </DialogContent>
-    )}
-  </AlertDialogContext.Consumer>
+              );
+            }}
+            children={children}
+          />
+        </DialogContent>
+      )}
+    </AlertDialogContext.Consumer>
+  )
 );
 
 AlertDialogContent.propTypes = {
