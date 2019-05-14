@@ -1,0 +1,164 @@
+# Combobox
+
+[Combobox](#combobox) -
+[ComboboxInput](#comboboxinput) -
+[ComboboxPopup](#comboboxpopup) -
+[ComboboxList](#comboboxpopup) -
+[ComboboxOption](#comboboxpopup) -
+[ComboboxOptionText](#comboboxpopup)
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/combobox
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#combobox
+
+Accessible Combobox (autocomplete or autosuggest) component for React.
+
+```.jsx
+<div style={{ maxWidth: 600, margin: "auto" }}>
+  <h2 id="demo">Basic Combobox</h2>
+  <Combobox ariaLabel="Fruit">
+    <ComboboxInput />
+    <ComboboxPopup>
+      <ComboboxList>
+        <ComboboxOption value="Apple">
+          🍎 <ComboboxOptionText />
+        </ComboboxOption>
+        <ComboboxOption value="Banana">
+          🍌 <ComboboxOptionText />
+        </ComboboxOption>
+        <ComboboxOption value="Orange">
+          🍊 <ComboboxOptionText />
+        </ComboboxOption>
+        <ComboboxOption value="Pineapple">
+          🍍 <ComboboxOptionText />
+        </ComboboxOption>
+        <ComboboxOption value="Kiwi">
+          🥝 <ComboboxOptionText />
+        </ComboboxOption>
+      </ComboboxList>
+    </ComboboxPopup>
+  </Combobox>
+</div>
+```
+
+## Combobox
+
+Parent component that sets up the proper aria roles and context for the rest of the components.
+
+### Combobox CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-combobox] {
+}
+```
+
+### Combobox ariaLabel
+
+Brief description of the items being suggested. If you're selecting a message recipient you might use "Recipient", if you're searching for a city you might say "City". This label will be read by assistive tech.
+
+```jsx
+<Combobox ariaLabel="Recipient" />
+```
+
+Some WAI ARIA examples will use an existing element in the DOM to label them both, but not all designs visually display the label, so Combobox takes a this prop instead and labels both elements for you.
+
+### Combobox onSelect
+
+Called when the user makes a selection with the selection value.
+
+```jsx
+<Combobox onSelect={item => {}} />
+```
+
+## ComboboxInput
+
+Wraps an `<input/>` with a couple extra props that work with the combobox.
+
+### ComboboxInput selectOnClick
+
+Defaults to false.
+
+If true, when the user clicks inside the text box the current value will be selected. Use this if the user is likely to delete all the text anyway (like the URL bar in browsers).
+
+However, if the user is likely to want to tweak the value, leave this false, like a google search--the user is likely wanting to edit their search, not replace it completely.
+
+### ComboboxInput autocomplete
+
+Defaults to true.
+
+Determines if the value in the input changes or not as the user navigates with the keyboard. If true the value changes, if false the value doesn't change.
+
+Set this to false when you don't really need the value from the input but want to populate some other state (like the recipient selector in Gmail). But if your input is more like a normal `<input type="text"/>`, then leave the `true` default.
+
+```jsx
+<ComboboxInput autocomplete={false} />
+```
+
+## ComboboxPopup
+
+Contains the popup that renders the list. Because some UI needs to render more than the list in the popup, you need to render one of these around the list. For example, maybe you want to render the number of results suggested.
+
+```jsx
+<ComboboxPopup>
+  <Alert>{results.length} results(s)</Alert>
+  <ComboboxList>{/* ... */}</ComboboxList>
+</ComboboxPopup>
+```
+
+## ComboboxList
+
+Contains the `ComboboxOption` elements and sets up the proper aria attributes for the list.
+
+## ComboboxOption
+
+### ComboboxOption value
+
+The value to match against when suggesting.
+
+```jsx
+<ComboboxOption value="Salt Lake City, Utah" />
+```
+
+### ComboboxOption children
+
+Optional, if omitted, the `value` will be used.
+
+```jsx
+<ComboboxOption value="Seattle, Tacoma, Washington" />
+```
+
+```jsx
+<ComboboxOption value="Apple" />
+  🍎 <ComboboxOptionText/>
+</ComboboxOption>
+```
+
+## ComboboxOptionText
+
+Renders the value of a `ComboboxOption` as text but with spans wrapping the matching and non-matching segments of text.
+
+So given an option like this:
+
+```jsx
+<ComboboxOption value="Seattle">
+  🌧 <ComboboxOptionText />
+</ComboboxOption>
+```
+
+And the user typed `Sea`, the out would be:
+
+```jsx
+<span data-user-value>Sea</span><span data-suggested-value>ttle</span>
+```
+
+### ComboboxOptionText CSS Selectors
+
+```css
+/* the matching segments of text */
+[data-user-value] {
+}
+/* the unmatching segments */
+[data-suggested-value] {
+}
+```

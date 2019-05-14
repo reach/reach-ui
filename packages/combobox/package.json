@@ -1,0 +1,44 @@
+{
+  "name": "@reach/combobox",
+  "version": "0.0.0",
+  "description": "Accessible React Combobox (Autocomplete).",
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "echo \"Write some tests you bum!\"",
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "dependencies": {
+    "@reach/utils": "^0.2.2",
+    "@reach/portal": "^0.2.1",
+    "@reach/auto-id": "0.2.0",
+    "highlight-words-core": "^1.2.0",
+    "escape-regexp": "^0.0.1"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.6.2",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "use-throttle": "^0.0.3",
+    "match-sorter": "^2.3.0",
+    "jest": "^23.4.2",
+    "react": "^16.8.0",
+    "react-test-renderer": "^16.8.0"
+  },
+  "jest": {
+    "testRegex": ".+\\.test\\.js$",
+    "testURL": "http://localhost"
+  },
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
+}
