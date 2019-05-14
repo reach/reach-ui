@@ -69,8 +69,11 @@ export function useRect(nodeRef, observe = true) {
     if (observe) {
       observerRef.current.observe();
     }
-    return () => observerRef.current.unobserve();
-  }, [observe]);
+    return () => {
+      observerRef.current.unobserve();
+      observerRef.current = null;
+    };
+  }, [observe, nodeRef.current]);
   return rect;
 }
 
