@@ -477,8 +477,8 @@ const getStyles = (position, triggerRect, tooltipRect) => {
 
 const positionDefault = (triggerRect, tooltipRect) => {
   const styles = {
-    left: `${triggerRect.left + window.scrollX}px`,
-    top: `${triggerRect.top + triggerRect.height + window.scrollY}px`
+    left: `${triggerRect.left + window.pageXOffset}px`,
+    top: `${triggerRect.top + triggerRect.height + window.pageYOffset}px`
   };
 
   const collisions = {
@@ -495,10 +495,16 @@ const positionDefault = (triggerRect, tooltipRect) => {
   return {
     ...styles,
     left: directionRight
-      ? `${triggerRect.right - tooltipRect.width + window.scrollX}px`
-      : `${triggerRect.left + window.scrollX}px`,
+      ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
+      : `${triggerRect.left + window.pageXOffset}px`,
     top: directionUp
-      ? `${triggerRect.top - OFFSET - tooltipRect.height + window.scrollY}px`
-      : `${triggerRect.top + OFFSET + triggerRect.height + window.scrollY}px`
+      ? `${triggerRect.top -
+          OFFSET -
+          tooltipRect.height +
+          window.pageYOffset}px`
+      : `${triggerRect.top +
+          OFFSET +
+          triggerRect.height +
+          window.pageYOffset}px`
   };
 };
