@@ -63,16 +63,18 @@ export function useRect(nodeRef, observe = true) {
   let [rect, setRect] = useState(null);
   let observerRef = useRef(null);
   useLayoutEffect(() => {
-    if (!observerRef.current) {
+    if (nodeRef.current && !observerRef.current) {
       observerRef.current = observeRect(nodeRef.current, setRect);
     }
-    if (observe) {
+    if (observe && observerRef.current) {
       observerRef.current.observe();
     }
     return () => {
-      observerRef.current.unobserve();
-      observerRef.current = null;
-    };
+      if (observerRef.current) {
+        observerRef.current.unobserve();
+        observerRef.current = null;
+      }
+    }; 
   }, [observe, nodeRef.current]);
   return rect;
 }
