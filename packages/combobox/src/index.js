@@ -101,7 +101,6 @@ const stateChart = {
         [ESCAPE]: IDLE,
         [NAVIGATE]: NAVIGATING,
         [SELECT_WITH_KEYBOARD]: IDLE,
-        [SELECT_WITH_CLICK]: IDLE,
         [INTERACT]: INTERACTING
       }
     },
@@ -110,7 +109,8 @@ const stateChart = {
         [CHANGE]: SUGGESTING,
         [BLUR]: IDLE,
         [ESCAPE]: IDLE,
-        [NAVIGATE]: NAVIGATING
+        [NAVIGATE]: NAVIGATING,
+        [SELECT_WITH_CLICK]: IDLE
       }
     }
   }
@@ -169,6 +169,7 @@ const isVisible = state => visibleStates.includes(state);
 // Combobox
 
 const Context = createContext();
+
 export const Combobox = forwardRef(function Combobox(
   { children, as: Comp = "div", onSelect, ...rest },
   ref
@@ -230,7 +231,7 @@ export const Combobox = forwardRef(function Combobox(
     <Context.Provider value={context}>
       <Comp
         {...rest}
-        data-reach-combobox
+        data-reach-combobox=""
         ref={ref}
         role="combobox"
         aria-haspopup="listbox"
@@ -337,7 +338,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   return (
     <Comp
       {...props}
-      data-reach-combobox-input
+      data-reach-combobox-input=""
       ref={node => {
         assignRef(inputRef, node);
         assignRef(forwardedRef, node);
@@ -370,9 +371,9 @@ export const ComboboxPopup = forwardRef(function ComboboxPopup(
 
   // Instead of conditionally rendering the popover we use the `hidden` prop
   // because we don't want to unmount on close (from escape or onSelect).  If
-  // we unmounted, then we'd the optionsRef and the user wouldn't be able to
-  // use the arrow keys to pop the list back open. However, the developer can
-  // conditionally render the ComboboxPopup if they do want to cause
+  // we unmounted, then we'd lose the optionsRef and the user wouldn't be able
+  // to use the arrow keys to pop the list back open. However, the developer
+  // can conditionally render the ComboboxPopup if they do want to cause
   // mount/unmount based on the app's own data (like results.length or
   // whatever).
   const hidden = !isVisible(state);
@@ -401,7 +402,7 @@ export const ComboboxPopup = forwardRef(function ComboboxPopup(
 // ComboboxList
 
 export const ComboboxList = forwardRef(function ComboboxList(
-  { as: Comp = "ul", style, ...props },
+  { as: Comp = "ul", ...props },
   ref
 ) {
   const { optionsRef } = useContext(Context);
@@ -454,7 +455,7 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
     <OptionContext.Provider value={value}>
       <li
         {...props}
-        data-reach-combobox-option
+        data-reach-combobox-option=""
         ref={ref}
         id={makeHash(value)}
         role="option"
