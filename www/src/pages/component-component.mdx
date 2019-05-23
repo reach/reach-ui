@@ -5,8 +5,9 @@ import Helmet from "react-helmet"
   meta={[
     {
       name: "description",
-      content: "A dynamic version of React.Component, a component component if you will."
-    }
+      content:
+        "A dynamic version of React.Component, a component component if you will.",
+    },
   ]}
 />
 
@@ -52,9 +53,8 @@ yarn add @reach/component-component
 And then import it:
 
 ```js
-import Component from "@reach/component-component";
+import Component from "@reach/component-component"
 ```
-
 
 ## Props
 
@@ -67,14 +67,14 @@ import Component from "@reach/component-component";
 | [ didMount ](#didmount)                               | func   |
 | [ didUpdate ](#didupdate)                             | func   |
 | [ willUnmount ](willunmount)                          | func   |
-| [ getSnapshotBeforeUpdate ](#getSnapshotBeforeUpdate) | func   |
+| [ getSnapshotBeforeUpdate ](#getsnapshotbeforeupdate) | func   |
 | [ shouldUpdate ](#shouldupdate)                       | func   |
 | [ render ](#render)                                   | func   |
 | [ children ](#children)                               | func   |
 
 ### initialState
 
-*Type*: `object`
+_Type_: `object`
 
 An object of initial state.
 
@@ -86,9 +86,9 @@ An object of initial state.
 
 ### getInitialState
 
-*Type*: `func: () => object`
+_Type_: `func: () => object`
 
-A function to return intitial state.  Use this when initial state is computed.
+A function to return intitial state. Use this when initial state is computed.
 
 In the following example, `Date.now()` will _not_ be called every time a parent component causes this component to re-render.
 
@@ -107,7 +107,7 @@ However, in the next example, `Date.now()` would be called with every re-render,
 
 ### refs
 
-*Type*: `object`
+_Type_: `object`
 
 Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
 
@@ -129,7 +129,7 @@ Put any refs you need to keep track of here, stuff like DOM nodes, timers, and s
 
 ### getRefs
 
-*Type*: `func: () => object`
+_Type_: `func: () => object`
 
 Use this when any of your refs are computed.
 
@@ -138,15 +138,15 @@ Use this when any of your refs are computed.
   getRefs={() => {
     return {
       input: React.createRef(),
-      popupContainer: document.createElement("div")
-    };
+      popupContainer: document.createElement("div"),
+    }
   }}
 />
 ```
 
 ### didMount
 
-*Type*: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
+_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
 
 Called when the component mounts.
 
@@ -181,25 +181,25 @@ See also [React Docs](https://reactjs.org/docs/react-component.html#componentdid
 
 ### didUpdate
 
-*Type*: `func: ({ state, props, refs, setState, forceUpdate, nextProps, nextState }) => undefined`
+_Type_: `func: ({ state, props, refs, setState, forceUpdate, nextProps, nextState }) => undefined`
 
 Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
 ### willUnmount
 
-*Type*: `func: ({ state, props, refs }) => undefined`
+_Type_: `func: ({ state, props, refs }) => undefined`
 
 Called when the component will be removed from the page. See [React Docs](https://reactjs.org/docs/react-component.html#componentwillunmount).
 
 ### getSnapshotBeforeUpdate
 
-*Type*: `func: ({ state, props, refs, prevProps, prevState }) => any`
+_Type_: `func: ({ state, props, refs, prevProps, prevState }) => any`
 
 See [React Docs](https://reactjs.org/docs/react-component.html#getsnapshotbeforeupdate).
 
 ### shouldUpdate
 
-*Type*: `func: ({ state, props, nextProps, nextState }) => bool`
+_Type_: `func: ({ state, props, nextProps, nextState }) => bool`
 
 Return `true` to signify the component needs an update, `false` if it does not. Useful for wrapping up expensive parts of your app without having to refactor to new components.
 
@@ -241,7 +241,7 @@ See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcompon
 
 ### children
 
-*Type*: `node`
+_Type_: `node`
 
 Usual React children prop.
 
@@ -251,7 +251,7 @@ Usual React children prop.
 </Component>
 ```
 
-*Type*: `func: ({ state, props, refs, setState, forceUpdate }) => node`
+_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
 
@@ -353,5 +353,3 @@ Here is a pretty involved example showing just how composable this component is:
   )}
 </Component>
 ```
-
-
