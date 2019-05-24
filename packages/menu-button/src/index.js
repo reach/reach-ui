@@ -443,9 +443,7 @@ let getStyles = (buttonRect, menuRect) => {
     };
   }
 
-  if (buttonRect.width < 500) {
     styles.minWidth = buttonRect.width;
-  }
 
   let collisions = {
     top: buttonRect.top - menuRect.height < 0,
