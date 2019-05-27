@@ -4,8 +4,9 @@ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
+  ComboboxPopup,
   ComboboxOption,
-  ComboboxPopup
+  ComboboxButton
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -23,14 +24,12 @@ export function Example() {
 
   return (
     <div>
-      <h2>Clientside Search</h2>
+      <h2>No Portal</h2>
       <Combobox>
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+        <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
+        <ComboboxButton aria-label="toggle menu">▾</ComboboxButton>
         {results && (
-          <ComboboxPopup style={popupStyle}>
-            <p>
-              <button>Hi</button>
-            </p>
+          <ComboboxPopup>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
@@ -58,14 +57,3 @@ function useCityMatch(term) {
     [throttledTerm]
   );
 }
-
-const inputStyle = {
-  width: 400,
-  fontSize: "100%",
-  padding: "0.33rem"
-};
-
-const popupStyle = {
-  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none"
-};

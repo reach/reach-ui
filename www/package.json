@@ -10,9 +10,11 @@
     "@reach/alert": "*",
     "@reach/alert-dialog": "*",
     "@reach/auto-id": "*",
+    "@reach/combobox": "0.0.2",
     "@reach/component-component": "*",
     "@reach/dialog": "*",
     "@reach/menu-button": "*",
+    "@reach/popover": "0.0.0",
     "@reach/portal": "*",
     "@reach/rect": "*",
     "@reach/skip-nav": "*",
@@ -31,6 +33,7 @@
     "gatsby-plugin-sharp": "^2.0.28",
     "gatsby-source-filesystem": "^2.0.24",
     "gatsby-transformer-sharp": "^2.1.17",
+    "match-sorter": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
@@ -41,7 +44,8 @@
     "remark-autolink-headings": "^5.1.0",
     "remark-emoji": "^2.0.2",
     "remark-images": "^0.18.0",
-    "remark-slug": "^5.1.1"
+    "remark-slug": "^5.1.1",
+    "use-throttle": "0.0.3"
   },
   "devDependencies": {
     "prettier": "^1.16.4"

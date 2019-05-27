@@ -257,3 +257,24 @@ button#hamburger {
   text-align: center;
   margin-top: 20px;
 }
+
+.city-search-input {
+  box-sizing: border-box;
+  width: 400px;
+  font: inherit;
+  padding: 0.25rem 0.5rem;
+  border: solid 1px #bbb;
+}
+
+.shadow-popup {
+  box-sizing: border-box;
+  border: solid 1px #bbb;
+  border-top: solid 1px #ddd;
+  margin-top: -1px;
+  box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
+}
+
+[data-reach-combobox][aria-expanded="true"] [data-reach-combobox-input] {
+  box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
+  outline: none;
+}

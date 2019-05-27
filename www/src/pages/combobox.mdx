@@ -12,33 +12,195 @@
 
 Accessible Combobox (autocomplete or autosuggest) component for React.
 
+A combo box is the combination of an `<input type="text"/>` and a list. The list is designed to help the user arrive at a value, but the value does not necessarily have to come from that list. Think of it more like an `<input type="text"/>` with some suggestions than a `<select/>`.
+
+You can, however, validate that the value comes from the list, that's up to your app.
+
+## Examples
+
+To get you started, let's take a look at a few examples that grow from simple to complex, after the examples you can see the API for each component.
+
+### Basic, Fixed List Combobox
+
+Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
+
 ```.jsx
-<div style={{ maxWidth: 600, margin: "auto" }}>
-  <h2 id="demo">Basic Combobox</h2>
-  <Combobox ariaLabel="Fruit">
-    <ComboboxInput />
+<div>
+  <h4 id="demo">Basic, Fixed List Combobox</h4>
+  <Combobox>
+    <ComboboxInput aria-labelledby="demo" />
     <ComboboxPopup>
-      <ComboboxList>
-        <ComboboxOption value="Apple">
-          🍎 <ComboboxOptionText />
-        </ComboboxOption>
-        <ComboboxOption value="Banana">
-          🍌 <ComboboxOptionText />
-        </ComboboxOption>
-        <ComboboxOption value="Orange">
-          🍊 <ComboboxOptionText />
-        </ComboboxOption>
-        <ComboboxOption value="Pineapple">
-          🍍 <ComboboxOptionText />
-        </ComboboxOption>
-        <ComboboxOption value="Kiwi">
-          🥝 <ComboboxOptionText />
-        </ComboboxOption>
+      <ComboboxList aria-labelledby="demo">
+        <ComboboxOption value="Apple" />
+        <ComboboxOption value="Banana" />
+        <ComboboxOption value="Orange" />
+        <ComboboxOption value="Pineapple" />
+        <ComboboxOption value="Kiwi" />
       </ComboboxList>
     </ComboboxPopup>
   </Combobox>
 </div>
 ```
+
+### Custom Rendering in ComboboxOption
+
+Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to continue to get the built-in text highlighting to still work. Only the `value` is used to match, not the children.
+
+```.jsx
+<Combobox>
+  <ComboboxInput
+    placeholder="Custom Option Rendering"
+    aria-label="custom option demo"
+    style={{ width: 300 }}
+  />
+  <ComboboxPopup>
+    <ComboboxList aria-label="custom option demo">
+      <ComboboxOption value="Apple">
+        🍎 <ComboboxOptionText />
+      </ComboboxOption>
+      <ComboboxOption value="Banana">
+        🍌 <ComboboxOptionText />
+      </ComboboxOption>
+      <ComboboxOption value="Orange">
+        🍊 <ComboboxOptionText />
+      </ComboboxOption>
+      <ComboboxOption value="Pineapple">
+        🍍 <ComboboxOptionText />
+      </ComboboxOption>
+      <ComboboxOption value="Kiwi">
+        🥝 <ComboboxOptionText />
+      </ComboboxOption>
+    </ComboboxList>
+  </ComboboxPopup>
+</Combobox>
+```
+
+### Clientside Search
+
+This demo searches a client-side list of all US Cities. Combobox does not implement any matching on your list (aside from highlighting the matched phrases in an option). Instead, you render an Option for each result you want in the list. So your job is to:
+
+- Establish the search term state
+- Match the search to your list
+- Render a `ComboboxOption` for each match
+
+There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
+
+```.jsx
+(() => {
+  function Demo() {
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
+
+    return (
+      <div>
+        <h4>Clientside Search</h4>
+        <Combobox>
+          <ComboboxInput
+            aria-label="Cities"
+            className="city-search-input"
+            onChange={handleChange}
+          />
+          {results && (
+            <ComboboxPopup className="shadow-popup">
+              <ComboboxList aria-label="Cities">
+                {results.slice(0, 10).map((result, index) => (
+                  <ComboboxOption
+                    key={index}
+                    value={`${result.city}, ${result.state}`}
+                  />
+                ))}
+              </ComboboxList>
+            </ComboboxPopup>
+           )}
+        </Combobox>
+      </div>
+    );
+  }
+
+  function useCityMatch(term) {
+    const throttledTerm = useThrottle(term, 100);
+    return useMemo(
+      () =>
+        term.trim() === ""
+          ? null
+          : matchSorter(cities, term, {
+              keys: [item => `${item.city}, ${item.state}`]
+            }),
+      [throttledTerm]
+    );
+  }
+
+  return <Demo />;
+})();
+```
+
+### Server Side Search
+
+This is the same demo as above, except this time we're going to a server to get the match. This is recommended as the previous example had to download 350kb of city text! Again, there is nothing special about a ComboboxList as any other list in React. As the input changes, fetch data, set state, render options.
+
+```.jsx
+(() => {
+  function ServerCitySearch() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const cities = useCitySearch(searchTerm);
+    const handleSearchTermChange = event => {
+      setSearchTerm(event.target.value);
+    };
+
+    return (
+      <Combobox>
+        <ComboboxInput
+          className="city-search-input"
+          onChange={handleSearchTermChange}
+          aria-label="Cities"
+        />
+        <ComboboxPopup className="shadow-popup">
+          <ComboboxList>
+            {cities.map(city => {
+              const str = `${city.city}, ${city.state}`;
+              return <ComboboxOption key={str} value={str} />;
+            })}
+          </ComboboxList>
+        </ComboboxPopup>
+      </Combobox>
+    );
+  }
+
+  function useCitySearch(searchTerm) {
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+      if (searchTerm.trim() !== "") {
+        let isFresh = true;
+        fetchCities(searchTerm).then(cities => {
+          if (isFresh) setCities(cities);
+        });
+        return () => (isFresh = false);
+      }
+    }, [searchTerm]);
+
+    return cities;
+  }
+
+  const cache = {}
+  function fetchCities(value) {
+    if (cache[value]) {
+      return Promise.resolve(cache[value])
+    }
+    return fetch("https://city-search.now.sh/?" + value)
+      .then(res => res.json())
+      .then(result => {
+        cache[value] = result
+        return result
+      })
+  }
+
+  return <ServerCitySearch />
+})();
+```
+
+### Categories, lots of elements
 
 ## Combobox
 
@@ -52,16 +214,6 @@ Please see the [styling guide](/styling).
 [data-reach-combobox] {
 }
 ```
-
-### Combobox ariaLabel
-
-Brief description of the items being suggested. If you're selecting a message recipient you might use "Recipient", if you're searching for a city you might say "City". This label will be read by assistive tech.
-
-```jsx
-<Combobox ariaLabel="Recipient" />
-```
-
-Some WAI ARIA examples will use an existing element in the DOM to label them both, but not all designs visually display the label, so Combobox takes a this prop instead and labels both elements for you.
 
 ### Combobox onSelect
 
@@ -87,7 +239,7 @@ However, if the user is likely to want to tweak the value, leave this false, lik
 
 Defaults to true.
 
-Determines if the value in the input changes or not as the user navigates with the keyboard. If true the value changes, if false the value doesn't change.
+Determines if the value in the input changes or not as the user navigates with the keyboard. If true, the value changes, if false the value doesn't change.
 
 Set this to false when you don't really need the value from the input but want to populate some other state (like the recipient selector in Gmail). But if your input is more like a normal `<input type="text"/>`, then leave the `true` default.
 
@@ -98,6 +250,8 @@ Set this to false when you don't really need the value from the input but want t
 ## ComboboxPopup
 
 Contains the popup that renders the list. Because some UI needs to render more than the list in the popup, you need to render one of these around the list. For example, maybe you want to render the number of results suggested.
+
+If you pass `portal={false}` the popup will no longer be rendered in a portal, but in the same order as the React tree.
 
 ```jsx
 <ComboboxPopup>
