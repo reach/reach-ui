@@ -15,8 +15,8 @@ configure(() => {
   // const {
   //   name,
   //   Example
-  // } = require("../packages/dialog/examples/nested.example.js");
-  // storiesOf("Dialog", module).add(name, () => <Example />);
+  // } = require("../packages/combobox/examples/no-popover.example.js");
+  // storiesOf("Combobox", module).add(name, () => <Example />);
 
   // Automatically import all examples
   const req = require.context(

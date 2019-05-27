@@ -7,6 +7,8 @@ import React from "react"
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live"
 import { MDXProvider } from "@mdx-js/tag"
 import Layout from "./layout"
+import { useThrottle } from "use-throttle"
+import matchSorter from "match-sorter"
 
 import GatsbyLink from "gatsby-link"
 
@@ -31,6 +33,15 @@ import {
   AlertDialogOverlay,
   AlertDialogContent,
 } from "@reach/alert-dialog"
+
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopup,
+  ComboboxList,
+  ComboboxOption,
+  ComboboxOptionText,
+} from "@reach/combobox"
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
 
@@ -82,6 +93,14 @@ const PreComponent = ({ className, ...props }) =>
         Tooltip,
         TooltipPopup,
         useTooltip,
+        Combobox,
+        ComboboxInput,
+        ComboboxPopup,
+        ComboboxList,
+        ComboboxOption,
+        ComboboxOptionText,
+        useThrottle,
+        matchSorter,
       }}
     >
       <LiveEditor tabIndex="-1" />
@@ -103,6 +122,8 @@ export default class MyPageLayout extends React.Component {
     } else {
       this.node.focus()
     }
+    // I dunno, I just made it global on window, whatever...
+    import("./cities.js")
   }
 
   render() {

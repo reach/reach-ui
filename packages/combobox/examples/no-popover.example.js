@@ -1,11 +1,13 @@
 import "../styles.css";
+import "./styles.css";
 import React, { useState, useMemo } from "react";
 import {
   Combobox,
   ComboboxInput,
   ComboboxList,
+  ComboboxPopup,
   ComboboxOption,
-  ComboboxPopup
+  ComboboxButton
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -23,22 +25,33 @@ export function Example() {
 
   return (
     <div>
-      <h2>Clientside Search</h2>
-      <Combobox>
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+      <h2>No Portal</h2>
+      <Combobox style={{ width: "400px" }}>
+        <ComboboxInput onChange={handleChange} />
         {results && (
-          <ComboboxPopup style={popupStyle}>
-            <p>
-              <button>Hi</button>
-            </p>
-            <ComboboxList>
-              {results.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={`${result.city}, ${result.state}`}
-                />
-              ))}
-            </ComboboxList>
+          <ComboboxPopup portal={false}>
+            <hr />
+            {results.length > 0 ? (
+              <ComboboxList>
+                {results.slice(0, 10).map((result, index) => (
+                  <ComboboxOption
+                    key={index}
+                    value={`${result.city}, ${result.state}`}
+                  />
+                ))}
+              </ComboboxList>
+            ) : (
+              <p
+                style={{
+                  margin: 0,
+                  color: "#454545",
+                  padding: "0.25rem 1rem 0.75rem 1rem",
+                  fontStyle: "italic"
+                }}
+              >
+                No results :(
+              </p>
+            )}
           </ComboboxPopup>
         )}
       </Combobox>
@@ -58,14 +71,3 @@ function useCityMatch(term) {
     [throttledTerm]
   );
 }
-
-const inputStyle = {
-  width: 400,
-  fontSize: "100%",
-  padding: "0.33rem"
-};
-
-const popupStyle = {
-  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none"
-};

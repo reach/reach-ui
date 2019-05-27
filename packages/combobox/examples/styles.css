@@ -1,0 +1,64 @@
+:root {
+  /* --accent: hsl(197, 100%, 44%); */
+  --accent: rgb(234, 89, 111);
+  --focus-shadow: 0px 0px 2px var(--accent);
+  --focus-border: solid 1px var(--accent);
+}
+
+[data-reach-combobox-input] {
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  font-size: 100%;
+  border: solid 1px #ccc;
+}
+
+[data-reach-combobox-popup] {
+  border: none;
+  box-sizing: border-box;
+  position: relative;
+  top: -1px;
+}
+
+[data-reach-combobox] {
+  position: relative;
+  box-sizing: border-box;
+  border: solid 1px transparent;
+}
+
+[data-reach-combobox-button] {
+  position: absolute;
+  right: 0;
+  font-size: 150%;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.75rem;
+}
+
+[data-reach-combobox]:focus-within {
+  border: var(--focus-border);
+  box-shadow: var(--focus-shadow);
+}
+
+[data-reach-combobox][aria-expanded="true"]:focus-within
+  [data-reach-combobox-input] {
+  border-color: transparent;
+}
+
+[data-reach-combobox-option] {
+  padding: 0.25rem 1rem;
+}
+
+[data-reach-combobox-option]:last-child {
+  margin-bottom: 0.5rem;
+}
+
+[data-reach-combobox] hr {
+  margin: 0 1rem 0.5rem 1rem;
+  display: block;
+  height: 1px;
+  border: none;
+  background: #ccc;
+  box-sizing: border-box;
+}
