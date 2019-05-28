@@ -9,7 +9,6 @@ let id = 0;
 const genId = () => ++id;
 
 export const useId = () => {
-  const [id, setId] = useState(null);
-  useEffect(() => setId(genId()), []);
+  const [id] = useState(genId);
   return id;
 };
