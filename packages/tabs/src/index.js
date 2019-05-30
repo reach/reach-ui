@@ -131,17 +131,15 @@ export const TabList = forwardRef(function TabList(
         _onSelectTab(nextIndex);
         break;
       }
-      case "ArrowDown": {
-        // don't scroll down
-        event.preventDefault();
-        _onFocusPanel();
-        break;
-      }
       case "Home": {
+        // don't scroll up
+        event.preventDefault();
         _onSelectTab(0);
         break;
       }
       case "End": {
+        // don't scroll down
+        event.preventDefault();
         _onSelectTab(React.Children.count(children) - 1);
         break;
       }
