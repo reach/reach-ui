@@ -324,7 +324,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
       switch (state) {
         case VISIBLE: {
           transition("selectWithKeyboard");
