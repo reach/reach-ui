@@ -451,7 +451,7 @@ let getStyles = (buttonRect, menuRect) => {
     top: buttonRect.top - menuRect.height < 0,
     right: window.innerWidth < buttonRect.left + menuRect.width,
     bottom: window.innerHeight < buttonRect.top + menuRect.height,
-    left: buttonRect.left - menuRect.width < 0
+    left: buttonRect.left + buttonRect.width - menuRect.width < 0
   };
 
   const directionRight = collisions.right && !collisions.left;
