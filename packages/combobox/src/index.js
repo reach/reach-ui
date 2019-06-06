@@ -232,7 +232,7 @@ export const Combobox = forwardRef(function Combobox(
   // Need this to focus it
   const inputRef = useRef();
 
-  const popupRef = useRef();
+  const popoverRef = useRef();
 
   const buttonRef = useRef();
 
@@ -268,7 +268,7 @@ export const Combobox = forwardRef(function Combobox(
     return {
       data,
       inputRef,
-      popupRef,
+      popoverRef,
       buttonRef,
       onSelect,
       optionsRef,
@@ -427,9 +427,9 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxPopup
+// ComboboxPopover
 
-export const ComboboxPopup = forwardRef(function ComboboxPopup(
+export const ComboboxPopover = forwardRef(function ComboboxPopover(
   {
     // if true, will render in a portal, otherwise inline
     portal = true,
@@ -442,7 +442,7 @@ export const ComboboxPopup = forwardRef(function ComboboxPopup(
   },
   forwardedRef
 ) {
-  const { state, popupRef, inputRef, isVisible } = useContext(Context);
+  const { popoverRef, inputRef, isVisible } = useContext(Context);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
 
@@ -450,7 +450,7 @@ export const ComboboxPopup = forwardRef(function ComboboxPopup(
   // because we don't want to unmount on close (from escape or onSelect).  If
   // we unmounted, then we'd lose the optionsRef and the user wouldn't be able
   // to use the arrow keys to pop the list back open. However, the developer
-  // can conditionally render the ComboboxPopup if they do want to cause
+  // can conditionally render the ComboboxPopover if they do want to cause
   // mount/unmount based on the app's own data (like results.length or
   // whatever).
   const hidden = !isVisible;
@@ -467,10 +467,10 @@ export const ComboboxPopup = forwardRef(function ComboboxPopup(
   return (
     <Container
       {...props}
-      data-reach-combobox-popup=""
+      data-reach-combobox-popover=""
       {...popupProps}
       ref={node => {
-        assignRef(popupRef, node);
+        assignRef(popoverRef, node);
         assignRef(forwardedRef, node);
       }}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
@@ -772,7 +772,7 @@ function useKeyDown() {
 }
 
 function useBlur() {
-  const { state, transition, popupRef, inputRef, buttonRef } = useContext(
+  const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
     Context
   );
 
@@ -782,9 +782,9 @@ function useBlur() {
       if (
         document.activeElement !== inputRef.current &&
         document.activeElement !== buttonRef.current &&
-        popupRef.current
+        popoverRef.current
       ) {
-        if (popupRef.current.contains(document.activeElement)) {
+        if (popoverRef.current.contains(document.activeElement)) {
           // focus landed inside the combobox, keep it open, but we don't want
           // "Enter" causing the popover to close, so we clear the navigation
           // value to act like there's no navigation going on anymore (cause

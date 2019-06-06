@@ -5,7 +5,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopup
+  ComboboxPopover
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -42,7 +42,7 @@ export function Example() {
           style={{ width: 400 }}
         />
         {results && (
-          <ComboboxPopup>
+          <ComboboxPopover>
             {results.length === 0 && (
               <p>
                 No Results{" "}
@@ -68,7 +68,7 @@ export function Example() {
             <p>
               <a href="/new">Add a record</a>
             </p>
-          </ComboboxPopup>
+          </ComboboxPopover>
         )}
       </Combobox>
     </div>

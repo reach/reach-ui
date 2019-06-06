@@ -5,7 +5,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopup
+  ComboboxPopover
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -28,7 +28,7 @@ export function Example() {
       <Combobox>
         <ComboboxInput autocomplete={false} onChange={handleChange} />
         {results && (
-          <ComboboxPopup>
+          <ComboboxPopover>
             {results.length > 0 ? (
               <ComboboxList>
                 <h3>top 3 results!</h3>
@@ -56,7 +56,7 @@ export function Example() {
                 No results, peace be with you.
               </p>
             )}
-          </ComboboxPopup>
+          </ComboboxPopover>
         )}
       </Combobox>
     </div>
