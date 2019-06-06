@@ -11,10 +11,6 @@
   },
   "license": "MIT",
   "repository": "https://github.com/reach/reach-ui",
-  "devDependencies": {
-    "@reach/menu-button": "^0.1.16",
-    "@reach/tooltip": "^0.1.7"
-  },
   "dependencies": {
     "@storybook/react": "^3.4.7",
     "autoprefixer": "^8.6.2",
