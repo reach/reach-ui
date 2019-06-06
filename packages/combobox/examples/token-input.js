@@ -56,7 +56,6 @@ function TokenLabel({ onRemove, onKeyDown, ...props }) {
   );
 }
 
-const TokenContext = createContext();
 function Token({ value, ...props }) {
   const { selectionsRef } = useContext(Context);
   // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
@@ -147,7 +146,6 @@ export function Example() {
                   onClick={() => {
                     console.log("YOOOOOO");
                     setTerm("");
-                    ref.current.focus();
                   }}
                 >
                   clear
