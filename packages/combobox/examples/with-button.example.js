@@ -4,7 +4,7 @@ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
-  ComboboxPopup,
+  ComboboxPopover,
   ComboboxOption,
   ComboboxButton
 } from "../src/index";
@@ -29,7 +29,7 @@ export function Example() {
         <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
         <ComboboxButton aria-label="toggle menu">▾</ComboboxButton>
         {results && (
-          <ComboboxPopup>
+          <ComboboxPopover>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
@@ -38,7 +38,7 @@ export function Example() {
                 />
               ))}
             </ComboboxList>
-          </ComboboxPopup>
+          </ComboboxPopover>
         )}
       </Combobox>
     </div>

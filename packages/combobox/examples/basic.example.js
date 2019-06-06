@@ -5,7 +5,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopup
+  ComboboxPopover
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -27,7 +27,7 @@ export function Example() {
       <Combobox>
         <ComboboxInput onChange={handleChange} style={inputStyle} />
         {results && (
-          <ComboboxPopup style={popupStyle}>
+          <ComboboxPopover style={popupStyle}>
             <p>
               <button>Hi</button>
             </p>
@@ -39,7 +39,7 @@ export function Example() {
                 />
               ))}
             </ComboboxList>
-          </ComboboxPopup>
+          </ComboboxPopover>
         )}
       </Combobox>
     </div>

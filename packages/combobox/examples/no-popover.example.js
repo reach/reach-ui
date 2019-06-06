@@ -5,7 +5,7 @@ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
-  ComboboxPopup,
+  ComboboxPopover,
   ComboboxOption
 } from "../src/index";
 import matchSorter from "match-sorter";
@@ -28,7 +28,7 @@ export function Example() {
       <Combobox style={{ width: "400px" }}>
         <ComboboxInput onChange={handleChange} />
         {results && (
-          <ComboboxPopup portal={false}>
+          <ComboboxPopover portal={false}>
             <hr />
             {results.length > 0 ? (
               <ComboboxList>
@@ -51,7 +51,7 @@ export function Example() {
                 No results :(
               </p>
             )}
-          </ComboboxPopup>
+          </ComboboxPopover>
         )}
       </Combobox>
     </div>
