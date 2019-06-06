@@ -49,11 +49,11 @@ export function positionDefault(targetRect, popupRect) {
   const { directionUp, directionRight } = getCollisions(targetRect, popupRect);
   return {
     left: directionRight
-      ? `${targetRect.right - popupRect.width + window.scrollX}px`
-      : `${targetRect.left + window.scrollX}px`,
+      ? `${targetRect.right - popupRect.width + window.pageXOffset}px`
+      : `${targetRect.left + window.pageXOffset}px`,
     top: directionUp
-      ? `${targetRect.top - popupRect.height + window.scrollY}px`
-      : `${targetRect.top + targetRect.height + window.scrollY}px`
+      ? `${targetRect.top - popupRect.height + window.pageYOffset}px`
+      : `${targetRect.top + targetRect.height + window.pageYOffset}px`
   };
 }
 
@@ -63,8 +63,8 @@ export function positionMatchWidth(targetRect, popupRect) {
     width: targetRect.width,
     left: targetRect.left,
     top: directionUp
-      ? `${targetRect.top - popupRect.height + window.scrollY}px`
-      : `${targetRect.top + targetRect.height + window.scrollY}px`
+      ? `${targetRect.top - popupRect.height + window.pageYOffset}px`
+      : `${targetRect.top + targetRect.height + window.pageYOffset}px`
   };
 }
 
@@ -82,7 +82,7 @@ export function positionMatchWidth(targetRect, popupRect) {
 
 //   return {
 //     left: collisions.right
-//       ? `${targetRect.right - popupRect.width + window.scrollX}px`
+//       ? `${targetRect.right - popupRect.width + window.pageXOffset}px`
 //       : collisions.left ? `` : ``
 //   };
 // }
