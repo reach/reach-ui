@@ -11,7 +11,7 @@ import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";
 
-export let name = "Extra Elements";
+export let name = "Lots of Elements";
 
 export function Example() {
   let [term, setTerm] = useState("");

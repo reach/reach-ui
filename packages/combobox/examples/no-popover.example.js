@@ -12,7 +12,7 @@ import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";
 
-export let name = "Basic";
+export let name = "No Popover";
 
 export function Example() {
   let [term, setTerm] = useState("");
