@@ -175,7 +175,7 @@ function reducer(data, action) {
         navigationValue: null
       };
     case INTERACT:
-      return { ...nextState, navigationValue: null };
+      return nextState;
     case FOCUS:
       return {
         ...nextState,
@@ -398,7 +398,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   };
 
   const inputValue =
-    autocomplete && state === NAVIGATING
+    autocomplete && (state === NAVIGATING || state === INTERACTING)
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
         navigationValue || controlledValue || value
       : controlledValue || value;
@@ -525,7 +525,7 @@ export const ComboboxList = forwardRef(function ComboboxList(
 const OptionContext = createContext();
 
 export const ComboboxOption = forwardRef(function ComboboxOption(
-  { children, value, onClick, onMouseDown, ...props },
+  { children, value, onClick, ...props },
   ref
 ) {
   const {
