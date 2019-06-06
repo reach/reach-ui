@@ -6,8 +6,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxPopup,
-  ComboboxOption,
-  ComboboxButton
+  ComboboxOption
 } from "../src/index";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
