@@ -45,7 +45,7 @@ import React, {
   useEffect
 } from "react";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, checkStyles, shouldIgnoreTooltips } from "@reach/utils";
+import { wrapEvent, checkStyles } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
@@ -280,7 +280,7 @@ export function useTooltip({
   };
 
   const handleFocus = event => {
-    if (shouldIgnoreTooltips()) return;
+    if (window.__REACH_DISABLE_TOOLTIPS) return;
     switch (state) {
       case IDLE:
       case VISIBLE:
