@@ -11,7 +11,8 @@ let createAriaHider = dialogNode => {
   let rootNodes = [];
 
   Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
-    if (node === dialogNode.parentNode) {
+    const portalNode = dialogNode.parentNode.parentNode.parentNode;
+    if (node === portalNode) {
       return;
     }
     let attr = node.getAttribute("aria-hidden");
