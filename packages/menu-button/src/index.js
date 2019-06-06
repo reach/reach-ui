@@ -4,13 +4,12 @@ import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
 import { node, func, object, string, number, oneOfType, any } from "prop-types";
-import {
-  wrapEvent,
-  checkStyles,
-  assignRef,
-  disableTooltips,
-  enableTooltips
-} from "@reach/utils";
+import { wrapEvent, checkStyles, assignRef } from "@reach/utils";
+
+// TODO: add the mousedown/drag/mouseup to select of native menus, will
+// also help w/ remove the menu button tooltip hide-flash.
+
+// TODO: add type-to-highlight like native menus
 
 let { Provider, Consumer } = createContext();
 
@@ -23,7 +22,7 @@ let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
 
 let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   if (state.isOpen && !prevState.isOpen) {
-    disableTooltips();
+    window.__REACH_DISABLE_TOOLTIPS = true;
     if (state.selectionIndex !== -1) {
       // haven't measured the popover yet, give it a frame otherwise
       // we'll scroll to the bottom of the page >.<
@@ -37,7 +36,10 @@ let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
     if (!appManagedFocus) {
       refs.button.focus();
     }
-    enableTooltips();
+    // we want to ignore the immediate focus of a tooltip so it doesn't pop
+    // up again when the menu closes, only pops up when focus returns again
+    // to the tooltip (like native OS tooltips)
+    window.__REACH_DISABLE_TOOLTIPS = false;
   } else if (state.selectionIndex !== prevState.selectionIndex) {
     if (state.selectionIndex === -1) {
       // clear highlight when mousing over non-menu items, but focus the menu
