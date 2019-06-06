@@ -1,5 +1,4 @@
 import "../styles.css";
-import "./styles.css";
 import React, { useState, useMemo } from "react";
 import {
   Combobox,
