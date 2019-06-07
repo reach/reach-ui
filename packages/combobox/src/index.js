@@ -375,8 +375,6 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     }
   };
 
-  // WHERE I LEFT OFF: focus is now opening the list, maybe it shouldn't, maybe
-  // make a <ComboboxButton/> that can control it instead.
   const handleFocus = () => {
     if (selectOnClick) {
       selectOnClickRef.current = true;
