@@ -274,7 +274,61 @@ button#hamburger {
   box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
 }
 
-[data-reach-combobox][aria-expanded="true"] [data-reach-combobox-input] {
-  box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
+.pink [data-reach-combobox-input] {
   outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  font-size: 100%;
+  border: solid 1px #ccc;
+  margin: 0;
+}
+
+.pink [data-reach-combobox-popover] {
+  border: none;
+  box-sizing: border-box;
+  position: relative;
+  top: -1px;
+}
+
+.pink[data-reach-combobox] {
+  width: 300px;
+  position: relative;
+  box-sizing: border-box;
+  border: solid 1px transparent;
+}
+
+.pink [data-reach-combobox-button] {
+  position: absolute;
+  right: 0;
+  font-size: 150%;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.75rem;
+}
+
+.pink[data-reach-combobox]:focus-within {
+  border: solid 1px rgb(234, 89, 111);
+  box-shadow: 0px 0px 2px rgb(234, 89, 111);
+}
+
+.pink [data-reach-combobox-input]:focus {
+  border-color: transparent;
+}
+
+.pink [data-reach-combobox-option] {
+  padding: 0.25rem 1rem;
+}
+
+.pink [data-reach-combobox-option]:last-child {
+  margin-bottom: 0.5rem;
+}
+
+.pink hr {
+  margin: 0 1rem 0.5rem 1rem;
+  display: block;
+  height: 1px;
+  border: none;
+  background: #ccc;
+  box-sizing: border-box;
 }

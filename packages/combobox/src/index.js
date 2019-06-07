@@ -555,6 +555,7 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
         id={makeHash(value)}
         role="option"
         aria-selected={isActive}
+        data-highlighted={isActive ? "" : undefined}
         // without this the menu will close from `onBlur`, but with it the
         // element can be `document.activeElement` and then our focus checks in
         // onBlur will work as intended
