@@ -1,6 +1,6 @@
 {
   "name": "@reach/popover",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Render a portal positioned relative to another element.",
   "main": "index.js",
   "module": "es/index.js",
