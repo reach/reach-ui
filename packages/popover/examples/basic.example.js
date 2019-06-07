@@ -34,7 +34,7 @@ export function Example() {
               Tab navigation from the textarea that triggered this should now
               move to the button below.
             </p>
-            <button>I should be the next tabTab Tests</button>
+            <button>I should be the next tab</button>
           </div>
         </Popover>
       )}
