@@ -784,10 +784,7 @@ function useBlur() {
         popoverRef.current
       ) {
         if (popoverRef.current.contains(document.activeElement)) {
-          // focus landed inside the combobox, keep it open, but we don't want
-          // "Enter" causing the popover to close, so we clear the navigation
-          // value to act like there's no navigation going on anymore (cause
-          // there isn't!)
+          // focus landed inside the combobox, keep it open
           if (state !== INTERACTING) {
             transition(INTERACT);
           }
