@@ -222,10 +222,7 @@ You can even have other interactive elements inside the popover, it won't close 
             style={{ width: 300, margin: 0 }}
           />
           {results && (
-            <ComboboxPopover
-              portal={false}
-              style={{ position: "absolute", width: 300 }}
-            >
+            <ComboboxPopover style={{ width: 300 }}>
               {results.length > 0 ? (
                 <ComboboxList>
                   <h5 style={heading}>Top 3 results!</h5>
