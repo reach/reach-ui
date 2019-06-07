@@ -16,23 +16,29 @@ export function Example() {
       />
       {value.length > 0 && (
         <Popover
+          targetRef={ref}
           position={
             value === "match width" ? positionMatchWidth : positionDefault
           }
-          targetRef={ref}
         >
           <div
             style={{
               border: "solid 1px",
               padding: 10,
-              background: "white"
+              background: "white",
+              width: 400
             }}
           >
             <p>Huzzah!!! I am here! WASSUPPPPP</p>
-            <p>What's going on?</p>
+            <p>
+              Tab navigation from the textarea that triggered this should now
+              move to the button below.
+            </p>
+            <button>I should be the next tabTab Tests</button>
           </div>
         </Popover>
       )}
+      <button>and then tab to me after that one</button>
     </div>
   );
 }
