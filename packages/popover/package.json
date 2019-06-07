@@ -12,7 +12,8 @@
   "dependencies": {
     "@reach/portal": "^0.2.1",
     "@reach/rect": "^0.2.1",
-    "@reach/utils": "^0.2.3"
+    "@reach/utils": "^0.2.3",
+    "tabbable": "^4.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
