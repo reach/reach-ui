@@ -2,7 +2,7 @@
 
 [Combobox](#combobox) -
 [ComboboxInput](#comboboxinput) -
-[ComboboxPopup](#comboboxpopup) -
+[ComboboxPopover](#comboboxpopover) -
 [ComboboxList](#comboboxpopup) -
 [ComboboxOption](#comboboxpopup) -
 [ComboboxOptionText](#comboboxpopup)
@@ -12,9 +12,7 @@
 
 Accessible Combobox (autocomplete or autosuggest) component for React.
 
-A combo box is the combination of an `<input type="text"/>` and a list. The list is designed to help the user arrive at a value, but the value does not necessarily have to come from that list. Think of it more like an `<input type="text"/>` with some suggestions than a `<select/>`.
-
-You can, however, validate that the value comes from the list, that's up to your app.
+A combo box is the combination of an `<input type="text"/>` and a list. The list is designed to help the user arrive at a value, but the value does not necessarily have to come from that list. Don't think of it like a `<select/>`, but more of an `<input type="text"/>` with some suggestions. You can, however, validate that the value comes from the list, that's up to your app.
 
 ## Examples
 
@@ -29,7 +27,7 @@ Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple c
   <h4 id="demo">Basic, Fixed List Combobox</h4>
   <Combobox>
     <ComboboxInput aria-labelledby="demo" />
-    <ComboboxPopup>
+    <ComboboxPopover>
       <ComboboxList aria-labelledby="demo">
         <ComboboxOption value="Apple" />
         <ComboboxOption value="Banana" />
@@ -37,14 +35,14 @@ Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple c
         <ComboboxOption value="Pineapple" />
         <ComboboxOption value="Kiwi" />
       </ComboboxList>
-    </ComboboxPopup>
+    </ComboboxPopover>
   </Combobox>
 </div>
 ```
 
 ### Custom Rendering in ComboboxOption
 
-Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to continue to get the built-in text highlighting to still work. Only the `value` is used to match, not the children.
+Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
 ```.jsx
 <Combobox>
@@ -53,7 +51,7 @@ Sometimes your items need to be more than just text, in these cases you can pass
     aria-label="custom option demo"
     style={{ width: 300 }}
   />
-  <ComboboxPopup>
+  <ComboboxPopover>
     <ComboboxList aria-label="custom option demo">
       <ComboboxOption value="Apple">
         🍎 <ComboboxOptionText />
@@ -71,7 +69,7 @@ Sometimes your items need to be more than just text, in these cases you can pass
         🥝 <ComboboxOptionText />
       </ComboboxOption>
     </ComboboxList>
-  </ComboboxPopup>
+  </ComboboxPopover>
 </Combobox>
 ```
 
@@ -102,7 +100,7 @@ There is nothing special about managing state for a combobox, it's like managing
             onChange={handleChange}
           />
           {results && (
-            <ComboboxPopup className="shadow-popup">
+            <ComboboxPopover className="shadow-popup">
               <ComboboxList aria-label="Cities">
                 {results.slice(0, 10).map((result, index) => (
                   <ComboboxOption
@@ -111,7 +109,7 @@ There is nothing special about managing state for a combobox, it's like managing
                   />
                 ))}
               </ComboboxList>
-            </ComboboxPopup>
+            </ComboboxPopover>
            )}
         </Combobox>
       </div>
@@ -155,14 +153,16 @@ This is the same demo as above, except this time we're going to a server to get 
           onChange={handleSearchTermChange}
           aria-label="Cities"
         />
-        <ComboboxPopup className="shadow-popup">
-          <ComboboxList>
-            {cities.map(city => {
-              const str = `${city.city}, ${city.state}`;
-              return <ComboboxOption key={str} value={str} />;
-            })}
-          </ComboboxList>
-        </ComboboxPopup>
+        {cities.length > 0 && (
+          <ComboboxPopover className="shadow-popup">
+            <ComboboxList>
+              {cities.map(city => {
+                const str = `${city.city}, ${city.state}`;
+                return <ComboboxOption key={str} value={str} />;
+              })}
+            </ComboboxList>
+          </ComboboxPopover>
+        )}
       </Combobox>
     );
   }
@@ -201,6 +201,96 @@ This is the same demo as above, except this time we're going to a server to get 
 ```
 
 ### Categories, lots of elements
+
+Sometimes your list is a bit more complicated, like categories of results, and lots of elements besides options inside the popover.
+
+You can even have other interactive elements inside the popover, it won't close when the user interacts with them.
+
+```.jsx
+(() => {
+  function Demo() {
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
+
+    return (
+      <div>
+        <h4>Lots of stuff going on</h4>
+        <Combobox>
+          <ComboboxInput
+            onChange={handleChange}
+            style={{ width: 300, margin: 0 }}
+          />
+          {results && (
+            <ComboboxPopover
+              portal={false}
+              style={{ position: "absolute", width: 300 }}
+            >
+              {results.length > 0 ? (
+                <ComboboxList>
+                  <h5 style={heading}>Top 3 results!</h5>
+                  {results.slice(0, 3).map((result, index) => (
+                    <ComboboxOption
+                      key={index}
+                      value={`${result.city}, ${result.state}`}
+                    />
+                  ))}
+                  {results.length > 3 && (
+                    <React.Fragment>
+                      <h5 style={heading}>The Rest</h5>
+                      {results.slice(3, 10).map((result, index) => (
+                        <ComboboxOption
+                          key={index}
+                          value={`${result.city}, ${result.state}`}
+                        />
+                      ))}
+                    </React.Fragment>
+                  )}
+                </ComboboxList>
+              ) : (
+                <div>
+                  <p style={{ padding: 10, textAlign: "center" }}>
+                    No results 😞
+                  </p>
+                </div>
+              )}
+              <p style={{ textAlign: "center", padding: 10 }}>
+                <button>
+                  Create a new record
+                </button>
+              </p>
+            </ComboboxPopover>
+          )}
+        </Combobox>
+      </div>
+    );
+  }
+
+  function useCityMatch(term) {
+    const throttledTerm = useThrottle(term, 100);
+    return useMemo(
+      () =>
+        term.trim() === ""
+          ? null
+          : matchSorter(cities, term, {
+              keys: [item => `${item.city}, ${item.state}`]
+            }),
+      [throttledTerm]
+    );
+  }
+
+  const heading = {
+    fontSize: "100%",
+    color: "red",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    margin: 0,
+    padding: 5
+  }
+
+  return <Demo />;
+})();
+```
 
 ## Combobox
 
@@ -247,17 +337,17 @@ Set this to false when you don't really need the value from the input but want t
 <ComboboxInput autocomplete={false} />
 ```
 
-## ComboboxPopup
+## ComboboxPopover
 
 Contains the popup that renders the list. Because some UI needs to render more than the list in the popup, you need to render one of these around the list. For example, maybe you want to render the number of results suggested.
 
 If you pass `portal={false}` the popup will no longer be rendered in a portal, but in the same order as the React tree.
 
 ```jsx
-<ComboboxPopup>
+<ComboboxPopover>
   <Alert>{results.length} results(s)</Alert>
   <ComboboxList>{/* ... */}</ComboboxList>
-</ComboboxPopup>
+</ComboboxPopover>
 ```
 
 ## ComboboxList

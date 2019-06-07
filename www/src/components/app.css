@@ -273,8 +273,3 @@ button#hamburger {
   margin-top: -1px;
   box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
 }
-
-[data-reach-combobox][aria-expanded="true"] [data-reach-combobox-input] {
-  box-shadow: 0px 2px 4px hsla(0, 0%, 0%, 0.15);
-  outline: none;
-}
