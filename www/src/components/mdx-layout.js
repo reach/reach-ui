@@ -37,7 +37,7 @@ import {
 import {
   Combobox,
   ComboboxInput,
-  ComboboxPopup,
+  ComboboxPopover,
   ComboboxList,
   ComboboxOption,
   ComboboxOptionText,
@@ -95,7 +95,7 @@ const PreComponent = ({ className, ...props }) =>
         useTooltip,
         Combobox,
         ComboboxInput,
-        ComboboxPopup,
+        ComboboxPopover,
         ComboboxList,
         ComboboxOption,
         ComboboxOptionText,
