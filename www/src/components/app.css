@@ -285,7 +285,8 @@ button#hamburger {
 }
 
 .pink [data-reach-combobox-popover] {
-  border: none;
+  border: solid 1px #ccc;
+  border-top: none;
   box-sizing: border-box;
   position: relative;
   top: -1px;
@@ -310,6 +311,10 @@ button#hamburger {
 .pink[data-reach-combobox]:focus-within {
   border: solid 1px rgb(234, 89, 111);
   box-shadow: 0px 0px 2px rgb(234, 89, 111);
+}
+
+.pink[data-reach-combobox]:focus-within [data-reach-combobox-popover] {
+  border-color: transparent;
 }
 
 .pink [data-reach-combobox-input]:focus {
