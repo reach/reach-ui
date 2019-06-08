@@ -266,21 +266,24 @@ export const Combobox = forwardRef(function Combobox(
 
   const context = useMemo(() => {
     return {
+      // deps
       data,
-      inputRef,
-      popoverRef,
-      buttonRef,
+      listboxId,
       onSelect,
-      optionsRef,
+      openOnFocus,
       state,
       transition,
-      listboxId,
-      autocompletePropRef,
-      persistSelectionRef,
+      // derived
       isVisible: isVisible(state),
-      openOnFocus
+      // refs
+      autocompletePropRef,
+      buttonRef,
+      inputRef,
+      optionsRef,
+      persistSelectionRef,
+      popoverRef
     };
-  }, [data, onSelect, state, transition, listboxId]);
+  }, [data, listboxId, onSelect, openOnFocus, state, transition]);
 
   return (
     <Context.Provider value={context}>
