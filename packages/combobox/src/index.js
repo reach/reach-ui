@@ -576,12 +576,14 @@ export function ComboboxOptionText() {
     data: { value: contextValue }
   } = useContext(Context);
 
-  const searchWords = escapeRegexp(contextValue).split(/\s+/);
-  const textToHighlight = value;
-  const results = useMemo(() => findAll({ searchWords, textToHighlight }), [
-    searchWords,
-    textToHighlight
-  ]);
+  const results = useMemo(
+    () =>
+      findAll({
+        searchWords: escapeRegexp(contextValue).split(/\s+/),
+        textToHighlight: value
+      }),
+    [contextValue, value]
+  );
 
   return results.length
     ? results.map((result, index) => {
