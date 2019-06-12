@@ -10,7 +10,7 @@
 //
 // Only one tooltip can be visible at a time, so we use a global state chart to
 // describe the various states and transitions between states that are
-// possible.  With the all the timeouts involved with tooltips it's important to
+// possible. With the all the timeouts involved with tooltips it's important to
 // "make impossible states impossible" with a state machine.
 //
 // It's also okay to use these module globals because you don't server render
