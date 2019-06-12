@@ -237,14 +237,14 @@ export function useTooltip({
   ref,
   DEBUG_STYLE
 } = {}) {
+  const id = `tooltip:${useId()}`;
   const [isVisible, setIsVisible] = useState(
-    DEBUG_STYLE ? true : state === VISIBLE
+    DEBUG_STYLE ? true : context.id === id && state === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
   const triggerRef = ref || useRef();
   const triggerRect = useRect(triggerRef, isVisible);
-  const id = `tooltip:${useId()}`;
 
   useEffect(() => {
     return subscribe(() => {
