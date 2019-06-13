@@ -370,10 +370,13 @@ let MenuListImpl = React.forwardRef(
           assignRef(ref, node);
         }}
         onBlur={event => {
-          if (
-            !state.closingWithClick &&
-            !refs.menu.contains(event.relatedTarget)
-          ) {
+          let target = event.relatedTarget;
+          if (target === null) {
+            // relatedTarget isn't a standard secondary target, but IE 11 sets the next focused
+            // element before the blur event is called
+            target = document.activeElement;
+          }
+          if (!state.closingWithClick && !refs.menu.contains(target)) {
             setState(close);
           }
         }}
