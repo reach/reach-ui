@@ -349,7 +349,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
   useLayoutEffect(() => {
     autocompletePropRef.current = autocomplete;
-  });
+  }, [autocomplete]);
 
   const handleValueChange = value => {
     if (value.trim() === "") {
@@ -654,7 +654,7 @@ function useFocusManagement(lastActionType, inputRef) {
     ) {
       inputRef.current.focus();
     }
-  });
+  }, [lastActionType]);
 }
 
 // We want the same events when the input or the popup have focus (HOW COOL ARE
