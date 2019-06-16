@@ -10,7 +10,7 @@ https://ui.reach.tech
 
 This project uses
 
-- [Lerna](https://lernajs.io/) to manage multiple libs
+- [Lerna](https://lerna.js.org/) to manage multiple libs
 - [Storybook](https://storybook.js.org/) for a great development experience
 - [Gatsby](https://gatsbyjs.org/) for a blazing fast website.
 - [Jest](https://jestjs.io/) for painless testing.
