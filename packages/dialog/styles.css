@@ -23,7 +23,7 @@
   outline: none;
 }
 
-@media (screen and min-width: 750px) {
+@media screen and (min-width: 750px) {
   [data-reach-dialog-content] {
     width: 50vw;
   }
