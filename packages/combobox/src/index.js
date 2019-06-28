@@ -201,6 +201,8 @@ const findNavigationValue = (state, action) => {
   }
 };
 
+const stripIndex = str => str.replace(/__\d+/, "");
+
 ////////////////////////////////////////////////////////////////////////////////
 // Combobox
 
@@ -398,7 +400,9 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   const inputValue =
     autocomplete && (state === NAVIGATING || state === INTERACTING)
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
-        navigationValue || controlledValue || value
+        (navigationValue && stripIndex(navigationValue)) ||
+        controlledValue ||
+        value
       : controlledValue || value;
 
   return (
@@ -476,7 +480,7 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
       hidden={hidden}
       // Allow the user to click empty space inside the popover without causing
       // to close from useBlur
-      tabIndex="-1"
+      tabIndex={-1}
     />
   );
 });
@@ -533,11 +537,20 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
     optionsRef
   } = useContext(Context);
 
+  const optionId = React.useRef();
+
   useEffect(() => {
-    optionsRef.current.push(value);
+    const index =
+      optionsRef.current && optionsRef.current.length
+        ? optionsRef.current.length
+        : 0;
+    const id = `${value}__${index}`;
+
+    optionsRef.current.push(id);
+    optionId.current = id;
   });
 
-  const isActive = navigationValue === value;
+  const isActive = navigationValue === optionId.current;
 
   const handleClick = () => {
     onSelect && onSelect(value);
@@ -550,14 +563,14 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
         {...props}
         data-reach-combobox-option=""
         ref={ref}
-        id={makeHash(value)}
+        id={optionId.current ? `${makeHash(optionId.current)}` : undefined}
         role="option"
         aria-selected={isActive}
         data-highlighted={isActive ? "" : undefined}
         // without this the menu will close from `onBlur`, but with it the
         // element can be `document.activeElement` and then our focus checks in
         // onBlur will work as intended
-        tabIndex="-1"
+        tabIndex={-1}
         onClick={wrapEvent(onClick, handleClick)}
         children={children || <ComboboxOptionText />}
       />
@@ -690,7 +703,7 @@ function useKeyDown() {
             persistSelection: persistSelectionRef.current
           });
         } else {
-          const index = options.indexOf(navigationValue);
+          const index = options.findIndex(opt => opt === navigationValue);
           const atBottom = index === options.length - 1;
           if (atBottom) {
             if (autocompletePropRef.current) {
@@ -726,7 +739,7 @@ function useKeyDown() {
         if (state === IDLE) {
           transition(NAVIGATE);
         } else {
-          const index = options.indexOf(navigationValue);
+          const index = options.findIndex(opt => opt === navigationValue);
           if (index === 0) {
             if (autocompletePropRef.current) {
               // Go back to the value the user has typed because we are
