@@ -340,7 +340,7 @@ export function useTooltip({
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
-    onBlur: wrapEvent(onFocus, handleBlur),
+    onBlur: wrapEvent(onBlur, handleBlur),
     onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
     onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
     onMouseDown: wrapEvent(onMouseDown, handleMouseDown)
