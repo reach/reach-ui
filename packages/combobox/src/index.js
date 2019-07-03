@@ -55,6 +55,9 @@ const CLEAR = "CLEAR";
 // User is typing
 const CHANGE = "CHANGE";
 
+// Used for the setting the initial value
+const CHANGE_SILENT = "CHANGE_SILENT";
+
 // User is navigating w/ the keyboard
 const NAVIGATE = "NAVIGATE";
 
@@ -84,6 +87,7 @@ const stateChart = {
       on: {
         [BLUR]: IDLE,
         [CLEAR]: IDLE,
+        [CHANGE_SILENT]: IDLE,
         [CHANGE]: SUGGESTING,
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
@@ -134,6 +138,7 @@ function reducer(data, action) {
   const nextState = { ...data, lastActionType: action.type };
   switch (action.type) {
     case CHANGE:
+    case CHANGE_SILENT:
       return {
         ...nextState,
         navigationValue: null,
@@ -249,7 +254,7 @@ export const Combobox = forwardRef(function Combobox(
   const defaultData = {
     // the value the user has typed, we derived this also when the developer is
     // controlling the value of ComboboxInput
-    value: "",
+    value: null,
     // the value the user has navigated to with the keyboard
     navigationValue: null
   };
@@ -363,7 +368,13 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   // we have this derived state to emulate onChange of the input as we receive
   // new `value`s ...[*]
   if (isControlled && controlledValue !== value) {
-    handleValueChange(controlledValue);
+    if (value === null) {
+      // this is most likely the initial value so we want to
+      // update value without transitioning to SUGGESTING
+      transition(CHANGE_SILENT, { value: controlledValue });
+    } else {
+      handleValueChange(controlledValue);
+    }
   }
 
   // [*]... and when controlled, we don't trigger handleValueChange as the user
@@ -398,8 +409,8 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   const inputValue =
     autocomplete && (state === NAVIGATING || state === INTERACTING)
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
-        navigationValue || controlledValue || value
-      : controlledValue || value;
+        navigationValue || controlledValue || value || ""
+      : controlledValue || value || "";
 
   return (
     <Comp
