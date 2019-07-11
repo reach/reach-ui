@@ -503,7 +503,7 @@ const getStyles = (position, triggerRect, tooltipRect) => {
 const positionDefault = (triggerRect, tooltipRect) => {
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
-    right: window.innerWidth < triggerRect.left + tooltipRect.width,
+    right: document.documentElement.clientWidth < triggerRect.left + tooltipRect.width,
     bottom:
       window.innerHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
     left: triggerRect.left - tooltipRect.width < 0
