@@ -166,7 +166,7 @@ function reducer(data, action) {
     case SELECT_WITH_KEYBOARD:
       return {
         ...nextState,
-        value: data.navigationValue,
+        value: stripIndex(data.navigationValue),
         navigationValue: null
       };
     case CLOSE_WITH_BUTTON:
