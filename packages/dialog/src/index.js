@@ -62,53 +62,55 @@ let DialogOverlay = React.forwardRef(
       ...props
     },
     forwardedRef
-  ) => (
-    <Component didMount={checkDialogStyles}>
-      {isOpen ? (
-        <Portal data-reach-dialog-wrapper>
-          <Component
-            refs={{ overlayNode: null }}
-            didMount={({ refs }) => {
-              portalDidMount(refs);
-            }}
-            willUnmount={contentWillUnmount}
-          >
-            {({ refs }) => (
-              <FocusLock
-                returnFocus
-                onActivation={() => {
-                  if (initialFocusRef) {
-                    initialFocusRef.current.focus();
-                  }
-                }}
-              >
-                <RemoveScroll>
-                  <div
-                    data-reach-dialog-overlay
-                    onClick={wrapEvent(onClick, event => {
-                      event.stopPropagation();
-                      onDismiss();
-                    })}
-                    onKeyDown={wrapEvent(onKeyDown, event => {
-                      if (event.key === "Escape") {
+  ) => {
+    return (
+      <Component didMount={checkDialogStyles}>
+        {isOpen ? (
+          <Portal data-reach-dialog-wrapper>
+            <Component
+              refs={{ overlayNode: null }}
+              didMount={({ refs }) => {
+                portalDidMount(refs);
+              }}
+              willUnmount={contentWillUnmount}
+            >
+              {({ refs }) => (
+                <FocusLock
+                  returnFocus
+                  onActivation={() => {
+                    if (initialFocusRef) {
+                      initialFocusRef.current.focus();
+                    }
+                  }}
+                >
+                  <RemoveScroll>
+                    <div
+                      data-reach-dialog-overlay
+                      onClick={wrapEvent(onClick, event => {
                         event.stopPropagation();
                         onDismiss();
-                      }
-                    })}
-                    ref={node => {
-                      refs.overlayNode = node;
-                      assignRef(forwardedRef, node);
-                    }}
-                    {...props}
-                  />
-                </RemoveScroll>
-              </FocusLock>
-            )}
-          </Component>
-        </Portal>
-      ) : null}
-    </Component>
-  )
+                      })}
+                      onKeyDown={wrapEvent(onKeyDown, event => {
+                        if (event.key === "Escape") {
+                          event.stopPropagation();
+                          onDismiss();
+                        }
+                      })}
+                      ref={node => {
+                        refs.overlayNode = node;
+                        assignRef(forwardedRef, node);
+                      }}
+                      {...props}
+                    />
+                  </RemoveScroll>
+                </FocusLock>
+              )}
+            </Component>
+          </Portal>
+        ) : null}
+      </Component>
+    );
+  }
 );
 
 DialogOverlay.propTypes = {
