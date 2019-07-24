@@ -58,11 +58,14 @@ let DialogOverlay = React.forwardRef(
       onDismiss = k,
       initialFocusRef,
       onClick,
+      onMouseDown,
       onKeyDown,
       ...props
     },
     forwardedRef
   ) => {
+    const mouseDownTarget = React.useRef();
+
     return (
       <Component didMount={checkDialogStyles}>
         {isOpen ? (
@@ -87,8 +90,13 @@ let DialogOverlay = React.forwardRef(
                     <div
                       data-reach-dialog-overlay
                       onClick={wrapEvent(onClick, event => {
-                        event.stopPropagation();
-                        onDismiss();
+                        if (mouseDownTarget.current === event.target) {
+                          event.stopPropagation();
+                          onDismiss();
+                        }
+                      })}
+                      onMouseDown={wrapEvent(onMouseDown, event => {
+                        mouseDownTarget.current = event.target;
                       })}
                       onKeyDown={wrapEvent(onKeyDown, event => {
                         if (event.key === "Escape") {
