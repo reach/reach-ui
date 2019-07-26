@@ -346,7 +346,8 @@ MenuList.propTypes = {
 
 let focusableChildrenTypes = [MenuItem, MenuLink];
 
-let isFocusableChildType = child => focusableChildrenTypes.includes(child.type);
+let isFocusableChildType = child =>
+  child != null && focusableChildrenTypes.includes(child.type);
 let getFocusableMenuChildren = children => {
   let focusable = [];
   Children.forEach(children, child => {
