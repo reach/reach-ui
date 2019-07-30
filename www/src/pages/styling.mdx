@@ -19,11 +19,23 @@ Styling a Reach component feels similar to styling any native element. There are
 
 # Including Base Styles
 
-Reach UI uses stylesheets for the components' base styles. You must include these styles in your app for the components to work properly
+Reach UI uses stylesheets for the components' base styles. You must include these styles in your app for the components to work properly.
 
 ## Automatically Including Styles
 
 A webpack plugin is in development that will automatically bundle the styles so you don't have to.
+
+## Skip including styles
+
+Normally, you'll receive a warning when you forget to include the matching CSS file. If you're implementing all styles yourself, you can disable this warning by setting a root CSS variable matching the package name to 1. Here's an example:
+
+```css
+:root {
+  --reach-dialog: 1;
+}
+```
+
+Note that you should tread carefully - in most cases, the styles you import are better to override than remove completely.
 
 ## Using a Bundler (webpack, parcel, etc.)
 
@@ -87,6 +99,8 @@ let YourMenuList = styled(MenuList)`
 // glamor CSS prop
 <MenuList css={absolutely}/>
 ```
+
+
 
 ## CSS Selectors
 
