@@ -211,7 +211,7 @@ export const MenuItem = forwardRef(function MenuItem(
       ref={ref}
       data-reach-menu-item={role === "menuitem" ? true : undefined}
       role={role}
-      tabIndex={-1}
+      tabIndex={role === "menuitem" ? "-1" : undefined}
       data-selected={role === "menuitem" && isSelected ? true : undefined}
       onClick={wrapEvent(onClick, event => {
         select();
