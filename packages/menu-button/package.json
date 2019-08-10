@@ -17,6 +17,7 @@
     "@reach/rect": "0.2.1",
     "@reach/utils": "^0.2.3",
     "@reach/window-size": "^0.1.4",
+    "@reach/tooltip": "^0.2.1",
     "warning": "^4.0.2"
   },
   "peerDependencies": {
