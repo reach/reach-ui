@@ -211,6 +211,9 @@ export const Combobox = forwardRef(function Combobox(
     // Called whenever the user selects an item from the list
     onSelect,
 
+    // Called whenever the navigationValue changes
+    onHighlightChange,
+
     // opens the list when the input receives focused (but only if there are
     // items in the list)
     openOnFocus = false,
@@ -281,6 +284,15 @@ export const Combobox = forwardRef(function Combobox(
       openOnFocus
     };
   }, [data, onSelect, state, transition, listboxId]);
+
+  React.useEffect(
+    function() {
+      if (onHighlightChange) {
+        onHighlightChange(data.navigationValue);
+      }
+    },
+    [data.navigationValue]
+  );
 
   return (
     <Context.Provider value={context}>
