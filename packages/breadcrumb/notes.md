@@ -6,6 +6,12 @@ What we know for sure:
 - The separator between breadcrumb items should not be read by the screen reader
 - The current (last) item on the list should have `aria-current`
 
+Resources followed:
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/breadcrumb
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#breadcrumb
+- Further reading: https://scottaohara.github.io/a11y_breadcrumbs/
+
 Open questions:
 
 ### Separator implementation
