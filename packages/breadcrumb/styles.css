@@ -1,0 +1,14 @@
+[data-reach-breadcrumb] ol {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+[data-breadcrumb-separator] {
+  padding: 0 0.5em;
+}
+
+[data-reach-breadcrumb-item][aria-current] {
+  color: gray;
+}
