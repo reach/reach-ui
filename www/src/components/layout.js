@@ -156,6 +156,7 @@ let Nav = ({ media }) => (
 
               <NavLink to="/alert">Alert</NavLink>
               <NavLink to="/alert-dialog">AlertDialog</NavLink>
+              <NavLink to="/breadcrumb">Breadcrumb</NavLink>
               <NavLink to="/combobox">Combobox</NavLink>
               <NavLink to="/dialog">Dialog (Modal)</NavLink>
               <NavLink to="/menu-button">MenuButton (Dropdown)</NavLink>

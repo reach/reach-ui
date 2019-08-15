@@ -1,0 +1,118 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Breadcrumb"
+  meta={[
+    {
+      name: "description",
+      content: "Accessible React breadcrumb",
+    },
+  ]}
+/>
+
+# Breadcrumb
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/breadcrumb
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#breadcrumb
+- Further reading: https://scottaohara.github.io/a11y_breadcrumbs/
+
+Indicate the current page’s location within a navigational hierarchy.
+
+```.jsx
+<Breadcrumb>
+  <a href="/">Home</a>
+  <a href="/components">Parent</a>
+  <span>Current Page</span>
+</Breadcrumb>
+```
+
+## Installation
+
+```bash
+npm install @reach/breadcrumb
+# or
+yarn add @reach/breadcrumb
+```
+
+And then import it:
+
+```js
+import Breadcrumb from "@reach/breadcrumb"
+```
+
+## Props
+
+| Prop                    | Type | Required | Default |
+| ----------------------- | ---- | -------- | ------- |
+| [children](#children)   | node | false    |
+| [separator](#separator) | node | false    | "/"     |
+
+### children
+
+_Type_: `node`
+
+Links to go up on the navigational hierarchy.
+
+_Note: The last element in a breadcrumb (which is also the current page) is not a link.._
+
+```.jsx
+<Breadcrumb>
+  <a href="/">Home</a>
+  <a href="/components">Parent</a>
+  <span>Current Page</span>
+</Breadcrumb>
+```
+
+### separator
+
+_Type_: `node`
+
+You can customise the separator used between the links:
+
+```.jsx
+<Breadcrumb separator="➤">
+  <a href="/">Home</a>
+  <a href="/components">Parent</a>
+  <span>Current Page</span>
+</Breadcrumb>
+```
+
+or even use a component for the separator:
+
+```.jsx
+<Breadcrumb separator={<Icon name="arrow"/>}>
+  <a href="/">Home</a>
+  <a href="/components">Parent</a>
+  <span>Current Page</span>
+</Breadcrumb>
+```
+
+## Breadcrumb CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+/* breadcrumb container */
+[data-reach-breadcrumb] ol {
+}
+
+/* ordered list of links */
+[data-reach-breadcrumb] ol {
+}
+
+/* list item */
+[data-reach-breadcrumb-item] {
+}
+
+/* link to a parent location */
+[data-reach-breadcrumb-item] a {
+}
+
+/* current list item */
+[data-reach-breadcrumb-item][aria-current] {
+}
+
+/* breadcrumb separator */
+[data-breadcrumb-separator] {
+}
+```
