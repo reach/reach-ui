@@ -10,7 +10,7 @@ https://ui.reach.tech
 
 This project uses
 
-- [Lerna](https://lernajs.io/) to manage multiple libs
+- [Lerna](https://lerna.js.org/) to manage multiple libs
 - [Storybook](https://storybook.js.org/) for a great development experience
 - [Gatsby](https://gatsbyjs.org/) for a blazing fast website.
 - [Jest](https://jestjs.io/) for painless testing.
@@ -116,7 +116,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Button               |
 | 🛠      | Carousel             |
 | 🛠      | Checkbox             |
-| ✅      | Combo Box            |
+| ✅     | Combo Box            |
 | ✅     | Dialog (Modal)       |
 | 🛠      | Disclosure           |
 | ❓     | Feed                 |
