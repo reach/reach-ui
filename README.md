@@ -21,7 +21,6 @@ Before doing anything else, run these commands:
 git clone git@github.com:reach/reach-ui.git
 cd reach-ui
 yarn install
-yarn bootstrap
 yarn build
 ```
 
