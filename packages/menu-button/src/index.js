@@ -27,7 +27,9 @@ let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
       // haven't measured the popover yet, give it a frame otherwise
       // we'll scroll to the bottom of the page >.<
       requestAnimationFrame(() => {
-        refs.items[state.selectionIndex].focus();
+        if (refs.items[state.selectionIndex]) {
+          refs.items[state.selectionIndex].focus();
+        }
       });
     } else {
       refs.menu.focus();
