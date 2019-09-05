@@ -10,6 +10,11 @@ import React, {
 } from "react";
 import { node, func, number, string, bool, oneOfType } from "prop-types";
 import { useId } from "@reach/auto-id";
+import { wrapEvent } from "@reach/utils";
+
+// TODO: wrapEvent
+//       change vertical prop to direction that takes a string
+//       drop label prop for markers
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -49,6 +54,8 @@ export const Slider = forwardRef(function Slider(
     onFocus,
     onKeyDown,
     onMouseDown,
+    onMouseMove,
+    onMouseUp,
     onMouseLeave,
     step = 1,
     vertical = false,
@@ -92,6 +99,8 @@ export const Slider = forwardRef(function Slider(
     updateValue,
     onKeyDown,
     onMouseDown,
+    onMouseMove,
+    onMouseUp,
     thumbRef,
     trackRef
   });
@@ -409,6 +418,8 @@ const useSliderEvents = ({
   updateValue,
   onKeyDown,
   onMouseDown,
+  onMouseMove,
+  onMouseUp,
   thumbRef,
   disabled,
   trackRef
@@ -436,7 +447,7 @@ const useSliderEvents = ({
     }
   };
 
-  const handleKeyDown = event => {
+  const handleKeyDown = wrapEvent(onKeyDown, event => {
     let flag = false;
     let newValue;
     const tenSteps = (max - min) / 10;
@@ -481,13 +492,10 @@ const useSliderEvents = ({
     }
     newValue = getAllowedValue(newValue, min, max);
     updateValue(newValue);
+  });
 
-    onKeyDown && onKeyDown(event);
-  };
-
-  const handleMouseDown = event => {
+  const handleMouseDown = wrapEvent(onMouseDown, event => {
     if (disabled) return;
-    onMouseDown && onMouseDown(event);
     event.preventDefault();
 
     let newValue = getNewValue(event);
@@ -498,17 +506,17 @@ const useSliderEvents = ({
     document.body.addEventListener("mousemove", handleMouseMove);
     document.body.addEventListener("mouseup", handleMouseUp);
     thumbRef.current && thumbRef.current.focus();
-  };
+  });
 
-  const handleMouseUp = () => {
+  const handleMouseUp = wrapEvent(onMouseUp, () => {
     document.body.removeEventListener("mousemove", handleMouseMove);
     document.body.removeEventListener("mouseup", handleMouseUp);
-  };
+  });
 
-  const handleMouseMove = event => {
+  const handleMouseMove = wrapEvent(onMouseMove, event => {
     let newValue = getNewValue(event);
     updateValue(newValue);
-  };
+  });
 
   return { handleKeyDown, handleMouseDown, handleMouseUp, handleMouseMove };
 };
