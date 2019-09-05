@@ -1,0 +1,113 @@
+:root {
+  --highlight-color: #1159a6;
+  --handle-focus-scale: 1.15;
+}
+
+[data-reach-slider] {
+  padding: 20px;
+}
+
+[data-reach-slider-horizontal] {
+  width: 250px;
+  height: 4px;
+  padding-bottom: 30px;
+}
+
+[data-reach-slider-vertical] {
+  width: 4px;
+  height: 250px;
+  padding-right: 30px;
+}
+
+[data-reach-slider-track] {
+  border-radius: 2px;
+  background: #f2f2f2;
+  width: inherit;
+  height: inherit;
+}
+
+[data-reach-slider-handle] {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--highlight-color);
+  background: #fff;
+  border-radius: 10px;
+  z-index: 1;
+  transform-origin: center;
+  transition: transform 200ms ease-out;
+}
+
+[data-reach-slider-handle-horizontal] {
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+}
+
+[data-reach-slider-handle-horizontal]:focus {
+  transform: translateY(-50%) scale(var(--handle-focus-scale));
+}
+
+[data-reach-slider-handle-vertical] {
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+}
+
+[data-reach-slider-handle-vertical]:focus {
+  transform: translateX(-50%) scale(var(--handle-focus-scale));
+}
+
+[data-reach-slider-track-highlight] {
+  border-radius: inherit;
+  background: var(--highlight-color);
+}
+
+[data-reach-slider-track-highlight-horizontal] {
+  height: 100%;
+}
+
+[data-reach-slider-track-highlight-vertical] {
+  width: 100%;
+}
+
+[data-reach-slider-marker] {
+  width: 6px;
+  height: 6px;
+  background: inherit;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  transform-origin: center;
+  transition: background 200ms ease-out;
+}
+
+[data-reach-slider-marker-horizontal] {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+[data-reach-slider-marker-vertical] {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+[data-reach-slider-marker-highlight] {
+  background: var(--highlight-color);
+}
+
+[data-reach-slider-marker-label] {
+  position: absolute;
+  font-size: 12px;
+}
+
+[data-reach-slider-marker-label-horizontal] {
+  top: calc(100% + 5px);
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+[data-reach-slider-marker-label-vertical] {
+  left: calc(100% + 5px);
+  top: 50%;
+  text-align: right;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
