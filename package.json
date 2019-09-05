@@ -1,18 +1,16 @@
 {
+  "private": true,
   "name": "reach-ui",
+  "repository": "reach/reach-ui",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "test": "lerna run test --stream",
-    "bootstrap": "node ./scripts/bootstrap.js",
+    "test": "lerna run test",
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "clean": "git clean -fdX .",
-    "postinstall": "node ./scripts/postinstall.js",
     "precommit": "pretty-quick --staged",
     "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
   },
-  "license": "MIT",
-  "repository": "https://github.com/reach/reach-ui",
   "dependencies": {
     "@storybook/react": "^3.4.7",
     "autoprefixer": "^8.6.2",
@@ -37,7 +35,7 @@
     "gzip-size": "^5.0.0",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.4.2",
-    "lerna": "^2.11.0",
+    "lerna": "^3.16.4",
     "postcss-flexbugs-fixes": "^3.3.1",
     "postcss-loader": "^2.1.5",
     "prettier": "^1.13.5",
@@ -53,10 +51,12 @@
     "rollup-plugin-uglify": "^4.0.0",
     "style-loader": "^0.21.0"
   },
-  "prettier": {},
   "husky": {
     "hooks": {
       "pre-push": "lerna run lint"
     }
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
