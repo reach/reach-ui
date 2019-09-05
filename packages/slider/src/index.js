@@ -11,6 +11,25 @@ import React, {
 import { node, func, number, string, bool, oneOfType } from "prop-types";
 import { useId } from "@reach/auto-id";
 
+// A11y reference:
+//   - http://www.oaa-accessibility.org/examplep/slider1/
+//   - https://github.com/Stanko/aria-progress-range-slider
+// TODO: Screen reader testing
+
+// Random thoughts/notes:
+//  - There is a bit of jank, particularly with vertical sliders, when reacting to the mouse
+//    moving out of the element boundaries while the mouse is still down.
+//    Currently testing this against the behavior of the native input range element to get
+//    our slider on par.
+//  - Normally I'd be inclined to use transform to move the handle in response
+//    to a change for max performance benefit, but doing so would conflict
+//    with user applied transform styles to the handle.
+//  - I imagine there will be use cases where RTL languages will need a
+//    reversed slider, so we'll want to update the math to deal
+//    with that somehow. Maybe `reverse` prop? Should we do the same for vertical sliders?
+//    How does the native range input react to RTL language detection (if at all)?
+//    And if so, would we approach it differently with a multi-thumb slider?
+
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
   {
