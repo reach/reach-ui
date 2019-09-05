@@ -41,6 +41,13 @@ export let wrapEvent = (theirHandler, ourHandler) => event => {
   }
 };
 
+export let callEventWithDefault = (theirHandler, ourHandler) => event => {
+  theirHandler && theirHandler(event);
+  if (!event.defaultPrevented) {
+    ourHandler && ourHandler(event);
+  }
+};
+
 export const assignRef = (ref, value) => {
   if (ref == null) return;
   if (typeof ref === "function") {

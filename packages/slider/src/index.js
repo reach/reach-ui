@@ -8,11 +8,11 @@ import React, {
   useCallback,
   cloneElement
 } from "react";
-import { node, func, number, string, bool, oneOfType } from "prop-types";
+import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import { useId } from "@reach/auto-id";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, callEventWithDefault } from "@reach/utils";
 
-// TODO: wrapEvent
+// TODO:
 //       change vertical prop to direction that takes a string
 //       drop label prop for markers
 
@@ -35,6 +35,11 @@ import { wrapEvent } from "@reach/utils";
 //    How does the native range input react to RTL language detection (if at all)?
 //    And if so, would we approach it differently with a multi-thumb slider?
 
+const SliderOrientation = {
+  horizontal: "horizontal",
+  vertical: "vertical"
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
   {
@@ -55,10 +60,9 @@ export const Slider = forwardRef(function Slider(
     onKeyDown,
     onMouseDown,
     onMouseMove,
-    onMouseUp,
     onMouseLeave,
+    orientation = SliderOrientation.horizontal,
     step = 1,
-    vertical = false,
     children,
     ...rest
   },
@@ -86,10 +90,13 @@ export const Slider = forwardRef(function Slider(
     [isControlled, onChange]
   );
 
-  const orientation = vertical ? "vertical" : "horizontal";
-  const isVertical = orientation === "vertical";
+  const isVertical = orientation === SliderOrientation.vertical;
 
-  const { handleKeyDown, handleMouseDown, handleMouseUp } = useSliderEvents({
+  const {
+    handleKeyDown,
+    handleMouseDown,
+    removeEventListeners
+  } = useSliderEvents({
     value: actualValue,
     disabled,
     step,
@@ -100,7 +107,6 @@ export const Slider = forwardRef(function Slider(
     onKeyDown,
     onMouseDown,
     onMouseMove,
-    onMouseUp,
     thumbRef,
     trackRef
   });
@@ -154,21 +160,15 @@ export const Slider = forwardRef(function Slider(
       data-reach-slider-disabled={disabled ? "" : undefined}
       tabIndex="-1"
       onMouseDown={handleMouseDown}
-      onMouseLeave={event => {
-        handleMouseUp();
-        onMouseLeave && onMouseLeave(event);
-      }}
-      onBlur={event => {
-        handleMouseUp();
-        onBlur && onBlur(event);
-      }}
+      onMouseLeave={callEventWithDefault(onMouseLeave, removeEventListeners)}
+      onBlur={callEventWithDefault(onBlur, removeEventListeners)}
       aria-disabled={disabled}
       id={sliderId}
       {...rest}
     >
       <Track
         ref={trackRef}
-        isVertical={orientation === "vertical"}
+        isVertical={isVertical}
         trackSegmentStyle={trackSegmentStyle}
         disabled={disabled}
         children={clones}
@@ -186,11 +186,16 @@ export const Slider = forwardRef(function Slider(
 });
 
 Slider.propTypes = {
+  disabled: bool,
   min: number,
   max: number,
-  vertical: bool,
+  orientation: oneOf([
+    SliderOrientation.horizontal,
+    SliderOrientation.vertical
+  ]),
   onChange: func,
-  children: node
+  children: node,
+  step: number
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -302,8 +307,8 @@ export const Marker = forwardRef(function Marker(
     label,
     min,
     max,
-    onThumbFocus: onFocus,
-    onThumbKeyDown: onKeyDown,
+    onThumbFocus,
+    onThumbKeyDown,
     sliderId,
     style = {},
     value,
@@ -419,7 +424,6 @@ const useSliderEvents = ({
   onKeyDown,
   onMouseDown,
   onMouseMove,
-  onMouseUp,
   thumbRef,
   disabled,
   trackRef
@@ -504,21 +508,26 @@ const useSliderEvents = ({
     }
 
     document.body.addEventListener("mousemove", handleMouseMove);
-    document.body.addEventListener("mouseup", handleMouseUp);
+    document.body.addEventListener("mouseup", removeEventListeners);
     thumbRef.current && thumbRef.current.focus();
   });
 
-  const handleMouseUp = wrapEvent(onMouseUp, () => {
+  const removeEventListeners = () => {
     document.body.removeEventListener("mousemove", handleMouseMove);
-    document.body.removeEventListener("mouseup", handleMouseUp);
-  });
+    document.body.removeEventListener("mouseup", removeEventListeners);
+  };
 
   const handleMouseMove = wrapEvent(onMouseMove, event => {
     let newValue = getNewValue(event);
     updateValue(newValue);
   });
 
-  return { handleKeyDown, handleMouseDown, handleMouseUp, handleMouseMove };
+  return {
+    handleKeyDown,
+    handleMouseDown,
+    removeEventListeners,
+    handleMouseMove
+  };
 };
 
 // https://github.com/chakra-ui/chakra-ui/blob/master/packages/chakra-ui/src/utils/index.js#L9
