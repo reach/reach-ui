@@ -58,9 +58,9 @@ export const Slider = forwardRef(function Slider(
     onChange,
     onFocus,
     onKeyDown,
-    onMouseDown,
-    onMouseMove,
-    onMouseLeave,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
     orientation = SliderOrientation.horizontal,
     step = 1,
     children,
@@ -94,17 +94,19 @@ export const Slider = forwardRef(function Slider(
 
   const {
     handleKeyDown,
-    handleMouseDown,
-    removeEventListeners
+    handlePointerDown,
+    handlePointerUp,
+    handlePointerMove
   } = useSliderEvents({
     disabled,
     handleRef,
     isVertical,
-    onKeyDown,
-    onMouseDown,
-    onMouseMove,
     min,
     max,
+    onKeyDown,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
     step,
     value: actualValue,
     trackRef,
@@ -118,8 +120,9 @@ export const Slider = forwardRef(function Slider(
   const ctx = {
     ariaLabelledBy,
     onKeyDown,
-    onMouseDown,
-    onMouseMove,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
     onHandleFocus: onFocus,
     onHandleKeyDown: handleKeyDown,
     sliderId,
@@ -156,9 +159,9 @@ export const Slider = forwardRef(function Slider(
         role="presentation"
         ref={ref}
         tabIndex="-1"
-        onMouseDown={handleMouseDown}
-        onMouseLeave={callEventWithDefault(onMouseLeave, removeEventListeners)}
-        onBlur={callEventWithDefault(onBlur, removeEventListeners)}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerMove={handlePointerMove}
         aria-disabled={disabled}
         id={sliderId}
         {...dataAttributes}
@@ -387,8 +390,9 @@ const useSliderEvents = ({
   handleRef,
   isVertical,
   onKeyDown,
-  onMouseDown,
-  onMouseMove,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
   min,
   max,
   step,
@@ -396,6 +400,7 @@ const useSliderEvents = ({
   trackRef,
   updateValue
 }) => {
+  const [active, setActive] = useState(false);
   const getNewValue = event => {
     if (trackRef.current) {
       const {
@@ -464,36 +469,43 @@ const useSliderEvents = ({
     updateValue(newValue);
   });
 
-  const handleMouseDown = wrapEvent(onMouseDown, event => {
-    if (disabled) return;
-    event.preventDefault();
-
-    let newValue = getNewValue(event);
-    if (newValue !== value) {
-      updateValue(newValue);
+  const handlePointerMove = wrapEvent(onPointerMove, event => {
+    console.log("active!");
+    if (disabled) {
+      if (active) setActive(false);
+      return;
     }
-
-    document.body.addEventListener("mousemove", handleMouseMove);
-    document.body.addEventListener("mouseup", removeEventListeners);
-
-    handleRef.current && handleRef.current.focus();
+    event.preventDefault();
+    if (active) {
+      const newValue = getNewValue(event);
+      if (newValue !== value) {
+        updateValue(newValue);
+      }
+    }
   });
 
-  const removeEventListeners = () => {
-    document.body.removeEventListener("mousemove", handleMouseMove);
-    document.body.removeEventListener("mouseup", removeEventListeners);
-  };
+  const handlePointerDown = wrapEvent(onPointerDown, event => {
+    if (disabled) {
+      if (active) setActive(false);
+      return;
+    }
+    if (handleRef.current) {
+      setActive(true);
+      handleRef.current.focus();
+      handleRef.current.setPointerCapture(event.pointerId);
+    }
+  });
 
-  const handleMouseMove = wrapEvent(onMouseMove, event => {
-    let newValue = getNewValue(event);
-    updateValue(newValue);
+  const handlePointerUp = wrapEvent(onPointerUp, event => {
+    setActive(false);
+    handleRef.current.releasePointerCapture(event.pointerId);
   });
 
   return {
     handleKeyDown,
-    handleMouseDown,
-    removeEventListeners,
-    handleMouseMove
+    handlePointerDown,
+    handlePointerUp,
+    handlePointerMove
   };
 };
 
