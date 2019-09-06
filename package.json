@@ -8,7 +8,6 @@
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "clean": "git clean -fdX .",
-    "precommit": "pretty-quick --staged",
     "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
   },
   "dependencies": {
@@ -39,12 +38,13 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "lerna run lint"
-    }
-  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "pre-push": "lerna run lint"
+    }
+  }
 }
