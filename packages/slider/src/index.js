@@ -84,7 +84,7 @@ export const Slider = forwardRef(function Slider(
         setValue(newValue);
       }
       if (onChange) {
-        onChange(newValue);
+        onChange(newValue, { min, max });
       }
     },
     [isControlled, onChange]
