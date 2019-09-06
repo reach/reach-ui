@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, callEventWithDefault } from "@reach/utils";
+import { wrapEvent } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -295,7 +295,7 @@ export const Handle = forwardRef(function Handle(
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Marker = forwardRef(function Marker(
-  { children, centered, style = {}, value, ...props },
+  { children, style = {}, value, ...props },
   forwardedRef
 ) {
   const {
@@ -309,7 +309,6 @@ export const Marker = forwardRef(function Marker(
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
   const actualValue = valueToPercent(value, sliderMin, sliderMax);
-  const { width, height } = useDimensions(ref);
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     isVertical,
@@ -317,13 +316,7 @@ export const Marker = forwardRef(function Marker(
     highlight
   });
 
-  const dimension = isVertical ? height : width;
-
-  const absoluteStartPosition = `calc(${actualValue}% - ${
-    centered ? `${dimension}px / 2` : `${dimension}px * ${actualValue * 0.01}`
-  })`;
-
-  console.log(typeof children);
+  const absoluteStartPosition = `${actualValue}%`;
 
   return value != null ? (
     <div
@@ -549,3 +542,11 @@ export function useDimensions(passedRef) {
   }, [ref, width, height]);
   return { ref, width, height };
 }
+
+// TODO: Move this to @reach/utils
+export let callEventWithDefault = (theirHandler, ourHandler) => event => {
+  theirHandler && theirHandler(event);
+  if (!event.defaultPrevented) {
+    ourHandler && ourHandler(event);
+  }
+};

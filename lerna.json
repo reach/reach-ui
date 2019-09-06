@@ -2,7 +2,10 @@
   "version": "independent",
   "packages": ["packages/*"],
   "registry": "https://registry.npmjs.org/",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "lerna": "2.11.0"
 }

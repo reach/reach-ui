@@ -2,7 +2,6 @@ let checkedPkgs = {};
 
 let checkStyles = () => {};
 
-// eslint-disable-next-line no-undef
 if (__DEV__) {
   checkStyles = pkg => {
     // only check once per package
@@ -39,13 +38,6 @@ export let wrapEvent = (theirHandler, ourHandler) => event => {
   theirHandler && theirHandler(event);
   if (!event.defaultPrevented) {
     return ourHandler(event);
-  }
-};
-
-export let callEventWithDefault = (theirHandler, ourHandler) => event => {
-  theirHandler && theirHandler(event);
-  if (!event.defaultPrevented) {
-    ourHandler && ourHandler(event);
   }
 };
 
