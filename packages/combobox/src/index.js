@@ -299,7 +299,11 @@ export const Combobox = forwardRef(function Combobox(
   );
 });
 
-Combobox.propTypes = { onSelect: func };
+if (__DEV__) {
+  Combobox.propTypes = {
+    onSelect: func
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxInput

@@ -71,20 +71,26 @@ export const Tabs = forwardRef(function Tabs(
   return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
 });
 
-Tabs.propTypes = {
-  children: node.isRequired,
-  onChange: func,
-  index: (props, name, compName, ...rest) => {
-    if (props.index > -1 && props.onChange == null && props.readOnly !== true) {
-      return new Error(
-        "You provided a `value` prop to `Tabs` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
-      );
-    } else {
-      return number(name, props, compName, ...rest);
-    }
-  },
-  defaultIndex: number
-};
+if (__DEV__) {
+  Tabs.propTypes = {
+    children: node.isRequired,
+    onChange: func,
+    index: (props, name, compName, ...rest) => {
+      if (
+        props.index > -1 &&
+        props.onChange == null &&
+        props.readOnly !== true
+      ) {
+        return new Error(
+          "You provided a `value` prop to `Tabs` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
+        );
+      } else {
+        return number(name, props, compName, ...rest);
+      }
+    },
+    defaultIndex: number
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TabList = forwardRef(function TabList(
@@ -162,9 +168,11 @@ export const TabList = forwardRef(function TabList(
   );
 });
 
-TabList.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  TabList.propTypes = {
+    children: node
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Tab = forwardRef(function Tab(
@@ -200,9 +208,11 @@ export const Tab = forwardRef(function Tab(
   );
 });
 
-Tab.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  Tab.propTypes = {
+    children: node
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanels = forwardRef(function TabPanels(
@@ -232,9 +242,11 @@ export const TabPanels = forwardRef(function TabPanels(
   );
 });
 
-TabPanels.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  TabPanels.propTypes = {
+    children: node
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanel = forwardRef(function TabPanel(
@@ -258,9 +270,11 @@ export const TabPanel = forwardRef(function TabPanel(
   );
 });
 
-TabPanel.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  TabPanel.propTypes = {
+    children: node
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // TODO: move into @reach/utils when something else needs it

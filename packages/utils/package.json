@@ -1,11 +1,10 @@
 {
   "name": "@reach/utils",
-  "version": "0.2.4",
+  "version": "0.2.3",
   "description": "Internal, shared utilities for Reach UI.",
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },

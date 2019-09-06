@@ -103,9 +103,11 @@ let Menu = ({ children }) => (
   </Component>
 );
 
-Menu.propTypes = {
-  children: oneOfType([func, node])
-};
+if (__DEV__) {
+  Menu.propTypes = {
+    children: oneOfType([func, node])
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////
 let MenuButton = React.forwardRef(
@@ -158,11 +160,13 @@ let MenuButton = React.forwardRef(
   )
 );
 
-MenuButton.propTypes = {
-  onClick: func,
-  onKeyDown: func,
-  children: node
-};
+if (__DEV__) {
+  MenuButton.propTypes = {
+    onClick: func,
+    onKeyDown: func,
+    children: node
+  };
+}
 
 let MenuItem = React.forwardRef(
   (
@@ -222,17 +226,19 @@ let MenuItem = React.forwardRef(
   }
 );
 
-MenuItem.propTypes = {
-  onSelect: func.isRequired,
-  onClick: func,
-  role: string,
-  state: object,
-  setState: func,
-  index: number,
-  onKeyDown: func,
-  onMouseMove: func,
-  _ref: func
-};
+if (__DEV__) {
+  MenuItem.propTypes = {
+    onSelect: func.isRequired,
+    onClick: func,
+    role: string,
+    state: object,
+    setState: func,
+    index: number,
+    onKeyDown: func,
+    onMouseMove: func,
+    _ref: func
+  };
+}
 
 let k = () => {};
 
@@ -295,17 +301,19 @@ let MenuLink = React.forwardRef(
   }
 );
 
-MenuLink.propTypes = {
-  onKeyDown: func,
-  onClick: func,
-  component: any,
-  as: any,
-  style: object,
-  setState: func,
-  state: object,
-  index: number,
-  _ref: func
-};
+if (__DEV__) {
+  MenuLink.propTypes = {
+    onKeyDown: func,
+    onClick: func,
+    component: any,
+    as: any,
+    style: object,
+    setState: func,
+    state: object,
+    index: number,
+    _ref: func
+  };
+}
 ///////////////////////////////////////////////////////////////////
 
 let MenuList = React.forwardRef((props, ref) => (
@@ -340,9 +348,11 @@ let MenuList = React.forwardRef((props, ref) => (
   </Consumer>
 ));
 
-MenuList.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  MenuList.propTypes = {
+    children: node
+  };
+}
 
 let focusableChildrenTypes = [MenuItem, MenuLink];
 
@@ -416,14 +426,16 @@ let MenuListImpl = React.forwardRef(
   }
 );
 
-MenuListImpl.propTypes = {
-  refs: object,
-  state: object,
-  setState: func,
-  children: node,
-  onKeyDown: func,
-  onBlur: func
-};
+if (__DEV__) {
+  MenuListImpl.propTypes = {
+    refs: object,
+    state: object,
+    setState: func,
+    children: node,
+    onKeyDown: func,
+    onBlur: func
+  };
+}
 
 let getStyles = (buttonRect, menuRect) => {
   let haventMeasuredButtonYet = !buttonRect;
