@@ -138,6 +138,7 @@ export const Slider = forwardRef(function Slider(
     return clone;
   });
 
+  const dataAttributes = makeDataAttributes("slider", { isVertical, disabled });
   const trackSegmentStyle = isVertical
     ? {
         width: `100%`,
@@ -154,16 +155,13 @@ export const Slider = forwardRef(function Slider(
     <div
       role="presentation"
       ref={ref}
-      data-reach-slider=""
-      data-reach-slider-horizontal={!isVertical ? "" : undefined}
-      data-reach-slider-vertical={isVertical ? "" : undefined}
-      data-reach-slider-disabled={disabled ? "" : undefined}
       tabIndex="-1"
       onMouseDown={handleMouseDown}
       onMouseLeave={callEventWithDefault(onMouseLeave, removeEventListeners)}
       onBlur={callEventWithDefault(onBlur, removeEventListeners)}
       aria-disabled={disabled}
       id={sliderId}
+      {...dataAttributes}
       {...rest}
     >
       <Track
@@ -210,6 +208,14 @@ export const Track = forwardRef(function Track(
   },
   ref
 ) {
+  const dataAttributes = makeDataAttributes("slider-track", {
+    isVertical,
+    disabled
+  });
+  const innerDataAttributes = makeDataAttributes("slider-track-highlight", {
+    isVertical,
+    disabled
+  });
   return (
     <div
       ref={ref}
@@ -219,16 +225,12 @@ export const Track = forwardRef(function Track(
       data-reach-slider-track-disabled={disabled ? "" : undefined}
       id="track"
       style={{ ...style, position: "relative" }}
+      {...dataAttributes}
       {...props}
     >
       <div
-        data-reach-slider-track-highlight=""
-        data-reach-slider-track-highlight-horizontal={
-          !isVertical ? "" : undefined
-        }
-        data-reach-slider-track-highlight-vertical={isVertical ? "" : undefined}
-        data-reach-slider-track-highlight-disabled={disabled ? "" : undefined}
         style={{ position: "absolute", ...trackSegmentStyle, ...style }}
+        {...innerDataAttributes}
       />
       {children}
     </div>
@@ -262,6 +264,10 @@ export const Handle = forwardRef(function Handle(
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
   const { width, height } = useDimensions(ref);
+  const dataAttributes = makeDataAttributes("slider-handle", {
+    isVertical,
+    _disabled
+  });
 
   const dimension = isVertical ? height : width;
   const absoluteStartPosition = `calc(${_trackPercent}% - ${
@@ -270,10 +276,6 @@ export const Handle = forwardRef(function Handle(
 
   return (
     <div
-      data-reach-slider-handle=""
-      data-reach-slider-handle-horizontal={!isVertical ? "" : undefined}
-      data-reach-slider-handle-vertical={isVertical ? "" : undefined}
-      data-reach-slider-handle-disabled={_disabled ? "" : undefined}
       onFocus={onFocus}
       ref={node => mergeRefs([ref, _thumbRef], node)}
       role="slider"
@@ -293,6 +295,7 @@ export const Handle = forwardRef(function Handle(
           : { left: absoluteStartPosition }),
         ...style
       }}
+      {...dataAttributes}
       {...props}
     />
   );
@@ -304,7 +307,6 @@ export const Marker = forwardRef(function Marker(
     ariaLabelledBy,
     children,
     centered,
-    label,
     min,
     max,
     onThumbFocus,
@@ -329,33 +331,23 @@ export const Marker = forwardRef(function Marker(
   const ref = forwardedRef || ownRef;
   const actualValue = valueToPercent(value, min, max);
   const { width, height } = useDimensions(ref);
+  const highlight = _value >= value;
+  const dataAttributes = makeDataAttributes("slider-marker", {
+    isVertical,
+    _disabled,
+    highlight
+  });
 
   const dimension = isVertical ? height : width;
 
   const absoluteStartPosition = `calc(${actualValue}% - ${
     centered ? `${dimension}px / 2` : `${dimension}px * ${actualValue * 0.01}`
   })`;
-  const highlight = _value > value;
 
-  // Label might be a zero, so we can't rely on truthy/falsy checks
-  const hasLabel = label != null;
+  console.log(typeof children);
 
   return value != null ? (
     <div
-      data-reach-slider-marker=""
-      data-reach-slider-marker-highlight={highlight ? "" : undefined}
-      data-reach-slider-marker-highlight-horizontal={
-        highlight && !isVertical ? "" : undefined
-      }
-      data-reach-slider-marker-highlight-vertical={
-        highlight && isVertical ? "" : undefined
-      }
-      data-reach-slider-marker-highlight-disabled={
-        highlight && _disabled ? "" : undefined
-      }
-      data-reach-slider-marker-horizontal={!isVertical ? "" : undefined}
-      data-reach-slider-marker-vertical={isVertical ? "" : undefined}
-      data-reach-slider-marker-disabled={_disabled ? "" : undefined}
       role="presentation"
       ref={ref}
       style={{
@@ -365,21 +357,10 @@ export const Marker = forwardRef(function Marker(
           : { left: absoluteStartPosition }),
         ...style
       }}
+      {...dataAttributes}
       {...props}
-    >
-      {(hasLabel || children) && (
-        <div
-          data-reach-slider-marker-label=""
-          data-reach-slider-marker-label-horizontal={
-            !isVertical ? "" : undefined
-          }
-          data-reach-slider-marker-label-vertical={isVertical ? "" : undefined}
-          data-reach-slider-marker-label-disabled={_disabled ? "" : undefined}
-        >
-          {hasLabel ? label : children}
-        </div>
-      )}
-    </div>
+      children={children}
+    />
   ) : null;
 });
 
@@ -411,6 +392,23 @@ export function roundValueToStep(value, step) {
 export function getAllowedValue(val, min, max) {
   return val > max ? max : val < min ? min : val;
 }
+
+export const makeDataAttributes = (
+  component = "slider",
+  { isVertical, highlight, disabled }
+) => ({
+  [`data-reach-${component}`]: "",
+  [`data-reach-${component}-horizontal`]: !isVertical ? "" : undefined,
+  [`data-reach-${component}-vertical`]: isVertical ? "" : undefined,
+  [`data-reach-${component}-disabled`]: disabled ? "" : undefined,
+  [`data-reach-${component}-highlight`]: highlight ? "" : undefined,
+  [`data-reach-${component}-highlight-horizontal`]:
+    highlight && !isVertical ? "" : undefined,
+  [`data-reach-${component}-highlight-vertical`]:
+    highlight && isVertical ? "" : undefined,
+  [`data-reach-${component}-highlight-disabled`]:
+    highlight && disabled ? "" : undefined
+});
 
 export const makeId = (id, index) => `${id}:${index}`;
 

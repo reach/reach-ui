@@ -69,8 +69,8 @@
 }
 
 [data-reach-slider-marker] {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background: inherit;
   border: 1px solid #fff;
   border-radius: 4px;
@@ -92,19 +92,19 @@
   background: var(--highlight-color);
 }
 
-[data-reach-slider-marker-label] {
+[data-reach-slider-marker] > span {
   position: absolute;
   font-size: 12px;
 }
 
-[data-reach-slider-marker-label-horizontal] {
+[data-reach-slider-marker-horizontal] > span {
   top: calc(100% + 5px);
   left: 50%;
   text-align: center;
   transform: translateX(-50%);
 }
 
-[data-reach-slider-marker-label-vertical] {
+[data-reach-slider-marker-vertical] > span {
   left: calc(100% + 5px);
   top: 50%;
   text-align: right;

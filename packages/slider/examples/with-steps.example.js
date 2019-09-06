@@ -15,7 +15,11 @@ export const Example = () => {
       <Handle centered />
       {steps.map(key => {
         const value = key * step;
-        return <Marker key={key} value={value} label={value} centered />;
+        return (
+          <Marker key={key} value={value} centered>
+            <span>{value}</span>
+          </Marker>
+        );
       })}
     </Slider>
   );
