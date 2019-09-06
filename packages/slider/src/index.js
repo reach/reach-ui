@@ -55,8 +55,8 @@ export const Slider = forwardRef(function Slider(
     min = 0,
     name,
     onBlur,
-    onChange,
     onFocus,
+    onChange,
     onKeyDown,
     onPointerDown,
     onPointerMove,
@@ -160,8 +160,9 @@ export const Slider = forwardRef(function Slider(
         ref={ref}
         tabIndex="-1"
         onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
         onPointerMove={handlePointerMove}
+        onPointerUp={wrapEvent(onPointerUp, handlePointerUp)}
+        onBlur={wrapEvent(onBlur, handlePointerUp)}
         aria-disabled={disabled}
         id={sliderId}
         {...dataAttributes}
@@ -392,7 +393,6 @@ const useSliderEvents = ({
   onKeyDown,
   onPointerDown,
   onPointerMove,
-  onPointerUp,
   min,
   max,
   step,
@@ -470,7 +470,6 @@ const useSliderEvents = ({
   });
 
   const handlePointerMove = wrapEvent(onPointerMove, event => {
-    console.log("active!");
     if (disabled) {
       if (active) setActive(false);
       return;
@@ -489,17 +488,31 @@ const useSliderEvents = ({
       if (active) setActive(false);
       return;
     }
+    handleRef.current.focus();
+
     if (handleRef.current) {
-      setActive(true);
-      handleRef.current.focus();
+      const newValue = getNewValue(event);
       handleRef.current.setPointerCapture(event.pointerId);
+      setActive(true);
+      if (newValue !== value) {
+        updateValue(newValue);
+      }
     }
+
+    // We need to make sure the handle is moveable immediately on first click, so we need
+    // to prevent the slider from getting focus by calling `preventDefault.
+    // The problem is, this also screws up the pointer events resulting in some jank if the
+    // user moves the pointer outside the element before releasing.
+    // This needs some work.
+    event.preventDefault();
   });
 
-  const handlePointerUp = wrapEvent(onPointerUp, event => {
+  const handlePointerUp = event => {
+    if (handleRef.current && event.pointerId) {
+      handleRef.current.releasePointerCapture(event.pointerId);
+    }
     setActive(false);
-    handleRef.current.releasePointerCapture(event.pointerId);
-  });
+  };
 
   return {
     handleKeyDown,
