@@ -21,16 +21,12 @@ Before doing anything else, run these commands:
 git clone git@github.com:reach/reach-ui.git
 cd reach-ui
 yarn install
-yarn bootstrap
 yarn build
 ```
 
 ## Root Repo Scripts:
 
 ```sh
-yarn bootstrap    # bootstraps lerna so all dependencies get
-                  # linked for cross-component development
-
 yarn start        # starts storybook server
 
 yarn test         # runs tests in all packages

@@ -377,11 +377,13 @@ export default function Tooltip({
   );
 }
 
-Tooltip.propTypes = {
-  children: node.isRequired,
-  label: node.isRequired,
-  ariaLabel: string
-};
+if (__DEV__) {
+  Tooltip.propTypes = {
+    children: node.isRequired,
+    label: node.isRequired,
+    ariaLabel: string
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TooltipPopup = forwardRef(function TooltipPopup(
@@ -415,11 +417,13 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
   ) : null;
 });
 
-TooltipPopup.propTypes = {
-  label: node.isRequired,
-  ariaLabel: string,
-  position: func
-};
+if (__DEV__) {
+  TooltipPopup.propTypes = {
+    label: node.isRequired,
+    ariaLabel: string,
+    position: func
+  };
+}
 
 // Need a separate component so that useRect works inside the portal
 const TooltipContent = forwardRef(function TooltipContent(
