@@ -118,13 +118,15 @@ let Alert = ({ children, type, ...props }) => {
   );
 };
 
-Alert.propTypes = {
-  children: node,
-  type: string
-};
-
 Alert.defaultProps = {
   type: "polite"
 };
+
+if (__DEV__) {
+  Alert.propTypes = {
+    children: node,
+    type: string
+  };
+}
 
 export default Alert;
