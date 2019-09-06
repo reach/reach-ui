@@ -2,19 +2,16 @@
 // Welcome to @reach/slider!
 
 import React, {
+  createContext,
   forwardRef,
-  useRef,
-  useState,
   useCallback,
-  cloneElement
+  useContext,
+  useRef,
+  useState
 } from "react";
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import { useId } from "@reach/auto-id";
 import { wrapEvent, callEventWithDefault } from "@reach/utils";
-
-// TODO:
-//       change vertical prop to direction that takes a string
-//       drop label prop for markers
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -33,12 +30,15 @@ import { wrapEvent, callEventWithDefault } from "@reach/utils";
 //    reversed slider, so we'll want to update the math to deal
 //    with that somehow. Maybe `reverse` prop? Should we do the same for vertical sliders?
 //    How does the native range input react to RTL language detection (if at all)?
-//    And if so, would we approach it differently with a multi-thumb slider?
+//    And if so, would we approach it differently with a multi-handle slider?
 
 const SliderOrientation = {
   horizontal: "horizontal",
   vertical: "vertical"
 };
+
+const SliderContext = createContext({});
+const useSliderContext = () => useContext(SliderContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
@@ -75,7 +75,7 @@ export const Slider = forwardRef(function Slider(
   const trackPercent = valueToPercent(actualValue, min, max);
 
   const trackRef = useRef();
-  const thumbRef = useRef();
+  const handleRef = useRef();
   const _id = useId();
 
   const updateValue = useCallback(
@@ -97,46 +97,45 @@ export const Slider = forwardRef(function Slider(
     handleMouseDown,
     removeEventListeners
   } = useSliderEvents({
-    value: actualValue,
     disabled,
-    step,
+    handleRef,
     isVertical,
-    min,
-    max,
-    updateValue,
     onKeyDown,
     onMouseDown,
     onMouseMove,
-    thumbRef,
-    trackRef
+    min,
+    max,
+    step,
+    value: actualValue,
+    trackRef,
+    updateValue
   });
 
   const valueText = getValueText ? getValueText(actualValue) : ariaValueText;
 
   const sliderId = id || _id;
 
-  const clones = React.Children.map(children, (child, index) => {
-    // ignore random <div/>s etc.
-    if (typeof child.type === "string") return child;
-    const clone = cloneElement(child, {
-      onThumbKeyDown: handleKeyDown,
-      onThumbFocus: onFocus,
-      _trackPercent: trackPercent,
-      ariaLabelledBy,
-      _isVertical: isVertical,
-      _orientation: orientation,
-      _disabled: disabled,
-      _thumbRef: thumbRef,
-      _trackRef: trackRef,
-      min,
-      max,
-      valueText,
-      _value: actualValue,
-      sliderId,
-      _id: makeId(sliderId, index)
-    });
-    return clone;
-  });
+  const ctx = {
+    ariaLabelledBy,
+    onKeyDown,
+    onMouseDown,
+    onMouseMove,
+    onHandleFocus: onFocus,
+    onHandleKeyDown: handleKeyDown,
+    sliderId,
+    sliderMax: max,
+    sliderMin: min,
+    sliderValue: actualValue,
+    valueText,
+    disabled,
+    isVertical,
+    orientation,
+    handleRef,
+    sliderStep: step,
+    trackPercent,
+    trackRef,
+    updateValue
+  };
 
   const dataAttributes = makeDataAttributes("slider", { isVertical, disabled });
   const trackSegmentStyle = isVertical
@@ -152,34 +151,34 @@ export const Slider = forwardRef(function Slider(
       };
 
   return (
-    <div
-      role="presentation"
-      ref={ref}
-      tabIndex="-1"
-      onMouseDown={handleMouseDown}
-      onMouseLeave={callEventWithDefault(onMouseLeave, removeEventListeners)}
-      onBlur={callEventWithDefault(onBlur, removeEventListeners)}
-      aria-disabled={disabled}
-      id={sliderId}
-      {...dataAttributes}
-      {...rest}
-    >
-      <Track
-        ref={trackRef}
-        isVertical={isVertical}
-        trackSegmentStyle={trackSegmentStyle}
-        disabled={disabled}
-        children={clones}
-      />
+    <SliderContext.Provider value={ctx}>
+      <div
+        role="presentation"
+        ref={ref}
+        tabIndex="-1"
+        onMouseDown={handleMouseDown}
+        onMouseLeave={callEventWithDefault(onMouseLeave, removeEventListeners)}
+        onBlur={callEventWithDefault(onBlur, removeEventListeners)}
+        aria-disabled={disabled}
+        id={sliderId}
+        {...dataAttributes}
+        {...rest}
+      >
+        <Track
+          ref={trackRef}
+          trackSegmentStyle={trackSegmentStyle}
+          children={children}
+        />
 
-      {/* do we need this? */}
-      <input
-        type="hidden"
-        value={actualValue}
-        name={name}
-        id={`input:${sliderId}`}
-      />
-    </div>
+        {/* do we need this? */}
+        <input
+          type="hidden"
+          value={actualValue}
+          name={name}
+          id={`input:${sliderId}`}
+        />
+      </div>
+    </SliderContext.Provider>
   );
 });
 
@@ -198,16 +197,11 @@ Slider.propTypes = {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Track = forwardRef(function Track(
-  {
-    children,
-    isVertical,
-    disabled,
-    style = {},
-    trackSegmentStyle = {},
-    ...props
-  },
+  { children, style = {}, trackSegmentStyle = {}, ...props },
   ref
 ) {
+  const { disabled, isVertical } = useSliderContext();
+
   const dataAttributes = makeDataAttributes("slider-track", {
     isVertical,
     disabled
@@ -219,10 +213,6 @@ export const Track = forwardRef(function Track(
   return (
     <div
       ref={ref}
-      data-reach-slider-track=""
-      data-reach-slider-track-horizontal={!isVertical ? "" : undefined}
-      data-reach-slider-track-vertical={isVertical ? "" : undefined}
-      data-reach-slider-track-disabled={disabled ? "" : undefined}
       id="track"
       style={{ ...style, position: "relative" }}
       {...dataAttributes}
@@ -240,52 +230,54 @@ export const Track = forwardRef(function Track(
 ////////////////////////////////////////////////////////////////////////////////
 export const Handle = forwardRef(function Handle(
   {
-    onThumbKeyDown: onKeyDown,
-    onThumbFocus: onFocus,
-    _trackPercent,
-    ariaLabelledBy,
-    _isVertical: isVertical,
-    _orientation,
-    _disabled,
-    _thumbRef,
-    _trackRef,
     centered = false,
-    min,
-    max,
-    valueText,
-    _value,
-    sliderId,
-    _id,
+    // min, // TODO: Create separate min/max for handles
+    // max,
     style = {},
     ...props
   },
   forwardedRef
 ) {
+  const {
+    ariaLabelledBy,
+    disabled,
+    handleRef,
+    isVertical,
+    onHandleFocus: onFocus,
+    onHandleKeyDown: onKeyDown,
+    orientation,
+    sliderMin,
+    sliderMax,
+    sliderValue,
+    trackPercent,
+    valueText
+  } = useSliderContext();
+
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
   const { width, height } = useDimensions(ref);
   const dataAttributes = makeDataAttributes("slider-handle", {
     isVertical,
-    _disabled
+    disabled
   });
 
   const dimension = isVertical ? height : width;
-  const absoluteStartPosition = `calc(${_trackPercent}% - ${
-    centered ? `${dimension}px / 2` : `${dimension}px * ${_trackPercent * 0.01}`
+  const absoluteStartPosition = `calc(${trackPercent}% - ${
+    centered ? `${dimension}px / 2` : `${dimension}px * ${trackPercent * 0.01}`
   })`;
 
   return (
     <div
       onFocus={onFocus}
-      ref={node => mergeRefs([ref, _thumbRef], node)}
+      ref={node => mergeRefs([ref, handleRef], node)}
       role="slider"
-      tabIndex={_disabled ? undefined : 0}
-      aria-disabled={_disabled}
-      aria-valuemin={min}
+      tabIndex={disabled ? undefined : 0}
+      aria-disabled={disabled}
+      aria-valuemin={sliderMin}
       aria-valuetext={valueText}
-      aria-orientation={_orientation}
-      aria-valuenow={_value}
-      aria-valuemax={max}
+      aria-orientation={orientation}
+      aria-valuenow={sliderValue}
+      aria-valuemax={sliderMax}
       aria-labelledby={ariaLabelledBy}
       onKeyDown={onKeyDown}
       style={{
@@ -303,38 +295,25 @@ export const Handle = forwardRef(function Handle(
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Marker = forwardRef(function Marker(
-  {
-    ariaLabelledBy,
-    children,
-    centered,
-    min,
-    max,
-    onThumbFocus,
-    onThumbKeyDown,
-    sliderId,
-    style = {},
-    value,
-    valueText,
-    _disabled,
-    _id,
-    _isVertical: isVertical,
-    _orientation,
-    _thumbRef,
-    _trackPercent,
-    _trackRef,
-    _value,
-    ...props
-  },
+  { children, centered, style = {}, value, ...props },
   forwardedRef
 ) {
+  const {
+    disabled,
+    isVertical,
+    sliderMin,
+    sliderMax,
+    sliderValue
+  } = useSliderContext();
+
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualValue = valueToPercent(value, min, max);
+  const actualValue = valueToPercent(value, sliderMin, sliderMax);
   const { width, height } = useDimensions(ref);
-  const highlight = _value >= value;
+  const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     isVertical,
-    _disabled,
+    disabled,
     highlight
   });
 
@@ -368,9 +347,7 @@ Marker.propTypes = {
   value: oneOfType([string, number]).isRequired
 };
 
-////////////////////////////////////////////////////////////////
-// UTILS
-////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 export function valueToPercent(value, min, max) {
   return ((value - min) * 100) / (max - min);
 }
@@ -413,18 +390,18 @@ export const makeDataAttributes = (
 export const makeId = (id, index) => `${id}:${index}`;
 
 const useSliderEvents = ({
-  step,
-  value,
+  disabled,
+  handleRef,
   isVertical,
-  min,
-  max,
-  updateValue,
   onKeyDown,
   onMouseDown,
   onMouseMove,
-  thumbRef,
-  disabled,
-  trackRef
+  min,
+  max,
+  step,
+  value,
+  trackRef,
+  updateValue
 }) => {
   const getNewValue = event => {
     if (trackRef.current) {
@@ -442,9 +419,7 @@ const useSliderEvents = ({
       if (step) {
         newValue = roundValueToStep(newValue, step);
       }
-
       newValue = getAllowedValue(newValue, min, max);
-
       return newValue;
     }
   };
@@ -507,7 +482,8 @@ const useSliderEvents = ({
 
     document.body.addEventListener("mousemove", handleMouseMove);
     document.body.addEventListener("mouseup", removeEventListeners);
-    thumbRef.current && thumbRef.current.focus();
+
+    handleRef.current && handleRef.current.focus();
   });
 
   const removeEventListeners = () => {

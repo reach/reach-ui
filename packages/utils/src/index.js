@@ -2,6 +2,7 @@ let checkedPkgs = {};
 
 let checkStyles = () => {};
 
+// eslint-disable-next-line no-undef
 if (__DEV__) {
   checkStyles = pkg => {
     // only check once per package
