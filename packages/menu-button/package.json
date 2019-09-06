@@ -7,7 +7,6 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
@@ -27,13 +26,8 @@
   "devDependencies": {
     "@reach/router": "^1.0.0",
     "@reach/tooltip": "^0.2.2",
-    "jest": "^23.4.2",
     "react": "^16.8.0",
     "react-test-renderer": "^16.8.0"
-  },
-  "jest": {
-    "testRegex": ".+\\.test\\.js$",
-    "testURL": "http://localhost"
   },
   "files": [
     "es",
