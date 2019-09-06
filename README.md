@@ -27,9 +27,6 @@ yarn build
 ## Root Repo Scripts:
 
 ```sh
-yarn bootstrap    # bootstraps lerna so all dependencies get
-                  # linked for cross-component development
-
 yarn start        # starts storybook server
 
 yarn test         # runs tests in all packages
