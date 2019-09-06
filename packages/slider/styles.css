@@ -80,12 +80,12 @@
 
 [data-reach-slider-marker-horizontal] {
   top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
 }
 
 [data-reach-slider-marker-vertical] {
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
 [data-reach-slider-marker-highlight] {
