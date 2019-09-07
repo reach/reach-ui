@@ -7,13 +7,13 @@
   padding: 20px;
 }
 
-[data-reach-slider-horizontal] {
+[data-reach-slider-orientation="horizontal"] {
   width: 250px;
   height: 4px;
   padding-bottom: 30px;
 }
 
-[data-reach-slider-vertical] {
+[data-reach-slider-orientation="vertical"] {
   width: 4px;
   height: 250px;
   padding-right: 30px;
@@ -37,21 +37,21 @@
   transition: transform 200ms ease-out;
 }
 
-[data-reach-slider-handle-horizontal] {
+[data-reach-slider-handle-orientation="horizontal"] {
   top: 50%;
   transform: translateY(-50%) scale(1);
 }
 
-[data-reach-slider-handle-horizontal]:focus {
+[data-reach-slider-handle-orientation="horizontal"]:focus {
   transform: translateY(-50%) scale(var(--handle-focus-scale));
 }
 
-[data-reach-slider-handle-vertical] {
+[data-reach-slider-handle-orientation="vertical"] {
   left: 50%;
   transform: translateX(-50%) scale(1);
 }
 
-[data-reach-slider-handle-vertical]:focus {
+[data-reach-slider-handle-orientation="vertical"]:focus {
   transform: translateX(-50%) scale(var(--handle-focus-scale));
 }
 
@@ -60,11 +60,11 @@
   background: var(--highlight-color);
 }
 
-[data-reach-slider-track-highlight-horizontal] {
+[data-reach-slider-track-highlight="horizontal"] {
   height: 100%;
 }
 
-[data-reach-slider-track-highlight-vertical] {
+[data-reach-slider-track-highlight="vertical"] {
   width: 100%;
 }
 
@@ -78,12 +78,12 @@
   transition: background 200ms ease-out;
 }
 
-[data-reach-slider-marker-horizontal] {
+[data-reach-slider-marker-orientation="horizontal"] {
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-[data-reach-slider-marker-vertical] {
+[data-reach-slider-marker-orientation="vertical"] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -97,14 +97,14 @@
   font-size: 12px;
 }
 
-[data-reach-slider-marker-horizontal] > span {
+[data-reach-slider-marker-orientation="horizontal"] > span {
   top: calc(100% + 5px);
   left: 50%;
   text-align: center;
   transform: translateX(-50%);
 }
 
-[data-reach-slider-marker-vertical] > span {
+[data-reach-slider-marker-orientation="vertical"] > span {
   left: calc(100% + 5px);
   top: 50%;
   text-align: right;

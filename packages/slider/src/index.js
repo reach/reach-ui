@@ -16,7 +16,10 @@ import { wrapEvent } from "@reach/utils";
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
 //   - https://github.com/Stanko/aria-progress-range-slider
+
 // TODO: Screen reader testing
+// TODO: Figure out capturing pointerUp outside of the window when handle is focused
+// TODO: Warnings when switching from controlled/uncontrolled, etc.
 
 // Random thoughts/notes:
 //  - There is a bit of jank, particularly with vertical sliders, when reacting to the mouse
@@ -123,6 +126,7 @@ export const Slider = forwardRef(function Slider(
     onPointerDown,
     onPointerMove,
     onPointerUp,
+    onHandleBlur: onBlur,
     onHandleFocus: onFocus,
     onHandleKeyDown: handleKeyDown,
     sliderId,
@@ -140,7 +144,10 @@ export const Slider = forwardRef(function Slider(
     updateValue
   };
 
-  const dataAttributes = makeDataAttributes("slider", { isVertical, disabled });
+  const dataAttributes = makeDataAttributes("slider", {
+    disabled,
+    orientation
+  });
   const trackSegmentStyle = isVertical
     ? {
         width: `100%`,
@@ -162,7 +169,6 @@ export const Slider = forwardRef(function Slider(
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={wrapEvent(onPointerUp, handlePointerUp)}
-        onBlur={wrapEvent(onBlur, handlePointerUp)}
         aria-disabled={disabled}
         id={sliderId}
         {...dataAttributes}
@@ -173,30 +179,36 @@ export const Slider = forwardRef(function Slider(
           trackSegmentStyle={trackSegmentStyle}
           children={children}
         />
-
-        {/* do we need this? */}
-        <input
-          type="hidden"
-          value={actualValue}
-          name={name}
-          id={`input:${sliderId}`}
-        />
+        {name && (
+          // If the slider is used in a form we'll need an input field to capture the value.
+          // We'll assume this when the component is given a form field name.
+          <input
+            type="hidden"
+            value={actualValue}
+            name={name}
+            id={`input:${sliderId}`}
+          />
+        )}
       </div>
     </SliderContext.Provider>
   );
 });
 
 Slider.propTypes = {
+  defaultValue: number,
   disabled: bool,
+  getValueText: func,
   min: number,
   max: number,
+  name: string,
   orientation: oneOf([
     SliderOrientation.horizontal,
     SliderOrientation.vertical
   ]),
   onChange: func,
   children: node,
-  step: number
+  step: number,
+  value: number
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -204,14 +216,14 @@ export const Track = forwardRef(function Track(
   { children, style = {}, trackSegmentStyle = {}, ...props },
   ref
 ) {
-  const { disabled, isVertical } = useSliderContext();
+  const { disabled, orientation } = useSliderContext();
 
   const dataAttributes = makeDataAttributes("slider-track", {
-    isVertical,
+    orientation,
     disabled
   });
   const innerDataAttributes = makeDataAttributes("slider-track-highlight", {
-    isVertical,
+    orientation,
     disabled
   });
   return (
@@ -247,6 +259,7 @@ export const Handle = forwardRef(function Handle(
     disabled,
     handleRef,
     isVertical,
+    onHandleBlur: onBlur,
     onHandleFocus: onFocus,
     onHandleKeyDown: onKeyDown,
     orientation,
@@ -261,7 +274,7 @@ export const Handle = forwardRef(function Handle(
   const ref = forwardedRef || ownRef;
   const { width, height } = useDimensions(ref);
   const dataAttributes = makeDataAttributes("slider-handle", {
-    isVertical,
+    orientation,
     disabled
   });
 
@@ -272,6 +285,7 @@ export const Handle = forwardRef(function Handle(
 
   return (
     <div
+      onBlur={onBlur}
       onFocus={onFocus}
       ref={node => mergeRefs([ref, handleRef], node)}
       role="slider"
@@ -297,6 +311,10 @@ export const Handle = forwardRef(function Handle(
   );
 });
 
+Handle.propTypes = {
+  centered: bool
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 export const Marker = forwardRef(function Marker(
   { children, style = {}, value, ...props },
@@ -305,6 +323,7 @@ export const Marker = forwardRef(function Marker(
   const {
     disabled,
     isVertical,
+    orientation,
     sliderMin,
     sliderMax,
     sliderValue
@@ -315,7 +334,7 @@ export const Marker = forwardRef(function Marker(
   const actualValue = valueToPercent(value, sliderMin, sliderMax);
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
-    isVertical,
+    orientation,
     disabled,
     highlight
   });
@@ -369,20 +388,15 @@ export function getAllowedValue(val, min, max) {
 
 export const makeDataAttributes = (
   component = "slider",
-  { isVertical, highlight, disabled }
-) => ({
-  [`data-reach-${component}`]: "",
-  [`data-reach-${component}-horizontal`]: !isVertical ? "" : undefined,
-  [`data-reach-${component}-vertical`]: isVertical ? "" : undefined,
-  [`data-reach-${component}-disabled`]: disabled ? "" : undefined,
-  [`data-reach-${component}-highlight`]: highlight ? "" : undefined,
-  [`data-reach-${component}-highlight-horizontal`]:
-    highlight && !isVertical ? "" : undefined,
-  [`data-reach-${component}-highlight-vertical`]:
-    highlight && isVertical ? "" : undefined,
-  [`data-reach-${component}-highlight-disabled`]:
-    highlight && disabled ? "" : undefined
-});
+  { orientation, highlight, disabled }
+) => {
+  return {
+    [`data-reach-${component}`]: "",
+    [`data-reach-${component}-orientation`]: orientation,
+    [`data-reach-${component}-disabled`]: disabled ? orientation : undefined,
+    [`data-reach-${component}-highlight`]: highlight ? orientation : undefined
+  };
+};
 
 export const makeId = (id, index) => `${id}:${index}`;
 
