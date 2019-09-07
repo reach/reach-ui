@@ -168,7 +168,7 @@ export const Slider = forwardRef(function Slider(
         tabIndex="-1"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
-        onPointerUp={wrapEvent(onPointerUp, handlePointerUp)}
+        onPointerUp={handlePointerUp}
         aria-disabled={disabled}
         id={sliderId}
         {...dataAttributes}
@@ -407,6 +407,7 @@ const useSliderEvents = ({
   onKeyDown,
   onPointerDown,
   onPointerMove,
+  onPointerUp,
   min,
   max,
   step,
@@ -521,12 +522,12 @@ const useSliderEvents = ({
     event.preventDefault();
   });
 
-  const handlePointerUp = event => {
+  const handlePointerUp = wrapEvent(onPointerUp, event => {
     if (handleRef.current && event.pointerId) {
       handleRef.current.releasePointerCapture(event.pointerId);
     }
     setActive(false);
-  };
+  });
 
   return {
     handleKeyDown,
