@@ -73,6 +73,7 @@ export const Slider = forwardRef(function Slider(
 ) {
   const { current: isControlled } = useRef(controlledValue != null);
   const [value, setValue] = useState(defaultValue || min);
+  const [handlePosition, setHandlePosition] = useState(0);
   const _value = isControlled ? controlledValue : value;
   const actualValue = getAllowedValue(_value, min, max);
   const trackPercent = valueToPercent(actualValue, min, max);
@@ -87,7 +88,7 @@ export const Slider = forwardRef(function Slider(
         setValue(newValue);
       }
       if (onChange) {
-        onChange(newValue, { min, max });
+        onChange(newValue, { min, max, handlePosition });
       }
     },
     [isControlled, onChange]
@@ -137,6 +138,8 @@ export const Slider = forwardRef(function Slider(
     disabled,
     isVertical,
     orientation,
+    handlePosition,
+    setHandlePosition,
     handleRef,
     sliderStep: step,
     trackPercent,
@@ -257,6 +260,7 @@ export const Handle = forwardRef(function Handle(
   const {
     ariaLabelledBy,
     disabled,
+    setHandlePosition,
     handleRef,
     isVertical,
     onHandleBlur: onBlur,
@@ -282,6 +286,10 @@ export const Handle = forwardRef(function Handle(
   const absoluteStartPosition = `calc(${trackPercent}% - ${
     centered ? `${dimension}px / 2` : `${dimension}px * ${trackPercent * 0.01}`
   })`;
+
+  React.useEffect(() => {
+    setHandlePosition(absoluteStartPosition);
+  }, [absoluteStartPosition]);
 
   return (
     <div
