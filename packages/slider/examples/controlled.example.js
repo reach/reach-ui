@@ -1,12 +1,29 @@
 import React from "react";
 import "../styles.css";
-import { Slider, Handle, Marker } from "../src";
+import { Slider, Handle, Marker, Track, TrackHighlight } from "../src";
 
 export const name = "Controlled";
 
 export const Example = () => {
   const [value, setValue] = React.useState(0);
   const [status, setStatus] = React.useState("Give us some happiness!");
+  const markers = [
+    {
+      face: "🙁",
+      value: 0,
+      label: "frowny face"
+    },
+    {
+      face: "😐",
+      value: 60,
+      label: "neutral face"
+    },
+    {
+      face: "🙂",
+      value: 120,
+      label: "smiley face"
+    }
+  ];
   const handleChange = (newValue, { min, max }) => {
     const absVar = 0 - min;
     const absMin = min + absVar;
@@ -27,22 +44,17 @@ export const Example = () => {
   return (
     <div>
       <Slider onChange={handleChange} value={value} min={0} max={120}>
-        <Handle centered />
-        <Marker value={0}>
-          <span role="img" aria-label="frowny face">
-            🙁
-          </span>
-        </Marker>
-        <Marker value={60}>
-          <span role="img" aria-label="neutral face">
-            😐
-          </span>
-        </Marker>
-        <Marker value={120}>
-          <span role="img" aria-label="smiley face">
-            🙂
-          </span>
-        </Marker>
+        <Track>
+          <TrackHighlight />
+          <Handle />
+          {markers.map(({ face, label, value: val }) => (
+            <Marker value={val}>
+              <span role="img" aria-label={label}>
+                {face}
+              </span>
+            </Marker>
+          ))}
+        </Track>
       </Slider>
       <p role="status" style={{ color: "crimson" }}>
         Happieness level at {value}% – {status}

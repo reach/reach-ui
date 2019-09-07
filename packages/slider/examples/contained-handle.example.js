@@ -1,11 +1,14 @@
 import React from "react";
 import "../styles.css";
-import { Slider, Handle } from "../src";
+import { Slider, Handle, Track, TrackHighlight } from "../src";
 
 export const name = "Contained Handle";
 
 export const Example = () => (
   <Slider handleAlignment="contain">
-    <Handle />
+    <Track>
+      <TrackHighlight />
+      <Handle />
+    </Track>
   </Slider>
 );

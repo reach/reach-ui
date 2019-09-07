@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles.css";
-import { Slider, Handle, Marker } from "../src";
+import { Slider, Handle, Marker, Track, TrackHighlight } from "../src";
 
 export const name = "With Steps";
 
@@ -12,15 +12,18 @@ export const Example = () => {
   const steps = Array.from(Array(range / step + 1).keys());
   return (
     <Slider step={step} min={min} max={max}>
-      <Handle />
-      {steps.map(key => {
-        const value = key * step;
-        return (
-          <Marker key={key} value={value}>
-            <span>{value}</span>
-          </Marker>
-        );
-      })}
+      <Track>
+        <TrackHighlight />
+        <Handle />
+        {steps.map(key => {
+          const value = key * step;
+          return (
+            <Marker key={key} value={value}>
+              <span>{value}</span>
+            </Marker>
+          );
+        })}
+      </Track>
     </Slider>
   );
 };

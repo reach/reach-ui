@@ -1,7 +1,7 @@
 import React from "react";
 // import { useTransition, useSprings, animated } from "react-spring";
 import "../styles.css";
-import { Slider, Handle } from "../src";
+import { Slider, Handle, Track, TrackHighlight } from "../src";
 
 export const name = "Animated";
 
@@ -21,6 +21,7 @@ export const Example = () => {
     ]);
   };
 
+  // TODO: Animate
   // Thoughts:
   //  - In order to animate using something like React Spring, user may need
   //    to access some state from inside the component. Perhaps we allow them
@@ -48,7 +49,10 @@ export const Example = () => {
             min={MIN}
             max={MAX}
           >
-            <Handle />
+            <Track>
+              <TrackHighlight />
+              <Handle />
+            </Track>
           </Slider>
         );
       })}

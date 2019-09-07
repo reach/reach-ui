@@ -138,7 +138,7 @@ export const Slider = forwardRef(function Slider(
 
   const sliderId = id || _id;
 
-  const trackSegmentStyle = isVertical
+  const trackHighlightStyle = isVertical
     ? {
         width: `100%`,
         height: `${trackPercent}%`,
@@ -173,7 +173,7 @@ export const Slider = forwardRef(function Slider(
     sliderStep: step,
     trackPercent,
     trackRef,
-    trackSegmentStyle,
+    trackHighlightStyle,
     updateValue
   };
 
@@ -196,7 +196,7 @@ export const Slider = forwardRef(function Slider(
         {...dataAttributes}
         {...rest}
       >
-        <Track ref={trackRef} children={children} />
+        {children}
         {name && (
           // If the slider is used in a form we'll need an input field to capture the value.
           // We'll assume this when the component is given a form field name.
@@ -234,20 +234,11 @@ export const Track = forwardRef(function Track(
   { children, style = {}, ...props },
   forwardedRef
 ) {
-  const {
-    disabled,
-    orientation,
-    trackRef,
-    trackSegmentStyle
-  } = useSliderContext();
+  const { disabled, orientation, trackRef } = useSliderContext();
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
 
   const dataAttributes = makeDataAttributes("slider-track", {
-    orientation,
-    disabled
-  });
-  const innerDataAttributes = makeDataAttributes("slider-track-highlight", {
     orientation,
     disabled
   });
@@ -259,12 +250,31 @@ export const Track = forwardRef(function Track(
       {...dataAttributes}
       {...props}
     >
-      <div
-        style={{ position: "absolute", ...trackSegmentStyle, ...style }}
-        {...innerDataAttributes}
-      />
       {children}
     </div>
+  );
+});
+
+////////////////////////////////////////////////////////////////////////////////
+export const TrackHighlight = forwardRef(function TrackHighlight(
+  { children, style = {}, ...props },
+  forwardedRef
+) {
+  const { disabled, orientation, trackHighlightStyle } = useSliderContext();
+  const ownRef = useRef(null);
+  const ref = forwardedRef || ownRef;
+
+  const dataAttributes = makeDataAttributes("slider-track-highlight", {
+    orientation,
+    disabled
+  });
+  return (
+    <div
+      ref={ref}
+      style={{ position: "absolute", ...trackHighlightStyle, ...style }}
+      {...dataAttributes}
+      {...props}
+    />
   );
 });
 
