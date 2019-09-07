@@ -12,11 +12,11 @@ export const Example = () => {
   const steps = Array.from(Array(range / step + 1).keys());
   return (
     <Slider step={step} min={min} max={max}>
-      <Handle centered />
+      <Handle />
       {steps.map(key => {
         const value = key * step;
         return (
-          <Marker key={key} value={value} centered>
+          <Marker key={key} value={value}>
             <span>{value}</span>
           </Marker>
         );

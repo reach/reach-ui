@@ -21,6 +21,22 @@ export const Example = () => {
     ]);
   };
 
+  // Thoughts:
+  //  - In order to animate using something like React Spring, user may need
+  //    to access some state from inside the component. Perhaps we allow them
+  //    to pass children as a function for that? Any better ideas?
+  //    <Slider>
+  //      {(handlePosition) => {
+  //        const transition = useTransition( ...use handlePosition to create animation styles );
+  //        transitions.map(({ item, key, props }) => (
+  //          <animated.div {...props} key={key}>
+  //            <Handle />
+  //          </animated.div>
+  //        ))
+  //        <Handle />
+  //      }}
+  //    </Slider>
+
   return (
     <div>
       {values.map((value, index) => {
@@ -32,7 +48,7 @@ export const Example = () => {
             min={MIN}
             max={MAX}
           >
-            <Handle centered />
+            <Handle />
           </Slider>
         );
       })}
@@ -43,11 +59,3 @@ export const Example = () => {
     </div>
   );
 };
-
-function usePrevious(value) {
-  const ref = React.useRef(null);
-  React.useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
-}

@@ -6,7 +6,7 @@ export const name = "Basic";
 
 export const Example = () => (
   <Slider>
-    <Handle centered />
+    <Handle />
     <Marker value={10}>
       <span>10</span>
     </Marker>

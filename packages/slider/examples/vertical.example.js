@@ -6,7 +6,7 @@ export const name = "Vertical";
 
 export const Example = () => (
   <Slider orientation="vertical">
-    <Handle centered />
+    <Handle />
     <Marker value={10}>
       <span>10</span>
     </Marker>

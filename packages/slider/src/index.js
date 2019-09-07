@@ -20,6 +20,7 @@ import { wrapEvent } from "@reach/utils";
 // TODO: Screen reader testing
 // TODO: Figure out capturing pointerUp outside of the window when handle is focused
 // TODO: Warnings when switching from controlled/uncontrolled, etc.
+// TODO: Implement + test valueText
 
 // Random thoughts/notes:
 //  - There is a bit of jank, particularly with vertical sliders, when reacting to the mouse
@@ -40,8 +41,16 @@ const SliderOrientation = {
   vertical: "vertical"
 };
 
-const SliderContext = createContext({});
-const useSliderContext = () => useContext(SliderContext);
+const HandleAlignment = {
+  // Handle is centered directly over the current value marker
+  center: "center",
+  // Handle is contained within the bounds of the track, offset slightlu from the value's
+  // center mark to accommodate
+  contain: "contain"
+};
+
+export const SliderContext = createContext({});
+export const useSliderContext = () => useContext(SliderContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
@@ -53,6 +62,7 @@ export const Slider = forwardRef(function Slider(
     disabled,
     value: controlledValue,
     getValueText,
+    handleAlignment = HandleAlignment.center,
     id,
     max = 100,
     min = 0,
@@ -72,15 +82,25 @@ export const Slider = forwardRef(function Slider(
   ref
 ) {
   const { current: isControlled } = useRef(controlledValue != null);
-  const [value, setValue] = useState(defaultValue || min);
-  const [handlePosition, setHandlePosition] = useState(0);
-  const _value = isControlled ? controlledValue : value;
-  const actualValue = getAllowedValue(_value, min, max);
-  const trackPercent = valueToPercent(actualValue, min, max);
-
   const trackRef = useRef();
   const handleRef = useRef();
   const _id = useId();
+  const [value, setValue] = useState(defaultValue || min);
+  const _value = isControlled ? controlledValue : value;
+  const actualValue = getAllowedValue(_value, min, max);
+  const trackPercent = valueToPercent(actualValue, min, max);
+  const { ref: x, ...handleDimensions } = useDimensions(handleRef);
+  const isVertical = orientation === SliderOrientation.vertical;
+
+  const handleSize = isVertical
+    ? handleDimensions.height
+    : handleDimensions.width;
+
+  const handlePosition = `calc(${trackPercent}% - ${
+    handleAlignment === HandleAlignment.center
+      ? `${handleSize}px / 2`
+      : `${handleSize}px * ${trackPercent * 0.01}`
+  })`;
 
   const updateValue = useCallback(
     newValue => {
@@ -93,8 +113,6 @@ export const Slider = forwardRef(function Slider(
     },
     [isControlled, onChange]
   );
-
-  const isVertical = orientation === SliderOrientation.vertical;
 
   const {
     handleKeyDown,
@@ -116,13 +134,27 @@ export const Slider = forwardRef(function Slider(
     trackRef,
     updateValue
   });
-
   const valueText = getValueText ? getValueText(actualValue) : ariaValueText;
 
   const sliderId = id || _id;
 
+  const trackSegmentStyle = isVertical
+    ? {
+        width: `100%`,
+        height: `${trackPercent}%`,
+        bottom: 0
+      }
+    : {
+        width: `${trackPercent}%`,
+        height: `100%`,
+        left: 0
+      };
+
   const ctx = {
     ariaLabelledBy,
+    handleDimensions,
+    handlePosition,
+    handleRef,
     onKeyDown,
     onPointerDown,
     onPointerMove,
@@ -138,12 +170,10 @@ export const Slider = forwardRef(function Slider(
     disabled,
     isVertical,
     orientation,
-    handlePosition,
-    setHandlePosition,
-    handleRef,
     sliderStep: step,
     trackPercent,
     trackRef,
+    trackSegmentStyle,
     updateValue
   };
 
@@ -151,17 +181,6 @@ export const Slider = forwardRef(function Slider(
     disabled,
     orientation
   });
-  const trackSegmentStyle = isVertical
-    ? {
-        width: `100%`,
-        height: `${trackPercent}%`,
-        bottom: 0
-      }
-    : {
-        width: `${trackPercent}%`,
-        height: `100%`,
-        left: 0
-      };
 
   return (
     <SliderContext.Provider value={ctx}>
@@ -177,11 +196,7 @@ export const Slider = forwardRef(function Slider(
         {...dataAttributes}
         {...rest}
       >
-        <Track
-          ref={trackRef}
-          trackSegmentStyle={trackSegmentStyle}
-          children={children}
-        />
+        <Track ref={trackRef} children={children} />
         {name && (
           // If the slider is used in a form we'll need an input field to capture the value.
           // We'll assume this when the component is given a form field name.
@@ -216,10 +231,17 @@ Slider.propTypes = {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Track = forwardRef(function Track(
-  { children, style = {}, trackSegmentStyle = {}, ...props },
-  ref
+  { children, style = {}, ...props },
+  forwardedRef
 ) {
-  const { disabled, orientation } = useSliderContext();
+  const {
+    disabled,
+    orientation,
+    trackRef,
+    trackSegmentStyle
+  } = useSliderContext();
+  const ownRef = useRef(null);
+  const ref = forwardedRef || ownRef;
 
   const dataAttributes = makeDataAttributes("slider-track", {
     orientation,
@@ -231,7 +253,7 @@ export const Track = forwardRef(function Track(
   });
   return (
     <div
-      ref={ref}
+      ref={node => mergeRefs([ref, trackRef], node)}
       id="track"
       style={{ ...style, position: "relative" }}
       {...dataAttributes}
@@ -249,7 +271,6 @@ export const Track = forwardRef(function Track(
 ////////////////////////////////////////////////////////////////////////////////
 export const Handle = forwardRef(function Handle(
   {
-    centered = false,
     // min, // TODO: Create separate min/max for handles
     // max,
     style = {},
@@ -260,7 +281,7 @@ export const Handle = forwardRef(function Handle(
   const {
     ariaLabelledBy,
     disabled,
-    setHandlePosition,
+    handlePosition,
     handleRef,
     isVertical,
     onHandleBlur: onBlur,
@@ -270,26 +291,15 @@ export const Handle = forwardRef(function Handle(
     sliderMin,
     sliderMax,
     sliderValue,
-    trackPercent,
     valueText
   } = useSliderContext();
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const { width, height } = useDimensions(ref);
   const dataAttributes = makeDataAttributes("slider-handle", {
     orientation,
     disabled
   });
-
-  const dimension = isVertical ? height : width;
-  const absoluteStartPosition = `calc(${trackPercent}% - ${
-    centered ? `${dimension}px / 2` : `${dimension}px * ${trackPercent * 0.01}`
-  })`;
-
-  React.useEffect(() => {
-    setHandlePosition(absoluteStartPosition);
-  }, [absoluteStartPosition]);
 
   return (
     <div
@@ -308,9 +318,7 @@ export const Handle = forwardRef(function Handle(
       onKeyDown={onKeyDown}
       style={{
         position: "absolute",
-        ...(isVertical
-          ? { bottom: absoluteStartPosition }
-          : { left: absoluteStartPosition }),
+        ...(isVertical ? { bottom: handlePosition } : { left: handlePosition }),
         ...style
       }}
       {...dataAttributes}
@@ -319,9 +327,7 @@ export const Handle = forwardRef(function Handle(
   );
 });
 
-Handle.propTypes = {
-  centered: bool
-};
+Handle.propTypes = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Marker = forwardRef(function Marker(
