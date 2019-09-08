@@ -121,37 +121,32 @@ _Type_: `function`
 
 Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
 
-```jsx
-;(() => {
-  const colors = ["firebrick", "goldenrod", "dodgerblue"]
-
-  function Example() {
-    const [tabIndex, setTabIndex] = useState(0)
-    const backgroundColor = colors[tabIndex]
-    return (
-      <Tabs
-        onChange={index => setTabIndex(index)}
-        style={{
-          color: "white",
-          background: backgroundColor,
-        }}
-      >
-        <TabList>
-          <Tab>Red</Tab>
-          <Tab>Yellow</Tab>
-          <Tab>Blue</Tab>
-        </TabList>
-        <TabPanels style={{ padding: 20 }}>
-          <TabPanel>The Primary Colors</TabPanel>
-          <TabPanel>Are 1, 2, 3</TabPanel>
-          <TabPanel>Red, yellow and blue.</TabPanel>
-        </TabPanels>
-      </Tabs>
-    )
-  }
-
-  return <Example />
-})()
+```.jsx
+function Example() {
+  const colors = ["firebrick", "goldenrod", "dodgerblue"];
+  const [tabIndex, setTabIndex] = useState(0);
+  const backgroundColor = colors[tabIndex];
+  return (
+    <Tabs
+      onChange={index => setTabIndex(index)}
+      style={{
+        color: "white",
+        background: backgroundColor
+      }}
+    >
+      <TabList>
+        <Tab>Red</Tab>
+        <Tab>Yellow</Tab>
+        <Tab>Blue</Tab>
+      </TabList>
+      <TabPanels style={{ padding: 20 }}>
+        <TabPanel>The Primary Colors</TabPanel>
+        <TabPanel>Are 1, 2, 3</TabPanel>
+        <TabPanel>Red, yellow and blue.</TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+}
 ```
 
 ### Tabs defaultIndex
@@ -164,10 +159,13 @@ Starts the tabs at a specific index.
 <Tabs defaultIndex={1}>
   <TabPanels>
     <TabPanel>
-      <img src="https://placekitten.com/400/200" />
+      <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
     </TabPanel>
     <TabPanel>
-      <img src="https://placecage.com/400/200" />
+      <img
+        src="https://www.placecage.com/400/200"
+        alt="A picture of Nicolas Cage"
+      />
     </TabPanel>
   </TabPanels>
   <TabList>
@@ -183,53 +181,52 @@ _Type_: `number`
 
 Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
 
-```jsx
-;(() => {
-  function ControlledExample() {
-    const [tabIndex, setTabIndex] = useState(0)
+```.jsx
+function Example() {
+  const [tabIndex, setTabIndex] = useState(0);
 
-    const handleSliderChange = event => {
-      setTabIndex(parseInt(event.target.value, 10))
-    }
-
-    const handleTabsChange = index => {
-      setTabIndex(index)
-    }
-
-    return (
-      <div>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          value={tabIndex}
-          onChange={handleSliderChange}
-        />
-
-        <Tabs index={tabIndex} onChange={handleTabsChange}>
-          <TabList>
-            <Tab>One</Tab>
-            <Tab>Two</Tab>
-            <Tab>Three</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <p>Click the tabs or pull the slider around</p>
-            </TabPanel>
-            <TabPanel>
-              <p>Yeah yeah. What's up?</p>
-            </TabPanel>
-            <TabPanel>
-              <p>Oh, hello there.</p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </div>
-    )
+  const handleSliderChange = event => {
+    setTabIndex(parseInt(event.target.value, 10));
   }
 
-  return <ControlledExample />
-})()
+  const handleTabsChange = index => {
+    setTabIndex(index)
+  }
+
+  return (
+    <div>
+      <input
+        type="range"
+        min="0"
+        max="2"
+        value={tabIndex}
+        onChange={handleSliderChange}
+      />
+
+      <Tabs
+        index={tabIndex}
+        onChange={handleTabsChange}
+      >
+        <TabList>
+          <Tab>One</Tab>
+          <Tab>Two</Tab>
+          <Tab>Three</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <p>Click the tabs or pull the slider around</p>
+          </TabPanel>
+          <TabPanel>
+            <p>Yeah yeah. What's up?</p>
+          </TabPanel>
+          <TabPanel>
+            <p>Oh, hello there.</p>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </div>
+  );
+}
 ```
 
 ### Tabs as
