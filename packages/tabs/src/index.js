@@ -48,7 +48,7 @@ export const Tabs = forwardRef(function Tabs(
 
   const clones = React.Children.map(children, child => {
     // ignore random <div/>s etc.
-    if (typeof child.type === "string") return child;
+    if (!child || typeof child.type === "string") return child;
     return cloneElement(child, {
       selectedIndex: isControlled ? controlledIndex : selectedIndex,
       _id,
