@@ -23,7 +23,7 @@
   "devDependencies": {
     "react-spring": "^8.0.19"
   },
-  "author": "Ryan Florence",
+  "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "files": [
     "es",
