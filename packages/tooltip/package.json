@@ -13,10 +13,10 @@
     "@reach/portal": "^0.2.1",
     "@reach/rect": "^0.2.1",
     "@reach/utils": "^0.2.3",
-    "@reach/visually-hidden": "^0.1.4",
-    "prop-types": "^15.7.2"
+    "@reach/visually-hidden": "^0.1.4"
   },
   "peerDependencies": {
+    "prop-types": "^15.x",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
