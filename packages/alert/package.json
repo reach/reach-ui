@@ -12,6 +12,7 @@
     "@reach/visually-hidden": "^0.1.4"
   },
   "peerDependencies": {
+    "prop-types": "^15.x",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },

@@ -11,7 +11,7 @@
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "peerDependencies": {
-    "prop-types": "^15.6.2",
+    "prop-types": "^15.x",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
