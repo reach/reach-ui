@@ -11,6 +11,8 @@ let style = {
   position: "absolute"
 };
 
-export default props => {
+function VisuallyHidden(props) {
   return <div style={style} {...props} />;
-};
+}
+
+export default VisuallyHidden;
