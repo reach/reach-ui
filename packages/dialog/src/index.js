@@ -49,7 +49,8 @@ let contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
-let FocusContext = React.createContext();
+let ConditionalWrapper = ({ condition, wrapper, children }) =>
+  condition ? wrapper(children) : children;
 
 let DialogOverlay = React.forwardRef(
   (
@@ -59,6 +60,7 @@ let DialogOverlay = React.forwardRef(
       initialFocusRef,
       onClick,
       onKeyDown,
+      removeScroll = true,
       ...props
     },
     forwardedRef
@@ -82,7 +84,10 @@ let DialogOverlay = React.forwardRef(
                   }
                 }}
               >
-                <RemoveScroll>
+                <ConditionalWrapper
+                  condition={removeScroll}
+                  wrapper={children => <RemoveScroll>{children}</RemoveScroll>}
+                >
                   <div
                     data-reach-dialog-overlay
                     onClick={wrapEvent(onClick, event => {
@@ -101,7 +106,7 @@ let DialogOverlay = React.forwardRef(
                     }}
                     {...props}
                   />
-                </RemoveScroll>
+                </ConditionalWrapper>
               </FocusLock>
             )}
           </Component>
@@ -134,11 +139,18 @@ let DialogContent = React.forwardRef(
   )
 );
 
-let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
+let Dialog = ({
+  isOpen,
+  onDismiss = k,
+  initialFocusRef,
+  removeScroll,
+  ...props
+}) => (
   <DialogOverlay
     isOpen={isOpen}
     onDismiss={onDismiss}
     initialFocusRef={initialFocusRef}
+    removeScroll={removeScroll}
   >
     <DialogContent {...props} />
   </DialogOverlay>
