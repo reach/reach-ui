@@ -78,6 +78,7 @@ High-level component to render a modal dialog window over the top of the page (o
 | [element props](#dialog-element-props) | spread |
 | [isOpen](#dialog-isopen)               | bool   |
 | [onDismiss](#dialog-ondismiss)         | func   |
+| [removeScroll](#dialog-removescroll)   | bool   |
 | [children](#dialog-element-props)      | node   |
 
 ### Dialog element props
@@ -218,6 +219,41 @@ The only time you shouldn't close the dialog on dismiss is when the dialog requi
 </Component>
 ```
 
+### Dialog removeScroll
+
+_Type_: `bool` default: `true`
+
+The page scroll is disabled by default. This behavior can be controlled with the `removeScroll` prop.
+
+```.jsx
+<Component initialState={{ showDialog: false, hideScroll: true }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true, hideScroll: true })}>
+        Open Dialog without scroll
+      </button>
+      <button onClick={() => setState({ showDialog: true, hideScroll: false })}>
+        Open Dialog with scroll
+      </button>
+
+      <Dialog
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
+        removeScroll={state.hideScroll}
+      >
+        <button
+          className="close-button"
+          onClick={() => setState({ showDialog: false })}
+        >
+          Close
+        </button>
+        <p>{state.hideScroll ? "No scroll" : "Scroll way!"}</p>
+      </Dialog>
+    </div>
+  )}
+</Component>
+```
+
 ### Dialog children
 
 _Type_: `node`
@@ -281,6 +317,7 @@ Use the following CSS to target the overlay:
 | [isOpen](#dialogoverlay-isopen)                   | bool   |
 | [onDismiss](#dialogoverlay-ondismiss)             | func   |
 | [initialFocusRef](#dialogoverlay-initialfocusref) | ref    |
+| [removeScroll](#dialogoverlay-removescroll)       | bool   |
 | [children](#dialogoverlay-element-props)          | node   |
 
 ### DialogOverlay element props
@@ -358,6 +395,12 @@ By default the first focusable element will receive focus when the dialog opens 
   return <App />;
 };
 ```
+
+### DialogOverlay removeScroll
+
+_Type_: `bool` default: `true`
+
+Same as [Dialog `removeScroll`](#dialog-removescroll)
 
 ### DialogOverlay children
 
