@@ -19,10 +19,10 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
-  "author": "Ryan Florence",
+  "author": "Ryan Florence <@ryanflorence>",
   "contributors": [
-    "Chance Strickland",
-    "Michael Jackson"
+    "Chance Strickland <@chancethedev>",
+    "Michael Jackson <@mjackson>"
   ],
   "license": "MIT",
   "files": [

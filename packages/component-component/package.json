@@ -10,8 +10,10 @@
   },
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
   "peerDependencies": {
-    "prop-types": "^15.6.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
