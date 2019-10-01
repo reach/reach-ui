@@ -126,20 +126,20 @@ export const Slider = forwardRef(function Slider(
     switch (event.key) {
       case "ArrowLeft":
       case "ArrowDown":
-        newValue = value - step;
+        newValue = actualValue - step;
         flag = true;
         break;
       case "ArrowRight":
       case "ArrowUp":
-        newValue = value + step;
+        newValue = actualValue + step;
         flag = true;
         break;
       case "PageDown":
-        newValue = value - tenSteps;
+        newValue = actualValue - tenSteps;
         flag = true;
         break;
       case "PageUp":
-        newValue = value + tenSteps;
+        newValue = actualValue + tenSteps;
         flag = true;
         break;
       case "Home":
