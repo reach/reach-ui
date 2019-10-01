@@ -243,7 +243,8 @@ export function useTooltip({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  const triggerRef = ref || useRef();
+  const ownRef = useRef();
+  const triggerRef = ref || ownRef;
   const triggerRect = useRect(triggerRef, isVisible);
 
   useEffect(() => {
@@ -324,7 +325,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
       switch (state) {
         case VISIBLE: {
           transition("selectWithKeyboard");

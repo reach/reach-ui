@@ -72,6 +72,7 @@ export function useRect(nodeRef, observe = true) {
       observerRef.current.observe();
     }
     return () => observerRef.current.unobserve();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [observe]);
   return rect;
 }
