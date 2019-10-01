@@ -384,7 +384,7 @@ let MenuListImpl = React.forwardRef(
         onBlur={event => {
           if (
             !state.closingWithClick &&
-            !refs.menu.contains(event.relatedTarget)
+            !refs.menu.contains(event.relatedTarget || document.activeElement)
           ) {
             setState(close);
           }
