@@ -407,7 +407,7 @@ let MenuListImpl = React.forwardRef(
           }
         })}
       >
-        {Children.map(children, (child, index) => {
+        {Children.map(Children.toArray(children), (child, index) => {
           if (isFocusableChildType(child)) {
             let focusIndex = focusableChildren.indexOf(child);
 
