@@ -21,7 +21,6 @@ import { wrapEvent } from "@reach/utils";
 
 // TODO: Screen reader testing
 // TODO: valueText
-// TODO: Keyboard events in controlled examples are broken ;_;
 
 // Random thoughts/notes:
 //    Currently testing this against the behavior of the native input range element to get
@@ -173,7 +172,11 @@ export const Slider = forwardRef(function Slider(
     }
     if (sliderRef.current && handleRef.current) {
       setPointerDown(true);
+      const newValue = getNewValueFromPointer(event);
       sliderRef.current.setPointerCapture(event.pointerId);
+      if (newValue !== value) {
+        updateValue(newValue);
+      }
       handleRef.current.focus();
     }
   });
