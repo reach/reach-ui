@@ -1,2 +1,2 @@
-index.js
-lib
+/es/**/*
+/index.js
