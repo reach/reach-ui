@@ -286,6 +286,7 @@ function useUpdateEffect(effect, deps) {
     } else {
       mounted.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }
 
