@@ -243,7 +243,8 @@ export function useTooltip({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  const triggerRef = ref || useRef();
+  const ownRef = useRef();
+  const triggerRef = ref || ownRef;
   const triggerRect = useRect(triggerRef, isVisible);
 
   useEffect(() => {
