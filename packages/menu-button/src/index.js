@@ -205,7 +205,7 @@ let MenuItem = React.forwardRef(
           select();
         })}
         onKeyDown={wrapEvent(onKeyDown, event => {
-          if (event.key === "Enter") {
+          if (event.key === "Enter" || event.key === " ") {
             // prevent the button from being "clicked" by
             // this "Enter" keydown
             event.preventDefault();
