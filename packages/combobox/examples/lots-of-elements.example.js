@@ -72,6 +72,7 @@ function useCityMatch(term) {
         : matchSorter(cities, term, {
             keys: [item => `${item.city}, ${item.state}`]
           }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
   );
 }
