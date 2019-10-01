@@ -8,7 +8,8 @@
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "clean": "git clean -fdX .",
-    "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master"
+    "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master",
+    "lint": "lerna run lint"
   },
   "dependencies": {
     "@babel/cli": "^7.6.2",
