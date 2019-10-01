@@ -49,6 +49,7 @@ let contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
+// eslint-disable-next-line no-unused-vars
 let FocusContext = React.createContext();
 
 let DialogOverlay = React.forwardRef(
