@@ -5,7 +5,6 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
@@ -13,7 +12,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "Ryan Florence",
+  "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "files": [
     "es",

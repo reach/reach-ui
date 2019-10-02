@@ -1,0 +1,30 @@
+{
+  "name": "@reach/popover",
+  "version": "0.1.0",
+  "description": "Render a portal positioned relative to another element.",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "node ../../shared/build-package",
+    "lint": "eslint . --max-warnings=0"
+  },
+  "dependencies": {
+    "@reach/portal": "^0.2.1",
+    "@reach/rect": "^0.2.1",
+    "@reach/utils": "^0.2.3",
+    "tabbable": "^4.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "author": "Ryan Florence <@ryanflorence>",
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "styles.css"
+  ]
+}

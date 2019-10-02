@@ -25,7 +25,7 @@ A couple notes on using tooltips:
 
 _Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
-```.jsx
+```jsx
 <div>
   <Tooltip label="Notifications">
     <button style={{ fontSize: 25 }}>
@@ -46,7 +46,7 @@ _Touch Events_: Touch events are currently not supported. There's not a lot of r
       </button>
     </Tooltip>
   </div>
-</div>;
+</div>
 ```
 
 ## Installation
@@ -65,7 +65,7 @@ import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
 
 ## Usage
 
-```.jsx
+```jsx
 <Tooltip label="Save">
   <button style={{ fontSize: 25 }}>💾</button>
 </Tooltip>
@@ -73,23 +73,20 @@ import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
 
 Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
 
-```.jsx
+```jsx
 <Tooltip
   // What the tooltip renders
   label="Notifications"
-
   // What the screenreader announces
   ariaLabel="3 Notifications"
 >
-  <button style={{ fontSize: 25 }}>
-    🔔 3
-  </button>
+  <button style={{ fontSize: 25 }}>🔔 3</button>
 </Tooltip>
 ```
 
 All props passed to `Tooltip` will go to the popover.
 
-```.jsx
+```jsx
 <Tooltip
   label="Fall in love all over again"
   style={{
@@ -97,7 +94,7 @@ All props passed to `Tooltip` will go to the popover.
     color: "white",
     border: "none",
     borderRadius: "4px",
-    padding: "0.5em 1em"
+    padding: "0.5em 1em",
   }}
 >
   <button style={{ fontSize: 25 }}>❤️</button>
@@ -121,8 +118,8 @@ You may want to drop down to this lower level API if you need animation or you w
 
 ### Triangle pointers and custom styles
 
-```.jsx
-(() => {
+```jsx
+;(() => {
   // Center the tooltip, but collisions will win
   const centered = (triggerRect, tooltipRect) => {
     const triggerCenter = triggerRect.left + triggerRect.width / 2
@@ -135,7 +132,6 @@ You may want to drop down to this lower level API if you need animation or you w
   }
 
   function TriangleTooltip({ children, label, ariaLabel }) {
-
     // get the props from useTooltip
     const [trigger, tooltip] = useTooltip()
 
