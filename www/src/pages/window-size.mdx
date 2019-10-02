@@ -5,8 +5,8 @@ import Helmet from "react-helmet"
   meta={[
     {
       name: "description",
-      content: "Calls back with the window dimensions."
-    }
+      content: "Calls back with the window dimensions.",
+    },
   ]}
 />
 
@@ -14,9 +14,9 @@ import Helmet from "react-helmet"
 
 Calls back with the window dimensions.
 
-```.jsx
+```jsx
 <WindowSize>
-  {(size) => (
+  {size => (
     <div>
       <div>Resize your window.</div>
       <pre>{JSON.stringify(size, null, 2)}</pre>
@@ -36,18 +36,17 @@ yarn add @reach/window-size
 And then import it:
 
 ```js
-import WindowSize from "@reach/window-size";
+import WindowSize from "@reach/window-size"
 ```
 
 ## Props
 
-| Prop                   | Type   | Required |
-| -----------------------| ------ | -------- |
-| [children](#children)  | func   | true     |
+| Prop                  | Type | Required |
+| --------------------- | ---- | -------- |
+| [children](#children) | func | true     |
 
 ### children
 
-*Type*: `func: (({ width, height })) => undefined`
+_Type_: `func: (({ width, height })) => undefined`
 
 A function that calls back to you with the window size.
-
