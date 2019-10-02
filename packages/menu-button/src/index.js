@@ -6,21 +6,23 @@ import Component from "@reach/component-component";
 import { node, func, object, string, number, oneOfType, any } from "prop-types";
 import { wrapEvent, checkStyles, assignRef } from "@reach/utils";
 
+const noop = () => {};
+
 // TODO: add the mousedown/drag/mouseup to select of native menus, will
 // also help w/ remove the menu button tooltip hide-flash.
 
 // TODO: add type-to-highlight like native menus
 
-let { Provider, Consumer } = createContext();
+const { Provider, Consumer } = createContext();
 
-let checkIfAppManagedFocus = ({ refs, state, prevState }) => {
+const checkIfAppManagedFocus = ({ refs, state, prevState }) => {
   if (!state.isOpen && prevState.isOpen) {
     return !refs.menu.contains(document.activeElement);
   }
   return false;
 };
 
-let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
+const manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   if (state.isOpen && !prevState.isOpen) {
     window.__REACH_DISABLE_TOOLTIPS = true;
     if (state.selectionIndex !== -1) {
@@ -53,31 +55,31 @@ let manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   }
 };
 
-let openAtFirstItem = state => ({ isOpen: true, selectionIndex: 0 });
+const openAtFirstItem = state => ({ isOpen: true, selectionIndex: 0 });
 
-let close = state => ({
+const close = state => ({
   isOpen: false,
   selectionIndex: -1,
   closingWithClick: false
 });
 
-let selectItemAtIndex = index => state => ({
+const selectItemAtIndex = index => state => ({
   selectionIndex: index
 });
 
-let genId = prefix =>
+const genId = prefix =>
   `${prefix}-${Math.random()
     .toString(32)
     .substr(2, 8)}`;
 
 ////////////////////////////////////////////////////////////////////////
-let getMenuRefs = () => ({
+const getMenuRefs = () => ({
   button: null,
   menu: null,
   items: []
 });
 
-let getInitialMenuState = () => ({
+const getInitialMenuState = () => ({
   isOpen: false,
   buttonRect: undefined,
   selectionIndex: -1,
@@ -85,9 +87,9 @@ let getInitialMenuState = () => ({
   buttonId: genId("button")
 });
 
-let checkIfStylesIncluded = () => checkStyles("menu-button");
+const checkIfStylesIncluded = () => checkStyles("menu-button");
 
-let Menu = ({ children }) => (
+const Menu = ({ children }) => (
   <Component
     getRefs={getMenuRefs}
     getInitialState={getInitialMenuState}
@@ -112,7 +114,7 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////
-let MenuButton = React.forwardRef(
+const MenuButton = React.forwardRef(
   ({ onClick, onKeyDown, onMouseDown, ...props }, ref) => (
     <Consumer>
       {({ refs, state, setState }) => (
@@ -170,7 +172,7 @@ if (__DEV__) {
   };
 }
 
-let MenuItem = React.forwardRef(
+const MenuItem = React.forwardRef(
   (
     {
       onSelect,
@@ -187,8 +189,8 @@ let MenuItem = React.forwardRef(
     },
     ref
   ) => {
-    let isSelected = index === state.selectionIndex;
-    let select = () => {
+    const isSelected = index === state.selectionIndex;
+    const select = () => {
       onSelect();
       setState(close);
     };
@@ -242,10 +244,8 @@ if (__DEV__) {
   };
 }
 
-let k = () => {};
-
 ////////////////////////////////////////////////////////////////////////
-let MenuLink = React.forwardRef(
+const MenuLink = React.forwardRef(
   (
     {
       onKeyDown,
@@ -273,8 +273,8 @@ let MenuLink = React.forwardRef(
         state={state}
         setState={setState}
         index={index}
-        onSelect={k}
-        _ref={k}
+        onSelect={noop}
+        _ref={noop}
       >
         <Link
           role="menuitem"
@@ -318,7 +318,7 @@ if (__DEV__) {
 }
 ///////////////////////////////////////////////////////////////////
 
-let MenuList = React.forwardRef((props, ref) => (
+const MenuList = React.forwardRef((props, ref) => (
   <Consumer>
     {({ refs, state, setState }) =>
       state.isOpen && (
@@ -356,20 +356,20 @@ if (__DEV__) {
   };
 }
 
-let focusableChildrenTypes = [MenuItem, MenuLink];
+const focusableChildrenTypes = [MenuItem, MenuLink];
 
-let isFocusableChildType = child => focusableChildrenTypes.includes(child.type);
-let getFocusableMenuChildren = children => {
-  let focusable = [];
-  Children.forEach(children, child => {
-    if (isFocusableChildType(child)) focusable.push(child);
-  });
+const isFocusableChildType = child =>
+  focusableChildrenTypes.includes(child.type);
+const getFocusableMenuChildren = childrenArray => {
+  const focusable = childrenArray.filter(child => isFocusableChildType(child));
   return focusable;
 };
 
-let MenuListImpl = React.forwardRef(
+const MenuListImpl = React.forwardRef(
   ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => {
-    let focusableChildren = getFocusableMenuChildren(children);
+    const clones = Children.toArray(children).filter(Boolean);
+    const focusableChildren = getFocusableMenuChildren(clones);
+
     return (
       <div
         data-reach-menu-list
@@ -394,13 +394,13 @@ let MenuListImpl = React.forwardRef(
             setState(close);
           } else if (event.key === "ArrowDown") {
             event.preventDefault(); // prevent window scroll
-            let nextIndex = state.selectionIndex + 1;
+            const nextIndex = state.selectionIndex + 1;
             if (nextIndex !== focusableChildren.length) {
               setState({ selectionIndex: nextIndex });
             }
           } else if (event.key === "ArrowUp") {
             event.preventDefault(); // prevent window scroll
-            let nextIndex = state.selectionIndex - 1;
+            const nextIndex = state.selectionIndex - 1;
             if (nextIndex !== -1) {
               setState({ selectionIndex: nextIndex });
             }
@@ -409,9 +409,9 @@ let MenuListImpl = React.forwardRef(
           }
         })}
       >
-        {Children.map(children, (child, index) => {
+        {clones.map((child, index) => {
           if (isFocusableChildType(child)) {
-            let focusIndex = focusableChildren.indexOf(child);
+            const focusIndex = focusableChildren.indexOf(child);
 
             return React.cloneElement(child, {
               setState,
@@ -439,15 +439,15 @@ if (__DEV__) {
   };
 }
 
-let getStyles = (buttonRect, menuRect) => {
-  let haventMeasuredButtonYet = !buttonRect;
+const getStyles = (buttonRect, menuRect) => {
+  const haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
     return { opacity: 0 };
   }
 
-  let haventMeasuredMenuYet = !menuRect;
+  const haventMeasuredMenuYet = !menuRect;
 
-  let styles = {
+  const styles = {
     left: `${buttonRect.left + window.pageXOffset}px`,
     top: `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
@@ -463,7 +463,7 @@ let getStyles = (buttonRect, menuRect) => {
     styles.minWidth = buttonRect.width;
   }
 
-  let collisions = {
+  const collisions = {
     top: buttonRect.top - menuRect.height < 0,
     right: window.innerWidth < buttonRect.left + menuRect.width,
     bottom: window.innerHeight < buttonRect.top + menuRect.height,
