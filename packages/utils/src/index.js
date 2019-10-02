@@ -36,10 +36,17 @@ if (__DEV__) {
 
 export { checkStyles };
 
-export let wrapEvent = (theirHandler, ourHandler) => event => {
+export const wrapEvent = (theirHandler, ourHandler) => event => {
   theirHandler && theirHandler(event);
   if (!event.defaultPrevented) {
     return ourHandler(event);
+  }
+};
+
+export const callEventWithDefault = (theirHandler, ourHandler) => event => {
+  theirHandler && theirHandler(event);
+  if (!event.defaultPrevented) {
+    ourHandler && ourHandler(event);
   }
 };
 

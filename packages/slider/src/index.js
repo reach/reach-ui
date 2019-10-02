@@ -4,7 +4,6 @@
 import React, {
   createContext,
   forwardRef,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -47,8 +46,8 @@ const HandleAlignment = {
   contain: "contain"
 };
 
-export const SliderContext = createContext({});
-export const useSliderContext = () => useContext(SliderContext);
+const SliderContext = createContext({});
+const useSliderContext = () => useContext(SliderContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
@@ -331,7 +330,7 @@ Slider.propTypes = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Track = forwardRef(function Track(
+export const SliderTrack = forwardRef(function SliderTrack(
   { children, style = {}, ...props },
   forwardedRef
 ) {
@@ -356,13 +355,13 @@ export const Track = forwardRef(function Track(
   );
 });
 
-Track.displayName = "Track";
-Track.propTypes = {
+SliderTrack.displayName = "Track";
+SliderTrack.propTypes = {
   children: node
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-export const TrackHighlight = forwardRef(function TrackHighlight(
+export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   { children, style = {}, ...props },
   forwardedRef
 ) {
@@ -384,13 +383,13 @@ export const TrackHighlight = forwardRef(function TrackHighlight(
   );
 });
 
-TrackHighlight.displayName = "TrackHighlight";
-TrackHighlight.propTypes = {
+SliderTrackHighlight.displayName = "TrackHighlight";
+SliderTrackHighlight.propTypes = {
   children: node
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Handle = forwardRef(function Handle(
+export const SliderHandle = forwardRef(function SliderHandle(
   {
     // min, // TODO: Create separate min/max for handles
     // max,
@@ -444,11 +443,11 @@ export const Handle = forwardRef(function Handle(
   );
 });
 
-Handle.displayName = "Handle";
-Handle.propTypes = {};
+SliderHandle.displayName = "Handle";
+SliderHandle.propTypes = {};
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Marker = forwardRef(function Marker(
+export const SliderMarker = forwardRef(function SliderMarker(
   { children, style = {}, value, ...props },
   forwardedRef
 ) {
@@ -491,8 +490,8 @@ export const Marker = forwardRef(function Marker(
   ) : null;
 });
 
-Marker.displayName = "Marker";
-Marker.propTypes = {
+SliderMarker.displayName = "Marker";
+SliderMarker.propTypes = {
   value: oneOfType([string, number]).isRequired
 };
 
@@ -580,11 +579,3 @@ export function useDimensions(passedRef) {
   }, [ref, width, height]);
   return { ref, width, height };
 }
-
-// TODO: Move this to @reach/utils
-export let callEventWithDefault = (theirHandler, ourHandler) => event => {
-  theirHandler && theirHandler(event);
-  if (!event.defaultPrevented) {
-    ourHandler && ourHandler(event);
-  }
-};

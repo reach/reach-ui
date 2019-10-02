@@ -1,20 +1,26 @@
 import React from "react";
 import "../styles.css";
-import { Slider, Handle, Marker, Track, TrackHighlight } from "../src";
+import {
+  Slider,
+  SliderHandle,
+  SliderMarker,
+  SliderTrack,
+  SliderTrackHighlight
+} from "../src";
 
 export const name = "Vertical";
 
 export const Example = () => (
   <Slider orientation="vertical">
-    <Track>
-      <TrackHighlight />
-      <Handle />
-      <Marker value={10}>
+    <SliderTrack>
+      <SliderTrackHighlight />
+      <SliderHandle />
+      <SliderMarker value={10}>
         <span>10</span>
-      </Marker>
-      <Marker value={90}>
+      </SliderMarker>
+      <SliderMarker value={90}>
         <span>90</span>
-      </Marker>
-    </Track>
+      </SliderMarker>
+    </SliderTrack>
   </Slider>
 );

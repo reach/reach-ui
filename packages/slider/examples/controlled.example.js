@@ -1,8 +1,17 @@
 import React from "react";
 import "../styles.css";
-import { Slider, Handle, Marker, Track, TrackHighlight } from "../src";
+import {
+  Slider,
+  SliderHandle,
+  SliderMarker,
+  SliderTrack,
+  SliderTrackHighlight
+} from "../src";
 
 export const name = "Controlled";
+
+const MIN = 0;
+const MAX = 120;
 
 export const Example = () => {
   const [value, setValue] = React.useState(0);
@@ -24,13 +33,14 @@ export const Example = () => {
       label: "smiley face"
     }
   ];
-  const handleChange = (newValue, { min, max }) => {
-    const absVar = 0 - min;
-    const absMin = min + absVar;
-    const absMax = max + absVar;
+
+  React.useEffect(() => {
+    const absVar = 0 - MIN;
+    const absMin = MIN + absVar;
+    const absMax = MAX + absVar;
     const range = absMax - absMin;
-    const absValue = newValue + absVar;
-    if (newValue === max) {
+    const absValue = value + absVar;
+    if (value === MAX) {
       setStatus("We are so happy!");
     } else if (absValue >= 0.75 * range) {
       setStatus("Almost happy enough!");
@@ -39,22 +49,24 @@ export const Example = () => {
     } else {
       setStatus("Why so sad?");
     }
-    setValue(newValue);
-  };
+  }, [value]);
+
   return (
     <div>
-      <Slider onChange={handleChange} value={value} min={0} max={120}>
-        <Track>
-          <TrackHighlight />
-          <Handle />
+      <button onClick={() => setValue(MIN)}>Bring it Down!</button>
+      <button onClick={() => setValue(MAX)}>Max Out!</button>
+      <Slider onChange={setValue} value={value} min={MIN} max={MAX}>
+        <SliderTrack>
+          <SliderTrackHighlight />
+          <SliderHandle />
           {markers.map(({ face, label, value: val }) => (
-            <Marker value={val}>
+            <SliderMarker value={val}>
               <span role="img" aria-label={label}>
                 {face}
               </span>
-            </Marker>
+            </SliderMarker>
           ))}
-        </Track>
+        </SliderTrack>
       </Slider>
       <p role="status" style={{ color: "crimson" }}>
         Happieness level at {value}% – {status}
