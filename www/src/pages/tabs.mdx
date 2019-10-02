@@ -362,8 +362,8 @@ Please see the [styling guide](/styling).
 
 ```jsx
 <TabPanels>
-  <TabPanel>One</TaPanelb>
-  <TaPanelb>Two</TaPanelb>
+  <TabPanel>One</TabPanel>
+  <TabPanel>Two</TabPanel>
 </TabPanels>
 ```
 
@@ -483,7 +483,7 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 _Type_: `number` - cloned
 
-Because TabList needs to know the order of hte children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
+Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
 ```.jsx
 (() => {

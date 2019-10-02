@@ -8,6 +8,7 @@ import "@reach/skip-nav/styles.css"
 import "@reach/menu-button/styles.css"
 import "@reach/tabs/styles.css"
 import "@reach/tooltip/styles.css"
+import "@reach/combobox/styles.css"
 
 import "./normalize.css"
 import "./skeleton.css"
@@ -155,6 +156,7 @@ let Nav = ({ media }) => (
 
               <NavLink to="/alert">Alert</NavLink>
               <NavLink to="/alert-dialog">AlertDialog</NavLink>
+              <NavLink to="/combobox">Combobox</NavLink>
               <NavLink to="/dialog">Dialog (Modal)</NavLink>
               <NavLink to="/menu-button">MenuButton (Dropdown)</NavLink>
               <NavLink to="/skip-nav">SkipNav</NavLink>

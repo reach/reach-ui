@@ -19,20 +19,6 @@ let cleanProps = props => {
 };
 
 class Component extends React.Component {
-  static propTypes = {
-    initialState: object,
-    getInitialState: func,
-    refs: object,
-    getRefs: func,
-    didMount: func,
-    didUpdate: func,
-    willUnmount: func,
-    getSnapshotBeforeUpdate: func,
-    shouldUpdate: func,
-    render: func,
-    children: oneOfType([func, node])
-  };
-
   static defaultProps = {
     getInitialState: () => {},
     getRefs: () => ({})
@@ -113,9 +99,25 @@ class Component extends React.Component {
     return render
       ? render(this.getArgs())
       : typeof children === "function"
-        ? children(this.getArgs())
-        : children || null;
+      ? children(this.getArgs())
+      : children || null;
   }
+}
+
+if (__DEV__) {
+  Component.propTypes = {
+    initialState: object,
+    getInitialState: func,
+    refs: object,
+    getRefs: func,
+    didMount: func,
+    didUpdate: func,
+    willUnmount: func,
+    getSnapshotBeforeUpdate: func,
+    shouldUpdate: func,
+    render: func,
+    children: oneOfType([func, node])
+  };
 }
 
 export default Component;

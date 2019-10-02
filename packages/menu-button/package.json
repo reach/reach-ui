@@ -1,13 +1,12 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Accessible React button dropdown menu.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
@@ -15,24 +14,20 @@
     "@reach/component-component": "0.1.3",
     "@reach/portal": "^0.2.1",
     "@reach/rect": "0.2.1",
-    "@reach/utils": "^0.2.2",
+    "@reach/utils": "^0.2.3",
     "@reach/window-size": "^0.1.4",
+    "prop-types": "^15.7.2",
     "warning": "^4.0.2"
   },
   "peerDependencies": {
-    "prop-types": "^15.6.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
     "@reach/router": "^1.0.0",
-    "jest": "^23.4.2",
+    "@reach/tooltip": "^0.2.2",
     "react": "^16.8.0",
     "react-test-renderer": "^16.8.0"
-  },
-  "jest": {
-    "testRegex": ".+\\.test\\.js$",
-    "testURL": "http://localhost"
   },
   "files": [
     "es",
