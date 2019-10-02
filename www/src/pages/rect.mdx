@@ -12,8 +12,8 @@ import Helmet from "react-helmet"
 
 # @reach/rect
 
-[useRect](#useRect) -
-[Rect](#Rect)
+[useRect](#userect) -
+[Rect](#rect)
 
 Measures DOM elements (aka. bounding client rect). See also [Element.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
 
@@ -41,14 +41,14 @@ Hook that observes and returns the measurements (ClientRect) of a DOM element. P
 
 If `observe` is false, the element's rect will no longer be observed, pass it `true` again and it will. This is mostly used for things like popovers and animations, so you can usually observe when you need to, and stop observing when you don't.
 
-```.jsx
-(() => {
+```jsx
+;(() => {
   function Example() {
     // your own ref
-    const ref = useRef();
+    const ref = useRef()
 
     // pass it in to be observered
-    const rect = useRect(ref);
+    const rect = useRect(ref)
 
     return (
       <div>
@@ -60,18 +60,18 @@ If `observe` is false, the element's rect will no longer be observed, pass it `t
           style={{
             display: "inline-block",
             padding: 10,
-            border: "solid 1px"
+            border: "solid 1px",
           }}
           dangerouslySetInnerHTML={{
-            __html: "Edit this to change the size!"
+            __html: "Edit this to change the size!",
           }}
         />
       </div>
-    );
+    )
   }
 
-  return <Example />;
-})();
+  return <Example />
+})()
 ```
 
 # Rect
@@ -88,7 +88,7 @@ Render prop component for use in class components to observe element measurement
 
 ### children
 
-_Type_: `func: ({ ref, rect }) => undefined`
+_Type_: `func: ({ ref, rect }) => node`
 
 A function that calls back to you with a `ref` to place on an element and the `rect` measurements of the dom node.
 
@@ -104,12 +104,14 @@ This is typically used for elements that pop over other elements (like a dropdow
 
 Pass `true` to observe, `false` to ignore.
 
-```.jsx
+```jsx
 <Rect observe={false}>
   {({ rect, ref }) => (
     <div ref={ref}>
       <div>Will not measure the element when false</div>
-      <div>Edit this code and change it to <code>true</code></div>
+      <div>
+        Edit this code and change it to <code>true</code>
+      </div>
       <pre>{JSON.stringify(rect, null, 2)}</pre>
     </div>
   )}

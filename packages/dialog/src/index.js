@@ -49,6 +49,7 @@ let contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
+// eslint-disable-next-line no-unused-vars
 let FocusContext = React.createContext();
 
 let DialogOverlay = React.forwardRef(
@@ -87,12 +88,12 @@ let DialogOverlay = React.forwardRef(
                     data-reach-dialog-overlay
                     onClick={wrapEvent(onClick, event => {
                       event.stopPropagation();
-                      onDismiss();
+                      onDismiss(event);
                     })}
                     onKeyDown={wrapEvent(onKeyDown, event => {
                       if (event.key === "Escape") {
                         event.stopPropagation();
-                        onDismiss();
+                        onDismiss(event);
                       }
                     })}
                     ref={node => {

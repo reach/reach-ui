@@ -243,7 +243,8 @@ export function useTooltip({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  const triggerRef = ref || useRef();
+  const ownRef = useRef();
+  const triggerRef = ref || ownRef;
   const triggerRect = useRect(triggerRef, isVisible);
 
   useEffect(() => {
@@ -324,7 +325,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
       switch (state) {
         case VISIBLE: {
           transition("selectWithKeyboard");
@@ -334,13 +335,13 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-describedby": id,
+    "aria-describedby": isVisible ? id : undefined,
     "data-reach-tooltip-trigger": "",
     ref: triggerRef,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
-    onBlur: wrapEvent(onFocus, handleBlur),
+    onBlur: wrapEvent(onBlur, handleBlur),
     onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
     onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
     onMouseDown: wrapEvent(onMouseDown, handleMouseDown)
@@ -480,11 +481,6 @@ const getStyles = (position, triggerRect, tooltipRect) => {
 };
 
 const positionDefault = (triggerRect, tooltipRect) => {
-  const styles = {
-    left: `${triggerRect.left + window.pageXOffset}px`,
-    top: `${triggerRect.top + triggerRect.height + window.pageYOffset}px`
-  };
-
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
@@ -497,7 +493,6 @@ const positionDefault = (triggerRect, tooltipRect) => {
   const directionUp = collisions.bottom && !collisions.top;
 
   return {
-    ...styles,
     left: directionRight
       ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
       : `${triggerRect.left + window.pageXOffset}px`,
