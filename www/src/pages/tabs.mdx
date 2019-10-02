@@ -13,10 +13,10 @@ import Helmet from "react-helmet"
 # @reach/tabs
 
 [Tabs](#tabs) -
-[TabList](#TabList) -
-[Tab](#Tab) -
-[TabPanels](#TabPanels) -
-[TabPanel](#TabPanel)
+[TabList](#tablist) -
+[Tab](#tab) -
+[TabPanels](#tabpanels) -
+[TabPanel](#tabpanel)
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/tabs
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
@@ -362,8 +362,8 @@ Please see the [styling guide](/styling).
 
 ```jsx
 <TabPanels>
-  <TabPanel>One</TaPanelb>
-  <TaPanelb>Two</TaPanelb>
+  <TabPanel>One</TabPanel>
+  <TabPanel>Two</TabPanel>
 </TabPanels>
 ```
 
@@ -483,7 +483,7 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 _Type_: `number` - cloned
 
-Because TabList needs to know the order of hte children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
+Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
 ```.jsx
 (() => {
@@ -711,4 +711,3 @@ With a little composition we can animate the selected tab bar.
   );
 })();
 ```
-
