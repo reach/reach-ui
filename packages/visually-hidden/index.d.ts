@@ -1,5 +1,5 @@
 declare module "@reach/visually-hidden" {
-  const VisuallyHidden: React.SFC;
+  const VisuallyHidden: React.FunctionComponent;
 
   export default VisuallyHidden;
 }
