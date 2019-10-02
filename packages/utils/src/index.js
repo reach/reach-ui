@@ -1,3 +1,5 @@
+import { useRef, useEffect } from "react";
+
 let checkedPkgs = {};
 
 let checkStyles = () => {};
@@ -53,3 +55,15 @@ export const assignRef = (ref, value) => {
     }
   }
 };
+
+export function useUpdateEffect(effect, deps) {
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) {
+      effect();
+    } else {
+      mounted.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}
