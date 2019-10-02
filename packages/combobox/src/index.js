@@ -280,8 +280,7 @@ export const Combobox = forwardRef(function Combobox(
       isVisible: isVisible(state),
       openOnFocus
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, onSelect, state, transition, listboxId]);
+  }, [data, onSelect, openOnFocus, state, transition, listboxId]);
 
   return (
     <Context.Provider value={context}>
