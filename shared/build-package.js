@@ -1,29 +1,29 @@
 // this gets run from the package directory
-const fs = require("fs");
+// const fs = require("fs");
 const execSync = require("child_process").execSync;
-const prettyBytes = require("pretty-bytes");
-const gzipSize = require("gzip-size");
+// const prettyBytes = require("pretty-bytes");
+// const gzipSize = require("gzip-size");
 const path = require("path");
 
-let pkg = path.basename(process.env.PWD || process.cwd());
-let babel = `${__dirname}/../node_modules/.bin/babel`;
-let rollup = `${__dirname}/../node_modules/.bin/rollup`;
-let rollupConfig = `${__dirname}/rollup-config.js`;
+// let pkg = path.basename(process.env.PWD || process.cwd());
+let babel = path.resolve(__dirname, "../node_modules/.bin/babel");
+// let rollup = `${__dirname}/../node_modules/.bin/rollup`;
+// let rollupConfig = `${__dirname}/rollup-config.js`;
 
 const exec = (command, extraEnv) =>
   execSync(command, {
-    stdio: "inherit",
-    env: Object.assign({}, process.env, extraEnv)
+    env: Object.assign({}, process.env, extraEnv),
+    stdio: "inherit"
   });
 
 console.log("\nBuilding ES modules ...");
-exec(`${babel} src -d es --ignore *.test.js`, {
-  BABEL_ENV: "es"
+exec(`${babel} src -d es --ignore src/*.test.js --root-mode upward`, {
+  MODULE_FORMAT: "esm"
 });
 
 console.log("Building CommonJS modules ...");
-exec(`${babel} src -d . --ignore *.test.js`, {
-  BABEL_ENV: "cjs"
+exec(`${babel} src -d . --ignore src/*.test.js --root-mode upward`, {
+  MODULE_FORMAT: "cjs"
 });
 
 // Not building UMD for now...

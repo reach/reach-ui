@@ -151,6 +151,7 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
   useEffect(() => {
     doc.addEventListener("keydown", handleKeyDown);
     return () => doc.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function getElementAfterTrigger() {
