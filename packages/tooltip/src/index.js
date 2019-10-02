@@ -481,11 +481,6 @@ const getStyles = (position, triggerRect, tooltipRect) => {
 };
 
 const positionDefault = (triggerRect, tooltipRect) => {
-  const styles = {
-    left: `${triggerRect.left + window.pageXOffset}px`,
-    top: `${triggerRect.top + triggerRect.height + window.pageYOffset}px`
-  };
-
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
@@ -498,7 +493,6 @@ const positionDefault = (triggerRect, tooltipRect) => {
   const directionUp = collisions.bottom && !collisions.top;
 
   return {
-    ...styles,
     left: directionRight
       ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
       : `${triggerRect.left + window.pageXOffset}px`,
