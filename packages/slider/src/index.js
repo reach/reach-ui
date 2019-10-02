@@ -4,6 +4,7 @@
 import React, {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -115,6 +116,42 @@ export const Slider = forwardRef(function Slider(
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
+
+  const updateValue = useCallback(
+    function updateValue(newValue) {
+      if (!isControlled) {
+        setValue(newValue);
+      }
+      if (onChange) {
+        onChange(newValue, { min, max, handlePosition });
+      }
+    },
+    [handlePosition, isControlled, max, min, onChange]
+  );
+
+  const getNewValueFromPointer = useCallback(
+    function getNewValueFromPointer(event) {
+      if (trackRef.current) {
+        const {
+          left,
+          width,
+          bottom,
+          height
+        } = trackRef.current.getBoundingClientRect();
+        const { clientX, clientY } = event;
+        let diff = isVertical ? bottom - clientY : clientX - left;
+        let percent = diff / (isVertical ? height : width);
+        let newValue = percentToValue(percent, min, max);
+
+        if (step) {
+          newValue = roundValueToStep(newValue, step);
+        }
+        newValue = getAllowedValue(newValue, min, max);
+        return newValue;
+      }
+    },
+    [isVertical, max, min, step]
+  );
 
   const handleKeyDown = wrapEvent(onKeyDown, function(event) {
     let flag = false;
@@ -233,36 +270,6 @@ export const Slider = forwardRef(function Slider(
     orientation
   });
 
-  function getNewValueFromPointer(event) {
-    if (trackRef.current) {
-      const {
-        left,
-        width,
-        bottom,
-        height
-      } = trackRef.current.getBoundingClientRect();
-      const { clientX, clientY } = event;
-      let diff = isVertical ? bottom - clientY : clientX - left;
-      let percent = diff / (isVertical ? height : width);
-      let newValue = percentToValue(percent, min, max);
-
-      if (step) {
-        newValue = roundValueToStep(newValue, step);
-      }
-      newValue = getAllowedValue(newValue, min, max);
-      return newValue;
-    }
-  }
-
-  function updateValue(newValue) {
-    if (!isControlled) {
-      setValue(newValue);
-    }
-    if (onChange) {
-      onChange(newValue, { min, max, handlePosition });
-    }
-  }
-
   useEffect(() => {
     const handlePointerMove = wrapEvent(onPointerMove, function(event) {
       const newValue = getNewValueFromPointer(event);
@@ -278,7 +285,13 @@ export const Slider = forwardRef(function Slider(
     return () => {
       document.removeEventListener("pointermove", handlePointerMove);
     };
-  }, [onPointerMove, getNewValueFromPointer, updateValue, isPointerDown]);
+  }, [
+    onPointerMove,
+    getNewValueFromPointer,
+    updateValue,
+    isPointerDown,
+    value
+  ]);
 
   return (
     <SliderContext.Provider value={ctx}>
