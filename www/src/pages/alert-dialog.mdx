@@ -162,7 +162,7 @@ You should probably do this when your dialog contains a lot of elements. It's al
 
 ### AlertDialog onDismiss
 
-_Type_: `func`
+_Type_: `func: (event) => void`
 
 When the user clicks outside the modal or hits the escape key, this function will be called. If you want the modal to close, you’ll need to set state.
 
@@ -460,7 +460,7 @@ Same as [AlertDialog `isOpen`](#alertdialog-isopen)
 
 ### AlertDialogOverlay onDismiss
 
-_Type_: `func`
+_Type_: `func`: (event) => void
 
 Same as [AlertDialog `onDismiss`](#alertdialog-ondismiss)
 
