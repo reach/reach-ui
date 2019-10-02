@@ -8,34 +8,25 @@ https://ui.reach.tech
 
 ## Getting Started
 
-This project uses
+Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow their [install instructions](https://yarnpkg.com/docs/install) to get Yarn installed on your system.
 
-- [Lerna](https://lernajs.io/) to manage multiple libs
-- [Storybook](https://storybook.js.org/) for a great development experience
-- [Gatsby](https://gatsbyjs.org/) for a blazing fast website.
-- [Jest](https://jestjs.io/) for painless testing.
-
-Before doing anything else, run these commands:
+Then, run these commands:
 
 ```
 git clone git@github.com:reach/reach-ui.git
 cd reach-ui
 yarn install
-yarn bootstrap
 yarn build
 ```
 
 ## Root Repo Scripts:
 
 ```sh
-yarn bootstrap    # bootstraps lerna so all dependencies get
-                  # linked for cross-component development
+yarn build        # builds all packages
 
 yarn start        # starts storybook server
 
 yarn test         # runs tests in all packages
-
-yarn build        # builds all packages
 
 yarn release      # publishes changed packages
 ```
@@ -45,9 +36,9 @@ yarn release      # publishes changed packages
 The website uses [Gatsby](https://gatsbyjs.org) v2 with [Gatsby MDX](https://github.com/ChristopherBiscardi/gatsby-mdx) powering most of the pages. It is deployed with [now](https://now.sh)
 
 ```
-yarn start        # starts the website
-
 yarn build        # builds the production site to "public/"
+
+yarn start        # starts the website
 
 yarn stage        # deploys the site with now.sh
 
@@ -116,7 +107,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Button               |
 | 🛠      | Carousel             |
 | 🛠      | Checkbox             |
-| 🛠      | Combo Box            |
+| ✅     | Combo Box            |
 | ✅     | Dialog (Modal)       |
 | 🛠      | Disclosure           |
 | ❓     | Feed                 |

@@ -10,7 +10,7 @@
 //
 // Only one tooltip can be visible at a time, so we use a global state chart to
 // describe the various states and transitions between states that are
-// possible.  With the all the timeouts involved with tooltips it's important to
+// possible. With all the timeouts involved with tooltips it's important to
 // "make impossible states impossible" with a state machine.
 //
 // It's also okay to use these module globals because you don't server render
@@ -45,7 +45,7 @@ import React, {
   useEffect
 } from "react";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, checkStyles, shouldIgnoreTooltips } from "@reach/utils";
+import { wrapEvent, checkStyles } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
@@ -237,14 +237,15 @@ export function useTooltip({
   ref,
   DEBUG_STYLE
 } = {}) {
+  const id = `tooltip:${useId()}`;
   const [isVisible, setIsVisible] = useState(
-    DEBUG_STYLE ? true : state === VISIBLE
+    DEBUG_STYLE ? true : context.id === id && state === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
-  const triggerRef = ref || useRef();
+  const ownRef = useRef();
+  const triggerRef = ref || ownRef;
   const triggerRect = useRect(triggerRef, isVisible);
-  const id = `tooltip:${useId()}`;
 
   useEffect(() => {
     return subscribe(() => {
@@ -280,7 +281,7 @@ export function useTooltip({
   };
 
   const handleFocus = event => {
-    if (shouldIgnoreTooltips()) return;
+    if (window.__REACH_DISABLE_TOOLTIPS) return;
     switch (state) {
       case IDLE:
       case VISIBLE:
@@ -324,7 +325,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " ") {
+    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
       switch (state) {
         case VISIBLE: {
           transition("selectWithKeyboard");
@@ -334,13 +335,13 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-describedby": id,
+    "aria-describedby": isVisible ? id : undefined,
     "data-reach-tooltip-trigger": "",
     ref: triggerRef,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
-    onBlur: wrapEvent(onFocus, handleBlur),
+    onBlur: wrapEvent(onBlur, handleBlur),
     onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
     onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
     onMouseDown: wrapEvent(onMouseDown, handleMouseDown)
@@ -377,11 +378,13 @@ export default function Tooltip({
   );
 }
 
-Tooltip.propTypes = {
-  children: node.isRequired,
-  label: node.isRequired,
-  ariaLabel: string
-};
+if (__DEV__) {
+  Tooltip.propTypes = {
+    children: node.isRequired,
+    label: node.isRequired,
+    ariaLabel: string
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TooltipPopup = forwardRef(function TooltipPopup(
@@ -415,11 +418,13 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
   ) : null;
 });
 
-TooltipPopup.propTypes = {
-  label: node.isRequired,
-  ariaLabel: string,
-  position: func
-};
+if (__DEV__) {
+  TooltipPopup.propTypes = {
+    label: node.isRequired,
+    ariaLabel: string,
+    position: func
+  };
+}
 
 // Need a separate component so that useRect works inside the portal
 const TooltipContent = forwardRef(function TooltipContent(
@@ -477,8 +482,8 @@ const getStyles = (position, triggerRect, tooltipRect) => {
 
 const positionDefault = (triggerRect, tooltipRect) => {
   const styles = {
-    left: `${triggerRect.left + window.scrollX}px`,
-    top: `${triggerRect.top + triggerRect.height + window.scrollY}px`
+    left: `${triggerRect.left + window.pageXOffset}px`,
+    top: `${triggerRect.top + triggerRect.height + window.pageYOffset}px`
   };
 
   const collisions = {
@@ -495,10 +500,16 @@ const positionDefault = (triggerRect, tooltipRect) => {
   return {
     ...styles,
     left: directionRight
-      ? `${triggerRect.right - tooltipRect.width + window.scrollX}px`
-      : `${triggerRect.left + window.scrollX}px`,
+      ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
+      : `${triggerRect.left + window.pageXOffset}px`,
     top: directionUp
-      ? `${triggerRect.top - OFFSET - tooltipRect.height + window.scrollY}px`
-      : `${triggerRect.top + OFFSET + triggerRect.height + window.scrollY}px`
+      ? `${triggerRect.top -
+          OFFSET -
+          tooltipRect.height +
+          window.pageYOffset}px`
+      : `${triggerRect.top +
+          OFFSET +
+          triggerRect.height +
+          window.pageYOffset}px`
   };
 };

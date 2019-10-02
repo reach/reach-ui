@@ -60,7 +60,7 @@ import Component from "@reach/component-component"
 
 | Prop                                                  | Type   |
 | ----------------------------------------------------- | ------ |
-| [initialState](#initialstate)                         | object |  |
+| [ initialState ](#initialstate)                       | object |
 | [ getInitialState ](#getinitialstate)                 | func   |
 | [ refs ](#refs)                                       | object |
 | [ getRefs ](#getrefs)                                 | func   |
@@ -69,8 +69,8 @@ import Component from "@reach/component-component"
 | [ willUnmount ](willunmount)                          | func   |
 | [ getSnapshotBeforeUpdate ](#getsnapshotbeforeupdate) | func   |
 | [ shouldUpdate ](#shouldupdate)                       | func   |
-| [ render ](#render)                                   | func   |
 | [ children ](#children)                               | func   |
+| [ render ](#render)                                   | func   |
 
 ### initialState
 
@@ -181,7 +181,7 @@ See also [React Docs](https://reactjs.org/docs/react-component.html#componentdid
 
 ### didUpdate
 
-_Type_: `func: ({ state, props, refs, setState, forceUpdate, nextProps, nextState }) => undefined`
+_Type_: `func: ({ state, props, refs, setState, forceUpdate, prevProps, prevState }) => undefined`
 
 Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
@@ -276,6 +276,32 @@ A render prop callback to provide the stateful parts of your component at render
     </div>
   )}
 </Component>
+```
+
+### render
+
+_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
+
+```.jsx
+<Component
+  initialState={{ hue: 0 }}
+  render={({ setState, state }) => (
+    <div>
+      <button onClick={() => setState({ hue: Math.random() * 360 })}>
+        Generate Color
+      </button>
+      <br />
+      <svg width="100" height="100">
+        <path
+          d="M20,30 Q40,5 50,30 T90,30"
+          fill="none"
+          stroke={`hsl(${state.hue}, 50%, 50%)`}
+          strokeWidth="5"
+        />
+      </svg>
+    </div>
+  )}
+/>
 ```
 
 ## Todo App Example
