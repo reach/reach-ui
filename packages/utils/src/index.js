@@ -34,10 +34,10 @@ if (__DEV__) {
 
 export { checkStyles };
 
-export let wrapEvent = (handler, cb) => event => {
-  handler && handler(event);
+export let wrapEvent = (theirHandler, ourHandler) => event => {
+  theirHandler && theirHandler(event);
   if (!event.defaultPrevented) {
-    return cb(event);
+    return ourHandler(event);
   }
 };
 
@@ -53,24 +53,3 @@ export const assignRef = (ref, value) => {
     }
   }
 };
-
-// This suuuuuuuuuuuucks but I can't think of anything better rn, we could use
-// a default React Context, but I don't see how that's any different.
-//
-// If a Tooltip wraps a MenuButton and the menu returns focus to the button it
-// triggers the tooltip focus event and pops up the tooltip and that's gross
-// and this is a run-on sentence.  So, we've got this kind of global context
-// for tooltip to know if it should respond to focus or not.
-let ignoreTooltips = false;
-
-export function disableTooltips() {
-  ignoreTooltips = true;
-}
-
-export function enableTooltips() {
-  ignoreTooltips = false;
-}
-
-export function shouldIgnoreTooltips() {
-  return ignoreTooltips;
-}
