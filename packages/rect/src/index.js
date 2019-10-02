@@ -49,15 +49,17 @@ let Rect = props => (
   />
 );
 
-Rect.propTypes = {
-  children: func,
-  observe: bool,
-  onChange: func
-};
-
 Rect.defaultProps = {
   observe: true
 };
+
+if (__DEV__) {
+  Rect.propTypes = {
+    children: func,
+    observe: bool,
+    onChange: func
+  };
+}
 
 export function useRect(nodeRef, observe = true) {
   let [rect, setRect] = useState(null);
@@ -75,6 +77,7 @@ export function useRect(nodeRef, observe = true) {
         observerRef.current = null;
       }
     }; 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [observe, nodeRef.current]);
   return rect;
 }

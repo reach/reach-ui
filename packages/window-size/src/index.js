@@ -33,8 +33,10 @@ let WindowSize = ({ children }) => (
   />
 );
 
-WindowSize.propTypes = {
-  children: func.isRequired
-};
+if (__DEV__) {
+  WindowSize.propTypes = {
+    children: func.isRequired
+  };
+}
 
 export default WindowSize;

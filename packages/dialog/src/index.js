@@ -11,7 +11,8 @@ let createAriaHider = dialogNode => {
   let rootNodes = [];
 
   Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
-    if (node === dialogNode.parentNode) {
+    const portalNode = dialogNode.parentNode.parentNode.parentNode;
+    if (node === portalNode) {
       return;
     }
     let attr = node.getAttribute("aria-hidden");
@@ -48,6 +49,7 @@ let contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
+// eslint-disable-next-line no-unused-vars
 let FocusContext = React.createContext();
 
 let DialogOverlay = React.forwardRef(
@@ -86,12 +88,12 @@ let DialogOverlay = React.forwardRef(
                     data-reach-dialog-overlay
                     onClick={wrapEvent(onClick, event => {
                       event.stopPropagation();
-                      onDismiss();
+                      onDismiss(event);
                     })}
                     onKeyDown={wrapEvent(onKeyDown, event => {
                       if (event.key === "Escape") {
                         event.stopPropagation();
-                        onDismiss();
+                        onDismiss(event);
                       }
                     })}
                     ref={node => {
@@ -110,9 +112,11 @@ let DialogOverlay = React.forwardRef(
   )
 );
 
-DialogOverlay.propTypes = {
-  initialFocusRef: () => {}
-};
+if (__DEV__) {
+  DialogOverlay.propTypes = {
+    initialFocusRef: () => {}
+  };
+}
 
 let stopPropagation = event => event.stopPropagation();
 
@@ -141,9 +145,11 @@ let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
   </DialogOverlay>
 );
 
-Dialog.propTypes = {
-  isOpen: bool,
-  onDismiss: func
-};
+if (__DEV__) {
+  Dialog.propTypes = {
+    isOpen: bool,
+    onDismiss: func
+  };
+}
 
 export { DialogOverlay, DialogContent, Dialog };

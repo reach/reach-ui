@@ -5,23 +5,23 @@ import Helmet from "react-helmet"
   meta={[
     {
       name: "description",
-      content: "An accessible React.js modal dialog."
-    }
+      content: "An accessible React.js modal dialog.",
+    },
   ]}
 />
 
 # Dialog (Modal)
 
-[Dialog](#dialog) - 
-[DialogOverlay](#dialogoverlay) - 
+[Dialog](#dialog) -
+[DialogOverlay](#dialogoverlay) -
 [DialogContent](#dialogcontent)
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/dialog
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal
 
 An accessible dialog or "modal" window.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -29,7 +29,10 @@ An accessible dialog or "modal" window.
         Open Dialog
       </button>
 
-      <Dialog isOpen={state.showDialog}>
+      <Dialog
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
+      >
         <button
           className="close-button"
           onClick={() => setState({ showDialog: false })}
@@ -55,11 +58,7 @@ yarn add @reach/dialog
 And then import the components you need:
 
 ```js
-import {
-  Dialog,
-  DialogOverlay,
-  DialogContent
-} from "@reach/dialog";
+import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog"
 ```
 
 # Dialog
@@ -74,20 +73,20 @@ High-level component to render a modal dialog window over the top of the page (o
 
 ## Dialog Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#dialog-element-props)           | spread |
-| [isOpen](#dialog-isopen)           | bool |
-| [onDismiss](#dialog-ondismiss)           | func |
-| [children](#dialog-element-props)  | node   |
+| Prop                                   | Type   |
+| -------------------------------------- | ------ |
+| [element props](#dialog-element-props) | spread |
+| [isOpen](#dialog-isopen)               | bool   |
+| [onDismiss](#dialog-ondismiss)         | func   |
+| [children](#dialog-element-props)      | node   |
 
 ### Dialog element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -95,11 +94,13 @@ Any props not listed above will be spread onto the underlying `DialogContent` el
         Show Dialog
       </button>
 
-      <Dialog style={{ color: "red" }} isOpen={state.showDialog}>
+      <Dialog
+        style={{ color: "red" }}
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
+      >
         <p>My text is red because the style prop got applied to the div</p>
-        <button onClick={() => setState({ showDialog: false })}>
-          Okay
-        </button>
+        <button onClick={() => setState({ showDialog: false })}>Okay</button>
       </Dialog>
     </div>
   )}
@@ -108,7 +109,7 @@ Any props not listed above will be spread onto the underlying `DialogContent` el
 
 ### Dialog isOpen
 
-*Type*: `bool` default: `true`
+_Type_: `bool` default: `true`
 
 Controls whether the dialog is open or not.
 
@@ -126,7 +127,7 @@ If you'd rather not have the dialog always rendered, you can put a guard in fron
 
 Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. You should probably do this when your dialog contains a lot of elements.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -135,14 +136,12 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
       </button>
 
       {state.showDialog && (
-        <Dialog>
+        <Dialog onDismiss={() => setState({ showDialog: false })}>
           <p>
-            I don’t use <code>isOpen</code>, I just render when I should
-            and not when I shouldn’t.
+            I don’t use <code>isOpen</code>, I just render when I should and not
+            when I shouldn’t.
           </p>
-          <button onClick={() => setState({ showDialog: false })}>
-            Okay
-          </button>
+          <button onClick={() => setState({ showDialog: false })}>Okay</button>
         </Dialog>
       )}
     </div>
@@ -152,11 +151,13 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
 
 ### Dialog onDismiss
 
-*Type*: `func`
+_Type_: `func`
 
-When the user clicks outside the modal or hits the escape key, this function will be called. If you want the modal to close, you’ll need to set state.
+This function is called whenever the user hits "Escape" or clicks outside the dialog. _It's important to close the dialog `onDismiss`_ as seen in all the demos on this page.
 
-```.jsx
+The only time you shouldn't close the dialog on dismiss is when the dialog requires a choice and none of them are "cancel". For example, perhaps two records need to be merged and the user needs to pick the surviving record. Neither choice is less destructive than the other, in these cases you may want to alert the user they need to a make a choice on dismiss instead of closing the dialog.
+
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -169,11 +170,37 @@ When the user clicks outside the modal or hits the escape key, this function wil
         onDismiss={() => setState({ showDialog: false })}
       >
         <p>
-          It is your job to close this with state when the user
-          clicks outside or presses escape.
+          It is your job to close this with state when the user clicks outside
+          or presses escape.
         </p>
+        <button onClick={() => setState({ showDialog: false })}>Okay</button>
+      </Dialog>
+    </div>
+  )}
+</Component>
+```
+
+```jsx
+<Component initialState={{ showDialog: false, warn: false }}>
+  {({ state, setState }) => (
+    <div>
+      <button onClick={() => setState({ showDialog: true })}>
+        Show Dialog
+      </button>
+
+      <Dialog
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ warn: true })}
+      >
+        {state.warn && (
+          <p style={{ color: "red" }}>You must make a choice, sorry :(</p>
+        )}
+        <p>Which router should survive the merge?</p>
         <button onClick={() => setState({ showDialog: false })}>
-          Okay
+          React Router
+        </button>{" "}
+        <button onClick={() => setState({ showDialog: false })}>
+          @reach/router
         </button>
       </Dialog>
     </div>
@@ -181,12 +208,9 @@ When the user clicks outside the modal or hits the escape key, this function wil
 </Component>
 ```
 
-
-
-
 ### Dialog children
 
-*Type*: `node`
+_Type_: `node`
 
 Accepts any renderable content.
 
@@ -202,7 +226,7 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render a `DialogContent` inside.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -213,9 +237,15 @@ Note: You must render a `DialogContent` inside.
       <DialogOverlay
         style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
         isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
       >
-        <DialogContent style={{ boxShadow: '0px 10px 50px hsla(0, 0%, 0%, 0.33)' }}>
-          <p>The overlay styles are a white fade instead of the default black fade.</p>
+        <DialogContent
+          style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
+        >
+          <p>
+            The overlay styles are a white fade instead of the default black
+            fade.
+          </p>
           <button onClick={() => setState({ showDialog: false })}>
             Very nice.
           </button>
@@ -240,17 +270,17 @@ Use the following CSS to target the overlay:
 
 ## DialogOverlay Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#dialogoverlay-element-props)           | spread |
-| [isOpen](#dialogoverlay-isopen)           | bool |
-| [onDismiss](#dialogoverlay-ondismiss)           | func |
-| [initialFocusRef](#dialogoverlay-initialfocusref)           | ref |
-| [children](#dialogoverlay-element-props)  | node   |
+| Prop                                              | Type   |
+| ------------------------------------------------- | ------ |
+| [element props](#dialogoverlay-element-props)     | spread |
+| [isOpen](#dialogoverlay-isopen)                   | bool   |
+| [onDismiss](#dialogoverlay-ondismiss)             | func   |
+| [initialFocusRef](#dialogoverlay-initialfocusref) | ref    |
+| [children](#dialogoverlay-element-props)          | node   |
 
 ### DialogOverlay element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `div`.
 
@@ -262,32 +292,31 @@ Any props not listed above will be spread onto the underlying `div`.
 
 ### DialogOverlay isOpen
 
-*Type*: `bool`
+_Type_: `bool`
 
 Same as [Dialog `isOpen`](#dialog-isopen)
 
 ### DialogOverlay onDismiss
 
-*Type*: `func`
+_Type_: `func`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss)
 
 ### DialogContent initialFocus
 
-*Type*: `ref`
+_Type_: `ref`
 
 By default the first focusable element will receive focus when the dialog opens but you can provide a ref to focus instead.
 
-```.jsx
-() => {
+```jsx
+;() => {
   class App extends React.Component {
-
     constructor() {
       super()
-      this.buttonRef = React.createRef();
-      this.state = { showDialog: false };
-      this.open = () => this.setState({ showDialog: true });
-      this.close = () => this.setState({ showDialog: false });
+      this.buttonRef = React.createRef()
+      this.state = { showDialog: false }
+      this.open = () => this.setState({ showDialog: true })
+      this.close = () => this.setState({ showDialog: false })
     }
 
     render() {
@@ -296,14 +325,13 @@ By default the first focusable element will receive focus when the dialog opens 
           <button onClick={this.open}>Show Dialog</button>
 
           {this.state.showDialog && (
-            <DialogOverlay initialFocusRef={this.buttonRef}>
+            <DialogOverlay
+              initialFocusRef={this.buttonRef}
+              onDismiss={this.close}
+            >
               <DialogContent>
-                <p>
-                  Pass the button ref to DialogOverlay and
-                  the button.
-                </p>
-                <button onClick={this.close}>Not me</button>{" "}
-                <button
+                <p>Pass the button ref to DialogOverlay and the button.</p>
+                <button onClick={this.close}>Not me</button> <button
                   ref={this.buttonRef}
                   onClick={this.close}
                 >
@@ -313,26 +341,23 @@ By default the first focusable element will receive focus when the dialog opens 
             </DialogOverlay>
           )}
         </div>
-      );
+      )
     }
   }
 
-  return <App />;
-};
+  return <App />
+}
 ```
-
 
 ### DialogOverlay children
 
-*Type*: `node`
+_Type_: `node`
 
 Should be a `DialogContent`.
 
 ```jsx
 <DialogOverlay>
-  <DialogContent>
-    Hey!
-  </DialogContent>
+  <DialogContent>Hey!</DialogContent>
 </DialogOverlay>
 ```
 
@@ -344,7 +369,7 @@ Note: Must be a child of `DialogOverlay`.
 
 Note: You only need to use this when you are also styling `DialogOverlay`, otherwise you can use the high-level `Dialog` component and pass the props to it. Any props passed to `Dialog` component (besides `isOpen` and `onDismiss`) will be spread onto `DialogContent`.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -352,15 +377,21 @@ Note: You only need to use this when you are also styling `DialogOverlay`, other
         Show Dialog
       </button>
 
-      <DialogOverlay isOpen={state.showDialog}>
+      <DialogOverlay
+        isOpen={state.showDialog}
+        onDismiss={() => setState({ showDialog: false })}
+      >
         <DialogContent
           style={{
             border: "solid 5px hsla(0, 0%, 0%, 0.5)",
-            borderRadius: "10px"
+            borderRadius: "10px",
           }}
         >
           <p>I have a nice border now.</p>
-          <p>Note that we could have used the simpler <code>Dialog</code> instead.</p>
+          <p>
+            Note that we could have used the simpler <code>Dialog</code>{" "}
+            instead.
+          </p>
           <button onClick={() => setState({ showDialog: false })}>
             Got it.
           </button>
@@ -385,14 +416,14 @@ Use the following CSS to target the overlay:
 
 ## DialogContent Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#dialogcontent-element-props)           | spread |
-| [children](#dialogcontent-element-props)  | node   |
+| Prop                                          | Type   |
+| --------------------------------------------- | ------ |
+| [element props](#dialogcontent-element-props) | spread |
+| [children](#dialogcontent-element-props)      | node   |
 
 ### DialogContent element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `div`.
 
@@ -404,7 +435,7 @@ Any props not listed above will be spread onto the underlying `div`.
 
 ### DialogContent children
 
-*Type*: `node`
+_Type_: `node`
 
 Accepts any renderable content.
 
@@ -418,7 +449,7 @@ Accepts any renderable content.
 
 If you'd like to animate the content, give [React Spring](https://github.com/drcmda/react-spring) a shot.
 
-```.jsx
+```jsx
 <Component initialState={{ showDialog: false }}>
   {({ state, setState }) => (
     <div>
@@ -433,12 +464,15 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
       >
         {state.showDialog &&
           (styles => (
-            <DialogOverlay style={{ opacity: styles.opacity }}>
+            <DialogOverlay
+              style={{ opacity: styles.opacity }}
+              onDismiss={() => setState({ showDialog: false })}
+            >
               <DialogContent
                 style={{
                   transform: `translate3d(0px, ${styles.y}px, 0px)`,
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
               >
                 <button onClick={() => setState({ showDialog: false })}>
@@ -469,11 +503,10 @@ This is a little unusual for a React component to traverse the DOM that it isn't
 
 ### Keyboard Accessibility
 
-| key | action |
-|-----|--------|
+| key      | action                                   |
+| -------- | ---------------------------------------- |
 | `Escape` | Dismisses the dialog (if the app allows) |
 
 ## Z Index Wars
 
 Dialog does not set a z-index, it depends on the DOM order to be on top of the rest of the app (the overlay is inserted at the end of the document when it is opened). If your app is already battling in the z-index wars, be sure to add a z-index to the `<Dialog>` or `<DialogOverlay>` that you render.
-
