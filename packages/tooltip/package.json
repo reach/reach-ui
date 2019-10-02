@@ -1,11 +1,10 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Accessible tooltips",
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
@@ -24,7 +23,7 @@
   "devDependencies": {
     "react-spring": "^8.0.19"
   },
-  "author": "Ryan Florence",
+  "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "files": [
     "es",

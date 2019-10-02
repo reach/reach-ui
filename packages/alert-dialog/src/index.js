@@ -31,12 +31,14 @@ function AlertDialogOverlay({ leastDestructiveRef, ...props }) {
   );
 }
 
-AlertDialogOverlay.propTypes = {
-  isOpen: bool,
-  onDismiss: func,
-  leastDestructiveRef: oneOfType([func, object]),
-  children: node
-};
+if (__DEV__) {
+  AlertDialogOverlay.propTypes = {
+    isOpen: bool,
+    onDismiss: func,
+    leastDestructiveRef: oneOfType([func, object]),
+    children: node
+  };
+}
 
 let AlertDialogContent = ({ children, ...props }) => (
   <AlertDialogContext.Consumer>
@@ -68,9 +70,11 @@ let AlertDialogContent = ({ children, ...props }) => (
   </AlertDialogContext.Consumer>
 );
 
-AlertDialogContent.propTypes = {
-  children: node
-};
+if (__DEV__) {
+  AlertDialogContent.propTypes = {
+    children: node
+  };
+}
 
 let AlertDialogLabel = props => (
   <AlertDialogContext.Consumer>
@@ -94,12 +98,14 @@ let AlertDialog = ({ isOpen, onDismiss, leastDestructiveRef, ...props }) => (
   </AlertDialogOverlay>
 );
 
-AlertDialog.propTypes = {
-  isOpen: bool,
-  onDismiss: func,
-  leastDestructiveRef: func,
-  children: node
-};
+if (__DEV__) {
+  AlertDialog.propTypes = {
+    isOpen: bool,
+    onDismiss: func,
+    leastDestructiveRef: func,
+    children: node
+  };
+}
 
 export {
   AlertDialog,

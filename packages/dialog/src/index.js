@@ -49,6 +49,7 @@ let contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
+// eslint-disable-next-line no-unused-vars
 let FocusContext = React.createContext();
 
 let DialogOverlay = React.forwardRef(
@@ -111,9 +112,11 @@ let DialogOverlay = React.forwardRef(
   )
 );
 
-DialogOverlay.propTypes = {
-  initialFocusRef: () => {}
-};
+if (__DEV__) {
+  DialogOverlay.propTypes = {
+    initialFocusRef: () => {}
+  };
+}
 
 let stopPropagation = event => event.stopPropagation();
 
@@ -142,9 +145,11 @@ let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
   </DialogOverlay>
 );
 
-Dialog.propTypes = {
-  isOpen: bool,
-  onDismiss: func
-};
+if (__DEV__) {
+  Dialog.propTypes = {
+    isOpen: bool,
+    onDismiss: func
+  };
+}
 
 export { DialogOverlay, DialogContent, Dialog };

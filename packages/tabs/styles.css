@@ -1,3 +1,7 @@
+:root {
+  --reach-tabs: 1;
+}
+
 [data-reach-tab-panel] {
   outline: none;
 }
