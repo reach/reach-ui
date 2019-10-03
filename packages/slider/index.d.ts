@@ -20,7 +20,9 @@ declare module "@reach/slider" {
     orientation?: "horizontal" | "vertical";
     step?: number;
   };
-  export type SliderTrackProps = React.HTMLProps<HTMLDivElement>;
+  export type SliderTrackProps = React.HTMLProps<HTMLDivElement> & {
+    children: React.ReactNode;
+  };
   export type SliderTrackHighlightProps = React.HTMLProps<HTMLDivElement>;
   export type SliderHandleProps = React.HTMLProps<HTMLDivElement>;
   export type SliderMarkerProps = React.HTMLProps<HTMLDivElement>;

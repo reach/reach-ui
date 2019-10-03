@@ -329,7 +329,7 @@ Slider.propTypes = {
     SliderOrientation.vertical
   ]),
   onChange: func,
-  children: node,
+  children: node.isRequired,
   step: number,
   value: number
 };
@@ -362,7 +362,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
 
 SliderTrack.displayName = "Track";
 SliderTrack.propTypes = {
-  children: node
+  children: node.isRequired
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -389,9 +389,7 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
 });
 
 SliderTrackHighlight.displayName = "TrackHighlight";
-SliderTrackHighlight.propTypes = {
-  children: node
-};
+SliderTrackHighlight.propTypes = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderHandle = forwardRef(function SliderHandle(
