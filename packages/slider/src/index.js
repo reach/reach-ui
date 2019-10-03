@@ -20,6 +20,10 @@ import { wrapEvent } from "@reach/utils";
 //   - https://github.com/Stanko/aria-progress-range-slider
 
 // TODO: Screen reader testing
+// TODO: Investigate
+
+// Example todos:
+//  - Compose with other Reach elements (popover, tooltip, etc.)
 
 // Random thoughts/notes:
 //  - Currently testing this against the behavior of the native input range element to get
@@ -63,7 +67,7 @@ export const Slider = forwardRef(function Slider(
     onPointerMove,
     onPointerUp,
     orientation = SliderOrientation.horizontal,
-    step = 1,
+    step: stepProp,
     children,
     ...rest
   },
@@ -98,6 +102,7 @@ export const Slider = forwardRef(function Slider(
   const actualValue = getAllowedValue(_value, min, max);
   const trackPercent = valueToPercent(actualValue, min, max);
   const isVertical = orientation === SliderOrientation.vertical;
+  const step = stepProp || 1;
 
   const handleSize = isVertical
     ? handleDimensions.height
@@ -149,16 +154,17 @@ export const Slider = forwardRef(function Slider(
     let flag = false;
     let newValue;
     const tenSteps = (max - min) / 10;
+    const keyStep = stepProp || (max - min) / 100;
 
     switch (event.key) {
       case "ArrowLeft":
       case "ArrowDown":
-        newValue = actualValue - step;
+        newValue = actualValue - keyStep;
         flag = true;
         break;
       case "ArrowRight":
       case "ArrowUp":
-        newValue = actualValue + step;
+        newValue = actualValue + keyStep;
         flag = true;
         break;
       case "PageDown":
@@ -185,9 +191,8 @@ export const Slider = forwardRef(function Slider(
       event.preventDefault();
       event.stopPropagation();
     }
-    if (step) {
-      newValue = roundValueToStep(newValue, step);
-    }
+
+    newValue = roundValueToStep(newValue, keyStep);
     newValue = getAllowedValue(newValue, min, max);
     updateValue(newValue);
   });
