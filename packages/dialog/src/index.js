@@ -57,6 +57,7 @@ let DialogOverlay = React.forwardRef(
     {
       isOpen = true,
       onDismiss = k,
+      onMouseDown,
       initialFocusRef,
       onClick,
       onKeyDown,
@@ -69,7 +70,7 @@ let DialogOverlay = React.forwardRef(
         {isOpen ? (
           <Portal data-reach-dialog-wrapper>
             <Component
-              refs={{ overlayNode: null }}
+              refs={{ overlayNode: null, mouseDownTarget: null }}
               didMount={({ refs }) => {
                 portalDidMount(refs);
               }}
@@ -88,8 +89,13 @@ let DialogOverlay = React.forwardRef(
                     <div
                       data-reach-dialog-overlay
                       onClick={wrapEvent(onClick, event => {
-                        event.stopPropagation();
-                        onDismiss(event);
+                        if (refs.mouseDownTarget === event.target) {
+                          event.stopPropagation();
+                          onDismiss(event);
+                        }
+                      })}
+                      onMouseDown={wrapEvent(onMouseDown, event => {
+                        refs.mouseDownTarget = event.target;
                       })}
                       onKeyDown={wrapEvent(onKeyDown, event => {
                         if (event.key === "Escape") {
@@ -114,11 +120,9 @@ let DialogOverlay = React.forwardRef(
   }
 );
 
-if (__DEV__) {
-  DialogOverlay.propTypes = {
-    initialFocusRef: () => {}
-  };
-}
+DialogOverlay.propTypes = {
+  initialFocusRef: () => {}
+};
 
 let stopPropagation = event => event.stopPropagation();
 
@@ -147,11 +151,9 @@ let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
   </DialogOverlay>
 );
 
-if (__DEV__) {
-  Dialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func
-  };
-}
+Dialog.propTypes = {
+  isOpen: bool,
+  onDismiss: func
+};
 
 export { DialogOverlay, DialogContent, Dialog };
