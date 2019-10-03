@@ -62,23 +62,18 @@ if (__DEV__) {
 }
 
 export function useRect(nodeRef, observe = true) {
-  const { current: node } = nodeRef;
   let [rect, setRect] = useState(null);
   let observerRef = useRef(null);
   useLayoutEffect(() => {
-    if (node && !observerRef.current) {
-      observerRef.current = observeRect(node, setRect);
+    if (!observerRef.current && nodeRef.current) {
+      observerRef.current = observeRect(nodeRef.current, setRect);
     }
-    if (observe && observerRef.current) {
+    if (observe) {
       observerRef.current.observe();
     }
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.unobserve();
-        observerRef.current = null;
-      }
-    };
-  }, [observe, node]);
+    return () => observerRef.current.unobserve();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [observe]);
   return rect;
 }
 
