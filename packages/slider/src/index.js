@@ -20,19 +20,11 @@ import { wrapEvent } from "@reach/utils";
 //   - https://github.com/Stanko/aria-progress-range-slider
 
 // TODO: Screen reader testing
-// TODO: valueText
 
 // Random thoughts/notes:
-//    Currently testing this against the behavior of the native input range element to get
-//    our slider on par.
-//  - Normally I'd be inclined to use transform to move the handle in response
-//    to a change for max performance benefit, but doing so would conflict
-//    with user applied transform styles to the handle.
-//  - I imagine there will be use cases where RTL languages will need a
-//    reversed slider, so we'll want to update the math to deal
-//    with that somehow. Maybe `reverse` prop? Should we do the same for vertical sliders?
-//    How does the native range input react to RTL language detection (if at all)?
-//    And if so, would we approach it differently with a multi-handle slider?
+//  - Currently testing this against the behavior of the native input range element to get
+//    our slider on par. We'll explore animated and multi-handle sliders next.
+//  - We may want to research some use cases for reversed sliders in RTL languages if that's a thing
 
 const SliderOrientation = {
   horizontal: "horizontal",
@@ -90,7 +82,7 @@ export const Slider = forwardRef(function Slider(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const _id = useId();
+  const _id = makeId("slider", useId());
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
@@ -404,7 +396,7 @@ SliderTrackHighlight.propTypes = {
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderHandle = forwardRef(function SliderHandle(
   {
-    // min, // TODO: Create separate min/max for handles
+    // min,
     // max,
     style = {},
     ...props
