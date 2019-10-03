@@ -1,3 +1,3 @@
 declare module "@reach/auto-id" {
-  const useId: () => number;
+  const useId: (postfix?: string | number) => string;
 }
