@@ -31,47 +31,42 @@ Every dialog must render an `AlertDialogLabel` so the screen reader knows what t
 
 This is built on top of [Dialog](/dialog), so `AlertDialog` spreads its props and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and `AlertDialogContent` to `DialogContent`.
 
-```jsx
-;() => {
-  class App extends React.Component {
-    constructor() {
-      super()
-      this.cancelRef = React.createRef()
-      this.state = { showDialog: false }
-      this.open = () => this.setState({ showDialog: true })
-      this.close = () => this.setState({ showDialog: false })
-    }
+```.jsx
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false);
+  const cancelRef = React.useRef();
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
-    render() {
-      return (
-        <div>
-          <button onClick={this.open}>Delete something</button>
+  return (
+    <div>
+      <button onClick={open}>
+        Delete something
+      </button>
 
-          {this.state.showDialog && (
-            <AlertDialog leastDestructiveRef={this.cancelRef}>
-              <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+      {showDialog && (
+        <AlertDialog leastDestructiveRef={cancelRef}>
+          <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-              <AlertDialogDescription>
-                Are you sure you want to delete something? This action is
-                permanent, and we're totally not just flipping a field called
-                "deleted" to "true" in our database, we're actually deleting
-                something.
-              </AlertDialogDescription>
+          <AlertDialogDescription>
+            Are you sure you want to delete something? This action
+            is permanent, and we're totally not just flipping a
+            field called "deleted" to "true" in our database, we're
+            actually deleting something.
+          </AlertDialogDescription>
 
-              <div className="alert-buttons">
-                <button onClick={this.close}>Yes, delete</button>{" "}
-                <button ref={this.cancelRef} onClick={this.close}>
-                  Nevermind, don't delete.
-                </button>
-              </div>
-            </AlertDialog>
-          )}
-        </div>
-      )
-    }
-  }
-
-  return <App />
+          <div className="alert-buttons">
+            <button onClick={close}>
+              Yes, delete
+            </button>{" "}
+            <button ref={cancelRef} onClick={close}>
+              Nevermind, don't delete.
+            </button>
+          </div>
+        </AlertDialog>
+      )}
+    </div>
+  )
 }
 ```
 
@@ -162,63 +157,65 @@ You should probably do this when your dialog contains a lot of elements. It's al
 
 ### AlertDialog onDismiss
 
-_Type_: `func`
+_Type_: `func: (event) => void`
 
 When the user clicks outside the modal or hits the escape key, this function will be called. If you want the modal to close, you’ll need to set state.
 
 **IMPORTANT**: Ensure that `onDismiss` and the click handler of the `leastDestructiveRef` are identical!
 
-```jsx
-;() => {
-  class App extends React.Component {
-    constructor() {
-      super()
-      this.cancelRef = React.createRef()
-      this.state = { confirmDelete: false }
-      this.open = () => this.setState({ confirmDelete: true })
-      this.destroyStuff = () => {
-        console.log("destroyed!")
-        this.setState({ confirmDelete: false })
-      }
-      // make sure `onDismiss` and the `onClick` of the
-      // `leastDestructiveRef` are identical, best to just
-      // pass them both the same function
-      this.onDismiss = () => this.setState({ confirmDelete: false })
-    }
+```.jsx
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false);
+  const cancelRef = React.useRef();
 
-    render() {
-      return (
-        <div>
-          <button onClick={this.open}>Delete something</button>
+  const open = () => setShowDialog(true);
+  const destroyStuff = () => {
+    console.log('Destroyed!');
+    setShowDialog(false);
+  };
+  // make sure `close` and the `onClick` of the
+  // `leastDestructiveRef` are identical, best to just
+  // pass them both the same function
+  const close = () => setShowDialog(false);
 
-          {this.state.confirmDelete && (
-            <AlertDialog
-              onDismiss={this.onDismiss}
-              leastDestructiveRef={this.cancelRef}
+  return (
+    <div>
+      <button onClick={open}>
+        Delete something
+      </button>
+
+      {showDialog && (
+        <AlertDialog
+          onDismiss={close}
+          leastDestructiveRef={cancelRef}
+        >
+          <AlertDialogLabel>
+            Please Confirm!
+          </AlertDialogLabel>
+
+          <AlertDialogDescription>
+            Are you sure you want to delete something?
+            This action is permanent, and we're totally
+            not just flipping a field called "deleted"
+            to "true" in our database, we're actually
+            deleting something.
+          </AlertDialogDescription>
+
+          <div className="alert-buttons">
+            <button onClick={destroyStuff}>
+              Yes, delete
+            </button>{" "}
+            <button
+              ref={cancelRef}
+              onClick={close}
             >
-              <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
-
-              <AlertDialogDescription>
-                Are you sure you want to delete something? This action is
-                permanent, and we're totally not just flipping a field called
-                "deleted" to "true" in our database, we're actually deleting
-                something.
-              </AlertDialogDescription>
-
-              <div className="alert-buttons">
-                <button onClick={this.destroyStuff}>Yes, delete</button>{" "}
-                <button ref={this.cancelRef} onClick={this.onDismiss}>
-                  Nevermind, don't delete.
-                </button>
-              </div>
-            </AlertDialog>
-          )}
-        </div>
-      )
-    }
-  }
-
-  return <App />
+              Nevermind, don't delete.
+            </button>
+          </div>
+        </AlertDialog>
+      )}
+    </div>
+  )
 }
 ```
 
@@ -228,49 +225,50 @@ _Type_: `node`
 
 To prevent accidental data loss, an alert dialog should focus the least destructive action button when it opens.
 
-```jsx
-;() => {
-  class App extends React.Component {
-    constructor() {
-      super()
-      // we'll pass this ref to both AlertDialog and our button
-      this.cancelRef = React.createRef()
-      this.state = { confirm: false }
-      this.open = () => this.setState({ confirm: true })
-      this.publish = () => this.setState({ confirm: false })
-      this.onDismiss = () => this.setState({ confirm: false })
-    }
+```.jsx
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false);
 
-    render() {
-      return (
-        <div>
-          <button onClick={this.open}>Publish something</button>
+  // we'll pass this ref to both AlertDialog and our button
+  const cancelRef = React.useRef();
 
-          {this.state.confirm && (
-            <AlertDialog leastDestructiveRef={this.cancelRef}>
-              <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
-              <AlertDialogDescription>
-                Are you sure you want to publish this thing?
-              </AlertDialogDescription>
+  return (
+    <div>
+      <button onClick={open}>
+        Publish something
+      </button>
 
-              <div className="alert-buttons">
-                <button onClick={this.publish}>
-                  Yes, publish and keep editing
-                </button>{" "}
-                <button onClick={this.publish}>Yes, publish and view</button>{" "}
-                <button ref={this.cancelRef} onClick={this.onDismiss}>
-                  Don't publish, keep working
-                </button>
-              </div>
-            </AlertDialog>
-          )}
-        </div>
-      )
-    }
-  }
+      {showDialog && (
+        <AlertDialog leastDestructiveRef={cancelRef}>
+          <AlertDialogLabel>
+            Please Confirm!
+          </AlertDialogLabel>
 
-  return <App />
+          <AlertDialogDescription>
+            Are you sure you want to publish this thing?
+          </AlertDialogDescription>
+
+          <div className="alert-buttons">
+            <button onClick={this.close}>
+              Yes, publish and keep editing
+            </button>{" "}
+            <button onClick={this.close}>
+              Yes, publish and view
+            </button>{" "}
+            <button
+              ref={cancelRef}
+              onClick={close}
+            >
+              Don't publish, keep working
+            </button>
+          </div>
+        </AlertDialog>
+      )}
+    </div>
+  );
 }
 ```
 
@@ -291,7 +289,7 @@ Accepts any renderable content but should generally be restricted to `AlertDialo
   </AlertDialogDescription>
 
   <div>
-    <button onClick={this.destroyStuff}>
+    <button onClick={destroyStuff}>
       A Destructive Action
     </button>{" "}
     <button ref={leastDestructiveRef}>
@@ -373,50 +371,53 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render an `AlertDialogContent` inside.
 
-```jsx
-;() => {
-  class App extends React.Component {
-    constructor() {
-      super()
-      // you'll pass this ref to both AlertDialog and your button
-      this.cancelRef = React.createRef()
-      this.state = { confirm: false }
-      this.open = () => this.setState({ confirm: true })
-      this.close = () => this.setState({ confirm: false })
-    }
+```.jsx
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false);
 
-    render() {
-      return (
-        <div>
-          <button onClick={this.open}>Delete something</button>
+  // we'll pass this ref to both AlertDialog and our button
+  const cancelRef = React.useRef();
 
-          {this.state.confirm && (
-            <AlertDialogOverlay
-              style={{ background: "hsla(0, 50%, 50%, 0.85)" }}
-              leastDestructiveRef={this.cancelRef}
-            >
-              <AlertDialogContent style={{ background: "#f0f0f0" }}>
-                <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
-                <AlertDialogDescription>
-                  Are you sure you want delete stuff, it will be permanent.
-                </AlertDialogDescription>
+  return (
+    <div>
+      <button onClick={open}>
+        Delete something
+      </button>
 
-                <div className="alert-buttons">
-                  <button onClick={this.close}>Yes, delete</button>{" "}
-                  <button ref={this.cancelRef} onClick={this.close}>
-                    Nevermind
-                  </button>
-                </div>
-              </AlertDialogContent>
-            </AlertDialogOverlay>
-          )}
-        </div>
-      )
-    }
-  }
+      {showDialog && (
+        <AlertDialogOverlay
+          style={{ background: "hsla(0, 50%, 50%, 0.85)" }}
+          leastDestructiveRef={cancelRef}
+        >
+          <AlertDialogContent style={{ background: '#f0f0f0' }}>
+            <AlertDialogLabel>
+              Please Confirm!
+            </AlertDialogLabel>
 
-  return <App />
+            <AlertDialogDescription>
+              Are you sure you want delete stuff,
+              it will be permanent.
+            </AlertDialogDescription>
+
+            <div className="alert-buttons">
+              <button onClick={close}>
+                Yes, delete
+              </button>{" "}
+              <button
+                ref={cancelRef}
+                onClick={close}
+              >
+                Nevermind
+              </button>
+            </div>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      )}
+    </div>
+  );
 }
 ```
 
@@ -460,7 +461,7 @@ Same as [AlertDialog `isOpen`](#alertdialog-isopen)
 
 ### AlertDialogOverlay onDismiss
 
-_Type_: `func`
+_Type_: `func`: (event) => void
 
 Same as [AlertDialog `onDismiss`](#alertdialog-ondismiss)
 

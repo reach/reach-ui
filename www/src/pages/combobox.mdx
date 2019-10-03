@@ -83,12 +83,12 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
-```jsx
-;(() => {
-  function Demo() {
-    const [term, setTerm] = useState("")
-    const results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+```.jsx
+(() => {
+  function Example() {
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <div>
@@ -129,19 +129,19 @@ There is nothing special about managing state for a combobox, it's like managing
     )
   }
 
-  return <Demo />
-})()
+  return <Example />;
+})();
 ```
 
 ### Server Side Search
 
 This is the same demo as above, except this time we're going to a server to get the match. This is recommended as the previous example had to download 350kb of city text! Again, there is nothing special about a ComboboxList as any other list in React. As the input changes, fetch data, set state, render options.
 
-```jsx
-;(() => {
-  function ServerCitySearch() {
-    const [searchTerm, setSearchTerm] = useState("")
-    const cities = useCitySearch(searchTerm)
+```.jsx
+(() => {
+  function Example() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const cities = useCitySearch(searchTerm);
     const handleSearchTermChange = event => {
       setSearchTerm(event.target.value)
     }
@@ -196,8 +196,8 @@ This is the same demo as above, except this time we're going to a server to get 
       })
   }
 
-  return <ServerCitySearch />
-})()
+  return <Example />
+})();
 ```
 
 ### Lots of arbitrary elements
@@ -206,12 +206,12 @@ Sometimes your list is a bit more complicated, like categories of results, and l
 
 You can even have other interactive elements inside the popover, it won't close when the user interacts with them.
 
-```jsx
-;(() => {
-  function Demo() {
-    const [term, setTerm] = useState("")
-    const results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+```.jsx
+(() => {
+  function Example() {
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <div>
@@ -283,20 +283,20 @@ You can even have other interactive elements inside the popover, it won't close 
     padding: 5,
   }
 
-  return <Demo />
-})()
+  return <Example />;
+})();
 ```
 
 ### Custom styling
 
 This demo shows how you can control a lot about the styling. It uses `portal={false}` on the ComboboxPopover which allows us to create a continuous outline around the entire thing.
 
-```jsx
-;(() => {
-  function PinkDemo() {
-    let [term, setTerm] = useState("")
-    let results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+```.jsx
+(() => {
+  function Example() {
+    let [term, setTerm] = useState("");
+    let results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <Combobox className="pink">
@@ -344,8 +344,8 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
     )
   }
 
-  return <PinkDemo />
-})()
+  return <Example />;
+})();
 ```
 
 ## CSS Selectors
@@ -379,6 +379,16 @@ Please see the [styling guide](/styling).
 ## Combobox
 
 Parent component that sets up the proper aria roles and context for the rest of the components.
+
+### Combobox openOnFocus
+
+```jsx
+<Combobox openOnFocus />
+```
+
+Defaults to false.
+
+If true, the popover opens when focus is on the text box.
 
 ### Combobox onSelect
 

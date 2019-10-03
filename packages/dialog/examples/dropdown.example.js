@@ -1,6 +1,6 @@
 import React from "react";
 import Component from "@reach/component-component";
-import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
+import { Menu, MenuButton, MenuList, MenuItem } from "../../menu-button";
 import "../styles.css";
 import { Dialog } from "../src/index";
 

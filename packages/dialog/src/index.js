@@ -57,66 +57,72 @@ let DialogOverlay = React.forwardRef(
     {
       isOpen = true,
       onDismiss = k,
+      onMouseDown,
       initialFocusRef,
       onClick,
       onKeyDown,
       ...props
     },
     forwardedRef
-  ) => (
-    <Component didMount={checkDialogStyles}>
-      {isOpen ? (
-        <Portal data-reach-dialog-wrapper>
-          <Component
-            refs={{ overlayNode: null }}
-            didMount={({ refs }) => {
-              portalDidMount(refs);
-            }}
-            willUnmount={contentWillUnmount}
-          >
-            {({ refs }) => (
-              <FocusLock
-                returnFocus
-                onActivation={() => {
-                  if (initialFocusRef) {
-                    initialFocusRef.current.focus();
-                  }
-                }}
-              >
-                <RemoveScroll>
-                  <div
-                    data-reach-dialog-overlay
-                    onClick={wrapEvent(onClick, event => {
-                      event.stopPropagation();
-                      onDismiss(event);
-                    })}
-                    onKeyDown={wrapEvent(onKeyDown, event => {
-                      if (event.key === "Escape") {
-                        event.stopPropagation();
-                        onDismiss(event);
-                      }
-                    })}
-                    ref={node => {
-                      refs.overlayNode = node;
-                      assignRef(forwardedRef, node);
-                    }}
-                    {...props}
-                  />
-                </RemoveScroll>
-              </FocusLock>
-            )}
-          </Component>
-        </Portal>
-      ) : null}
-    </Component>
-  )
+  ) => {
+    return (
+      <Component didMount={checkDialogStyles}>
+        {isOpen ? (
+          <Portal data-reach-dialog-wrapper>
+            <Component
+              refs={{ overlayNode: null, mouseDownTarget: null }}
+              didMount={({ refs }) => {
+                portalDidMount(refs);
+              }}
+              willUnmount={contentWillUnmount}
+            >
+              {({ refs }) => (
+                <FocusLock
+                  returnFocus
+                  onActivation={() => {
+                    if (initialFocusRef) {
+                      initialFocusRef.current.focus();
+                    }
+                  }}
+                >
+                  <RemoveScroll>
+                    <div
+                      data-reach-dialog-overlay
+                      onClick={wrapEvent(onClick, event => {
+                        if (refs.mouseDownTarget === event.target) {
+                          event.stopPropagation();
+                          onDismiss(event);
+                        }
+                      })}
+                      onMouseDown={wrapEvent(onMouseDown, event => {
+                        refs.mouseDownTarget = event.target;
+                      })}
+                      onKeyDown={wrapEvent(onKeyDown, event => {
+                        if (event.key === "Escape") {
+                          event.stopPropagation();
+                          onDismiss(event);
+                        }
+                      })}
+                      ref={node => {
+                        refs.overlayNode = node;
+                        assignRef(forwardedRef, node);
+                      }}
+                      {...props}
+                    />
+                  </RemoveScroll>
+                </FocusLock>
+              )}
+            </Component>
+          </Portal>
+        ) : null}
+      </Component>
+    );
+  }
 );
 
-if (__DEV__) {
-  DialogOverlay.propTypes = {
-    initialFocusRef: () => {}
-  };
-}
+DialogOverlay.propTypes = {
+  initialFocusRef: () => {}
+};
 
 let stopPropagation = event => event.stopPropagation();
 
@@ -145,11 +151,9 @@ let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
   </DialogOverlay>
 );
 
-if (__DEV__) {
-  Dialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func
-  };
-}
+Dialog.propTypes = {
+  isOpen: bool,
+  onDismiss: func
+};
 
 export { DialogOverlay, DialogContent, Dialog };
