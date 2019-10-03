@@ -12,9 +12,6 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "dependencies": {
-    "react-uid": "^2.2.0"
-  },
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
   "files": [
