@@ -5,17 +5,18 @@ import Helmet from "react-helmet"
   meta={[
     {
       name: "description",
-      content: "Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want."
-    }
+      content:
+        "Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.",
+    },
   ]}
 />
 
 # Styling
 
-[Including Base Styles](#including-base-styles) - 
+[Including Base Styles](#including-base-styles) -
 [Overriding and Adding New Styles](#overriding--adding-new-styles)
 
-Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.  
+Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.
 
 # Including Base Styles
 
@@ -45,12 +46,7 @@ If you are using a module bundler like webpack or parcel, you can import them wh
 
 ```jsx
 // import the components
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem
-} from "@reach/menu-button"
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button"
 
 // and the styles
 import "@reach/menu-button/styles.css"
@@ -66,7 +62,7 @@ If you’re not using a bundler you can find the styles at:
 
 `your-app/node_modules/@reach/<package-name>/styles.css`
 
-Include those files however you include the rest of your stylesheets.  Alternatively, you can use a CDN like Unpkg, but this is not recommended for production apps.
+Include those files however you include the rest of your stylesheets. Alternatively, you can use a CDN like Unpkg, but this is not recommended for production apps.
 
 ```html
 <link
@@ -102,7 +98,6 @@ let YourMenuList = styled(MenuList)`
 <MenuList css={absolutely}/>
 ```
 
-
 ## CSS Selectors
 
 Because Reach UI uses regular stylesheets for its own styles you can override them like any other element. All styles use the lowest possible "specificity score", so as long as you include the component styles before your own app styles you should not run into any specificity problems.
@@ -128,6 +123,3 @@ There are certain states an element can go into like "selected". To target these
   background: red;
 }
 ```
-
-
-

@@ -3,7 +3,10 @@ import Helmet from "react-helmet"
 <Helmet
   title="Reach UI - SkipNav"
   meta={[
-    { name: 'description', content: "Skip navigation link for screenreader and keyboard users." }
+    {
+      name: "description",
+      content: "Skip navigation link for screenreader and keyboard users.",
+    },
   ]}
 />
 
@@ -19,18 +22,19 @@ If the user does not navigate with the keyboard, they won't see the link.
 For a demo, click some empty space on this page to move focus to the document body, then hit the "tab" key You'll see the link pop up. Hit enter, then tab again. Rather than cycling through the navigation, you are tabbing through the main content of the page.
 
 ```jsx
-ReactDOM.render((
+ReactDOM.render(
   <React.Fragment>
     {/* put the link at the top of your app */}
-    <SkipNavLink/>
+    <SkipNavLink />
     <div>
-      <YourNav/>
+      <YourNav />
       {/* and the content next to your main content */}
-      <SkipNavContent/>
-      <YourMainContent/>
+      <SkipNavContent />
+      <YourMainContent />
     </div>
-  </React.Fragment>
-), rootNode)
+  </React.Fragment>,
+  rootNode
+)
 ```
 
 ## Installation
@@ -42,7 +46,7 @@ yarn add @reach/skip-nav
 And then import it:
 
 ```js
-import { SkipNavLink, SkipNavContent } from '@reach/skip-nav'
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
 ```
 
 # SkipNavLink
@@ -52,26 +56,28 @@ Renders a link that remains hidden until focused to skip to the main content.
 ## SkipNavLink CSS Selectors
 
 ```css
-[data-reach-skip-link] {  }
-[data-reach-skip-link]:focus { }
+[data-reach-skip-link] {
+}
+[data-reach-skip-link]:focus {
+}
 ```
 
 ## SkipNavLink Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [element props](#skipnavlink-element-props)  | spread |
-| [children](#skipnavlink-children)  | node |
+| Prop                                        | Type   |
+| ------------------------------------------- | ------ |
+| [element props](#skipnavlink-element-props) | spread |
+| [children](#skipnavlink-children)           | node   |
 
 ### SkipNavLink element props
 
-*Type*: `spread`
+_Type_: `spread`
 
 Element props are spread to the underlying link.
 
 ### SkipNavLink children
 
-*Type*: `node` default: `"Skip to content"`
+_Type_: `node` default: `"Skip to content"`
 
 Allows you to change the text for your preferred phrase or localization.
 
@@ -85,13 +91,13 @@ Renders a div as the target for the link.
 
 ## SkipNavLink Props
 
-| Prop                   | Type   |
-| -----------------------| ------ |
-| [children](#skipnavcontent-children)  | node |
+| Prop                                 | Type |
+| ------------------------------------ | ---- |
+| [children](#skipnavcontent-children) | node |
 
 ### SkipNavLink children
 
-*Type*: `node`
+_Type_: `node`
 
 You can place the `SkipNavContent` element as a sibling to your main content or as a wrapper:
 
@@ -107,4 +113,3 @@ You can place the `SkipNavContent` element as a sibling to your main content or 
 ```
 
 Keep in mind it renders a `div`, so it may mess with your CSS depending on where it’s placed.
-
