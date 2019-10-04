@@ -2,6 +2,7 @@
 // Welcome to @reach/slider!
 
 import React, {
+  cloneElement,
   createContext,
   forwardRef,
   useCallback,
@@ -14,6 +15,7 @@ import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent } from "@reach/utils";
+import { useTooltip, TooltipPopup } from "@reach/tooltip";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -505,6 +507,80 @@ export const SliderMarker = forwardRef(function SliderMarker(
 SliderMarker.displayName = "SliderMarker";
 SliderMarker.propTypes = {
   value: oneOfType([string, number]).isRequired
+};
+
+////////////////////////////////////////////////////////////////////////////////
+export function SliderTooltip({ children, label, getLabel, ...props }) {
+  const { disabled, orientation, sliderValue, valueText } = useSliderContext();
+  const [trigger, tooltip] = useTooltip();
+
+  const centered = (triggerRect, tooltipRect) => {
+    const triggerCenter = triggerRect.left + triggerRect.width / 2;
+    const left = triggerCenter - tooltipRect.width / 2;
+    const maxLeft = window.innerWidth - tooltipRect.width - 2;
+    return {
+      left: Math.min(Math.max(2, left), maxLeft) + window.pageXOffset,
+      top: triggerRect.bottom + 8 + window.pageYOffset
+    };
+  };
+
+  // We want to show the tooltip whenever the handle is focused, regardless
+  // of what happens with mouse events.
+  const preventDefaultWhenFocused = useCallback(event => {
+    if (document.activeElement === event.currentTarget) {
+      event.preventDefault();
+    }
+  }, []);
+
+  const getEventHandler = handler =>
+    wrapEvent(preventDefaultWhenFocused, handler);
+
+  const dataAttributes = makeDataAttributes("slider-tooltip", {
+    orientation,
+    disabled
+  });
+
+  const child = React.Children.only(children);
+
+  return (
+    <>
+      {cloneElement(child, {
+        ...trigger,
+        onMouseLeave: wrapEvent(
+          child.props.onMouseLeave,
+          getEventHandler(trigger.onMouseLeave)
+        ),
+        onMouseMove: wrapEvent(
+          child.props.onMouseMove,
+          getEventHandler(trigger.onMouseMove)
+        ),
+        onMouseEnter: wrapEvent(
+          child.props.onMouseEnter,
+          getEventHandler(trigger.onMouseEnter)
+        ),
+        onMouseDown: wrapEvent(
+          child.props.onMouseDown,
+          getEventHandler(trigger.onMouseDown)
+        )
+      })}
+      <TooltipPopup
+        {...tooltip}
+        {...dataAttributes}
+        label={
+          getLabel ? getLabel(sliderValue) : label || valueText || sliderValue
+        }
+        position={centered}
+        {...props}
+      />
+    </>
+  );
+}
+
+SliderTooltip.displayName = "SliderTooltip";
+SliderTooltip.propTypes = {
+  children: node,
+  getLabel: func,
+  label: node
 };
 
 ////////////////////////////////////////////////////////////////////////////////
