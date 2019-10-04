@@ -1,6 +1,6 @@
 {
   "name": "@reach/popover",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0-alpha.2",
   "description": "Render a portal positioned relative to another element.",
   "main": "index.js",
   "module": "es/index.js",
@@ -9,9 +9,9 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/portal": "^0.3.0-alpha.1",
-    "@reach/rect": "^0.3.0-alpha.1",
-    "@reach/utils": "^0.3.0-alpha.1",
+    "@reach/portal": "^0.3.0-alpha.2",
+    "@reach/rect": "^0.3.0-alpha.2",
+    "@reach/utils": "^0.3.0-alpha.2",
     "tabbable": "^4.0.0"
   },
   "peerDependencies": {

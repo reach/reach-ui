@@ -1,6 +1,6 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0-alpha.2",
   "description": "Skip navigation links for screen reader and keyboard users.",
   "main": "index.js",
   "module": "es/index.js",
