@@ -188,8 +188,8 @@ export const Slider = forwardRef(function Slider(
     }
 
     if (flag) {
-      event.preventDefault();
-      event.stopPropagation();
+      // event.preventDefault();
+      // event.stopPropagation();
     }
 
     newValue = roundValueToStep(newValue, keyStep);
@@ -347,14 +347,16 @@ export const SliderTrack = forwardRef(function SliderTrack(
   const { disabled, orientation, trackRef } = useSliderContext();
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
+  const actualRef = useForkRef(ref, trackRef);
 
   const dataAttributes = makeDataAttributes("slider-track", {
     orientation,
     disabled
   });
+
   return (
     <div
-      ref={node => mergeRefs([ref, trackRef], node)}
+      ref={actualRef}
       id="track"
       style={{ ...style, position: "relative" }}
       {...dataAttributes}
@@ -365,7 +367,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
   );
 });
 
-SliderTrack.displayName = "Track";
+SliderTrack.displayName = "SliderTrack";
 SliderTrack.propTypes = {
   children: node.isRequired
 };
@@ -393,7 +395,7 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   );
 });
 
-SliderTrackHighlight.displayName = "TrackHighlight";
+SliderTrackHighlight.displayName = "SliderTrackHighlight";
 SliderTrackHighlight.propTypes = {};
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -402,6 +404,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     // min,
     // max,
     style = {},
+    onKeyDown,
     ...props
   },
   forwardedRef
@@ -412,7 +415,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     handlePosition,
     handleRef,
     isVertical,
-    onHandleKeyDown: onKeyDown,
+    onHandleKeyDown,
     orientation,
     sliderMin,
     sliderMax,
@@ -422,6 +425,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
+  const actualRef = useForkRef(ref, handleRef);
   const dataAttributes = makeDataAttributes("slider-handle", {
     orientation,
     disabled
@@ -429,7 +433,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
 
   return (
     <div
-      ref={node => mergeRefs([ref, handleRef], node)}
+      ref={actualRef}
       role="slider"
       tabIndex={disabled ? undefined : 0}
       aria-disabled={disabled}
@@ -439,7 +443,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
       aria-valuenow={sliderValue}
       aria-valuemax={sliderMax}
       aria-labelledby={ariaLabelledBy}
-      onKeyDown={onKeyDown}
+      onKeyDown={wrapEvent(onKeyDown, onHandleKeyDown)}
       style={{
         position: "absolute",
         ...(isVertical ? { bottom: handlePosition } : { left: handlePosition }),
@@ -451,7 +455,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
   );
 });
 
-SliderHandle.displayName = "Handle";
+SliderHandle.displayName = "SliderHandle";
 SliderHandle.propTypes = {};
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -498,7 +502,7 @@ export const SliderMarker = forwardRef(function SliderMarker(
   ) : null;
 });
 
-SliderMarker.displayName = "Marker";
+SliderMarker.displayName = "SliderMarker";
 SliderMarker.propTypes = {
   value: oneOfType([string, number]).isRequired
 };
@@ -556,8 +560,32 @@ export function assignRef(ref, value) {
   }
 }
 
-export function mergeRefs(refs, value) {
-  refs.forEach(ref => assignRef(ref, value));
+// https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/utils/useForkRef.js
+export function useForkRef(refA, refB) {
+  /**
+   * This will create a new function if the ref props change and are defined.
+   * This means React will call the old forkRef with `null` and the new forkRef
+   * with the ref. Cleanup naturally emerges from this behavior.
+   */
+  const ref = React.useMemo(() => {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return refValue => {
+      setRef(refA, refValue);
+      setRef(refB, refValue);
+    };
+  }, [refA, refB]);
+
+  function setRef(ref, value) {
+    if (typeof ref === "function") {
+      ref(value);
+    } else if (ref) {
+      ref.current = value;
+    }
+  }
+
+  return ref;
 }
 
 export function useDimensions(passedRef) {
