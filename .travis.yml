@@ -7,7 +7,7 @@ jobs:
     before_script: yarn build
     script: yarn test
   - stage: Release
-    if: tag =~ ^@reach/([a-z-]+)@[0-9]+\.[0-9]+\.[0-9]+$
+    if: tag =~ ^@reach/([a-z-]+)@[0-9]+\.[0-9]+\.[0-9]+
     before_script: yarn build
     script: echo "Publishing $TRAVIS_TAG to npm ..."
     before_deploy: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
