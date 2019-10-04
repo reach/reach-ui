@@ -1,6 +1,6 @@
 {
   "name": "@reach/portal",
-  "version": "0.2.1",
+  "version": "0.3.0-alpha.0",
   "description": "Declarative portals for React",
   "main": "index.js",
   "module": "es/index.js",
@@ -9,7 +9,7 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.3"
+    "@reach/component-component": "^0.3.0-alpha.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
