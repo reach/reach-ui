@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useMemo, useEffect } from "react";
 
 let checkedPkgs = {};
 
@@ -73,4 +73,28 @@ export function useUpdateEffect(effect, deps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
+}
+
+export function useAssignRef(refA, refB) {
+  const ref = useMemo(() => {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return refValue => {
+      setRef(refA, refValue);
+      setRef(refB, refValue);
+    };
+  }, [refA, refB]);
+
+  // We shouldn't really need to throw an error using this method AFAICT.
+  // TODO: We may want to consider phasing out `assignRef` in favor of this hook.
+  function setRef(ref, value) {
+    if (typeof ref === "function") {
+      ref(value);
+    } else if (ref) {
+      ref.current = value;
+    }
+  }
+
+  return ref;
 }
