@@ -208,7 +208,8 @@ export const Slider = forwardRef(function Slider(
     if (sliderRef.current && handleRef.current) {
       setPointerDown(true);
       const newValue = getNewValueFromPointer(event);
-      sliderRef.current.setPointerCapture(event.pointerId);
+      sliderRef.current.setPointerCapture &&
+        sliderRef.current.setPointerCapture(event.pointerId);
       if (newValue !== value) {
         updateValue(newValue);
       }
@@ -218,7 +219,8 @@ export const Slider = forwardRef(function Slider(
 
   const handlePointerUp = wrapEvent(onPointerUp, function(event) {
     if (sliderRef.current && event.pointerId) {
-      sliderRef.current.releasePointerCapture(event.pointerId);
+      sliderRef.current.releasePointerCapture &&
+        sliderRef.current.releasePointerCapture(event.pointerId);
     }
     setPointerDown(false);
   });

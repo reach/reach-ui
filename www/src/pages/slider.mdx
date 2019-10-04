@@ -1,0 +1,262 @@
+import Helmet from "react-helmet"
+
+<Helmet
+  title="Reach UI - Slider"
+  meta={[
+    {
+      name: "description",
+      content: "Accessible Slider for React.js",
+    },
+  ]}
+/>
+
+# Tooltip
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/tooltip
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+
+When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
+
+A couple notes on using tooltips:
+
+- Do not use tooltips for information vital to task completion. The elements they are attached to should usually make sense on their own, but a tooltip can help provide a little bit more information--especially for new users of your app.
+- Keep the content minimal, they are not intended to hide critical content.
+- If you want interactive content, you can use a [Dialog](/dialog).
+
+_Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
+
+```jsx
+<div>
+  <Tooltip label="Notifications">
+    <button style={{ fontSize: 25 }}>
+      <span>🔔</span>
+    </button>
+  </Tooltip>
+  <Tooltip label="Settings">
+    <button style={{ fontSize: 25 }}>
+      <span aria-hidden>⚙️</span>
+    </button>
+  </Tooltip>
+
+  <div style={{ float: "right" }}>
+    <Tooltip label="Notifications" ariaLabel="3 Notifications">
+      <button style={{ fontSize: 25 }}>
+        <span>🔔</span>
+        <span>3</span>
+      </button>
+    </Tooltip>
+  </div>
+</div>
+```
+
+## Installation
+
+```bash
+npm install @reach/tooltip
+# or
+yarn add @reach/tooltip
+```
+
+And then import the components you need:
+
+```js
+import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
+```
+
+## Usage
+
+```jsx
+<Tooltip label="Save">
+  <button style={{ fontSize: 25 }}>💾</button>
+</Tooltip>
+```
+
+Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
+
+```jsx
+<Tooltip
+  // What the tooltip renders
+  label="Notifications"
+  // What the screenreader announces
+  ariaLabel="3 Notifications"
+>
+  <button style={{ fontSize: 25 }}>🔔 3</button>
+</Tooltip>
+```
+
+All props passed to `Tooltip` will go to the popover.
+
+```jsx
+<Tooltip
+  label="Fall in love all over again"
+  style={{
+    background: "hsla(0, 0%, 0%, 0.75)",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "0.5em 1em",
+  }}
+>
+  <button style={{ fontSize: 25 }}>❤️</button>
+</Tooltip>
+```
+
+## Tooltip CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-tooltip] {
+}
+```
+
+## useTooltip, TooltipPopup
+
+`Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`.
+
+You may want to drop down to this lower level API if you need animation or you want to add the triangles to the tooltip. We've provided code for both of these use-cases below:
+
+### Triangle pointers and custom styles
+
+```jsx
+;(() => {
+  // Center the tooltip, but collisions will win
+  const centered = (triggerRect, tooltipRect) => {
+    const triggerCenter = triggerRect.left + triggerRect.width / 2
+    const left = triggerCenter - tooltipRect.width / 2
+    const maxLeft = window.innerWidth - tooltipRect.width - 2
+    return {
+      left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
+      top: triggerRect.bottom + 8 + window.scrollY,
+    }
+  }
+
+  function TriangleTooltip({ children, label, ariaLabel }) {
+    // get the props from useTooltip
+    const [trigger, tooltip] = useTooltip()
+
+    // destructure off what we need to position the triangle
+    const { isVisible, triggerRect } = tooltip
+
+    return (
+      <Fragment>
+        {cloneElement(children, trigger)}
+
+        {isVisible && (
+          // The Triangle. We position it relative to the trigger, not the popup
+          // so that collisions don't have a triangle pointing off to nowhere.
+          // Using a Portal may seem a little extreme, but we can keep the
+          // positioning logic simpler here instead of needing to consider
+          // the popup's position relative to the trigger and collisions
+          <Portal>
+            <div
+              style={{
+                position: "absolute",
+                left:
+                  triggerRect && triggerRect.left - 10 + triggerRect.width / 2,
+                top: triggerRect && triggerRect.bottom + window.scrollY,
+                width: 0,
+                height: 0,
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderBottom: "10px solid black",
+              }}
+            />
+          </Portal>
+        )}
+        <TooltipPopup
+          {...tooltip}
+          label={label}
+          ariaLabel={ariaLabel}
+          style={{
+            background: "black",
+            color: "white",
+            border: "none",
+            borderRadius: "3px",
+            padding: "0.5em 1em",
+          }}
+          position={centered}
+        />
+      </Fragment>
+    )
+  }
+
+  return (
+    <div>
+      <TriangleTooltip label="Notifications Really Long to Trigger Collision">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>🔔</span>
+        </button>
+      </TriangleTooltip>
+      <TriangleTooltip label="Settings">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>⚙️</span>
+        </button>
+      </TriangleTooltip>
+
+      <div style={{ float: "right" }}>
+        <TriangleTooltip
+          label="Notifications Really Long to Trigger Collision"
+          ariaLabel="3 Notifications"
+        >
+          <button style={{ fontSize: 25 }}>
+            <span>🔔</span>
+            <span>3</span>
+          </button>
+        </TriangleTooltip>
+      </div>
+    </div>
+  )
+})()
+```
+
+### Animation
+
+Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
+
+```jsx
+import React, { Fragment, cloneElement } from "react"
+import { useTooltip, TooltipPopup } from "@reach/tooltip"
+import { useTransition, animated } from "react-spring"
+
+animated.TooltipPopup = animated(TooltipPopup)
+animated.TooltipContent = animated(TooltipPopup)
+
+function AnimatedTooltip({ children, ...rest }) {
+  const [trigger, tooltip, isVisible] = useTooltip()
+
+  const transitions = useTransition(isVisible ? tooltip : false, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { mass: 1, tension: 500, friction: 40 },
+  })
+
+  return (
+    <Fragment>
+      {cloneElement(children, trigger)}
+
+      {transitions.map(
+        ({ item: tooltip, props: styles, key }) =>
+          tooltip && (
+            <animated.TooltipContent
+              key={key}
+              {...tooltip}
+              {...rest}
+              style={styles}
+            />
+          )
+      )}
+    </Fragment>
+  )
+}
+
+// Now you can replace `Tooltip` with `AnimatedTooltip`
+function App() {
+  return (
+    <AnimatedTooltip label="Compose Message">
+      <button>📝</button>
+    </AnimatedTooltip>
+  )
+}
+```
