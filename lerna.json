@@ -1,8 +1,10 @@
 {
-  "version": "independent",
+  "version": "0.3.0-alpha.0",
   "packages": ["packages/*"],
   "registry": "https://registry.npmjs.org/",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "npmClient": "yarn",
   "useWorkspaces": true
 }
