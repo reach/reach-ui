@@ -1,0 +1,4 @@
+*.yml
+packages/*/index.js
+packages/*/es/**/*
+vendor

@@ -1,0 +1,19 @@
+language: node_js
+node_js: node
+cache: yarn
+jobs:
+  include:
+  - stage: Test
+    before_script: yarn build
+    script: yarn test
+  - stage: Release
+    if: tag =~ /^@reach\/([a-z-]+?)@[0-9]+\.[0-9]+\.[0-9]+/
+    before_script: yarn build
+    script: echo "Publishing $TRAVIS_TAG to npm ..."
+    before_deploy: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script: lerna publish from-git --yes --pre-dist-tag next
+      on:
+        tags: true

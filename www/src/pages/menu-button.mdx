@@ -26,7 +26,7 @@ An accessible dropdown menu for the common dropdown menu button design pattern.
 
 Please note that the buttons on this page are styled by this website. They are just buttons, so they will appear the same as any other button in your app.
 
-```.jsx
+```jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -36,10 +36,9 @@ Please note that the buttons on this page are styled by this website. They are j
     <MenuItem onSelect={() => alert("Copy")}>Create a Copy</MenuItem>
     <MenuItem onSelect={() => alert("Mark as Draft")}>Mark as Draft</MenuItem>
     <MenuItem onSelect={() => alert("Delete")}>Delete</MenuItem>
-    <MenuLink
-      as="a"
-      href="https://reach.tech/workshops"
-    >Attend a Workshop</MenuLink>
+    <MenuLink as="a" href="https://reach.tech/workshops">
+      Attend a Workshop
+    </MenuLink>
   </MenuList>
 </Menu>
 ```
@@ -163,7 +162,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
 
-```.jsx
+```jsx
 <Menu>
   <MenuButton
     className="button-primary"
@@ -226,7 +225,7 @@ _Type_: `spread`
 
 All props are spread to the underlying element. Here we apply a `className` the element.
 
-```.jsx
+```jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -308,7 +307,7 @@ The following example has this css applied:
 }
 ```
 
-```.jsx
+```jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -344,27 +343,26 @@ All props are spread to the underlying element.
 In this example the `onFocus` prop is passed down to the element.
 
 ```.jsx
-<Component initialState={{ focusCount: 0 }}>
-  {({ setState, state: { focusCount } }) => (
+function Example(props) {
+  const [focusCount, setFocusCount] = React.useState(0);
+  return (
     <Menu>
-      <MenuButton>
-        Actions
-      </MenuButton>
+      <MenuButton>Actions</MenuButton>
       <MenuList>
         <MenuItem
           onFocus={() => {
-            setState(state => ({
-              focusCount: state.focusCount + 1
-            }))
+            setFocusCount(prevFocusCount => prevFocusCount + 1);
           }}
           onSelect={() => {}}
-        >Focused {focusCount} Times</MenuItem>
+        >
+          Focused {focusCount} Times
+        </MenuItem>
         <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
         <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
       </MenuList>
     </Menu>
-  )}
-</Component>
+  );
+}
 ```
 
 ### MenuItem children
@@ -373,7 +371,7 @@ _Type_: `node`
 
 You can put any type of content inside of a `<MenuItem>`.
 
-```.jsx
+```jsx
 <Menu>
   <MenuButton>
     Your Cats <span aria-hidden>▾</span>
@@ -387,10 +385,7 @@ You can put any type of content inside of a `<MenuItem>`.
       <span>Fluffybuns the Destroyer</span>
     </MenuItem>
     <MenuItem onSelect={() => {}}>
-      <img
-        src="https://placekitten.com/120/120"
-        alt="Simon the pensive"
-      />
+      <img src="https://placekitten.com/120/120" alt="Simon the pensive" />
       <span>Simon the pensive</span>
     </MenuItem>
   </MenuList>
@@ -404,15 +399,15 @@ Handles linking to a different page in the menu. By default it renders `<a>`, bu
 Must be a direct child of a `<MenuList>`.
 
 ```jsx
-improt { Link } from "@reach/router"
-
-<MenuList>
-  <MenuLink as={Link} to="somewhere/else">Somewhere w/ Reach Router</MenuLink>
+import { Link } from "@reach/router"
+;<MenuList>
+  <MenuLink as={Link} to="somewhere/else">
+    Somewhere w/ Reach Router
+  </MenuLink>
   <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
-  <MenuLink
-    as={GatsbyLink}
-    to="/somewhere/with/gatsby"
-  >Some Gatsby Page</MenuLink>
+  <MenuLink as={GatsbyLink} to="/somewhere/with/gatsby">
+    Some Gatsby Page
+  </MenuLink>
 </MenuList>
 ```
 
@@ -514,63 +509,55 @@ If one of your menu items causes the `<Menu>` itself to unmount, it is your job 
 Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screenreader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
 
 ```.jsx
-(() => {
-  class App extends React.Component {
-    constructor() {
-      super();
-      this.focusRefs = {
-        screen1: React.createRef(),
-        screenTwoButton: React.createRef()
-      };
-
-      this.state = {
-        screen: 1
-      };
+function Example(props) {
+  const screen1FocusRef = React.useRef();
+  const screen2ButtonFocusRef = React.useRef();
+  React.useEffect(() => {
+    if (screen === 1) {
+      screen1FocusRef.current.focus();
     }
-
-    render() {
-      return this.state.screen === 1 ? (
-        <div ref={this.focusRefs.screen1} tabIndex="-1">
-          <h4>Screen One</h4>
-          <Menu>
-            <MenuButton>Actions</MenuButton>
-            <MenuList>
-              <MenuItem
-                onSelect={() => {
-                  this.setState({ screen: 2 }, () => {
-                    this.focusRefs.screenTwoButton.current.focus();
-                  });
-                }}
-              >
-                Go to screen 2
-              </MenuItem>
-              <MenuItem onSelect={() => {}}>
-                Do nothing
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <Menu />
-        </div>
-      ) : this.state.screen === 2 ? (
-        <div>
-          <h4>Screen 2</h4>
-          <button
-            ref={this.focusRefs.screenTwoButton}
-            onClick={() => {
-              this.setState({ screen: 1 }, () =>
-                this.focusRefs.screen1.current.focus()
-              );
-            }}
-          >
-            Back to screen 1
-          </button>
-        </div>
-      ) : null;
+    if (screen === 2) {
+      screen2ButtonFocusRef.current.focus();
     }
+  }, [screen]);
+
+  const [screen, setScreen] = React.useState(1);
+  if (screen === 1) {
+    return (
+      <div ref={screen1FocusRef} tabIndex="-1">
+        <h4>Screen One</h4>
+        <Menu>
+          <MenuButton>Actions</MenuButton>
+          <MenuList>
+            <MenuItem
+              onSelect={() => setScreen(2)}
+            >
+              Go to screen 2
+            </MenuItem>
+            <MenuItem onSelect={() => {}}>
+              Do nothing
+            </MenuItem>
+          </MenuList>
+        </Menu>
+        <Menu />
+      </div>
+    );
   }
-
-  return <App />;
-})()
+  if (screen === 2) {
+    return (
+      <div>
+        <h4>Screen 2</h4>
+        <button
+          ref={screen2ButtonFocusRef}
+          onClick={() => setScreen(1)}
+        >
+          Back to screen 1
+        </button>
+      </div>
+    )
+  }
+  return null;
+}
 ```
 
 ## Icons

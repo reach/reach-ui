@@ -18,21 +18,21 @@ declare module "@reach/menu-button" {
     children: React.ReactNode;
   }
 
-  export const Menu: React.SFC<IMenuProps>;
+  export const Menu: React.FunctionComponent<IMenuProps>;
 
-  export type MenuButtonProps = JSX.IntrinsicElements["button"] & {
+  export type MenuButtonProps = React.HTMLProps<HTMLButtonElement> & {
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     children: React.ReactNode;
   };
 
-  export const MenuButton: React.SFC<MenuButtonProps>;
+  export const MenuButton: React.FunctionComponent<MenuButtonProps>;
 
-  export type MenuListProps = JSX.IntrinsicElements["div"] & {
+  export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
     children: React.ReactNode;
   };
 
-  export const MenuList: React.SFC<MenuListProps>;
+  export const MenuList: React.FunctionComponent<MenuListProps>;
 
   type ResolvedMenuLinkProps<T> = T extends keyof JSX.IntrinsicElements
     ? JSX.IntrinsicElements[T]
@@ -62,7 +62,7 @@ declare module "@reach/menu-button" {
     props: MenuLinkProps<T>
   ): React.ReactElement<MenuLinkProps<T>>;
 
-  export type MenuItemProps = JSX.IntrinsicElements["div"] & {
+  export type MenuItemProps = React.HTMLProps<HTMLDivElement> & {
     onSelect: () => void;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
@@ -74,5 +74,5 @@ declare module "@reach/menu-button" {
     _ref?: (node: HTMLElement) => void;
   };
 
-  export const MenuItem: React.SFC<MenuItemProps>;
+  export const MenuItem: React.FunctionComponent<MenuItemProps>;
 }

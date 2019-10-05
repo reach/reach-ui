@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.2.9",
+  "version": "0.3.0-alpha.2",
   "description": "Accessible React Modal Dialog.",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -11,19 +11,19 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.1.3",
-    "@reach/portal": "^0.2.1",
-    "@reach/utils": "^0.2.3",
+    "@reach/component-component": "^0.2.0-alpha.2",
+    "@reach/portal": "^0.3.0-alpha.2",
+    "@reach/utils": "^0.3.0-alpha.2",
     "prop-types": "^15.7.2",
-    "react-focus-lock": "^1.17.7",
-    "react-remove-scroll": "^1.0.2"
+    "react-focus-lock": "^2.1.0",
+    "react-remove-scroll": "^2.0.4"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@reach/menu-button": "^0.1.18",
+    "@reach/menu-button": "^0.2.0-alpha.2",
     "react": "^16.8.0",
     "react-test-renderer": "^16.8.0"
   },

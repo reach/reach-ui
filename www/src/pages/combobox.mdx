@@ -22,7 +22,7 @@ To get you started, let's take a look at a few examples that grow from simple to
 
 Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
 
-```.jsx
+```jsx
 <div>
   <h4 id="demo">Basic, Fixed List Combobox</h4>
   <Combobox>
@@ -44,7 +44,7 @@ Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple c
 
 Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
-```.jsx
+```jsx
 <Combobox>
   <ComboboxInput
     placeholder="Custom Option Rendering"
@@ -85,7 +85,7 @@ There is nothing special about managing state for a combobox, it's like managing
 
 ```.jsx
 (() => {
-  function Demo() {
+  function Example() {
     const [term, setTerm] = useState("");
     const results = useCityMatch(term);
     const handleChange = event => setTerm(event.target.value);
@@ -110,26 +110,26 @@ There is nothing special about managing state for a combobox, it's like managing
                 ))}
               </ComboboxList>
             </ComboboxPopover>
-           )}
+          )}
         </Combobox>
       </div>
-    );
+    )
   }
 
   function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100);
+    const throttledTerm = useThrottle(term, 100)
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
-    );
+    )
   }
 
-  return <Demo />;
+  return <Example />;
 })();
 ```
 
@@ -139,12 +139,12 @@ This is the same demo as above, except this time we're going to a server to get 
 
 ```.jsx
 (() => {
-  function ServerCitySearch() {
+  function Example() {
     const [searchTerm, setSearchTerm] = useState("");
     const cities = useCitySearch(searchTerm);
     const handleSearchTermChange = event => {
-      setSearchTerm(event.target.value);
-    };
+      setSearchTerm(event.target.value)
+    }
 
     return (
       <Combobox>
@@ -157,30 +157,30 @@ This is the same demo as above, except this time we're going to a server to get 
           <ComboboxPopover className="shadow-popup">
             <ComboboxList>
               {cities.map(city => {
-                const str = `${city.city}, ${city.state}`;
-                return <ComboboxOption key={str} value={str} />;
+                const str = `${city.city}, ${city.state}`
+                return <ComboboxOption key={str} value={str} />
               })}
             </ComboboxList>
           </ComboboxPopover>
         )}
       </Combobox>
-    );
+    )
   }
 
   function useCitySearch(searchTerm) {
-    const [cities, setCities] = useState([]);
+    const [cities, setCities] = useState([])
 
     useEffect(() => {
       if (searchTerm.trim() !== "") {
-        let isFresh = true;
+        let isFresh = true
         fetchCities(searchTerm).then(cities => {
-          if (isFresh) setCities(cities);
-        });
-        return () => (isFresh = false);
+          if (isFresh) setCities(cities)
+        })
+        return () => (isFresh = false)
       }
-    }, [searchTerm]);
+    }, [searchTerm])
 
-    return cities;
+    return cities
   }
 
   const cache = {}
@@ -196,7 +196,7 @@ This is the same demo as above, except this time we're going to a server to get 
       })
   }
 
-  return <ServerCitySearch />
+  return <Example />
 })();
 ```
 
@@ -208,7 +208,7 @@ You can even have other interactive elements inside the popover, it won't close 
 
 ```.jsx
 (() => {
-  function Demo() {
+  function Example() {
     const [term, setTerm] = useState("");
     const results = useCityMatch(term);
     const handleChange = event => setTerm(event.target.value);
@@ -252,28 +252,26 @@ You can even have other interactive elements inside the popover, it won't close 
                 </div>
               )}
               <p style={{ textAlign: "center", padding: 10 }}>
-                <button>
-                  Create a new record
-                </button>
+                <button>Create a new record</button>
               </p>
             </ComboboxPopover>
           )}
         </Combobox>
       </div>
-    );
+    )
   }
 
   function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100);
+    const throttledTerm = useThrottle(term, 100)
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
-    );
+    )
   }
 
   const heading = {
@@ -282,10 +280,10 @@ You can even have other interactive elements inside the popover, it won't close 
     fontWeight: "bold",
     textTransform: "uppercase",
     margin: 0,
-    padding: 5
+    padding: 5,
   }
 
-  return <Demo />;
+  return <Example />;
 })();
 ```
 
@@ -295,7 +293,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 
 ```.jsx
 (() => {
-  function PinkDemo() {
+  function Example() {
     let [term, setTerm] = useState("");
     let results = useCityMatch(term);
     const handleChange = event => setTerm(event.target.value);
@@ -321,7 +319,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
                   margin: 0,
                   color: "#454545",
                   padding: "0.25rem 1rem 0.75rem 1rem",
-                  fontStyle: "italic"
+                  fontStyle: "italic",
                 }}
               >
                 No results :(
@@ -330,23 +328,23 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
           </ComboboxPopover>
         )}
       </Combobox>
-    );
+    )
   }
 
   function useCityMatch(term) {
-    let throttledTerm = useThrottle(term, 100);
+    let throttledTerm = useThrottle(term, 100)
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
-    );
+    )
   }
 
-  return <PinkDemo />;
+  return <Example />;
 })();
 ```
 
@@ -381,6 +379,16 @@ Please see the [styling guide](/styling).
 ## Combobox
 
 Parent component that sets up the proper aria roles and context for the rest of the components.
+
+### Combobox openOnFocus
+
+```jsx
+<Combobox openOnFocus />
+```
+
+Defaults to false.
+
+If true, the popover opens when focus is on the text box.
 
 ### Combobox onSelect
 
