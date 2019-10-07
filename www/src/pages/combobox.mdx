@@ -22,7 +22,7 @@ To get you started, let's take a look at a few examples that grow from simple to
 
 Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
 
-```jsx
+```.jsx
 <div>
   <h4 id="demo">Basic, Fixed List Combobox</h4>
   <Combobox>
@@ -44,7 +44,7 @@ Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple c
 
 Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
-```jsx
+```.jsx
 <Combobox>
   <ComboboxInput
     placeholder="Custom Option Rendering"
@@ -83,7 +83,7 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
-```jsx
+```.jsx
 ;(() => {
   function Example() {
     const [term, setTerm] = useState("")
@@ -382,7 +382,7 @@ Parent component that sets up the proper aria roles and context for the rest of 
 
 ### Combobox openOnFocus
 
-```jsx
+```.jsx
 <Combobox openOnFocus />
 ```
 
@@ -394,7 +394,7 @@ If true, the popover opens when focus is on the text box.
 
 Called with the selection value when the user makes a selection from the list.
 
-```jsx
+```.jsx
 <Combobox onSelect={item => {}} />
 ```
 
@@ -404,7 +404,7 @@ Wraps an `<input/>` with a couple extra props that work with the combobox.
 
 ### ComboboxInput selectOnClick
 
-```jsx
+```.jsx
 <ComboboxInput selectOnClick />
 ```
 
@@ -422,7 +422,7 @@ Determines if the value in the input changes or not as the user navigates with t
 
 Set this to false when you don't really need the value from the input but want to populate some other state (like the recipient selector in Gmail). But if your input is more like a normal `<input type="text"/>`, then leave the `true` default.
 
-```jsx
+```.jsx
 <ComboboxInput autocomplete={false} />
 ```
 
@@ -440,7 +440,7 @@ Contains the `ComboboxOption` elements and sets up the proper aria attributes fo
 
 ## ComboboxList persistSelectionRef
 
-```jsx
+```.jsx
 <ComboboxList persistSelection />
 ```
 
@@ -456,7 +456,7 @@ An option that is suggested to the user as they interact with the combobox.
 
 The value to match against when suggesting.
 
-```jsx
+```.jsx
 <ComboboxOption value="Salt Lake City, Utah" />
 ```
 
@@ -464,13 +464,13 @@ The value to match against when suggesting.
 
 Optional. If omitted, the `value` will be used as the children like this:
 
-```jsx
+```.jsx
 <ComboboxOption value="Seattle, Tacoma, Washington" />
 ```
 
 But if you need to control a bit more, you can put whatever children you want, but make sure to render a `ComboboxOptionText` as well, so the value is still displayed with the text highlighting on the matched portions.
 
-```jsx
+```.jsx
 <ComboboxOption value="Apple" />
 🍎 <ComboboxOptionText/>
 </ComboboxOption>
@@ -482,7 +482,7 @@ Renders the value of a `ComboboxOption` as text but with spans wrapping the matc
 
 So given an option like this:
 
-```jsx
+```.jsx
 <ComboboxOption value="Seattle">
   🌧 <ComboboxOptionText />
 </ComboboxOption>
@@ -490,7 +490,7 @@ So given an option like this:
 
 And the user typed `Sea`, the out would be:
 
-```jsx
+```.jsx
 <span data-user-value>Sea</span><span data-suggested-value>ttle</span>
 ```
 

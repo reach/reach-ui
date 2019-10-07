@@ -45,6 +45,15 @@ import {
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
 
+import {
+  Slider,
+  SliderTrack,
+  SliderTrackHighlight,
+  SliderHandle,
+  SliderMarker,
+  SliderTooltip,
+} from "@reach/slider"
+
 import { useId } from "@reach/auto-id"
 
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
@@ -89,6 +98,12 @@ const PreComponent = ({ className, ...props }) =>
         Tab,
         TabPanels,
         TabPanel,
+        Slider,
+        SliderTrack,
+        SliderTrackHighlight,
+        SliderHandle,
+        SliderMarker,
+        SliderTooltip,
         useId,
         Tooltip,
         TooltipPopup,

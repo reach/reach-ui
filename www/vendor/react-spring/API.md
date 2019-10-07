@@ -1,12 +1,12 @@
 # Spring configs
 
-```jsx
+```.jsx
 import { config } from 'react-spring'
 
 <Spring config={config.default} />
 ```
 
-```jsx
+```.jsx
 /*
     default: { tension: 170, friction: 26 },
     gentle: { tension: 120, friction: 14 },
@@ -25,11 +25,11 @@ import { config } from 'react-spring'
 
 # Spring
 
-```jsx
+```.jsx
 import { Spring } from 'react-spring'
 ```
 
-```jsx
+```.jsx
 class Spring extends React.PureComponent {
   static propTypes = {
     // Will skip rendering the component if true and write to the dom directly
@@ -80,11 +80,11 @@ class Spring extends React.PureComponent {
 
 # Transition
 
-```jsx
+```.jsx
 import { Transition } from 'react-spring'
 ```
 
-```jsx
+```.jsx
 class Transition extends React.PureComponent {
   static propTypes = {
     native: PropTypes.bool,
@@ -144,11 +144,11 @@ class Transition extends React.PureComponent {
 
 # Trail
 
-```jsx
+```.jsx
 import { Trail } from 'react-spring'
 ```
 
-```jsx
+```.jsx
 class Trail extends React.PureComponent {
   static propTypes = {
     native: PropTypes.bool,
@@ -178,11 +178,11 @@ class Trail extends React.PureComponent {
 
 # Parallax
 
-```jsx
+```.jsx
 import { Parallax, ParallaxLayer } from 'react-spring'
 ```
 
-```jsx
+```.jsx
 class Parallax extends React.PureComponent {
   static propTypes = {
     // Total (inner) height/width of the scroll container
@@ -221,7 +221,7 @@ class ParallaxLayer extends React.PureComponent {
 
 # Keyframes
 
-```jsx
+```.jsx
 export default class Keyframes extends React.Component {
   static create = primitive => states => {
     if (typeof states === 'function') states = { [DEFAULT]: states }

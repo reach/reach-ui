@@ -26,7 +26,7 @@ An accessible dropdown menu for the common dropdown menu button design pattern.
 
 Please note that the buttons on this page are styled by this website. They are just buttons, so they will appear the same as any other button in your app.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -79,7 +79,7 @@ _Type_: `oneOfType(node, function)`
 
 Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>Actions</MenuButton>
   <MenuList>
@@ -91,7 +91,7 @@ Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
 Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
 
-```jsx
+```.jsx
 <Menu>
   {({ isOpen }) => (
     <React.Fragment>
@@ -111,7 +111,7 @@ Alternatively, you can provide a render callback. This is helpful if you need to
 
 Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. Must be rendered inside of a `<Menu>`.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>Profile</MenuButton>
   {/* ... */}
@@ -162,7 +162,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton
     className="button-primary"
@@ -182,7 +182,7 @@ _Type_: `node`
 
 Accepts any renderable content.
 
-```jsx
+```.jsx
 <MenuButton>
   Actions{" "}
   <span aria-hidden>
@@ -195,7 +195,7 @@ Accepts any renderable content.
 
 Wraps a DOM element that renders the menu items. Must be rendered inside of a `<Menu>`.
 
-```jsx
+```.jsx
 <Menu>
   {/* ... */}
   <MenuList>
@@ -225,7 +225,7 @@ _Type_: `spread`
 
 All props are spread to the underlying element. Here we apply a `className` the element.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -264,7 +264,7 @@ _Type_: `node`
 
 Can contain only `MenuItem` or a `MenuLink`
 
-```jsx
+```.jsx
 <MenuList>
   <MenuItem />
   <MenuLink />
@@ -275,7 +275,7 @@ Can contain only `MenuItem` or a `MenuLink`
 
 Handles menu selection. Must be a direct child of a `<MenuList>`.
 
-```jsx
+```.jsx
 <MenuList>
   <MenuItem onSelect={() => alert("download!")}>Download</MenuItem>
 </MenuList>
@@ -307,7 +307,7 @@ The following example has this css applied:
 }
 ```
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>
     Actions <span aria-hidden>▾</span>
@@ -371,7 +371,7 @@ _Type_: `node`
 
 You can put any type of content inside of a `<MenuItem>`.
 
-```jsx
+```.jsx
 <Menu>
   <MenuButton>
     Your Cats <span aria-hidden>▾</span>
@@ -398,7 +398,7 @@ Handles linking to a different page in the menu. By default it renders `<a>`, bu
 
 Must be a direct child of a `<MenuList>`.
 
-```jsx
+```.jsx
 import { Link } from "@reach/router"
 ;<MenuList>
   <MenuLink as={Link} to="somewhere/else">
@@ -446,7 +446,7 @@ _Type_: `spread`
 
 All props are spread to the underlying element
 
-```jsx
+```.jsx
 // the `to` prop is spread onto the Reach Router Link
 <MenuLink as={Link} to="somewhere/else">
   Somewhere
@@ -466,7 +466,7 @@ _Type_: `any`
 
 By default, `MenuLink` renders an anchor, but if you are using a router you can use `as={Link}`.
 
-```jsx
+```.jsx
 import { Link } from "@reach/router"
 ;<Menu>
   <MenuButton>Products</MenuButton>
@@ -482,7 +482,7 @@ import { Link } from "@reach/router"
 
 Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t it won't work because we will not be able to manage focus on the element the component renders.
 
-```jsx
+```.jsx
 import GatsbyLink from "gatsby/link"
 ;<MenuLink as={GatsbyLink} to="/somewhere" />
 ```
@@ -493,7 +493,7 @@ _Type_: `node`
 
 You can render any kind of content inside of a MenuLink.
 
-```jsx
+```.jsx
 <MenuLink>
   <ProfileImage userId="4" />
   <UserName>Ryan Florence</UserName>
@@ -564,7 +564,7 @@ function Example(props) {
 
 If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screenreaders will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
 
-```jsx
+```.jsx
 <MenuButton>
   Actions <span aria-hidden>▾</span>
 </MenuButton>
@@ -572,7 +572,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 
 However, if you have no text and only an icon, please make sure your icon has a screenreader friendly label:
 
-```jsx
+```.jsx
 // we'd rather it said "Actions" than
 // "downward pointing triangle"
 <MenuButton>

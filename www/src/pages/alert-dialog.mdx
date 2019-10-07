@@ -94,7 +94,7 @@ import {
 
 High-level component to render an alert dialog.
 
-```jsx
+```.jsx
 <AlertDialog leastDestructiveRef={someRef}>
   <AlertDialogLabel />
   <AlertDialogContent />
@@ -117,7 +117,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `Dialog` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
-```jsx
+```.jsx
 <AlertDialog style={{ color: "red" }}>
   <AlertDialogLabel>
     My text is red because the style prop got applied to the div underneath
@@ -131,7 +131,7 @@ _Type_: `bool` default: `true`
 
 Controls whether the dialog is open or not.
 
-```jsx
+```.jsx
 <AlertDialog isOpen={true}>
   <AlertDialogLabel>I will be open</AlertDialogLabel>
 </AlertDialog>
@@ -143,7 +143,7 @@ Controls whether the dialog is open or not.
 
 Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. If you'd rather not have the dialog always rendered, you can put a guard in front of it and only render when it should be open. In this case you don’t need the `isOpen` prop at all.
 
-```jsx
+```.jsx
 {
   state.confirmDelete && (
     <AlertDialog isOpen={true}>
@@ -278,7 +278,7 @@ _Type_: `node`
 
 Accepts any renderable content but should generally be restricted to `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other content might not be announced to the user by the screen reader.
 
-```jsx
+```.jsx
 <AlertDialog>
   <AlertDialogLabel>
     Please Confirm!
@@ -329,7 +329,7 @@ _Type_: `spread`
 
 All props are spread to an underlying `div`.
 
-```jsx
+```.jsx
 <AlertDialogLabel className="alert-label" />
 ```
 
@@ -361,7 +361,7 @@ _Type_: `spread`
 
 All props are spread to an underlying `div`.
 
-```jsx
+```.jsx
 <AlertDialogDescription className="alert-description" />
 ```
 
@@ -449,7 +449,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogOverlay`, and in turn spread onto the underlying `div`.
 
-```jsx
+```.jsx
 <AlertDialogOverlay className="light-modal" />
 ```
 
@@ -477,7 +477,7 @@ _Type_: `node`
 
 Should be an `AlertDialogContent`.
 
-```jsx
+```.jsx
 <AlertDialogOverlay>
   <AlertDialogContent />
 </AlertDialogOverlay>
@@ -491,7 +491,7 @@ Note: Must be a child of `AlertDialogOverlay`.
 
 Note: You only need to use this when you are also styling `AlertDialogOverlay`, otherwise you can use the high-level `AlertDialog` component and pass the props to it.
 
-```jsx
+```.jsx
 <AlertDialogOverlay style={someSpecificStyles}>
   <AlertDialogContent className={orAClassName} />
 </AlertDialogOverlay>
@@ -522,7 +522,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, and then again onto the underlying `div`.
 
-```jsx
+```.jsx
 <AlertDialogContent className="nice-border" />
 ```
 

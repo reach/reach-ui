@@ -2,7 +2,7 @@
 
     npm install react-spring
 
-```jsx
+```.jsx
 // React-dom
 import { Spring, ... } from 'react-spring'
 
@@ -90,7 +90,7 @@ For annotated prop-types, good for finding out about all the obscure props that 
 
 A `Spring` will move data from one state to another. It remembers the current state, value changes are always fluid.
 
-```jsx
+```.jsx
 import { Spring } from 'react-spring'
 
 <Spring from={{ opacity: 0 }} to={{ opacity: 1 }}>
@@ -104,7 +104,7 @@ import { Spring } from 'react-spring'
 
 `Transition` watches elements as they mount and unmount, it helps you to animate these changes.
 
-```jsx
+```.jsx
 import { Transition } from 'react-spring'
 
 <Transition
@@ -122,7 +122,7 @@ import { Transition } from 'react-spring'
 
 Given a single child instead of a list you can toggle between two components.
 
-```jsx
+```.jsx
 import { Transition } from 'react-spring'
 
 <Transition from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
@@ -135,7 +135,7 @@ import { Transition } from 'react-spring'
 
 If you need to toggle a single child, that is also possible.
 
-```jsx
+```.jsx
 import { Transition } from 'react-spring'
 
 <Transition from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
@@ -149,7 +149,7 @@ import { Transition } from 'react-spring'
 
 `Trail` animates the first child of a list of elements, the rest follow the spring of their previous sibling.
 
-```jsx
+```.jsx
 import { Trail } from 'react-spring'
 
 <Trail from={{ opacity: 0 }} to={{ opacity: 1 }} keys={items.map(item => item.key)}>
@@ -163,7 +163,7 @@ import { Trail } from 'react-spring'
 
 `Keyframes` allow you to chain, compose and orchestrate animations by creating predefined slots. The resulting primitive behaves like the primitive it stems from, it can receive all generic properties like `native` or `from`, etc. You make it animate by passing the `state` props, which receives the named slot.
 
-```jsx
+```.jsx
 import { Keyframes, config } from 'react-spring'
 
 // You can create keyframes for springs, trails and transitions
@@ -191,7 +191,7 @@ const Container = Keyframes.Spring({
 
 `Parallax` allows you to declaratively create page/scroll-based animations.
 
-```jsx
+```.jsx
 import { Parallax, ParallaxLayer } from 'react-spring'
 
 <Parallax pages={2}>
@@ -210,7 +210,7 @@ import { Parallax, ParallaxLayer } from 'react-spring'
 
 You'll find varying implementations under [/dist/addons](https://github.com/drcmda/react-spring/tree/master/src/addons). For now there's a time-based animation as well common [easings](https://github.com/drcmda/react-spring/blob/master/src/addons/Easing.js), and IOS'es harmonic oscillator spring. All primitives understand the `impl` property which you can use to switch implementations.
 
-```jsx
+```.jsx
 import { TimingAnimation, Easing } from 'react-spring/dist/addons'
 
 <Spring impl={TimingAnimation} config={{ duration: 1000, easing: Easing.linear }} ...>
@@ -220,7 +220,7 @@ import { TimingAnimation, Easing } from 'react-spring/dist/addons'
 
 You can interpolate almost everything, from numbers, colors (names, rgb, rgba, hsl, hsla), paths (as long as the number of points match, otherwise use [custom interpolation](https://codesandbox.io/embed/lwpkp46om)), percentages, units, arrays and string patterns. You can also set non-animatable string values and even `auto` is valid.
 
-```jsx
+```.jsx
 <Spring to={{
     scale: toggle ? 1 : 2,
     start: toggle ? '#abc' : 'rgb(10,20,30)',
@@ -239,7 +239,7 @@ You can interpolate almost everything, from numbers, colors (names, rgb, rgba, h
 
 The Api is driven by render props. We offer both `render` and `children` as well as prop forwarding (unrecognized props will be spread over the receiving component). You can use it like always (all the above examples), or in various patterns, for instance higher-order-render-props:
 
-```jsx
+```.jsx
 const Header = ({ children, bold, ...styles }) => (
     <h1 style={styles}>
         {bold ? <b>{children}</b> : children}
@@ -257,7 +257,7 @@ const Header = ({ children, bold, ...styles }) => (
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <sub>Most libs animate by having React recalculate the component-tree on every frame. Here it attempts to animate a component consisting of ~300 sub-components, plowing through the frame budget and causing jank.</sub> | <sub>React-spring with the `native` property renders the component _only once_, from then on the animation will be applied directly to the dom in a requestAnimationFrame-loop, similar to how gsap and d3 do it.</sub> |
 
-```jsx
+```.jsx
 import { Spring, animated } from 'react-spring'
 
 <Spring native from={{ opacity: 0 }} to={{ opacity: 1 }}>
@@ -273,7 +273,7 @@ The default export points to react-dom. If you want to animate react-native refe
 
 In react-native you can still use the `native` keyword for more performance, create your own animated-components by calling into the `animated` function.
 
-```jsx
+```.jsx
 import { Spring, animated } from 'react-spring/dist/native'
 import { View } from 'react-native'
 

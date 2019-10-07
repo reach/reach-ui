@@ -27,7 +27,7 @@ The `Tab` and `TabPanel` elements are associated by their order in the tree. Non
 
 You can render any other elements you want inside of `Tabs`, but `TabList` should only render `Tab` elements, and `TabPanels` should only render `TabPanel` elements.
 
-```jsx
+```.jsx
 <Tabs>
   <TabList>
     <Tab>One</Tab>
@@ -94,7 +94,7 @@ _Type_: `node`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
-```jsx
+```.jsx
 <Tabs>
   <TabList>
     <Tab>Uno</Tab>
@@ -155,7 +155,7 @@ _Type_: `number`
 
 Starts the tabs at a specific index.
 
-```jsx
+```.jsx
 <Tabs defaultIndex={1}>
   <TabPanels>
     <TabPanel>
@@ -247,7 +247,7 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 The parent component of the tabs.
 
-```jsx
+```.jsx
 <TabList>
   <Tab>Tacos</Tab>
   <Tab>Tortas</Tab>
@@ -274,7 +274,7 @@ Please see the [styling guide](/styling).
 
 `TabList` expects multiple `Tab` elements as children.
 
-```jsx
+```.jsx
 <TabList>
   <Tab>One</Tab>
   <Tab>Two</Tab>
@@ -283,7 +283,7 @@ Please see the [styling guide](/styling).
 
 But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via `cloneElement`).
 
-```jsx
+```.jsx
 const RedTab = props => <Tab {...props} style={{ color: "red" }} />
 
 const TabPage = () => (
@@ -306,7 +306,7 @@ _Type_: `ComponentType`
 
 Tabs will render a `div` unless you specify a different element.
 
-```jsx
+```.jsx
 <TabList as={View} />
 ```
 
@@ -324,7 +324,7 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 The parent component of the panels.
 
-```jsx
+```.jsx
 <TabPanels>
   <TabPanel>My favorite</TabPanel>
   <TabPanel>My other favorite</TabPanel>
@@ -351,7 +351,7 @@ Please see the [styling guide](/styling).
 
 `TabPanels` expects multiple `TabPanel` elements as children.
 
-```jsx
+```.jsx
 <TabPanels>
   <TabPanel>One</TabPanel>
   <TabPanel>Two</TabPanel>
@@ -360,7 +360,7 @@ Please see the [styling guide](/styling).
 
 But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via `cloneElement`).
 
-```jsx
+```.jsx
 const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />
 
 const TabPage = () => (
@@ -383,7 +383,7 @@ _Type_: `ComponentType`
 
 Tabs will render a `div` unless you specify a different element.
 
-```jsx
+```.jsx
 <TabPanels as={View} />
 ```
 
@@ -401,7 +401,7 @@ Please see the ["as" prop documentation](/as-prop) for more information
 
 The interactive element that changes the selected panel.
 
-```jsx
+```.jsx
 <Tab>Coconut Korma</Tab>
 ```
 
@@ -436,7 +436,7 @@ Please see the [styling guide](/styling).
 
 `Tab` can receive any type of children.
 
-```jsx
+```.jsx
 <Tab>
   <HouseIcon /> Home
 </Tab>
@@ -446,7 +446,7 @@ Please see the [styling guide](/styling).
 
 Disables a tab when true. Clicking will not work and keyboard navigation will skip over it.
 
-```jsx
+```.jsx
 <Tab disabled />
 ```
 
@@ -456,7 +456,7 @@ _Type_: `ComponentType`
 
 Tab will render a `button` unless you specify a different element.
 
-```jsx
+```.jsx
 <Tab as={ReactNativeWebButton} />
 ```
 
@@ -476,7 +476,7 @@ _Type_: `number` - cloned
 
 Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
-```jsx
+```.jsx
 ;(() => {
   function CoolTab(props) {
     // `isSelected` comes from `TabList` cloning the `CoolTab`.
@@ -510,7 +510,7 @@ Because TabList needs to know the order of the children, we use `cloneElement` t
 
 The panel that displays when it's corresponding tab is active.
 
-```jsx
+```.jsx
 <TabPanel>
   <h2>The Best Food</h2>
   <p>The best food is either Mexican or Indian.</p>
@@ -538,7 +538,7 @@ Please see the [styling guide](/styling).
 
 `TabPanel` can receive any type of children.
 
-```jsx
+```.jsx
 <TabPanel>
   <h2>Whatever you want</h2>
   <p>In here</p>
@@ -551,7 +551,7 @@ _Type_: `ComponentType`
 
 TabPanel will render a `div` unless you specify a different element.
 
-```jsx
+```.jsx
 <Tab as={View} />
 ```
 
@@ -573,7 +573,7 @@ These demos show off how you can add quite a bit of behavior to your Tabs interf
 
 If you'd like to drive your tabs with data you can create a `DataTabs` component.
 
-```jsx
+```.jsx
 ;(() => {
   function DataTabs({ data }) {
     return (
@@ -611,7 +611,7 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
 
 With a little composition we can animate the selected tab bar.
 
-```jsx
+```.jsx
 ;(() => {
   const AnimatedContext = React.createContext()
 

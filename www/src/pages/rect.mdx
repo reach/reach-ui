@@ -33,7 +33,7 @@ import Rect, { useRect } from "@reach/rect"
 
 # useRect
 
-```jsx
+```.jsx
 rect = useRect(ref [, observe=true ])
 ```
 
@@ -100,7 +100,7 @@ This is typically used for elements that pop over other elements (like a dropdow
 
 Pass `true` to observe, `false` to ignore.
 
-```jsx
+```.jsx
 <Rect observe={false}>
   {({ rect, ref }) => (
     <div ref={ref}>
@@ -120,7 +120,7 @@ _Type_: `func: (rect) => void`
 
 Calls back whenever the `rect` of the element changes.
 
-```jsx
+```.jsx
 <Rect onChange={rect => console.log(rect)}/>
   {({ rect, ref }) => (
     <div ref={ref}/>
