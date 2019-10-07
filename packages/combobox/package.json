@@ -1,6 +1,6 @@
 {
   "name": "@reach/combobox",
-  "version": "0.2.0-alpha.0",
+  "version": "0.3.0-alpha.0",
   "description": "Accessible React Combobox (Autocomplete).",
   "author": "Ryan Florence <@ryanflorence>",
   "license": "MIT",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.3.0-alpha.0",
-    "@reach/popover": "^0.2.0-alpha.0",
+    "@reach/popover": "^0.3.0-alpha.0",
     "@reach/portal": "^0.3.0-alpha.0",
     "@reach/utils": "^0.3.0-alpha.0",
     "escape-regexp": "0.0.1",

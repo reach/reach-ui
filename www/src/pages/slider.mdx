@@ -10,20 +10,14 @@ import Helmet from "react-helmet"
   ]}
 />
 
-# Tooltip
+# Slider
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/tooltip
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+- Source: https://github.com/reach/reach-ui/tree/master/packages/slider
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#slider
 
-When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
+A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
-A couple notes on using tooltips:
-
-- Do not use tooltips for information vital to task completion. The elements they are attached to should usually make sense on their own, but a tooltip can help provide a little bit more information--especially for new users of your app.
-- Keep the content minimal, they are not intended to hide critical content.
-- If you want interactive content, you can use a [Dialog](/dialog).
-
-_Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
+_Pointer Events_: Slider uses pointer events for a simpler.
 
 ```jsx
 <div>

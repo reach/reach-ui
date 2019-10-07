@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "reach-ui",
-  "repository": "reach/reach-ui",
+  "repository": "https://github.com/reach/reach-ui",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
     "test": "MODULE_FORMAT=cjs jest packages",
@@ -36,6 +36,7 @@
     "husky": "^3.0.7",
     "jest": "^24.9.0",
     "lerna": "^3.16.4",
+    "lerna-changelog": "^0.8.2",
     "pepjs": "0.5.2",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
@@ -50,6 +51,14 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged",
       "pre-push": "lerna run lint"
+    }
+  },
+  "changelog": {
+    "labels": {
+      "breaking-change": "BREAKING CHANGE",
+      "bug": "BUGFIX",
+      "docs": "DOCUMENTATION",
+      "enhancement": "FEATURE"
     }
   }
 }
