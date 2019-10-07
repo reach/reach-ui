@@ -1,4 +1,5 @@
 :root {
+  --reach-slider: 1;
   --highlight-color: #1159a6;
   --handle-focus-scale: 1.15;
 }
@@ -60,11 +61,11 @@
   background: var(--highlight-color);
 }
 
-[data-reach-slider-track-highlight="horizontal"] {
+[data-reach-slider-track-highlight-orientation="horizontal"] {
   height: 100%;
 }
 
-[data-reach-slider-track-highlight="vertical"] {
+[data-reach-slider-track-highlight-orientation="vertical"] {
   width: 100%;
 }
 

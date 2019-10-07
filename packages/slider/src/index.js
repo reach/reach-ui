@@ -508,7 +508,7 @@ export const SliderMarker = forwardRef(function SliderMarker(
 
 SliderMarker.displayName = "SliderMarker";
 SliderMarker.propTypes = {
-  value: oneOfType([string, number]).isRequired
+  value: number.isRequired
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -614,8 +614,8 @@ export function makeDataAttributes(
 ) {
   return {
     [`data-reach-${component}`]: "",
+    [`data-reach-${component}-disabled`]: disabled ? "" : undefined,
     [`data-reach-${component}-orientation`]: orientation,
-    [`data-reach-${component}-disabled`]: disabled ? orientation : undefined,
     [`data-reach-${component}-highlight`]: highlight ? orientation : undefined
   };
 }
