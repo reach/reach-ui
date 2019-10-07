@@ -11,7 +11,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
+import { node, func, number, string, bool, oneOf } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent } from "@reach/utils";
@@ -22,7 +22,6 @@ import { useTooltip, TooltipPopup } from "@reach/tooltip";
 //   - https://github.com/Stanko/aria-progress-range-slider
 
 // TODO: Screen reader testing
-// TODO: Investigate
 
 // Example todos:
 //  - Compose with other Reach elements (popover, tooltip, etc.)
