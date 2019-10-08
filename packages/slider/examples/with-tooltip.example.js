@@ -1,5 +1,4 @@
 import React from "react";
-import { useRect } from "../../rect/src";
 import { useTooltip, TooltipPopup } from "../../tooltip/src";
 import { wrapEvent } from "../../utils/src";
 import "../styles.css";
