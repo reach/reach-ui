@@ -51,7 +51,6 @@ import {
   SliderTrackHighlight,
   SliderHandle,
   SliderMarker,
-  SliderTooltip,
 } from "@reach/slider"
 
 import { useId } from "@reach/auto-id"
@@ -103,7 +102,6 @@ const PreComponent = ({ className, ...props }) =>
         SliderTrackHighlight,
         SliderHandle,
         SliderMarker,
-        SliderTooltip,
         useId,
         Tooltip,
         TooltipPopup,

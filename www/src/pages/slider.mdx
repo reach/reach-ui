@@ -17,7 +17,7 @@ import Helmet from "react-helmet"
 
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
-Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderTrackHighlight`, `SliderMarker` `SliderHandle`, and `SliderTooltip` components as children.
+Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderTrackHighlight`, `SliderMarker` and `SliderHandle` components as children.
 
 _Pointer Events_: Slider uses pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). As such, to override default behavior you will need to use pointer events rather than mouse or touch events. For example, if you wish to call `event.preventDefault` to override the slider handle's activation on a mouse click event, you'll want to reach for `onPointerDown` instead of `onMouseDown`. If you need to support older browsers without native pointer events, we recommend [`pepjs`](https://github.com/jquery/PEP) as a solid polyfill.
 
@@ -196,7 +196,7 @@ Please see the [styling guide](/styling).
 
 _Type_: `node`
 
-`SliderTrack` expects `<SliderHandle>` (or a `<SliderHandle>` nested inside a `<SliderTooltip>`), at minimum, for the Slider to function. All other Slider subcomponents should be passed as children inside the `SliderTrack`.
+`SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to function. All other Slider subcomponents should be passed as children inside the `SliderTrack`.
 
 # SliderTrackHighlight
 
@@ -272,46 +272,3 @@ Please see the [styling guide](/styling).
 ## SliderHandle Props
 
 `SliderTrackHighlight` accepts any props that a HTML div component accepts.
-
-# SliderTooltip
-
-A tooltip that appears when the slider handle is either hovered, focused or actively engaged by the user. The SliderTooltip must wrap the SliderHandle.
-
-## SliderTooltip CSS Selectors
-
-Please see the [styling guide](/styling).
-
-```css
-[data-reach-slider-tooltip] {
-}
-[data-reach-slider-tooltip-disabled] {
-}
-[data-reach-slider-tooltip-orientation="horizontal|vertical"] {
-}
-```
-
-## SliderTooltip Props
-
-| Prop                                | Type | Required | Default |
-| ----------------------------------- | ---- | -------- | ------- |
-| [children](#slidertooltip-children) | node | false    |         |
-| [getLabel](#slidertooltip-getlabel) | func | false    |         |
-| [label](#slidertooltip-label)       | node | false    |         |
-
-### SliderTooltip children
-
-_Type_: `node`
-
-`SliderTooltip` expects `<SliderHandle>` as its sole child.
-
-### SliderTooltip getLabel
-
-_Type_: `func: (value: number) => string`
-
-A function used to set a human-readable text label based on the slider's current value. If the tooltip's text should be static, use the `label` prop instead.
-
-### SliderTooltip label
-
-_Type_: `string`
-
-A static label to use inside the tooltip. If neither a `label` or `getLabel` prop is set, the Tooltip will default to the slider's `aria-valuetext` value if it is set, otherwise the slider's numeric value.

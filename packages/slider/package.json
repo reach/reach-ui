@@ -10,9 +10,8 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.2.0",
-    "@reach/tooltip": "^0.2.2",
-    "@reach/utils": "^0.2.3",
+    "@reach/auto-id": "0.3.0-alpha.0",
+    "@reach/utils": "0.3.0-alpha.0",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
