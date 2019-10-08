@@ -1,7 +1,6 @@
 :root {
   --reach-slider: 1;
   --highlight-color: #1159a6;
-  --handle-focus-scale: 1.15;
 }
 
 [data-reach-slider] {
@@ -40,20 +39,20 @@
 
 [data-reach-slider-handle-orientation="horizontal"] {
   top: 50%;
-  transform: translateY(-50%) scale(1);
+  transform: translateY(-50%);
 }
 
 [data-reach-slider-handle-orientation="horizontal"]:focus {
-  transform: translateY(-50%) scale(var(--handle-focus-scale));
+  transform: translateY(-50%);
 }
 
 [data-reach-slider-handle-orientation="vertical"] {
   left: 50%;
-  transform: translateX(-50%) scale(1);
+  transform: translateX(-50%);
 }
 
 [data-reach-slider-handle-orientation="vertical"]:focus {
-  transform: translateX(-50%) scale(var(--handle-focus-scale));
+  transform: translateX(-50%);
 }
 
 [data-reach-slider-track-highlight] {

@@ -11,7 +11,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { node, func, number, string, bool, oneOf } from "prop-types";
+import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent } from "@reach/utils";
@@ -94,6 +94,7 @@ export const Slider = forwardRef(function Slider(
   const ownRef = useRef(null);
   const sliderRef = forwardedRef || ownRef;
 
+  const [hasFocus, setHasFocus] = useState(false);
   const [isPointerDown, setPointerDown] = useState(false);
   const [value, setValue] = useState(defaultValue || min);
 
@@ -245,11 +246,13 @@ export const Slider = forwardRef(function Slider(
     handleDimensions,
     handlePosition,
     handleRef,
+    hasFocus,
     onKeyDown,
     onPointerDown,
     onPointerMove,
     onPointerUp,
     onHandleKeyDown: handleKeyDown,
+    setHasFocus,
     sliderId,
     sliderMax: max,
     sliderMin: min,
@@ -306,7 +309,16 @@ export const Slider = forwardRef(function Slider(
         {...dataAttributes}
         {...rest}
       >
-        {children}
+        {typeof children === "function"
+          ? children({
+              hasFocus,
+              id: sliderId,
+              max,
+              min,
+              value,
+              valueText
+            })
+          : children}
         {name && (
           // If the slider is used in a form we'll need an input field to capture the value.
           // We'll assume this when the component is given a form field name
@@ -337,7 +349,7 @@ Slider.propTypes = {
     SliderOrientation.vertical
   ]),
   onChange: func,
-  children: node.isRequired,
+  children: oneOfType([node, func]).isRequired,
   step: number,
   value: number
 };
@@ -406,6 +418,8 @@ export const SliderHandle = forwardRef(function SliderHandle(
   {
     // min,
     // max,
+    onBlur,
+    onFocus,
     style = {},
     onKeyDown,
     ...props
@@ -420,6 +434,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     isVertical,
     onHandleKeyDown,
     orientation,
+    setHasFocus,
     sliderMin,
     sliderMax,
     sliderValue,
@@ -446,6 +461,12 @@ export const SliderHandle = forwardRef(function SliderHandle(
       aria-valuenow={sliderValue}
       aria-valuemax={sliderMax}
       aria-labelledby={ariaLabelledBy}
+      onBlur={wrapEvent(onBlur, () => {
+        setHasFocus(false);
+      })}
+      onFocus={wrapEvent(onFocus, () => {
+        setHasFocus(true);
+      })}
       onKeyDown={wrapEvent(onKeyDown, onHandleKeyDown)}
       style={{
         position: "absolute",
