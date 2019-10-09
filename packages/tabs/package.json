@@ -12,7 +12,7 @@
     "@reach/auto-id": "^0.3.0-alpha.0",
     "@reach/utils": "^0.3.0-alpha.0",
     "prop-types": "^15.7.2",
-    "warning": "^4.0.2"
+    "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",

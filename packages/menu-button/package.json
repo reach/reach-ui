@@ -17,14 +17,14 @@
     "@reach/utils": "^0.3.0-alpha.0",
     "@reach/window-size": "^0.3.0-alpha.0",
     "prop-types": "^15.7.2",
-    "warning": "^4.0.2"
+    "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "@reach/router": "^1.0.0",
+    "@reach/router": "^1.2.1",
     "@reach/tooltip": "^0.3.0-alpha.0",
     "react": "^16.8.0",
     "react-test-renderer": "^16.8.0"
