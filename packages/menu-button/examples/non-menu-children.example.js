@@ -5,7 +5,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
 export let name = "Non Menu Children";
 
-const Label = props => (
+const ExampleLabel = props => (
   <span
     style={{
       padding: "0 20px",
@@ -26,15 +26,15 @@ export let Example = () => (
       Actions <span aria-hidden="true">▾</span>
     </MenuButton>
     <MenuList>
-      <Label>Mammals</Label>
+      <ExampleLabel>Mammals</ExampleLabel>
       <MenuItem onSelect={action("Bear")}>Bear</MenuItem>
       <MenuItem onSelect={action("Fox")}>Fox</MenuItem>
       <MenuItem onSelect={action("Lion")}>Lion</MenuItem>
-      <Label>Reptiles</Label>
+      <ExampleLabel>Reptiles</ExampleLabel>
       <MenuItem onSelect={action("Lizard")}>Lizard</MenuItem>
       <MenuItem onSelect={action("Snake")}>Snake</MenuItem>
       <MenuItem onSelect={action("Crocodile")}>Crocodile</MenuItem>
-      <Label>Amphibians</Label>
+      <ExampleLabel>Amphibians</ExampleLabel>
       <MenuItem onSelect={action("Frog")}>Frog</MenuItem>
       <MenuItem onSelect={action("Toad")}>Toad</MenuItem>
       <MenuItem onSelect={action("Salamander")}>Salamander</MenuItem>

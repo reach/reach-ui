@@ -26,7 +26,7 @@ function getScrollbarOffset() {
   return 0;
 }
 
-function TriangleTooltip({ children, ...rest }) {
+function ExampleTriangle({ children, ...rest }) {
   // get the props from useTooltip
   const [trigger, tooltip] = useTooltip();
 
@@ -72,24 +72,24 @@ function TriangleTooltip({ children, ...rest }) {
 export function Example() {
   return (
     <div>
-      <TriangleTooltip label="Notifications">
+      <ExampleTriangle label="Notifications">
         <button style={{ fontSize: 25 }}>
           <span aria-hidden>🔔</span>
         </button>
-      </TriangleTooltip>
-      <TriangleTooltip label="Settings">
+      </ExampleTriangle>
+      <ExampleTriangle label="Settings">
         <button style={{ fontSize: 25 }}>
           <span aria-hidden>⚙️</span>
         </button>
-      </TriangleTooltip>
+      </ExampleTriangle>
 
       <div style={{ float: "right" }}>
-        <TriangleTooltip label="Notifications" ariaLabel="3 Notifications">
+        <ExampleTriangle label="Notifications" ariaLabel="3 Notifications">
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
             <span>3</span>
           </button>
-        </TriangleTooltip>
+        </ExampleTriangle>
       </div>
       <div style={{ marginTop: 600 }}>Hi</div>
     </div>
