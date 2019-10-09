@@ -2,11 +2,7 @@ import React from "react";
 import Component from "@reach/component-component";
 import "../styles.css";
 import { DialogOverlay, DialogContent } from "../src/index";
-import {
-  Transition,
-  animated,
-  config
-} from "../../../www/vendor/react-spring/src/targets/web";
+import { Transition, animated, config } from "react-spring/web.cjs";
 
 export let name = "Change Styles";
 
