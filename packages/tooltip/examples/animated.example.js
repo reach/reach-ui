@@ -10,7 +10,7 @@ export const name = "Animated";
 animated.TooltipPopup = animated(TooltipPopup);
 animated.TooltipContent = animated(TooltipPopup);
 
-function AnimatedTooltip({ children, ...rest }) {
+function ExampleAnimatedTooltip({ children, ...rest }) {
   const [trigger, tooltip, isVisible] = useTooltip();
 
   const transitions = useTransition(isVisible ? tooltip : false, null, {
@@ -42,24 +42,27 @@ function AnimatedTooltip({ children, ...rest }) {
 export function Example() {
   return (
     <div>
-      <AnimatedTooltip label="Notifications">
+      <ExampleAnimatedTooltip label="Notifications">
         <button style={{ fontSize: 25 }}>
           <span aria-hidden>🔔</span>
         </button>
-      </AnimatedTooltip>
-      <AnimatedTooltip label="Settings">
+      </ExampleAnimatedTooltip>
+      <ExampleAnimatedTooltip label="Settings">
         <button style={{ fontSize: 25 }}>
           <span aria-hidden>⚙️</span>
         </button>
-      </AnimatedTooltip>
+      </ExampleAnimatedTooltip>
 
       <div style={{ float: "right" }}>
-        <AnimatedTooltip label="Notifications" ariaLabel="3 Notifications">
+        <ExampleAnimatedTooltip
+          label="Notifications"
+          ariaLabel="3 Notifications"
+        >
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
             <span>3</span>
           </button>
-        </AnimatedTooltip>
+        </ExampleAnimatedTooltip>
       </div>
     </div>
   );
