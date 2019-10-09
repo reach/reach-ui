@@ -7,13 +7,15 @@ import { node, func, object, string, number, oneOfType, any } from "prop-types";
 import { wrapEvent, checkStyles, assignRef } from "@reach/utils";
 
 const noop = () => {};
+let id = 0;
+const genId = () => `button-${++id}`;
 
 // TODO: add the mousedown/drag/mouseup to select of native menus, will
 // also help w/ remove the menu button tooltip hide-flash.
 
 // TODO: add type-to-highlight like native menus
 
-const { Provider, Consumer } = createContext();
+const MenuContext = createContext();
 
 const checkIfAppManagedFocus = ({ refs, state, prevState }) => {
   if (!state.isOpen && prevState.isOpen) {
@@ -67,11 +69,6 @@ const selectItemAtIndex = index => state => ({
   selectionIndex: index
 });
 
-const genId = prefix =>
-  `${prefix}-${Math.random()
-    .toString(32)
-    .substr(2, 8)}`;
-
 ////////////////////////////////////////////////////////////////////////
 const getMenuRefs = () => ({
   button: null,
@@ -83,29 +80,31 @@ const getInitialMenuState = () => ({
   isOpen: false,
   buttonRect: undefined,
   selectionIndex: -1,
-  closingWithClick: false,
-  buttonId: genId("button")
+  closingWithClick: false
 });
 
 const checkIfStylesIncluded = () => checkStyles("menu-button");
 
-const Menu = ({ children }) => (
-  <Component
-    getRefs={getMenuRefs}
-    getInitialState={getInitialMenuState}
-    didMount={checkIfStylesIncluded}
-    didUpdate={manageFocusOnUpdate}
-    getSnapshotBeforeUpdate={checkIfAppManagedFocus}
-  >
-    {context => (
-      <Provider value={context}>
-        {typeof children === "function"
-          ? children({ isOpen: context.state.isOpen })
-          : children}
-      </Provider>
-    )}
-  </Component>
-);
+const Menu = ({ children }) => {
+  const [buttonId, setButtonId] = React.useState(null);
+  return (
+    <Component
+      getRefs={getMenuRefs}
+      getInitialState={getInitialMenuState}
+      didMount={checkIfStylesIncluded}
+      didUpdate={manageFocusOnUpdate}
+      getSnapshotBeforeUpdate={checkIfAppManagedFocus}
+    >
+      {context => (
+        <MenuContext.Provider value={{ ...context, buttonId, setButtonId }}>
+          {typeof children === "function"
+            ? children({ isOpen: context.state.isOpen })
+            : children}
+        </MenuContext.Provider>
+      )}
+    </Component>
+  );
+};
 
 if (__DEV__) {
   Menu.propTypes = {
@@ -115,53 +114,58 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////
 const MenuButton = React.forwardRef(
-  ({ onClick, onKeyDown, onMouseDown, ...props }, ref) => (
-    <Consumer>
-      {({ refs, state, setState }) => (
-        <Rect
-          observe={state.isOpen}
-          onChange={buttonRect => setState({ buttonRect })}
-        >
-          {({ ref: rectRef }) => (
-            <button
-              id={state.buttonId}
-              aria-haspopup="menu"
-              aria-expanded={state.isOpen}
-              data-reach-menu-button
-              type="button"
-              ref={node => {
-                rectRef(node);
-                assignRef(ref, node);
-                refs.button = node;
-              }}
-              onMouseDown={wrapEvent(onMouseDown, () => {
-                if (state.isOpen) {
-                  setState({ closingWithClick: true });
-                }
-              })}
-              onClick={wrapEvent(onClick, () => {
-                if (state.isOpen) {
-                  setState(close);
-                } else {
-                  setState(openAtFirstItem);
-                }
-              })}
-              onKeyDown={wrapEvent(onKeyDown, event => {
-                if (event.key === "ArrowDown") {
-                  event.preventDefault(); // prevent scroll
-                  setState(openAtFirstItem);
-                } else if (event.key === "ArrowUp") {
-                  event.preventDefault(); // prevent scroll
-                  setState(openAtFirstItem);
-                }
-              })}
-              {...props}
-            />
-          )}
-        </Rect>
-      )}
-    </Consumer>
-  )
+  ({ onClick, onKeyDown, onMouseDown, id, ...props }, ref) => {
+    const { refs, state, setState, buttonId, setButtonId } = React.useContext(
+      MenuContext
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(() => setButtonId(id != null ? id : genId()), []);
+
+    return (
+      <Rect
+        observe={state.isOpen}
+        onChange={buttonRect => setState({ buttonRect })}
+      >
+        {({ ref: rectRef }) => (
+          <button
+            id={buttonId}
+            aria-haspopup="menu"
+            aria-expanded={state.isOpen}
+            data-reach-menu-button
+            type="button"
+            ref={node => {
+              rectRef(node);
+              assignRef(ref, node);
+              refs.button = node;
+            }}
+            onMouseDown={wrapEvent(onMouseDown, () => {
+              if (state.isOpen) {
+                setState({ closingWithClick: true });
+              }
+            })}
+            onClick={wrapEvent(onClick, () => {
+              if (state.isOpen) {
+                setState(close);
+              } else {
+                setState(openAtFirstItem);
+              }
+            })}
+            onKeyDown={wrapEvent(onKeyDown, event => {
+              if (event.key === "ArrowDown") {
+                event.preventDefault(); // prevent scroll
+                setState(openAtFirstItem);
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault(); // prevent scroll
+                setState(openAtFirstItem);
+              }
+            })}
+            {...props}
+          />
+        )}
+      </Rect>
+    );
+  }
 );
 
 if (__DEV__) {
@@ -318,37 +322,36 @@ if (__DEV__) {
 }
 ///////////////////////////////////////////////////////////////////
 
-const MenuList = React.forwardRef((props, ref) => (
-  <Consumer>
-    {({ refs, state, setState }) =>
-      state.isOpen && (
-        <Portal>
-          <WindowSize>
-            {() => (
-              <Rect>
-                {({ rect: menuRect, ref: menuRef }) => (
-                  <div
-                    data-reach-menu
-                    ref={menuRef}
-                    style={getStyles(state.buttonRect, menuRect)}
-                  >
-                    <MenuListImpl
-                      {...props}
-                      setState={setState}
-                      state={state}
-                      refs={refs}
-                      ref={ref}
-                    />
-                  </div>
-                )}
-              </Rect>
-            )}
-          </WindowSize>
-        </Portal>
-      )
-    }
-  </Consumer>
-));
+const MenuList = React.forwardRef((props, ref) => {
+  const { refs, state, setState } = React.useContext(MenuContext);
+  return (
+    state.isOpen && (
+      <Portal>
+        <WindowSize>
+          {() => (
+            <Rect>
+              {({ rect: menuRect, ref: menuRef }) => (
+                <div
+                  data-reach-menu
+                  ref={menuRef}
+                  style={getStyles(state.buttonRect, menuRect)}
+                >
+                  <MenuListImpl
+                    {...props}
+                    setState={setState}
+                    state={state}
+                    refs={refs}
+                    ref={ref}
+                  />
+                </div>
+              )}
+            </Rect>
+          )}
+        </WindowSize>
+      </Portal>
+    )
+  );
+});
 
 if (__DEV__) {
   MenuList.propTypes = {
@@ -369,13 +372,14 @@ const MenuListImpl = React.forwardRef(
   ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => {
     const clones = Children.toArray(children).filter(Boolean);
     const focusableChildren = getFocusableMenuChildren(clones);
+    const { buttonId } = React.useContext(MenuContext);
 
     return (
       <div
         data-reach-menu-list
         {...rest}
         role="menu"
-        aria-labelledby={state.buttonId}
+        aria-labelledby={buttonId}
         tabIndex="-1"
         ref={node => {
           refs.menu = node;
