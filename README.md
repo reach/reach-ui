@@ -118,7 +118,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | 🛠      | Menu or Menu bar     |
 | ✅     | Menu Button          |
 | 🛠      | Radio Group          |
-| 🛠      | Slider               |
+| 🧪     | Slider               |
 | 🛠      | Slider (Multi-Thumb) |
 | ❓     | Spinbutton           |
 | ❓     | Table                |
