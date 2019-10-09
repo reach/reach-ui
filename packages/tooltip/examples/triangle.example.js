@@ -20,7 +20,6 @@ const centered = (triggerRect, tooltipRect) => {
 function getScrollbarOffset() {
   try {
     if (window.innerWidth > document.documentElement.clientWidth) {
-      console.log(window.innerWidth - document.documentElement.clientWidth);
       return window.innerWidth - document.documentElement.clientWidth;
     }
   } catch (err) {}
