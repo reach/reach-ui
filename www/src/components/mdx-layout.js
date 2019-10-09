@@ -5,7 +5,7 @@ import "./app.css"
 
 import React from "react"
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live"
-import { MDXProvider } from "@mdx-js/tag"
+import { MDXProvider } from "@mdx-js/react"
 import Layout from "./layout"
 import { useThrottle } from "use-throttle"
 import matchSorter from "match-sorter"
@@ -49,16 +49,19 @@ import { useId } from "@reach/auto-id"
 
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
 
-import { Transition } from "../../vendor/react-spring/src/targets/web"
+import { Transition } from "react-spring/web.cjs"
 
 import { Phased } from "recondition"
 
-const PreComponent = ({ className, ...props }) =>
-  props.children.props.props &&
-  props.children.props.props.className === "language-.jsx" ? (
+const PreComponent = ({ className, ...props }) => {
+  console.log(props.children.props)
+  return props.children.props &&
+    props.children.props.className === "language-jsx" ? (
     <LiveProvider
-      mountStylesheet={false}
-      code={props.children.props.children}
+      theme={{ plain: {}, styles: [] }}
+      code={props.children.props.children.trim()}
+      //code={props.children.trim()}
+      // ode={props.children}
       scope={{
         ...React,
         GatsbyLink,
@@ -103,13 +106,14 @@ const PreComponent = ({ className, ...props }) =>
         matchSorter,
       }}
     >
-      <LiveEditor tabIndex="-1" />
+      <LiveEditor className="shit" tabIndex="-1" />
       <LiveError />
       <LivePreview />
     </LiveProvider>
   ) : (
     <pre {...props} className="WHAT_THE_CRAP" />
   )
+}
 
 const Table = props => <table className="u-full-width" {...props} />
 

@@ -342,16 +342,16 @@ All props are spread to the underlying element.
 
 In this example the `onFocus` prop is passed down to the element.
 
-```.jsx
+```jsx
 function Example(props) {
-  const [focusCount, setFocusCount] = React.useState(0);
+  const [focusCount, setFocusCount] = React.useState(0)
   return (
     <Menu>
       <MenuButton>Actions</MenuButton>
       <MenuList>
         <MenuItem
           onFocus={() => {
-            setFocusCount(prevFocusCount => prevFocusCount + 1);
+            setFocusCount(prevFocusCount => prevFocusCount + 1)
           }}
           onSelect={() => {}}
         >
@@ -361,7 +361,7 @@ function Example(props) {
         <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
       </MenuList>
     </Menu>
-  );
+  )
 }
 ```
 
@@ -508,20 +508,20 @@ If one of your menu items causes the `<Menu>` itself to unmount, it is your job 
 
 Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screenreader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
 
-```.jsx
+```jsx
 function Example(props) {
-  const screen1FocusRef = React.useRef();
-  const screen2ButtonFocusRef = React.useRef();
+  const screen1FocusRef = React.useRef()
+  const screen2ButtonFocusRef = React.useRef()
   React.useEffect(() => {
     if (screen === 1) {
-      screen1FocusRef.current.focus();
+      screen1FocusRef.current.focus()
     }
     if (screen === 2) {
-      screen2ButtonFocusRef.current.focus();
+      screen2ButtonFocusRef.current.focus()
     }
-  }, [screen]);
+  }, [screen])
 
-  const [screen, setScreen] = React.useState(1);
+  const [screen, setScreen] = React.useState(1)
   if (screen === 1) {
     return (
       <div ref={screen1FocusRef} tabIndex="-1">
@@ -529,34 +529,25 @@ function Example(props) {
         <Menu>
           <MenuButton>Actions</MenuButton>
           <MenuList>
-            <MenuItem
-              onSelect={() => setScreen(2)}
-            >
-              Go to screen 2
-            </MenuItem>
-            <MenuItem onSelect={() => {}}>
-              Do nothing
-            </MenuItem>
+            <MenuItem onSelect={() => setScreen(2)}>Go to screen 2</MenuItem>
+            <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
           </MenuList>
         </Menu>
         <Menu />
       </div>
-    );
+    )
   }
   if (screen === 2) {
     return (
       <div>
         <h4>Screen 2</h4>
-        <button
-          ref={screen2ButtonFocusRef}
-          onClick={() => setScreen(1)}
-        >
+        <button ref={screen2ButtonFocusRef} onClick={() => setScreen(1)}>
           Back to screen 1
         </button>
       </div>
     )
   }
-  return null;
+  return null
 }
 ```
 

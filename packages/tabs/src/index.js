@@ -10,6 +10,20 @@ import warning from "warning";
 import { wrapEvent } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
+/**
+ * Just a component
+ */
+export function RandomComp(props) {
+  return <div>{props.children}</div>;
+}
+
+RandomComp.propTypes = {
+  /**
+   * Does a thing.
+   */
+  children: node.isRequired
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 export const Tabs = forwardRef(function Tabs(
   {
@@ -71,26 +85,26 @@ export const Tabs = forwardRef(function Tabs(
   return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
 });
 
-if (__DEV__) {
-  Tabs.propTypes = {
-    children: node.isRequired,
-    onChange: func,
-    index: (props, name, compName, ...rest) => {
-      if (
-        props.index > -1 &&
-        props.onChange == null &&
-        props.readOnly !== true
-      ) {
-        return new Error(
-          "You provided a `value` prop to `Tabs` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
-        );
-      } else {
-        return number(name, props, compName, ...rest);
-      }
-    },
-    defaultIndex: number
-  };
-}
+Tabs.propTypes = {
+  children: node.isRequired,
+  /**
+   * Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
+   *
+   * @param {number} index The index of the active tab
+   * @returns {void}
+   */
+  onChange: func,
+  index: (props, name, compName, ...rest) => {
+    if (props.index > -1 && props.onChange == null && props.readOnly !== true) {
+      return new Error(
+        "You provided a `value` prop to `Tabs` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
+      );
+    } else {
+      return number(name, props, compName, ...rest);
+    }
+  },
+  defaultIndex: number
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TabList = forwardRef(function TabList(
