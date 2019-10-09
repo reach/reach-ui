@@ -7,7 +7,7 @@ export let name = "Basic";
 
 export let Example = () => (
   <Menu>
-    <MenuButton>
+    <MenuButton id="example-button">
       Actions <span aria-hidden="true">▾</span>
     </MenuButton>
     <MenuList>
