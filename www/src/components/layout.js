@@ -180,7 +180,7 @@ let Nav = ({ media }) => (
                 padding: 5,
               }}
             >
-              &copy; 2018 Reach
+              &copy; {new Date().getFullYear()} Reach
             </footer>
           </div>
         </div>
