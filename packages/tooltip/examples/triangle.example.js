@@ -9,12 +9,23 @@ export const name = "Triangle";
 const centered = (triggerRect, tooltipRect) => {
   const triggerCenter = triggerRect.left + triggerRect.width / 2;
   const left = triggerCenter - tooltipRect.width / 2;
-  const maxLeft = window.innerWidth - tooltipRect.width - 2;
+  const maxLeft = window.innerWidth - tooltipRect.width - getScrollbarOffset();
   return {
     left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
     top: triggerRect.bottom + 8 + window.scrollY
   };
 };
+
+// TODO: Move to @reach/utils
+function getScrollbarOffset() {
+  try {
+    if (window.innerWidth > document.documentElement.clientWidth) {
+      console.log(window.innerWidth - document.documentElement.clientWidth);
+      return window.innerWidth - document.documentElement.clientWidth;
+    }
+  } catch (err) {}
+  return 0;
+}
 
 function TriangleTooltip({ children, ...rest }) {
   // get the props from useTooltip
@@ -81,6 +92,7 @@ export function Example() {
           </button>
         </TriangleTooltip>
       </div>
+      <div style={{ marginTop: 600 }}>Hi</div>
     </div>
   );
 }
