@@ -1,4 +1,5 @@
 declare module "@reach/slider" {
+  import * as React from "react";
   export type SliderProps = React.HTMLProps<HTMLDivElement> & {
     children: React.ReactNode;
     defaultValue?: number;
