@@ -1,12 +1,18 @@
 # Table of Contents 👇
 
-- [Springs and basic interpolation](#springs-and-basic-interpolation)
-- [Render props](#render-props)
-- [Native rendering and interpolation](#native-rendering-and-interpolation-demo)
-- [Imperative Api](#imperative-api)
-- [Transitions](#transitions)
-- [Keyframes](#keyframes)
-- [Parallax and page transitions](#parallax-and-page-transitions)
+- [Table of Contents 👇](#table-of-contents-%f0%9f%91%87)
+- [API overview 📖](#api-overview-%f0%9f%93%96)
+    - [Springs and basic interpolation](#springs-and-basic-interpolation)
+        - [Animating 'auto'](#animating-auto)
+    - [Render props](#render-props)
+    - [Native rendering and interpolation (Demo)](#native-rendering-and-interpolation-demo)
+        - [Single or multiple value interpolation](#single-or-multiple-value-interpolation)
+        - [More complex interpolations, chaining, clamping and ranges](#more-complex-interpolations-chaining-clamping-and-ranges)
+    - [Imperative Api](#imperative-api)
+    - [Transitions](#transitions)
+    - [Trails/Staggered transitions](#trailsstaggered-transitions)
+    - [Keyframes](#keyframes)
+    - [Parallax and page transitions](#parallax-and-page-transitions)
 
 # API overview 📖
 
@@ -16,7 +22,7 @@ For a raw documentation of all possible properties look [here](https://github.co
 
 You can interpolate almost everything, from numbers, colors, svg-paths, percentages, arrays to string patterns:
 
-```.jsx
+```jsx
 <Spring to={{
     scale: toggle ? 1 : 2,
     start: toggle ? '#abc' : 'rgb(10,20,30)',
@@ -36,7 +42,7 @@ A couple of extra props you might be interested in are `onRest`, which fires onc
 
 react-spring is one of the few libs that understands and animates `auto`, so you can use it in your configs, like so:
 
-```.jsx
+```jsx
 <Spring from={{ height: 0 }} to={{ height: 'auto' }}>
 ```
 
@@ -46,14 +52,14 @@ Keep in mind that in order to do this we have to measure out a snapshot set to `
 
 2.  **Contents change but won't animate**. If you set your spring to `auto` and later add or remove contents (children), it doesn't animate since it's essentially going from "auto" to "auto". In these rare cases you can use the `force` prop, which forces the spring to animate regardless of whether props are the same or not.
 
-```.jsx
+```jsx
 <Spring force from={{ height: 0 }} to={{ height: 'auto' }}>
   {items.map(id => <Item key={id} />)}
 ```
 
 3.  **Nested auto-springs eat into their animations**. If you nest springs and click one open and close another, the measurements will conflict for a moment. There is no real solution here. Something you can do to help it is make sure springs animate with less precision so that they will complete faster.
 
-```.jsx
+```jsx
 <Spring
   from={{ height: 0 }} to={{ height: 'auto' }}
   config={{ ...config.default, restSpeedThreshold: 1, restDisplacementThreshold: 0.1 }}>
@@ -63,7 +69,7 @@ Keep in mind that in order to do this we have to measure out a snapshot set to `
 
 Don't like the way render props wrap your code and create nested structures? By default we support both `render` and `children`, so you can create higher-order components like so:
 
-```.jsx
+```jsx
 const Header = ({ children, bold, ...styles }) => (
     <h1 style={styles}>
         {bold ? <b>{children}</b> : children}
@@ -96,7 +102,7 @@ Just be aware of the following conditions:
 
 ##### Single or multiple value interpolation
 
-```.jsx
+```jsx
 import { Spring, animated, interpolate } from 'react-spring'
 
 <Spring native from={{ radius: 0, time: 0, x: 0, y: 0 }} to={{ radius: 10, time: 1, x: 10, y: 20 }}>
@@ -121,7 +127,7 @@ import { Spring, animated, interpolate } from 'react-spring'
 
 In cases where you need to clamp or extrapolate, the `interpolate` function can take several properties that might be of interest to you. Specifically `range`, `output`, `filter`, `extrapolate`, `extrapolateLeft` and `extrapolateRight`. You can also chain results and interpolate further.
 
-```.jsx
+```jsx
 <animated.div
   style={{
     transform: x
@@ -144,7 +150,7 @@ In cases where you need to clamp or extrapolate, the `interpolate` function can 
 
 If it's necessary you can control your animations imperatively.
 
-```.jsx
+```jsx
 import {
   AnimatedValue,
   animated,
@@ -170,7 +176,7 @@ const App = ({ children }) => {
 
 Animates children as they mount and unmount. `from` denotes base styles, `enter` styles are applied when objects appear, `leave` styles are applied when objects disappear. Keys and children have to match in their order! The keys are the same that you would provide in any other looping situation.
 
-```.jsx
+```jsx
 import { Transition } from 'react-spring'
 
 <ul>
@@ -186,7 +192,7 @@ import { Transition } from 'react-spring'
 
 For more complex animations you can return per-object styles individually. Let Transition know the actual data by passing it raw to `items`, either pass your keys like always or give it an accessor. And for more control, there's `update` which fires for nodes that are neither entering nor leaving.
 
-```.jsx
+```jsx
 <Transition
   items={items}
   keys={item => item.key}
@@ -200,7 +206,7 @@ For more complex animations you can return per-object styles individually. Let T
 
 You can use this prototype for two-state reveals, simply render a single child that you can switch out for another. You don't have to pass keys for this one.
 
-```.jsx
+```jsx
 <Transition from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
   {toggle ? ComponentA : ComponentB}
 </Transition>
@@ -208,7 +214,7 @@ You can use this prototype for two-state reveals, simply render a single child t
 
 If you need to track a single child, that is also possible:
 
-```.jsx
+```jsx
 <Transition from={{ opacity: 0 }} enter={{ opacity: 1 }} leave={{ opacity: 0 }}>
   {toggle && Component}
 </Transition>
@@ -218,7 +224,7 @@ If you need to track a single child, that is also possible:
 
 `Trail` animates the first child of the list you pass, the others will follow in a trailing motion. The api is similar to `Transition` though it will assume your list is fixed.
 
-```.jsx
+```jsx
 import { Trail } from 'react-spring'
 
 <Trail from={{ opacity: 0 }} to={{ opacity: 1 }} keys={items.map(item => item.key)}>
@@ -232,7 +238,7 @@ import { Trail } from 'react-spring'
 
 The resulting primitive can receive all the generic properties you would normally give your springs, like `native`, `from`, and so on.
 
-```.jsx
+```jsx
 import { Keyframes, config } from 'react-spring'
 
 // You can create keyframes for springs, trails and transitions
@@ -256,7 +262,7 @@ const Container = Keyframes.Spring({
 
 There is a shortcut for low-level scripting by giving it a function instead of an object consisting of slots (good for loops and such). In this case the state prop can be omitted.
 
-```.jsx
+```jsx
 // Will fade children in and out in a loop
 const Container = Keyframes.Spring(async next => {
   while (true) {
@@ -275,7 +281,7 @@ const Container = Keyframes.Spring(async next => {
 
 And another for arrays:
 
-```.jsx
+```jsx
 const Container = Keyframes.Spring([
   { to: { scale: 1.5 } },
   { to: { scale: 1 } },
@@ -284,7 +290,7 @@ const Container = Keyframes.Spring([
 
 `Spring` and `Trail` also have a `.to` shortcut to make it even leaner. It will try to interpolate animatable props, but you can still use regular Spring-props like delay, immediate and so on, just be aware that they are reserved.
 
-```.jsx
+```jsx
 const Container = Keyframes.Spring.to([
   { immediate: true, delay: 500, scale: 1.5 },
   { scale: 1 },
@@ -293,7 +299,7 @@ const Container = Keyframes.Spring.to([
 
 If you have made [your own animation primitive](https://github.com/drcmda/react-spring/issues/97#issuecomment-392380139) and want to drive it through keyframes, that is also doable:
 
-```.jsx
+```jsx
 const Container = Keyframes.create(MyOwnPrimitive)({ ... })
 ```
 
@@ -303,7 +309,7 @@ const Container = Keyframes.create(MyOwnPrimitive)({ ... })
 
 `Parallax.pages` determines the total space of the inner content where each page takes 100% of the visible container. `ParallaxLayer.offset` determines where the layer will be at when scrolled to (0=start, 1=1st page, ...). `ParallaxLayer.speed` shifts the layer in accordance to its offset, values can be positive or negative.
 
-```.jsx
+```jsx
 import { Parallax, ParallaxLayer } from 'react-spring'
 
 <Parallax pages={3} scrolling={false} horizontal ref={ref => this.parallax = ref}>

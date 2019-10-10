@@ -15,7 +15,7 @@ import Helmet from "react-helmet"
 
 A dynamic version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
 
-```.jsx
+```jsx
 <Component initialState={{ hue: 0 }}>
   {({ setState, state }) => (
     <div style={{ textAlign: "center" }}>
@@ -78,7 +78,7 @@ _Type_: `object`
 
 An object of initial state.
 
-```.jsx
+```jsx
 <Component initialState={{ count: 10 }}>
   {({ state }) => <div>Count is {state.count}</div>}
 </Component>
@@ -92,7 +92,7 @@ A function to return intitial state. Use this when initial state is computed.
 
 In the following example, `Date.now()` will _not_ be called every time a parent component causes this component to re-render.
 
-```.jsx
+```jsx
 <Component getInitialState={() => ({ now: Date.now() })}>
   {({ state }) => <div>Now is: {state.now}</div>}
 </Component>
@@ -100,7 +100,7 @@ In the following example, `Date.now()` will _not_ be called every time a parent 
 
 However, in the next example, `Date.now()` would be called with every re-render, which is not what we want.
 
-```.jsx
+```jsx
 // 😭
 <Component initialState={{ now: Date.now() }} />
 ```
@@ -133,7 +133,7 @@ _Type_: `func: () => object`
 
 Use this when any of your refs are computed.
 
-```.jsx
+```jsx
 <Component
   getRefs={() => {
     return {
@@ -152,7 +152,7 @@ Called when the component mounts.
 
 Perhaps you want some async data but don't want to make an entirely new component just for the lifecycles to get it:
 
-```.jsx
+```jsx
 <Component
   initialState={{ gists: null }}
   didMount={({ setState }) => {
@@ -205,7 +205,7 @@ Return `true` to signify the component needs an update, `false` if it does not. 
 
 For example: often you find just one part of your component is expensive to render, maybe because of a large SVG with a dynamic style or two. Rather than pulling the elements out of your component and putting them in a new `PureComponent`, you can inline a `shoudlUpdate` check:
 
-```.jsx
+```jsx
 <Component initialState={{ hue: 0 }}>
   {({ setState, state }) => (
     <div>
@@ -247,7 +247,7 @@ _Type_: `node`
 
 Usual React children prop.
 
-```.jsx
+```jsx
 <Component>
   <div>Hey, I am the child</div>
 </Component>
@@ -257,7 +257,7 @@ _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
 
-```.jsx
+```jsx
 <Component initialState={{ hue: 0 }}>
   {({ setState, state }) => (
     <div>
@@ -282,7 +282,7 @@ A render prop callback to provide the stateful parts of your component at render
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
-```.jsx
+```jsx
 <Component
   initialState={{ hue: 0 }}
   render={({ setState, state }) => (
@@ -314,7 +314,7 @@ Here is a pretty involved example showing just how composable this component is:
 - Optimized todo rendering, avoiding updates if the color has not changed
 - Tracked refs
 
-```.jsx
+```jsx
 <Component
   getRefs={() => ({
     input: React.createRef(),
