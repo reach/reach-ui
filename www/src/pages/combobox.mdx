@@ -86,9 +86,9 @@ There is nothing special about managing state for a combobox, it's like managing
 ```.jsx
 (() => {
   function Example() {
-    const [term, setTerm] = useState("")
-    const results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <div>
@@ -129,8 +129,8 @@ There is nothing special about managing state for a combobox, it's like managing
     )
   }
 
-  return <Example />
-})()
+  return <Example />;
+})();
 ```
 
 ### Server Side Search
