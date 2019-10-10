@@ -19,7 +19,7 @@ A UI input component where the user selects a value from within a given range. A
 
 Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderTrackHighlight`, `SliderMarker` and `SliderHandle` components as children.
 
-_Pointer Events_: Slider uses pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). As such, to override default behavior you will need to use pointer events rather than mouse or touch events. For example, if you wish to call `event.preventDefault` to override the slider handle's activation on a mouse click event, you'll want to reach for `onPointerDown` instead of `onMouseDown`. If you need to support older browsers without native pointer events, we recommend [`pepjs`](https://github.com/jquery/PEP) as a solid polyfill.
+_Pointer Events_: Slider uses pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). As such, to override default behavior you will need to use pointer events rather than mouse or touch events. For example, if you wish to call `event.preventDefault` to override the slider handle's activation on a mouse click event, you'll want to reach for `onPointerDown` instead of `onMouseDown`. [If you need to support older browsers without native pointer events (or ensure compatibility with some inconsistent native behavior in MacOS Safari < 13 and Safari)](https://caniuse.com/#feat=pointer), we recommend [`pepjs`](https://github.com/jquery/PEP) as a solid polyfill.
 
 ```.jsx
 <div>
