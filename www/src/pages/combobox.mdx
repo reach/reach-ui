@@ -84,7 +84,7 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
 ```.jsx
-;(() => {
+(() => {
   function Example() {
     const [term, setTerm] = useState("")
     const results = useCityMatch(term)
@@ -394,7 +394,7 @@ If true, the popover opens when focus is on the text box.
 
 Called with the selection value when the user makes a selection from the list.
 
-```.jsx
+```jsx
 <Combobox onSelect={item => {}} />
 ```
 

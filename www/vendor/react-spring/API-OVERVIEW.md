@@ -1,18 +1,12 @@
 # Table of Contents 👇
 
-- [Table of Contents 👇](#table-of-contents-%f0%9f%91%87)
-- [API overview 📖](#api-overview-%f0%9f%93%96)
-    - [Springs and basic interpolation](#springs-and-basic-interpolation)
-        - [Animating 'auto'](#animating-auto)
-    - [Render props](#render-props)
-    - [Native rendering and interpolation (Demo)](#native-rendering-and-interpolation-demo)
-        - [Single or multiple value interpolation](#single-or-multiple-value-interpolation)
-        - [More complex interpolations, chaining, clamping and ranges](#more-complex-interpolations-chaining-clamping-and-ranges)
-    - [Imperative Api](#imperative-api)
-    - [Transitions](#transitions)
-    - [Trails/Staggered transitions](#trailsstaggered-transitions)
-    - [Keyframes](#keyframes)
-    - [Parallax and page transitions](#parallax-and-page-transitions)
+- [Springs and basic interpolation](#springs-and-basic-interpolation)
+- [Render props](#render-props)
+- [Native rendering and interpolation](#native-rendering-and-interpolation-demo)
+- [Imperative Api](#imperative-api)
+- [Transitions](#transitions)
+- [Keyframes](#keyframes)
+- [Parallax and page transitions](#parallax-and-page-transitions)
 
 # API overview 📖
 
