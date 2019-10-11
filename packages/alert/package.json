@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.3.0-alpha.0",
+  "version": "0.3.0",
   "description": "Screenreader friendly alert messages.",
   "main": "index.js",
   "module": "es/index.js",
@@ -9,8 +9,8 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.3.0-alpha.0",
-    "@reach/visually-hidden": "^0.3.0-alpha.0",
+    "@reach/component-component": "^0.3.0",
+    "@reach/visually-hidden": "^0.3.0",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
