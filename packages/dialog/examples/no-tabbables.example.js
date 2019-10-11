@@ -4,9 +4,9 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Dialog } from "../src/index";
 
-export let name = "No Tabbables";
+export const name = "No Tabbables";
 
-export let Example = () => (
+export const Example = () => (
   <Component initialState={{ showDialog: false }}>
     {({ state, setState }) => (
       <div>

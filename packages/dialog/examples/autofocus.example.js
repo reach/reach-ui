@@ -3,9 +3,9 @@ import Component from "@reach/component-component";
 import "../styles.css";
 import { Dialog } from "../src/index";
 
-export let name = "Autofocus";
+export const name = "Autofocus";
 
-export let Example = () => (
+export const Example = () => (
   <Component
     initialState={{ showDialog: false }}
     refs={{ button: React.createRef() }}

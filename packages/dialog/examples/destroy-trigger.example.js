@@ -3,9 +3,9 @@ import Component from "@reach/component-component";
 import "../styles.css";
 import { Dialog } from "../src/index";
 
-export let name = "Destroy Trigger";
+export const name = "Destroy Trigger";
 
-export let Example = () => (
+export const Example = () => (
   <Component
     getRefs={() => ({
       openButton: React.createRef(),

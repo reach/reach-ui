@@ -3,9 +3,9 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
-export let name = "Basic";
+export const name = "Basic";
 
-export let Example = () => (
+export const Example = () => (
   <Menu>
     <MenuButton id="example-button">
       Actions <span aria-hidden="true">▾</span>

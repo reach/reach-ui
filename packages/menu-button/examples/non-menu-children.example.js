@@ -3,7 +3,7 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
-export let name = "Non Menu Children";
+export const name = "Non Menu Children";
 
 const Label = props => (
   <span
@@ -20,7 +20,7 @@ const Label = props => (
   />
 );
 
-export let Example = () => (
+export const Example = () => (
   <Menu>
     <MenuButton>
       Actions <span aria-hidden="true">▾</span>

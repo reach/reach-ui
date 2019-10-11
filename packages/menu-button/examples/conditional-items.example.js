@@ -3,9 +3,9 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
-export let name = "Conditional Items";
+export const name = "Conditional Items";
 
-export let Example = () => {
+export const Example = () => {
   const [activeItem, setActiveItem] = useState(false);
   return (
     <>

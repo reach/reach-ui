@@ -4,7 +4,7 @@ import { Dialog } from "./index";
 
 describe("rendering", () => {
   it("does not render children when not open", () => {
-    let wrapper = renderer.create(
+    const wrapper = renderer.create(
       <div lang="gr">
         <Dialog isOpen={false}>
           <div lang="en" />

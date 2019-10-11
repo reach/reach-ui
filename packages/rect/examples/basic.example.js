@@ -1,9 +1,9 @@
 import React from "react";
 import Rect from "../src/index";
 
-export let name = "Basic";
+export const name = "Basic";
 
-export let Example = () => (
+export const Example = () => (
   <Rect>
     {({ ref, rect }) => (
       <div>

@@ -3,9 +3,9 @@ import Component from "@reach/component-component";
 import "../styles.css";
 import { Dialog } from "../src/index";
 
-export let name = "Dismiss";
+export const name = "Dismiss";
 
-export let Example = () => (
+export const Example = () => (
   <Component initialState={{ showDialog: false }}>
     {({ state, setState }) => (
       <div>

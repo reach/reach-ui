@@ -222,7 +222,7 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
     return event.target === tabbable(doc)[0];
   }
 
-  let restoreTabIndexTuplés = [];
+  const restoreTabIndexTuplés = [];
   function disableTabbablesInPopover() {
     const elements = tabbable(popoverRef.current);
     elements.forEach(element => {

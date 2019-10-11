@@ -5,9 +5,9 @@ import { useId } from "@reach/auto-id";
 import invariant from "invariant";
 import { func, bool, node, object, oneOfType } from "prop-types";
 
-let AlertDialogContext = createContext();
+const AlertDialogContext = createContext();
 
-let AlertDialogOverlay = React.forwardRef(
+const AlertDialogOverlay = React.forwardRef(
   ({ leastDestructiveRef, ...props }, forwardRef) => {
     const labelId = useId();
     const descriptionId = useId();
@@ -43,7 +43,7 @@ if (__DEV__) {
   };
 }
 
-let AlertDialogContent = React.forwardRef(
+const AlertDialogContent = React.forwardRef(
   ({ children, ...props }, forwardRef) => (
     <AlertDialogContext.Consumer>
       {refs => (
@@ -82,7 +82,7 @@ if (__DEV__) {
   };
 }
 
-let AlertDialogLabel = props => (
+const AlertDialogLabel = props => (
   <AlertDialogContext.Consumer>
     {({ labelId }) => (
       <div id={labelId} data-reach-alert-dialog-label {...props} />
@@ -90,7 +90,7 @@ let AlertDialogLabel = props => (
   </AlertDialogContext.Consumer>
 );
 
-let AlertDialogDescription = props => (
+const AlertDialogDescription = props => (
   <AlertDialogContext.Consumer>
     {({ descriptionId }) => (
       <div id={descriptionId} data-reach-alert-dialog-description {...props} />
@@ -98,7 +98,7 @@ let AlertDialogDescription = props => (
   </AlertDialogContext.Consumer>
 );
 
-let AlertDialog = ({ isOpen, onDismiss, leastDestructiveRef, ...props }) => (
+const AlertDialog = ({ isOpen, onDismiss, leastDestructiveRef, ...props }) => (
   <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
     <AlertDialogContent {...props} />
   </AlertDialogOverlay>

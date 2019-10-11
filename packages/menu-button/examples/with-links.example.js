@@ -10,7 +10,7 @@ import {
   LocationProvider
 } from "@reach/router";
 
-export let name = "With Links";
+export const name = "With Links";
 
 const Home = () => (
   <div>
@@ -41,9 +41,9 @@ const Settings = () => (
 
 // this is because we're in an iframe and not a
 // pushState server inside of storybook
-let memoryHistory = createHistory(createMemorySource("/"));
+const memoryHistory = createHistory(createMemorySource("/"));
 
-export let Example = () => (
+export const Example = () => (
   <LocationProvider history={memoryHistory}>
     <Router>
       <Home path="/" />

@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import Component from "../src/index";
 
-export let name = "Kitchen Sink Todo List";
+export const name = "Kitchen Sink Todo List";
 
-export let Example = () => (
+export const Example = () => (
   <Component
     getRefs={() => ({
       input: null
@@ -30,7 +30,7 @@ export let Example = () => (
           <form
             onSubmit={event => {
               event.preventDefault();
-              let node = refs.input;
+              const node = refs.input;
               setState({ todos: state.todos.concat([node.value]) });
               node.value = "";
             }}

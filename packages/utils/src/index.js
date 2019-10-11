@@ -1,6 +1,6 @@
 import { useRef, useMemo, useEffect } from "react";
 
-let checkedPkgs = {};
+const checkedPkgs = {};
 
 let checkStyles = () => {};
 
@@ -36,7 +36,7 @@ if (__DEV__) {
 
 export { checkStyles };
 
-export let wrapEvent = (theirHandler, ourHandler) => event => {
+export const wrapEvent = (theirHandler, ourHandler) => event => {
   theirHandler && theirHandler(event);
   if (!event.defaultPrevented) {
     return ourHandler(event);

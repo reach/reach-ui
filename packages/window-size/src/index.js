@@ -2,10 +2,10 @@ import React from "react";
 import Component from "@reach/component-component";
 import { func } from "prop-types";
 
-let hasWindow = typeof window !== "undefined";
+const hasWindow = typeof window !== "undefined";
 
-let didMount = ({ refs, setState }) => {
-  let resize = () =>
+const didMount = ({ refs, setState }) => {
+  const resize = () =>
     setState({
       width: window.innerWidth,
       height: window.innerHeight
@@ -16,11 +16,11 @@ let didMount = ({ refs, setState }) => {
   };
 };
 
-let willUnmount = ({ refs }) => {
+const willUnmount = ({ refs }) => {
   refs.removeEvent();
 };
 
-let WindowSize = ({ children }) => (
+const WindowSize = ({ children }) => (
   <Component
     refs={{ removeEvent: null }}
     initialState={{

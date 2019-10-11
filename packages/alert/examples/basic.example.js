@@ -3,9 +3,9 @@ import Alert from "../src/index";
 import Component from "../../component-component/src";
 import VisuallyHidden from "../../visually-hidden/src";
 
-export let name = "Basic";
+export const name = "Basic";
 
-export let Example = () => (
+export const Example = () => (
   <Component
     initialState={{
       messages: [],

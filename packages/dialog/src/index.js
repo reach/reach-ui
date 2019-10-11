@@ -6,17 +6,17 @@ import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import { func, bool } from "prop-types";
 
-let createAriaHider = dialogNode => {
-  let originalValues = [];
-  let rootNodes = [];
+const createAriaHider = dialogNode => {
+  const originalValues = [];
+  const rootNodes = [];
 
   Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
     const portalNode = dialogNode.parentNode.parentNode.parentNode;
     if (node === portalNode) {
       return;
     }
-    let attr = node.getAttribute("aria-hidden");
-    let alreadyHidden = attr !== null && attr !== "false";
+    const attr = node.getAttribute("aria-hidden");
+    const alreadyHidden = attr !== null && attr !== "false";
     if (alreadyHidden) {
       return;
     }
@@ -27,7 +27,7 @@ let createAriaHider = dialogNode => {
 
   return () => {
     rootNodes.forEach((node, index) => {
-      let originalValue = originalValues[index];
+      const originalValue = originalValues[index];
       if (originalValue === null) {
         node.removeAttribute("aria-hidden");
       } else {
@@ -37,22 +37,22 @@ let createAriaHider = dialogNode => {
   };
 };
 
-let k = () => {};
+const k = () => {};
 
-let checkDialogStyles = () => checkStyles("dialog");
+const checkDialogStyles = () => checkStyles("dialog");
 
-let portalDidMount = refs => {
+const portalDidMount = refs => {
   refs.disposeAriaHider = createAriaHider(refs.overlayNode);
 };
 
-let contentWillUnmount = ({ refs }) => {
+const contentWillUnmount = ({ refs }) => {
   refs.disposeAriaHider();
 };
 
 // eslint-disable-next-line no-unused-vars
-let FocusContext = React.createContext();
+const FocusContext = React.createContext();
 
-let DialogOverlay = React.forwardRef(
+const DialogOverlay = React.forwardRef(
   (
     {
       isOpen = true,
@@ -124,9 +124,9 @@ DialogOverlay.propTypes = {
   initialFocusRef: () => {}
 };
 
-let stopPropagation = event => event.stopPropagation();
+const stopPropagation = event => event.stopPropagation();
 
-let DialogContent = React.forwardRef(
+const DialogContent = React.forwardRef(
   ({ onClick, onKeyDown, ...props }, forwardedRef) => (
     <div
       aria-modal="true"
@@ -141,7 +141,7 @@ let DialogContent = React.forwardRef(
   )
 );
 
-let Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
+const Dialog = ({ isOpen, onDismiss = k, initialFocusRef, ...props }) => (
   <DialogOverlay
     isOpen={isOpen}
     onDismiss={onDismiss}

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Popover, { positionDefault, positionMatchWidth } from "../src/index";
 
-export let name = "Basic";
+export const name = "Basic";
 
 export function Example() {
   const ref = useRef();

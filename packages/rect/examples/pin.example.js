@@ -1,7 +1,7 @@
 import React from "react";
 import Rect from "../src/index";
 
-export let name = "Pin element to another";
+export const name = "Pin element to another";
 
 export class Example extends React.Component {
   state = { pin: true };

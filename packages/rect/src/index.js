@@ -3,10 +3,10 @@ import Component from "@reach/component-component";
 import observeRect from "@reach/observe-rect";
 import { func, bool } from "prop-types";
 
-let render = ({ refs, props: { children }, state: { rect } }) =>
+const render = ({ refs, props: { children }, state: { rect } }) =>
   children({ ref: node => (refs.node = node), rect });
 
-let didMount = ({ setState, refs, props }) => {
+const didMount = ({ setState, refs, props }) => {
   if (!refs.node) {
     console.warn("You need to place the ref");
     return;
@@ -20,7 +20,7 @@ let didMount = ({ setState, refs, props }) => {
   }
 };
 
-let didUpdate = ({ refs, props, prevProps }) => {
+const didUpdate = ({ refs, props, prevProps }) => {
   if (props.observe && !prevProps.observe) {
     refs.observer.observe();
   } else if (!props.observe && prevProps.observe) {
@@ -28,11 +28,11 @@ let didUpdate = ({ refs, props, prevProps }) => {
   }
 };
 
-let willUnmount = ({ refs }) => {
+const willUnmount = ({ refs }) => {
   refs.observer.unobserve();
 };
 
-let Rect = props => (
+const Rect = props => (
   <Component
     {...props}
     refs={{
@@ -62,8 +62,8 @@ if (__DEV__) {
 }
 
 export function useRect(nodeRef, observe = true) {
-  let [rect, setRect] = useState(null);
-  let observerRef = useRef(null);
+  const [rect, setRect] = useState(null);
+  const observerRef = useRef(null);
   useLayoutEffect(() => {
     if (!observerRef.current && nodeRef.current) {
       observerRef.current = observeRect(nodeRef.current, setRect);

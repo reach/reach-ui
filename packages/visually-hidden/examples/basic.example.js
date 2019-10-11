@@ -1,9 +1,9 @@
 import React from "react";
 import VisuallyHidden from "../src/index";
 
-export let name = "Basic";
+export const name = "Basic";
 
-export let Example = () => (
+export const Example = () => (
   <button>
     <VisuallyHidden>Save</VisuallyHidden>
     <svg aria-hidden width="32" height="32">

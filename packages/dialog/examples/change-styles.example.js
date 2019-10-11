@@ -8,12 +8,12 @@ import {
   config
 } from "../../../www/vendor/react-spring/src/targets/web";
 
-export let name = "Change Styles";
+export const name = "Change Styles";
 
-let AnimatedDialogOverlay = animated(DialogOverlay);
-let AnimatedDialogContent = animated(DialogContent);
+const AnimatedDialogOverlay = animated(DialogOverlay);
+const AnimatedDialogContent = animated(DialogContent);
 
-export let Example = () => (
+export const Example = () => (
   <Component initialState={{ showDialog: false }}>
     {({ state, setState }) => (
       <div>

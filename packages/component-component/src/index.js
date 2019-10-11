@@ -1,8 +1,8 @@
 import React from "react";
 import { object, func, oneOfType, node } from "prop-types";
 
-let cleanProps = props => {
-  let {
+const cleanProps = props => {
+  const {
     initialState,
     getInitialState,
     refs,

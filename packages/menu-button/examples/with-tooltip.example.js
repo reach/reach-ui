@@ -6,9 +6,9 @@ import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 import Tooltip from "../../tooltip";
 
-export let name = "With Tooltip";
+export const name = "With Tooltip";
 
-export let Example = () => (
+export const Example = () => (
   <Menu>
     <Tooltip label="Hamburger">
       <MenuButton>

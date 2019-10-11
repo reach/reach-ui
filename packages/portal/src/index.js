@@ -2,7 +2,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import Component from "@reach/component-component";
 
-let Portal = ({ children, type = "reach-portal" }) => (
+const Portal = ({ children, type = "reach-portal" }) => (
   <Component
     getRefs={() => ({ mountNode: null, portalNode: null })}
     didMount={({ refs, forceUpdate }) => {

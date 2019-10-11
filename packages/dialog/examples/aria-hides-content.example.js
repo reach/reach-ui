@@ -4,12 +4,12 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Dialog } from "../src/index";
 
-export let name = "Aria Hides Content";
+export const name = "Aria Hides Content";
 
-let setupMutationObserver = ({ refs }) => {
+const setupMutationObserver = ({ refs }) => {
   console.log("mutation observer");
-  let logMutation = action("Root Node Attribute Mutated");
-  let observer = new MutationObserver(mutationsList => {
+  const logMutation = action("Root Node Attribute Mutated");
+  const observer = new MutationObserver(mutationsList => {
     for (var mutation of mutationsList) {
       console.log(mutation);
       logMutation(
@@ -23,11 +23,11 @@ let setupMutationObserver = ({ refs }) => {
   refs.disconnectObserver = () => observer.disconnect();
 };
 
-let teardownMutationObserver = ({ refs }) => {
+const teardownMutationObserver = ({ refs }) => {
   refs.disconnectObserver();
 };
 
-export let Example = () => (
+export const Example = () => (
   <Component
     refs={{ disconnectObserver: null }}
     didMount={setupMutationObserver}

@@ -10,8 +10,8 @@ const COMPONENT_ARGS = {
   forceUpdate: expect.any(Function)
 };
 
-let snapshot = element => {
-  let wrapper = renderer.create(element);
+const snapshot = element => {
+  const wrapper = renderer.create(element);
   const tree = wrapper.toJSON();
   expect(tree).toMatchSnapshot();
   return tree;

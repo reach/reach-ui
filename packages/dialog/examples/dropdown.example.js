@@ -4,9 +4,9 @@ import { Menu, MenuButton, MenuList, MenuItem } from "../../menu-button";
 import "../styles.css";
 import { Dialog } from "../src/index";
 
-export let name = "Dropdown";
+export const name = "Dropdown";
 
-export let Example = () => (
+export const Example = () => (
   <Component initialState={{ showDialog: false }}>
     {({ state, setState }) => (
       <div>

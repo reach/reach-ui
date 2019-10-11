@@ -7,9 +7,9 @@ import {
   AlertDialogDescription
 } from "../src/index";
 
-export let name = "Basic";
+export const name = "Basic";
 
-export let Example = () => (
+export const Example = () => (
   <Component
     getRefs={() => ({ close: React.createRef() })}
     initialState={{ showDialog: false }}

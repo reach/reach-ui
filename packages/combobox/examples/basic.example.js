@@ -11,11 +11,11 @@ import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";
 
-export let name = "Basic";
+export const name = "Basic";
 
 export function Example() {
-  let [term, setTerm] = useState("");
-  let results = useCityMatch(term);
+  const [term, setTerm] = useState("");
+  const results = useCityMatch(term);
 
   const handleChange = event => {
     setTerm(event.target.value);
@@ -47,7 +47,7 @@ export function Example() {
 }
 
 function useCityMatch(term) {
-  let throttledTerm = useThrottle(term, 100);
+  const throttledTerm = useThrottle(term, 100);
   return useMemo(
     () =>
       term.trim() === ""

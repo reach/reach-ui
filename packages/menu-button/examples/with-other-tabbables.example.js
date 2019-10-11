@@ -3,9 +3,9 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
-export let name = "With Other Tabbables";
+export const name = "With Other Tabbables";
 
-export let Example = () => (
+export const Example = () => (
   <div>
     <p>
       <label for="cheers">How many cheers for Reach?</label>

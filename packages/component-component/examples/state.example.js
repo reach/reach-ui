@@ -1,9 +1,9 @@
 import React from "react";
 import Component from "../src/index";
 
-export let name = "Basic State";
+export const name = "Basic State";
 
-export let Example = () => (
+export const Example = () => (
   <Component initialState={{ hue: 0 }}>
     {({ setState, state }) => (
       <div

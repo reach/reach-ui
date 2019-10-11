@@ -3,9 +3,9 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "../src/index";
 
-export let name = "Render Callback";
+export const name = "Render Callback";
 
-export let Example = () => (
+export const Example = () => (
   <Menu>
     {({ isOpen }) => (
       <React.Fragment>

@@ -19,29 +19,29 @@ import { node, string } from "prop-types";
 
 // singleton state is fine because you don't server render
 // an alert (SRs don't read them on first load anyway)
-let keys = {
+const keys = {
   polite: -1,
   assertive: -1
 };
 
-let elements = {
+const elements = {
   polite: {},
   assertive: {}
 };
 
-let liveRegions = {
+const liveRegions = {
   polite: null,
   assertive: null
 };
 
 let renderTimer = null;
 
-let renderAlerts = () => {
+const renderAlerts = () => {
   clearTimeout(renderTimer);
 
   renderTimer = setTimeout(() => {
     Object.keys(elements).forEach(type => {
-      let container = liveRegions[type];
+      const container = liveRegions[type];
       if (container) {
         render(
           <VisuallyHidden>
@@ -63,15 +63,15 @@ let renderAlerts = () => {
   }, 500);
 };
 
-let createMirror = type => {
-  let key = ++keys[type];
+const createMirror = type => {
+  const key = ++keys[type];
 
-  let mount = element => {
+  const mount = element => {
     if (liveRegions[type]) {
       elements[type][key] = element;
       renderAlerts();
     } else {
-      let node = document.createElement("div");
+      const node = document.createElement("div");
       node.setAttribute(`data-reach-live-${type}`, "true");
       liveRegions[type] = node;
       document.body.appendChild(liveRegions[type]);
@@ -79,12 +79,12 @@ let createMirror = type => {
     }
   };
 
-  let update = element => {
+  const update = element => {
     elements[type][key] = element;
     renderAlerts();
   };
 
-  let unmount = element => {
+  const unmount = element => {
     delete elements[type][key];
     renderAlerts();
   };
@@ -92,8 +92,8 @@ let createMirror = type => {
   return { mount, update, unmount };
 };
 
-let Alert = ({ children, type, ...props }) => {
-  let element = (
+const Alert = ({ children, type, ...props }) => {
+  const element = (
     <div {...props} data-reach-alert>
       {children}
     </div>
