@@ -370,7 +370,6 @@ export const SliderTrack = forwardRef(function SliderTrack(
   return (
     <div
       ref={actualRef}
-      id="track"
       style={{ ...style, position: "relative" }}
       {...dataAttributes}
       {...props}
