@@ -21,8 +21,16 @@
 [data-reach-slider-track] {
   border-radius: 2px;
   background: #f2f2f2;
-  width: inherit;
+}
+
+[data-reach-slider-track-orientation="horizontal"] {
+  width: 100%;
   height: inherit;
+}
+
+[data-reach-slider-track-orientation="vertical"] {
+  width: inherit;
+  height: 100%;
 }
 
 [data-reach-slider-handle] {
