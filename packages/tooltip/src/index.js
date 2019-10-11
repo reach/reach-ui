@@ -232,7 +232,6 @@ export function useTooltip({
   onMouseLeave,
   onFocus,
   onBlur,
-  onKeyDown,
   onMouseDown,
   ref,
   DEBUG_STYLE
@@ -262,6 +261,25 @@ export function useTooltip({
 
   useEffect(() => checkStyles("tooltip"));
 
+  useEffect(() => {
+    const handleKeyDown = event => {
+      if (
+        event.key === "Enter" ||
+        event.key === " " ||
+        event.key === "Escape"
+      ) {
+        switch (state) {
+          case VISIBLE: {
+            transition("selectWithKeyboard");
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  });
+
   const handleMouseEnter = () => {
     switch (state) {
       case IDLE:
@@ -280,7 +298,7 @@ export function useTooltip({
     }
   };
 
-  const handleFocus = event => {
+  const handleFocus = () => {
     if (window.__REACH_DISABLE_TOOLTIPS) return;
     switch (state) {
       case IDLE:
@@ -324,16 +342,6 @@ export function useTooltip({
     }
   };
 
-  const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
-      switch (state) {
-        case VISIBLE: {
-          transition("selectWithKeyboard");
-        }
-      }
-    }
-  };
-
   const trigger = {
     "aria-describedby": isVisible ? id : undefined,
     "data-reach-tooltip-trigger": "",
@@ -343,7 +351,6 @@ export function useTooltip({
     onFocus: wrapEvent(onFocus, handleFocus),
     onBlur: wrapEvent(onBlur, handleBlur),
     onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
-    onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
     onMouseDown: wrapEvent(onMouseDown, handleMouseDown)
   };
 
@@ -375,7 +382,6 @@ export default function Tooltip({
     onMouseLeave: child.props.onMouseLeave,
     onFocus: child.props.onFocus,
     onBlur: child.props.onBlur,
-    onKeyDown: child.props.onKeyDown,
     onMouseDown: child.props.onMouseDown,
     ref: child.ref
   });
