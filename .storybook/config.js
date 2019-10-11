@@ -3,6 +3,7 @@ import React from "react";
 import path from "path";
 import { configure } from "@storybook/react";
 import { getStorybook, storiesOf } from "@storybook/react";
+import "pepjs";
 
 let getPackageName = filePath =>
   path

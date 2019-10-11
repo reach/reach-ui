@@ -23,6 +23,7 @@
     "@reach/utils": "^0.2.3",
     "@reach/visually-hidden": "*",
     "@reach/window-size": "*",
+    "@reach/slider": "file:../packages/slider",
     "gatsby": "^2.1.31",
     "gatsby-image": "^2.0.33",
     "gatsby-mdx": "^0.4.3",
