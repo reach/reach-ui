@@ -49,8 +49,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "pre-push": "lerna run lint"
+      "pre-commit": "pretty-quick --staged"
     }
   },
   "changelog": {
