@@ -1,7 +1,13 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuList, MenuButton, MenuLink, MenuItem } from "../src/index";
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuLink,
+  MenuItem
+} from "@reach/menu-button";
 import {
   Router,
   Link,

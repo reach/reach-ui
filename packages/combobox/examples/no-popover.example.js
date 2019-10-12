@@ -6,7 +6,7 @@ import {
   ComboboxList,
   ComboboxPopover,
   ComboboxOption
-} from "../src/index";
+} from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";

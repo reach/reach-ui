@@ -1,7 +1,7 @@
 import React from "react";
-import Alert from "../src/index";
-import Component from "../../component-component/src";
-import VisuallyHidden from "../../visually-hidden/src";
+import Alert from "@reach/alert";
+import Component from "@reach/component-component";
+import VisuallyHidden from "@reach/visually-hidden";
 
 export let name = "Basic";
 
