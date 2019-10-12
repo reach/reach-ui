@@ -25,6 +25,7 @@
   "devDependencies": {
     "@reach/menu-button": "^0.4.0-beta.0",
     "react": "^16.8.0",
+    "react-spring": "^8.0.27",
     "react-test-renderer": "^16.8.0"
   },
   "files": [
