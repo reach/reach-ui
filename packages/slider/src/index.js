@@ -596,14 +596,16 @@ export function useDimensions(passedRef) {
 }
 
 // TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(refA, refB) {
+function useForkedRef(...refs) {
   return React.useMemo(() => {
-    if (refA == null && refB == null) {
+    if (refs.every(ref => ref == null)) {
       return null;
     }
     return node => {
-      assignRef(refA, node);
-      assignRef(refB, node);
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
     };
-  }, [refA, refB]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }
