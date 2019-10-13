@@ -238,3 +238,16 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
     });
   }
 }
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(refA, refB) {
+  return React.useMemo(() => {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return node => {
+      assignRef(refA, node);
+      assignRef(refB, node);
+    };
+  }, [refA, refB]);
+}

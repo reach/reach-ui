@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useCallback, useMemo, useEffect } from "react";
 
 let checkedPkgs = {};
 
@@ -68,26 +68,16 @@ export function useUpdateEffect(effect, deps) {
   }, deps);
 }
 
-export function useAssignRef(refA, refB) {
-  const ref = useMemo(() => {
-    if (refA == null && refB == null) {
+export function useForkedRef(...refs) {
+  return useMemo(() => {
+    if (refs.every(ref => ref == null)) {
       return null;
     }
-    return refValue => {
-      setRef(refA, refValue);
-      setRef(refB, refValue);
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
     };
-  }, [refA, refB]);
-
-  // We shouldn't really need to throw an error using this method AFAICT.
-  // TODO: We may want to consider phasing out `assignRef` in favor of this hook.
-  function setRef(ref, value) {
-    if (typeof ref === "function") {
-      ref(value);
-    } else if (ref) {
-      ref.current = value;
-    }
-  }
-
-  return ref;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }

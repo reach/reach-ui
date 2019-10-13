@@ -13,7 +13,7 @@ import React, {
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, assignRef } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -360,7 +360,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
   const { disabled, orientation, trackRef } = useSliderContext();
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualRef = useForkRef(ref, trackRef);
+  const actualRef = useForkedRef(ref, trackRef);
 
   const dataAttributes = makeDataAttributes("slider-track", {
     orientation,
@@ -440,7 +440,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualRef = useForkRef(ref, handleRef);
+  const actualRef = useForkedRef(ref, handleRef);
   const dataAttributes = makeDataAttributes("slider-handle", {
     orientation,
     disabled
@@ -567,48 +567,6 @@ export function makeId(id, index) {
   return `${id}:${index}`;
 }
 
-// https://github.com/chakra-ui/chakra-ui/blob/master/packages/chakra-ui/src/utils/index.js#L9
-export function assignRef(ref, value) {
-  if (ref == null) return;
-  if (typeof ref === "function") {
-    ref(value);
-  } else {
-    try {
-      ref.current = value;
-    } catch (error) {
-      throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
-    }
-  }
-}
-
-// https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/utils/useForkRef.js
-export function useForkRef(refA, refB) {
-  /**
-   * This will create a new function if the ref props change and are defined.
-   * This means React will call the old forkRef with `null` and the new forkRef
-   * with the ref. Cleanup naturally emerges from this behavior.
-   */
-  const ref = React.useMemo(() => {
-    if (refA == null && refB == null) {
-      return null;
-    }
-    return refValue => {
-      setRef(refA, refValue);
-      setRef(refB, refValue);
-    };
-  }, [refA, refB]);
-
-  function setRef(ref, value) {
-    if (typeof ref === "function") {
-      ref(value);
-    } else if (ref) {
-      ref.current = value;
-    }
-  }
-
-  return ref;
-}
-
 export function useDimensions(passedRef) {
   const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
@@ -635,4 +593,17 @@ export function useDimensions(passedRef) {
     }
   }, [ref, width, height]);
   return { ref, width, height };
+}
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(refA, refB) {
+  return React.useMemo(() => {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return node => {
+      assignRef(refA, node);
+      assignRef(refB, node);
+    };
+  }, [refA, refB]);
 }

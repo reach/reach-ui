@@ -219,7 +219,7 @@ export const Combobox = forwardRef(function Combobox(
     as: Comp = "div",
     ...rest
   },
-  ref
+  forwardedRef
 ) {
   // We store the values of all the ComboboxOptions on this ref. This makes it
   // possible to perform the keyboard navigation from the input on the list. We
@@ -288,7 +288,7 @@ export const Combobox = forwardRef(function Combobox(
       <Comp
         {...rest}
         data-reach-combobox=""
-        ref={ref}
+        ref={forwardedRef}
         role="combobox"
         aria-haspopup="listbox"
         aria-owns={listboxId}
@@ -341,6 +341,8 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     autocompletePropRef,
     openOnFocus
   } = useContext(Context);
+
+  const ref = useForkedRef(inputRef, forwardedRef);
 
   // Because we close the List on blur, we need to track if the blur is
   // caused by clicking inside the list, and if so, don't close the List.
@@ -410,10 +412,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     <Comp
       {...props}
       data-reach-combobox-input=""
-      ref={node => {
-        assignRef(inputRef, node);
-        assignRef(forwardedRef, node);
-      }}
+      ref={ref}
       value={inputValue}
       onClick={wrapEvent(onClick, handleClick)}
       onBlur={wrapEvent(onBlur, handleBlur)}
@@ -446,6 +445,7 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
   forwardedRef
 ) {
   const { popoverRef, inputRef, isVisible } = useContext(Context);
+  const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
 
@@ -472,10 +472,7 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
       {...props}
       data-reach-combobox-popover=""
       {...popupProps}
-      ref={node => {
-        assignRef(popoverRef, node);
-        assignRef(forwardedRef, node);
-      }}
+      ref={ref}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       onBlur={wrapEvent(onBlur, handleBlur)}
       hidden={hidden}
@@ -497,7 +494,7 @@ export const ComboboxList = forwardRef(function ComboboxList(
     as: Comp = "ul",
     ...props
   },
-  ref
+  forwardedRef
 ) {
   const { optionsRef, persistSelectionRef } = useContext(Context);
 
@@ -515,7 +512,12 @@ export const ComboboxList = forwardRef(function ComboboxList(
   });
 
   return (
-    <Comp {...props} ref={ref} data-reach-combobox-list="" role="listbox" />
+    <Comp
+      {...props}
+      ref={forwardedRef}
+      data-reach-combobox-list=""
+      role="listbox"
+    />
   );
 });
 
@@ -529,7 +531,7 @@ const OptionContext = createContext();
 
 export const ComboboxOption = forwardRef(function ComboboxOption(
   { children, value, onClick, ...props },
-  ref
+  forwardedRef
 ) {
   const {
     onSelect,
@@ -554,7 +556,7 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
       <li
         {...props}
         data-reach-combobox-option=""
-        ref={ref}
+        ref={forwardedRef}
         id={makeHash(value)}
         role="option"
         aria-selected={isActive}
@@ -610,11 +612,12 @@ export function ComboboxOptionText() {
 // ComboboxButton
 export const ComboboxButton = forwardRef(function ComboboxButton(
   { as: Comp = "button", onClick, onKeyDown, ...props },
-  ref
+  forwardedRef
 ) {
   const { transition, state, buttonRef, listboxId, isVisible } = useContext(
     Context
   );
+  const ref = useForkedRef(buttonRef, forwardedRef);
 
   const handleKeyDown = useKeyDown();
 
@@ -632,10 +635,7 @@ export const ComboboxButton = forwardRef(function ComboboxButton(
       aria-controls={listboxId}
       aria-haspopup="listbox"
       aria-expanded={isVisible}
-      ref={node => {
-        assignRef(ref, node);
-        assignRef(buttonRef, node);
-      }}
+      ref={ref}
       onClick={wrapEvent(onClick, handleClick)}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       {...props}
@@ -842,6 +842,21 @@ const makeHash = str => {
   }
   return hash;
 };
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(...refs) {
+  return useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Well alright, you made it all the way here to like 700 lines of code (geez,
