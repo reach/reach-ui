@@ -1,5 +1,4 @@
 import React from "react";
-import Component from "@reach/component-component";
 import "@reach/dialog/styles.css";
 import {
   AlertDialog,
