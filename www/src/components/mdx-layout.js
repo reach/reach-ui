@@ -45,11 +45,19 @@ import {
 
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
 
+import {
+  Slider,
+  SliderTrack,
+  SliderTrackHighlight,
+  SliderHandle,
+  SliderMarker,
+} from "@reach/slider"
+
 import { useId } from "@reach/auto-id"
 
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
 
-import { Transition } from "../../vendor/react-spring/src/targets/web"
+import { useTransition, animated } from "react-spring/web.cjs"
 
 import { Phased } from "recondition"
 
@@ -61,6 +69,7 @@ const PreComponent = ({ className, ...props }) =>
       code={props.children.props.children}
       scope={{
         ...React,
+        animated,
         GatsbyLink,
         Component,
         Rect,
@@ -76,7 +85,7 @@ const PreComponent = ({ className, ...props }) =>
         Dialog,
         DialogOverlay,
         DialogContent,
-        Transition,
+        useTransition,
         Phased,
         Alert,
         AlertDialog,
@@ -89,6 +98,11 @@ const PreComponent = ({ className, ...props }) =>
         Tab,
         TabPanels,
         TabPanel,
+        Slider,
+        SliderTrack,
+        SliderTrackHighlight,
+        SliderHandle,
+        SliderMarker,
         useId,
         Tooltip,
         TooltipPopup,

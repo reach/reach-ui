@@ -483,44 +483,40 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 
 ```.jsx
 function Example(props) {
+  const AnimatedDialogOverlay = animated(DialogOverlay);
+  const AnimatedDialogContent = animated(DialogContent);
   const [showDialog, setShowDialog] = React.useState(false);
-  const buttonRef = React.useRef();
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-
+  const transitions = useTransition(showDialog, null, {
+    from: { opacity: 0, y: -10 },
+    enter: { opacity: 1, y: 0 },
+    leave: { opacity: 0, y: 10 },
+  });
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
-
-      <Transition
-        from={{ opacity: 0, y: -10 }}
-        enter={{ opacity: 1, y: 0 }}
-        leave={{ opacity: 0, y: 10 }}
-      >
-        {showDialog &&
-          (styles => (
-            <DialogOverlay
-              style={{ opacity: styles.opacity }}
-              onDismiss={close}
-            >
-              <DialogContent
+      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+      {transitions.map(
+        ({ item, key, props: styles }) =>
+          item && (
+            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+              <AnimatedDialogContent
                 style={{
                   transform: `translate3d(0px, ${styles.y}px, 0px)`,
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10,
+                  borderRadius: 10
                 }}
               >
-                <button onClick={close}>
+                <button onClick={() => setShowDialog(false)}>
                   Close Dialog
                 </button>
                 <p>React Spring makes it too easy!</p>
+                <input type="text" />
+                <br />
+                <input type="text" />
                 <button>Ayyyyyy</button>
-              </DialogContent>
-            </DialogOverlay>
-          ))}
-      </Transition>
+              </AnimatedDialogContent>
+            </AnimatedDialogOverlay>
+          )
+      )}
     </div>
   );
 }
