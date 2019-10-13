@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 import React from "react"
 import PropTypes from "prop-types"
 import Helmet from "react-helmet"
@@ -43,6 +44,22 @@ let Bar = () => (
       background: "white",
       margin: "3px 0",
     }}
+  />
+)
+
+let NavTag = props => (
+  <span
+    style={{
+      fontSize: 13,
+      letterSpacing: 1.2,
+      textTransform: "uppercase",
+      padding: `0 0.25em`,
+      marginLeft: "0.5em",
+      display: "inlineBlock",
+      background: `rgba(255,255,255,0.15)`,
+      borderRadius: 3,
+    }}
+    {...props}
   />
 )
 
@@ -159,7 +176,14 @@ let Nav = ({ media }) => (
               <NavLink to="/combobox">Combobox</NavLink>
               <NavLink to="/dialog">Dialog (Modal)</NavLink>
               <NavLink to="/menu-button">MenuButton (Dropdown)</NavLink>
+              <NavLink to="/portal">Portal</NavLink>
               <NavLink to="/skip-nav">SkipNav</NavLink>
+              <NavLink to="/slider">
+                Slider{" "}
+                <NavTag>
+                  <VisuallyHidden>Currently in </VisuallyHidden>Beta
+                </NavTag>
+              </NavLink>
               <NavLink to="/tabs">Tabs</NavLink>
               <NavLink to="/tooltip">Tooltip</NavLink>
               <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
@@ -180,7 +204,7 @@ let Nav = ({ media }) => (
                 padding: 5,
               }}
             >
-              &copy; 2018 Reach
+              &copy; {new Date().getFullYear()} Reach
             </footer>
           </div>
         </div>

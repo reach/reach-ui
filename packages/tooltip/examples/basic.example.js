@@ -6,10 +6,11 @@ import Tooltip from "../src/index";
 export const name = "Basic";
 
 export function Example() {
+  const coolRef = React.useRef();
   return (
     <div>
       <Tooltip label="Notifications">
-        <button style={{ fontSize: 25 }}>
+        <button style={{ fontSize: 25 }} ref={coolRef}>
           <span aria-hidden>🔔</span>
         </button>
       </Tooltip>
