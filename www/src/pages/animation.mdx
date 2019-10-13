@@ -104,29 +104,31 @@ Now we're ready to go:
 ## React Spring
 
 ```jsx
-<Component initialState={{ showDialog: false }}>
-  {({ state, setState }) => (
-    <div>
-      <button onClick={() => setState({ showDialog: true })}>
-        Show Dialog
-      </button>
+let AnimatedDialogOverlay = animated(DialogOverlay)
+let AnimatedDialogContent = animated(DialogContent)
 
-      <Transition
-        from={{ opacity: 0, y: -10 }}
-        enter={{ opacity: 1, y: 0 }}
-        leave={{ opacity: 0, y: 10 }}
-      >
-        {state.showDialog &&
-          (styles => (
-            <DialogOverlay style={{ opacity: styles.opacity }}>
-              <DialogContent
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false)
+  const transitions = useTransition(showDialog, null, {
+    from: { opacity: 0, y: -10 },
+    enter: { opacity: 1, y: 0 },
+    leave: { opacity: 0, y: 10 },
+  })
+  return (
+    <div>
+      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+      {transitions.map(
+        ({ item, key, props: styles }) =>
+          item && (
+            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+              <AnimatedDialogContent
                 style={{
                   transform: `translate3d(0px, ${styles.y}px, 0px)`,
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10,
                 }}
               >
-                <button onClick={() => setState({ showDialog: false })}>
+                <button onClick={() => setShowDialog(false)}>
                   Close Dialog
                 </button>
                 <p>React Spring makes it too easy!</p>
@@ -134,11 +136,11 @@ Now we're ready to go:
                 <br />
                 <input type="text" />
                 <button>Ayyyyyy</button>
-              </DialogContent>
-            </DialogOverlay>
-          ))}
-      </Transition>
+              </AnimatedDialogContent>
+            </AnimatedDialogOverlay>
+          )
+      )}
     </div>
-  )}
-</Component>
+  )
+}
 ```
