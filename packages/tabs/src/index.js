@@ -180,6 +180,9 @@ export const Tab = forwardRef(function Tab(
   forwardedRef
 ) {
   const { isSelected, _userInteractedRef, _onSelect, _id, ...htmlProps } = rest;
+  const htmlType =
+    Comp === "button" && htmlProps.type == null ? "button" : undefined;
+  console.log({ Comp, htmlType });
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
@@ -203,6 +206,7 @@ export const Tab = forwardRef(function Tab(
       data-selected={isSelected ? "" : undefined}
       onClick={_onSelect}
       children={children}
+      type={htmlType}
       {...htmlProps}
     />
   );
