@@ -10,13 +10,18 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog1(true)}>Show Dialog</button>
-      <Dialog onDismiss={() => setShowDialog1(false)} isOpen={showDialog1}>
+      <Dialog
+        accessibilityLabel="Announcement"
+        onDismiss={() => setShowDialog1(false)}
+        isOpen={showDialog1}
+      >
         <div>
           <button onClick={() => setShowDialog2(true)}>
             Show Another Dialog
           </button>
           <p>You can never have too many design escape hatches</p>
           <Dialog
+            accessibilityLabel="A second announcement"
             style={{ position: "relative", left: 20, top: 20 }}
             onDismiss={() => setShowDialog2(false)}
             isOpen={showDialog2}

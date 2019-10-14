@@ -3,10 +3,11 @@ import Portal from "@reach/portal";
 import { checkStyles, wrapEvent, assignRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import { func, bool } from "prop-types";
+import { string, func, bool } from "prop-types";
 
 const noop = () => {};
 
+////////////////////////////////////////////////////////////////////////////////
 export const DialogOverlay = React.forwardRef(function DialogOverlay(
   { isOpen = true, ...props },
   forwardedRef
@@ -28,9 +29,11 @@ if (__DEV__) {
   DialogOverlay.propTypes = {
     initialFocusRef: () => {}
   };
+  DialogOverlay.displayName = "DialogOverlay";
 }
 
-const DialogInner = React.forwardRef(function DialogPortal(
+////////////////////////////////////////////////////////////////////////////////
+const DialogInner = React.forwardRef(function DialogInner(
   {
     initialFocusRef,
     onClick,
@@ -83,13 +86,20 @@ const DialogInner = React.forwardRef(function DialogPortal(
   );
 });
 
+if (__DEV__) {
+  DialogOverlay.displayName = "DialogOverlay";
+}
+
+////////////////////////////////////////////////////////////////////////////////
 export const DialogContent = React.forwardRef(function DialogContent(
-  { onClick, onKeyDown, ...props },
+  { accessibilityLabel, onClick, onKeyDown, ...props },
   forwardedRef
 ) {
   return (
     <div
+      role="dialog"
       aria-modal="true"
+      aria-label={accessibilityLabel}
       data-reach-dialog-content
       tabIndex="-1"
       onClick={wrapEvent(onClick, event => {
@@ -101,6 +111,15 @@ export const DialogContent = React.forwardRef(function DialogContent(
   );
 });
 
+if (__DEV__) {
+  DialogContent.propTypes = {
+    accessibilityLabel: validateAriaLabel,
+    "aria-labelledby": validateAriaLabel
+  };
+  DialogContent.displayName = "DialogContent";
+}
+
+////////////////////////////////////////////////////////////////////////////////
 export const Dialog = React.forwardRef(function Dialog(
   { isOpen, onDismiss = noop, initialFocusRef, ...props },
   forwardedRef
@@ -121,10 +140,14 @@ export const Dialog = React.forwardRef(function Dialog(
 if (__DEV__) {
   Dialog.propTypes = {
     isOpen: bool,
-    onDismiss: func
+    onDismiss: func,
+    accessibilityLabel: validateAriaLabel,
+    "aria-labelledby": validateAriaLabel
   };
+  Dialog.displayName = "Dialog";
 }
 
+////////////////////////////////////////////////////////////////////////////////
 function createAriaHider(dialogNode) {
   let originalValues = [];
   let rootNodes = [];
@@ -178,4 +201,28 @@ function useForkedRef(...refs) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
+}
+
+function validateAriaLabel(props, name, compName, ...rest) {
+  const details =
+    "\nSee https://www.w3.org/TR/wai-aria/#aria-label for details.";
+  if (!props.accessibilityLabel && !props["aria-labelledby"]) {
+    return new Error(
+      "You must provide either an `accessibilityLabel` prop or an `aria-labelledby` prop to the `" +
+        compName +
+        "` component." +
+        details
+    );
+  }
+  if (props.accessibilityLabel && props["aria-labelledby"]) {
+    return new Error(
+      "You provided both `accessibilityLabel` and `aria-labelledby` props to the `" +
+        compName +
+        "` component. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into `" +
+        compName +
+        "`. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `accessibilityLabel` prop, which will be used as an `aria-label` on the HTML tag." +
+        details
+    );
+  }
+  return string(name, props, compName, ...rest);
 }

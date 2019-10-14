@@ -26,7 +26,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
+      <Dialog
+        accessibilityLabel="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <p>
           The root node should have aria-hidden="true" set when opened and unset
           when closed.

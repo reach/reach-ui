@@ -9,7 +9,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
+      <Dialog
+        accessibilityLabel="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>This is killer!</p>
         <input type="text" />

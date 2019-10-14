@@ -36,7 +36,7 @@ export let Example = () => {
         </button>
       )}
 
-      <Dialog isOpen={phase === 2}>
+      <Dialog accessibilityLabel="Announcement" isOpen={phase === 2}>
         <button ref={closeButton} onClick={() => setPhase(3)}>
           Close Dialog
         </button>
