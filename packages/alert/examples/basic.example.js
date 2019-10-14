@@ -95,18 +95,24 @@ function reducer(state = {}, action) {
   }
 }
 
-function useMessageTimeout(messages, callback) {
-  const timeout = React.useRef(null);
+function useMessageTimeout(messages, callback, time = 5000) {
+  const timeouts = React.useRef([]);
   const lastMessageCount = usePrevious(messages.length);
   React.useEffect(() => {
     if (messages.length && lastMessageCount < messages.length) {
-      timeout.current = setTimeout(callback, 5000);
+      timeouts.current.push(setTimeout(callback, time));
     }
-  }, [messages, lastMessageCount, callback]);
+  }, [messages, lastMessageCount, callback, time]);
 
-  React.useEffect(() => clearTimeout(timeout.current), []);
+  React.useEffect(() => {
+    const allTimeouts = timeouts.current;
+    return () => {
+      allTimeouts.forEach(clearTimeout);
+    };
+  }, []);
 }
 
+// TODO: Move to @reach/utils
 function usePrevious(value) {
   const ref = React.useRef();
   React.useEffect(() => {
