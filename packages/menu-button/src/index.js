@@ -135,7 +135,7 @@ const MenuButton = React.forwardRef(
             data-reach-menu-button
             type="button"
             ref={node => {
-              rectRef(node);
+              assignRef(rectRef, node);
               assignRef(ref, node);
               refs.button = node;
             }}
