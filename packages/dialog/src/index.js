@@ -24,9 +24,11 @@ export const DialogOverlay = React.forwardRef(function DialogOverlay(
   ) : null;
 });
 
-DialogOverlay.propTypes = {
-  initialFocusRef: () => {}
-};
+if (__DEV__) {
+  DialogOverlay.propTypes = {
+    initialFocusRef: () => {}
+  };
+}
 
 const DialogInner = React.forwardRef(function DialogPortal(
   {
@@ -116,10 +118,12 @@ export const Dialog = React.forwardRef(function Dialog(
   );
 });
 
-Dialog.propTypes = {
-  isOpen: bool,
-  onDismiss: func
-};
+if (__DEV__) {
+  Dialog.propTypes = {
+    isOpen: bool,
+    onDismiss: func
+  };
+}
 
 function createAriaHider(dialogNode) {
   let originalValues = [];
