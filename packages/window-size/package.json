@@ -15,7 +15,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "Ryan Florence <@ryanflorence>",
+  "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "files": [
     "es",
