@@ -1,7 +1,8 @@
 import React from "react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
-import "../styles.css";
 import { Dialog } from "@reach/dialog";
+import { action } from "@storybook/addon-actions";
+import "../styles.css";
 
 export let name = "Dropdown";
 
@@ -15,9 +16,9 @@ export let Example = () => {
         <Menu>
           <MenuButton>Dropdown</MenuButton>
           <MenuList>
-            <MenuItem>Test</MenuItem>
-            <MenuItem>Test</MenuItem>
-            <MenuItem>Test</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test</MenuItem>
           </MenuList>
         </Menu>
       </Dialog>
