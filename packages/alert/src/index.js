@@ -11,7 +11,7 @@
 // see how this goes, and if it becomes a problem, we can introduce a portal
 // later.
 
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
 import { node, string } from "prop-types";
@@ -33,19 +33,25 @@ let liveRegions = {
   assertive: null
 };
 
-const Alert = ({ children, type = "polite", ...props }) => {
+const Alert = forwardRef(function Alert(
+  { children, type = "polite", ...props },
+  forwardedRef
+) {
+  const ownRef = useRef(null);
+  const ref = forwardedRef || ownRef;
   const child = useMemo(
     () => (
-      <div {...props} data-reach-alert>
+      <div {...props} ref={ref} data-reach-alert>
         {children}
       </div>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [children, props]
   );
   useMirrorEffects(type, child);
 
   return child;
-};
+});
 
 if (__DEV__) {
   Alert.propTypes = {
@@ -72,7 +78,8 @@ function renderAlerts() {
             >
               {Object.keys(elements[type]).map(key =>
                 React.cloneElement(elements[type][key], {
-                  key
+                  key,
+                  ref: null
                 })
               )}
             </div>
