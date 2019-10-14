@@ -1,7 +1,13 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuList, MenuLink, MenuButton, MenuItem } from "../src/index";
+import {
+  Menu,
+  MenuList,
+  MenuLink,
+  MenuButton,
+  MenuItem
+} from "@reach/menu-button";
 
 export let name = "Long Text";
 

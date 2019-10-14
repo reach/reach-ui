@@ -2,7 +2,7 @@ import React from "react";
 import Component from "@reach/component-component";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Dialog } from "../src/index";
+import { Dialog } from "@reach/dialog";
 
 export let name = "Aria Hides Content";
 

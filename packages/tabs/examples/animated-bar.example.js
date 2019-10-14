@@ -6,8 +6,8 @@ import React, {
   createContext
 } from "react";
 import "../styles.css";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "../src";
-import { useRect } from "../../rect/src";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import { useRect } from "@reach/rect";
 
 export const name = "Animated Bar";
 

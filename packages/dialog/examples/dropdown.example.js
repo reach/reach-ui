@@ -1,8 +1,8 @@
 import React from "react";
 import Component from "@reach/component-component";
-import { Menu, MenuButton, MenuList, MenuItem } from "../../menu-button";
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
 import "../styles.css";
-import { Dialog } from "../src/index";
+import { Dialog } from "@reach/dialog";
 
 export let name = "Dropdown";
 
