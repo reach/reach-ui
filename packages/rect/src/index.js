@@ -1,53 +1,12 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
-import Component from "@reach/component-component";
 import observeRect from "@reach/observe-rect";
 import { func, bool } from "prop-types";
 
-let render = ({ refs, props: { children }, state: { rect } }) =>
-  children({ ref: node => (refs.node = node), rect });
-
-let didMount = ({ setState, refs, props }) => {
-  if (!refs.node) {
-    console.warn("You need to place the ref");
-    return;
-  }
-  refs.observer = observeRect(refs.node, rect => {
-    props.onChange && props.onChange(rect);
-    setState({ rect });
-  });
-  if (props.observe) {
-    refs.observer.observe();
-  }
+let Rect = ({ onChange, observe, children }) => {
+  const ref = React.useRef(null);
+  const rect = useRect(ref, observe, onChange);
+  return children({ ref, rect });
 };
-
-let didUpdate = ({ refs, props, prevProps }) => {
-  if (props.observe && !prevProps.observe) {
-    refs.observer.observe();
-  } else if (!props.observe && prevProps.observe) {
-    refs.observer.unobserve();
-  }
-};
-
-let willUnmount = ({ refs }) => {
-  refs.observer.unobserve();
-};
-
-let Rect = props => (
-  <Component
-    {...props}
-    refs={{
-      node: undefined,
-      observer: undefined
-    }}
-    initialState={{
-      rect: undefined
-    }}
-    didMount={didMount}
-    didUpdate={didUpdate}
-    willUnmount={willUnmount}
-    render={render}
-  />
-);
 
 Rect.defaultProps = {
   observe: true
@@ -61,19 +20,30 @@ if (__DEV__) {
   };
 }
 
-export function useRect(nodeRef, observe = true) {
+export function useRect(nodeRef, observe = true, onChange) {
   let [rect, setRect] = useState(null);
   let observerRef = useRef(null);
   useLayoutEffect(() => {
+    const cleanup = () => {
+      observerRef.current && observerRef.current.unobserve();
+    };
+
+    if (!nodeRef.current) {
+      console.warn("You need to place the ref");
+      return cleanup;
+    }
+
     if (!observerRef.current && nodeRef.current) {
-      observerRef.current = observeRect(nodeRef.current, setRect);
+      observerRef.current = observeRect(nodeRef.current, rect => {
+        onChange && onChange(rect);
+        setRect(rect);
+      });
     }
-    if (observe) {
-      observerRef.current.observe();
-    }
-    return () => observerRef.current.unobserve();
+
+    observe && observerRef.current.observe();
+    return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observe]);
+  }, [observe, onChange]);
   return rect;
 }
 
