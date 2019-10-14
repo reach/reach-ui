@@ -6,7 +6,7 @@ import {
   SliderMarker,
   SliderTrack,
   SliderTrackHighlight
-} from "../src";
+} from "@reach/slider";
 
 export const name = "Vertical";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles.css";
-import { Dialog } from "../src/index";
+import { Dialog } from "@reach/dialog";
 
 export let name = "Autofocus";
 

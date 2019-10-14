@@ -1,5 +1,5 @@
 import React from "react";
-import WindowSize from "../src/index";
+import WindowSize from "@reach/window-size";
 
 export let name = "Basic";
 

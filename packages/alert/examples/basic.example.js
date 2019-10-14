@@ -1,6 +1,6 @@
 import React from "react";
-import Alert from "../src/index";
-import VisuallyHidden from "../../visually-hidden/src";
+import Alert from "@reach/alert";
+import VisuallyHidden from "@reach/visually-hidden";
 import LoremIpsum from "./LoremIpsum";
 
 export let name = "Basic";
