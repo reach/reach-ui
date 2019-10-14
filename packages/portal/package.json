@@ -8,7 +8,9 @@
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@reach/component-component": "^0.4.0-beta.0"
+  },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
