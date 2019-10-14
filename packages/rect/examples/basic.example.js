@@ -1,5 +1,5 @@
 import React from "react";
-import Rect from "../src/index";
+import Rect from "@reach/rect";
 
 export let name = "Basic";
 

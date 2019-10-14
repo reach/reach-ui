@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import "../styles.css";
 import React, { Fragment, cloneElement } from "react";
-import { useTooltip, TooltipPopup } from "../src/index";
+import { useTooltip, TooltipPopup } from "@reach/tooltip";
 // https://github.com/react-spring/react-spring/issues/552#issuecomment-464680114
 import { useTransition, animated } from "react-spring/web.cjs";
 

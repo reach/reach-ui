@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import Popover, { positionDefault, positionMatchWidth } from "../src/index";
+import Popover, { positionDefault, positionMatchWidth } from "@reach/popover";
 
 export let name = "Basic";
 

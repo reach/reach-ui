@@ -5,7 +5,7 @@ import {
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
-} from "../src";
+} from "@reach/slider";
 
 export const name = "Contained Handle";
 
