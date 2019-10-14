@@ -3,7 +3,7 @@ import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 
-export let name = "Render Callback";
+export let name = "Render Prop";
 
 export let Example = () => (
   <Menu>
