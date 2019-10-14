@@ -334,23 +334,26 @@ export const Slider = forwardRef(function Slider(
 });
 
 Slider.displayName = "Slider";
-Slider.propTypes = {
-  defaultValue: number,
-  disabled: bool,
-  getValueText: func,
-  handleAlignment: oneOf([HandleAlignment.center, HandleAlignment.contain]),
-  min: number,
-  max: number,
-  name: string,
-  orientation: oneOf([
-    SliderOrientation.horizontal,
-    SliderOrientation.vertical
-  ]),
-  onChange: func,
-  children: oneOfType([node, func]).isRequired,
-  step: number,
-  value: number
-};
+
+if (__DEV__) {
+  Slider.propTypes = {
+    defaultValue: number,
+    disabled: bool,
+    getValueText: func,
+    handleAlignment: oneOf([HandleAlignment.center, HandleAlignment.contain]),
+    min: number,
+    max: number,
+    name: string,
+    orientation: oneOf([
+      SliderOrientation.horizontal,
+      SliderOrientation.vertical
+    ]),
+    onChange: func,
+    children: oneOfType([node, func]).isRequired,
+    step: number,
+    value: number
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderTrack = forwardRef(function SliderTrack(
@@ -380,9 +383,12 @@ export const SliderTrack = forwardRef(function SliderTrack(
 });
 
 SliderTrack.displayName = "SliderTrack";
-SliderTrack.propTypes = {
-  children: node.isRequired
-};
+
+if (__DEV__) {
+  SliderTrack.propTypes = {
+    children: node.isRequired
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
@@ -408,7 +414,10 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
 });
 
 SliderTrackHighlight.displayName = "SliderTrackHighlight";
-SliderTrackHighlight.propTypes = {};
+
+if (__DEV__) {
+  SliderTrackHighlight.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderHandle = forwardRef(function SliderHandle(
@@ -477,7 +486,10 @@ export const SliderHandle = forwardRef(function SliderHandle(
 });
 
 SliderHandle.displayName = "SliderHandle";
-SliderHandle.propTypes = {};
+
+if (__DEV__) {
+  SliderHandle.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderMarker = forwardRef(function SliderMarker(
@@ -524,9 +536,12 @@ export const SliderMarker = forwardRef(function SliderMarker(
 });
 
 SliderMarker.displayName = "SliderMarker";
-SliderMarker.propTypes = {
-  value: number.isRequired
-};
+
+if (__DEV__) {
+  SliderMarker.propTypes = {
+    value: number.isRequired
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export function valueToPercent(value, min, max) {
