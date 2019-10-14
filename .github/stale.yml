@@ -4,7 +4,6 @@ daysUntilStale: 30
 daysUntilClose: 60
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - potential-bug
   - bug
   - RFC
   - in-progress
