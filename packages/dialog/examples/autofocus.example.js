@@ -1,28 +1,19 @@
 import React from "react";
-import Component from "@reach/component-component";
 import "../styles.css";
 import { Dialog } from "@reach/dialog";
 
 export let name = "Autofocus";
 
-export let Example = () => (
-  <Component
-    initialState={{ showDialog: false }}
-    refs={{ button: React.createRef() }}
-  >
-    {({ state, setState, refs }) => (
-      <div>
-        <button onClick={() => setState({ showDialog: true })}>
-          Show Dialog
-        </button>
-
-        <Dialog isOpen={state.showDialog} initialFocusRef={refs.button}>
-          <button onClick={() => setState({ showDialog: false })}>
-            Close Dialog
-          </button>
-          <button ref={refs.button}>Auto focused</button>
-        </Dialog>
-      </div>
-    )}
-  </Component>
-);
+export let Example = () => {
+  const [showDialog, setShowDialog] = React.useState(false);
+  const button = React.useRef(null);
+  return (
+    <div>
+      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+      <Dialog isOpen={showDialog} initialFocusRef={button}>
+        <button onClick={() => setShowDialog(false)}>Close Dialog</button>
+        <button ref={button}>Auto focused</button>
+      </Dialog>
+    </div>
+  );
+};

@@ -8,7 +8,7 @@
     "build": "node ../../shared/build-package",
     "lint": "eslint . --max-warnings=0"
   },
-  "author": "Ryan Florence <@ryanflorence>",
+  "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.7.2"

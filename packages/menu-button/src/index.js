@@ -191,8 +191,9 @@ const MenuItem = React.forwardRef(
       _ref,
       ...rest
     },
-    ref
+    forwardedRef
   ) => {
+    const ref = useForkedRef(forwardedRef, _ref);
     const isSelected = index === state.selectionIndex;
     const select = () => {
       onSelect();
@@ -201,10 +202,7 @@ const MenuItem = React.forwardRef(
     return (
       <div
         {...rest}
-        ref={node => {
-          assignRef(ref, node);
-          assignRef(_ref, node);
-        }}
+        ref={ref}
         data-reach-menu-item={role === "menuitem" ? true : undefined}
         role={role}
         tabIndex="-1"
@@ -263,9 +261,10 @@ const MenuLink = React.forwardRef(
       _ref,
       ...props
     },
-    ref
+    forwardedRef
   ) => {
     const Link = Comp || AsComp;
+    const ref = useForkedRef(_ref, forwardedRef);
     if (Comp) {
       console.warn(
         "[@reach/menu-button]: Please use the `as` prop instead of `component`."
@@ -295,10 +294,7 @@ const MenuLink = React.forwardRef(
               event.stopPropagation();
             }
           })}
-          ref={node => {
-            assignRef(_ref, node);
-            assignRef(ref, node);
-          }}
+          ref={ref}
           style={{ ...style }}
           {...props}
         />
@@ -489,3 +485,18 @@ const getStyles = (buttonRect, menuRect) => {
 };
 
 export { Menu, MenuList, MenuButton, MenuLink, MenuItem };
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(...refs) {
+  return React.useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
+}
