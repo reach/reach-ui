@@ -47,9 +47,10 @@ const DialogInner = React.forwardRef(function DialogPortal(
 
   return (
     <FocusLock
+      autoFocus
       returnFocus
       onActivation={() => {
-        if (initialFocusRef) {
+        if (initialFocusRef && initialFocusRef.current) {
           initialFocusRef.current.focus();
         }
       }}
@@ -98,22 +99,22 @@ export const DialogContent = React.forwardRef(function DialogContent(
   );
 });
 
-export const Dialog = ({
-  isOpen,
-  onDismiss = noop,
-  initialFocusRef,
-  ...props
-}) => {
+export const Dialog = React.forwardRef(function Dialog(
+  { isOpen, onDismiss = noop, initialFocusRef, ...props },
+  forwardedRef
+) {
+  const ownRef = React.useRef(null);
+  const ref = forwardedRef || ownRef;
   return (
     <DialogOverlay
       isOpen={isOpen}
       onDismiss={onDismiss}
       initialFocusRef={initialFocusRef}
     >
-      <DialogContent {...props} />
+      <DialogContent ref={ref} {...props} />
     </DialogOverlay>
   );
-};
+});
 
 Dialog.propTypes = {
   isOpen: bool,
