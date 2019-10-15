@@ -30,6 +30,7 @@
     "src",
     "lib",
     "index.js",
+    "index.d.ts",
     "styles.css"
   ]
 }

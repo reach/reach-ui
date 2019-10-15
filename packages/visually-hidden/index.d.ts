@@ -1,5 +1,7 @@
 declare module "@reach/visually-hidden" {
-  const VisuallyHidden: React.FunctionComponent;
-
+  import * as React from "react";
+  const VisuallyHidden: React.FunctionComponent<
+    React.HTMLProps<HTMLDivElement>
+  >;
   export default VisuallyHidden;
 }
