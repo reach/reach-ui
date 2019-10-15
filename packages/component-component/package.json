@@ -18,8 +18,8 @@
     "react-dom": "^16.4.0"
   },
   "devDependencies": {
-    "react": "^16.8.0",
-    "react-test-renderer": "^16.8.0"
+    "react": "^16.10.2",
+    "react-test-renderer": "^16.10.2"
   },
   "files": [
     "es",
