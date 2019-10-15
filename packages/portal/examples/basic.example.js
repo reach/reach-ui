@@ -1,5 +1,5 @@
 import React from "react";
-import Portal from "../src/index";
+import Portal from "@reach/portal";
 
 export let name = "Basic";
 

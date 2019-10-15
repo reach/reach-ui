@@ -6,7 +6,7 @@ import {
   SliderMarker,
   SliderTrack,
   SliderTrackHighlight
-} from "../src";
+} from "@reach/slider";
 
 export const name = "With Steps";
 
@@ -16,6 +16,7 @@ export const Example = () => {
   const max = 120;
   const range = max - min;
   const steps = Array.from(Array(range / step + 1).keys());
+
   return (
     <Slider step={step} min={min} max={max}>
       <SliderTrack>

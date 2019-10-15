@@ -1,13 +1,13 @@
 import React from "react";
-import { useTooltip, TooltipPopup } from "../../tooltip/src";
-import { wrapEvent } from "../../utils/src";
+import { useTooltip, TooltipPopup } from "@reach/tooltip";
+import { wrapEvent } from "@reach/utils";
 import "../styles.css";
 import {
   Slider,
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
-} from "../src";
+} from "@reach/slider";
 
 export const name = "With Tooltip";
 

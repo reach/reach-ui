@@ -1,34 +1,22 @@
 import React from "react";
-import Component from "@reach/component-component";
 import "../styles.css";
-import { Dialog } from "../src/index";
+import { Dialog } from "@reach/dialog";
 
 export let name = "Dismiss";
 
-export let Example = () => (
-  <Component initialState={{ showDialog: false }}>
-    {({ state, setState }) => (
-      <div>
-        <button onClick={() => setState({ showDialog: true })}>
-          Show Dialog
-        </button>
-
-        <Dialog
-          isOpen={state.showDialog}
-          onDismiss={() => {
-            setState({ showDialog: false });
-          }}
-        >
-          <button onClick={() => setState({ showDialog: false })}>
-            Close Dialog
-          </button>
-          <p>This is killer!</p>
-          <input type="text" />
-          <br />
-          <input type="text" />
-          <button>Ayyyyyy</button>
-        </Dialog>
-      </div>
-    )}
-  </Component>
-);
+export let Example = () => {
+  const [showDialog, setShowDialog] = React.useState(false);
+  return (
+    <div>
+      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+      <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
+        <button onClick={() => setShowDialog(false)}>Close Dialog</button>
+        <p>This is killer!</p>
+        <input type="text" />
+        <br />
+        <input type="text" />
+        <button>Ayyyyyy</button>
+      </Dialog>
+    </div>
+  );
+};

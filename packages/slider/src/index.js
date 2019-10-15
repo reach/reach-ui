@@ -13,7 +13,7 @@ import React, {
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, assignRef } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -29,18 +29,14 @@ import { wrapEvent } from "@reach/utils";
 //    our slider on par. We'll explore animated and multi-handle sliders next.
 //  - We may want to research some use cases for reversed sliders in RTL languages if that's a thing
 
-const SliderOrientation = {
-  horizontal: "horizontal",
-  vertical: "vertical"
-};
+export const SliderOrientationHorizontal = "horizontal";
+export const SliderOrientationVertical = "vertical";
 
-const HandleAlignment = {
-  // Handle is centered directly over the current value marker
-  center: "center",
-  // Handle is contained within the bounds of the track, offset slightlu from the value's
-  // center mark to accommodate
-  contain: "contain"
-};
+// Handle is centered directly over the current value marker
+export const SliderHandleAlignCenter = "center";
+// Handle is contained within the bounds of the track, offset
+// slightly from the value's center mark to accommodate
+export const SliderHandleAlignContain = "contain";
 
 const SliderContext = createContext({});
 const useSliderContext = () => useContext(SliderContext);
@@ -55,7 +51,7 @@ export const Slider = forwardRef(function Slider(
     disabled,
     value: controlledValue,
     getValueText,
-    handleAlignment = HandleAlignment.center,
+    handleAlignment = SliderHandleAlignCenter,
     id,
     max = 100,
     min = 0,
@@ -65,7 +61,7 @@ export const Slider = forwardRef(function Slider(
     onPointerDown,
     onPointerMove,
     onPointerUp,
-    orientation = SliderOrientation.horizontal,
+    orientation = SliderOrientationHorizontal,
     step: stepProp,
     children,
     ...rest
@@ -101,7 +97,7 @@ export const Slider = forwardRef(function Slider(
   const _value = isControlled ? controlledValue : value;
   const actualValue = getAllowedValue(_value, min, max);
   const trackPercent = valueToPercent(actualValue, min, max);
-  const isVertical = orientation === SliderOrientation.vertical;
+  const isVertical = orientation === SliderOrientationVertical;
   const step = stepProp || 1;
 
   const handleSize = isVertical
@@ -109,7 +105,7 @@ export const Slider = forwardRef(function Slider(
     : handleDimensions.width;
 
   const handlePosition = `calc(${trackPercent}% - ${
-    handleAlignment === HandleAlignment.center
+    handleAlignment === SliderHandleAlignCenter
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
@@ -334,23 +330,26 @@ export const Slider = forwardRef(function Slider(
 });
 
 Slider.displayName = "Slider";
-Slider.propTypes = {
-  defaultValue: number,
-  disabled: bool,
-  getValueText: func,
-  handleAlignment: oneOf([HandleAlignment.center, HandleAlignment.contain]),
-  min: number,
-  max: number,
-  name: string,
-  orientation: oneOf([
-    SliderOrientation.horizontal,
-    SliderOrientation.vertical
-  ]),
-  onChange: func,
-  children: oneOfType([node, func]).isRequired,
-  step: number,
-  value: number
-};
+
+if (__DEV__) {
+  Slider.propTypes = {
+    defaultValue: number,
+    disabled: bool,
+    getValueText: func,
+    handleAlignment: oneOf([SliderHandleAlignCenter, SliderHandleAlignContain]),
+    min: number,
+    max: number,
+    name: string,
+    orientation: oneOf([
+      SliderOrientationHorizontal,
+      SliderOrientationVertical
+    ]),
+    onChange: func,
+    children: oneOfType([node, func]).isRequired,
+    step: number,
+    value: number
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderTrack = forwardRef(function SliderTrack(
@@ -360,7 +359,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
   const { disabled, orientation, trackRef } = useSliderContext();
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualRef = useForkRef(ref, trackRef);
+  const actualRef = useForkedRef(ref, trackRef);
 
   const dataAttributes = makeDataAttributes("slider-track", {
     orientation,
@@ -380,9 +379,12 @@ export const SliderTrack = forwardRef(function SliderTrack(
 });
 
 SliderTrack.displayName = "SliderTrack";
-SliderTrack.propTypes = {
-  children: node.isRequired
-};
+
+if (__DEV__) {
+  SliderTrack.propTypes = {
+    children: node.isRequired
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
@@ -408,7 +410,10 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
 });
 
 SliderTrackHighlight.displayName = "SliderTrackHighlight";
-SliderTrackHighlight.propTypes = {};
+
+if (__DEV__) {
+  SliderTrackHighlight.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderHandle = forwardRef(function SliderHandle(
@@ -440,7 +445,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualRef = useForkRef(ref, handleRef);
+  const actualRef = useForkedRef(ref, handleRef);
   const dataAttributes = makeDataAttributes("slider-handle", {
     orientation,
     disabled
@@ -477,7 +482,10 @@ export const SliderHandle = forwardRef(function SliderHandle(
 });
 
 SliderHandle.displayName = "SliderHandle";
-SliderHandle.propTypes = {};
+
+if (__DEV__) {
+  SliderHandle.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderMarker = forwardRef(function SliderMarker(
@@ -524,9 +532,12 @@ export const SliderMarker = forwardRef(function SliderMarker(
 });
 
 SliderMarker.displayName = "SliderMarker";
-SliderMarker.propTypes = {
-  value: number.isRequired
-};
+
+if (__DEV__) {
+  SliderMarker.propTypes = {
+    value: number.isRequired
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 export function valueToPercent(value, min, max) {
@@ -567,48 +578,6 @@ export function makeId(id, index) {
   return `${id}:${index}`;
 }
 
-// https://github.com/chakra-ui/chakra-ui/blob/master/packages/chakra-ui/src/utils/index.js#L9
-export function assignRef(ref, value) {
-  if (ref == null) return;
-  if (typeof ref === "function") {
-    ref(value);
-  } else {
-    try {
-      ref.current = value;
-    } catch (error) {
-      throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
-    }
-  }
-}
-
-// https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/utils/useForkRef.js
-export function useForkRef(refA, refB) {
-  /**
-   * This will create a new function if the ref props change and are defined.
-   * This means React will call the old forkRef with `null` and the new forkRef
-   * with the ref. Cleanup naturally emerges from this behavior.
-   */
-  const ref = React.useMemo(() => {
-    if (refA == null && refB == null) {
-      return null;
-    }
-    return refValue => {
-      setRef(refA, refValue);
-      setRef(refB, refValue);
-    };
-  }, [refA, refB]);
-
-  function setRef(ref, value) {
-    if (typeof ref === "function") {
-      ref(value);
-    } else if (ref) {
-      ref.current = value;
-    }
-  }
-
-  return ref;
-}
-
 export function useDimensions(passedRef) {
   const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
@@ -635,4 +604,19 @@ export function useDimensions(passedRef) {
     }
   }, [ref, width, height]);
   return { ref, width, height };
+}
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(...refs) {
+  return React.useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }

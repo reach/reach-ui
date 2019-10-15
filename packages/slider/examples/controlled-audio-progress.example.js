@@ -5,7 +5,7 @@ import {
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
-} from "../src";
+} from "@reach/slider";
 import { useAudio, timeToMs, msToTime } from "./utils";
 
 export const name = "Audio Progress";

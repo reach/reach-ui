@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useRect } from "../src/index";
+import { useRect } from "@reach/rect";
 
 export const name = "useRect";
 

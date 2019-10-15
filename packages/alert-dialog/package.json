@@ -2,7 +2,7 @@
   "name": "@reach/alert-dialog",
   "version": "0.4.0-beta.0",
   "description": "Accessible React Alert Dialog.",
-  "author": "Ryan Florence <@ryanflorence>",
+  "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "index.js",
   "module": "es/index.js",
@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.4.0-beta.0",
-    "@reach/component-component": "^0.4.0-beta.0",
     "@reach/dialog": "^0.4.0-beta.0",
     "@reach/utils": "^0.4.0-beta.0",
     "invariant": "^2.2.4",
@@ -31,6 +30,7 @@
     "src",
     "lib",
     "index.js",
+    "index.d.ts",
     "styles.css"
   ]
 }
