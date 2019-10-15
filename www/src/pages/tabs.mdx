@@ -1,7 +1,4 @@
-import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
-
-const data = useStaticQuery(graphql`query HeaderQuery { site { siteMetadata { title } } }`)
+import Helmet from "../components/DefaultHelmet"
 
 <Helmet
   title="Reach UI - Tabs"
