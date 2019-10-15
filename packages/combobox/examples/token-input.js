@@ -24,7 +24,7 @@ export let name = "Controlled";
 
 const Context = createContext();
 
-function TokenLabel({ onRemove, onKeyDown, ...props }) {
+function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
   const selectionsRef = useRef([]);
   const [selectionNavIndex, setSelectionNavIndex] = useState(-1);
 
@@ -56,7 +56,7 @@ function TokenLabel({ onRemove, onKeyDown, ...props }) {
   );
 }
 
-function Token({ value, ...props }) {
+function ExampleToken({ value, ...props }) {
   const { selectionsRef } = useContext(Context);
   // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
 
@@ -71,12 +71,12 @@ function Token({ value, ...props }) {
   );
 }
 
-function Tokenbox({ onSelect, ...props }) {
+function ExampleTokenbox({ onSelect, ...props }) {
   const handleSelect = () => {};
   return <Combobox onSelect={wrapEvent(onSelect, handleSelect)} {...props} />;
 }
 
-function TokenInput({ onKeyDown, ...props }) {
+function ExampleTokenInput({ onKeyDown, ...props }) {
   const { onRemove, selectionsRef } = useContext(Context);
   const handleKeyDown = event => {
     const { value } = event.target;
@@ -110,8 +110,8 @@ export function Example() {
   return (
     <div>
       <h2>Tokenbox</h2>
-      <Tokenbox onSelect={handleSelect}>
-        <TokenLabel
+      <ExampleTokenbox onSelect={handleSelect}>
+        <ExampleTokenLabel
           onRemove={item => {
             setSelections(selections.filter(s => s !== item));
           }}
@@ -122,9 +122,9 @@ export function Example() {
           }}
         >
           {selections.map(selection => (
-            <Token value={selection} />
+            <ExampleToken value={selection} />
           ))}
-          <TokenInput
+          <ExampleTokenInput
             value={term}
             onChange={handleChange}
             autocomplete={false}
@@ -136,7 +136,7 @@ export function Example() {
               font: "inherit"
             }}
           />
-        </TokenLabel>
+        </ExampleTokenLabel>
         {results && (
           <ComboboxPopover>
             {results.length === 0 && (
@@ -162,7 +162,7 @@ export function Example() {
             </ComboboxList>
           </ComboboxPopover>
         )}
-      </Tokenbox>
+      </ExampleTokenbox>
     </div>
   );
 }

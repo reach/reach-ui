@@ -1,0 +1,14 @@
+[
+  {
+    "description": "React component.",
+    "displayName": "ComponentTest",
+    "methods": [],
+    "props": {
+      "children": {
+        "type": { "name": "node" },
+        "required": true,
+        "description": "Does a thing"
+      }
+    }
+  }
+]

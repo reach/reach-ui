@@ -1,12 +1,21 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "reach-ui-website",
+  "description": "The accessible foundation of your React apps and design systems",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "repository": "https://github.com/reach/reach-ui",
+  "author": "React Training <hello@reacttraining.com>",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
+    "clean": "gatsby clean"
+  },
   "dependencies": {
-    "@mdx-js/mdx": "^0.20.3",
-    "@mdx-js/tag": "^0.20.3",
+    "@mdx-js/mdx": "^1.5.1",
+    "@mdx-js/react": "^1.5.1",
     "@reach/alert": "file:../packages/alert",
     "@reach/alert-dialog": "file:../packages/alert-dialog",
     "@reach/auto-id": "file:../packages/auto-id",
@@ -24,50 +33,31 @@
     "@reach/visually-hidden": "file:../packages/visually-hidden",
     "@reach/window-size": "file:../packages/window-size",
     "@reach/slider": "file:../packages/slider",
-    "gatsby": "^2.1.31",
-    "gatsby-image": "^2.0.33",
-    "gatsby-mdx": "^0.4.3",
-    "gatsby-plugin-google-analytics": "^2.0.17",
-    "gatsby-plugin-manifest": "^2.0.24",
-    "gatsby-plugin-offline": "^2.0.25",
-    "gatsby-plugin-react-helmet": "^3.0.9",
-    "gatsby-plugin-sharp": "^2.0.28",
-    "gatsby-source-filesystem": "^2.0.24",
-    "gatsby-transformer-sharp": "^2.1.17",
-    "match-sorter": "^3.0.0",
+    "gatsby": "^2.16.3",
+    "gatsby-image": "^2.2.29",
+    "gatsby-plugin-google-analytics": "^2.1.23",
+    "gatsby-plugin-manifest": "^2.2.23",
+    "gatsby-plugin-mdx": "^1.0.52",
+    "gatsby-plugin-react-helmet": "^3.1.13",
+    "gatsby-plugin-sharp": "^2.2.31",
+    "gatsby-remark-autolink-headers": "^2.1.16",
+    "gatsby-remark-emoji": "^0.0.3",
+    "gatsby-remark-images": "^3.1.28",
+    "gatsby-remark-slug": "^0.1.0",
+    "gatsby-source-filesystem": "^2.1.33",
+    "gatsby-transformer-react-docgen": "^5.0.19",
+    "gatsby-transformer-sharp": "^2.2.23",
+    "match-sorter": "^4.0.2",
     "prop-types": "^15.7.2",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-helmet": "^5.2.0",
-    "react-live": "^1.12.0",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-helmet": "^5.2.1",
+    "react-live": "^2.2.1",
     "react-spring": "^8.0.27",
-    "recondition": "1.2",
-    "remark-autolink-headings": "^5.1.0",
-    "remark-emoji": "^2.0.2",
-    "remark-images": "^0.18.0",
-    "remark-slug": "^5.1.1",
-    "use-throttle": "0.0.3"
+    "recondition": "^1.2.4",
+    "use-throttle": "^0.0.3"
   },
   "devDependencies": {
-    "prettier": "^1.16.4"
-  },
-  "keywords": [
-    "gatsby"
-  ],
-  "license": "MIT",
-  "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx}",
-    "start": "npm run develop",
-    "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "prettier": "^1.18.2"
   }
 }

@@ -1,4 +1,4 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Component Component"
@@ -6,14 +6,18 @@ import Helmet from "react-helmet"
     {
       name: "description",
       content:
-        "A dynamic version of React.Component, a component component if you will.",
-    },
+        "A dynamic, functional version of a React.Component; a component component if you will."
+    }
   ]}
 />
 
 # Component Component
 
-A dynamic version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
+> NOTE: This component was developed in the days before React Hooks.
+> In most cases, you should probably build your function components using hooks and use a class
+> component in the rare cases you need them. We may deprecate this component in the future.
+
+A dynamic, functional version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
 
 ```jsx
 <Component initialState={{ hue: 0 }}>
@@ -33,7 +37,7 @@ A dynamic version of `React.Component`, a component component if you will. Usefu
             height: "2em",
             borderRadius: "50%",
             background: `hsl(${state.hue + n * 120}, 50%, 50%)`,
-            transition: "background-color 200ms ease",
+            transition: "background-color 200ms ease"
           }}
         />
       ))}
@@ -53,7 +57,7 @@ yarn add @reach/component-component
 And then import it:
 
 ```js
-import Component from "@reach/component-component"
+import Component from "@reach/component-component";
 ```
 
 ## Props
@@ -78,10 +82,14 @@ _Type_: `object`
 
 An object of initial state.
 
-```jsx
-<Component initialState={{ count: 10 }}>
-  {({ state }) => <div>Count is {state.count}</div>}
-</Component>
+```jsx-live
+function Example() {
+  return (
+    <Component initialState={{ count: 10 }}>
+      {({ state }) => <div>Count is {state.count}</div>}
+    </Component>
+  );
+}
 ```
 
 ### getInitialState
@@ -111,20 +119,24 @@ _Type_: `object`
 
 Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
 
-```jsx
-<Component refs={{ input: null }}>
-  {({ refs }) => (
-    <form
-      onSubmit={event => {
-        event.preventDefault()
-        alert(refs.input.value)
-      }}
-    >
-      <input ref={node => (refs.input = node)} type="text" />{" "}
-      <button type="submit">Go</button>
-    </form>
-  )}
-</Component>
+```jsx-live
+function Example() {
+  return (
+    <Component refs={{ input: null }}>
+      {({ refs }) => (
+        <form
+          onSubmit={event => {
+            event.preventDefault();
+            alert(refs.input.value);
+          }}
+        >
+          <input ref={node => (refs.input = node)} type="text" />{" "}
+          <button type="submit">Go</button>
+        </form>
+      )}
+    </Component>
+  );
+}
 ```
 
 ### getRefs
@@ -138,8 +150,8 @@ Use this when any of your refs are computed.
   getRefs={() => {
     return {
       input: React.createRef(),
-      popupContainer: document.createElement("div"),
-    }
+      popupContainer: document.createElement("div")
+    };
   }}
 />
 ```
@@ -158,7 +170,7 @@ Perhaps you want some async data but don't want to make an entirely new componen
   didMount={({ setState }) => {
     fetch("https://api.github.com/gists?per_page=5")
       .then(res => res.json())
-      .then(gists => setState({ gists }))
+      .then(gists => setState({ gists }));
   }}
 >
   {({ state }) =>
@@ -205,38 +217,42 @@ Return `true` to signify the component needs an update, `false` if it does not. 
 
 For example: often you find just one part of your component is expensive to render, maybe because of a large SVG with a dynamic style or two. Rather than pulling the elements out of your component and putting them in a new `PureComponent`, you can inline a `shoudlUpdate` check:
 
-```jsx
-<Component initialState={{ hue: 0 }}>
-  {({ setState, state }) => (
-    <div>
-      <button
-        onClick={() => {
-          setState({ hue: Math.random() * 360 })
-        }}
-      >
-        Change Color
-      </button>
-
-      <Component
-        hue={state.hue}
-        shouldUpdate={({ nextProps, props }) => {
-          return nextProps.hue !== props.hue
-        }}
-      >
+```jsx-live
+function Example() {
+  return (
+    <Component initialState={{ hue: 0 }}>
+      {({ setState, state }) => (
         <div>
-          <svg width="100" height="100">
-            <path
-              d="M20,30 Q40,5 50,30 T90,30"
-              fill="none"
-              stroke={`hsl(${state.hue}, 50%, 50%)`}
-              strokeWidth="5"
-            />
-          </svg>
+          <button
+            onClick={() => {
+              setState({ hue: Math.random() * 360 });
+            }}
+          >
+            Change Color
+          </button>
+
+          <Component
+            hue={state.hue}
+            shouldUpdate={({ nextProps, props }) => {
+              return nextProps.hue !== props.hue;
+            }}
+          >
+            <div>
+              <svg width="100" height="100">
+                <path
+                  d="M20,30 Q40,5 50,30 T90,30"
+                  fill="none"
+                  stroke={`hsl(${state.hue}, 50%, 50%)`}
+                  strokeWidth="5"
+                />
+              </svg>
+            </div>
+          </Component>
         </div>
-      </Component>
-    </div>
-  )}
-</Component>
+      )}
+    </Component>
+  );
+}
 ```
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcomponentupdate).
@@ -247,61 +263,73 @@ _Type_: `node`
 
 Usual React children prop.
 
-```jsx
-<Component>
-  <div>Hey, I am the child</div>
-</Component>
+```jsx-live
+function Example() {
+  return (
+    <Component>
+      <div>Hey, I am the child</div>
+    </Component>
+  );
+}
 ```
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
 
-```jsx
-<Component initialState={{ hue: 0 }}>
-  {({ setState, state }) => (
-    <div>
-      <button onClick={() => setState({ hue: Math.random() * 360 })}>
-        Generate Color
-      </button>
-      <br />
-      <svg width="100" height="100">
-        <path
-          d="M20,30 Q40,5 50,30 T90,30"
-          fill="none"
-          stroke={`hsl(${state.hue}, 50%, 50%)`}
-          strokeWidth="5"
-        />
-      </svg>
-    </div>
-  )}
-</Component>
+```jsx-live
+function Example() {
+  return (
+    <Component initialState={{ hue: 0 }}>
+      {({ setState, state }) => (
+        <div>
+          <button onClick={() => setState({ hue: Math.random() * 360 })}>
+            Generate Color
+          </button>
+          <br />
+          <svg width="100" height="100">
+            <path
+              d="M20,30 Q40,5 50,30 T90,30"
+              fill="none"
+              stroke={`hsl(${state.hue}, 50%, 50%)`}
+              strokeWidth="5"
+            />
+          </svg>
+        </div>
+      )}
+    </Component>
+  );
+}
 ```
 
 ### render
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
-```jsx
-<Component
-  initialState={{ hue: 0 }}
-  render={({ setState, state }) => (
-    <div>
-      <button onClick={() => setState({ hue: Math.random() * 360 })}>
-        Generate Color
-      </button>
-      <br />
-      <svg width="100" height="100">
-        <path
-          d="M20,30 Q40,5 50,30 T90,30"
-          fill="none"
-          stroke={`hsl(${state.hue}, 50%, 50%)`}
-          strokeWidth="5"
-        />
-      </svg>
-    </div>
-  )}
-/>
+```jsx-live
+function Example() {
+  return (
+    <Component
+      initialState={{ hue: 0 }}
+      render={({ setState, state }) => (
+        <div>
+          <button onClick={() => setState({ hue: Math.random() * 360 })}>
+            Generate Color
+          </button>
+          <br />
+          <svg width="100" height="100">
+            <path
+              d="M20,30 Q40,5 50,30 T90,30"
+              fill="none"
+              stroke={`hsl(${state.hue}, 50%, 50%)`}
+              strokeWidth="5"
+            />
+          </svg>
+        </div>
+      )}
+    />
+  );
+}
 ```
 
 ## Todo App Example
@@ -314,66 +342,71 @@ Here is a pretty involved example showing just how composable this component is:
 - Optimized todo rendering, avoiding updates if the color has not changed
 - Tracked refs
 
-```jsx
-<Component
-  getRefs={() => ({
-    input: React.createRef(),
-  })}
-  getInitialState={() => {
-    return {
-      todos: ["This is kinda weird"],
-    }
-  }}
->
-  {({ state, setState, refs }) => (
-    <>
-      <Component
-        didUpdate={() => (document.title = state.todos.length + " Todos")}
-      />
-      <div style={{ fontFamily: "sans-serif" }}>
-        <h4>Todo List</h4>
-        <form
-          onSubmit={event => {
-            event.preventDefault()
-            let node = refs.input.current
-            setState({ todos: state.todos.concat([node.value]) })
-            node.value = ""
-          }}
-        >
-          <input ref={refs.input} />
-        </form>
-        <div>
-          {state.todos.map((todo, index) => (
-            <Component
-              key={index}
-              getInitialState={() => ({ hue: Math.random() * 360 })}
-              todo={todo}
-              shouldUpdate={({ nextProps, nextState, props, state }) => {
-                return (
-                  nextProps.todo !== props.todo || nextState.hue !== state.hue
-                )
+```jsx-live
+function Example() {
+  return (
+    <Component
+      getRefs={() => ({
+        input: React.createRef()
+      })}
+      getInitialState={() => {
+        return {
+          todos: ["This is kinda weird"]
+        };
+      }}
+    >
+      {({ state, setState, refs }) => (
+        <>
+          <Component
+            didUpdate={() => (document.title = state.todos.length + " Todos")}
+          />
+          <div style={{ fontFamily: "sans-serif" }}>
+            <h4>Todo List</h4>
+            <form
+              onSubmit={event => {
+                event.preventDefault();
+                let node = refs.input.current;
+                setState({ todos: state.todos.concat([node.value]) });
+                node.value = "";
               }}
             >
-              {({ setState, state }) => (
-                <div style={{ color: `hsl(${state.hue}, 50%, 50%)` }}>
-                  <button
-                    onClick={() => {
-                      setState({ hue: Math.random() * 360 })
-                    }}
-                  >
-                    Change Color
-                  </button>{" "}
-                  {todo}
-                </div>
-              )}
-            </Component>
-          ))}
-        </div>
-        <p>
-          <button onClick={() => setState({ todos: [] })}>Clear all</button>
-        </p>
-      </div>
-    </>
-  )}
-</Component>
+              <input ref={refs.input} />
+            </form>
+            <div>
+              {state.todos.map((todo, index) => (
+                <Component
+                  key={index}
+                  getInitialState={() => ({ hue: Math.random() * 360 })}
+                  todo={todo}
+                  shouldUpdate={({ nextProps, nextState, props, state }) => {
+                    return (
+                      nextProps.todo !== props.todo ||
+                      nextState.hue !== state.hue
+                    );
+                  }}
+                >
+                  {({ setState, state }) => (
+                    <div style={{ color: `hsl(${state.hue}, 50%, 50%)` }}>
+                      <button
+                        onClick={() => {
+                          setState({ hue: Math.random() * 360 });
+                        }}
+                      >
+                        Change Color
+                      </button>{" "}
+                      {todo}
+                    </div>
+                  )}
+                </Component>
+              ))}
+            </div>
+            <p>
+              <button onClick={() => setState({ todos: [] })}>Clear all</button>
+            </p>
+          </div>
+        </>
+      )}
+    </Component>
+  );
+}
 ```
