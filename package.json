@@ -11,7 +11,6 @@
     "build": "lerna run build --parallel",
     "changes": "lerna-changelog",
     "clean": "git clean -fdX .",
-    "release": "lerna run test --since origin/master && yarn build:changed && lerna publish --since origin/master",
     "lint": "lerna run lint",
     "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
   },
@@ -25,7 +24,7 @@
     "@storybook/react": "^5.2.4",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
-    "autoprefixer": "^9.6.4",
+    "autoprefixer": "^9.6.5",
     "babel-eslint": "10.x",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
