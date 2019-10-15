@@ -6,14 +6,18 @@ import Helmet from "react-helmet"
     {
       name: "description",
       content:
-        "A dynamic version of React.Component, a component component if you will.",
+        "A dynamic, functional version of a React.Component; a component component if you will.",
     },
   ]}
 />
 
 # Component Component
 
-A dynamic version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
+> NOTE: This component was developed in the days before React Hooks.
+> In most cases, you should probably build your function components using hooks and use a class
+> component in the rare cases you need them. We may deprecate this component in the future.
+
+A dynamic, functional version of `React.Component`, a component component if you will. Useful for inline lifecycles and state. It's also incredibly composable and used in many other Reach components.
 
 ```jsx
 <Component initialState={{ hue: 0 }}>
