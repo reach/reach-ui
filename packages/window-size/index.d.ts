@@ -1,8 +1,17 @@
 declare module "@reach/window-size" {
-  interface IWindowSizeProps {
-    children: (
-      size: { width: number; height: number }
-    ) => React.ReactElement<any>;
-  }
-  class WindowSize extends React.Component<IWindowSizeProps, {}> {}
+  import * as React from "react";
+
+  export type WindowSize = {
+    width: number;
+    height: number;
+  };
+
+  export type WindowSizeProps = {
+    children: (size: WindowSize) => React.ReactElement<any>;
+  };
+
+  export function useWindowSize(): WindowSize;
+
+  declare const WindowSize: React.FunctionComponent<WindowSizeProps>;
+  export default WindowSize;
 }
