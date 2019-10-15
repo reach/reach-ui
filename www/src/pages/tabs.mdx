@@ -1,12 +1,12 @@
-import Helmet from "../components/DefaultHelmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Tabs"
   meta={[
     {
       name: "description",
-      content: "Accessible Tabs",
-    },
+      content: "Accessible Tabs"
+    }
   ]}
 />
 
@@ -27,26 +27,30 @@ The `Tab` and `TabPanel` elements are associated by their order in the tree. Non
 
 You can render any other elements you want inside of `Tabs`, but `TabList` should only render `Tab` elements, and `TabPanels` should only render `TabPanel` elements.
 
-```jsx
-<Tabs>
-  <TabList>
-    <Tab>One</Tab>
-    <Tab>Two</Tab>
-    <Tab>Three</Tab>
-  </TabList>
+```jsx-live
+function Example() {
+  return (
+    <Tabs>
+      <TabList>
+        <Tab>One</Tab>
+        <Tab>Two</Tab>
+        <Tab>Three</Tab>
+      </TabList>
 
-  <TabPanels>
-    <TabPanel>
-      <p>one!</p>
-    </TabPanel>
-    <TabPanel>
-      <p>two!</p>
-    </TabPanel>
-    <TabPanel>
-      <p>three!</p>
-    </TabPanel>
-  </TabPanels>
-</Tabs>
+      <TabPanels>
+        <TabPanel>
+          <p>one!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>two!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>three!</p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+}
 ```
 
 [Check out the demos](#demos) for ideas on how to style and compose.
@@ -62,7 +66,7 @@ yarn add @reach/tabs
 And then import the components:
 
 ```js
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs"
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 ```
 
 # Tabs
@@ -94,25 +98,29 @@ _Type_: `node`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
-```jsx
-<Tabs>
-  <TabList>
-    <Tab>Uno</Tab>
-    <Tab>Dos</Tab>
-  </TabList>
+```jsx-live
+function Example() {
+  return (
+    <Tabs>
+      <TabList>
+        <Tab>Uno</Tab>
+        <Tab>Dos</Tab>
+      </TabList>
 
-  <div>Random</div>
+      <div>Random</div>
 
-  <TabPanels>
-    <TabPanel>Uno</TabPanel>
-    <TabPanel>Dos</TabPanel>
-  </TabPanels>
+      <TabPanels>
+        <TabPanel>Uno</TabPanel>
+        <TabPanel>Dos</TabPanel>
+      </TabPanels>
 
-  <TabList>
-    <Tab>Uno</Tab>
-    <Tab>Dos</Tab>
-  </TabList>
-</Tabs>
+      <TabList>
+        <Tab>Uno</Tab>
+        <Tab>Dos</Tab>
+      </TabList>
+    </Tabs>
+  );
+}
 ```
 
 ### Tabs onChange
@@ -121,17 +129,17 @@ _Type_: `function`
 
 Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
 
-```jsx
+```jsx-live
 function Example() {
-  const colors = ["firebrick", "goldenrod", "dodgerblue"]
-  const [tabIndex, setTabIndex] = useState(0)
-  const backgroundColor = colors[tabIndex]
+  const colors = ["firebrick", "goldenrod", "dodgerblue"];
+  const [tabIndex, setTabIndex] = useState(0);
+  const backgroundColor = colors[tabIndex];
   return (
     <Tabs
       onChange={index => setTabIndex(index)}
       style={{
         color: "white",
-        background: backgroundColor,
+        background: backgroundColor
       }}
     >
       <TabList>
@@ -145,7 +153,7 @@ function Example() {
         <TabPanel>Red, yellow and blue.</TabPanel>
       </TabPanels>
     </Tabs>
-  )
+  );
 }
 ```
 
@@ -155,24 +163,28 @@ _Type_: `number`
 
 Starts the tabs at a specific index.
 
-```jsx
-<Tabs defaultIndex={1}>
-  <TabPanels>
-    <TabPanel>
-      <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
-    </TabPanel>
-    <TabPanel>
-      <img
-        src="https://www.placecage.com/400/200"
-        alt="A picture of Nicolas Cage"
-      />
-    </TabPanel>
-  </TabPanels>
-  <TabList>
-    <Tab>Kitten</Tab>
-    <Tab>Cage</Tab>
-  </TabList>
-</Tabs>
+```jsx-live
+function Example() {
+  return (
+    <Tabs defaultIndex={1}>
+      <TabPanels>
+        <TabPanel>
+          <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
+        </TabPanel>
+        <TabPanel>
+          <img
+            src="https://www.placecage.com/400/200"
+            alt="A picture of Nicolas Cage"
+          />
+        </TabPanel>
+      </TabPanels>
+      <TabList>
+        <Tab>Kitten</Tab>
+        <Tab>Cage</Tab>
+      </TabList>
+    </Tabs>
+  );
+}
 ```
 
 ### Tabs index
@@ -181,17 +193,17 @@ _Type_: `number`
 
 Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
 
-```jsx
+```jsx-live
 function Example() {
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(0);
 
   const handleSliderChange = event => {
-    setTabIndex(parseInt(event.target.value, 10))
-  }
+    setTabIndex(parseInt(event.target.value, 10));
+  };
 
   const handleTabsChange = index => {
-    setTabIndex(index)
-  }
+    setTabIndex(index);
+  };
 
   return (
     <div>
@@ -222,7 +234,7 @@ function Example() {
         </TabPanels>
       </Tabs>
     </div>
-  )
+  );
 }
 ```
 
@@ -279,7 +291,7 @@ Please see the [styling guide](/styling).
 But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via `cloneElement`).
 
 ```jsx
-const RedTab = props => <Tab {...props} style={{ color: "red" }} />
+const RedTab = props => <Tab {...props} style={{ color: "red" }} />;
 
 const TabPage = () => (
   <Tabs>
@@ -292,7 +304,7 @@ const TabPage = () => (
       <TabPanel>...</TabPanel>
     </TabPanels>
   </Tabs>
-)
+);
 ```
 
 ### TabList as
@@ -352,20 +364,20 @@ Please see the [styling guide](/styling).
 But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via `cloneElement`).
 
 ```jsx
-const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />
+const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />;
 
 const TabPage = () => (
   <Tabs>
     <TabList>
       <Tab>...</Tab>
-      <Tab>..</Tab>
+      <Tab>...</Tab>
     </TabList>
     <TabPanels>
       <BoldPanel>...</BoldPanel>
       <TabPanel>...</TabPanel>
     </TabPanels>
   </Tabs>
-)
+);
 ```
 
 ### TabPanels as
@@ -459,11 +471,11 @@ _Type_: `number` - cloned
 
 Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function CoolTab(props) {
     // `isSelected` comes from `TabList` cloning the `CoolTab`.
-    const { isSelected, children } = props
+    const { isSelected, children } = props;
 
     // make sure to forward *all* props received from TabList
     return (
@@ -471,7 +483,7 @@ Because TabList needs to know the order of the children, we use `cloneElement` t
         {isSelected ? "😎" : "😐"}
         {children}
       </Tab>
-    )
+    );
   }
 
   return (
@@ -485,8 +497,8 @@ Because TabList needs to know the order of the children, we use `cloneElement` t
         <TabPanel>2</TabPanel>
       </TabPanels>
     </Tabs>
-  )
-})()
+  );
+})();
 ```
 
 # TabPanel
@@ -552,8 +564,8 @@ These demos show off how you can add quite a bit of behavior to your Tabs interf
 
 If you'd like to drive your tabs with data you can create a `DataTabs` component.
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function DataTabs({ data }) {
     return (
       <Tabs>
@@ -568,7 +580,7 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
           ))}
         </TabPanels>
       </Tabs>
-    )
+    );
   }
 
   // now if you have an array of data...
@@ -577,32 +589,32 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
     {
       label: "Burrito",
       content:
-        "Perhaps the greatest dish ever invented but bigger and with rice.",
-    },
-  ]
+        "Perhaps the greatest dish ever invented but bigger and with rice."
+    }
+  ];
 
   // you can just pass it in:
-  return <DataTabs data={tabData} />
-})()
+  return <DataTabs data={tabData} />;
+})();
 ```
 
 ## Animation
 
 With a little composition we can animate the selected tab bar.
 
-```jsx
-;(() => {
-  const AnimatedContext = React.createContext()
+```jsx-live
+(() => {
+  const AnimatedContext = React.createContext();
 
   function AnimatedTabs(props) {
     // need to store the position of the selected Tab so we can
     // animate the bar to its position
-    const [selectedRect, setSelectedRect] = useState(null)
+    const [selectedRect, setSelectedRect] = useState(null);
 
     // need to measure the parent element so we can measure
     // the relative "left" for the bar
-    const tabsRef = useRef()
-    const tabsRect = useRect(tabsRef)
+    const tabsRef = useRef();
+    const tabsRect = useRect(tabsRef);
 
     // Put the function to change the positions on context so the
     // Tabs down the tree can easily access it
@@ -627,33 +639,33 @@ With a little composition we can animate the selected tab bar.
               // rect from the selected tab to set the styles of the bar
               transition: "all 300ms ease",
               left: selectedRect && selectedRect.left - tabsRect.left,
-              width: selectedRect && selectedRect.width,
+              width: selectedRect && selectedRect.width
             }}
           />
 
           {props.children[1]}
         </Tabs>
       </AnimatedContext.Provider>
-    )
+    );
   }
 
   function AnimatedTab(props) {
-    const { isSelected } = props
+    const { isSelected } = props;
 
     // Each tab measures itself
-    const ref = useRef()
-    const rect = useRect(ref, isSelected)
+    const ref = useRef();
+    const rect = useRect(ref, isSelected);
 
     // and calls up to the parent when it becomes selected
     // we useLayoutEffect to avoid flicker
-    const setSelectedRect = useContext(AnimatedContext)
+    const setSelectedRect = useContext(AnimatedContext);
     useLayoutEffect(() => {
-      if (isSelected) setSelectedRect(rect)
-    }, [isSelected, rect, setSelectedRect])
+      if (isSelected) setSelectedRect(rect);
+    }, [isSelected, rect, setSelectedRect]);
 
     return (
       <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
-    )
+    );
   }
 
   // And that's it! It's not a small amount of code, but it's not a ton
@@ -677,6 +689,6 @@ With a little composition we can animate the selected tab bar.
         </TabPanel>
       </TabPanels>
     </AnimatedTabs>
-  )
-})()
+  );
+})();
 ```

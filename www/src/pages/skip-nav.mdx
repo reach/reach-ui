@@ -1,12 +1,12 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - SkipNav"
   meta={[
     {
       name: "description",
-      content: "Skip navigation link for screenreader and keyboard users.",
-    },
+      content: "Skip navigation link for screenreader and keyboard users."
+    }
   ]}
 />
 
@@ -34,7 +34,7 @@ ReactDOM.render(
     </div>
   </React.Fragment>,
   rootNode
-)
+);
 ```
 
 ## Installation
@@ -46,7 +46,7 @@ yarn add @reach/skip-nav
 And then import it:
 
 ```js
-import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 ```
 
 # SkipNavLink

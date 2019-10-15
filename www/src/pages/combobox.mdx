@@ -1,4 +1,4 @@
-import Helmet from "../components/DefaultHelmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Combobox"
@@ -6,8 +6,8 @@ import Helmet from "../components/DefaultHelmet"
     {
       name: "description",
       content:
-        "Accessible combobox (autocomplete or autosuggest) component for React",
-    },
+        "Accessible combobox (autocomplete or autosuggest) component for React"
+    }
   ]}
 />
 
@@ -35,55 +35,63 @@ To get you started, let's take a look at a few examples that grow from simple to
 
 Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
 
-```jsx
-<div>
-  <h4 id="demo">Basic, Fixed List Combobox</h4>
-  <Combobox>
-    <ComboboxInput aria-labelledby="demo" />
-    <ComboboxPopover>
-      <ComboboxList aria-labelledby="demo">
-        <ComboboxOption value="Apple" />
-        <ComboboxOption value="Banana" />
-        <ComboboxOption value="Orange" />
-        <ComboboxOption value="Pineapple" />
-        <ComboboxOption value="Kiwi" />
-      </ComboboxList>
-    </ComboboxPopover>
-  </Combobox>
-</div>
+```jsx-live
+function Example() {
+  return (
+    <div>
+      <h4 id="demo">Basic, Fixed List Combobox</h4>
+      <Combobox>
+        <ComboboxInput aria-labelledby="demo" />
+        <ComboboxPopover>
+          <ComboboxList aria-labelledby="demo">
+            <ComboboxOption value="Apple" />
+            <ComboboxOption value="Banana" />
+            <ComboboxOption value="Orange" />
+            <ComboboxOption value="Pineapple" />
+            <ComboboxOption value="Kiwi" />
+          </ComboboxList>
+        </ComboboxPopover>
+      </Combobox>
+    </div>
+  );
+}
 ```
 
 ### Custom Rendering in ComboboxOption
 
 Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
-```jsx
-<Combobox>
-  <ComboboxInput
-    placeholder="Custom Option Rendering"
-    aria-label="custom option demo"
-    style={{ width: 300 }}
-  />
-  <ComboboxPopover>
-    <ComboboxList aria-label="custom option demo">
-      <ComboboxOption value="Apple">
-        🍎 <ComboboxOptionText />
-      </ComboboxOption>
-      <ComboboxOption value="Banana">
-        🍌 <ComboboxOptionText />
-      </ComboboxOption>
-      <ComboboxOption value="Orange">
-        🍊 <ComboboxOptionText />
-      </ComboboxOption>
-      <ComboboxOption value="Pineapple">
-        🍍 <ComboboxOptionText />
-      </ComboboxOption>
-      <ComboboxOption value="Kiwi">
-        🥝 <ComboboxOptionText />
-      </ComboboxOption>
-    </ComboboxList>
-  </ComboboxPopover>
-</Combobox>
+```jsx-live
+function Example() {
+  return (
+    <Combobox>
+      <ComboboxInput
+        placeholder="Custom Option Rendering"
+        aria-label="custom option demo"
+        style={{ width: 300 }}
+      />
+      <ComboboxPopover>
+        <ComboboxList aria-label="custom option demo">
+          <ComboboxOption value="Apple">
+            🍎 <ComboboxOptionText />
+          </ComboboxOption>
+          <ComboboxOption value="Banana">
+            🍌 <ComboboxOptionText />
+          </ComboboxOption>
+          <ComboboxOption value="Orange">
+            🍊 <ComboboxOptionText />
+          </ComboboxOption>
+          <ComboboxOption value="Pineapple">
+            🍍 <ComboboxOptionText />
+          </ComboboxOption>
+          <ComboboxOption value="Kiwi">
+            🥝 <ComboboxOptionText />
+          </ComboboxOption>
+        </ComboboxList>
+      </ComboboxPopover>
+    </Combobox>
+  );
+}
 ```
 
 ### Clientside Search
@@ -96,12 +104,12 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function Example() {
-    const [term, setTerm] = useState("")
-    const results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <div>
@@ -126,38 +134,38 @@ There is nothing special about managing state for a combobox, it's like managing
           )}
         </Combobox>
       </div>
-    )
+    );
   }
 
   function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100)
+    const throttledTerm = useThrottle(term, 100);
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [item => `${item.city}, ${item.state}`]
             }),
       [throttledTerm]
-    )
+    );
   }
 
-  return <Example />
-})()
+  return <Example />;
+})();
 ```
 
 ### Server Side Search
 
 This is the same demo as above, except this time we're going to a server to get the match. This is recommended as the previous example had to download 350kb of city text! Again, there is nothing special about a ComboboxList as any other list in React. As the input changes, fetch data, set state, render options.
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function Example() {
-    const [searchTerm, setSearchTerm] = useState("")
-    const cities = useCitySearch(searchTerm)
+    const [searchTerm, setSearchTerm] = useState("");
+    const cities = useCitySearch(searchTerm);
     const handleSearchTermChange = event => {
-      setSearchTerm(event.target.value)
-    }
+      setSearchTerm(event.target.value);
+    };
 
     return (
       <Combobox>
@@ -170,47 +178,47 @@ This is the same demo as above, except this time we're going to a server to get 
           <ComboboxPopover className="shadow-popup">
             <ComboboxList>
               {cities.map(city => {
-                const str = `${city.city}, ${city.state}`
-                return <ComboboxOption key={str} value={str} />
+                const str = `${city.city}, ${city.state}`;
+                return <ComboboxOption key={str} value={str} />;
               })}
             </ComboboxList>
           </ComboboxPopover>
         )}
       </Combobox>
-    )
+    );
   }
 
   function useCitySearch(searchTerm) {
-    const [cities, setCities] = useState([])
+    const [cities, setCities] = useState([]);
 
     useEffect(() => {
       if (searchTerm.trim() !== "") {
-        let isFresh = true
+        let isFresh = true;
         fetchCities(searchTerm).then(cities => {
-          if (isFresh) setCities(cities)
-        })
-        return () => (isFresh = false)
+          if (isFresh) setCities(cities);
+        });
+        return () => (isFresh = false);
       }
-    }, [searchTerm])
+    }, [searchTerm]);
 
-    return cities
+    return cities;
   }
 
-  const cache = {}
+  const cache = {};
   function fetchCities(value) {
     if (cache[value]) {
-      return Promise.resolve(cache[value])
+      return Promise.resolve(cache[value]);
     }
     return fetch("https://city-search.now.sh/?" + value)
       .then(res => res.json())
       .then(result => {
-        cache[value] = result
-        return result
-      })
+        cache[value] = result;
+        return result;
+      });
   }
 
-  return <Example />
-})()
+  return <Example />;
+})();
 ```
 
 ### Lots of arbitrary elements
@@ -219,12 +227,12 @@ Sometimes your list is a bit more complicated, like categories of results, and l
 
 You can even have other interactive elements inside the popover, it won't close when the user interacts with them.
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function Example() {
-    const [term, setTerm] = useState("")
-    const results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+    const [term, setTerm] = useState("");
+    const results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <div>
@@ -271,20 +279,20 @@ You can even have other interactive elements inside the popover, it won't close 
           )}
         </Combobox>
       </div>
-    )
+    );
   }
 
   function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100)
+    const throttledTerm = useThrottle(term, 100);
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [item => `${item.city}, ${item.state}`]
             }),
       [throttledTerm]
-    )
+    );
   }
 
   const heading = {
@@ -293,23 +301,23 @@ You can even have other interactive elements inside the popover, it won't close 
     fontWeight: "bold",
     textTransform: "uppercase",
     margin: 0,
-    padding: 5,
-  }
+    padding: 5
+  };
 
-  return <Example />
-})()
+  return <Example />;
+})();
 ```
 
 ### Custom styling
 
 This demo shows how you can control a lot about the styling. It uses `portal={false}` on the ComboboxPopover which allows us to create a continuous outline around the entire thing.
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   function Example() {
-    let [term, setTerm] = useState("")
-    let results = useCityMatch(term)
-    const handleChange = event => setTerm(event.target.value)
+    let [term, setTerm] = useState("");
+    let results = useCityMatch(term);
+    const handleChange = event => setTerm(event.target.value);
 
     return (
       <Combobox className="pink">
@@ -332,7 +340,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
                   margin: 0,
                   color: "#454545",
                   padding: "0.25rem 1rem 0.75rem 1rem",
-                  fontStyle: "italic",
+                  fontStyle: "italic"
                 }}
               >
                 No results :(
@@ -341,24 +349,24 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
           </ComboboxPopover>
         )}
       </Combobox>
-    )
+    );
   }
 
   function useCityMatch(term) {
-    let throttledTerm = useThrottle(term, 100)
+    let throttledTerm = useThrottle(term, 100);
     return useMemo(
       () =>
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [item => `${item.city}, ${item.state}`]
             }),
       [throttledTerm]
-    )
+    );
   }
 
-  return <Example />
-})()
+  return <Example />;
+})();
 ```
 
 ## CSS Selectors

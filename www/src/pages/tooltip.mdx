@@ -1,12 +1,12 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Tooltip"
   meta={[
     {
       name: "description",
-      content: "Accessible Tooltips for React.js",
-    },
+      content: "Accessible Tooltips for React.js"
+    }
   ]}
 />
 
@@ -25,28 +25,32 @@ A couple notes on using tooltips:
 
 _Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
-```jsx
-<div>
-  <Tooltip label="Notifications">
-    <button style={{ fontSize: 25 }}>
-      <span>🔔</span>
-    </button>
-  </Tooltip>
-  <Tooltip label="Settings">
-    <button style={{ fontSize: 25 }}>
-      <span aria-hidden>⚙️</span>
-    </button>
-  </Tooltip>
+```jsx-live
+function Example() {
+  return (
+    <div>
+      <Tooltip label="Notifications">
+        <button style={{ fontSize: 25 }}>
+          <span>🔔</span>
+        </button>
+      </Tooltip>
+      <Tooltip label="Settings">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>⚙️</span>
+        </button>
+      </Tooltip>
 
-  <div style={{ float: "right" }}>
-    <Tooltip label="Notifications" ariaLabel="3 Notifications">
-      <button style={{ fontSize: 25 }}>
-        <span>🔔</span>
-        <span>3</span>
-      </button>
-    </Tooltip>
-  </div>
-</div>
+      <div style={{ float: "right" }}>
+        <Tooltip label="Notifications" ariaLabel="3 Notifications">
+          <button style={{ fontSize: 25 }}>
+            <span>🔔</span>
+            <span>3</span>
+          </button>
+        </Tooltip>
+      </div>
+    </div>
+  );
+}
 ```
 
 ## Installation
@@ -60,45 +64,57 @@ yarn add @reach/tooltip
 And then import the components you need:
 
 ```js
-import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip"
+import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
 ```
 
 ## Usage
 
-```jsx
-<Tooltip label="Save">
-  <button style={{ fontSize: 25 }}>💾</button>
-</Tooltip>
+```jsx-live
+function Example() {
+  return (
+    <Tooltip label="Save">
+      <button style={{ fontSize: 25 }}>💾</button>
+    </Tooltip>
+  );
+}
 ```
 
 Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
 
-```jsx
-<Tooltip
-  // What the tooltip renders
-  label="Notifications"
-  // What the screenreader announces
-  ariaLabel="3 Notifications"
->
-  <button style={{ fontSize: 25 }}>🔔 3</button>
-</Tooltip>
+```jsx-live
+function Example() {
+  return (
+    <Tooltip
+      // What the tooltip renders
+      label="Notifications"
+      // What the screenreader announces
+      ariaLabel="3 Notifications"
+    >
+      <button style={{ fontSize: 25 }}>🔔 3</button>
+    </Tooltip>
+  );
+}
 ```
 
 All props passed to `Tooltip` will go to the popover.
 
-```jsx
-<Tooltip
-  label="Fall in love all over again"
-  style={{
-    background: "hsla(0, 0%, 0%, 0.75)",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    padding: "0.5em 1em",
-  }}
->
-  <button style={{ fontSize: 25 }}>❤️</button>
-</Tooltip>
+```jsx-live
+function Example() {
+  return (
+    <Tooltip
+      label="Fall in love all over again"
+      style={{
+        background: "hsla(0, 0%, 0%, 0.75)",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        padding: "0.5em 1em"
+      }}
+    >
+      <button style={{ fontSize: 25 }}>❤️</button>
+    </Tooltip>
+  );
+}
 ```
 
 ## Tooltip CSS Selectors
@@ -118,25 +134,25 @@ You may want to drop down to this lower level API if you need animation or you w
 
 ### Triangle pointers and custom styles
 
-```jsx
-;(() => {
+```jsx-live
+(() => {
   // Center the tooltip, but collisions will win
   const centered = (triggerRect, tooltipRect) => {
-    const triggerCenter = triggerRect.left + triggerRect.width / 2
-    const left = triggerCenter - tooltipRect.width / 2
-    const maxLeft = window.innerWidth - tooltipRect.width - 2
+    const triggerCenter = triggerRect.left + triggerRect.width / 2;
+    const left = triggerCenter - tooltipRect.width / 2;
+    const maxLeft = window.innerWidth - tooltipRect.width - 2;
     return {
       left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-      top: triggerRect.bottom + 8 + window.scrollY,
-    }
-  }
+      top: triggerRect.bottom + 8 + window.scrollY
+    };
+  };
 
   function TriangleTooltip({ children, label, ariaLabel }) {
     // get the props from useTooltip
-    const [trigger, tooltip] = useTooltip()
+    const [trigger, tooltip] = useTooltip();
 
     // destructure off what we need to position the triangle
-    const { isVisible, triggerRect } = tooltip
+    const { isVisible, triggerRect } = tooltip;
 
     return (
       <Fragment>
@@ -159,7 +175,7 @@ You may want to drop down to this lower level API if you need animation or you w
                 height: 0,
                 borderLeft: "10px solid transparent",
                 borderRight: "10px solid transparent",
-                borderBottom: "10px solid black",
+                borderBottom: "10px solid black"
               }}
             />
           </Portal>
@@ -173,12 +189,12 @@ You may want to drop down to this lower level API if you need animation or you w
             color: "white",
             border: "none",
             borderRadius: "3px",
-            padding: "0.5em 1em",
+            padding: "0.5em 1em"
           }}
           position={centered}
         />
       </Fragment>
-    )
+    );
   }
 
   return (
@@ -206,8 +222,8 @@ You may want to drop down to this lower level API if you need animation or you w
         </TriangleTooltip>
       </div>
     </div>
-  )
-})()
+  );
+})();
 ```
 
 ### Animation
@@ -215,22 +231,22 @@ You may want to drop down to this lower level API if you need animation or you w
 Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
 
 ```jsx
-import React, { Fragment, cloneElement } from "react"
-import { useTooltip, TooltipPopup } from "@reach/tooltip"
-import { useTransition, animated } from "react-spring"
+import React, { Fragment, cloneElement } from "react";
+import { useTooltip, TooltipPopup } from "@reach/tooltip";
+import { useTransition, animated } from "react-spring";
 
-animated.TooltipPopup = animated(TooltipPopup)
-animated.TooltipContent = animated(TooltipPopup)
+animated.TooltipPopup = animated(TooltipPopup);
+animated.TooltipContent = animated(TooltipPopup);
 
 function AnimatedTooltip({ children, ...rest }) {
-  const [trigger, tooltip, isVisible] = useTooltip()
+  const [trigger, tooltip, isVisible] = useTooltip();
 
   const transitions = useTransition(isVisible ? tooltip : false, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { mass: 1, tension: 500, friction: 40 },
-  })
+    config: { mass: 1, tension: 500, friction: 40 }
+  });
 
   return (
     <Fragment>
@@ -248,7 +264,7 @@ function AnimatedTooltip({ children, ...rest }) {
           )
       )}
     </Fragment>
-  )
+  );
 }
 
 // Now you can replace `Tooltip` with `AnimatedTooltip`
@@ -257,6 +273,6 @@ function App() {
     <AnimatedTooltip label="Compose Message">
       <button>📝</button>
     </AnimatedTooltip>
-  )
+  );
 }
 ```

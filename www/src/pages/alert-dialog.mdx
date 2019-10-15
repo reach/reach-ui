@@ -1,12 +1,12 @@
-import Helmet from "../components/DefaultHelmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Alert Dialog"
   meta={[
     {
       name: "description",
-      content: "Accessible alert dialog for React",
-    },
+      content: "Accessible alert dialog for React"
+    }
   ]}
 />
 
@@ -31,12 +31,12 @@ Every dialog must render an `AlertDialogLabel` so the screen reader knows what t
 
 This is built on top of [Dialog](/dialog), so `AlertDialog` spreads its props and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and `AlertDialogContent` to `DialogContent`.
 
-```jsx
+```jsx-live
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false)
-  const cancelRef = React.useRef()
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
+  const [showDialog, setShowDialog] = React.useState(false);
+  const cancelRef = React.useRef();
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
   return (
     <div>
@@ -61,7 +61,7 @@ function Example(props) {
         </AlertDialog>
       )}
     </div>
-  )
+  );
 }
 ```
 
@@ -81,8 +81,8 @@ import {
   AlertDialogLabel,
   AlertDialogDescription,
   AlertDialogOverlay,
-  AlertDialogContent,
-} from "@reach/alert-dialog"
+  AlertDialogContent
+} from "@reach/alert-dialog";
 ```
 
 # AlertDialog
@@ -144,7 +144,7 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
     <AlertDialog isOpen={true}>
       <AlertDialogLabel>I will be open</AlertDialogLabel>
     </AlertDialog>
-  )
+  );
 }
 ```
 
@@ -158,20 +158,20 @@ When the user clicks outside the modal or hits the escape key, this function wil
 
 **IMPORTANT**: Ensure that `onDismiss` and the click handler of the `leastDestructiveRef` are identical!
 
-```jsx
+```jsx-live
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false)
-  const cancelRef = React.useRef()
+  const [showDialog, setShowDialog] = React.useState(false);
+  const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true)
+  const open = () => setShowDialog(true);
   const destroyStuff = () => {
-    console.log("Destroyed!")
-    setShowDialog(false)
-  }
+    console.log("Destroyed!");
+    setShowDialog(false);
+  };
   // make sure `close` and the `onClick` of the
   // `leastDestructiveRef` are identical, best to just
   // pass them both the same function
-  const close = () => setShowDialog(false)
+  const close = () => setShowDialog(false);
 
   return (
     <div>
@@ -196,7 +196,7 @@ function Example(props) {
         </AlertDialog>
       )}
     </div>
-  )
+  );
 }
 ```
 
@@ -206,15 +206,15 @@ _Type_: `node`
 
 To prevent accidental data loss, an alert dialog should focus the least destructive action button when it opens.
 
-```jsx
+```jsx-live
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false)
+  const [showDialog, setShowDialog] = React.useState(false);
 
   // we'll pass this ref to both AlertDialog and our button
-  const cancelRef = React.useRef()
+  const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
   return (
     <div>
@@ -238,7 +238,7 @@ function Example(props) {
         </AlertDialog>
       )}
     </div>
-  )
+  );
 }
 ```
 
@@ -341,15 +341,15 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render an `AlertDialogContent` inside.
 
-```jsx
+```jsx-live
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false)
+  const [showDialog, setShowDialog] = React.useState(false);
 
   // we'll pass this ref to both AlertDialog and our button
-  const cancelRef = React.useRef()
+  const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true)
-  const close = () => setShowDialog(false)
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
 
   return (
     <div>
@@ -377,7 +377,7 @@ function Example(props) {
         </AlertDialogOverlay>
       )}
     </div>
-  )
+  );
 }
 ```
 
