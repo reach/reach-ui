@@ -1,12 +1,12 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Dialog (Modal)"
   meta={[
     {
       name: "description",
-      content: "An accessible React.js modal dialog.",
-    },
+      content: "An accessible React.js modal dialog."
+    }
   ]}
 />
 
@@ -21,7 +21,7 @@ import Helmet from "react-helmet"
 
 An accessible dialog or "modal" window.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -29,18 +29,10 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Open Dialog
-      </button>
+      <button onClick={open}>Open Dialog</button>
 
-      <Dialog
-        isOpen={showDialog}
-        onDismiss={close}
-      >
-        <button
-          className="close-button"
-          onClick={close}
-        >
+      <Dialog isOpen={showDialog} onDismiss={close}>
+        <button className="close-button" onClick={close}>
           <VisuallyHidden>Close</VisuallyHidden>
           <span aria-hidden>×</span>
         </button>
@@ -62,7 +54,7 @@ yarn add @reach/dialog
 And then import the components you need:
 
 ```js
-import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog"
+import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 ```
 
 # Dialog
@@ -90,7 +82,7 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -98,19 +90,11 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
-      <Dialog
-        style={{ color: "red" }}
-        isOpen={showDialog}
-        onDismiss={close}
-      >
+      <Dialog style={{ color: "red" }} isOpen={showDialog} onDismiss={close}>
         <p>My text is red because the style prop got applied to the div</p>
-        <button onClick={close}>
-          Okay
-        </button>
+        <button onClick={close}>Okay</button>
       </Dialog>
     </div>
   );
@@ -137,7 +121,7 @@ If you'd rather not have the dialog always rendered, you can put a guard in fron
 
 Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. You should probably do this when your dialog contains a lot of elements.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -145,9 +129,7 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
       {showDialog && (
         <Dialog onDismiss={close}>
@@ -155,9 +137,7 @@ function Example(props) {
             I don’t use <code>isOpen</code>, I just render when I should and not
             when I shouldn’t.
           </p>
-          <button onClick={close}>
-            Okay
-          </button>
+          <button onClick={close}>Okay</button>
         </Dialog>
       )}
     </div>
@@ -173,7 +153,7 @@ This function is called whenever the user hits "Escape" or clicks outside the di
 
 The only time you shouldn't close the dialog on dismiss is when the dialog requires a choice and none of them are "cancel". For example, perhaps two records need to be merged and the user needs to pick the surviving record. Neither choice is less destructive than the other, in these cases you may want to alert the user they need to a make a choice on dismiss instead of closing the dialog.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -181,28 +161,21 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
-      <Dialog
-        isOpen={showDialog}
-        onDismiss={close}
-      >
+      <Dialog isOpen={showDialog} onDismiss={close}>
         <p>
           It is your job to close this with state when the user clicks outside
           or presses escape.
         </p>
-        <button onClick={close}>
-          Okay
-        </button>
+        <button onClick={close}>Okay</button>
       </Dialog>
     </div>
   );
 }
 ```
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const [showWarning, setShowWarning] = React.useState(false);
@@ -215,29 +188,15 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
-      <Dialog
-        isOpen={showDialog}
-        onDismiss={dismiss}
-      >
+      <Dialog isOpen={showDialog} onDismiss={dismiss}>
         {showWarning && (
-          <p style={{ color: 'red' }}>
-            You must make a choice, sorry :(
-          </p>
+          <p style={{ color: "red" }}>You must make a choice, sorry :(</p>
         )}
-        <p>
-          Which router should survive the merge?
-        </p>
-        <button onClick={close}>
-          React Router
-        </button>
-        {" "}
-        <button onClick={close}>
-          @reach/router
-        </button>
+        <p>Which router should survive the merge?</p>
+        <button onClick={close}>React Router</button>{" "}
+        <button onClick={close}>@reach/router</button>
       </Dialog>
     </div>
   );
@@ -262,7 +221,7 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render a `DialogContent` inside.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -270,20 +229,21 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
       <DialogOverlay
         style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
         isOpen={showDialog}
         onDismiss={close}
       >
-        <DialogContent style={{ boxShadow: '0px 10px 50px hsla(0, 0%, 0%, 0.33)' }}>
-          <p>The overlay styles are a white fade instead of the default black fade.</p>
-          <button onClick={close}>
-            Very nice.
-          </button>
+        <DialogContent
+          style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
+        >
+          <p>
+            The overlay styles are a white fade instead of the default black
+            fade.
+          </p>
+          <button onClick={close}>Very nice.</button>
         </DialogContent>
       </DialogOverlay>
     </div>
@@ -343,7 +303,7 @@ _Type_: `ref`
 
 By default the first focusable element will receive focus when the dialog opens but you can provide a ref to focus instead.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -355,17 +315,10 @@ function Example(props) {
       <button onClick={open}>Show Dialog</button>
 
       {showDialog && (
-        <DialogOverlay
-          initialFocusRef={buttonRef}
-          onDismiss={close}
-        >
+        <DialogOverlay initialFocusRef={buttonRef} onDismiss={close}>
           <DialogContent>
-            <p>
-              Pass the button ref to DialogOverlay and
-              the button.
-            </p>
-            <button onClick={close}>Not me</button>{" "}
-            <button
+            <p>Pass the button ref to DialogOverlay and the button.</p>
+            <button onClick={close}>Not me</button> <button
               ref={buttonRef}
               onClick={close}
             >
@@ -399,7 +352,7 @@ Note: Must be a child of `DialogOverlay`.
 
 Note: You only need to use this when you are also styling `DialogOverlay`, otherwise you can use the high-level `Dialog` component and pass the props to it. Any props passed to `Dialog` component (besides `isOpen` and `onDismiss`) will be spread onto `DialogContent`.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -408,25 +361,21 @@ function Example(props) {
 
   return (
     <div>
-      <button onClick={open}>
-        Show Dialog
-      </button>
+      <button onClick={open}>Show Dialog</button>
 
-      <DialogOverlay
-        isOpen={showDialog}
-        onDismiss={close}
-      >
+      <DialogOverlay isOpen={showDialog} onDismiss={close}>
         <DialogContent
           style={{
             border: "solid 5px hsla(0, 0%, 0%, 0.5)",
-            borderRadius: "10px",
+            borderRadius: "10px"
           }}
         >
           <p>I have a nice border now.</p>
-          <p>Note that we could have used the simpler <code>Dialog</code> instead.</p>
-          <button onClick={close}>
-            Got it.
-          </button>
+          <p>
+            Note that we could have used the simpler <code>Dialog</code>{" "}
+            instead.
+          </p>
+          <button onClick={close}>Got it.</button>
         </DialogContent>
       </DialogOverlay>
     </div>
@@ -481,7 +430,7 @@ Accepts any renderable content.
 
 If you'd like to animate the content, give [React Spring](https://github.com/drcmda/react-spring) a shot.
 
-```.jsx
+```jsx-live
 function Example(props) {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
@@ -489,7 +438,7 @@ function Example(props) {
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
-    leave: { opacity: 0, y: 10 },
+    leave: { opacity: 0, y: 10 }
   });
   return (
     <div>

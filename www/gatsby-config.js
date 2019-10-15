@@ -1,6 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: "Gatsby Default Starter",
+    title: "Reach UI",
+    description: `The accessible foundation of your React apps and design systems.`,
+    author: `@ryanflorence`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -11,16 +13,34 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-mdx`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
         extensions: [".mdx", ".md"],
-        defaultLayout: require.resolve("./src/components/mdx-layout.js"),
-        mdPlugins: [
-          require("remark-images"),
-          require("remark-emoji"),
-          require("remark-slug"),
-          require("remark-autolink-headings"),
+        defaultLayouts: {
+          default: require.resolve("./src/components/mdx-layout.js"),
+        },
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+          },
+          {
+            resolve: `gatsby-remark-emoji`,
+          },
+          {
+            resolve: `gatsby-remark-slug`,
+          },
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+          },
         ],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `docs`,
+        path: `${__dirname}/../packages`,
+        ignore: ["examples/**", "es/**", "umd/**"],
       },
     },
     {
@@ -30,13 +50,20 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    {
+      resolve: `gatsby-transformer-react-docgen`,
+      options: {
+        resolver: require("react-docgen").resolver.findAllComponentDefinitions,
+        babelrcRoots: ["../*"],
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "gatsby-starter-default",
-        short_name: "starter",
+        name: "reach-ui",
+        short_name: "reach-ui",
         start_url: "/",
         background_color: "#1159a6",
         theme_color: "#1159a6",
@@ -44,8 +71,5 @@ module.exports = {
         icon: "src/images/reach-icon.png", // This path is relative to the root of the site.
       },
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // 'gatsby-plugin-offline',
   ],
 }

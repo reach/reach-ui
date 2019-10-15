@@ -1,7 +1,9 @@
 {
-  "private": true,
   "name": "reach-ui",
+  "description": "The accessible foundation of your React apps and design systems",
+  "private": true,
   "repository": "https://github.com/reach/reach-ui",
+  "author": "React Training <hello@reacttraining.com>",
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
     "test": "MODULE_FORMAT=cjs jest packages",
@@ -9,7 +11,8 @@
     "build": "lerna run build --parallel",
     "changes": "lerna-changelog",
     "clean": "git clean -fdX .",
-    "lint": "lerna run lint"
+    "lint": "lerna run lint",
+    "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
   },
   "dependencies": {
     "@babel/cli": "^7.6.4",
@@ -21,7 +24,7 @@
     "@storybook/react": "^5.2.4",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
-    "autoprefixer": "^9.6.1",
+    "autoprefixer": "^9.6.5",
     "babel-eslint": "10.x",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",

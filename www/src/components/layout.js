@@ -1,27 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import React from "react"
-import PropTypes from "prop-types"
-import Helmet from "react-helmet"
-import Link from "gatsby-link"
+import React from "react";
+import PropTypes from "prop-types";
+import Helmet from "react-helmet";
+import Link from "gatsby-link";
 
-import "@reach/dialog/styles.css"
-import "@reach/skip-nav/styles.css"
-import "@reach/menu-button/styles.css"
-import "@reach/tabs/styles.css"
-import "@reach/tooltip/styles.css"
-import "@reach/combobox/styles.css"
+import "@reach/dialog/styles.css";
+import "@reach/skip-nav/styles.css";
+import "@reach/menu-button/styles.css";
+import "@reach/tabs/styles.css";
+import "@reach/tooltip/styles.css";
+import "@reach/combobox/styles.css";
 
-import "./normalize.css"
-import "./skeleton.css"
-import "./syntax.css"
-import "./app.css"
+import "./normalize.css";
+import "./root.css";
+import "./skeleton.css";
+import "./syntax.css";
+import "./app.css";
 
-import Logo from "./Logo"
-import MatchMedia from "./MatchMedia"
-import Component from "@reach/component-component"
-import VisuallyHidden from "@reach/visually-hidden"
+import Logo from "./Logo";
+import MatchMedia from "./MatchMedia";
+import Component from "@reach/component-component";
+import VisuallyHidden from "@reach/visually-hidden";
 
-import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 
 let NavLink = React.forwardRef((props, ref) =>
   props.href ? (
@@ -35,17 +36,17 @@ let NavLink = React.forwardRef((props, ref) =>
   ) : (
     <Link ref={ref} className="NavLink" {...props} />
   )
-)
+);
 
 let Bar = () => (
   <div
     style={{
       height: 3,
       background: "white",
-      margin: "3px 0",
+      margin: "3px 0"
     }}
   />
-)
+);
 
 let NavTag = props => (
   <span
@@ -57,11 +58,11 @@ let NavTag = props => (
       marginLeft: "0.5em",
       display: "inlineBlock",
       background: `rgba(255,255,255,0.15)`,
-      borderRadius: 3,
+      borderRadius: 3
     }}
     {...props}
   />
-)
+);
 
 let Nav = ({ media }) => (
   <Component
@@ -69,13 +70,13 @@ let Nav = ({ media }) => (
     refs={{ navNode: null }}
     initialState={{ isOpen: null }}
     didMount={({ setState, props }) => {
-      setState({ isOpen: !props.media.small })
+      setState({ isOpen: !props.media.small });
     }}
     didUpdate={({ prevProps, props, setState, state }) => {
       if (prevProps.media.small && !props.media.small) {
-        setState({ isOpen: true })
+        setState({ isOpen: true });
       } else if (!prevProps.media.small && props.media.small) {
-        setState({ isOpen: false })
+        setState({ isOpen: false });
       }
     }}
   >
@@ -97,18 +98,18 @@ let Nav = ({ media }) => (
                 textTransform: "none",
                 fontSize: "80%",
                 borderRadius: "50%",
-                zIndex: 1,
+                zIndex: 1
               }}
               onFocus={event => {
-                event.stopPropagation()
+                event.stopPropagation();
               }}
               onClick={() => {
-                let nextState = !state.isOpen
+                let nextState = !state.isOpen;
                 setState({ isOpen: nextState }, () => {
                   if (nextState) {
-                    refs.navNode.focus()
+                    refs.navNode.focus();
                   }
-                })
+                });
               }}
             >
               <div aria-hidden="true">
@@ -123,14 +124,14 @@ let Nav = ({ media }) => (
         <div
           id="nav"
           style={{
-            left: state.isOpen == null ? undefined : state.isOpen ? 0 : -250,
+            left: state.isOpen == null ? undefined : state.isOpen ? 0 : -250
           }}
           onFocus={() => {
-            setState({ isOpen: true })
+            setState({ isOpen: true });
           }}
           onBlur={() => {
             if (media.small) {
-              setState({ isOpen: false })
+              setState({ isOpen: false });
             }
           }}
         >
@@ -139,7 +140,7 @@ let Nav = ({ media }) => (
               display: "flex",
               flexDirection: "column",
               width: "100%",
-              minHeight: "100%",
+              minHeight: "100%"
             }}
           >
             <div style={{ flex: 1 }}>
@@ -152,7 +153,7 @@ let Nav = ({ media }) => (
               <NavLink
                 to="/"
                 ref={node => {
-                  refs.navNode = node
+                  refs.navNode = node;
                 }}
               >
                 Home
@@ -201,7 +202,7 @@ let Nav = ({ media }) => (
                 color: "hsla(0, 100%, 100%, 0.75)",
                 textAlign: "center",
                 fontSize: "80%",
-                padding: 5,
+                padding: 5
               }}
             >
               &copy; {new Date().getFullYear()} Reach
@@ -211,11 +212,11 @@ let Nav = ({ media }) => (
       </React.Fragment>
     )}
   </Component>
-)
+);
 
 class Layout extends React.Component {
   render() {
-    let { children } = this.props
+    let { children } = this.props;
     return (
       <>
         <Helmet
@@ -224,8 +225,8 @@ class Layout extends React.Component {
             {
               name: "description",
               content:
-                "The accessible foundation of your React apps and design systems.",
-            },
+                "The accessible foundation of your React apps and design systems."
+            }
           ]}
         >
           <html lang="en" />
@@ -234,7 +235,7 @@ class Layout extends React.Component {
         <MatchMedia
           server={{ small: true }}
           media={{
-            small: "(max-width: 800px)",
+            small: "(max-width: 800px)"
           }}
         >
           {media => (
@@ -247,12 +248,12 @@ class Layout extends React.Component {
           )}
         </MatchMedia>
       </>
-    )
+    );
   }
 }
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
+  children: PropTypes.node.isRequired
+};
 
-export default Layout
+export default Layout;
