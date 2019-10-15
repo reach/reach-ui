@@ -29,18 +29,14 @@ import { wrapEvent, assignRef } from "@reach/utils";
 //    our slider on par. We'll explore animated and multi-handle sliders next.
 //  - We may want to research some use cases for reversed sliders in RTL languages if that's a thing
 
-const SliderOrientation = {
-  horizontal: "horizontal",
-  vertical: "vertical"
-};
+export const SliderOrientationHorizontal = "horizontal";
+export const SliderOrientationVertical = "vertical";
 
-const HandleAlignment = {
-  // Handle is centered directly over the current value marker
-  center: "center",
-  // Handle is contained within the bounds of the track, offset slightlu from the value's
-  // center mark to accommodate
-  contain: "contain"
-};
+// Handle is centered directly over the current value marker
+export const SliderHandleAlignCenter = "center";
+// Handle is contained within the bounds of the track, offset
+// slightly from the value's center mark to accommodate
+export const SliderHandleAlignContain = "contain";
 
 const SliderContext = createContext({});
 const useSliderContext = () => useContext(SliderContext);
@@ -55,7 +51,7 @@ export const Slider = forwardRef(function Slider(
     disabled,
     value: controlledValue,
     getValueText,
-    handleAlignment = HandleAlignment.center,
+    handleAlignment = SliderHandleAlignCenter,
     id,
     max = 100,
     min = 0,
@@ -65,7 +61,7 @@ export const Slider = forwardRef(function Slider(
     onPointerDown,
     onPointerMove,
     onPointerUp,
-    orientation = SliderOrientation.horizontal,
+    orientation = SliderOrientationHorizontal,
     step: stepProp,
     children,
     ...rest
@@ -101,7 +97,7 @@ export const Slider = forwardRef(function Slider(
   const _value = isControlled ? controlledValue : value;
   const actualValue = getAllowedValue(_value, min, max);
   const trackPercent = valueToPercent(actualValue, min, max);
-  const isVertical = orientation === SliderOrientation.vertical;
+  const isVertical = orientation === SliderOrientationVertical;
   const step = stepProp || 1;
 
   const handleSize = isVertical
@@ -109,7 +105,7 @@ export const Slider = forwardRef(function Slider(
     : handleDimensions.width;
 
   const handlePosition = `calc(${trackPercent}% - ${
-    handleAlignment === HandleAlignment.center
+    handleAlignment === SliderHandleAlignCenter
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
@@ -340,13 +336,13 @@ if (__DEV__) {
     defaultValue: number,
     disabled: bool,
     getValueText: func,
-    handleAlignment: oneOf([HandleAlignment.center, HandleAlignment.contain]),
+    handleAlignment: oneOf([SliderHandleAlignCenter, SliderHandleAlignContain]),
     min: number,
     max: number,
     name: string,
     orientation: oneOf([
-      SliderOrientation.horizontal,
-      SliderOrientation.vertical
+      SliderOrientationHorizontal,
+      SliderOrientationVertical
     ]),
     onChange: func,
     children: oneOfType([node, func]).isRequired,
