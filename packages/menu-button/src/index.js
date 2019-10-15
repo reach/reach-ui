@@ -95,7 +95,7 @@ const getInitialMenuState = () => ({
 
 const checkIfStylesIncluded = () => checkStyles("menu-button");
 
-const Menu = ({ children }) => {
+const Menu = ({ children, ...props }) => {
   return (
     <Component
       getRefs={getMenuRefs}
@@ -105,7 +105,7 @@ const Menu = ({ children }) => {
       getSnapshotBeforeUpdate={checkIfAppManagedFocus}
     >
       {context => (
-        <MenuContext.Provider value={{ ...context }}>
+        <MenuContext.Provider value={{ ...context, wrapperProps: props }}>
           {typeof children === "function"
             ? children({ isOpen: context.state.isOpen })
             : children}
@@ -329,7 +329,7 @@ if (__DEV__) {
 const MenuList = React.forwardRef((props, forwardedRef) => {
   const ownRef = React.useRef(null);
   const ref = ownRef || forwardedRef;
-  const { state } = React.useContext(MenuContext);
+  const { state, wrapperProps } = React.useContext(MenuContext);
   return (
     state.isOpen && (
       <Portal>
@@ -341,6 +341,7 @@ const MenuList = React.forwardRef((props, forwardedRef) => {
                   data-reach-menu
                   ref={menuRef}
                   style={getStyles(state.buttonRect, menuRect)}
+                  {...wrapperProps}
                 >
                   <MenuListImpl {...props} ref={ref} />
                 </div>
