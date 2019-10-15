@@ -1,12 +1,12 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - useWindowSize, WindowSize"
   meta={[
     {
       name: "description",
-      content: "Measure the current window dimensions",
-    },
+      content: "Measure the current window dimensions"
+    }
   ]}
 />
 
@@ -28,28 +28,40 @@ yarn add @reach/window-size
 And then import it:
 
 ```js
-import WindowSize, { useWindowSize } from "@reach/window-size"
+import WindowSize, { useWindowSize } from "@reach/window-size";
 ```
 
 # useWindowSize
 
-```jsx
-const { width, height } = useWindowSize()
+```jsx-live
+function Example() {
+  const { width, height } = useWindowSize();
+  return (
+    <div>
+      <p>Resize your window.</p>
+      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
+    </div>
+  );
+}
 ```
 
 Hook that observes and returns the measurements of the browser window.
 
 # WindowSize
 
-```jsx
-<WindowSize>
-  {size => (
-    <div>
-      <div>Resize your window.</div>
-      <pre>{JSON.stringify(size, null, 2)}</pre>
-    </div>
-  )}
-</WindowSize>
+```jsx-live
+function Example() {
+  return (
+    <WindowSize>
+      {size => (
+        <div>
+          <p>Resize your window.</p>
+          <pre>{JSON.stringify(size, null, 2)}</pre>
+        </div>
+      )}
+    </WindowSize>
+  );
+}
 ```
 
 ## Props

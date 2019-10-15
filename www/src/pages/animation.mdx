@@ -1,4 +1,4 @@
-import Helmet from "../components/DefaultHelmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet title="Reach UI - Animation" />
 
@@ -32,24 +32,28 @@ You can animate the "enter" phase with just a little CSS.
 
 And then add the class to your menu:
 
-```jsx
-<Menu>
-  <MenuButton>
-    Actions <span aria-hidden>▾</span>
-  </MenuButton>
-  <MenuList className="slide-down">
-    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
-    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
-    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
-  </MenuList>
-</Menu>
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList className="slide-down">
+        <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
 ```
 
 However, you can't animate the "exit" phase with just CSS because React removes the element from the DOM immediately.
 
 ## CSS + reCONDITION Phase
 
-You may want to use CSS for both the enter and exit phases. For this, we can combine some CSS with the `Phase` component from reCONDITION.
+You may want to use CSS for both the enter and exit phases. For this, we can combine some CSS with the `Phased` component from [reCONDITION](https://github.com/theKashey/recondition).
 
 First add the CSS to define the animation:
 
@@ -57,7 +61,6 @@ First add the CSS to define the animation:
 .slide-down {
   transition-property: transform, opacity;
   transition-duration: 300ms;
-
   opacity: 0;
   transform: translateY(-10px);
 }
@@ -75,37 +78,41 @@ First add the CSS to define the animation:
 Then import the Phased component:
 
 ```jsx
-import { Phased } from "recondition"
+import { Phased } from "recondition";
 ```
 
 Now we're ready to go:
 
-```jsx
-<Menu>
-  <MenuButton>
-    Actions <span aria-hidden>▾</span>
-  </MenuButton>
-  <MenuList className="slide-down">
-    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
-    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
-    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
-  </MenuList>
-</Menu>
+```jsx-live
+function Example() {
+  // TODO: Update with Phased example
+  return (
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList className="slide-down">
+        <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
 ```
 
 ## React Spring
 
-```jsx
-let AnimatedDialogOverlay = animated(DialogOverlay)
-let AnimatedDialogContent = animated(DialogContent)
-
+```jsx-live
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false)
+  let AnimatedDialogOverlay = animated(DialogOverlay);
+  let AnimatedDialogContent = animated(DialogContent);
+  const [showDialog, setShowDialog] = React.useState(false);
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
-    leave: { opacity: 0, y: 10 },
-  })
+    leave: { opacity: 0, y: 10 }
+  });
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
@@ -117,7 +124,7 @@ function Example(props) {
                 style={{
                   transform: `translate3d(0px, ${styles.y}px, 0px)`,
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10,
+                  borderRadius: 10
                 }}
               >
                 <button onClick={() => setShowDialog(false)}>
@@ -133,6 +140,6 @@ function Example(props) {
           )
       )}
     </div>
-  )
+  );
 }
 ```

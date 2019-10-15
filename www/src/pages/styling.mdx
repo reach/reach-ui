@@ -1,4 +1,4 @@
-import Helmet from "react-helmet"
+import Helmet from "../components/DefaultHelmet";
 
 <Helmet
   title="Reach UI - Styling"
@@ -6,8 +6,8 @@ import Helmet from "react-helmet"
     {
       name: "description",
       content:
-        "Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.",
-    },
+        "Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want."
+    }
   ]}
 />
 
@@ -46,10 +46,10 @@ If you are using a module bundler like webpack or parcel, you can import them wh
 
 ```jsx
 // import the components
-import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button"
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
 
 // and the styles
-import "@reach/menu-button/styles.css"
+import "@reach/menu-button/styles.css";
 
 // now you're good!
 ```
