@@ -285,10 +285,16 @@ button#hamburger {
 }
 
 .pink [data-reach-combobox-popover] {
-  border: none;
+  border: 1px solid #ccc;
+  border-top: 0;
   box-sizing: border-box;
   position: relative;
   top: -1px;
+}
+
+.pink[data-reach-combobox]:focus-within [data-reach-combobox-popover] {
+  border: 1px solid transparent;
+  border-top: 0;
 }
 
 .pink[data-reach-combobox] {
@@ -312,7 +318,7 @@ button#hamburger {
   box-shadow: 0px 0px 2px rgb(234, 89, 111);
 }
 
-.pink [data-reach-combobox-input]:focus {
+.pink[data-reach-combobox]:focus-within [data-reach-combobox-input] {
   border-color: transparent;
 }
 
@@ -364,7 +370,6 @@ button#hamburger {
   border-radius: 10px;
   z-index: 1;
   transform-origin: center;
-  transition: transform 200ms ease-out;
 }
 
 [data-reach-slider-handle-orientation="horizontal"] {
@@ -405,7 +410,6 @@ button#hamburger {
   border: 1px solid #fff;
   border-radius: 4px;
   transform-origin: center;
-  transition: background 200ms ease-out;
 }
 
 [data-reach-slider-marker-orientation="horizontal"] {
