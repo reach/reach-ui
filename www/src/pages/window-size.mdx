@@ -25,17 +25,6 @@ npm install @reach/window-size
 yarn add @reach/window-size
 ```
 
-```jsx
-<WindowSize>
-  {size => (
-    <div>
-      <div>Resize your window.</div>
-      <pre>{JSON.stringify(size, null, 2)}</pre>
-    </div>
-  )}
-</WindowSize>
-```
-
 And then import it:
 
 ```js
@@ -51,6 +40,17 @@ const { width, height } = useWindowSize()
 Hook that observes and returns the measurements of the browser window.
 
 # WindowSize
+
+```jsx
+<WindowSize>
+  {size => (
+    <div>
+      <div>Resize your window.</div>
+      <pre>{JSON.stringify(size, null, 2)}</pre>
+    </div>
+  )}
+</WindowSize>
+```
 
 ## Props
 
