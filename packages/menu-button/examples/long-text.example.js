@@ -1,7 +1,13 @@
 import React from "react";
 import "../styles.css";
 import { action } from "@storybook/addon-actions";
-import { Menu, MenuList, MenuLink, MenuButton, MenuItem } from "../src/index";
+import {
+  Menu,
+  MenuList,
+  MenuLink,
+  MenuButton,
+  MenuItem
+} from "@reach/menu-button";
 
 export let name = "Long Text";
 
@@ -16,7 +22,7 @@ export let Example = () => (
         <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
         <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
         <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
-        <MenuLink href="https://reach.tech/workshops">
+        <MenuLink href="https://reacttraining.com/workshops/">
           Attend a Workshop Attend a Workshop Attend a Workshop Attend a
           Workshop Attend a Workshop
         </MenuLink>
@@ -32,7 +38,7 @@ export let Example = () => (
           <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
           <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
           <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
-          <MenuLink href="https://reach.tech/workshops">
+          <MenuLink href="https://reacttraining.com/workshops/">
             Attend a Workshop Attend a Workshop Attend a Workshop Attend a
             Workshop Attend a Workshop
           </MenuLink>

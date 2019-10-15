@@ -11,9 +11,8 @@
 // see how this goes, and if it becomes a problem, we can introduce a portal
 // later.
 
-import React from "react";
+import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
-import Component from "@reach/component-component";
 import VisuallyHidden from "@reach/visually-hidden";
 import { node, string } from "prop-types";
 
@@ -34,11 +33,39 @@ let liveRegions = {
   assertive: null
 };
 
+const Alert = forwardRef(function Alert(
+  { children, type = "polite", ...props },
+  forwardedRef
+) {
+  const ownRef = useRef(null);
+  const ref = forwardedRef || ownRef;
+  const child = useMemo(
+    () => (
+      <div {...props} ref={ref} data-reach-alert>
+        {children}
+      </div>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [children, props]
+  );
+  useMirrorEffects(type, child);
+
+  return child;
+});
+
+if (__DEV__) {
+  Alert.propTypes = {
+    children: node,
+    type: string
+  };
+}
+
+export default Alert;
+
+////////////////////////////////////////////////////////////////////////////////
 let renderTimer = null;
-
-let renderAlerts = () => {
+function renderAlerts() {
   clearTimeout(renderTimer);
-
   renderTimer = setTimeout(() => {
     Object.keys(elements).forEach(type => {
       let container = liveRegions[type];
@@ -51,7 +78,8 @@ let renderAlerts = () => {
             >
               {Object.keys(elements[type]).map(key =>
                 React.cloneElement(elements[type][key], {
-                  key
+                  key,
+                  ref: null
                 })
               )}
             </div>
@@ -61,9 +89,34 @@ let renderAlerts = () => {
       }
     });
   }, 500);
-};
+}
 
-let createMirror = type => {
+function useMirrorEffects(type, element) {
+  const prevType = usePrevious(type);
+  const mirror = useRef(null);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      mirror.current = createMirror(type);
+      mirror.current.mount(element);
+    } else if (!prevType !== type) {
+      mirror.current.unmount();
+      mirror.current = createMirror(type);
+      mirror.current.mount(element);
+    } else {
+      mirror.current.update(element, prevType, type);
+    }
+  }, [element, type, prevType]);
+
+  useEffect(() => {
+    return () => {
+      mirror.current && mirror.current.unmount();
+    };
+  }, []);
+}
+
+function createMirror(type) {
   let key = ++keys[type];
 
   let mount = element => {
@@ -84,49 +137,19 @@ let createMirror = type => {
     renderAlerts();
   };
 
-  let unmount = element => {
+  let unmount = () => {
     delete elements[type][key];
     renderAlerts();
   };
 
   return { mount, update, unmount };
-};
-
-let Alert = ({ children, type, ...props }) => {
-  let element = (
-    <div {...props} data-reach-alert>
-      {children}
-    </div>
-  );
-  return (
-    <Component
-      type={type}
-      getRefs={() => ({ mirror: createMirror(type) })}
-      didMount={({ refs }) => refs.mirror.mount(element)}
-      didUpdate={({ refs, prevProps }) => {
-        if (prevProps.type !== type) {
-          refs.mirror.unmount();
-          refs.mirror = createMirror(type);
-          refs.mirror.mount(element);
-        } else {
-          refs.mirror.update(element, prevProps.type, type);
-        }
-      }}
-      willUnmount={({ refs }) => refs.mirror.unmount(element)}
-      children={element}
-    />
-  );
-};
-
-Alert.defaultProps = {
-  type: "polite"
-};
-
-if (__DEV__) {
-  Alert.propTypes = {
-    children: node,
-    type: string
-  };
 }
 
-export default Alert;
+// TODO: Move to @reach/utils
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}

@@ -1,5 +1,7 @@
 declare module "@reach/alert" {
-  type AlertProps = {
+  import * as React from "react";
+
+  export type AlertProps = {
     type?: "assertive" | "polite";
   } & HTMLDivElement;
 

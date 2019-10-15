@@ -21,16 +21,14 @@ const PopoverImpl = forwardRef(function PopoverImpl(
   const popoverRef = useRef();
   const popoverRect = useRect(popoverRef);
   const targetRect = useRect(targetRef);
+  const ref = useForkedRef(popoverRef, forwardedRef);
 
   useSimulateTabNavigationForReactTree(targetRef, popoverRef);
 
   return (
     <div
       data-reach-popover=""
-      ref={node => {
-        assignRef(popoverRef, node);
-        assignRef(forwardedRef, node);
-      }}
+      ref={ref}
       style={{
         ...style,
         position: "absolute",
@@ -237,4 +235,19 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
       element.tabIndex = tabIndex;
     });
   }
+}
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(...refs) {
+  return React.useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
 }

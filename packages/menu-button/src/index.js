@@ -3,7 +3,16 @@ import Portal from "@reach/portal";
 import Rect from "@reach/rect";
 import WindowSize from "@reach/window-size";
 import Component from "@reach/component-component";
-import { node, func, object, string, number, oneOfType, any } from "prop-types";
+import {
+  node,
+  func,
+  object,
+  string,
+  number,
+  oneOfType,
+  any,
+  bool
+} from "prop-types";
 import { wrapEvent, checkStyles, assignRef } from "@reach/utils";
 
 const noop = () => {};
@@ -31,7 +40,7 @@ const manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
       // haven't measured the popover yet, give it a frame otherwise
       // we'll scroll to the bottom of the page >.<
       requestAnimationFrame(() => {
-        if (refs.items[state.selectionIndex]) {
+        if (refs.items && refs.items[state.selectionIndex]) {
           refs.items[state.selectionIndex].focus();
         }
       });
@@ -40,7 +49,7 @@ const manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
     }
   } else if (!state.isOpen && prevState.isOpen) {
     if (!appManagedFocus) {
-      refs.button.focus();
+      refs.button && refs.button.focus();
     }
     // we want to ignore the immediate focus of a tooltip so it doesn't pop
     // up again when the menu closes, only pops up when focus returns again
@@ -50,8 +59,8 @@ const manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
     if (state.selectionIndex === -1) {
       // clear highlight when mousing over non-menu items, but focus the menu
       // so the the keyboard will work after a mouseover
-      refs.menu.focus();
-    } else {
+      refs.menu && refs.menu.focus();
+    } else if (refs.items && refs.items[state.selectionIndex]) {
       refs.items[state.selectionIndex].focus();
     }
   }
@@ -77,6 +86,7 @@ const getMenuRefs = () => ({
 });
 
 const getInitialMenuState = () => ({
+  buttonId: null,
   isOpen: false,
   buttonRect: undefined,
   selectionIndex: -1,
@@ -86,7 +96,6 @@ const getInitialMenuState = () => ({
 const checkIfStylesIncluded = () => checkStyles("menu-button");
 
 const Menu = ({ children }) => {
-  const [buttonId, setButtonId] = React.useState(null);
   return (
     <Component
       getRefs={getMenuRefs}
@@ -96,7 +105,7 @@ const Menu = ({ children }) => {
       getSnapshotBeforeUpdate={checkIfAppManagedFocus}
     >
       {context => (
-        <MenuContext.Provider value={{ ...context, buttonId, setButtonId }}>
+        <MenuContext.Provider value={{ ...context }}>
           {typeof children === "function"
             ? children({ isOpen: context.state.isOpen })
             : children}
@@ -114,13 +123,15 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////
 const MenuButton = React.forwardRef(
-  ({ onClick, onKeyDown, onMouseDown, id, ...props }, ref) => {
-    const { refs, state, setState, buttonId, setButtonId } = React.useContext(
-      MenuContext
-    );
+  ({ onClick, onKeyDown, onMouseDown, id, ...props }, forwardedRef) => {
+    const { refs, state, setState } = React.useContext(MenuContext);
+    const ownRef = React.useRef(null);
+    const ref = forwardedRef || ownRef;
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => setButtonId(id != null ? id : genId()), []);
+    React.useEffect(
+      () => setState({ buttonId: id != null ? id : genId() }),
+      [] // eslint-disable-line react-hooks/exhaustive-deps
+    );
 
     return (
       <Rect
@@ -129,13 +140,13 @@ const MenuButton = React.forwardRef(
       >
         {({ ref: rectRef }) => (
           <button
-            id={buttonId}
+            id={state.buttonId}
             aria-haspopup="menu"
             aria-expanded={state.isOpen}
             data-reach-menu-button
             type="button"
             ref={node => {
-              rectRef(node);
+              assignRef(rectRef, node);
               assignRef(ref, node);
               refs.button = node;
             }}
@@ -182,17 +193,19 @@ const MenuItem = React.forwardRef(
       onSelect,
       onClick,
       role = "menuitem",
-      state,
-      setState,
-      index,
       onKeyDown,
       onMouseMove,
       onMouseLeave,
-      _ref,
+      _index: index,
+      _ref = null,
+      focusable,
       ...rest
     },
-    ref
+    forwardedRef
   ) => {
+    const { state, setState } = React.useContext(MenuContext);
+    const ownRef = React.useRef(null);
+    const ref = useForkedRef(_ref, forwardedRef || ownRef);
     const isSelected = index === state.selectionIndex;
     const select = () => {
       onSelect();
@@ -201,10 +214,7 @@ const MenuItem = React.forwardRef(
     return (
       <div
         {...rest}
-        ref={node => {
-          assignRef(ref, node);
-          assignRef(_ref, node);
-        }}
+        ref={ref}
         data-reach-menu-item={role === "menuitem" ? true : undefined}
         role={role}
         tabIndex="-1"
@@ -236,15 +246,16 @@ const MenuItem = React.forwardRef(
 
 if (__DEV__) {
   MenuItem.propTypes = {
+    focusable: bool,
     onSelect: func.isRequired,
     onClick: func,
     role: string,
     state: object,
     setState: func,
-    index: number,
     onKeyDown: func,
     onMouseMove: func,
-    _ref: func
+    _ref: func,
+    _index: number
   };
 }
 
@@ -257,29 +268,24 @@ const MenuLink = React.forwardRef(
       component: Comp,
       as: AsComp = "a",
       style,
-      setState,
-      state,
-      index,
-      _ref,
+      _index: index,
+      _ref = null,
+      focusable,
       ...props
     },
-    ref
+    forwardedRef
   ) => {
+    const { state, setState } = React.useContext(MenuContext);
     const Link = Comp || AsComp;
+    const ownRef = React.useRef(null);
+    const ref = useForkedRef(_ref, forwardedRef || ownRef);
     if (Comp) {
       console.warn(
         "[@reach/menu-button]: Please use the `as` prop instead of `component`."
       );
     }
     return (
-      <MenuItem
-        role="none"
-        state={state}
-        setState={setState}
-        index={index}
-        onSelect={noop}
-        _ref={noop}
-      >
+      <MenuItem role="none" onSelect={noop} _index={index} _ref={noop}>
         <Link
           role="menuitem"
           data-reach-menu-item
@@ -295,10 +301,7 @@ const MenuLink = React.forwardRef(
               event.stopPropagation();
             }
           })}
-          ref={node => {
-            assignRef(_ref, node);
-            assignRef(ref, node);
-          }}
+          ref={ref}
           style={{ ...style }}
           {...props}
         />
@@ -312,6 +315,7 @@ if (__DEV__) {
     onKeyDown: func,
     onClick: func,
     component: any,
+    focusable: bool,
     as: any,
     style: object,
     setState: func,
@@ -322,8 +326,10 @@ if (__DEV__) {
 }
 ///////////////////////////////////////////////////////////////////
 
-const MenuList = React.forwardRef((props, ref) => {
-  const { refs, state, setState } = React.useContext(MenuContext);
+const MenuList = React.forwardRef((props, forwardedRef) => {
+  const ownRef = React.useRef(null);
+  const ref = ownRef || forwardedRef;
+  const { state } = React.useContext(MenuContext);
   return (
     state.isOpen && (
       <Portal>
@@ -336,13 +342,7 @@ const MenuList = React.forwardRef((props, ref) => {
                   ref={menuRef}
                   style={getStyles(state.buttonRect, menuRect)}
                 >
-                  <MenuListImpl
-                    {...props}
-                    setState={setState}
-                    state={state}
-                    refs={refs}
-                    ref={ref}
-                  />
+                  <MenuListImpl {...props} ref={ref} />
                 </div>
               )}
             </Rect>
@@ -363,23 +363,24 @@ const focusableChildrenTypes = [MenuItem, MenuLink];
 
 const isFocusableChildType = child =>
   focusableChildrenTypes.includes(child.type);
+
 const getFocusableMenuChildren = childrenArray => {
   const focusable = childrenArray.filter(child => isFocusableChildType(child));
   return focusable;
 };
 
 const MenuListImpl = React.forwardRef(
-  ({ refs, state, setState, children, onKeyDown, onBlur, ...rest }, ref) => {
+  ({ children, onKeyDown, onBlur, ...rest }, ref) => {
+    const { state, setState, refs } = React.useContext(MenuContext);
     const clones = Children.toArray(children).filter(Boolean);
     const focusableChildren = getFocusableMenuChildren(clones);
-    const { buttonId } = React.useContext(MenuContext);
 
     return (
       <div
         data-reach-menu-list
         {...rest}
         role="menu"
-        aria-labelledby={buttonId}
+        aria-labelledby={state.buttonId}
         tabIndex="-1"
         ref={node => {
           refs.menu = node;
@@ -418,9 +419,7 @@ const MenuListImpl = React.forwardRef(
             const focusIndex = focusableChildren.indexOf(child);
 
             return React.cloneElement(child, {
-              setState,
-              state,
-              index: focusIndex,
+              _index: focusIndex,
               _ref: node => (refs.items[focusIndex] = node)
             });
           }
@@ -489,3 +488,18 @@ const getStyles = (buttonRect, menuRect) => {
 };
 
 export { Menu, MenuList, MenuButton, MenuLink, MenuItem };
+
+// TODO: Remove and import from @reach/utils once it's been added to the package
+function useForkedRef(...refs) {
+  return React.useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return node => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
+}

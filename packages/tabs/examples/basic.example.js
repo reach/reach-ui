@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles.css";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "../src";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 export const name = "Basic";
 

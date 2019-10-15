@@ -1,5 +1,5 @@
 import React from "react";
-import Component from "../src/index";
+import Component from "@reach/component-component";
 
 export let name = "Lifecycles and Refs";
 

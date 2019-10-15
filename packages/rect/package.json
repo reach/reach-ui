@@ -9,7 +9,6 @@
     "lint": "eslint . --max-warnings=0"
   },
   "dependencies": {
-    "@reach/component-component": "^0.4.0-beta.0",
     "@reach/observe-rect": "^1.0.3",
     "prop-types": "^15.7.2"
   },
@@ -17,13 +16,14 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "Ryan Florence <@ryanflorence>",
+  "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "files": [
     "es",
     "src",
     "lib",
     "index.js",
+    "index.d.ts",
     "styles.css"
   ]
 }

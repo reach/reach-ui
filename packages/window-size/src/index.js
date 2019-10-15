@@ -1,37 +1,12 @@
 import React from "react";
-import Component from "@reach/component-component";
 import { func } from "prop-types";
 
 let hasWindow = typeof window !== "undefined";
 
-let didMount = ({ refs, setState }) => {
-  let resize = () =>
-    setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
-  window.addEventListener("resize", resize);
-  refs.removeEvent = () => {
-    window.removeEventListener("resize", resize);
-  };
+export const WindowSize = ({ children }) => {
+  const dimensions = useWindowSize();
+  return children(dimensions);
 };
-
-let willUnmount = ({ refs }) => {
-  refs.removeEvent();
-};
-
-let WindowSize = ({ children }) => (
-  <Component
-    refs={{ removeEvent: null }}
-    initialState={{
-      width: hasWindow && window.innerWidth,
-      height: hasWindow && window.innerHeight
-    }}
-    didMount={didMount}
-    willUnmount={willUnmount}
-    render={({ state }) => children(state)}
-  />
-);
 
 if (__DEV__) {
   WindowSize.propTypes = {
@@ -40,3 +15,20 @@ if (__DEV__) {
 }
 
 export default WindowSize;
+
+export function useWindowSize() {
+  const [dimensions, setDimensions] = React.useState({
+    width: hasWindow ? window.innerWidth : 0,
+    height: hasWindow ? window.innerHeight : 0
+  });
+  React.useLayoutEffect(() => {
+    const resize = () =>
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+  return dimensions;
+}
