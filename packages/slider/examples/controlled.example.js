@@ -1,12 +1,6 @@
 import React from "react";
 import "../styles.css";
-import {
-  SliderInput,
-  SliderHandle,
-  SliderMarker,
-  SliderTrack,
-  SliderTrackHighlight
-} from "@reach/slider";
+import { Slider, SliderMarker } from "@reach/slider";
 
 export const name = "Controlled";
 
@@ -55,19 +49,15 @@ export const Example = () => {
     <div>
       <button onClick={() => setValue(MIN)}>Bring it Down!</button>
       <button onClick={() => setValue(MAX)}>Max Out!</button>
-      <SliderInput onChange={setValue} value={value} min={MIN} max={MAX}>
-        <SliderTrack>
-          <SliderTrackHighlight />
-          <SliderHandle />
-          {markers.map(({ face, label, value: val }) => (
-            <SliderMarker value={val}>
-              <span role="img" aria-label={label}>
-                {face}
-              </span>
-            </SliderMarker>
-          ))}
-        </SliderTrack>
-      </SliderInput>
+      <Slider onChange={setValue} value={value} min={MIN} max={MAX}>
+        {markers.map(({ face, label, value: val }) => (
+          <SliderMarker value={val}>
+            <span role="img" aria-label={label}>
+              {face}
+            </span>
+          </SliderMarker>
+        ))}
+      </Slider>
       <p role="status" style={{ color: "crimson" }}>
         Happieness level at {value}% – {status}
       </p>
