@@ -42,8 +42,54 @@ export const SLIDER_HANDLE_ALIGN_CONTAIN = "contain";
 const SliderContext = createContext({});
 const useSliderContext = () => useContext(SliderContext);
 
+// These proptypes are shared between the composed SliderInput component and the simplified Slider
+const sliderPropTypes = {
+  defaultValue: number,
+  disabled: bool,
+  getValueText: func,
+  handleAlignment: oneOf([
+    SLIDER_HANDLE_ALIGN_CENTER,
+    SLIDER_HANDLE_ALIGN_CONTAIN
+  ]),
+  min: number,
+  max: number,
+  name: string,
+  orientation: oneOf([
+    SLIDER_ORIENTATION_HORIZONTAL,
+    SLIDER_ORIENTATION_VERTICAL
+  ]),
+  onChange: func,
+  step: number,
+  value: number
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 export const Slider = forwardRef(function Slider(
+  { children, ...props },
+  forwardedRef
+) {
+  return (
+    <SliderInput ref={forwardedRef} {...props}>
+      <SliderTrack>
+        <SliderTrackHighlight />
+        <SliderHandle />
+        {children}
+      </SliderTrack>
+    </SliderInput>
+  );
+});
+
+Slider.displayName = "Slider";
+
+if (__DEV__) {
+  Slider.propTypes = {
+    ...sliderPropTypes,
+    children: node
+  };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+export const SliderInput = forwardRef(function SliderInput(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
@@ -330,28 +376,12 @@ export const Slider = forwardRef(function Slider(
   );
 });
 
-Slider.displayName = "Slider";
+SliderInput.displayName = "SliderInput";
 
 if (__DEV__) {
-  Slider.propTypes = {
-    defaultValue: number,
-    disabled: bool,
-    getValueText: func,
-    handleAlignment: oneOf([
-      SLIDER_HANDLE_ALIGN_CENTER,
-      SLIDER_HANDLE_ALIGN_CONTAIN
-    ]),
-    min: number,
-    max: number,
-    name: string,
-    orientation: oneOf([
-      SLIDER_ORIENTATION_HORIZONTAL,
-      SLIDER_ORIENTATION_VERTICAL
-    ]),
-    onChange: func,
-    children: oneOfType([node, func]).isRequired,
-    step: number,
-    value: number
+  SliderInput.propTypes = {
+    ...sliderPropTypes,
+    children: oneOfType([node, func]).isRequired
   };
 }
 
