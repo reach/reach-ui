@@ -9,7 +9,7 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog accessibilityLabel="Announcement" isOpen={showDialog}>
+      <Dialog aria-label="Announcement" isOpen={showDialog}>
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>This is killer!</p>
         <input type="text" />

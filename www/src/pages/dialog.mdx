@@ -77,13 +77,12 @@ High-level component to render a modal dialog window over the top of the page (o
 
 ## Dialog Props
 
-| Prop                                             | Type   |
-| ------------------------------------------------ | ------ |
-| [element props](#dialog-element-props)           | spread |
-| [accessibilityLabel](#dialog-accessibilitylabel) | string |
-| [isOpen](#dialog-isopen)                         | bool   |
-| [onDismiss](#dialog-ondismiss)                   | func   |
-| [children](#dialog-element-props)                | node   |
+| Prop                                   | Type   |
+| -------------------------------------- | ------ |
+| [element props](#dialog-element-props) | spread |
+| [isOpen](#dialog-isopen)               | bool   |
+| [onDismiss](#dialog-ondismiss)         | func   |
+| [children](#dialog-element-props)      | node   |
 
 ### Dialog element props
 
@@ -115,42 +114,6 @@ function Example(props) {
       </Dialog>
     </div>
   );
-}
-```
-
-### Dialog accessibilityLabel
-
-_Type_: `string`
-
-A hidden label for assistive devices.
-
-If the label text is visible on screen inside the dialog, you should wrap the label inside a component with a unique `id` prop and provide a matching value to `aria-labelledby` on the Dialog instead of `accessibilityLabel`. Use `accessibilityLabel` when the name of the Dialog cannot be determined programmatically from its visible content, as there are cases where providing a visible label is not the desired user experience.
-
-#### With accessibilityLabel
-
-```jsx
-function Example(props) {
-  return (
-    <Dialog accessibilityLabel="Warning about next steps" isOpen={true}>
-      <p>This might take a while! Are you sure?</p>
-      <button>Go Forward</button> <button>Go Back</button>
-    </Dialog>
-  )
-}
-```
-
-#### With aria-labelledby
-
-```jsx
-function Example(props) {
-  const labelId = `label:${useId()}`
-  return (
-    <Dialog aria-labelledby={labelId} isOpen={true}>
-      <h1 id={labelId}>Next Steps</h1>
-      <p>Follow these steps carefully!</p>
-      <button>Go Forward</button> <button>Go Back</button>
-    </Dialog>
-  )
 }
 ```
 
@@ -485,11 +448,10 @@ Use the following CSS to target the overlay:
 
 ## DialogContent Props
 
-| Prop                                                    | Type   |
-| ------------------------------------------------------- | ------ |
-| [element props](#dialogcontent-element-props)           | spread |
-| [accessibilityLabel](#dialogcontent-accessibilitylabel) | string |
-| [children](#dialogcontent-element-props)                | node   |
+| Prop                                          | Type   |
+| --------------------------------------------- | ------ |
+| [element props](#dialogcontent-element-props) | spread |
+| [children](#dialogcontent-element-props)      | node   |
 
 ### DialogContent element props
 
@@ -502,12 +464,6 @@ Any props not listed above will be spread onto the underlying `div`.
   <p>The underlying element will receive a class</p>
 </DialogOverlay>
 ```
-
-### DialogContent accessibilityLabel
-
-A hidden label for assistive devices.
-
-See [Dialog accessibilityLabel](#dialog-accessibilitylabel) for details.
 
 ### DialogContent children
 
@@ -571,6 +527,46 @@ function Example(props) {
 ### Tabbable Elements
 
 It is recommended to have at least one tabbable element in the dialog content. Ideally the first element in the dialog is a close button. If no tabbable elements are found, the dialog content element itself will receive focus.
+
+### Labeling
+
+As with many other complex UI components, a dialog needs to be properly labeled to provide context for users with assistive technology such as screen readers. If a dialog is announced to the user without a label, it can be confusing and difficult to navigate.
+
+There are two general approaches to labeling UI components on the web: `aria-label` and `aria-labelledby`. If the text of the is visible on screen, you should provide the label's HTML element with a unique `id` attribute. That `id` value is then given to an `aria-labelledby` attribute (or in React, an `aria-labelledby` prop) on the `Dialog`. With this context, the screen reader will announce whatever text is nested inside that ID'd markup as the title for the `Dialog`.
+
+Alternatively, a design may not include a visible label on the screen, but this context is still important for non-sighted users. In this case, you need to provide an `aria-label` prop to your `Dialog` instead.
+
+#### With `aria-label`
+
+```jsx
+function Example(props) {
+  return (
+    <Dialog aria-label="Warning about next steps" isOpen={true}>
+      <p>This might take a while! Are you sure?</p>
+      <button>Go Forward</button> <button>Go Back</button>
+    </Dialog>
+  )
+}
+```
+
+#### With aria-labelledby
+
+```jsx
+function Example(props) {
+  const labelId = `label:${useId()}`
+  return (
+    <Dialog aria-labelledby={labelId} isOpen={true}>
+      <h1 id={labelId}>Next Steps</h1>
+      <p>Follow these steps carefully!</p>
+      <button>Go Forward</button> <button>Go Back</button>
+    </Dialog>
+  )
+}
+```
+
+> NOTE: American users may see `aria-labelledby` and suspect a typo. In some regions (including the UK and Great Britain), the word is indeed spelled `labelled` instead of `labeled`. The correct HTML attribute is `aria-labelledby`.
+
+For more details, see the [W3C recommendations for `aria-label`](https://www.w3.org/TR/wai-aria/#aria-label).
 
 ### Aria Hiding Other Elements
 

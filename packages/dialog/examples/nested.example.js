@@ -11,7 +11,7 @@ export let Example = () => {
     <div>
       <button onClick={() => setShowDialog1(true)}>Show Dialog</button>
       <Dialog
-        accessibilityLabel="Announcement"
+        aria-label="Announcement"
         onDismiss={() => setShowDialog1(false)}
         isOpen={showDialog1}
       >
@@ -21,7 +21,7 @@ export let Example = () => {
           </button>
           <p>You can never have too many design escape hatches</p>
           <Dialog
-            accessibilityLabel="A second announcement"
+            aria-label="A second announcement"
             style={{ position: "relative", left: 20, top: 20 }}
             onDismiss={() => setShowDialog2(false)}
             isOpen={showDialog2}
