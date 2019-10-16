@@ -1,11 +1,6 @@
 import React from "react";
 import "../styles.css";
-import {
-  Slider,
-  SliderHandle,
-  SliderTrack,
-  SliderTrackHighlight
-} from "@reach/slider";
+import { Slider } from "@reach/slider";
 import { useAudio, timeToMs, msToTime } from "./utils";
 
 export const name = "Audio Progress";
@@ -44,12 +39,7 @@ export const Example = () => {
         min={0}
         max={max}
         getValueText={val => msToTime(val)}
-      >
-        <SliderTrack>
-          <SliderTrackHighlight />
-          <SliderHandle />
-        </SliderTrack>
-      </Slider>
+      />
       {audio}
     </div>
   );

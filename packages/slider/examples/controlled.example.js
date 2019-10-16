@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import {
-  Slider,
+  SliderInput,
   SliderHandle,
   SliderMarker,
   SliderTrack,
@@ -55,7 +55,7 @@ export const Example = () => {
     <div>
       <button onClick={() => setValue(MIN)}>Bring it Down!</button>
       <button onClick={() => setValue(MAX)}>Max Out!</button>
-      <Slider onChange={setValue} value={value} min={MIN} max={MAX}>
+      <SliderInput onChange={setValue} value={value} min={MIN} max={MAX}>
         <SliderTrack>
           <SliderTrackHighlight />
           <SliderHandle />
@@ -67,7 +67,7 @@ export const Example = () => {
             </SliderMarker>
           ))}
         </SliderTrack>
-      </Slider>
+      </SliderInput>
       <p role="status" style={{ color: "crimson" }}>
         Happieness level at {value}% – {status}
       </p>

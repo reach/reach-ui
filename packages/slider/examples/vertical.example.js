@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import {
-  Slider,
+  SliderInput,
   SliderHandle,
   SliderMarker,
   SliderTrack,
@@ -12,7 +12,7 @@ import {
 export const name = "Vertical";
 
 export const Example = () => (
-  <Slider orientation={SLIDER_ORIENTATION_VERTICAL}>
+  <SliderInput orientation={SLIDER_ORIENTATION_VERTICAL}>
     <SliderTrack>
       <SliderTrackHighlight />
       <SliderHandle />
@@ -23,5 +23,5 @@ export const Example = () => (
         <span>90</span>
       </SliderMarker>
     </SliderTrack>
-  </Slider>
+  </SliderInput>
 );

@@ -3,7 +3,7 @@ import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { wrapEvent } from "@reach/utils";
 import "../styles.css";
 import {
-  Slider,
+  SliderInput,
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
@@ -36,7 +36,7 @@ export const Example = () => {
     wrapEvent(preventDefaultWhenFocused, handler);
 
   return (
-    <Slider>
+    <SliderInput>
       {({ value, hasFocus }) => (
         <SliderTrack>
           <SliderTrackHighlight />
@@ -55,6 +55,6 @@ export const Example = () => {
           />
         </SliderTrack>
       )}
-    </Slider>
+    </SliderInput>
   );
 };
