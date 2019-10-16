@@ -6,13 +6,13 @@ import {
   SliderMarker,
   SliderTrack,
   SliderTrackHighlight,
-  SliderOrientationVertical
+  SLIDER_ORIENTATION_VERTICAL
 } from "@reach/slider";
 
 export const name = "Vertical";
 
 export const Example = () => (
-  <Slider orientation={SliderOrientationVertical}>
+  <Slider orientation={SLIDER_ORIENTATION_VERTICAL}>
     <SliderTrack>
       <SliderTrackHighlight />
       <SliderHandle />
