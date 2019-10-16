@@ -5,7 +5,7 @@ import React from "react";
 import { wrapEvent } from "@reach/utils";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import {
-  Slider,
+  SliderInput,
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
@@ -38,7 +38,7 @@ export const Example = () => {
     wrapEvent(preventDefaultWhenFocused, handler);
 
   return (
-    <Slider>
+    <SliderInput>
       {({ value }) => (
         <SliderTrack>
           <SliderTrackHighlight />
@@ -57,6 +57,6 @@ export const Example = () => {
           />
         </SliderTrack>
       )}
-    </Slider>
+    </SliderInput>
   );
 };

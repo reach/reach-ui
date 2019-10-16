@@ -1,12 +1,7 @@
 import "@reach/slider/styles.css";
 
 import React from "react";
-import {
-  Slider,
-  SliderHandle,
-  SliderTrack,
-  SliderTrackHighlight
-} from "@reach/slider";
+import { Slider } from "@reach/slider";
 
 import { useAudio, timeToMs, msToTime } from "./utils.js";
 
@@ -46,12 +41,7 @@ export const Example = () => {
         min={0}
         max={max}
         getValueText={val => msToTime(val)}
-      >
-        <SliderTrack>
-          <SliderTrackHighlight />
-          <SliderHandle />
-        </SliderTrack>
-      </Slider>
+      ></Slider>
       {audio}
     </div>
   );
