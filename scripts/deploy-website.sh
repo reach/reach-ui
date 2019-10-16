@@ -20,7 +20,8 @@ mv public "$tmp_dir/static/reach-ui"
 cd $tmp_dir
 git add -A
 git commit \
-	--author "Travis CI <travis-ci@reacttraining.com>" \
+  --allow-empty \
+  --author "Travis CI <travis-ci@reacttraining.com>" \
   -m "Update reach-ui website
 
 https://travis-ci.org/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
