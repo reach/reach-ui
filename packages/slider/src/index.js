@@ -340,7 +340,6 @@ export const SliderInput = forwardRef(function SliderInput(
   return (
     <SliderContext.Provider value={ctx}>
       <div
-        role="presentation"
         ref={sliderRef}
         tabIndex={-1}
         onPointerDown={handlePointerDown}
@@ -549,7 +548,6 @@ export const SliderMarker = forwardRef(function SliderMarker(
 
   return value != null ? (
     <div
-      role="presentation"
       ref={ref}
       style={{
         position: "absolute",
