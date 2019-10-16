@@ -5,13 +5,14 @@ import {
   Slider,
   SliderHandle,
   SliderTrack,
-  SliderTrackHighlight
+  SliderTrackHighlight,
+  SLIDER_HANDLE_ALIGN_CONTAIN
 } from "@reach/slider";
 
 export const name = "Contained Handle";
 
 export const Example = () => (
-  <Slider handleAlignment="contain">
+  <Slider handleAlignment={SLIDER_HANDLE_ALIGN_CONTAIN}>
     <SliderTrack>
       <SliderTrackHighlight />
       <SliderHandle />
