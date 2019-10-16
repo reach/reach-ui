@@ -1,6 +1,6 @@
-import React from "react"
-import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import React from "react";
+import Helmet from "react-helmet";
+import { useStaticQuery, graphql } from "gatsby";
 
 const DefaultHelmet = ({ meta = [], ...helmetProps }) => {
   const data = useStaticQuery(graphql`
@@ -12,7 +12,7 @@ const DefaultHelmet = ({ meta = [], ...helmetProps }) => {
         }
       }
     }
-  `)
+  `);
 
   return (
     <Helmet
@@ -20,13 +20,13 @@ const DefaultHelmet = ({ meta = [], ...helmetProps }) => {
       meta={[
         {
           name: "description",
-          content: data.site.siteMetadata.description,
+          content: data.site.siteMetadata.description
         },
-        ...meta,
+        ...meta
       ]}
       {...helmetProps}
     />
-  )
-}
+  );
+};
 
-export default DefaultHelmet
+export default DefaultHelmet;

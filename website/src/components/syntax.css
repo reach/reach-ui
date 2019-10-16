@@ -8,12 +8,14 @@ pre > code {
   display: block;
 }
 
-  pre, code[class*="language-"] {
-    font-size: 14px;
-  }
+pre,
+code[class*="language-"] {
+  font-size: 14px;
+}
 
 @media (max-width: 550px) {
-  pre, code[class*="language-"] {
+  pre,
+  code[class*="language-"] {
     font-size: 12px;
   }
 }
