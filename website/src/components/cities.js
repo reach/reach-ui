@@ -1,23190 +1,23190 @@
 window.cities = [
   {
     city: "Abbeville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Aberdeen",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Aberdeen",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Aberdeen",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Aberdeen",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Abilene",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Abilene",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Abingdon",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Abington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Absecon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Accokeek",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Acton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Acushnet",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Acworth",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Ada",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Adams",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Addison",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Addison",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Adelanto",
-    state: "California",
+    state: "California"
   },
   {
     city: "Adelphi",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Adrian",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Affton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Agawam",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Agoura Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ahuimanu",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Aiea",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Aiken",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Air Force Academy",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Airmont",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Akron",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Alabaster",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Alachua",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Alameda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alamo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alamo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Alamo Heights",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Alamogordo",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Alamosa",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Albany",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Albany",
-    state: "California",
+    state: "California"
   },
   {
     city: "Albany",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Albany",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Albemarle",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Albert Lea",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Albertville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Albion",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Albion",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Albuquerque",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Alcoa",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Alden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Alderwood Manor",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Aldine",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Alexander City",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Alexandria",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Alexandria",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Alexandria",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Alexandria",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Alexandria",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Algonquin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Alhambra",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alice",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Aliquippa",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Aliso Viejo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Allegany",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Allen",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Allen Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Allendale",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Allendale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Allentown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Alliance",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Alliance",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Allouez",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Alma",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Aloha",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Alondra Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alpena",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Alpharetta",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Alpine",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alpine",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Alsip",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Alta Sierra",
-    state: "California",
+    state: "California"
   },
   {
     city: "Altadena",
-    state: "California",
+    state: "California"
   },
   {
     city: "Altamont",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Altamont",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Altamonte Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Alton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Altoona",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Altoona",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Altoona",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Altus",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Alum Rock",
-    state: "California",
+    state: "California"
   },
   {
     city: "Alvin",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Amarillo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Ambler",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Ambridge",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "American Canyon",
-    state: "California",
+    state: "California"
   },
   {
     city: "American Fork",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Americus",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Ames",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Amesbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Amherst",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Amherst",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Amherst",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Amherst",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Amherst Center",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Amityville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ammon",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Amory",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Amsterdam",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Anaconda-Deer Lodge County",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Anacortes",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Anadarko",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Anaheim",
-    state: "California",
+    state: "California"
   },
   {
     city: "Anchorage",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Andalusia",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Anderson",
-    state: "California",
+    state: "California"
   },
   {
     city: "Anderson",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Anderson",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Anderson Mill",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Andover",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Andover",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Andover",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Andover",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Andrews",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Andrews AFB",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Angleton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Angola",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Ankeny",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Ann Arbor",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Annandale",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Annapolis",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Anniston",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Anoka",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Ansonia",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Anthony",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Antigo",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Antioch",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Antioch",
-    state: "California",
+    state: "California"
   },
   {
     city: "Apache Junction",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Apex",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Apollo Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Apopka",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Apple Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Apple Valley",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Appleton",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Applewood",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Aptos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Aquia Harbour",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Arab",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Arabi",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Aransas Pass",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Arbutus",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Arcadia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Arcadia",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Arcadia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Arcata",
-    state: "California",
+    state: "California"
   },
   {
     city: "Archbald",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Archdale",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Arden Hills",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Arden-Arcade",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ardmore",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Ardmore",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Arkadelphia",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Arkansas City",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Arlington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Arlington",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Arlington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Arlington",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Arlington",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Arlington Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Arnold",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Arnold",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Arroyo Grande",
-    state: "California",
+    state: "California"
   },
   {
     city: "Artesia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Artesia",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Artondale",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Arvada",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Arvin",
-    state: "California",
+    state: "California"
   },
   {
     city: "Asbury Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Asheboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Asheville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Ashland",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Ashland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Ashland",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Ashland",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Ashland",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ashland",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Ashland",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Ashland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ashtabula",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Ashwaubenon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Aspen Hill",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Astoria",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Atascadero",
-    state: "California",
+    state: "California"
   },
   {
     city: "Atascocita",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Atchison",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Athens",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Athens",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Athens",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Athens",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Athens-Clarke County",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Atherton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Athol",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Atkinson",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Atlanta",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Atlantic",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Atlantic Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Atlantic City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Atmore",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Attalla",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Attica",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Attleboro",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Atwater",
-    state: "California",
+    state: "California"
   },
   {
     city: "Auburn",
-    state: "California",
+    state: "California"
   },
   {
     city: "Auburn",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Auburn",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Auburn",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Auburn",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Auburn",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Auburn",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Auburn",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Auburn Hills",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Auburndale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Audubon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Audubon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "August",
-    state: "California",
+    state: "California"
   },
   {
     city: "Augusta",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Augusta",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Augusta-Richmond County",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Aurora",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Aurora",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Aurora",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Aurora",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Aurora",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Austin",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Austin",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Austintown",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Avenal",
-    state: "California",
+    state: "California"
   },
   {
     city: "Avenel",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Aventura",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Avocado Heights",
-    state: "California",
+    state: "California"
   },
   {
     city: "Avon",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Avon",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Avon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Avon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Avon Lake",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Avon Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Avondale",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Ayer",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Azalea Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Azle",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Aztec",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Azusa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Babylon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Back Mountain",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bacliff",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bailey’s Crossroads",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bainbridge",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Bainbridge Island",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Baker",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Baker City",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Bakersfield",
-    state: "California",
+    state: "California"
   },
   {
     city: "Balch Springs",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Baldwin",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Baldwin",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Baldwin Harbor",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Baldwin Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Baldwinsville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ballenger Creek",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ballston",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ballwin",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Baltimore",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bangor",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Bangor Trident Base",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Banning",
-    state: "California",
+    state: "California"
   },
   {
     city: "Baraboo",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Barberton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Barclay-Kingston",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bardstown",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Barnhart",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Barnstable Town",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Barre",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Barrington",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Barrington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Barrington",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Barrington",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Barstow",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bartlesville",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Bartlett",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bartlett",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Barton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bartonville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bartow",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bastrop",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Batavia",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Batavia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Batesville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Batesville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Batesville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Bath",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Bath",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Baton Rouge",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Battle Creek",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Battle Ground",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Bay City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bay City",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Bay Minette",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Bay Point",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bay Shore",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bay St. Louis",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Bay Village",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bayonet Point",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bayonne",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bayou Cane",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Bayport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bayshore Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Baytown",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bayville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Baywood",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Baywood-Los Osos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Beach Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Beachwood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Beachwood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Beacon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Beacon Square",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bear",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Beatrice",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Beaufort",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Beaumont",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Beaumont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Beaver Dam",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Beaver Falls",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Beavercreek",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Beaverton",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Beckett Ridge",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Beckley",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Bedford",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bedford",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bedford",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bedford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bedford",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Bedford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Bedford",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Bedford Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bee Ridge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Beech Grove",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Beecher",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Beekman",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Beeville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bel Air",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bel Air North",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bel Air South",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Belchertown",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Belen",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Belfast",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Bell",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bell Gardens",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bella Vista",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Bellair-Meadowbrook Terrace",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bellaire",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bellbrook",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Belle Chasse",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Belle Glade",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Belle Haven",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bellefontaine",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bellefontaine Neighbors",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Bellefonte",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Belleville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Belleville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bellevue",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Bellevue",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Bellevue",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bellevue",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bellevue",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Bellevue",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Bellevue Town",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Bellflower",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bellingham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Bellingham",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Bellmawr",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bellmead",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bellmore",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bellview",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bellwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Belmar",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Belmont",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Belmont",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Belmont",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Belmont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Beloit",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Belpre",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Belton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Belton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Beltsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Belvedere Park",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Belvidere",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bemidji",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Benbrook",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bend",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Benicia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bennettsville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Bennington",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Bennsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bensenville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Benton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Benton",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Benton Harbor",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Bentonville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Berea",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Berea",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Berea",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Bergenfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Berkeley",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Berkeley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Berkeley Heights",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Berkley",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Berkley",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Berlin",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Berlin",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Berlin",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Bermuda Dunes",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bernalillo",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Bernardsville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Berwick",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Berwick",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Berwyn",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bessemer",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Bethalto",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bethany",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Bethel",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Bethel Park",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bethesda",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bethlehem",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bethlehem",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bethpage",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bettendorf",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Beverly",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Beverly Hills",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Beverly Hills",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Beverly Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bexley",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Biddeford",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Big Flats",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Big Lake",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Big Rapids",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Big Spring",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Billerica",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Billings",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Biloxi",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Binghamton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Birmingham",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Birmingham",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Bisbee",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Bismarck",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Bixby",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Black Forest",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Black Jack",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Black Mountain",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Blackfoot",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Blackhawk-Camino Tassajara",
-    state: "California",
+    state: "California"
   },
   {
     city: "Blacklick Estates",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Blacksburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Blackstone",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Blackwell",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Bladensburg",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Blaine",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Blair",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Blakely",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bloomfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bloomfield",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Bloomfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Bloomfield Township",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Blooming Grove",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bloomingdale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bloomingdale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bloomingdale",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bloomingdale",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Bloomington",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bloomington",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Bloomington",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bloomington",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Bloomsburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Blue Ash",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Blue Bell",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Blue Island",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Blue Springs",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Bluefield",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Bluffton",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Blythe",
-    state: "California",
+    state: "California"
   },
   {
     city: "Blytheville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Boardman",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Boaz",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Boca Del Mar",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Boca Raton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Boerne",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bogalusa",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Bogota",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bohemia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Boise City",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Bolingbrook",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bolivar",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Bon Air",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bonadelle Ranchos-Madera Ranchos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bonham",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bonita",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bonita Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bonner Springs",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Bonney Lake",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Boone",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Boone",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Booneville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Boonton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Boonville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Boonville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Borger",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bossier City",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Boston",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Boston",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bostonia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Bothell",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Boulder",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Boulder City",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Boulder Hill",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bound Brook",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bountiful",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Bourbonnais",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bourne",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Bow",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Bowie",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bowleys Quarters",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Bowling Green",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Bowling Green",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Boxford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Boyes Hot Springs",
-    state: "California",
+    state: "California"
   },
   {
     city: "Boynton Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bozeman",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Bradenton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Bradford",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Bradley",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Brainerd",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Braintree",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Brandon",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Brandon",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Branford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Branson",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Brattleboro",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Brawley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Brazil",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Brea",
-    state: "California",
+    state: "California"
   },
   {
     city: "Breaux Bridge",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Brecksville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bremerton",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Brenham",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Brent",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Brentwood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Brentwood",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brentwood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Brentwood",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Brentwood",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Brevard",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Brewer",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Brewster",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Briarcliff Manor",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Bridge City",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Bridge City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bridgeport",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Bridgeport",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Bridgeport",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Bridgeton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Bridgeton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Bridgetown North",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bridgeview",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Bridgewater",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Brier",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Brigantine",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Brigham City",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Brighton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Brighton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brighton",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Bristol",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Bristol",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Bristol",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Bristol",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bristol",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Broadview",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Broadview Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Broadview Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Brockport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brockton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Broken Arrow",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Bronxville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brook Park",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Brookfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Brookfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Brookfield",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Brookhaven",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Brookhaven",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brookhaven",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Brookings",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Brookline",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Brooklyn",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Brooklyn",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Brooklyn Center",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Brooklyn Park",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Brooklyn Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Brookside",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Brooksville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Broomall",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Broomfield",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Brown Deer",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Brownfield",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Browns Mills",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Brownsburg",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Brownsville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Brownsville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Brownsville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Brownsville-Bawcomville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Brownwood",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Brunswick",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Brunswick",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Brunswick",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Brunswick",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Brushy Creek",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bryan",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Bryan",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Bryant",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Bryn Mawr-Skyway",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Buckeye",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Bucyrus",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Budd Lake",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Buechel",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Buena Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Buena Vista",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Buena Vista",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Buffalo",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Buffalo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Buffalo Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Buford",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Bull Run",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Bullhead City",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Burbank",
-    state: "California",
+    state: "California"
   },
   {
     city: "Burbank",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Burien",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Burkburnett",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Burke",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Burleson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Burley",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Burlingame",
-    state: "California",
+    state: "California"
   },
   {
     city: "Burlington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Burlington",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Burlington",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Burlington",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Burlington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Burlington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Burlington",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Burlington",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Burlington",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Burnsville",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Burr Ridge",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Burrillville",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Burton",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Burton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Burtonsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Busti",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Butler",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Butler",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Butte-Silver Bow",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Buxton",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Byram",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Cabot",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Cadillac",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Cahokia",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Cairo",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Cairo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Calabasas",
-    state: "California",
+    state: "California"
   },
   {
     city: "Caldwell",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Caldwell",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Caledonia",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Calexico",
-    state: "California",
+    state: "California"
   },
   {
     city: "Calhoun",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "California",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "California City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Calimesa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Calipatria",
-    state: "California",
+    state: "California"
   },
   {
     city: "Callaway",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Calumet City",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Calumet Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Calverton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Camano",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Camarillo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Camas",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Cambria",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cambridge",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cambridge",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Cambridge",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Camden",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Camden",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Camden",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Cameron",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Cameron Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Camillus",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Camp Hill",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Camp Pendleton North",
-    state: "California",
+    state: "California"
   },
   {
     city: "Camp Pendleton South",
-    state: "California",
+    state: "California"
   },
   {
     city: "Camp Springs",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Camp Verde",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Campbell",
-    state: "California",
+    state: "California"
   },
   {
     city: "Campbell",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Campbellsville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Canandaigua",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Canby",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Candler-McAfee",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Canfield",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Canon City",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Canonsburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Canton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Canton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Canton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Canton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Canton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Canton",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Canton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Canton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Canyon",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Canyon Lake",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Canyon Lake",
-    state: "California",
+    state: "California"
   },
   {
     city: "Canyon Rim",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Cape Canaveral",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cape Coral",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cape Elizabeth",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Cape Girardeau",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Cape St. Claire",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Capitola",
-    state: "California",
+    state: "California"
   },
   {
     city: "Carbondale",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Carbondale",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Carencro",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Caribou",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Carlisle",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Carlsbad",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Carlsbad",
-    state: "California",
+    state: "California"
   },
   {
     city: "Carmel",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Carmel",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Carmichael",
-    state: "California",
+    state: "California"
   },
   {
     city: "Carnegie",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Carney",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Carneys Point",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Carnot-Moon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Carol City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Carol Stream",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Carpentersville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Carpinteria",
-    state: "California",
+    state: "California"
   },
   {
     city: "Carrboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Carroll",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Carrollton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Carrollton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Carrollton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Carson",
-    state: "California",
+    state: "California"
   },
   {
     city: "Carson City",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Carteret",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Cartersville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Carthage",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Carthage",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Caruthersville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Carver",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Cary",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Cary",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Casa de Oro-Mount Helix",
-    state: "California",
+    state: "California"
   },
   {
     city: "Casa Grande",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Casas Adobes",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Cascade-Fairwood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Casper",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Casselberry",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Castle Rock",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Castle Shannon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Castlewood",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Castro Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Castroville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Catalina",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Catalina Foothills",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Catasauqua",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Cathedral City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Catonsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Catskill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cave Spring",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Cayce",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Cazenovia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cedar City",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Cedar Falls",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Cedar Grove",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Cedar Hill",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cedar Hills",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Cedar Lake",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Cedar Mill",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Cedar Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cedar Rapids",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Cedarburg",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Cedarhurst",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cedartown",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Celina",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Center Line",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Center Moriches",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Center Point",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Centereach",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Centerville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Centerville",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Central Falls",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Central Islip",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Central Manchester",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Central Point",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Centralia",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Centralia",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Centreville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Century Village",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ceres",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cerritos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chalco",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Chalmette",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Chambersburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Chamblee",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Champaign",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Champlin",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Chandler",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Chanhassen",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Channahon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Channelview",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Chantilly",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Chanute",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Chaparral",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Chapel Hill",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Chappaqua",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Charles City",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Charleston",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Charleston",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Charleston",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Charlestown",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Charlotte",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Charlotte",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Charlottesville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Charlton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Charter Oak",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chaska",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Chatham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Chatham",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Chatham",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Chattanooga",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Cheat Lake",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Cheektowaga",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Chehalis",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Chelmsford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Chelsea",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Chenango",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cheney",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Cherry Hill Mall",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Cherryland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chesapeake",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Chesapeake Ranch Estates-Drum Point",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cheshire",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Chester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Chester",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Chester",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Chester",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Chesterfield",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Chesterton",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Chestnut Ridge",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cheval",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cheverly",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cheviot",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Chevy Chase",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cheyenne",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Chicago",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Chicago Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Chicago Ridge",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Chickasaw",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Chickasha",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Chico",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chicopee",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Childress",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Chili",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Chillicothe",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Chillicothe",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Chillum",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Chino",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chino Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Chino Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Chippewa Falls",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Choctaw",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Chowchilla",
-    state: "California",
+    state: "California"
   },
   {
     city: "Christiansburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Chubbuck",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Chula Vista",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cicero",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Cicero",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cimarron Hills",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Cincinnati",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Cinco Ranch",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Circleville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Citrus",
-    state: "California",
+    state: "California"
   },
   {
     city: "Citrus Heights",
-    state: "California",
+    state: "California"
   },
   {
     city: "Citrus Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Citrus Ridge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "City of The Dalles",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Claiborne",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Clairton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Clanton",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Claremont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Claremont",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Claremore",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Clarence",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Clarendon Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Clarion",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Clark",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Clarksburg",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Clarksdale",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Clarkson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Clarkston",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Clarkston",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Clarkston Heights-Vineland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Clarkstown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Clarksville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Clarksville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Clarksville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Claverack",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Clawson",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Clay",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Claymont",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Clayton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Clayton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Clayton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Clayton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Clayton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Clear Lake",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Clearfield",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Clearfield",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Clearlake",
-    state: "California",
+    state: "California"
   },
   {
     city: "Clearwater",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cleburne",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Clemmons",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Clemson",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Clermont",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cleveland",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Cleveland",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Cleveland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cleveland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Cleveland Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Clewiston",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cliffside Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Clifton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Clifton",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Clifton Heights",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Clifton Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Clinton",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Clinton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Clinton",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Clinton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Clinton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Clinton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Clinton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Clinton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Clinton",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Clinton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Clinton",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Clinton",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Clinton",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Clive",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Cloquet",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Closter",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Cloverdale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cloverleaf",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cloverly",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Clovis",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Clovis",
-    state: "California",
+    state: "California"
   },
   {
     city: "Clute",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Clyde",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Coachella",
-    state: "California",
+    state: "California"
   },
   {
     city: "Coalinga",
-    state: "California",
+    state: "California"
   },
   {
     city: "Coatesville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Cobleskill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cochituate",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Cockeysville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cocoa",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cocoa Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Coconut Creek",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cody",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Coeur d’Alene",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Coeymans",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Coffeyville",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Cohasset",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Cohoes",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Colchester",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Colchester",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Coldwater",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Colesville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "College",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "College Park",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "College Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "College Place",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "College Station",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Collegedale",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Collegeville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Colleyville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Collier Manor-Cresthaven",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Collierville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Collingdale",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Collingswood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Collins",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Collinsville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Collinsville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Colonia",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Colonial Heights",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Colonial Heights",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Colonial Park",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Colonie",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Colorado Springs",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Colton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Columbia",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Columbia",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Columbia",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Columbia",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Columbia",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Columbia",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Columbia",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Columbia City",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Columbia Heights",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Columbine",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Columbus",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Columbus",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Columbus",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Columbus",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Columbus",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Commack",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Commerce",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Commerce",
-    state: "California",
+    state: "California"
   },
   {
     city: "Commerce City",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Compton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Comstock Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Concord",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Concord",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Concord",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Concord",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Concord",
-    state: "California",
+    state: "California"
   },
   {
     city: "Concord",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Congers",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Conley",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Conneaut",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Connellsville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Connersville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Conning Towers-Nautilus Park",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Conover",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Conroe",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Conshohocken",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Converse",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Conway",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Conway",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Conway",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Conway",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Conyers",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Cookeville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Coolidge",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Coon Rapids",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Cooper City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Coos Bay",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Copiague",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Coppell",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Copperas Cove",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Coral Gables",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Coral Hills",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Coral Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Coral Terrace",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Coralville",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Coram",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Coraopolis",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Corbin",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Corcoran",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cordele",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Corinth",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Corinth",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cornelius",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Cornelius",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Corning",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Corning",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cornwall",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Corona",
-    state: "California",
+    state: "California"
   },
   {
     city: "Coronado",
-    state: "California",
+    state: "California"
   },
   {
     city: "Corpus Christi",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Corrales",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Corry",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Corsicana",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Corte Madera",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cortez",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Cortland",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cortland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Cortlandt",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Cortlandville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Corvallis",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Coshocton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Costa Mesa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cotati",
-    state: "California",
+    state: "California"
   },
   {
     city: "Coto de Caza",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cottage Grove",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Cottage Grove",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Cottage Lake",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Cottonwood",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Cottonwood Heights",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Cottonwood West",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Cottonwood-Verde Village",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Council Bluffs",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Country Club",
-    state: "California",
+    state: "California"
   },
   {
     city: "Country Club",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Country Club Estates",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Country Club Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Country Walk",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Covedale",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Coventry",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Coventry",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Covina",
-    state: "California",
+    state: "California"
   },
   {
     city: "Covington",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Covington",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Covington",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Covington",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Covington",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Covington",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Coweta",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Coxsackie",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Crafton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Craig",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Cranford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Cranston",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Crawford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Crawfordsville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Cresskill",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Crest Hill",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Crestline",
-    state: "California",
+    state: "California"
   },
   {
     city: "Creston",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Crestview",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Crestwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Crestwood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Crestwood Village",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Crete",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Crete",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Creve Coeur",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Crockett",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Crofton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cromwell",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Crookston",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Cross Lanes",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Crossett",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Crossville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Croton-on-Hudson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Crowley",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Crowley",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Crown Point",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Croydon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Crystal",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Crystal City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Crystal Lake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Cudahy",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cudahy",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Cuero",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Cullman",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Culpeper",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Culver City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cumberland",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Cumberland",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Cumberland",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Cumberland Hill",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Cupertino",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cushing",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Cutler",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cutler Ridge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cutlerville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Cuyahoga Falls",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Cynthiana",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Cypress",
-    state: "California",
+    state: "California"
   },
   {
     city: "Cypress Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Cypress Lake",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "D’Iberville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Dade City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Dale City",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Dalhart",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dallas",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dallas",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Dalton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Dalton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Daly City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Damascus",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Dana Point",
-    state: "California",
+    state: "California"
   },
   {
     city: "Danbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Dania Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Danvers",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Danville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Danville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Danville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Danville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Danville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Daphne",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Darby",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Darby Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Darien",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Darien",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Darlington",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Darnestown",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Dartmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Davenport",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Davidson",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Davie",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Davis",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dayton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Dayton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Dayton",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Daytona Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "De Bary",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "De Land",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "De Pere",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "De Ridder",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "De Soto",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "De Witt",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Dearborn",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Dearborn Heights",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Decatur",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Decatur",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Decatur",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Decatur",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Decorah",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Dedham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Deer Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Deer Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Deerfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Deerfield Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Deerpark",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Defiance",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "DeForest",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "DeKalb",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Del Aire",
-    state: "California",
+    state: "California"
   },
   {
     city: "Del City",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Del Rio",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Delafield",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Delano",
-    state: "California",
+    state: "California"
   },
   {
     city: "Delavan",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Delaware",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Delhi",
-    state: "California",
+    state: "California"
   },
   {
     city: "Delmar",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Delphos",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Delray Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Delta",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Deltona",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Deming",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Demopolis",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Denham Springs",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Denison",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Denison",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dennis",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Dent",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Denton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dentsville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Denver",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Depew",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Derby",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Derby",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Derby",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Derry",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Des Moines",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Des Moines",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Des Peres",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Des Plaines",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Desert Hot Springs",
-    state: "California",
+    state: "California"
   },
   {
     city: "DeSoto",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Destin",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Destrehan",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Detroit",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Detroit Lakes",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Devils Lake",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Dewey-Humboldt",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Dexter",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Diamond Bar",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dickinson",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Dickinson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dickson",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Dickson City",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Dighton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Dillon",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Dinuba",
-    state: "California",
+    state: "California"
   },
   {
     city: "Discovery Bay",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dishman",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Dix Hills",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Dixon",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dixon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Dobbs Ferry",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Dock Junction",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Doctor Phillips",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Dodge City",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Dolton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Donaldsonville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Donna",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Doral",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Doraville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Dormont",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Dothan",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Douglas",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Douglas",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Douglas",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Douglasville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Dover",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Dover",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Dover",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Dover",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Dover",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Dowagiac",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Downers Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Downey",
-    state: "California",
+    state: "California"
   },
   {
     city: "Downingtown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Doylestown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Dracut",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Draper",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Drexel Heights",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Drexel Hill",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Druid Hills",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Dry Run",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Dryden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Du Quoin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Duarte",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dublin",
-    state: "California",
+    state: "California"
   },
   {
     city: "Dublin",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Dublin",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "DuBois",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Dubuque",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Dudley",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Duluth",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Duluth",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Dumas",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dumbarton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Dumont",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Dunbar",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Duncan",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Duncanville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Dundalk",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Dunedin",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Dunellen",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Dunkirk",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Dunmore",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Dunn",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Dunn Loring",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Dunwoody",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Duquesne",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Durango",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Durant",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Durham",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Durham",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Durham",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Duxbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Dyer",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Dyersburg",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Eagan",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Eagle",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Eagle Mountain",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Eagle Pass",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Earlimart",
-    state: "California",
+    state: "California"
   },
   {
     city: "Easley",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "East Alton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "East Aurora",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Bethel",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "East Brainerd",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "East Bridgewater",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "East Brunswick",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "East Chicago",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "East Cleveland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "East Compton",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Falmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "East Fishkill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Foothills",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Glenville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Grand Forks",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "East Grand Rapids",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "East Greenbush",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Greenwich",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "East Haddam",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East Hampton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East Hampton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Hartford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East Haven",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East Hemet",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Highland Park",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "East Hill-Meridian",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "East Hills",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Islip",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East La Mirada",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Lake",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "East Lansing",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "East Liverpool",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "East Longmeadow",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "East Los Angeles",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Lyme",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East Massapequa",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Meadow",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Millcreek",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "East Moline",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "East Norriton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "East Northport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Orange",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "East Palo Alto",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Pasadena",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Patchogue",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Peoria",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "East Perrine",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "East Point",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "East Porterville",
-    state: "California",
+    state: "California"
   },
   {
     city: "East Providence",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "East Renton Highlands",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "East Ridge",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "East Riverdale",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "East Rochester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Rockaway",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "East Rutherford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "East San Gabriel",
-    state: "California",
+    state: "California"
   },
   {
     city: "East St. Louis",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "East Stroudsburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "East Wenatchee Bench",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "East Windsor",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "East York",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Eastchester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Easthampton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Eastlake",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Easton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Easton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Easton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Easton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Eastpointe",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Eastwood",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Eaton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Eatonton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Eatontown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Eau Claire",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Echelon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Economy",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Ecorse",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Eden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Eden",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Eden Isle",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Eden Prairie",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Edgemere",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Edgewater",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Edgewater",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Edgewood",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Edgewood",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Edgewood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Edina",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Edinboro",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Edinburg",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Edison",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Edmond",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Edmonds",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Edwards",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Edwardsville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Effingham",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Eglin AFB",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Egypt Lake-Leto",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Eidson Road",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "El Cajon",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Campo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "El Centro",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Cerrito",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Dorado",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "El Dorado",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "El Dorado Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Mirage",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "El Monte",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Paso",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "El Paso de Robles",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Reno",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "El Rio",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Segundo",
-    state: "California",
+    state: "California"
   },
   {
     city: "El Sobrante",
-    state: "California",
+    state: "California"
   },
   {
     city: "Elbridge",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Eldersburg",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Elfers",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Elgin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Elizabeth",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Elizabeth City",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Elizabethton",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Elizabethtown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Elizabethtown",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Elk City",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Elk Grove",
-    state: "California",
+    state: "California"
   },
   {
     city: "Elk Grove Village",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Elk Plain",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Elk River",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Elkhart",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Elkhorn",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Elkhorn",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Elkins",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Elko",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Elkridge",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Elkton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ellensburg",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Ellicott",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ellicott City",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ellington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Ellisville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Ellsworth",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Ellwood City",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Elm Grove",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Elma",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Elmhurst",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Elmira",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Elmont",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Elmwood Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Elmwood Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Elon College",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Eloy",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Elsmere",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Elwood",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Elwood",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Elyria",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Emerson",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Emeryville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Emmaus",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Emporia",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Encinitas",
-    state: "California",
+    state: "California"
   },
   {
     city: "Endicott",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Endwell",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Enfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Englewood",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Englewood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Englewood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Englewood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Enid",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Ennis",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Ensley",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Enterprise",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Enterprise",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Enumclaw",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Ephrata",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Ephrata",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Erie",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Erie",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Erlanger",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Erlton-Ellisburg",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Erwin",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Escanaba",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Escondido",
-    state: "California",
+    state: "California"
   },
   {
     city: "Esopus",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Espanola",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Essex",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Essex",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Essex",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Essex Junction",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Estelle",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Estero",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Estherville",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Euclid",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Eufaula",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Eugene",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Euless",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Eunice",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Eureka",
-    state: "California",
+    state: "California"
   },
   {
     city: "Eureka",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Eustis",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Evans",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Evans",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Evans",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Evanston",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Evanston",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Evansville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Everett",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Everett",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Evergreen",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Evergreen",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Evergreen Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Ewa Beach",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Ewing",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Excelsior Springs",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Exeter",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Exeter",
-    state: "California",
+    state: "California"
   },
   {
     city: "Exeter",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Fabens",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fair Lawn",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fair Oaks",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fair Oaks",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fair Plain",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Fairbanks",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Fairborn",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fairdale",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fairfax",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fairfax",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fairfield",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fairfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fairfield",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fairfield",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Fairfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Fairfield",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Fairfield",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Fairhaven",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Fairhope",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Fairland",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Fairlawn",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fairless Hills",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Fairmont",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Fairmont",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Fairmount",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fairview",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Fairview",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fairview",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fairview",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fairview Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Fairview Park",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fairview Shores",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fairwood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Fall River",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Fallbrook",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fallon",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Falls Church",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fallsburg",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fallston",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Falmouth",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Falmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Fanwood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fargo",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Faribault",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Farmers Branch",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Farmersville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Farmingdale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Farmington",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Farmington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Farmington",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Farmington",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Farmington",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Farmington",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Farmington",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Farmington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Farmington Hills",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Farmingville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Farmville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Farragut",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Farrell",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Fayetteville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Fayetteville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Fayetteville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Fayetteville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Feasterville-Trevose",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Federal Heights",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Federal Way",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Fenton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fenton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Fergus Falls",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Ferguson",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Fern Creek",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fern Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fernandina Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ferndale",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ferndale",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Ferndale",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Fernley",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Fernway",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Ferry Pass",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Festus",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Fillmore",
-    state: "California",
+    state: "California"
   },
   {
     city: "Findlay",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Finneytown",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fishers",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Fishkill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fitchburg",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Fitchburg",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Fitzgerald",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Five Corners",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Five Forks",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Flagstaff",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Flat Rock",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Flatwoods",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Flint",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Floral Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Florence",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Florence",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Florence",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Florence",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Florence",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Florence-Graham",
-    state: "California",
+    state: "California"
   },
   {
     city: "Florence-Roebling",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Florham Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Florida City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Florida Ridge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Florin",
-    state: "California",
+    state: "California"
   },
   {
     city: "Florissant",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Flossmoor",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Flower Mound",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Flowing Wells",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Flushing",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Folcroft",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Foley",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Folsom",
-    state: "California",
+    state: "California"
   },
   {
     city: "Folsom",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Fond du Lac",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Fontana",
-    state: "California",
+    state: "California"
   },
   {
     city: "Foothill Farms",
-    state: "California",
+    state: "California"
   },
   {
     city: "Foothill Ranch",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fords",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Forest",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Forest Acres",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Forest City",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Forest City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Forest Glen",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Forest Grove",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Forest Hill",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Forest Hills",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Forest Hills",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Forest Lake",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Forest Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Forest Park",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Forest Park",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Forestdale",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Forestville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Forestville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Forrest City",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Fort Ann",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fort Atkinson",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Fort Belvoir",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fort Benning South",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fort Bliss",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fort Bragg",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Fort Bragg",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fort Campbell North",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fort Carson",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fort Collins",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fort Dix",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fort Dodge",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Fort Drum",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fort Hood",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fort Hunt",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fort Knox",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fort Lauderdale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Lee",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Fort Lee",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fort Leonard Wood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Fort Lewis",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Fort Lupton",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fort Madison",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Fort Meade",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Fort Mill",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Fort Mitchell",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fort Morgan",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fort Myers",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Myers Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Oglethorpe",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fort Payne",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Fort Pierce",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Pierce North",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Polk South",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Fort Riley North",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Fort Rucker",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Fort Salonga",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fort Scott",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Fort Smith",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Fort Stewart",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fort Stockton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fort Thomas",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Fort Valley",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Fort Walton Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fort Washington",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Fort Wayne",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Fort Worth",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fortuna",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fortuna Foothills",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Foster City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fostoria",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fountain",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fountain Hills",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Fountain Inn",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Fountain Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fountainbleau",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Four Corners",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Fox Lake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Fox Point",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Foxborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Framingham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Franconia",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Frankfort",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Frankfort",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Frankfort",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Frankfort",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Frankfort Square",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Franklin",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Franklin",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Franklin",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Franklin",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Franklin",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Franklin",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Franklin",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Franklin",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Franklin",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Franklin",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Franklin Lakes",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Franklin Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Franklin Park",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Franklin Square",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fraser",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Frederick",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Fredericksburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Fredericksburg",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fredonia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Freehold",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Freeport",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Freeport",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Freeport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Freeport",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Freetown",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Fremont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fremont",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Fremont",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Fresno",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Fresno",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fridley",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Friendly",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Friendswood",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Frisco",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Front Royal",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Frostburg",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Fruit Cove",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fruita",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fruitvale",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Fruitville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Fullerton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Fullerton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Fulton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Fulton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Fultondale",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Fuquay-Varina",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Gadsden",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Gaffney",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Gages Lake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Gahanna",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Gainesville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Gainesville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Gainesville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gaithersburg",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Galax",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Galena Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Galesburg",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Galion",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Gallatin",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Galliano",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Gallup",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Galt",
-    state: "California",
+    state: "California"
   },
   {
     city: "Galveston",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Gantt",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Garden Acres",
-    state: "California",
+    state: "California"
   },
   {
     city: "Garden City",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Garden City",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Garden City",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Garden City",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Garden City",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Garden City",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Garden City Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Garden Grove",
-    state: "California",
+    state: "California"
   },
   {
     city: "Garden Home-Whitford",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Gardena",
-    state: "California",
+    state: "California"
   },
   {
     city: "Gardendale",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Gardere",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Gardiner",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Gardner",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Gardner",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Gardnerville Ranchos",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Garfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Garfield Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Garland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Garner",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Garrison",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Gary",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Gastonia",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Gates",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Gates-North Gates",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Gatesville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Gautier",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Geddes",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Genesee",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Geneseo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Geneseo",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Geneva",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Geneva",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Geneva",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Georgetown",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Georgetown",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Georgetown",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Georgetown",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Georgetown",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Georgetown County",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Gering",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "German Flatts",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Germantown",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Germantown",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Germantown",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Gettysburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Gibsonton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gifford",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gig Harbor",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Gilbert",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Gilford",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Gillette",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Gilroy",
-    state: "California",
+    state: "California"
   },
   {
     city: "Girard",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Gladeview",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gladewater",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Gladstone",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Gladstone",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Glasgow",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Glasgow",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Glassboro",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Glastonbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Glastonbury Center",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Glen Allen",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Glen Avon",
-    state: "California",
+    state: "California"
   },
   {
     city: "Glen Burnie",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Glen Carbon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glen Cove",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Glen Ellyn",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glen Ridge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Glen Rock",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Glenarden",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Glencoe",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glendale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Glendale",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Glendale",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Glendale Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glendora",
-    state: "California",
+    state: "California"
   },
   {
     city: "Glenn Dale",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Glenn Heights",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Glenolden",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Glenpool",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Glens Falls",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Glens Falls North",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Glenside",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Glenvar Heights",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Glenview",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glenville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Glenwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Glenwood Springs",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Globe",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Glocester",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Gloucester",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Gloucester City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Gloucester Point",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Gloversville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Godfrey",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Goffstown",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Gold Camp",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Gold River",
-    state: "California",
+    state: "California"
   },
   {
     city: "Golden",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Golden Gate",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Golden Glades",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Golden Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Golden Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Golden Valley",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Goldenrod",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Goldsboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Goleta",
-    state: "California",
+    state: "California"
   },
   {
     city: "Gonzales",
-    state: "California",
+    state: "California"
   },
   {
     city: "Gonzales",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Gonzales",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Gonzalez",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Goodings Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Goodlettsville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Goodyear",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Goose Creek",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Gorham",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Goshen",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Goshen",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Goulds",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gouverneur",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Grafton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Grafton",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Graham",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Graham",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Graham",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Granby",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Granby",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Granby",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Grand Blanc",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grand Chute",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Grand Forks",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Grand Haven",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grand Island",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Grand Island",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Grand Junction",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Grand Ledge",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grand Prairie",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Grand Rapids",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Grand Rapids",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grand Rapids",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Grand Terrace",
-    state: "California",
+    state: "California"
   },
   {
     city: "Grandview",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Grandview",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Grandview Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Grandville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Granger",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Granite Bay",
-    state: "California",
+    state: "California"
   },
   {
     city: "Granite City",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Grants",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Grants Pass",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Grantsville",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Granville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Grapevine",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Grass Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Gray",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Grayslake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Great Barrington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Great Bend",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Great Falls",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Great Falls",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Great Neck",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Great Neck Plaza",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greater Carrollwood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Greater Landover",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Greater Northdale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Greater Sun Center",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Greater Upper Marlboro",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Greatwood",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Greece",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greeley",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Green",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Green",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Green Bay",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Green Haven",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Green Hill",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Green River",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Green Valley",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Green Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Greenacres",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Greenbelt",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Greenburgh",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greencastle",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Greendale",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Greeneville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Greenfield",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Greenfield",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greenfield",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Greenfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Greenfield",
-    state: "California",
+    state: "California"
   },
   {
     city: "Greenlawn",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greensboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Greensburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Greensburg",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Greentree",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Greenville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Greenville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Greenville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Greenville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Greenville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Greenville",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Greenville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Greenville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Greenville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Greenville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Greenville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Greenville",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Greenwich",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Greenwood",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Greenwood",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Greenwood",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Greenwood",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Greenwood Village",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Greer",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Grenada",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Gresham",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Gresham Park",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Gretna",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Griffin",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Griffith",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Grinnell",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Griswold",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Groesbeck",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Grosse Ile",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grosse Pointe Farms",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grosse Pointe Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Grosse Pointe Woods",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Groton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Groton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Grove City",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Grove City",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Groveland",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Grover Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Groves",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Groveton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Grovetown",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Guilderland",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Guilford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Gulf Gate Estates",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gulfport",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Gulfport",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Gunbarrel",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Guntersville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Gurnee",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Guthrie",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Guttenberg",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Guymon",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Hacienda Heights",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hackensack",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hackettstown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Haddam",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Haddon Heights",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Haddonfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hagerstown",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Haiku-Pauwela",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Hailey",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Haines City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Halawa",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Haledon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hales Corners",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Half Moon",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Half Moon Bay",
-    state: "California",
+    state: "California"
   },
   {
     city: "Halfmoon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Halfway",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Halifax",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hallandale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Haltom City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Ham Lake",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hamburg",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hamden",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Hamilton",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Hamilton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hamilton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hamlet",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Hamlin",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hammond",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Hammond",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Hammonton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hampden",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Hampstead",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hampton",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hampton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Hampton Bays",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hampton Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hamptons at Boca Raton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hamtramck",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hanahan",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Hanford",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hannibal",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Hanover",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hanover",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hanover",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hanover",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hanover Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hanson",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hapeville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Harahan",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Harker Heights",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Harleysville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Harlingen",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Harper Woods",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Harriman",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Harrisburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Harrisburg",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Harrison",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Harrison",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Harrison",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Harrison",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Harrison",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Harrison",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Harrison Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Harrisonburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Harrisonville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Harrodsburg",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Hartford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Hartford",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Hartford",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Hartford City",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Hartland",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Hartsdale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hartselle",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Hartsville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Harvard",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Harvey",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Harvey",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Harwich",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Harwood Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hasbrouck Heights",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Haslett",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hastings",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hastings",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Hastings",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hastings",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hastings-on-Hudson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hatboro",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hattiesburg",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Hauppauge",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Havelock",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Haverhill",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Haverstraw",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Havre",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Havre de Grace",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Hawaiian Gardens",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hawaiian Paradise Park",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Hawthorn Woods",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hawthorne",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hawthorne",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hayden",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Hayesville",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Hays",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Haysville",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Hayward",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hazel Crest",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hazel Dell North",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Hazel Dell South",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Hazel Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hazelwood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Hazleton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Healdsburg",
-    state: "California",
+    state: "California"
   },
   {
     city: "Heath",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Heber",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Heber Springs",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Hebron",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Helena",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Helena",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Helena",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Helena Valley Southeast",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Helena Valley West Central",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Hemet",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hempstead",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Henderson",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Henderson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Henderson",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Henderson",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Hendersonville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Hendersonville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Henrietta",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Henryetta",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Hercules",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hereford",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Herkimer",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hermantown",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hermiston",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Hermitage",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hermosa Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hernando",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hernando",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Herndon",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Herrin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hershey",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hesperia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hewitt",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Hewlett",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hialeah",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hialeah Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hiawatha",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Hibbing",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hickory",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Hickory Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hicksville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hidalgo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "High Point",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Highland",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Highland",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Highland",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Highland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Highland Heights",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Highland Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Highland Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Highland Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Highland Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Highland Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Highland Springs",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Highland Village",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Highlands",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Highlands",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Highlands Ranch",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Highview",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Hillcrest",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hillcrest Heights",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Hilliard",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hillsboro",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hillsboro",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Hillsboro",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Hillsborough",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hillsdale",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hillsdale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hillside",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hillside",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hillview",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Hilo",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Hilton Head Island",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Hinesville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Hingham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hinsdale",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Hitchcock",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Hobart",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Hobart",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Hobbs",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Hobe Sound",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hoboken",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hockessin",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Hoffman Estates",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Holbrook",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Holbrook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Holden",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Holiday",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Holiday City-Berkeley",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Holladay",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Holland",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hollins",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Hollis",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hollister",
-    state: "California",
+    state: "California"
   },
   {
     city: "Holliston",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Holly",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Holly Hill",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Holly Springs",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Holly Springs",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Hollywood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Holmen",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Holt",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Holtsville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Holualoa",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Holyoke",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Home Gardens",
-    state: "California",
+    state: "California"
   },
   {
     city: "Homeacre-Lyndora",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Homeland Park",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Homer",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Homestead",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Homestead Meadows South",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Homewood",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Homewood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Homosassa Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hondo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Honolulu",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Hooksett",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hoosick",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hoover",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Hopatcong",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Hope",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Hope Mills",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Hopewell",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Hopkins",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hopkinsville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Hopkinton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hopkinton",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Hoquiam",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Horn Lake",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Hornell",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Horseheads",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Horsham",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Hot Springs",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Hot Springs Village",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Houghton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Houlton",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Houma",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Houston",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Howard",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Howell",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Howland Center",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hubbard",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Huber Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hudson",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Hudson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hudson",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Hudson",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Hudson",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Hudson",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Hudson Falls",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hudsonville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Hueytown",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Hugo",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hull",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Humble",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Humboldt",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Hunters Creek",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Huntersville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Huntingdon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Huntington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Huntington",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Huntington",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Huntington",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Huntington Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Huntington Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Huntington Station",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Huntington Woods",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Huntsville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Huntsville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Hurley",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Huron",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Huron",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Huron",
-    state: "California",
+    state: "California"
   },
   {
     city: "Hurricane",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Hurst",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Hutchinson",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Hutchinson",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Hyattsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Hybla Valley",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Hyde Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Hyrum",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Idabel",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Idaho Falls",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Idylwood",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Ilion",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Immokalee",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Imperial",
-    state: "California",
+    state: "California"
   },
   {
     city: "Imperial Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Incline Village-Crystal Bay",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Independence",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Independence",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Independence",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Independence",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Independence",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Independence",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Indian Harbour Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Indian Trail",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Indiana",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Indianapolis",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Indianola",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Indianola",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Indio",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ingleside",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Inglewood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Inglewood-Finn Hill",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Inkster",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Interlaken",
-    state: "California",
+    state: "California"
   },
   {
     city: "International Falls",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Inver Grove Heights",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Inverness",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Inverness",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Inwood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Inwood",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Iola",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Iona",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ione",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ionia",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Iowa City",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Iowa Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Ipswich",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Irmo",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Iron Mountain",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Irondale",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Irondale",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Irondequoit",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ironton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Ironwood",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Irvine",
-    state: "California",
+    state: "California"
   },
   {
     city: "Irving",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Irvington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Irvington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Iselin",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ishpeming",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Isla Vista",
-    state: "California",
+    state: "California"
   },
   {
     city: "Islamorada",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Island Lake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Islip",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Issaquah",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Itasca",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Ithaca",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ives Estates",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Jacinto City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Jackson",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Jackson",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Jackson",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Jackson",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Jackson",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Jackson",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Jacksonville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Jacksonville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Jacksonville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Jacksonville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Jacksonville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Jacksonville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Jacksonville Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Jamesburg",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Jamestown",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Jamestown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Janesville",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Jasmine Estates",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Jasper",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Jasper",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Jasper",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Jeannette",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Jefferson",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Jefferson",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Jefferson",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Jefferson City",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Jefferson City",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Jefferson Hills",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Jefferson Valley-Yorktown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Jeffersontown",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Jeffersonville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Jenison",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Jenks",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Jennings",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Jennings",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Jennings Lodge",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Jensen Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Jericho",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Jerome",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Jersey City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Jersey Village",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Jerseyville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Jessup",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Jesup",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Johnson City",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Johnson City",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Johnston",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Johnston",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Johnstown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Johnstown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Joliet",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Jollyville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Jonesboro",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Joplin",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Joppatowne",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Junction City",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Juneau and",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Jupiter",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Justice",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Kahului",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kailua",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kalamazoo",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Kalaoa",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kalispell",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Kaneohe",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kaneohe Station",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kankakee",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Kannapolis",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Kansas City",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Kansas City",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Kapaa",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Katy",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Kaufman",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Kaukauna",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Kaysville",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Keansburg",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Kearney",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Kearns",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Kearny",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Keene",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Keizer",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Keller",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Kelso",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kemp Mill",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ken Caryl",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Kenai",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Kendale Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kendall",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kendall Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Kendall West",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kendallville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Kenilworth",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Kenmore",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kenmore",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kennebunk",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Kennedy Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Kenner",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Kennesaw",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Kennett",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Kennewick",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kenosha",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Kensington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Kent",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kent",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Kent",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kentfield",
-    state: "California",
+    state: "California"
   },
   {
     city: "Kenton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Kentwood",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Kenwood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Keokuk",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Kerman",
-    state: "California",
+    state: "California"
   },
   {
     city: "Kernersville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Kerrville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Ketchikan",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Kettering",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Kettering",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Kewanee",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Key Biscayne",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Key Largo",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Key West",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Keyport",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Keystone",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kihei",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Kilgore",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Killeen",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Killingly",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Killingworth",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Kimberly",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Kinderhook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "King City",
-    state: "California",
+    state: "California"
   },
   {
     city: "King of Prussia",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Kingman",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Kings Grant",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Kings Mountain",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Kings Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kings Point",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kingsburg",
-    state: "California",
+    state: "California"
   },
   {
     city: "Kingsbury",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kingsgate",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kingsland",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Kingsport",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Kingston",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Kingston",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kingston",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Kingsville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Kinnelon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Kinston",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Kirby",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Kirkland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Kirkland",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kirksville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Kirkwood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Kirtland",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Kirtland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Kiryas Joel",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Kissimmee",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Kittery",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Klamath Falls",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Knik-Fairview",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Knoxville",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Knoxville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Kodiak",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Kokomo",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Kosciusko",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Kulpsville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "La Canada Flintridge",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Crescenta-Montrose",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Crosse",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "La Fayette",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "La Feria",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "La Follette",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "La Grande",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "La Grange",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "La Grange",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "La Grange Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "La Habra",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Homa",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "La Junta",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "La Marque",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "La Mesa",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Mirada",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Palma",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Plata",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "La Porte",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "La Porte",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "La Presa",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Puente",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Quinta",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Riviera",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Salle",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "La Vergne",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "La Verne",
-    state: "California",
+    state: "California"
   },
   {
     city: "La Vista",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Lacey",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lackawanna",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lackland AFB",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lacombe",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Laconia",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Ladera Heights",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ladson",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Ladue",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Lady Lake",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lafayette",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Lafayette",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Lafayette",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lafayette",
-    state: "California",
+    state: "California"
   },
   {
     city: "LaGrange",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Laguna",
-    state: "California",
+    state: "California"
   },
   {
     city: "Laguna Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Laguna Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Laguna Niguel",
-    state: "California",
+    state: "California"
   },
   {
     city: "Laguna West-Lakeside",
-    state: "California",
+    state: "California"
   },
   {
     city: "Laguna Woods",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lahaina",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Lake Arbor",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lake Arrowhead",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lake Barcroft",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lake Bluff",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lake Butter",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Carmel",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lake Charles",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Lake City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake City",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Lake Dallas",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lake Elmo",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Lake Elsinore",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lake Forest",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lake Forest",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lake Forest Park",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lake Geneva",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Lake Grove",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lake Havasu City",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Lake in the Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lake Jackson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lake Lorraine",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Los Angeles",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lake Lucerne",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Magdalene",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Mary",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Mohawk",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lake Monticello",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lake Morton-Berrydale",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lake Oswego",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Lake Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Ridge",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lake Ronkonkoma",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lake Shore",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lake Shore",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lake St. Louis",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Lake Station",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lake Stevens",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lake Wales",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Worth",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Worth Corridor",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lake Zurich",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lakeland",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lakeland",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lakeland Highlands",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lakeland North",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lakeland South",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lakes",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Lakes by the Bay",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lakes of the Four Seasons",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lakeside",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lakeside",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lakeside",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lakeville",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Lakeville",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lakeway",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lakewood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lakewood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lakewood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lakewood",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Lakewood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lakewood Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lamar",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Lambertville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Lamesa",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lamont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lampasas",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lancaster",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lancaster",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Lancaster",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lancaster",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lancaster",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lancaster",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lancaster",
-    state: "California",
+    state: "California"
   },
   {
     city: "Land O’ Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Landen",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lander",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Lanett",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Langley Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lanham-Seabrook",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lansdale",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lansdowne",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lansdowne-Baltimore Highlands",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lansing",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Lansing",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lansing",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lansing",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Lantana",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lapeer",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Laplace",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Laramie",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Larchmont",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Laredo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Largo",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Largo",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Larkfield-Wikiup",
-    state: "California",
+    state: "California"
   },
   {
     city: "Larkspur",
-    state: "California",
+    state: "California"
   },
   {
     city: "Larose",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Las Cruces",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Las Vegas",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Las Vegas",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Lathrop",
-    state: "California",
+    state: "California"
   },
   {
     city: "Latrobe",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lauderdale Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lauderhill",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Laughlin",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Laurel",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Laurel",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Laurel",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Laurel",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Laurel",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Laurel Bay",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Laurence Harbor",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Laurens",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Laurinburg",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lawndale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lawrence",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Lawrence",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lawrence",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lawrence",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lawrenceburg",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lawrenceburg",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Lawrenceville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Lawton",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Layton",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Le Mars",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Le Ray",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Le Roy",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lea Hill",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Leacock-Leola-Bareville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "League City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Leander",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Leavenworth",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Leawood",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Lebanon",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lebanon",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Lebanon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lebanon",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lebanon",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Lebanon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lebanon",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Lebanon",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Ledyard",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Lee",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lee’s Summit",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Leeds",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Leesburg",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Leesburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Leesville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Lehi",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Lehigh Acres",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Leicester",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Leisure City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Leisure Village West-Pine Lake Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Leitchfield",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Lemay",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Lemmon Valley-Golden Valley",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Lemon Grove",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lemont",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lemoore",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lenexa",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Lennox",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lenoir",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lenoir City",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lenox",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Leominster",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Leon Valley",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Leonia",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Levelland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Levittown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Levittown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lewisboro",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lewisburg",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lewiston",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Lewiston",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lewiston",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Lewistown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lewisville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lewisville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lexington",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lexington",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lexington",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Lexington",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Lexington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lexington",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Lexington Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lexington-Fayette",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Liberal",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Liberty",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Liberty",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Liberty",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Libertyville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lighthouse Point",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lilburn",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Lima",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lincoln",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Lincoln",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Lincoln",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lincoln",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lincoln",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lincoln City",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Lincoln Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Lincoln Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lincoln Village",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lincolnia",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lincolnshire",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lincolnton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lincolnwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lincroft",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Linda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Linden",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lindenhurst",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lindenhurst",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lindenwold",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lindon",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Lindsay",
-    state: "California",
+    state: "California"
   },
   {
     city: "Linganore-Bartonsville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Linglestown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lino Lakes",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Linthicum",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Linton Hall",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Linwood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lionville-Marchwood",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lisbon",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Lisbon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Lisle",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Litchfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Litchfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Litchfield",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Litchfield",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Lititz",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Little Canada",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Little Chute",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Little Cottonwood Creek Valley",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Little Falls",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Little Falls",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Little Ferry",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Little River",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Little Rock",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Little Silver",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Littlefield",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Littleton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Littleton",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Live Oak",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Live Oak",
-    state: "California",
+    state: "California"
   },
   {
     city: "Live Oak",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Livermore",
-    state: "California",
+    state: "California"
   },
   {
     city: "Livingston",
-    state: "California",
+    state: "California"
   },
   {
     city: "Livingston",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Livingston",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Livonia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Livonia",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Lloyd",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lochearn",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lock Haven",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lockhart",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lockhart",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lockport",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lockport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lodi",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lodi",
-    state: "California",
+    state: "California"
   },
   {
     city: "Logan",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Logan",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Logansport",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Loma Linda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lombard",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lomita",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lompoc",
-    state: "California",
+    state: "California"
   },
   {
     city: "London",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Londonderry",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Londontowne",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Long Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Long Beach",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Long Beach",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Long Branch",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Long Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Longboat Key",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Longmeadow",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Longmont",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Longview",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Longview",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Longwood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Loomis",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lorain",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lorton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Los Alamitos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Alamos",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Los Altos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Altos Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Angeles",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Banos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Gatos",
-    state: "California",
+    state: "California"
   },
   {
     city: "Los Lunas",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Louisville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Louisville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Louisville",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Louisville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Loveland",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Loveland",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Loves Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lovington",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Lowell",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lowell",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Lower Allen",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lower Burrell",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Lubbock",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lucas Valley-Marinwood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ludington",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Ludlow",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lufkin",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lugoff",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Luling",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Lumberton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Lumberton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Lunenburg",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lutherville-Timonium",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Lutz",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lynbrook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Lynchburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Lynden",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lyndhurst",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Lyndhurst",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Lyndon",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Lynn",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lynn Haven",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Lynnfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Lynnwood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Lynwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lynwood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Lyons",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Lysander",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mableton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Macedon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Macedonia",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Machesney Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Macomb",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Macon",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Madeira",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Madera",
-    state: "California",
+    state: "California"
   },
   {
     city: "Madera Acres",
-    state: "California",
+    state: "California"
   },
   {
     city: "Madison",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Madison",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Madison",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Madison",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Madison",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Madison",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Madison",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Madison Heights",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Madison Heights",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Madison Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Madisonville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Magalia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Magna",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Magnolia",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Mahopac",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mahtomedi",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Maitland",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Makaha",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Makakilo City",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Makawao",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Malden",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Malibu",
-    state: "California",
+    state: "California"
   },
   {
     city: "Malone",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Malta",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Maltby",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Malvern",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Malverne",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mamakating",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mamaroneck",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mammoth Lakes",
-    state: "California",
+    state: "California"
   },
   {
     city: "Manasquan",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Manassas",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Manassas Park",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Manchester",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Manchester",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Manchester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Manchester",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Manchester",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Mandan",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Mandeville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Mango",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Manhasset",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Manhattan",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Manhattan Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Manistee",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Manitowoc",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Mankato",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Manlius",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Manorhaven",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Manorville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mansfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Mansfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Mansfield",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mansfield",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mansfield Center",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Manteca",
-    state: "California",
+    state: "California"
   },
   {
     city: "Manteno",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mantua",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Manville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Maple Glen",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Maple Grove",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Maple Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Maple Valley",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Maplewood",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Maplewood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Maplewood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Maquoketa",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Marana",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Marathon",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Marblehead",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Marcellus",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Marco Island",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Marcy",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Marengo",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Margate",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Margate City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Marianna",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Marietta",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Marietta",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Marina",
-    state: "California",
+    state: "California"
   },
   {
     city: "Marina del Rey",
-    state: "California",
+    state: "California"
   },
   {
     city: "Marinette",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Marion",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Marion",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Marion",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Marion",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Marion",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Marion",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Marion",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Markham",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Marlborough",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Marlborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Marlin",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Marlow Heights",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Marlton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Marlton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Marquette",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Marrero",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Marshall",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Marshall",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Marshall",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Marshall",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Marshalltown",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Marshfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Marshfield",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Martha Lake",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Martin",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Martinez",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Martinez",
-    state: "California",
+    state: "California"
   },
   {
     city: "Martins Ferry",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Martinsburg",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Martinsville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Martinsville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Maryland City",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Maryland Heights",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Marysville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Marysville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Marysville",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Marysville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Maryville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Maryville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Mashpee",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Mason",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Mason",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mason City",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Masonboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Massapequa",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Massapequa Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Massena",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Massillon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mastic",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mastic Beach",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Matawan",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Mattapoisett",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Matteson",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Matthews",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mattoon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mattydale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mauldin",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Maumee",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Maumelle",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Mayfield",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Mayfield",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mayfield Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Maynard",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Mays Chapel",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Maysville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Maywood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Maywood",
-    state: "California",
+    state: "California"
   },
   {
     city: "Maywood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "McAlester",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "McAllen",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "McCandless Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "McComb",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "McCook",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "McDonough",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "McFarland",
-    state: "California",
+    state: "California"
   },
   {
     city: "McFarland",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "McGregor",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "McGuire AFB",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "McHenry",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "McKees Rocks",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "McKeesport",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "McKinleyville",
-    state: "California",
+    state: "California"
   },
   {
     city: "McKinney",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "McLean",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "McMinnville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "McMinnville",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "McPherson",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Meadow Woods",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Meadville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mebane",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mechanicsburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mechanicstown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mechanicsville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Medfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Medford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Medford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Medford",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Medina",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Medina",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Medulla",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Medway",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Mehlville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Melbourne",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Melrose",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Melrose Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Melrose Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Melville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Melvindale",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Memphis",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Memphis",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Menasha",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Mendon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mendota",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mendota",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mendota Heights",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Menlo Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Menominee",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Menomonee Falls",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Menomonie",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Mentone",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mentor",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mentor-on-the-Lake",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mequon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Meraux",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Merced",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mercedes",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mercer Island",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mercerville-Hamilton Square",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Meriden",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Meridian",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Meridian",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Merriam",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Merrick",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Merrifield",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Merrill",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Merrillville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Merrimac",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Merrimack",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Merritt Island",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Merrydale",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Merton",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Mesa",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Mesquite",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Mesquite",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Metairie",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Methuen",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Metropolis",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Metuchen",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Mexia",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mexico",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Miami",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Miami",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Miami Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Miami Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Miami Shores",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Miami Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Miamisburg",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Micco",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Michigan City",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Middle Island",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Middle River",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Middle Valley",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Middleborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Middleborough Center",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Middleburg",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Middleburg Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Middlebury",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Middlebury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Middlesborough",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Middlesex",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Middleton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Middleton",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Middletown",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Middletown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Middletown",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Middletown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Middletown",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Middletown",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Midland",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Midland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Midland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Midland Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Midlothian",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Midlothian",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Midvale",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Midwest City",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Milan",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Miles City",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Milford",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Milford",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Milford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Milford",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Milford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Milford",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Milford Mill",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Mililani Town",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Mill Creek",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mill Plain",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mill Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Millbrae",
-    state: "California",
+    state: "California"
   },
   {
     city: "Millbrook",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Millburn",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Millbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Millcreek",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Milledgeville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Miller Place",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Millersville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Millington",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Millis",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Milltown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Millville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Milo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Milpitas",
-    state: "California",
+    state: "California"
   },
   {
     city: "Milton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Milton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Milton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Milton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Milton",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Milton-Freewater",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Milwaukee",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Milwaukie",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Mims",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Minden",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Mineola",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mineral Wells",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Minneapolis",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Minnehaha",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Minnetonka",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Minot",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Minot AFB",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Mint Hill",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mira Loma",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mira Monte",
-    state: "California",
+    state: "California"
   },
   {
     city: "Miramar",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Mishawaka",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Mission",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Mission",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mission Bend",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mission Viejo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Missoula",
-    state: "Montana",
+    state: "Montana"
   },
   {
     city: "Missouri City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mitchell",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Mitchellville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Moberly",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Mobile",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Modesto",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mohave Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Mokena",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Moline",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Monaca",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Monahans",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Monessen",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Monett",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Monmouth",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Monmouth",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Monona",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Monroe",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Monroe",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Monroe",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Monroe",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Monroe",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Monroe",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Monroe",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Monroe",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Monroe",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Monroeville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Monrovia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Monsey",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Monson",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Montague",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Montclair",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Montclair",
-    state: "California",
+    state: "California"
   },
   {
     city: "Montclair",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Montebello",
-    state: "California",
+    state: "California"
   },
   {
     city: "Montecito",
-    state: "California",
+    state: "California"
   },
   {
     city: "Monterey",
-    state: "California",
+    state: "California"
   },
   {
     city: "Monterey Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Montgomery",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Montgomery",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Montgomery",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Montgomery Village",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Montgomeryville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Monticello",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Monticello",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Monticello",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Montpelier",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Montrose",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Montrose",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Montvale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Montville",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Moody",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Moore",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Moorestown-Lenola",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Mooresville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mooresville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Moorhead",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Moorpark",
-    state: "California",
+    state: "California"
   },
   {
     city: "Moraga",
-    state: "California",
+    state: "California"
   },
   {
     city: "Moraine",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Moreau",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Morehead City",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Moreno Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Morgan City",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Morgan Hill",
-    state: "California",
+    state: "California"
   },
   {
     city: "Morganton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Morgantown",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Morganville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Morrilton",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Morris",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Morristown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Morristown",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Morrisville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Morro Bay",
-    state: "California",
+    state: "California"
   },
   {
     city: "Morton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Morton Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Moscow",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Moses Lake",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Moss Bluff",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Moss Point",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Moultrie",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Mound",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Mounds View",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Moundsville",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Mount Airy",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Mount Airy",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mount Carmel",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mount Carmel",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mount Clemens",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Mount Dora",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Mount Healthy",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mount Holly",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Mount Hope",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Ivy",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Joy",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mount Juliet",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Mount Kisco",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Lebanon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mount Olympus",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Mount Pleasant",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Mount Pleasant",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Mount Pleasant",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Mount Pleasant",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Pleasant",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Mount Pleasant",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Mount Prospect",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mount Rainier",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Mount Sinai",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Vernon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Mount Vernon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Mount Vernon",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Mount Vernon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Mount Vernon",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mount Vernon",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Mount Washington",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Mountain Brook",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Mountain Home",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Mountain Home",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Mountain Home AFB",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Mountain Park",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Mountain Top",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Mountain View",
-    state: "California",
+    state: "California"
   },
   {
     city: "Mountainside",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Mountlake Terrace",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mukilteo",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Mukwonago",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Muncie",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Mundelein",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Munhall",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Municipality of Monroeville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Municipality of Murrysville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Munster",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Murfreesboro",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Murphy",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Murphysboro",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Murray",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Murray",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Murray",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Murraysville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Murrieta",
-    state: "California",
+    state: "California"
   },
   {
     city: "Muscatine",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Muscle Shoals",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Muscoy",
-    state: "California",
+    state: "California"
   },
   {
     city: "Muskego",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Muskegon",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Muskegon Heights",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Muskogee",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Mustang",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Myrtle Beach",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Myrtle Grove",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Myrtle Grove",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Mystic Island",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Nacogdoches",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Nampa",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Nanakuli",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Nanticoke",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Nantucket",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Nanuet",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Napa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Naperville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Napili-Honokowai",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Naples",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Naples Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Napoleon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Nappanee",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Narragansett",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Nashua",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Nashville-Davidson",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Natchez",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Natchitoches",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Natick",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "National City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Naugatuck",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Navasota",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Nazareth",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Nebraska City",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Nederland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Needham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Neenah",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Nellis AFB",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Neosho",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Neptune Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Nesconset",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Nether Providence Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Nevada",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Nevada",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "New Albany",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "New Albany",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "New Baltimore",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "New Bedford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "New Berlin",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "New Bern",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "New Braunfels",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "New Brighton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "New Brighton",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "New Britain",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Brunswick",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "New Canaan",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Carrollton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "New Cassel",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Castle",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Castle",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "New Castle",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "New City",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Cumberland",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "New Fairfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Hartford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Hartford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Haven",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Haven",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "New Hope",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "New Hyde Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Iberia",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "New Kensington",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "New Kingman-Butler",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "New Lenox",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "New London",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New London",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "New Milford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "New Milford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "New Orleans",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "New Paltz",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Philadelphia",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "New Port Richey",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "New Port Richey East",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "New Providence",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "New Richmond",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "New River",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "New Rochelle",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Scotland",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New Smyrna Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "New Territory",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "New Ulm",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "New Windsor",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "New York",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Newark",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Newark",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Newark",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Newark",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Newark",
-    state: "California",
+    state: "California"
   },
   {
     city: "Newberg",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Newberry",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Newburg",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Newburgh",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Newbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Newburyport",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Newcastle",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Newfane",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Newington",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Newington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Newman",
-    state: "California",
+    state: "California"
   },
   {
     city: "Newmarket",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Newnan",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Newport",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Newport",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Newport",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Newport",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Newport",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Newport",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Newport Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Newport East",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Newport News",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Newstead",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Newton",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Newton",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Newton",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Newton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Newton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Newtown",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Niagara",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Niagara Falls",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Niceville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Nicholasville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Niles",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Niles",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Niles",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Nipomo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Niskayuna",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Nitro",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Nixa",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Noblesville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Nogales",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Norco",
-    state: "California",
+    state: "California"
   },
   {
     city: "Norcross",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Norfolk",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Norfolk",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Norfolk",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Norland",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Normal",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Norman",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Normandy Park",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Norridge",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Norristown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "North Adams",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Amherst",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Amityville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Andover",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Andrews Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Arlington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "North Atlanta",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "North Attleborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Attleborough Center",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Auburn",
-    state: "California",
+    state: "California"
   },
   {
     city: "North Augusta",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "North Aurora",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "North Babylon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Bay Shore",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Bay Village",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Bellmore",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Bellport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Bend",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "North Bethesda",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "North Braddock",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "North Branch",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "North Branford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "North Brunswick Township",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "North Caldwell",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "North Canton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Castle",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Charleston",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "North Chicago",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "North College Hill",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Creek",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "North Decatur",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "North Druid Hills",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "North Elba",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Fair Oaks",
-    state: "California",
+    state: "California"
   },
   {
     city: "North Fort Myers",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Greenbush",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Haledon",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "North Haven",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "North Hempstead",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Highlands",
-    state: "California",
+    state: "California"
   },
   {
     city: "North Kensington",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "North Kingstown",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "North Las Vegas",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "North Lauderdale",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Laurel",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "North Lindenhurst",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Little Rock",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "North Logan",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "North Madison",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Manchester",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "North Mankato",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "North Marysville",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "North Massapequa",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Merrick",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Miami",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Miami Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Myrtle Beach",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "North New Hyde Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Ogden",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "North Olmsted",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Palm Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Patchogue",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Plainfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "North Platte",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "North Port",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Potomac",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "North Providence",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "North Reading",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "North Richland Hills",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "North Ridgeville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Riverside",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "North Royalton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "North Salt Lake",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "North Sarasota",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "North Smithfield",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "North Springfield",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "North St. Paul",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "North Star",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "North Syracuse",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Tonawanda",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Valley",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "North Valley Stream",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "North Vernon",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "North Versailles",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "North Wantagh",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Northampton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Northampton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Northborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Northbridge",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Northbrook",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Northbrook",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Northfield",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Northfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Northgate",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Northglenn",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Northlake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Northport",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Northport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Northridge",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Northview",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Northville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Northwest Harborcreek",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Norton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Norton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Norton Shores",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Norwalk",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Norwalk",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Norwalk",
-    state: "California",
+    state: "California"
   },
   {
     city: "Norwalk",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Norway",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Norwell",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Norwich",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Norwich",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Norwood",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Norwood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Novato",
-    state: "California",
+    state: "California"
   },
   {
     city: "Novi",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Nutley",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Nyack",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "O’Fallon",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "O’Fallon",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "O’Hara Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Oak Brook",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Oak Creek",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Oak Forest",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Oak Grove",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Oak Grove",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Oak Grove",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Oak Grove",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Oak Harbor",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Oak Hill",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Oak Hills",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Oak Hills Place",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Oak Island",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Oak Lawn",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Oak Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Oak Park",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Oak Ridge",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Oak Ridge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Oakbrook",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Oakdale",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Oakdale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oakdale",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Oakdale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Oakland",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Oakland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oakland Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Oakley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oakmont",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Oakton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Oakville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Oakville",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Oakwood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Oatfield",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Oberlin",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Ocala",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ocean Acres",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ocean City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ocean City",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ocean Pines",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Ocean Springs",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Oceano",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oceanside",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oceanside",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ocoee",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Oconomowoc",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Odenton",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Odessa",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Oelwein",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Offutt AFB",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Ogden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ogden",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Ogdensburg",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Oil City",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Oildale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ojai",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ojus",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Okemos",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Oklahoma City",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Okmulgee",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Okolona",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Olathe",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Old Bridge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Old Forge",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Old Lyme",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Old Orchard Beach",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Old Saybrook",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Old Town",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Oldsmar",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Olean",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Olive Branch",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Olivehurst",
-    state: "California",
+    state: "California"
   },
   {
     city: "Olivette",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Olmsted Falls",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Olney",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Olney",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Olympia",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Olympia Heights",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Omaha",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Onalaska",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Oneida",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Oneonta",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Onondaga",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ontario",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ontario",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Ontario",
-    state: "California",
+    state: "California"
   },
   {
     city: "Opa-locka",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Opa-locka North",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Opal Cliffs",
-    state: "California",
+    state: "California"
   },
   {
     city: "Opelika",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Opelousas",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Opp",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Opportunity",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Oquirrh",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Oradell",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Orange",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Orange",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Orange",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Orange",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Orange",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orange City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Orange Cove",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orange Lake",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Orange Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Orangeburg",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Orangetown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Orangevale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orchard Mesa",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Orchard Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Orchards",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Orcutt",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oregon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Oregon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Oregon City",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Orem",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Orinda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orland Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Orland Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Orlando",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Orleans",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Orlovista",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ormond Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ormond-By-The-Sea",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Oro Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Orono",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Orono",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Orosi",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oroville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oroville East",
-    state: "California",
+    state: "California"
   },
   {
     city: "Orrville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Osceola",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Oshkosh",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Oskaloosa",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Ossining",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Oswego",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Oswego",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Otis Orchards-East Farms",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Otsego",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Ottawa",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Ottawa",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Ottumwa",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Overland",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Overland Park",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Overlea",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Oviedo",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Owasso",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Owatonna",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Owego",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Owensboro",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Owings Mills",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Owosso",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Oxford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Oxford",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Oxford",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Oxford",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Oxford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Oxford",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Oxnard",
-    state: "California",
+    state: "California"
   },
   {
     city: "Oxon Hill-Glassmanor",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Oyster Bay",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ozark",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Ozark",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Pace",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pacific Grove",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pacifica",
-    state: "California",
+    state: "California"
   },
   {
     city: "Paducah",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Page",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Pahrump",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Paine Field-Lake Stickney",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Painesville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Palatine",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Palatka",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palestine",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Palisades Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Palm Bay",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Beach Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Coast",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Desert",
-    state: "California",
+    state: "California"
   },
   {
     city: "Palm Harbor",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm River-Clair Mel",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palm Springs",
-    state: "California",
+    state: "California"
   },
   {
     city: "Palm Valley",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palmdale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Palmer",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Palmetto",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palmetto Estates",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Palmview South",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Palmyra",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Palmyra",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Palmyra",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Palo Alto",
-    state: "California",
+    state: "California"
   },
   {
     city: "Palos Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Palos Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Palos Verdes Estates",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pampa",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Panama City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Panama City Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Panthersville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Papillion",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Paradise",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Paradise",
-    state: "California",
+    state: "California"
   },
   {
     city: "Paradise Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Paragould",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Paramount",
-    state: "California",
+    state: "California"
   },
   {
     city: "Paramus",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Paris",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Paris",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Paris",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Paris",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Park City",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Park City",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Park Forest",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Park Forest Village",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Park Hills",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Park Ridge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Park Ridge",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Parker",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Parker",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Parkersburg",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Parkland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Parkland",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Parkville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Parkville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Parkway-South Sacramento",
-    state: "California",
+    state: "California"
   },
   {
     city: "Parkwood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Parlier",
-    state: "California",
+    state: "California"
   },
   {
     city: "Parma",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Parma",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Parma Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Parole",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Parsons",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Pasadena",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Pasadena",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pasadena",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pascagoula",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Pasco",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Pass Christian",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Passaic",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pataskala",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Patchogue",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Paterson",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Patterson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Patterson",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pauls Valley",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Paulsboro",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pawling",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pawtucket",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Payette",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Payson",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Payson",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Pea Ridge",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Peabody",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Peachtree City",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Pearl",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Pearl City",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Pearl River",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pearland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pearsall",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pecan Grove",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pecos",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pedley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Peekskill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pekin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Pelham",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Pelham",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pelham",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Pell City",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Pella",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Pembroke",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Pembroke",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Pembroke Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pembroke Pines",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pendleton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pendleton",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Penfield",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Penn Hills",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Pennsauken",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pennsville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pensacola",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Peoria",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Peoria",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Peoria Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Pepper Pike",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Pepperell",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Perinton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Perkasie",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Perris",
-    state: "California",
+    state: "California"
   },
   {
     city: "Perry",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Perry",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Perry",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Perry",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Perry Hall",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Perry Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Perrysburg",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Perryton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Perryville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Perth Amboy",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Peru",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Peru",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Peru",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Petal",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Petaluma",
-    state: "California",
+    state: "California"
   },
   {
     city: "Petersburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Petoskey",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Pewaukee",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Pflugerville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pharr",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Phelps",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Phenix City",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Philadelphia",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Philadelphia",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Philipstown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Phillipsburg",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Phoenix",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Phoenixville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Picayune",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Pickerington",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Picnic Point-North Lynnwood",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Pico Rivera",
-    state: "California",
+    state: "California"
   },
   {
     city: "Picture Rocks",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Piedmont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pierre",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Pike Creek",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Pikesville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Pikeville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Pimmit Hills",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Pine Bluff",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Pine Castle",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pine Hill",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pine Hills",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pinecrest",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pinehurst",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Pinehurst",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Pinellas Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pineville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Pinewood",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Piney Green",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Pinole",
-    state: "California",
+    state: "California"
   },
   {
     city: "Piqua",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Pismo Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pitman",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pittsburg",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pittsburg",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Pittsburgh",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Pittsfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Pittsford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pittston",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Placentia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Placerville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Plainedge",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Plainfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Plainfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Plainfield",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Plainfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Plainview",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Plainview",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Plainville",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Plainville",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Plaistow",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Plano",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Plant City",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Plantation",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Plaquemine",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Plattekill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Platteville",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Plattsburgh",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Plattsmouth",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Pleasant Grove",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Pleasant Grove",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Pleasant Hill",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pleasant Hills",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Pleasant Prairie",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Pleasant Valley",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pleasanton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Pleasanton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pleasantville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pleasantville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pleasure Ridge Park",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Plover",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Plum",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Plymouth",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Plymouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Plymouth",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Plymouth",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Plymouth",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Plymouth",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Plymouth",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Plymouth Township",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Pocahontas",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Pocatello",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Poinciana",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Point Pleasant",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Pomfret",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pomona",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pompano Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pompano Beach Highlands",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Pompey",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pompton Lakes",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ponca City",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Pontiac",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Pontiac",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Pooler",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Poplar Bluff",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Poquoson",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Port Angeles",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Port Arthur",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Port Charlotte",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Port Chester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Port Clinton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Port Hueneme",
-    state: "California",
+    state: "California"
   },
   {
     city: "Port Huron",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Port Jefferson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Port Jefferson Station",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Port Jervis",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Port Lavaca",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Port Neches",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Port Orange",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Port Orchard",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Port Salerno",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Port St. John",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Port St. Lucie",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Port Townsend",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Port Washington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Port Washington",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Portage",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Portage",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Portage",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Portage Lakes",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Portales",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Porter",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Porterville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Portland",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Portland",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Portland",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Portland",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Portland",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Portland",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Portola Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Portsmouth",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Portsmouth",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Portsmouth",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Portsmouth",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Post Falls",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Poteau",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Potomac",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Potsdam",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Pottstown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Pottsville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Poughkeepsie",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Poulsbo",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Poway",
-    state: "California",
+    state: "California"
   },
   {
     city: "Powder Springs",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Powell",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Prairie du Chien",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Prairie Ridge",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Prairie Village",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Pratt",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Prattville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Prescott",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Prescott Valley",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Presque Isle",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Price",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Prichard",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Prien",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Princeton",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Princeton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Princeton",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Princeton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Princeton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Princeton",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Princeton Meadows",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Prineville",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Prior Lake",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Progress",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Prospect",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Prospect Heights",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Prospect Park",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Providence",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Provo",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Prunedale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Pryor Creek",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Pueblo",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Pueblo West",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Pukalani",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Pulaski",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Pulaski",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Pullman",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Punta Gorda",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Punxsutawney",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Putnam",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Putnam District",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Putnam Valley",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Puyallup",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Quakertown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Quantico Station",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Quartz Hill",
-    state: "California",
+    state: "California"
   },
   {
     city: "Queensbury",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Quincy",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Quincy",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Quincy",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Raceland",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Racine",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Radcliff",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Radford",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Radnor Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Rahway",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Rainbow City",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Raleigh",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Ralston",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Ramapo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ramblewood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ramona",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ramsey",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ramsey",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Rancho Cordova",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rancho Cucamonga",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rancho Mirage",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rancho Palos Verdes",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rancho San Diego",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rancho Santa Margarita",
-    state: "California",
+    state: "California"
   },
   {
     city: "Randallstown",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Randolph",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Rantoul",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rapid City",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Rapid Valley",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Raritan",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Raton",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Ravenna",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Rawlins",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Raymond",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Raymondville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Raymore",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Rayne",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Raynham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Raytown",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Reading",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Reading",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Reading",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Red Bank",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Red Bank",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Red Bank",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Red Bluff",
-    state: "California",
+    state: "California"
   },
   {
     city: "Red Hill",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Red Hook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Red Lion",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Red Oak",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Red Wing",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Redan",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Redding",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Redding",
-    state: "California",
+    state: "California"
   },
   {
     city: "Redford",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Redland",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Redlands",
-    state: "California",
+    state: "California"
   },
   {
     city: "Redlands",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Redmond",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Redmond",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Redondo Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Redwood City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Reedley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Reedsburg",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Rehoboth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Reidsville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Reisterstown",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Rendon",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Reno",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Rensselaer",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Renton",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Republic",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Reserve",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Reston",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Revere",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Rexburg",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Reynoldsburg",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Rhinebeck",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rhinelander",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Rialto",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rib Mountain",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Rice Lake",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Richardson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Richboro",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Richfield",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Richfield",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Richfield",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Richland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Richland",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Richland Hills",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Richmond",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Richmond",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Richmond",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Richmond",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Richmond",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Richmond",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Richmond",
-    state: "California",
+    state: "California"
   },
   {
     city: "Richmond Heights",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Richmond Heights",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Richmond Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Richmond Hill",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Richmond West",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Richton Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Ridge",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ridgecrest",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ridgefield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Ridgefield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ridgefield Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ridgeland",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Ridgeway",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ridgewood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ridley Park",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Rifle",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Ringwood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Rio del Mar",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rio Grande City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rio Linda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rio Rancho",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Ripley",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Ripon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Ripon",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rittman",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "River Edge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "River Falls",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "River Forest",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "River Grove",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "River Oaks",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "River Ridge",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "River Rouge",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "River Vale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Riverbank",
-    state: "California",
+    state: "California"
   },
   {
     city: "Riverdale",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Riverdale",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Riverdale",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Riverdale Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Riverhead",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Riverside",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Riverside",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Riverside",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Riverside",
-    state: "California",
+    state: "California"
   },
   {
     city: "Riverton",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Riverton",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Riverton-Boulevard Park",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Riverview",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Riverview",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Riviera Beach",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Riviera Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Roanoke",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Roanoke",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Roanoke Rapids",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Robbins",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Robbinsdale",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Robinson",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Robinson",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Robinson Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Robstown",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rochelle",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rochester",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Rochester",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Rochester",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Rochester",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rochester",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Rochester Hills",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Rock Falls",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rock Hill",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Rock Island",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rock Springs",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Rockaway",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Rockcreek",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Rockford",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rockingham",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Rockland",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Rockland",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Rockledge",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Rocklin",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rockport",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Rockport",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rockville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Rockville",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Rockville Centre",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rockwall",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rocky Hill",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Rocky Mount",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Rocky Point",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rocky River",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Rodeo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Roeland Park",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Rogers",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Rohnert Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rolla",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Rolling Hills Estates",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rolling Meadows",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Roma",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rome",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rome",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Romeoville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Romulus",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Ronkonkoma",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Roosevelt",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rosamond",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rosaryville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Roscoe",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Rose Hill",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Roseburg",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Rosedale",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Rosedale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Roseland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Roselle",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Roselle",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Roselle Park",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Rosemead",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rosemont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rosemount",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Rosenberg",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rosendale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Roseville",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Roseville",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Roseville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Roslyn Heights",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ross Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Rossford",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Rossmoor",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rossmoor",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Rossville",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Roswell",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Roswell",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Rotonda",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Rotterdam",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Round Lake Beach",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Round Lake Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Round Rock",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Rowland Heights",
-    state: "California",
+    state: "California"
   },
   {
     city: "Rowlett",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Roxboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Roy",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Royal Oak",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Royal Palm Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Royalton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rubidoux",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ruidoso",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Rumford",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Rumson",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Runnemede",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ruskin",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Russellville",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Russellville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Russellville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Ruston",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Rutherford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Rutland",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Rutland",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Rye",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Rye Brook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sachse",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Saco",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Sacramento",
-    state: "California",
+    state: "California"
   },
   {
     city: "Saddle Brook",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Safety Harbor",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Safford",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Saginaw",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Saginaw",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Saginaw Township North",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Saginaw Township South",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Saks",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Salamanca",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Salem",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Salem",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Salem",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Salem",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Salem",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Salem",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Salem",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Salem",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Salida",
-    state: "California",
+    state: "California"
   },
   {
     city: "Salina",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Salina",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Salinas",
-    state: "California",
+    state: "California"
   },
   {
     city: "Saline",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Salisbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Salisbury",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Salisbury",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Salisbury",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Sallisaw",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Salmon Creek",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Salt Lake City",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Sammamish",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "San Angelo",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Anselmo",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Antonio",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Benito",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Bernardino",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Bruno",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Buenaventura",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Carlos",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Carlos Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "San Clemente",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Diego",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Diego Country Estates",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Dimas",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Elizario",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Fernando",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Francisco",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Gabriel",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Jacinto",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Jose",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Juan",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Juan Capistrano",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Leandro",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Lorenzo",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Luis",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "San Luis Obispo",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Marcos",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Marcos",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "San Marino",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Mateo",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Pablo",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Rafael",
-    state: "California",
+    state: "California"
   },
   {
     city: "San Ramon",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sanatoga",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sand Lake",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sand Springs",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Sandalfoot Cove",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sandersville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Sandpoint",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Sandusky",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Sandusky South",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Sandwich",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Sandwich",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sandy",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Sandy Springs",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Sanford",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sanford",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Sanford",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Sanger",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sanibel",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sans Souci",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Santa Ana",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Barbara",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Clara",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Clarita",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Cruz",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Fe",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Santa Fe",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Santa Fe Springs",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Maria",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Monica",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Paula",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santa Rosa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Santee",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sappington",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Sapulpa",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Saraland",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Sarasota",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sarasota Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Saratoga",
-    state: "California",
+    state: "California"
   },
   {
     city: "Saratoga Springs",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sartell",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Satellite Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Saugerties",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Saugus",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sauk Rapids",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Sauk Village",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Sault Ste. Marie",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Sausalito",
-    state: "California",
+    state: "California"
   },
   {
     city: "Savage",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Savage-Guilford",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Savannah",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Savannah",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Sayreville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Sayville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Scarborough",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Scarsdale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Schaghticoke",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Schaumburg",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Schenectady",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Schererville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Schertz",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Schiller Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Schodack",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Schofield Barracks",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Schroeppel",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Scituate",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Scituate",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Scotch Plains",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Scotchtown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Scotia",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Scott",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Scott Lake",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Scott Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Scottdale",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Scotts Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Scottsbluff",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Scottsboro",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Scottsburg",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Scottsdale",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Scranton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Scriba",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Seabrook",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Seabrook",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Seaford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Seaford",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Seagoville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Seal Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Searcy",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Seaside",
-    state: "California",
+    state: "California"
   },
   {
     city: "SeaTac",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Seattle",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Seattle Hill-Silver Firs",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Sebastian",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sebastopol",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sebring",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Secaucus",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Security-Widefield",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Sedalia",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Sedona",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Sedro-Woolley",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Seekonk",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Seguin",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Selah",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Selden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sellersburg",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Selma",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Selma",
-    state: "California",
+    state: "California"
   },
   {
     city: "Seminole",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Seminole",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Senatobia",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Seneca",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Seneca Falls",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Setauket-East Setauket",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Seven Corners",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Seven Hills",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Seven Oaks",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Severn",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Severna Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Sevierville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Seward",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Seymour",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Seymour",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Seymour",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Shady Hills",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Shafter",
-    state: "California",
+    state: "California"
   },
   {
     city: "Shaker Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Shakopee",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Shaler Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Shamokin",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sharon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sharon",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sharonville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Shasta Lake",
-    state: "California",
+    state: "California"
   },
   {
     city: "Shawangunk",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Shawano",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Shawnee",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Shawnee",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Sheboygan",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Sheboygan Falls",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Sheffield",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Sheffield Lake",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Shelburne",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Shelby",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Shelby",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Shelby",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Shelbyville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Shelbyville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Shelbyville",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Shelton",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Shelton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Shenandoah",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Shepherdsville",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Sheridan",
-    state: "Wyoming",
+    state: "Wyoming"
   },
   {
     city: "Sherman",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Sherrelwood",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Sherwood",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Sherwood",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Shields",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Shiloh",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Shiloh",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Shiloh",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Shiprock",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Shirley",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Shirley",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Shively",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Shoreline",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Shoreview",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Shorewood",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Shorewood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Shorewood",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Show Low",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Shreveport",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Shrewsbury",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Shrewsbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sidney",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sidney",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "Sidney",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Sierra Madre",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sierra Vista",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Sierra Vista Southeast",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Siesta Key",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Signal Hill",
-    state: "California",
+    state: "California"
   },
   {
     city: "Signal Mountain",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Sikeston",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Siler City",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Siloam Springs",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Silsbee",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Silver City",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Silver Spring",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Silver Springs Shores",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Silverdale",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Silverton",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Silvis",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Simi Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Simpsonville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Simsbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Sioux Center",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Sioux City",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Sioux Falls",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Sitka and",
-    state: "Alaska",
+    state: "Alaska"
   },
   {
     city: "Skaneateles",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Skidaway Island",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Skokie",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Skowhegan",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Slaton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Sleepy Hollow",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Slidell",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Smithfield",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Smithfield",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Smithfield",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Smithfield",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Smiths",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Smithtown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Smyrna",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Smyrna",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Snellville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Snohomish",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Snyder",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Socastee",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Socorro",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Socorro",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Soddy-Daisy",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Sodus",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Solana Beach",
-    state: "California",
+    state: "California"
   },
   {
     city: "Soledad",
-    state: "California",
+    state: "California"
   },
   {
     city: "Solon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Solvay",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Somers",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Somers",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Somers",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Somers Point",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Somerset",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Somerset",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Somerset",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Somerset",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Somersworth",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Somerton",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Somerville",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Somerville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Sonoma",
-    state: "California",
+    state: "California"
   },
   {
     city: "Souderton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sound Beach",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "South Amboy",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "South Bend",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "South Berwick",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "South Boston",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "South Bradenton",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Burlington",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "South Charleston",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "South Cleveland",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "South Daytona",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South El Monte",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Elgin",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "South Euclid",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "South Farmingdale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "South Gate",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "South Gate",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Hadley",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "South Highpoint",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Hill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "South Hill",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "South Holland",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "South Houston",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "South Huntington",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "South Jordan",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "South Kensington",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "South Kingstown",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "South Lake Tahoe",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Laurel",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "South Lockport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "South Lyon",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "South Miami",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Miami Heights",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Milwaukee",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "South Monroe",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "South Ogden",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "South Orange",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "South Oroville",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Park Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "South Pasadena",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Patrick Shores",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Plainfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "South Portland",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "South River",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "South Salt Lake",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "South San Francisco",
-    state: "California",
+    state: "California"
   },
   {
     city: "South San Gabriel",
-    state: "California",
+    state: "California"
   },
   {
     city: "South San Jose Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Sioux City",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "South St. Paul",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "South Valley",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "South Venice",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "South Whittier",
-    state: "California",
+    state: "California"
   },
   {
     city: "South Williamsport",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "South Windsor",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "South Yarmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "South Yuba City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Southampton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Southaven",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Southborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Southbridge",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Southbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Southeast",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Southeast Arcadia",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Southern Pines",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Southfield",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Southgate",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Southgate",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Southglenn",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Southington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Southlake",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Southold",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Southport",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Southside",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Southwick",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Southwood Acres",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Spanaway",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Spanish Fork",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Spanish Lake",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Spanish Springs",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Sparks",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Sparta",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Spartanburg",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Spearfish",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Speedway",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Spencer",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Spencer",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Spokane",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Spotswood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Spring",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Spring Creek",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Spring Hill",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Spring Hill",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Spring Lake",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Spring Lake Park",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Spring Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Spring Valley",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Spring Valley",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Springboro",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Springdale",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Springdale",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Springdale",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Springfield",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Springfield",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Springfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Springfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Springfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Springfield",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Springfield",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Springfield",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Springfield",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Springfield",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Springfield",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Springville",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "St. Albans",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "St. Albans",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "St. Andrews",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "St. Ann",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Anthony",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Augustine",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "St. Charles",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Charles",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "St. Charles",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "St. Clair Shores",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "St. Cloud",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Cloud",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "St. Dennis",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "St. Francis",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "St. George",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "St. Helens",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "St. James",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "St. John",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "St. John",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Johns",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "St. Johnsbury",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "St. Joseph",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "St. Joseph",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Louis",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Louis Park",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Martin",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "St. Martinville",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "St. Marys",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "St. Marys",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "St. Marys",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "St. Matthews",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "St. Michael",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Paul",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Pete Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "St. Peter",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "St. Peters",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "St. Petersburg",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "St. Rose",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "St. Simons",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "St. Stephens",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Stafford",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Stafford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Stamford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Standish",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Stanford",
-    state: "California",
+    state: "California"
   },
   {
     city: "Stanton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Starkville",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "State College",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Statesboro",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Statesville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Staunton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Stayton",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Steamboat Springs",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Steger",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Steilacoom",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Stephenville",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Sterling",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Sterling",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sterling",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Sterling Heights",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Steubenville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Stevens Point",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Stickney",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Stillwater",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Stillwater",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Stillwater",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Stockbridge",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Stockton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Stone Mountain",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Stonegate",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Stoneham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Stonington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Stony Brook",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Stony Point",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Storm Lake",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Storrs",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Stoughton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Stoughton",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Stow",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Stowe Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Stratford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Stratford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Stratham",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Strathmore",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Stratmoor",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Streamwood",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Streator",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Streetsboro",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Strongsville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Struthers",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Stuart",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Stuarts Draft",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Sturbridge",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sturgeon Bay",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Sturgis",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Sturgis",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Stuttgart",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Suamico",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Succasunna-Kenvil",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Sudbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Sudley",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Suffern",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Suffield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Suffolk",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Sugar Hill",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Sugar Land",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Sugarmill Woods",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Suisun City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Suitland-Silver Hill",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Sullivan",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Sullivan",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sulphur",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Sulphur Springs",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Summerfield",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Summerville",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Summit",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Summit",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Summit",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Summit Park",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Sumner",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Sumter",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Sun City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sun City",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Sun City West",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Sun Lakes",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Sun Prairie",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Sun Valley",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Sunbury",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sunland Park",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Sunny Isles Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sunnyside",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Sunnyside",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Sunnyvale",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sunrise",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sunrise Manor",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Sunset",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Sunset Hills",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Superior",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Superior",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Surprise",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Susanville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Sussex",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Sutherlin",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Sutton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Suwanee",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Swainsboro",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Swampscott",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Swansea",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Swansea",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Swanton",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Swanzey",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Swarthmore",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sweden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Sweet Home",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Sweetwater",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Sweetwater",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Swissvale",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Sycamore",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Sylacauga",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Sylvania",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Syosset",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Syracuse",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Syracuse",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Tacoma",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Taft",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tahlequah",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Takoma Park",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Talladega",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Tallahassee",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tallmadge",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Tallulah",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Tamalpais-Homestead Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tamaqua",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Tamarac",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tamiami",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tampa",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tanque Verde",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Tappan",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Tarboro",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Tarpon Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tarrant",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Tarrytown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Taunton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Tavares",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Taylor",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Taylor",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Taylor",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Taylor Mill",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Taylors",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Taylorsville",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Taylorville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Teaneck",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Teays Valley",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Tecumseh",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Tecumseh",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Tehachapi",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tell City",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Temecula",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tempe",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Temperance",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Temple",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Temple City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Temple Hills",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Temple Terrace",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Templeton",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Tenafly",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Terrace Heights",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Terre Haute",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Terrell",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Terrytown",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Terryville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Tewksbury",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Texarkana",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Texarkana",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Texas City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "The Colony",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "The Crossings",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "The Hammocks",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "The Pinery",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "The Village",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "The Villages",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "The Woodlands",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Theodore",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Thermalito",
-    state: "California",
+    state: "California"
   },
   {
     city: "Thibodaux",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Thief River Falls",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Thomaston",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Thomaston",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Thomasville",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Thomasville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Thompson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Thompson",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Thompsonville",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Thomson",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Thonotosassa",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Thornton",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Thousand Oaks",
-    state: "California",
+    state: "California"
   },
   {
     city: "Three Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Three Rivers",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Tiburon",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tiffin",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Tifton",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Tigard",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Tillmans Corner",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Timberlake",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Timberlane",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Tinley Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Tinton Falls",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Tipp City",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Titusville",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Titusville",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Tiverton",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Toccoa",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Toledo",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Tolland",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Tomah",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Tomball",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Toms River",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Tonawanda",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Tooele",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Topeka",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Toppenish",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Topsfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Topsham",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Torrance",
-    state: "California",
+    state: "California"
   },
   {
     city: "Torrington",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Totowa",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Town ’n Country",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Town and Country",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Townsend",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Towson",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Tracy",
-    state: "California",
+    state: "California"
   },
   {
     city: "Traverse City",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Travilah",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Treasure Island",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Trenton",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Trenton",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Trenton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Trenton",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Trinidad",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Trinity",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Trooper",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Trophy Club",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Trotwood",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Troutdale",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Troy",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Troy",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Troy",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Troy",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Troy",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Troy",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Truckee",
-    state: "California",
+    state: "California"
   },
   {
     city: "Trumann",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Trumbull",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Trussville",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Truth or Consequences",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "Tualatin",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Tuba City",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Tuckahoe",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Tuckahoe",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Tucker",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Tucson",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Tucson Estates",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Tukwila",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Tulare",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tullahoma",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Tulsa",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Tumwater",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Tupelo",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Turlock",
-    state: "California",
+    state: "California"
   },
   {
     city: "Turtle Creek",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Tuscaloosa",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Tuscumbia",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Tuskegee",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Tustin",
-    state: "California",
+    state: "California"
   },
   {
     city: "Tustin Foothills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Twentynine Palms",
-    state: "California",
+    state: "California"
   },
   {
     city: "Twentynine Palms Base",
-    state: "California",
+    state: "California"
   },
   {
     city: "Twin Falls",
-    state: "Idaho",
+    state: "Idaho"
   },
   {
     city: "Twin Lakes",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Twin Rivers",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Twinsburg",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Two Rivers",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Tyler",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Tyngsborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Tysons Corner",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Ukiah",
-    state: "California",
+    state: "California"
   },
   {
     city: "Ulster",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Union",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Union",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Union",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Union",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Union Beach",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Union City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Union City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Union City",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Union City",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Union Hill-Novelty Hill",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Union Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Uniondale",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Uniontown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Universal City",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "University",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "University City",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "University Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "University Park",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "University Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "University Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "University Place",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Upland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Upper Arlington",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Upper Grand Lagoon",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Upper Providence Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Upper Saddle River",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Upper Sandusky",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Upper St. Clair",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Urbana",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Urbana",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Urbandale",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Utica",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Uvalde",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Uxbridge",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Vacaville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vadnais Heights",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Valdosta",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Valinda",
-    state: "California",
+    state: "California"
   },
   {
     city: "Valle Vista",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vallejo",
-    state: "California",
+    state: "California"
   },
   {
     city: "Valley",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Valley Center",
-    state: "California",
+    state: "California"
   },
   {
     city: "Valley City",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Valley Cottage",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Valley Falls",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Valley Park",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Valley Station",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Valley Stream",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Valparaiso",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Valparaiso",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Valrico",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Van Buren",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Van Buren",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Van Wert",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Vancouver",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Vandalia",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Vandalia",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Vandenberg AFB",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vashon",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Venice",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Venice Gardens",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Ventnor City",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Veradale",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Vermilion",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Vermillion",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Vernal",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Vernon",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Vernon",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Vernon",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Vernon Hills",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Vero Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Vero Beach South",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Verona",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Verona",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Verona",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Versailles",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Vestal",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Vestavia Hills",
-    state: "Alabama",
+    state: "Alabama"
   },
   {
     city: "Vicksburg",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Victor",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Victoria",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Victorville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vidalia",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Vidor",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Vienna",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Vienna",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "View Park-Windsor Hills",
-    state: "California",
+    state: "California"
   },
   {
     city: "Villa Hills",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Villa Park",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Village Green-Green Ridge",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Village Park",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Village St. George",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Villas",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Villas",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Ville Platte",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Vincennes",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Vincent",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vineland",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Vineyard",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vinings",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Vinita",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Vinton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Violet",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Virginia",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Virginia Beach",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Visalia",
-    state: "California",
+    state: "California"
   },
   {
     city: "Vista",
-    state: "California",
+    state: "California"
   },
   {
     city: "Volney",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wabash",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Waco",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Waconia",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Wade Hampton",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Wading River",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wadsworth",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Waggaman",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Wagoner",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Wahiawa",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Wahpeton",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Waianae",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waihee-Waiehu",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Wailuku",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waimalu",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waimea",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waipahu",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waipio",
-    state: "Hawaii",
+    state: "Hawaii"
   },
   {
     city: "Waite Park",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Wake Forest",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Wakefield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wakefield-Peacedale",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Walden",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Waldorf",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Waldwick",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Walker",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Walker Mill",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Walla Walla",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Walled Lake",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Waller",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Wallingford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Wallingford Center",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Wallington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Wallkill",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Walnut",
-    state: "California",
+    state: "California"
   },
   {
     city: "Walnut Creek",
-    state: "California",
+    state: "California"
   },
   {
     city: "Walnut Grove",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Walnut Park",
-    state: "California",
+    state: "California"
   },
   {
     city: "Walpole",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Waltham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Walworth",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wanaque",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Wantagh",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wapakoneta",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wappinger",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Ware",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wareham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Warner Robins",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Warr Acres",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Warren",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Warren",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Warren",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Warren",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Warren",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Warrensburg",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Warrensville Heights",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Warrenton",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Warrenville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Warrington",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Warsaw",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Warwick",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Warwick",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Wasco",
-    state: "California",
+    state: "California"
   },
   {
     city: "Waseca",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Washington",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Washington",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Washington",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Washington",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Washington",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Washington",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Washington",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Washington",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Washington",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Washington",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Washington",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Washington Terrace",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Washington Township",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Washougal",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Watauga",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Waterboro",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Waterbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Waterford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Waterford",
-    state: "California",
+    state: "California"
   },
   {
     city: "Waterford",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Waterford",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Waterloo",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Waterloo",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Waterloo",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Watertown",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Watertown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Watertown",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Watertown",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Watertown",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Waterville",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Watervliet",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Watsonville",
-    state: "California",
+    state: "California"
   },
   {
     city: "Wauconda",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Waukegan",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Waukesha",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Waunakee",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Waupun",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Wausau",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Wauseon",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wauwatosa",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Waveland",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Waverly",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Waverly",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Wawarsing",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wawayanda",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Waxahachie",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Waycross",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Wayland",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wayne",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Wayne",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Waynesboro",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Waynesboro",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Waynesville",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Weare",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Weatherford",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Weatherford",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Webb City",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Webster",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Webster",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Webster",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Webster City",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "Webster Groves",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Weddington",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Weigelstown",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Weirton",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "Wekiwa Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Welby",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Welcome",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Wellesley",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wellington",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Wellington",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Wells",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Wells Branch",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Wellston",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wellsville",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wenatchee",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Wentzville",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Weslaco",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "West Allis",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "West and East Lealman",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Athens",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Babylon",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Bend",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "West Bloomfield Township",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "West Boylston",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "West Bridgewater",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "West Caldwell",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Carrollton City",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "West Carson",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Chester",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "West Chicago",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "West Columbia",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "West Covina",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Des Moines",
-    state: "Iowa",
+    state: "Iowa"
   },
   {
     city: "West Fargo",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "West Frankfort",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "West Freehold",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Gate",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "West Glens Falls",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Goshen",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "West Hartford",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "West Hattiesburg",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "West Haven",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "West Haven-Sylvan",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "West Haverstraw",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Helena",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "West Hempstead",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Hollywood",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Islip",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Jordan",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "West Lafayette",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "West Lake Stevens",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "West Linn",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "West Little River",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Livingston",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "West Long Branch",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Melbourne",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Memphis",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "West Mifflin",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "West Milford",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Modesto",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Monroe",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "West New York",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Norriton",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "West Odessa",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "West Orange",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Palm Beach",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Paterson",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "West Pensacola",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Perrine",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West Plains",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "West Point",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Point",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "West Point",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "West Puente Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Richland",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "West Sacramento",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Seneca",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "West Slope",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "West Springfield",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "West Springfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "West St. Paul",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "West University Place",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "West Valley",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "West Valley City",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "West Vero Corridor",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "West View",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "West Warwick",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "West Whittier-Los Nietos",
-    state: "California",
+    state: "California"
   },
   {
     city: "West Yarmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westborough",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westbrook",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Westbrook",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Westbury",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Westchase",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Westchester",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Westchester",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Westerly",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Western Springs",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Westerville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Westfield",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westfield",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Westfield",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Westford",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westgate-Belvedere Homes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Westlake",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Westlake Village",
-    state: "California",
+    state: "California"
   },
   {
     city: "Westland",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Westmere",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Westminster",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westminster",
-    state: "California",
+    state: "California"
   },
   {
     city: "Westminster",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Westminster",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Westmont",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Westmont",
-    state: "California",
+    state: "California"
   },
   {
     city: "Westmoreland",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Weston",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Weston",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Weston",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Weston",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Westport",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westport",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Westview",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Westwego",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Westwood",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Westwood",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Westwood",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Westwood Lakes",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Wethersfield",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Weymouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wharton",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Wharton",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Wheat Ridge",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Wheatfield",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wheaton",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wheaton-Glenmont",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Wheelersburg",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wheeling",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wheeling",
-    state: "West Virginia",
+    state: "West Virginia"
   },
   {
     city: "White Bear Lake",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "White Center",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "White Horse",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "White House",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "White Marsh",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "White Meadow Lake",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "White Oak",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "White Oak",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "White Oak",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "White Plains",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "White Rock",
-    state: "New Mexico",
+    state: "New Mexico"
   },
   {
     city: "White Settlement",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Whitefish Bay",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Whitehall",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Whitehall",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Whitestown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Whitewater",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Whitinsville",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Whitman",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Whitmore Lake",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Whitney",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Whittier",
-    state: "California",
+    state: "California"
   },
   {
     city: "Wichita",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Wichita Falls",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Wickliffe",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wilbraham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wildomar",
-    state: "California",
+    state: "California"
   },
   {
     city: "Wildwood",
-    state: "Missouri",
+    state: "Missouri"
   },
   {
     city: "Wilkes-Barre",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Wilkins Township",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Wilkinsburg",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Willard",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Williamsburg",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Williamsburg",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Williamson",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Williamsport",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Williamstown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Williamstown",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Willimantic",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Williston",
-    state: "North Dakota",
+    state: "North Dakota"
   },
   {
     city: "Williston",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Williston Park",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Willmar",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Willoughby",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Willoughby Hills",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Willow Grove",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Willow Street",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Willowbrook",
-    state: "California",
+    state: "California"
   },
   {
     city: "Willowbrook",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Willowick",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Willows",
-    state: "California",
+    state: "California"
   },
   {
     city: "Wilmette",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wilmington",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wilmington",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Wilmington",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wilmington",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Wilmington Island",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Wilmington Manor",
-    state: "Delaware",
+    state: "Delaware"
   },
   {
     city: "Wilna",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wilson",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Wilson",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Wilsonville",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Wilton",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wilton",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Wilton Manors",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winchendon",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Winchester",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Winchester",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Winchester",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Winchester",
-    state: "Kentucky",
+    state: "Kentucky"
   },
   {
     city: "Winchester",
-    state: "Tennessee",
+    state: "Tennessee"
   },
   {
     city: "Winchester",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Windemere",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Winder",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Windham",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Windham",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Windham",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Windsor",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Windsor",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Windsor",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Windsor",
-    state: "California",
+    state: "California"
   },
   {
     city: "Windsor Locks",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Winfield",
-    state: "Kansas",
+    state: "Kansas"
   },
   {
     city: "Winfield",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Winnemucca",
-    state: "Nevada",
+    state: "Nevada"
   },
   {
     city: "Winnetka",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Winona",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Winooski",
-    state: "Vermont",
+    state: "Vermont"
   },
   {
     city: "Winslow",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Winslow",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Winsted",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Winston",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winston-Salem",
-    state: "North Carolina",
+    state: "North Carolina"
   },
   {
     city: "Winter Garden",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winter Gardens",
-    state: "California",
+    state: "California"
   },
   {
     city: "Winter Haven",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winter Park",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winter Springs",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Winters",
-    state: "California",
+    state: "California"
   },
   {
     city: "Winthrop",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Winthrop",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Winthrop Harbor",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Winton",
-    state: "California",
+    state: "California"
   },
   {
     city: "Wisconsin Rapids",
-    state: "Wisconsin",
+    state: "Wisconsin"
   },
   {
     city: "Wixom",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Woburn",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wolcott",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Wolf Trap",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Wolfeboro",
-    state: "New Hampshire",
+    state: "New Hampshire"
   },
   {
     city: "Wonder Lake",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wood Dale",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wood River",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Wood-Ridge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Woodbourne-Hyde Park",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Woodbridge",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Woodbridge",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Woodbridge",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Woodburn",
-    state: "Oregon",
+    state: "Oregon"
   },
   {
     city: "Woodbury",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Woodbury",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Woodbury",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Woodbury",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Woodcrest",
-    state: "California",
+    state: "California"
   },
   {
     city: "Woodfield",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Woodhaven",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Woodinville",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Woodlake",
-    state: "California",
+    state: "California"
   },
   {
     city: "Woodland",
-    state: "California",
+    state: "California"
   },
   {
     city: "Woodland Park",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Woodlawn",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Woodlyn",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Woodmere",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Woodmere",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Woodmoor",
-    state: "Colorado",
+    state: "Colorado"
   },
   {
     city: "Woodmore",
-    state: "Maryland",
+    state: "Maryland"
   },
   {
     city: "Woodridge",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Woods Cross",
-    state: "Utah",
+    state: "Utah"
   },
   {
     city: "Woodstock",
-    state: "Georgia",
+    state: "Georgia"
   },
   {
     city: "Woodstock",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Woodstock",
-    state: "Connecticut",
+    state: "Connecticut"
   },
   {
     city: "Woodstock",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Woodward",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Woodway",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Woonsocket",
-    state: "Rhode Island",
+    state: "Rhode Island"
   },
   {
     city: "Wooster",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Worcester",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Worth",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Worthington",
-    state: "Minnesota",
+    state: "Minnesota"
   },
   {
     city: "Worthington",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wrentham",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Wright",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Wright-Patterson AFB",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wyandanch",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Wyandotte",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Wyckoff",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Wylie",
-    state: "Texas",
+    state: "Texas"
   },
   {
     city: "Wyndham",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Wynne",
-    state: "Arkansas",
+    state: "Arkansas"
   },
   {
     city: "Wyoming",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Wyoming",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Wyomissing",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Wytheville",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Xenia",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Yakima",
-    state: "Washington",
+    state: "Washington"
   },
   {
     city: "Yankton",
-    state: "South Dakota",
+    state: "South Dakota"
   },
   {
     city: "Yardville-Groveville",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Yarmouth",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "Yarmouth",
-    state: "Massachusetts",
+    state: "Massachusetts"
   },
   {
     city: "Yazoo City",
-    state: "Mississippi",
+    state: "Mississippi"
   },
   {
     city: "Yeadon",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "Yeehaw Junction",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Yonkers",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Yorba Linda",
-    state: "California",
+    state: "California"
   },
   {
     city: "York",
-    state: "Nebraska",
+    state: "Nebraska"
   },
   {
     city: "York",
-    state: "Maine",
+    state: "Maine"
   },
   {
     city: "York",
-    state: "Pennsylvania",
+    state: "Pennsylvania"
   },
   {
     city: "York",
-    state: "South Carolina",
+    state: "South Carolina"
   },
   {
     city: "Yorketown",
-    state: "New Jersey",
+    state: "New Jersey"
   },
   {
     city: "Yorkshire",
-    state: "Virginia",
+    state: "Virginia"
   },
   {
     city: "Yorktown",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Yorktown Heights",
-    state: "New York",
+    state: "New York"
   },
   {
     city: "Yorkville",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Youngstown",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Ypsilanti",
-    state: "Michigan",
+    state: "Michigan"
   },
   {
     city: "Yreka",
-    state: "California",
+    state: "California"
   },
   {
     city: "Yuba City",
-    state: "California",
+    state: "California"
   },
   {
     city: "Yucaipa",
-    state: "California",
+    state: "California"
   },
   {
     city: "Yucca Valley",
-    state: "California",
+    state: "California"
   },
   {
     city: "Yukon",
-    state: "Oklahoma",
+    state: "Oklahoma"
   },
   {
     city: "Yulee",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Yuma",
-    state: "Arizona",
+    state: "Arizona"
   },
   {
     city: "Zachary",
-    state: "Louisiana",
+    state: "Louisiana"
   },
   {
     city: "Zanesville",
-    state: "Ohio",
+    state: "Ohio"
   },
   {
     city: "Zephyrhills",
-    state: "Florida",
+    state: "Florida"
   },
   {
     city: "Zion",
-    state: "Illinois",
+    state: "Illinois"
   },
   {
     city: "Zionsville",
-    state: "Indiana",
+    state: "Indiana"
   },
   {
     city: "Zuni Pueblo",
-    state: "New Mexico",
-  },
-]
+    state: "New Mexico"
+  }
+];

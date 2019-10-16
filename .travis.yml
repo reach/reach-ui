@@ -17,3 +17,19 @@ jobs:
       script: lerna publish from-git --yes --pre-dist-tag next
       on:
         tags: true
+  - stage: Deploy Website
+    if: branch = website
+    before_script: yarn build
+    script: echo "Deploying website to https://reacttraining.com/reach-ui/"
+    before_deploy:
+    - openssl aes-256-cbc -K $encrypted_e12d3fc86b46_key -iv $encrypted_e12d3fc86b46_iv
+      -in website-deploy-key.enc -out website-deploy-key -d
+    - chmod 600 website-deploy-key
+    - eval $(ssh-agent -s)
+    - ssh-add website-deploy-key
+    deploy:
+      provider: script
+      script: bash scripts/deploy-website.sh
+      skip_cleanup: true
+      on:
+        branch: website
