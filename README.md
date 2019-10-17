@@ -4,7 +4,7 @@ Thanks for getting involved with Reach UI development!
 
 ## Looking for the documentation?
 
-https://ui.reach.tech
+https://reacttraining.com/reach-ui/
 
 ## Getting Started
 
@@ -23,26 +23,8 @@ yarn build
 
 ```sh
 yarn build        # builds all packages
-
 yarn start        # starts storybook server
-
 yarn test         # runs tests in all packages
-
-yarn release      # publishes changed packages
-```
-
-## `www` directory scripts
-
-The website uses [Gatsby](https://gatsbyjs.org) v2 with [Gatsby MDX](https://github.com/ChristopherBiscardi/gatsby-mdx) powering most of the pages. It is deployed with [now](https://now.sh)
-
-```
-yarn build        # builds the production site to "public/"
-
-yarn start        # starts the website
-
-yarn stage        # deploys the site with now.sh
-
-yarn deploy       # alias the latest deploy to production
 ```
 
 ## Running / Writing Examples
@@ -128,3 +110,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | 🛠      | Tree View            |
 | ❓     | Treegrid             |
 | ❓     | Window Splitter      |
+
+## Website
+
+The website is a Gatsby app in the `website` directory. It automatically deploys to https://reacttraining.com/reach-ui/ when the `website` branch is updated.
