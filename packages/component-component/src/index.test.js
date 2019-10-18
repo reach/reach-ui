@@ -130,7 +130,7 @@ describe("state", () => {
     });
     const testComponent = renderer.create(
       <Component initialState={{ goodAtTesting: false }}>
-        {({ state, setState }) => (
+        {({ setState }) => (
           <div>
             <button
               className="test-button"

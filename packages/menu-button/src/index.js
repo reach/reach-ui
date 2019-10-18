@@ -66,15 +66,15 @@ const manageFocusOnUpdate = ({ refs, state, prevState }, appManagedFocus) => {
   }
 };
 
-const openAtFirstItem = state => ({ isOpen: true, selectionIndex: 0 });
+const openAtFirstItem = _ => ({ isOpen: true, selectionIndex: 0 });
 
-const close = state => ({
+const close = _ => ({
   isOpen: false,
   selectionIndex: -1,
   closingWithClick: false
 });
 
-const selectItemAtIndex = index => state => ({
+const selectItemAtIndex = index => _ => ({
   selectionIndex: index
 });
 
@@ -414,7 +414,7 @@ const MenuListImpl = React.forwardRef(
           }
         })}
       >
-        {clones.map((child, index) => {
+        {clones.map(child => {
           if (isFocusableChildType(child)) {
             const focusIndex = focusableChildren.indexOf(child);
 
