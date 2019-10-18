@@ -10,7 +10,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog} initialFocusRef={button}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        initialFocusRef={button}
+      >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <button ref={button}>Auto focused</button>
       </Dialog>
