@@ -1,0 +1,146 @@
+import Helmet from "react-helmet";
+
+<Helmet
+  title="Reach UI - Animation"
+  meta={[
+    {
+      name: "description",
+      content: "Blah blah."
+    }
+  ]}
+/>
+
+# Animation
+
+Animation is usually boiled down to three phases: enter, update, exit. With Reach UI you're probably after the just the "enter" and "exit" phases.
+
+You can achieve animation with CSS and/or composing with other React components. On this page we'll look at a few different approaches.
+
+## CSS Animations
+
+You can animate the "enter" phase with just a little CSS.
+
+```css
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list] {
+  border-radius: 5px;
+  animation: slide-down 0.2s ease;
+}
+```
+
+And then add the class to your menu:
+
+```jsx
+<Menu>
+  <MenuButton>
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList className="slide-down">
+    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+However, you can't animate the "exit" phase with just CSS because React removes the element from the DOM immediately.
+
+## CSS + reCONDITION Phase
+
+You may want to use CSS for both the enter and exit phases. For this, we can combine some CSS with the `Phase` component from reCONDITION.
+
+First add the CSS to define the animation:
+
+```css
+.slide-down {
+  transition-property: transform, opacity;
+  transition-duration: 300ms;
+
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.slide-down.enter {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.slide-down.exit {
+  opacity: 0;
+}
+```
+
+Then import the Phased component:
+
+```jsx
+import { Phased } from "recondition";
+```
+
+Now we're ready to go:
+
+```jsx
+<Menu>
+  <MenuButton>
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList className="slide-down">
+    <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+    <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+    <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+## React Spring
+
+```jsx
+let AnimatedDialogOverlay = animated(DialogOverlay);
+let AnimatedDialogContent = animated(DialogContent);
+
+function Example(props) {
+  const [showDialog, setShowDialog] = React.useState(false);
+  const transitions = useTransition(showDialog, null, {
+    from: { opacity: 0, y: -10 },
+    enter: { opacity: 1, y: 0 },
+    leave: { opacity: 0, y: 10 }
+  });
+  return (
+    <div>
+      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+      {transitions.map(
+        ({ item, key, props: styles }) =>
+          item && (
+            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+              <AnimatedDialogContent
+                style={{
+                  transform: `translate3d(0px, ${styles.y}px, 0px)`,
+                  border: "4px solid hsla(0, 0%, 0%, 0.5)",
+                  borderRadius: 10
+                }}
+              >
+                <button onClick={() => setShowDialog(false)}>
+                  Close Dialog
+                </button>
+                <p>React Spring makes it too easy!</p>
+                <input type="text" />
+                <br />
+                <input type="text" />
+                <button>Ayyyyyy</button>
+              </AnimatedDialogContent>
+            </AnimatedDialogOverlay>
+          )
+      )}
+    </div>
+  );
+}
+```

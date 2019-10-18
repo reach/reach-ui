@@ -151,43 +151,7 @@ export const CheckboxInput = React.forwardRef(function CheckboxInput(
     name: nameProp,
     onBlur,
     onChange,
-    onClick,
-    onContextMenu,
-    onDoubleClick,
-    onDrag,
-    onDragEnd,
-    onDragEnter,
-    onDragExit,
-    onDragLeave,
-    onDragOver,
-    onDragStart,
-    onDrop,
     onFocus,
-    onGotPointerCapture,
-    onInvalid,
-    onKeyDown,
-    onKeyPress,
-    onKeyUp,
-    onLostPointerCapture,
-    onMouseDown,
-    onMouseEnter,
-    onMouseLeave,
-    onMouseMove,
-    onMouseOut,
-    onMouseOver,
-    onMouseUp,
-    onPointerCancel,
-    onPointerDown,
-    onPointerEnter,
-    onPointerLeave,
-    onPointerMove,
-    onPointerOut,
-    onPointerOver,
-    onPointerUp,
-    onTouchCancel,
-    onTouchEnd,
-    onTouchMove,
-    onTouchStart,
     readOnly,
     required,
     tabIndex,
@@ -255,70 +219,16 @@ export const CheckboxInput = React.forwardRef(function CheckboxInput(
     });
   }
 
-  // Since the outer element for non-input types has no accessibility value, we should expect
-  // that all aria attributes will be passed to the input. We'll extract them programatically
-  // instead of trying to keep up with the specs as they evolve -_-
-  // There is probably a simpler method here but my brain is a little fried so please, have at it.
-  const [commonProps, ariaProps] = Object.entries(props).reduce(
-    (acc, [propKey, propValue]) =>
-      propKey.startsWith("aria-")
-        ? [acc[0], { ...acc[1], [propKey]: propValue }] // common props spread into the second slot, aria into the first
-        : [{ ...acc[0], [propKey]: propValue }, acc[1]],
-    [{}, {}]
-  );
-
-  // All interactive event props that should probably always go to the input
-  // Display-type events (animation, transition, etc.), belong on the outer element
-  const inputEventProps = {
-    onClick,
-    onContextMenu,
-    onDoubleClick,
-    onDrag,
-    onDragEnd,
-    onDragEnter,
-    onDragExit,
-    onDragLeave,
-    onDragOver,
-    onDragStart,
-    onDrop,
-    onGotPointerCapture,
-    onInvalid,
-    onKeyDown,
-    onKeyPress,
-    onKeyUp,
-    onLostPointerCapture,
-    onMouseDown,
-    onMouseEnter,
-    onMouseLeave,
-    onMouseMove,
-    onMouseOut,
-    onMouseOver,
-    onMouseUp,
-    onPointerCancel,
-    onPointerDown,
-    onPointerEnter,
-    onPointerLeave,
-    onPointerMove,
-    onPointerOut,
-    onPointerOver,
-    onPointerUp,
-    onTouchCancel,
-    onTouchEnd,
-    onTouchMove,
-    onTouchStart
-  };
-
   const outerProps = {
     "data-reach-checkbox-input": "",
     "data-checked": checked ? "" : undefined,
     "data-mixed": mixed ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,
     "data-read-only": readOnly ? "" : undefined,
-    ...commonProps
+    ...props
   };
 
   const inputProps = {
-    ...ariaProps,
     "aria-checked": mixed ? "mixed" : String(checked),
     "data-mixed": mixed,
     autoComplete,
@@ -334,8 +244,7 @@ export const CheckboxInput = React.forwardRef(function CheckboxInput(
     required,
     tabIndex,
     type: "checkbox",
-    value,
-    ...inputEventProps
+    value
   };
 
   return Comp === "input" ? (
@@ -348,10 +257,10 @@ export const CheckboxInput = React.forwardRef(function CheckboxInput(
     />
   ) : (
     <Comp
+      ref={ref}
       data-reach-checkbox-input-wrapper=""
       data-focus={isFocused ? "" : undefined}
       {...outerProps}
-      ref={ref}
     >
       <input
         data-reach-checkbox-input-hidden
