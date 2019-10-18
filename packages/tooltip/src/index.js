@@ -224,6 +224,8 @@ function clearContextId() {
   context.id = null;
 }
 
+const domId = id => `tooltip-${id}`;
+
 ////////////////////////////////////////////////////////////////////////////////
 // THE HOOK! It's about time we got to the goods!
 export function useTooltip({
@@ -237,9 +239,14 @@ export function useTooltip({
   ref,
   DEBUG_STYLE
 } = {}) {
-  const id = `tooltip:${useId()}`;
+  const id = useId();
+
   const [isVisible, setIsVisible] = useState(
-    DEBUG_STYLE ? true : context.id === id && state === VISIBLE
+    DEBUG_STYLE
+      ? true
+      : id === null
+      ? false
+      : context.id === id && state === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
@@ -335,7 +342,7 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-describedby": isVisible ? id : undefined,
+    "aria-describedby": isVisible ? domId(id) : undefined,
     "data-reach-tooltip-trigger": "",
     ref: triggerRef,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
@@ -423,7 +430,7 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
         ariaLabel={ariaLabel}
         position={position}
         isVisible={isVisible}
-        id={id}
+        id={domId(id)}
         triggerRect={triggerRect}
         ref={forwardRef}
         {...rest}
