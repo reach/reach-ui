@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-tooltip-mdx",
-  "path": "/tooltip/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}

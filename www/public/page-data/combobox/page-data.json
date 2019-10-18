@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-combobox-mdx",
-  "path": "/combobox/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}

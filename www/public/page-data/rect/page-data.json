@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-rect-mdx",
-  "path": "/rect/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-visually-hidden-mdx",
-  "path": "/visually-hidden/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}

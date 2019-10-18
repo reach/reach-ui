@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-auto-id-mdx",
-  "path": "/auto-id/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}

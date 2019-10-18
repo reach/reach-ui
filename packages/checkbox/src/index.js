@@ -214,8 +214,7 @@ export const CheckboxInput = React.forwardRef(function CheckboxInput(
       controlledChecked,
       value,
       grouped,
-      defaultChecked,
-      checkedStates
+      defaultChecked
     });
   }
 
@@ -427,7 +426,6 @@ function checkboxGroupErrorChecks({
 function checkboxErrorChecks({
   isControlled,
   controlledChecked,
-  checkedStates,
   defaultChecked,
   grouped,
   value

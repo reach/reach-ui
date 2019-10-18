@@ -1,8 +1,0 @@
-{
-  "componentChunkName": "component---src-pages-portal-mdx",
-  "path": "/portal/",
-  "webpackCompilationHash": "",
-  "result": {
-    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
-  }
-}
