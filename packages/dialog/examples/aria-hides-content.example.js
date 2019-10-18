@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Dialog } from "@reach/dialog";
 

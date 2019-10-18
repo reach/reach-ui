@@ -1,7 +1,9 @@
+import "@reach/tooltip/styles.css";
+import "@reach/slider/styles.css";
+
 import React from "react";
-import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { wrapEvent } from "@reach/utils";
-import "../styles.css";
+import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import {
   Slider,
   SliderHandle,
