@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-animation-mdx",
+  "path": "/animation/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

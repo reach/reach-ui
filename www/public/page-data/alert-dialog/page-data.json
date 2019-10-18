@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-alert-dialog-mdx",
+  "path": "/alert-dialog/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

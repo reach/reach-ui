@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-funding-mdx",
+  "path": "/funding/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

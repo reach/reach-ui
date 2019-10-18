@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-slider-mdx",
+  "path": "/slider/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

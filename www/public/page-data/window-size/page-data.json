@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-window-size-mdx",
+  "path": "/window-size/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

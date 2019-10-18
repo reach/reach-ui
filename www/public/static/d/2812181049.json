@@ -1,0 +1,10 @@
+{
+  "data": {
+    "site": {
+      "siteMetadata": {
+        "title": "Reach UI",
+        "description": "The accessible foundation of your React apps and design systems."
+      }
+    }
+  }
+}

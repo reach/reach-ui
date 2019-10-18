@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-menu-button-mdx",
+  "path": "/menu-button/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

@@ -136,7 +136,7 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export const CheckboxInput = React.forwardRef(function CheckboxInput2(
+export const CheckboxInput = React.forwardRef(function CheckboxInput(
   {
     as: Comp = "input",
     autoComplete,

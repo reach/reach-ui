@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-tabs-mdx",
+  "path": "/tabs/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-skip-nav-mdx",
+  "path": "/skip-nav/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

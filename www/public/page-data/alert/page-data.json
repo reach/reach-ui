@@ -1,0 +1,8 @@
+{
+  "componentChunkName": "component---src-pages-alert-mdx",
+  "path": "/alert/",
+  "webpackCompilationHash": "",
+  "result": {
+    "pageContext": { "isCreatedByStatefulCreatePages": true, "frontmatter": {} }
+  }
+}

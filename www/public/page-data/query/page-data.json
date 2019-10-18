@@ -1,0 +1,16 @@
+{
+  "componentChunkName": "component---src-pages-query-js",
+  "path": "/query/",
+  "webpackCompilationHash": "",
+  "result": {
+    "data": {
+      "site": {
+        "siteMetadata": {
+          "title": "Reach UI",
+          "description": "The accessible foundation of your React apps and design systems."
+        }
+      }
+    },
+    "pageContext": { "isCreatedByStatefulCreatePages": true }
+  }
+}
