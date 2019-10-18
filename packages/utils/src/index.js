@@ -81,3 +81,5 @@ export function useForkedRef(...refs) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
 }
+
+export const makeId = (id, index) => `${id}--${index}`;
