@@ -10,8 +10,8 @@
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "changes": "lerna-changelog",
-    "clean": "git clean -fdX .",
-    "lint": "lerna run lint",
+    "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
+    "lint": "eslint .",
     "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
   },
   "dependencies": {

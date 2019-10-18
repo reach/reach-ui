@@ -2,8 +2,13 @@ node_modules/
 npm-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
 /packages/*/es/
 /packages/*/umd/
 /packages/*/index.js
 /doc.json
+
 .vscode
+
+/website-deploy-key
+/website-deploy-key.pub
