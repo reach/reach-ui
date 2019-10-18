@@ -207,19 +207,17 @@ function ariaLabelType(props, name, compName, ...rest) {
     "\nSee https://www.w3.org/TR/wai-aria/#aria-label for details.";
   if (!props["aria-label"] && !props["aria-labelledby"]) {
     return new Error(
-      "You must provide either an `aria-label` prop or an `aria-labelledby` prop to the `" +
-        compName +
-        "` component." +
-        details
+      `A <${compName}> must have either an \`aria-label\` or \`aria-labelledby\` prop.
+      ${details}`
     );
   }
   if (props["aria-label"] && props["aria-labelledby"]) {
     return new Error(
-      "You provided both `aria-label` and `aria-labelledby` props to the `" +
+      "You provided both `aria-label` and `aria-labelledby` props to a <" +
         compName +
-        "` component. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into `" +
+        ">. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into <" +
         compName +
-        "`. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
+        ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
         details
     );
   }
