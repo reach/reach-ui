@@ -11,7 +11,7 @@
     "build": "lerna run build --parallel",
     "changes": "lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
-    "lint": "lerna run lint",
+    "lint": "eslint .",
     "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
   },
   "dependencies": {

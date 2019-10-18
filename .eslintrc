@@ -2,5 +2,8 @@
   "extends": "react-app",
   "globals": {
     "__DEV__": "readonly"
+  },
+  "rules": {
+    "import/first": 0
   }
 }
