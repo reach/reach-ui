@@ -112,8 +112,8 @@ export const DialogContent = React.forwardRef(function DialogContent(
 
 if (__DEV__) {
   DialogContent.propTypes = {
-    "aria-label": validateAriaLabel,
-    "aria-labelledby": validateAriaLabel
+    "aria-label": ariaLabelType,
+    "aria-labelledby": ariaLabelType
   };
   DialogContent.displayName = "DialogContent";
 }
@@ -140,8 +140,8 @@ if (__DEV__) {
   Dialog.propTypes = {
     isOpen: bool,
     onDismiss: func,
-    "aria-label": validateAriaLabel,
-    "aria-labelledby": validateAriaLabel
+    "aria-label": ariaLabelType,
+    "aria-labelledby": ariaLabelType
   };
   Dialog.displayName = "Dialog";
 }
@@ -202,7 +202,7 @@ function useForkedRef(...refs) {
   }, refs);
 }
 
-function validateAriaLabel(props, name, compName, ...rest) {
+function ariaLabelType(props, name, compName, ...rest) {
   const details =
     "\nSee https://www.w3.org/TR/wai-aria/#aria-label for details.";
   if (!props["aria-label"] && !props["aria-labelledby"]) {
