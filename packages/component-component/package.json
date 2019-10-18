@@ -5,8 +5,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -18,8 +17,8 @@
     "react-dom": "^16.4.0"
   },
   "devDependencies": {
-    "react": "^16.8.0",
-    "react-test-renderer": "^16.8.0"
+    "react": "^16.10.2",
+    "react-test-renderer": "^16.10.2"
   },
   "files": [
     "es",

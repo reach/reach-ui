@@ -1,24 +1,19 @@
 declare module "@reach/menu-button" {
-  interface IButtonRect {
-    height: number;
-    width: number;
-    left: number;
-    top: number;
-  }
+  import * as React from "react";
 
-  interface IState {
+  export type ButtonRect = DOMRect;
+
+  export interface MenuItemState {
     isOpen: boolean;
     closingWithClick: boolean;
     selectionIndex: number;
-    buttonRect: undefined | IButtonRect;
+    buttonRect: undefined | ButtonRect;
     buttonId: string;
   }
 
-  export interface IMenuProps {
+  export interface MenuProps {
     children: React.ReactNode;
   }
-
-  export const Menu: React.FunctionComponent<IMenuProps>;
 
   export type MenuButtonProps = React.HTMLProps<HTMLButtonElement> & {
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -26,13 +21,9 @@ declare module "@reach/menu-button" {
     children: React.ReactNode;
   };
 
-  export const MenuButton: React.FunctionComponent<MenuButtonProps>;
-
   export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
     children: React.ReactNode;
   };
-
-  export const MenuList: React.FunctionComponent<MenuListProps>;
 
   type ResolvedMenuLinkProps<T> = T extends keyof JSX.IntrinsicElements
     ? JSX.IntrinsicElements[T]
@@ -51,16 +42,12 @@ declare module "@reach/menu-button" {
     component?: ResolvedMenuLinkComponent<T>;
     index?: number;
     style?: React.CSSProperties;
-    setState?: (s: IState) => Partial<IState>;
-    state?: IState;
+    setState?: (s: MenuItemState) => Partial<MenuItemState>;
+    state?: MenuItemState;
     _ref?: (node: HTMLElement) => void;
   };
 
   type SupportedMenuLinkComponent = object | keyof JSX.IntrinsicElements;
-
-  export function MenuLink<T extends SupportedMenuLinkComponent>(
-    props: MenuLinkProps<T>
-  ): React.ReactElement<MenuLinkProps<T>>;
 
   export type MenuItemProps = React.HTMLProps<HTMLDivElement> & {
     onSelect: () => void;
@@ -68,11 +55,18 @@ declare module "@reach/menu-button" {
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     onMouseMove?: (e: React.MouseEvent<HTMLElement>) => void;
     role?: string;
-    state?: IState;
-    setState?: (s: IState) => Partial<IState>;
+    state?: MenuItemState;
+    setState?: (s: MenuItemState) => Partial<MenuItemState>;
     index?: number;
     _ref?: (node: HTMLElement) => void;
   };
 
+  export function MenuLink<T extends SupportedMenuLinkComponent>(
+    props: MenuLinkProps<T>
+  ): React.ReactElement<MenuLinkProps<T>>;
+
+  export const Menu: React.FunctionComponent<MenuProps>;
+  export const MenuButton: React.FunctionComponent<MenuButtonProps>;
+  export const MenuList: React.FunctionComponent<MenuListProps>;
   export const MenuItem: React.FunctionComponent<MenuItemProps>;
 }

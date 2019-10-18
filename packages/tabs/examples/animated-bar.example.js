@@ -13,7 +13,7 @@ export const name = "Animated Bar";
 
 const AnimatedContext = createContext();
 
-function AnimatedTabs({ color, ...rest }) {
+function ExampleAnimatedTabs({ color, ...rest }) {
   // some state to store the position we want to animate to
   const [activeRect, setActiveRect] = useState(null);
 
@@ -38,7 +38,7 @@ function AnimatedTabs({ color, ...rest }) {
   );
 }
 
-function AnimatedTab(props) {
+function ExampleAnimatedTab(props) {
   const { isSelected } = props;
 
   // measure the size of our element, only listen to rect if active
@@ -62,11 +62,13 @@ function AnimatedTab(props) {
 
 export function Example() {
   return (
-    <AnimatedTabs color="red" style={{ width: 400 }}>
+    <ExampleAnimatedTabs color="red" style={{ width: 400 }}>
       <TabList style={{ justifyContent: "space-around" }}>
-        <AnimatedTab style={{ flex: 1 }}>The First</AnimatedTab>
-        <AnimatedTab style={{ flex: 2 }}>This has longer text</AnimatedTab>
-        <AnimatedTab style={{ flex: 1 }}>Three</AnimatedTab>
+        <ExampleAnimatedTab style={{ flex: 1 }}>The First</ExampleAnimatedTab>
+        <ExampleAnimatedTab style={{ flex: 2 }}>
+          This has longer text
+        </ExampleAnimatedTab>
+        <ExampleAnimatedTab style={{ flex: 1 }}>Three</ExampleAnimatedTab>
       </TabList>
       <TabPanels style={{ padding: 10 }}>
         <TabPanel>
@@ -79,6 +81,6 @@ export function Example() {
           <p>Oh, hello there.</p>
         </TabPanel>
       </TabPanels>
-    </AnimatedTabs>
+    </ExampleAnimatedTabs>
   );
 }

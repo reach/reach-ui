@@ -5,8 +5,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "peerDependencies": {
     "react": "^16.8.0",
@@ -18,6 +17,7 @@
     "es",
     "src",
     "lib",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ]
 }

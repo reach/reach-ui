@@ -20,7 +20,7 @@ export const Example = () => {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       {transitions.map(
-        ({ item, key, props: styles }) =>
+        ({ item, props: styles }) =>
           item && (
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent

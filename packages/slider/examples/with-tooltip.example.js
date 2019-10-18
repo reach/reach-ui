@@ -37,7 +37,7 @@ export const Example = () => {
 
   return (
     <Slider>
-      {({ value, hasFocus }) => (
+      {({ value }) => (
         <SliderTrack>
           <SliderTrackHighlight />
           <SliderHandle

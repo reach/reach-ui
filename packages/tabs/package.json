@@ -5,14 +5,13 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
     "@reach/auto-id": "^0.4.0-beta.0",
     "@reach/utils": "^0.4.0-beta.0",
     "prop-types": "^15.7.2",
-    "warning": "^4.0.2"
+    "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
@@ -25,6 +24,7 @@
     "src",
     "lib",
     "index.js",
+    "index.d.ts",
     "styles.css"
   ]
 }

@@ -1,0 +1,631 @@
+import Helmet from "../components/DefaultHelmet";
+
+<Helmet
+  title="Reach UI - Menu Button (Dropdown)"
+  meta={[
+    {
+      name: "description",
+      content:
+        "An accessible dropdown menu for the common dropdown menu button design pattern."
+    }
+  ]}
+/>
+
+# MenuButton (Dropdown)
+
+[Menu](#menu) -
+[MenuButton](#menubutton) -
+[MenuList](#menulist) -
+[MenuItem](#menuitem) -
+[MenuLink](#menulink)
+
+- Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
+- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+
+An accessible dropdown menu for the common dropdown menu button design pattern.
+
+Please note that the buttons on this page are styled by this website. They are just buttons, so they will appear the same as any other button in your app.
+
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList>
+        <MenuItem onSelect={() => alert("Download")}>Download</MenuItem>
+        <MenuItem onSelect={() => alert("Copy")}>Create a Copy</MenuItem>
+        <MenuItem onSelect={() => alert("Mark as Draft")}>
+          Mark as Draft
+        </MenuItem>
+        <MenuItem onSelect={() => alert("Delete")}>Delete</MenuItem>
+        <MenuLink as="a" href="https://reacttraining.com/workshops/">
+          Attend a Workshop
+        </MenuLink>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+## Installation
+
+```bash
+npm install @reach/menu-button
+# or
+yarn add @reach/menu-button
+```
+
+And then import the components you need:
+
+```js
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  MenuLink
+} from "@reach/menu-button";
+```
+
+# Menu
+
+The wrapper component for the other components. No DOM element is rendered.
+
+## Menu Props
+
+| Prop                       | Type | Required |
+| -------------------------- | ---- | -------- |
+| [children](#menu-children) | node | false    |
+
+### Menu children
+
+_Type_: `oneOfType(node, function)`
+
+Requires two children: a `<MenuButton>` and a `<MenuList>`.
+
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>Actions</MenuButton>
+      <MenuList>
+        <MenuItem>Download</MenuItem>
+        <MenuLink to="view">View</MenuLink>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
+
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      {({ isOpen }) => (
+        <React.Fragment>
+          <MenuButton>
+            {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+          </MenuButton>
+          <MenuList>
+            <MenuItem>Download</MenuItem>
+            <MenuItem>Create a Copy</MenuItem>
+          </MenuList>
+        </React.Fragment>
+      )}
+    </Menu>
+  );
+}
+```
+
+# MenuButton
+
+Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. Must be rendered inside of a `<Menu>`.
+
+```jsx
+<Menu>
+  <MenuButton>Profile</MenuButton>
+  {/* ... */}
+</Menu>
+```
+
+## MenuButton CSS Selectors
+
+Please see the [styling guide](/styling).
+
+A `<MenuButton>` wraps a normal `<button>` and no styles are applied to it, so any global button styles you have will be applied.
+
+```css
+button {
+  /* your normal button styles will be applied */
+}
+```
+
+You can use the `[data-reach-menu-button]` selector to style only the dropdown buttons:
+
+```css
+[data-reach-menu-button] {
+  color: blue;
+}
+```
+
+If you'd like to target when the menu is open use `aria-expanded`:
+
+```css
+[data-reach-menu-button][aria-expanded="true"] {
+  background: #000;
+  color: white;
+}
+```
+
+## MenuButton Props
+
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [button props](#menubutton-button-props) | spread               | n/a      |
+| [children](#menubutton-children)         | node                 | false    |
+| onClick                                  | preventableEventFunc | false    |
+| onKeyDown                                | preventableEventFunc | false    |
+
+### MenuButton button props
+
+_Type_: `spread`
+
+Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
+
+```jsx
+<Menu>
+  <MenuButton
+    className="button-primary"
+    style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
+  >
+    Actions <span aria-hidden>▾</span>
+  </MenuButton>
+  <MenuList>
+    <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+### MenuButton children
+
+_Type_: `node`
+
+Accepts any renderable content.
+
+```jsx
+<MenuButton>
+  Actions{" "}
+  <span aria-hidden>
+    <Gear />
+  </span>
+</MenuButton>
+```
+
+# MenuList
+
+Wraps a DOM element that renders the menu items. Must be rendered inside of a `<Menu>`.
+
+```jsx
+<Menu>
+  {/* ... */}
+  <MenuList>
+    <MenuItem onSelect={() => {}}>Download</MenuItem>
+  </MenuList>
+</Menu>
+```
+
+## MenuList CSS Selectors
+
+```css
+[data-reach-menu-list] {
+  padding: 20px 10px;
+}
+```
+
+## MenuList Props
+
+| Prop                                      | Type   | Required |
+| ----------------------------------------- | ------ | -------- |
+| [element props](#menuitems-element-props) | spread | n/a      |
+| [children](#menuitems-children)           | node   | false    |
+
+### MenuList element props
+
+_Type_: `spread`
+
+All props are spread to the underlying element. Here we apply a `className` the element.
+
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList className="slide-down">
+        <MenuItem onSelect={() => {}}>Start Video</MenuItem>
+        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+The stylesheet contains these rules to create the animation.
+
+```css
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down[data-reach-menu-list] {
+  border-radius: 5px;
+  animation: slide-down 0.2s ease;
+}
+```
+
+### MenuList children
+
+_Type_: `node`
+
+Can contain only `MenuItem` or a `MenuLink`
+
+```jsx
+<MenuList>
+  <MenuItem />
+  <MenuLink />
+</MenuList>
+```
+
+# MenuItem
+
+Handles menu selection. Must be a direct child of a `<MenuList>`.
+
+```jsx
+<MenuList>
+  <MenuItem onSelect={() => alert("download!")}>Download</MenuItem>
+</MenuList>
+```
+
+## MenuItem CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-menu-item] {
+  padding: 20px 10px;
+}
+```
+
+To change the styles of a highlighted menu item, use this pseudo-pseudo selector:
+
+```css
+[data-reach-menu-item][data-selected] {
+  background: red;
+}
+```
+
+The following example has this css applied:
+
+```css
+.red-highlight[data-reach-menu-item][data-selected] {
+  background: red;
+}
+```
+
+```jsx-live
+function Example() {
+  return (
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList>
+        <MenuItem className="red-highlight" onSelect={() => {}}>
+          Start Video
+        </MenuItem>
+        <MenuItem className="red-highlight" onSelect={() => {}}>
+          Start Screenshare
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+## MenuItem Props
+
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [element props](#menuitem-element-props) | spread               | n/a      |
+| [children](#menuitem-children)           | node                 | false    |
+| onClick                                  | preventableEventFunc | false    |
+| onKeyDown                                | preventableEventFunc | false    |
+| onMouseMove                              | preventableEventFunc | false    |
+| onSelect                                 | preventableEventFunc | true     |
+
+### MenuItem element props
+
+_Type_: `spread`
+
+All props are spread to the underlying element.
+
+In this example the `onFocus` prop is passed down to the element.
+
+```jsx-live
+function Example(props) {
+  const [focusCount, setFocusCount] = React.useState(0);
+  return (
+    <Menu>
+      <MenuButton>Actions</MenuButton>
+      <MenuList>
+        <MenuItem
+          onFocus={() => {
+            setFocusCount(prevFocusCount => prevFocusCount + 1);
+          }}
+          onSelect={() => {}}
+        >
+          Focused {focusCount} Times
+        </MenuItem>
+        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+### MenuItem children
+
+_Type_: `node`
+
+You can put any type of content inside of a `<MenuItem>`.
+
+```jsx-live
+function Example(props) {
+  return (
+    <Menu>
+      <MenuButton>
+        Your Cats <span aria-hidden>▾</span>
+      </MenuButton>
+      <MenuList className="kittys">
+        <MenuItem onSelect={() => {}}>
+          <img
+            src="https://placekitten.com/100/100"
+            alt="Fluffybuns the destroyer"
+          />
+          <span>Fluffybuns the Destroyer</span>
+        </MenuItem>
+        <MenuItem onSelect={() => {}}>
+          <img src="https://placekitten.com/120/120" alt="Simon the pensive" />
+          <span>Simon the pensive</span>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+# MenuLink
+
+Handles linking to a different page in the menu. By default it renders `<a>`, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
+
+Must be a direct child of a `<MenuList>`.
+
+```jsx
+import { Link } from "@reach/router";
+<MenuList>
+  <MenuLink as={Link} to="somewhere/else">
+    Somewhere w/ Reach Router
+  </MenuLink>
+  <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
+  <MenuLink as={GatsbyLink} to="/somewhere/with/gatsby">
+    Some Gatsby Page
+  </MenuLink>
+</MenuList>;
+```
+
+## MenuLink CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-menu-item] {
+  padding: 20px 10px;
+}
+```
+
+To change the styles of a highlighted menu item, use this pseudo-pseudo selector:
+
+```css
+[data-reach-menu-item][data-selected] {
+  background: red;
+}
+```
+
+## MenuLink Props
+
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [element props](#menulink-element-props) | spread               | n/a      |
+| [as](#menulink-as)                       | any                  | true     |
+| [component](#menulink-component)         | any                  | false    |
+| [children](#menulink-children)           | node                 | false    |
+| onClick                                  | preventableEventFunc | false    |
+| to                                       | string               | true     |
+
+### MenuLink element props
+
+_Type_: `spread`
+
+All props are spread to the underlying element
+
+```jsx
+// the `to` prop is spread onto the Reach Router Link
+<MenuLink as={Link} to="somewhere/else">
+  Somewhere
+</MenuLink>
+
+// the `href` prop is spread onto the underlying `a`
+<MenuLink href="https://reactjs.org">Official React Site</MenuLink>
+```
+
+### MenuLink component
+
+Deprecated, see `as` prop below.
+
+### MenuLink as
+
+_Type_: `any`
+
+By default, `MenuLink` renders an anchor, but if you are using a router you can use `as={Link}`.
+
+```jsx
+import { Link } from "@reach/router";
+<Menu>
+  <MenuButton>Products</MenuButton>
+  <MenuList>
+    <MenuLink as={Link} href="/settings">
+      Settings
+    </MenuLink>
+    <MenuLink href="https://reacttraining.com/workshops">Workshops</MenuLink>
+    <MenuLink href="https://reacttraining.com/courses">Online Courses</MenuLink>
+  </MenuList>
+</Menu>;
+```
+
+Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t it won't work because we will not be able to manage focus on the element the component renders.
+
+```jsx
+import GatsbyLink from "gatsby/link";
+<MenuLink as={GatsbyLink} to="/somewhere" />;
+```
+
+### MenuLink children
+
+_Type_: `node`
+
+You can render any kind of content inside of a MenuLink.
+
+```jsx
+<MenuLink>
+  <ProfileImage userId="4" />
+  <UserName>Ryan Florence</UserName>
+</MenuLink>
+```
+
+# Notes
+
+## Unmounting the Menu after an action
+
+If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `<MenuLink>` and Reach Router. In this case, the router will handle focus for you.
+
+Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screenreader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
+
+```jsx
+function Example(props) {
+  const screen1FocusRef = React.useRef();
+  const screen2ButtonFocusRef = React.useRef();
+  React.useEffect(() => {
+    if (screen === 1) {
+      screen1FocusRef.current.focus();
+    }
+    if (screen === 2) {
+      screen2ButtonFocusRef.current.focus();
+    }
+  }, [screen]);
+
+  const [screen, setScreen] = React.useState(1);
+  if (screen === 1) {
+    return (
+      <div ref={screen1FocusRef} tabIndex="-1">
+        <h4>Screen One</h4>
+        <Menu>
+          <MenuButton>Actions</MenuButton>
+          <MenuList>
+            <MenuItem onSelect={() => setScreen(2)}>Go to screen 2</MenuItem>
+            <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
+          </MenuList>
+        </Menu>
+        <Menu />
+      </div>
+    );
+  }
+  if (screen === 2) {
+    return (
+      <div>
+        <h4>Screen 2</h4>
+        <button ref={screen2ButtonFocusRef} onClick={() => setScreen(1)}>
+          Back to screen 1
+        </button>
+      </div>
+    );
+  }
+  return null;
+}
+```
+
+## Icons
+
+If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screenreaders will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
+
+```jsx
+<MenuButton>
+  Actions <span aria-hidden>▾</span>
+</MenuButton>
+```
+
+However, if you have no text and only an icon, please make sure your icon has a screenreader friendly label:
+
+```jsx
+// we'd rather it said "Actions" than
+// "downward pointing triangle"
+<MenuButton>
+  <span aria-label="Actions">▾</span>
+</MenuButton>
+
+// add screen reader only text for svgs
+import AriaText from "@reach/aria-text"
+<MenuButton>
+  <AriaText>Actions</AriaText>
+  <svg aria-hidden>
+    <polygon points="0,0 20,0 10,10 " />
+  </svg>
+</MenuButton>
+
+// and your images an alt attribute
+<MenuButton>
+  <img src="gear.png" alt="gear"/>
+</MenuButton>
+
+// Or just label the button and hide everything
+<MenuButton aria-label="Actions">
+  <span aria-hidden>
+    <TripleDots/>
+  </span>
+</MenuButton>
+```
+
+## Keyboard Accessibility
+
+| Key                   | Action                   |
+| --------------------- | ------------------------ |
+| `Enter`               | Open/close               |
+| `ArrowUp`             | Highlight previous item  |
+| `ArrowDown`           | Highlight next item      |
+| `Enter`               | Select item              |
+| `Escape`              | Close                    |
+| `Tab`                 | No effect                |
+| TODO: Type characters | Highlights matching item |

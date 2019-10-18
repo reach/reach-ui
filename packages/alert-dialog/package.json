@@ -7,8 +7,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
     "@reach/auto-id": "^0.4.0-beta.0",
@@ -22,14 +21,15 @@
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
-    "react": "^16.8.0",
-    "react-test-renderer": "^16.8.0"
+    "react": "^16.10.2",
+    "react-test-renderer": "^16.10.2"
   },
   "files": [
     "es",
     "src",
     "lib",
     "index.js",
+    "index.d.ts",
     "styles.css"
   ]
 }
