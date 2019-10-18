@@ -22,6 +22,7 @@ export let Example = () => {
         onDismiss={close}
       >
         <DialogContent
+          aria-label="Announcement"
           ref={contentRef}
           style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
         >

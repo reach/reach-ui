@@ -11,6 +11,7 @@ export let Example = () => {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       <Dialog
+        aria-label="Announcement"
         isOpen={showDialog}
         onDismiss={() => setShowDialog(false)}
         onFocus={action("Focused!")}
