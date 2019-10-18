@@ -5,8 +5,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
     "@reach/observe-rect": "^1.0.3",
