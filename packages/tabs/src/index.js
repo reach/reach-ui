@@ -198,10 +198,10 @@ export const Tab = forwardRef(function Tab(
       data-reach-tab=""
       ref={ref}
       role="tab"
-      id={`tab:${_id}`}
+      id={makeId("tab", _id)}
       tabIndex={isSelected ? 0 : -1}
       aria-selected={isSelected}
-      aria-controls={`panel:${_id}`}
+      aria-controls={makeId("panel", _id)}
       data-selected={isSelected ? "" : undefined}
       onClick={_onSelect}
       children={children}
@@ -270,9 +270,9 @@ export const TabPanel = forwardRef(function TabPanel(
       ref={isSelected ? _selectedPanelRef : undefined}
       role="tabpanel"
       tabIndex={-1}
-      aria-labelledby={`tab:${_id}`}
+      aria-labelledby={makeId("tab", _id)}
       hidden={!isSelected}
-      id={`panel:${_id}`}
+      id={makeId("panel", _id)}
       children={children}
       {...htmlProps}
     />
@@ -299,4 +299,4 @@ function useUpdateEffect(effect, deps) {
   }, deps);
 }
 
-const makeId = (id, index) => `${id}:${index}`;
+const makeId = (id, index) => `${id}--${index}`;
