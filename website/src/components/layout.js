@@ -72,7 +72,7 @@ let Nav = ({ media }) => (
     didMount={({ setState, props }) => {
       setState({ isOpen: !props.media.small });
     }}
-    didUpdate={({ prevProps, props, setState, state }) => {
+    didUpdate={({ prevProps, props, setState }) => {
       if (prevProps.media.small && !props.media.small) {
         setState({ isOpen: true });
       } else if (!prevProps.media.small && props.media.small) {

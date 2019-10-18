@@ -220,7 +220,7 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanels = forwardRef(function TabPanels(
   { children, as: Comp = "div", ...rest },
-  ref
+  forwardedRef
 ) {
   const {
     selectedIndex,
@@ -241,7 +241,12 @@ export const TabPanels = forwardRef(function TabPanels(
   );
 
   return (
-    <Comp data-reach-tab-panels="" ref={ref} {...htmlAttrs} children={clones} />
+    <Comp
+      data-reach-tab-panels=""
+      ref={forwardedRef}
+      {...htmlAttrs}
+      children={clones}
+    />
   );
 });
 
@@ -254,7 +259,8 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanel = forwardRef(function TabPanel(
   { children, as: Comp = "div", ...rest },
-  ref
+  // TODO: Do we need to use this ref?
+  forwardedRef
 ) {
   const { isSelected, _selectedPanelRef, _id, ...htmlProps } = rest;
 
