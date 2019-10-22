@@ -237,7 +237,7 @@ export function useTooltip({
   ref: forwardedRef,
   DEBUG_STYLE
 } = {}) {
-  const id = useId();
+  const id = useId("tooltip");
 
   const [isVisible, setIsVisible] = useState(
     DEBUG_STYLE
@@ -340,7 +340,7 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
+    "aria-describedby": isVisible ? id : undefined,
     "data-reach-tooltip-trigger": "",
     ref,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
@@ -425,7 +425,7 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
         ariaLabel={ariaLabel}
         position={position}
         isVisible={isVisible}
-        id={makeId("tooltip", id)}
+        id={id}
         triggerRect={triggerRect}
         ref={forwardRef}
         {...rest}
