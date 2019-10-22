@@ -56,7 +56,8 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   const ariaDescribedBy = props["aria-describedby"] || descriptionId;
   const timer = useRef();
   React.useEffect(() => {
-    // defer these checks for 1 tick to allow <AlertDialogLabel> to update labelId via context
+    // defer these checks for 1 tick to allow <AlertDialogLabel> and
+    // <AlertDialogDescription> to update their labels via context
     timer.current = setTimeout(() => {
       invariant(
         document.getElementById(labelId),
