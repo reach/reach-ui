@@ -12,13 +12,11 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   forwardRef
 ) {
   const labelId = useId("alert-dialog");
-  const descriptionId = useId("alert-dialog-description");
 
   return (
     <AlertDialogContext.Provider
       value={{
         labelId,
-        descriptionId,
         leastDestructiveRef
       }}
     >
@@ -86,7 +84,7 @@ export const AlertDialogLabel = props => {
 };
 
 export const AlertDialogDescription = props => {
-  const { descriptionId } = React.useContext(AlertDialogContext);
+  const descriptionId = useId("alert-dialog-description");
   return (
     <div id={descriptionId} data-reach-alert-dialog-description {...props} />
   );
