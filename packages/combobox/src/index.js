@@ -24,7 +24,7 @@ import React, {
   useState
 } from "react";
 import { func } from "prop-types";
-import { wrapEvent, useForkedRef } from "@reach/utils";
+import { makeId, wrapEvent, useForkedRef, assignRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -246,6 +246,8 @@ export const Combobox = forwardRef(function Combobox(
 
   const persistSelectionRef = useRef();
 
+  const inputIdDictionary = useRef({});
+
   const defaultData = {
     // the value the user has typed, we derived this also when the developer is
     // controlling the value of ComboboxInput
@@ -278,6 +280,7 @@ export const Combobox = forwardRef(function Combobox(
       listboxId,
       autocompletePropRef,
       persistSelectionRef,
+      inputIdDictionary,
       isVisible: isVisible(state),
       openOnFocus
     };
@@ -340,7 +343,8 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     transition,
     listboxId,
     autocompletePropRef,
-    openOnFocus
+    openOnFocus,
+    inputIdDictionary
   } = useContext(Context);
 
   const ref = useForkedRef(inputRef, forwardedRef);
@@ -423,7 +427,9 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
       id={listboxId}
       aria-autocomplete="both"
       aria-activedescendant={
-        navigationValue ? makeHash(navigationValue) : undefined
+        navigationValue
+          ? inputIdDictionary.current[makeHash(navigationValue)]
+          : undefined
       }
     />
   );
@@ -531,14 +537,15 @@ export const ComboboxList = forwardRef(function ComboboxList(
 const OptionContext = createContext();
 
 export const ComboboxOption = forwardRef(function ComboboxOption(
-  { children, value, onClick, ...props },
+  { children, value, onClick, id, ...props },
   forwardedRef
 ) {
   const {
     onSelect,
     data: { navigationValue },
     transition,
-    optionsRef
+    optionsRef,
+    inputIdDictionary
   } = useContext(Context);
 
   useEffect(() => {
@@ -552,13 +559,18 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
     transition(SELECT_WITH_CLICK, { value });
   };
 
+  const optionValueHash = makeHash(value);
+  const optionId = id || makeId("comboboxoption", optionValueHash);
+
+  inputIdDictionary.current[optionValueHash] = optionId;
+
   return (
     <OptionContext.Provider value={value}>
       <li
         {...props}
         data-reach-combobox-option=""
         ref={forwardedRef}
-        id={makeHash(value)}
+        id={optionId}
         role="option"
         aria-selected={isActive}
         data-highlighted={isActive ? "" : undefined}
