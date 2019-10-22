@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import { makeId } from "@reach/utils";
@@ -11,12 +11,14 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   { leastDestructiveRef, ...props },
   forwardRef
 ) {
-  const labelId = useId("alert-dialog");
+  // generate a label ID, but allow it to be overwritten by setting an ID on <AlertDialogLabel>
+  const [labelId, setLabelId] = useState(useId("alert-dialog"));
 
   return (
     <AlertDialogContext.Provider
       value={{
         labelId,
+        setLabelId,
         leastDestructiveRef
       }}
     >
@@ -78,8 +80,14 @@ if (__DEV__) {
   };
 }
 
-export const AlertDialogLabel = props => {
-  const { labelId } = React.useContext(AlertDialogContext);
+export const AlertDialogLabel = ({ id, ...props }) => {
+  const { labelId, setLabelId } = React.useContext(AlertDialogContext);
+  useEffect(() => {
+    // if we've set id on label, notify AlertDialogContent
+    if (id) {
+      setLabelId(id);
+    }
+  }, [id, setLabelId]);
   return <div id={labelId} data-reach-alert-dialog-label {...props} />;
 };
 
