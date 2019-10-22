@@ -20,288 +20,167 @@ import {
   oneOfType,
   node,
   object,
-  element
+  element,
+  shape
 } from "prop-types";
 
 import "./checkbox.css";
 
-/**
- *
- * Idea for examples?
- *
- * <MultiCheckboxGroup>
- *   <MultiCheckbox label="All Condiments" name="condiments">
- *      <Checkbox label="Mayo" value="mayo" />
- *      <Checkbox label="Mustard" value="mustard" />
- *      <Checkbox label="Ketchup" value="ketchup" />
- *    </MultiCheckbox>
- * </MultiCheckboxGroup>
- *
- * RENDERS >>>>>
- *
- * <fieldset>
- *   <ul>
- *     <li>
- *       <label ... />
- *       <input ... />
- *       <ul>
- *         <li><label ... /><input ... /></li>
- *         <li><label ... /><input ... /></li>
- *         <li><label ... /><input ... /></li>
- *       </ul>
- *     </li>
- *   </ul>
- * </fieldset>
- */
-
-const CheckboxGroupContext = createContext({
-  legend: undefined,
-  name: undefined,
-  checkedStates: undefined,
-  setCheckedStates: undefined,
-  groupId: undefined,
-  disabled: undefined,
-  grouped: false
-});
-
-const sharedPropTypes = {
-  checked: oneOfType([bool, string]),
-  defaultChecked: bool,
-  disabled: bool,
-  name: string,
-  onChange: func,
-  readOnly: bool,
-  required: bool,
-  value: any
-};
+const CustomCheckboxContext = createContext({});
+const CheckboxGroupContext = createContext({});
+const useCheckboxContext = useContext(CustomCheckboxContext);
+const useGroupContext = useContext(CheckboxGroupContext);
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Checkbox = forwardRef(function Checkbox(
-  { label, ...props },
-  forwardedRef
-) {
-  const {
-    as,
-    name,
-    value: valueProp,
-    inputId: inputIdProp,
-    checked,
-    onChange,
-    defaultChecked,
-    ...wrapperProps
-  } = props;
+export const CustomCheckboxContainer = React.forwardRef(
+  function CustomCheckboxContainer({ children, ...props }, forwardedRef) {
+    const [
+      { checked, mixed, disabled, readOnly, focused },
+      _setContainerState
+    ] = useState({
+      checked: null,
+      mixed: null,
+      disabled: null,
+      readOnly: null,
+      focused: null
+    });
 
-  if (__DEV__) {
-    warning(
-      valueProp,
-      `Checkbox requires a \`value\` prop. A value has been inferred from its label.`
+    return (
+      <CustomCheckboxContext.Provider value={{ _setContainerState }}>
+        <div
+          ref={forwardedRef}
+          {...props}
+          data-reach-checkbox-input=""
+          data-checked={checked ? "" : undefined}
+          data-focused={focused ? "" : undefined}
+          data-mixed={mixed ? "" : undefined}
+          data-disabled={disabled ? "" : undefined}
+          data-read-only={readOnly ? "" : undefined}
+        >
+          {children}
+        </div>
+      </CustomCheckboxContext.Provider>
     );
   }
+);
 
-  const { groupId, grouped } = useContext(CheckboxGroupContext);
-
-  const fallbackId = `checkbox--${useId()}`;
-  const value = valueProp || kebabCase(label);
-  const inputId =
-    inputIdProp ||
-    (grouped && groupId ? `${groupId}--${fallbackId}` : fallbackId);
-
-  const inputProps = {
-    as,
-    name,
-    value,
-    id: inputId,
-    checked,
+////////////////////////////////////////////////////////////////////////////////
+export const CustomCheckbox = React.forwardRef(function CustomCheckbox(
+  {
+    checked: controlledChecked,
+    defaultChecked,
+    disabled: disabledProp,
+    checkmarks,
+    children,
     onChange,
-    defaultChecked
-  };
-
+    ...props
+  },
+  forwardedRef
+) {
+  const [inputProps, { checked }] = useMixedCheckbox({
+    checked: controlledChecked,
+    defaultChecked,
+    disabled: disabledProp,
+    onChange
+  });
   return (
-    <div data-reach-checkbox ref={forwardedRef} {...wrapperProps}>
-      <CheckboxInput {...inputProps} />
-      <label htmlFor={inputId} data-reach-checkbox-label>
-        {label}
-      </label>
-    </div>
+    <CustomCheckboxContainer {...props} ref={forwardedRef}>
+      {checked === true && checkmarks.true}
+      {checked === false && checkmarks.false}
+      {checked === "mixed" && checkmarks.mixed}
+      {children}
+      <MixedCheckbox {...inputProps} />
+    </CustomCheckboxContainer>
   );
 });
 
 if (__DEV__) {
-  Checkbox.propTypes = {
-    ...sharedPropTypes,
-    label: string.isRequired,
-    inputId: string
+  CustomCheckbox.propTypes = {
+    checkmarks: shape({
+      true: node,
+      false: node,
+      mixed: node
+    })
   };
-  Checkbox.displayName = "Checkbox";
+  CustomCheckbox.displayName = "CustomCheckbox";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export const CheckboxInput = React.forwardRef(function CheckboxInput(
+export const MixedCheckbox = React.forwardRef(function MixedCheckbox(
   {
-    as: Comp = "input",
-    autoComplete,
-    autoFocus,
     checked: controlledChecked,
-    checkedIcon,
     defaultChecked,
     disabled: disabledProp,
-    form,
-    icon,
-    id: idProp,
     name: nameProp,
     onBlur,
     onChange,
     onFocus,
     readOnly,
-    required,
-    tabIndex,
-    value,
     ...props
   },
   forwardedRef
 ) {
-  const { current: isControlled } = React.useRef(controlledChecked != null);
-  const [checkedState, setCheckedState] = React.useState(
-    Boolean(defaultChecked)
-  );
-  const [isFocused, setFocused] = React.useState(false);
-  const {
-    disabled: disabledGroup,
-    checkedStates,
-    grouped,
-    groupId,
-    name: groupName,
-    onChange: groupOnChange
-  } = useContext(CheckboxGroupContext);
+  const { groupId, name: groupName } = useGroupContext();
+  const { _setContainerState } = useCheckboxContext();
+  const [
+    inputProps,
+    { focused, checked, disabled, mixed, isControlled }
+  ] = useMixedCheckbox({
+    checked: controlledChecked,
+    defaultChecked,
+    disabled: disabledProp,
+    onBlur,
+    onChange,
+    onFocus
+  });
 
-  const inputRef = useRef(null);
-  const ref = useForkedRef(forwardedRef, Comp === "input" ? inputRef : null);
-
-  const disabled = disabledProp || disabledGroup;
-  const checked = isControlled ? controlledChecked : checkedState;
-  const mixed = checked === "mixed";
-
-  const fallbackId = `checkbox--${useId()}`;
-  const name = grouped ? groupName : nameProp;
-  const inputId =
-    idProp || (grouped && groupId ? `${groupId}--${fallbackId}` : fallbackId);
-
-  function handleChange(event) {
-    const { checked } = event.target;
-
-    if (grouped && groupOnChange) {
-      groupOnChange(event);
-      return;
-    }
-
-    if (!isControlled) {
-      setCheckedState(checked);
-    }
-
-    if (onChange) {
-      onChange(event);
-    }
-  }
+  const ownRef = useRef(null);
+  const ref = useForkedRef(forwardedRef, ownRef);
+  const name = groupName || nameProp;
 
   useEffect(() => {
-    inputRef.current.indeterminate = mixed;
-    inputRef.current.checked = checked === true ? true : false;
+    ownRef.current.indeterminate = mixed;
+    ownRef.current.checked = checked === true ? true : false;
   }, [mixed, checked]);
+
+  useEffect(() => {
+    if (_setContainerState) {
+      _setContainerState({ checked, mixed, disabled, readOnly, focused });
+    }
+  }, [_setContainerState, checked, disabled, mixed, readOnly, focused]);
 
   if (__DEV__) {
     checkboxErrorChecks({
       isControlled,
       controlledChecked,
-      value,
-      grouped,
+      groupId,
       defaultChecked
     });
   }
 
-  const outerProps = {
-    "data-reach-checkbox-input": "",
-    "data-checked": checked ? "" : undefined,
-    "data-mixed": mixed ? "" : undefined,
-    "data-disabled": disabled ? "" : undefined,
-    "data-read-only": readOnly ? "" : undefined,
-    ...props
-  };
-
-  const inputProps = {
-    "aria-checked": mixed ? "mixed" : String(checked),
-    "data-mixed": mixed,
-    autoComplete,
-    autoFocus,
-    checked,
-    defaultChecked,
-    disabled,
-    form,
-    id: inputId,
-    name,
-    onChange: handleChange,
-    readOnly,
-    required,
-    tabIndex,
-    type: "checkbox",
-    value
-  };
-
-  return Comp === "input" ? (
+  return (
     <input
-      ref={ref}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      {...outerProps}
+      {...props}
       {...inputProps}
-    />
-  ) : (
-    <Comp
       ref={ref}
-      data-reach-checkbox-input-wrapper=""
-      data-focus={isFocused ? "" : undefined}
-      {...outerProps}
-    >
-      <input
-        data-reach-checkbox-input-hidden
-        ref={inputRef}
-        {...inputProps}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          margin: 0,
-          padding: 0,
-          width: "100%",
-          height: "100%",
-          cursor: "inherit",
-          opacity: 0,
-          zIndex: 1
-        }}
-        onFocus={wrapEvent(onFocus, () => {
-          setFocused(true);
-        })}
-        onBlur={wrapEvent(onFocus, () => {
-          setFocused(false);
-        })}
-      />
-    </Comp>
+      data-reach-mixed-checkbox=""
+      name={name}
+      readOnly={readOnly}
+      type="checkbox"
+    />
   );
 });
 
 if (__DEV__) {
-  CheckboxInput.propTypes = {
-    ...sharedPropTypes,
-    autoFocus: bool,
+  MixedCheckbox.propTypes = {
     checked: oneOfType([bool, string]),
     defaultChecked: bool,
     disabled: bool,
     name: string,
     onChange: func,
-    readOnly: bool,
-    required: bool,
     value: any.isRequired
   };
-  CheckboxInput.displayName = "CheckboxInput";
+  MixedCheckbox.displayName = "MixedCheckbox";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,29 +206,22 @@ export const CheckboxGroup = forwardRef(function CheckboxGroup(
     ? controlledcheckedStates
     : _checkedStates;
   const name = nameProp || kebabCase(legend);
-  const fallbackId = `checkbox-group--${useId()}`;
+  const fallbackId = makeId("checkbox-group", useId());
   const id = idProp || fallbackId;
 
   if (__DEV__) {
     checkboxGroupErrorChecks({
       inControlledGroup,
-      controlledcheckedStates,
-      nameProp,
-      legend
+      controlledcheckedStates
     });
   }
 
-  function onChange(event) {
+  const onChange = wrapEvent(onChangeProp, event => {
     const { checked, value } = event.target;
-
     if (!inControlledGroup) {
       setCheckedStates({ ...checkedStates, [value]: Boolean(checked) });
     }
-
-    if (onChangeProp) {
-      onChangeProp(event);
-    }
-  }
+  });
 
   return (
     <CheckboxGroupContext.Provider
@@ -358,8 +230,7 @@ export const CheckboxGroup = forwardRef(function CheckboxGroup(
         legend,
         name,
         checkedStates,
-        onChange,
-        grouped: true
+        onChange
       }}
       ref={forwardedRef}
     >
@@ -381,9 +252,58 @@ if (__DEV__) {
     defaultCheckedStates: object,
     legend: string,
     as: oneOfType([element, string]),
-    name: string
+    name: string.isRequired
   };
   CheckboxGroup.displayName = "CheckboxGroup";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+export function useMixedCheckbox({
+  checked: controlledChecked,
+  defaultChecked,
+  disabled: disabledProp,
+  onBlur,
+  onChange,
+  onFocus
+}) {
+  const {
+    disabled: disabledGroup,
+    onChange: groupOnChange
+  } = useGroupContext();
+  const { current: isControlled } = React.useRef(controlledChecked != null);
+  const [focused, setFocused] = useState(false);
+  const [checkedState, setCheckedState] = React.useState(
+    Boolean(defaultChecked)
+  );
+  const disabled = disabledProp || disabledGroup;
+  const checked = isControlled ? controlledChecked : checkedState;
+  const mixed = checked === "mixed";
+
+  function handleChange(event) {
+    const { checked: targetChecked } = event.target;
+
+    if (groupOnChange) {
+      groupOnChange(event);
+      return;
+    }
+
+    if (!isControlled) {
+      setCheckedState(targetChecked);
+    }
+  }
+
+  const props = {
+    "aria-checked": mixed ? "mixed" : String(checked),
+    checked,
+    defaultChecked,
+    disabled,
+    onBlur: wrapEvent(onBlur, () => setFocused(false)),
+    onFocus: wrapEvent(onFocus, () => setFocused(true)),
+    onChange: wrapEvent(onChange, handleChange)
+  };
+  const state = { focused, checked, disabled, mixed, isControlled };
+
+  return [props, state];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -392,9 +312,7 @@ const getControlledPropWarning = (prop, component) =>
 
 function checkboxGroupErrorChecks({
   inControlledGroup,
-  controlledcheckedStates,
-  nameProp,
-  legend
+  controlledcheckedStates
 }) {
   warning(
     !(inControlledGroup && controlledcheckedStates == null),
@@ -411,26 +329,15 @@ function checkboxGroupErrorChecks({
       "CheckboxGroup"
     )}`
   );
-
-  warning(
-    !(!nameProp && legend),
-    `CheckboxGroup requires a name prop. A value has been inferred from the legend.`
-  );
-
-  warning(
-    !(!nameProp && !legend),
-    "CheckboxGroup requires name prop, and no legend prop has been detected for a fallback name. A checkbox input without a name attribute may yield unexpected results."
-  );
 }
 
 function checkboxErrorChecks({
   isControlled,
   controlledChecked,
   defaultChecked,
-  grouped,
-  value
+  groupId
 }) {
-  const component = "CheckboxInput";
+  const component = "MixedCheckbox";
   warning(
     !(isControlled && controlledChecked == null),
     `${component} is changing from controlled to uncontrolled. ${getControlledPropWarning(
@@ -448,12 +355,7 @@ function checkboxErrorChecks({
   );
 
   warning(
-    value,
-    `${component} requires a value prop. A checkbox input without a value attribute may yield unexpected results.`
-  );
-
-  warning(
-    !(grouped && defaultChecked),
+    !(groupId && defaultChecked),
     `Grouped ${component} components must handle state in the parent CheckboxGroup component. It looks like you're trying to set an defaultChecked prop on a nested ${component} component. This is likely to result in errors and could cause your app to crash.
     To set the initial state of uncontrolled grouped checkboxes, use the \`defaultCheckedStates\` prop on the CheckboxGroup. See https://reacttraining.com/reach-ui/checkbox#checkboxgroup-initialstates for details.`
   );
@@ -482,3 +384,5 @@ function useForkedRef(...refs) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
 }
+
+const makeId = (id, index) => `${id}--${index}`;
