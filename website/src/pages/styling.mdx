@@ -40,6 +40,17 @@ Here's an example:
 }
 ```
 
+## Ignore styles in your tests
+
+The warning will show up while running your tests. To avoid this, you can mock out the `checkStyles` function in the `@reach/utils` package. In Jest, you can add this snippet before your tests run:
+
+```js
+jest.mock('@reach/utils', () => ({
+  ...jest.requireActual('@reach/utils'),
+  checkStyles: jest.fn(),
+}));
+```
+
 ## Using a Bundler (webpack, parcel, etc.)
 
 If you are using a module bundler like webpack or parcel, you can import them where you import the component.
