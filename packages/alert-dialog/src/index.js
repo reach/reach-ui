@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import { makeId } from "@reach/utils";
@@ -46,19 +46,32 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   forwardRef
 ) {
   const { labelId, leastDestructiveRef } = React.useContext(AlertDialogContext);
+  const ariaLabelledBy = props["aria-labelledby"] || labelId;
+  const timer = useRef();
   React.useEffect(() => {
-    invariant(
-      document.getElementById(labelId),
-      `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
+    // defer these checks for 1 tick to allow <AlertDialogLabel> to update labelId via context
+    timer.current = setTimeout(() => {
+      invariant(
+        document.getElementById(labelId),
+        `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
         inside an \`<AlertDialog/>\`.`
-    );
+      );
+      invariant(
+        ariaLabelledBy === labelId,
+        `@reach/alert-dialog: User-defined \`aria-labelledby\` value must match
+      \`id\` set on \`<AlertDialogLabel>\`. Recieved \`aria-labelledby="${ariaLabelledBy}"\`,
+      \`labelId="${labelId}"\``
+      );
+    }, 1);
     invariant(
       leastDestructiveRef,
       `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
         \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
         https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
     );
-  }, [labelId, leastDestructiveRef]);
+
+    return clearTimeout(timer.current);
+  }, [labelId, leastDestructiveRef, ariaLabelledBy]);
   return (
     <DialogContent
       ref={forwardRef}
@@ -66,7 +79,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
       data-reach-alert-dialong-content
       data-reach-alert-dialog-content
       role="alertdialog"
-      aria-labelledby={labelId}
+      aria-labelledby={ariaLabelledBy}
       {...props}
     >
       {children}
