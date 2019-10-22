@@ -119,4 +119,4 @@ The website is a Gatsby app in the `website` directory. It automatically deploys
 
 This project exists thanks to our contributors and financial backers.
 
-<a href="https://github.com/reach/reach-ui/graphs/contributors"><img src="https://opencollective.com/reach-ui/contributors.svg?width=1260&button=false%22" /></a>
+<a href="https://github.com/reach/reach-ui/graphs/contributors"><img alt="graph of Reach UI GitHub contributors" src="https://opencollective.com/reach-ui/contributors.svg?width=1260&button=false%22" /></a>
