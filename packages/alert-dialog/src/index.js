@@ -92,10 +92,7 @@ export const AlertDialogLabel = ({ id, ...props }) => {
 };
 
 export const AlertDialogDescription = props => {
-  const descriptionId = useId("alert-dialog-description");
-  return (
-    <div id={descriptionId} data-reach-alert-dialog-description {...props} />
-  );
+  return <div data-reach-alert-dialog-description {...props} />;
 };
 
 export const AlertDialog = ({
