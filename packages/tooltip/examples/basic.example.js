@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import "../styles.css";
+import "@reach/tooltip/styles.css";
+
 import React from "react";
 import Tooltip from "@reach/tooltip";
 

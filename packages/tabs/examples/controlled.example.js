@@ -1,5 +1,6 @@
+import "@reach/tabs/styles.css";
+
 import React, { useState } from "react";
-import "../styles.css";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 export const name = "Controlled";

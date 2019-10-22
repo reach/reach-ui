@@ -1,3 +1,5 @@
+import "@reach/tabs/styles.css";
+
 import React, {
   useState,
   useRef,
@@ -5,7 +7,6 @@ import React, {
   useLayoutEffect,
   createContext
 } from "react";
-import "../styles.css";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { useRect } from "@reach/rect";
 

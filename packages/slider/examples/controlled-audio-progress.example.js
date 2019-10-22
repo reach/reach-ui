@@ -1,12 +1,14 @@
+import "@reach/slider/styles.css";
+
 import React from "react";
-import "../styles.css";
 import {
   Slider,
   SliderHandle,
   SliderTrack,
   SliderTrackHighlight
 } from "@reach/slider";
-import { useAudio, timeToMs, msToTime } from "./utils";
+
+import { useAudio, timeToMs, msToTime } from "./utils.js";
 
 export const name = "Audio Progress";
 
