@@ -114,3 +114,9 @@ The components to be built come from the the [Aria Practices Design Patterns and
 ## Website
 
 The website is a Gatsby app in the `website` directory. It automatically deploys to https://reacttraining.com/reach-ui/ when the `website` branch is updated.
+
+## Contributors
+
+This project exists thanks to our contributors and financial backers.
+
+<a href="https://github.com/reach/reach-ui/graphs/contributors"><img src="https://opencollective.com/reach-ui/contributors.svg?width=1260&button=false%22" /></a>
