@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { Dialog } from "@reach/dialog";
 
 export let name = "Destroy Trigger";
@@ -36,7 +37,7 @@ export let Example = () => {
         </button>
       )}
 
-      <Dialog isOpen={phase === 2}>
+      <Dialog aria-label="Announcement" isOpen={phase === 2}>
         <button ref={closeButton} onClick={() => setPhase(3)}>
           Close Dialog
         </button>

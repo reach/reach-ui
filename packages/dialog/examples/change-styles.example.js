@@ -1,7 +1,8 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
 import { useTransition, animated, config } from "react-spring/web.cjs";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
-import "../styles.css";
 
 export let name = "Change Styles";
 
@@ -24,6 +25,7 @@ export const Example = () => {
           item && (
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
+                aria-labelledby="dialog-title"
                 style={{
                   transform: `translate3d(0px, ${styles.y}px, 0px)`,
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
@@ -33,6 +35,7 @@ export const Example = () => {
                 <button onClick={() => setShowDialog(false)}>
                   Close Dialog
                 </button>
+                <h2 id="dialog-title">Animation is fun!</h2>
                 <p>React Spring makes it too easy!</p>
                 <input type="text" />
                 <br />

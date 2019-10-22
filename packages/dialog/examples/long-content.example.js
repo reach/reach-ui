@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { Dialog } from "@reach/dialog";
 
 export let name = "Long Content";
@@ -10,11 +11,14 @@ export let Example = () => {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       {new Array(20).fill(1).map((x, index) => (
-        <div style={{ position: "absolute", top: (index + 1) * 100 + "px" }}>
+        <div
+          key={index}
+          style={{ position: "absolute", top: (index + 1) * 100 + "px" }}
+        >
           - scroll -
         </div>
       ))}
-      <Dialog isOpen={showDialog}>
+      <Dialog aria-label="Announcement" isOpen={showDialog}>
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>Yikes!</p>
         <div style={{ height: 3000 }} />

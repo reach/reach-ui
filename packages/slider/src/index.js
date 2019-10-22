@@ -321,7 +321,7 @@ export const Slider = forwardRef(function Slider(
             type="hidden"
             value={actualValue}
             name={name}
-            id={`input:${sliderId}`}
+            id={makeId("input", sliderId)}
           />
         )}
       </div>
@@ -575,7 +575,7 @@ export function makeDataAttributes(
 }
 
 export function makeId(id, index) {
-  return `${id}:${index}`;
+  return `${id}--${index}`;
 }
 
 export function useDimensions(passedRef) {

@@ -1,5 +1,6 @@
+import "@reach/slider/styles.css";
+
 import React from "react";
-import "../styles.css";
 import {
   Slider,
   SliderHandle,

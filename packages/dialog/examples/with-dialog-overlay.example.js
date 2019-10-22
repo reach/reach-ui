@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 
 export let name = "With Separate Overlay";
@@ -22,6 +23,7 @@ export let Example = () => {
         onDismiss={close}
       >
         <DialogContent
+          aria-label="Announcement"
           ref={contentRef}
           style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
         >

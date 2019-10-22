@@ -112,5 +112,5 @@ if (__DEV__) {
 
 // TODO: Move to @reach/utils
 function makeId(id, index) {
-  return `${id}:${index}`;
+  return `${id}--${index}`;
 }

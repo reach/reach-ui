@@ -1,4 +1,5 @@
-import "../styles.css";
+import "@reach/combobox/styles.css";
+
 import React, {
   useContext,
   useState,
@@ -14,11 +15,12 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxPopover
-} from "../src/index";
+} from "@reach/combobox";
+import { wrapEvent } from "@reach/utils";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
-import cities from "./cities";
-import { wrapEvent } from "@reach/utils";
+
+import cities from "./cities.js";
 
 export let name = "Controlled";
 

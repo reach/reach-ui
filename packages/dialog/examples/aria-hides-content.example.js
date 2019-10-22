@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Dialog } from "@reach/dialog";
 
@@ -26,7 +27,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <p>
           The root node should have aria-hidden="true" set when opened and unset
           when closed.

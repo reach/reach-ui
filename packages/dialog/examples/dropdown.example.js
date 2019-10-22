@@ -1,8 +1,10 @@
+import "@reach/menu-button/styles.css";
+import "@reach/dialog/styles.css";
+
 import React from "react";
+import { action } from "@storybook/addon-actions";
 import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
 import { Dialog } from "@reach/dialog";
-import { action } from "@storybook/addon-actions";
-import "../styles.css";
 
 export let name = "Dropdown";
 
@@ -11,7 +13,7 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog}>
+      <Dialog aria-label="Announcement" isOpen={showDialog}>
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <Menu>
           <MenuButton>Dropdown</MenuButton>

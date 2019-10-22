@@ -1,5 +1,6 @@
+import "@reach/dialog/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { Dialog } from "@reach/dialog";
 
 export let name = "Dismiss";
@@ -9,7 +10,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog isOpen={showDialog} onDismiss={() => setShowDialog(false)}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>This is killer!</p>
         <input type="text" />

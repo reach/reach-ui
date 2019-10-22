@@ -1,16 +1,15 @@
-import React from "react";
-import "@reach/dialog/styles.css";
+import React, { useRef, useState } from "react";
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription
-} from "../src/index";
+} from "@reach/alert-dialog";
 
 export let name = "Basic";
 
 export let Example = () => {
-  const close = React.useRef(null);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const close = useRef(null);
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

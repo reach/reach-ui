@@ -1,4 +1,5 @@
-import "../styles.css";
+import "@reach/combobox/styles.css";
+
 import React, { useState, useMemo } from "react";
 import {
   Combobox,
@@ -10,7 +11,8 @@ import {
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
-import cities from "./cities";
+
+import cities from "./cities.js";
 
 export let name = "With Button";
 
