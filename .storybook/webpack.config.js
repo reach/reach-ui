@@ -8,6 +8,7 @@ module.exports = ({ config }) => {
       "@reach/alert": path.join(packagesPath, "/alert/src/"),
       "@reach/alert-dailog": path.join(packagesPath, "/alert-dailog/src/"),
       "@reach/auto-id": path.join(packagesPath, "/auto-id/src/"),
+      "@reach/checkbox": path.join(packagesPath, "/checkbox/src/"),
       "@reach/combobox": path.join(packagesPath, "/combobox/src/"),
       "@reach/component-component": path.join(
         packagesPath,

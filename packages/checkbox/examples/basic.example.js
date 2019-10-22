@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "@reach/checkbox";
+import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 export const name = "Basic";
@@ -7,24 +7,19 @@ export const name = "Basic";
 export function Example() {
   return (
     <div>
-      <Checkbox
-        value="plain-jane-input"
-        label="This is a plain input"
-        name="Ok"
-      />
-      <Checkbox
-        as="div"
-        label="This is a div"
-        value="whatever"
-        name="whatever"
-      />
-      <Checkbox
-        checked="mixed"
-        readOnly
-        value="readonly"
-        name="readonly"
-        label="Mixed + read only"
-      />
+      <label>
+        <input type="checkbox" value="plain-jane-input" name="ok" />
+        <span>This is a plain input</span>
+      </label>
+      <label>
+        <MixedCheckbox
+          checked="mixed"
+          readOnly
+          value="readonly"
+          name="readonly"
+        />
+        <span>Mixed + read only</span>
+      </label>
     </div>
   );
 }

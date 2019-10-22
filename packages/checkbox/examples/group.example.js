@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, CheckboxGroup } from "@reach/checkbox";
+import { MixedCheckbox, CheckboxGroup } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 export const name = "Grouped";
@@ -17,21 +17,18 @@ export function Example() {
     >
       {({ checkedStates }) => (
         <>
-          <Checkbox
-            value="whatever"
-            label="Whaaaa"
-            checked={checkedStates.whatever}
-          />
-          <Checkbox
-            value="awesome"
-            label="Awesome"
-            checked={checkedStates.awesome}
-          />
-          <Checkbox
-            value="nice"
-            label="Very very Nice"
-            checked={checkedStates.nice}
-          />
+          <label>
+            <MixedCheckbox value="whatever" checked={checkedStates.whatever} />
+            <span>Whaaaa</span>
+          </label>
+          <label>
+            <MixedCheckbox value="awesome" checked={checkedStates.awesome} />
+            <span>Awesome</span>
+          </label>
+          <label>
+            <MixedCheckbox value="nice" checked={checkedStates.nice} />
+            <span>Very very Nice</span>
+          </label>
         </>
       )}
     </CheckboxGroup>

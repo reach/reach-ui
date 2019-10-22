@@ -24,12 +24,12 @@ import {
   shape
 } from "prop-types";
 
-import "./checkbox.css";
+import "./styles.css";
 
 const CustomCheckboxContext = createContext({});
 const CheckboxGroupContext = createContext({});
-const useCheckboxContext = useContext(CustomCheckboxContext);
-const useGroupContext = useContext(CheckboxGroupContext);
+const useCheckboxContext = () => useContext(CustomCheckboxContext);
+const useGroupContext = () => useContext(CheckboxGroupContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 export const CustomCheckboxContainer = React.forwardRef(
@@ -46,11 +46,13 @@ export const CustomCheckboxContainer = React.forwardRef(
     });
 
     return (
-      <CustomCheckboxContext.Provider value={{ _setContainerState }}>
+      <CustomCheckboxContext.Provider
+        value={{ _setContainerState, _hidden: true }}
+      >
         <div
           ref={forwardedRef}
           {...props}
-          data-reach-checkbox-input=""
+          data-reach-custom-checkbox-container=""
           data-checked={checked ? "" : undefined}
           data-focused={focused ? "" : undefined}
           data-mixed={mixed ? "" : undefined}
@@ -72,7 +74,11 @@ export const CustomCheckbox = React.forwardRef(function CustomCheckbox(
     disabled: disabledProp,
     checkmarks,
     children,
+    id,
+    name,
     onChange,
+    readOnly,
+    value,
     ...props
   },
   forwardedRef
@@ -81,15 +87,26 @@ export const CustomCheckbox = React.forwardRef(function CustomCheckbox(
     checked: controlledChecked,
     defaultChecked,
     disabled: disabledProp,
-    onChange
+    onChange,
+    readOnly
   });
   return (
-    <CustomCheckboxContainer {...props} ref={forwardedRef}>
+    <CustomCheckboxContainer
+      data-reach-custom-checkbox=""
+      {...props}
+      ref={forwardedRef}
+    >
       {checked === true && checkmarks.true}
       {checked === false && checkmarks.false}
       {checked === "mixed" && checkmarks.mixed}
       {children}
-      <MixedCheckbox {...inputProps} />
+      <MixedCheckbox
+        id={id}
+        value={value}
+        name={name}
+        readOnly={readOnly}
+        {...inputProps}
+      />
     </CustomCheckboxContainer>
   );
 });
@@ -121,7 +138,7 @@ export const MixedCheckbox = React.forwardRef(function MixedCheckbox(
   forwardedRef
 ) {
   const { groupId, name: groupName } = useGroupContext();
-  const { _setContainerState } = useCheckboxContext();
+  const { _setContainerState, _hidden } = useCheckboxContext();
   const [
     inputProps,
     { focused, checked, disabled, mixed, isControlled }
@@ -131,7 +148,8 @@ export const MixedCheckbox = React.forwardRef(function MixedCheckbox(
     disabled: disabledProp,
     onBlur,
     onChange,
-    onFocus
+    onFocus,
+    readOnly
   });
 
   const ownRef = useRef(null);
@@ -164,6 +182,7 @@ export const MixedCheckbox = React.forwardRef(function MixedCheckbox(
       {...inputProps}
       ref={ref}
       data-reach-mixed-checkbox=""
+      data-reach-mixed-checkbox-hidden={_hidden && ""}
       name={name}
       readOnly={readOnly}
       type="checkbox"
@@ -264,7 +283,8 @@ export function useMixedCheckbox({
   disabled: disabledProp,
   onBlur,
   onChange,
-  onFocus
+  onFocus,
+  readOnly
 }) {
   const {
     disabled: disabledGroup,
@@ -285,6 +305,10 @@ export function useMixedCheckbox({
     if (groupOnChange) {
       groupOnChange(event);
       return;
+    }
+
+    if (readOnly) {
+      event.preventDefault();
     }
 
     if (!isControlled) {
