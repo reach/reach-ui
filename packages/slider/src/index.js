@@ -132,7 +132,7 @@ export const SliderInput = forwardRef(function SliderInput(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const _id = makeId("slider", useId());
+  const _id = useId("slider");
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
@@ -273,6 +273,7 @@ export const SliderInput = forwardRef(function SliderInput(
   const valueText = getValueText ? getValueText(value) : ariaValueText;
 
   const sliderId = id || _id;
+  const inputId = useId("sliderinput");
 
   const trackHighlightStyle = isVertical
     ? {
@@ -310,7 +311,8 @@ export const SliderInput = forwardRef(function SliderInput(
     trackPercent,
     trackRef,
     trackHighlightStyle,
-    updateValue
+    updateValue,
+    inputId
   };
 
   const dataAttributes = makeDataAttributes("slider", {
@@ -368,12 +370,7 @@ export const SliderInput = forwardRef(function SliderInput(
           // capture the value. We'll assume this when the component is given a
           // form field name (A `name` prop doesn't really make sense in any
           // other context).
-          <input
-            type="hidden"
-            value={value}
-            name={name}
-            id={makeId("input", sliderId)}
-          />
+          <input type="hidden" value={value} name={name} id={inputId} />
         )}
       </div>
     </SliderContext.Provider>
@@ -611,7 +608,7 @@ function makeDataAttributes(
   };
 }
 
-function useDimensions(passedRef) {
+export function useDimensions(passedRef) {
   const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
   // getBoundingClientRect does not work here when borders are applied.
