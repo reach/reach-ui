@@ -264,8 +264,7 @@ export const Combobox = forwardRef(function Combobox(
 
   useFocusManagement(data.lastActionType, inputRef);
 
-  const defaultListboxId = useId("listbox");
-  const [listboxId, setListboxId] = useState(null);
+  const [listboxId, setListboxId] = useState(useId("listbox"));
 
   const context = useMemo(() => {
     return {
@@ -278,6 +277,7 @@ export const Combobox = forwardRef(function Combobox(
       state,
       transition,
       listboxId,
+      setListboxId,
       autocompletePropRef,
       persistSelectionRef,
       inputIdDictionary,
@@ -332,6 +332,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
     // might be controlled
     value: controlledValue,
+    id,
     ...props
   },
   forwardedRef
@@ -342,6 +343,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     state,
     transition,
     listboxId,
+    setListboxId,
     autocompletePropRef,
     openOnFocus,
     inputIdDictionary
@@ -362,6 +364,12 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   useLayoutEffect(() => {
     autocompletePropRef.current = autocomplete;
   }, [autocomplete]);
+
+  useLayoutEffect(() => {
+    if (id) {
+      setListboxId(id);
+    }
+  }, [id, setListboxId]);
 
   const handleValueChange = value => {
     if (value.trim() === "") {
