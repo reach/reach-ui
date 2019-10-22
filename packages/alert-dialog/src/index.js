@@ -12,13 +12,17 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   forwardRef
 ) {
   // generate a label ID, but allow it to be overwritten by setting an ID on <AlertDialogLabel>
-  const [labelId, setLabelId] = useState(useId("alert-dialog"));
+  const [labelId, setLabelId] = useState(useId("alert-dialog-label"));
+  // don't set immediately, since <AlertDialogDescription> is not required
+  const [descriptionId, setDescriptionId] = useState();
 
   return (
     <AlertDialogContext.Provider
       value={{
         labelId,
         setLabelId,
+        descriptionId,
+        setDescriptionId,
         leastDestructiveRef
       }}
     >
@@ -45,8 +49,11 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   { children, ...props },
   forwardRef
 ) {
-  const { labelId, leastDestructiveRef } = React.useContext(AlertDialogContext);
+  const { labelId, leastDestructiveRef, descriptionId } = React.useContext(
+    AlertDialogContext
+  );
   const ariaLabelledBy = props["aria-labelledby"] || labelId;
+  const ariaDescribedBy = props["aria-describedby"] || descriptionId;
   const timer = useRef();
   React.useEffect(() => {
     // defer these checks for 1 tick to allow <AlertDialogLabel> to update labelId via context
@@ -62,6 +69,15 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
       \`id\` set on \`<AlertDialogLabel>\`. Recieved \`aria-labelledby="${ariaLabelledBy}"\`,
       \`labelId="${labelId}"\``
       );
+
+      if (ariaDescribedBy) {
+        invariant(
+          ariaDescribedBy === descriptionId,
+          `@reach/alert-dialog: User-defined \`aria-describedby\` value must match
+        \`id\` set on \`<AlertDialogDescription>\`. Recieved \`aria-describedby="${ariaDescribedBy}"\`,
+        \`descriptionId="${descriptionId}"\``
+        );
+      }
     }, 1);
     invariant(
       leastDestructiveRef,
@@ -71,7 +87,13 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
     );
 
     return clearTimeout(timer.current);
-  }, [labelId, leastDestructiveRef, ariaLabelledBy]);
+  }, [
+    labelId,
+    leastDestructiveRef,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    descriptionId
+  ]);
   return (
     <DialogContent
       ref={forwardRef}
@@ -80,6 +102,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
       data-reach-alert-dialog-content
       role="alertdialog"
       aria-labelledby={ariaLabelledBy}
+      {...(ariaDescribedBy ? { "aria-describedby": ariaDescribedBy } : {})}
       {...props}
     >
       {children}
@@ -104,8 +127,16 @@ export const AlertDialogLabel = ({ id, ...props }) => {
   return <div id={labelId} data-reach-alert-dialog-label {...props} />;
 };
 
-export const AlertDialogDescription = props => {
-  return <div data-reach-alert-dialog-description {...props} />;
+export const AlertDialogDescription = ({ id, ...props }) => {
+  const { setDescriptionId } = React.useContext(AlertDialogContext);
+  const generatedId = useId("alert-dialog-desc");
+  const descriptionId = id || generatedId;
+  useEffect(() => {
+    setDescriptionId(descriptionId);
+  }, [descriptionId, setDescriptionId]);
+  return (
+    <div id={descriptionId} data-reach-alert-dialog-description {...props} />
+  );
 };
 
 export const AlertDialog = ({
