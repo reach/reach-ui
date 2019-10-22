@@ -86,7 +86,9 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
         https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
     );
 
-    return clearTimeout(timer.current);
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [
     labelId,
     leastDestructiveRef,
