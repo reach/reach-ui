@@ -1,8 +1,10 @@
+import "@reach/menu-button/styles.css";
+import "@reach/dialog/styles.css";
+
 import React from "react";
+import { action } from "@storybook/addon-actions";
 import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
 import { Dialog } from "@reach/dialog";
-import { action } from "@storybook/addon-actions";
-import "../styles.css";
 
 export let name = "Dropdown";
 

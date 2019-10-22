@@ -1,5 +1,6 @@
+import "@reach/menu-button/styles.css";
+
 import React from "react";
-import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 

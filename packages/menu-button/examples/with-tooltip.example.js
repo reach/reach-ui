@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
+import "@reach/menu-button/styles.css";
+import "@reach/tooltip/styles.css";
 
 import React from "react";
-import "../styles.css";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
-import Tooltip from "../../tooltip";
+import Tooltip from "@reach/tooltip";
 
 export let name = "With Tooltip";
 

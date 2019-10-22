@@ -1,7 +1,8 @@
 import React from "react";
 import Alert from "@reach/alert";
 import VisuallyHidden from "@reach/visually-hidden";
-import LoremIpsum from "./LoremIpsum";
+
+import LoremIpsum from "./LoremIpsum.js";
 
 export let name = "Basic";
 
