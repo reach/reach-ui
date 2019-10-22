@@ -5,8 +5,8 @@ import { useId } from "../src/index";
 export let name = "Basic";
 
 export let Example = () => {
-  const divId = `div:${useId()}`;
-  const buttonId = `div:${useId()}`;
+  const divId = useId("div");
+  const buttonId = useId("button");
   return (
     <>
       <div id={divId}>
