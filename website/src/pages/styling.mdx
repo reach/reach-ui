@@ -40,12 +40,12 @@ Here's an example:
 }
 ```
 
-Skipping the 'missing CSS' warning with setting the css variable `--reach-dialog` will not work in your tests. If you are using jest you can skip them by mocking the function which is checking the styles.
+If you still see the warning when running tests in Jest, you can skip them by mocking the function that checks the styles.
 
-```
-jest.mock('@reach/utils', () => ({
-  ...jest.requireActual('@reach/utils'),
-  checkStyles: jest.fn(),
+```js
+jest.mock("@reach/utils", () => ({
+  ...jest.requireActual("@reach/utils"),
+  checkStyles: jest.fn()
 }));
 ```
 
