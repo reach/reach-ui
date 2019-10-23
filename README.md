@@ -111,6 +111,49 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Treegrid             |
 | ❓     | Window Splitter      |
 
+## Releases
+
+This is our current release process. It's not perfect, but it has almost the right balance of manual + automation for me. We might be able to put some of this in a script...
+
+```sh
+# First, run the build locally and make sure there are no problems
+# and that all the tests pass:
+$ yarn build
+$ yarn test
+
+# Then create a new version and git tag locally. Don't push yet!
+$ lerna version [version] --no-push
+
+# Take a look around and make sure everything is as you'd expect.
+# You can inspect everything from the commit that lerna made with:
+$ git log -p
+
+# If something needs to be changed, you can undo the commit and
+# delete the tag that lerna created and try again.
+
+# If everything looks good, push to GitHub along with the new tag:
+$ git push origin master --follow-tags
+
+# Open up travis-ci.com/reach/reach-ui and watch the build. There will
+# be 2 builds, one for the push to the master branch and one for the
+# new tag. The tag build will run the build and all the tests and then
+# automatically publish to npm if everything passes. If there's a
+# problem, we have to figure out how to fix manually.
+
+# Now generate the changelog and edit the release on GitHub for the tag.
+# You can get the changelog with:
+$ lerna-changelog
+
+# Then copy the output and paste it into the release on GitHub.
+```
+
+You need to be careful when publishing a new package because the `lerna publish` on Travis CI will fail for new packages. To get around this, you should publish a `0.0.0` version of the package manually ahead of time. Then the release from CI will be ok. This is really janky but AFAICT the only workaround.
+
+Stuff I'd like to improve:
+
+- Automate changelog generation and GitHub release from CI
+- Document how we're using GitHub PRs to generate the changelog somewhere
+
 ## Website
 
 The website is a Gatsby app in the `website` directory. It automatically deploys to https://reacttraining.com/reach-ui/ when the `website` branch is updated.
