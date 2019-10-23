@@ -1,5 +1,5 @@
 import React from "react";
-import { MixedCheckbox, CheckboxGroup } from "@reach/checkbox";
+import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 export const name = "Checklist";
@@ -17,7 +17,7 @@ export function Example() {
       sprouts: false
     },
     meats: {
-      turkey: true,
+      turkey: false,
       ham: true,
       pepperoni: false
     }
@@ -74,24 +74,25 @@ export function Example() {
               />
               <span>All {type}</span>
             </label>
-            <CheckboxGroup
-              name={type}
-              checkedStates={toppings[type]}
-              onChange={getHandler(type)}
-            >
-              {({ checkedStates }) => (
-                <ul>
-                  {Object.entries(checkedStates).map(([value, state]) => (
-                    <li key={value}>
-                      <label>
-                        <MixedCheckbox value={value} checked={state} />
-                        <span>{value}</span>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CheckboxGroup>
+            <fieldset>
+              <legend>{type}</legend>
+
+              <ul>
+                {Object.entries(toppings[type]).map(([value, state]) => (
+                  <li key={value}>
+                    <label>
+                      <MixedCheckbox
+                        name={type}
+                        value={value}
+                        checked={state}
+                        onChange={getHandler(type)}
+                      />
+                      <span>{value}</span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
           </fieldset>
         );
       })}
