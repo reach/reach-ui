@@ -9,7 +9,7 @@
     "test": "MODULE_FORMAT=cjs jest packages",
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
-    "version": "lerna version --no-push",
+    "version": "lerna version --no-push --new-version",
     "changes": "lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
     "lint": "eslint .",
