@@ -6,7 +6,7 @@ describe("rendering", () => {
   it("does not render children when not open", () => {
     let wrapper = renderer.create(
       <div lang="gr">
-        <Dialog isOpen={false}>
+        <Dialog isOpen={false} aria-label="cool dialog">
           <div lang="en" />
         </Dialog>
       </div>
