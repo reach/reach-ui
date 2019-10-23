@@ -62,7 +62,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   return (
     <DialogContent
       ref={forwardRef}
-      data-reach-alert-dialong-content
+      data-reach-alert-dialog-content
       role="alertdialog"
       aria-labelledby={labelId}
       {...props}
