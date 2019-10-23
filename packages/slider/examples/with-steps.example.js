@@ -1,13 +1,7 @@
 import "@reach/slider/styles.css";
 
 import React from "react";
-import {
-  Slider,
-  SliderHandle,
-  SliderMarker,
-  SliderTrack,
-  SliderTrackHighlight
-} from "@reach/slider";
+import { Slider, SliderMarker } from "@reach/slider";
 
 export const name = "With Steps";
 
@@ -20,18 +14,14 @@ export const Example = () => {
 
   return (
     <Slider step={step} min={min} max={max}>
-      <SliderTrack>
-        <SliderTrackHighlight />
-        <SliderHandle />
-        {steps.map(key => {
-          const value = key * step;
-          return (
-            <SliderMarker key={key} value={value}>
-              <span>{value}</span>
-            </SliderMarker>
-          );
-        })}
-      </SliderTrack>
+      {steps.map(key => {
+        const value = key * step;
+        return (
+          <SliderMarker key={key} value={value}>
+            <span>{value}</span>
+          </SliderMarker>
+        );
+      })}
     </Slider>
   );
 };

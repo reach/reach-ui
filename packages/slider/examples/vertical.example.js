@@ -3,26 +3,19 @@ import "@reach/slider/styles.css";
 import React from "react";
 import {
   Slider,
-  SliderHandle,
   SliderMarker,
-  SliderTrack,
-  SliderTrackHighlight,
-  SliderOrientationVertical
+  SLIDER_ORIENTATION_VERTICAL
 } from "@reach/slider";
 
 export const name = "Vertical";
 
 export const Example = () => (
-  <Slider orientation={SliderOrientationVertical}>
-    <SliderTrack>
-      <SliderTrackHighlight />
-      <SliderHandle />
-      <SliderMarker value={10}>
-        <span>10</span>
-      </SliderMarker>
-      <SliderMarker value={90}>
-        <span>90</span>
-      </SliderMarker>
-    </SliderTrack>
+  <Slider orientation={SLIDER_ORIENTATION_VERTICAL}>
+    <SliderMarker value={10}>
+      <span>10</span>
+    </SliderMarker>
+    <SliderMarker value={90}>
+      <span>90</span>
+    </SliderMarker>
   </Slider>
 );
