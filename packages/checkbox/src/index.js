@@ -24,8 +24,6 @@ import {
   shape
 } from "prop-types";
 
-import "./styles.css";
-
 const CustomCheckboxContext = createContext({});
 const CheckboxGroupContext = createContext({});
 const useCheckboxContext = () => useContext(CustomCheckboxContext);
