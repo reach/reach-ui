@@ -1,11 +1,11 @@
 import React from "react";
-import "../styles.css";
+import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionPanel
-} from "../src";
+} from "@reach/accordion";
 
 export const name = "Read Only";
 
