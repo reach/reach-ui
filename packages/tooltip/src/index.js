@@ -52,6 +52,11 @@ import { useRect } from "@reach/rect";
 import { node, string, func } from "prop-types";
 
 ////////////////////////////////////////////////////////////////////////////////
+// Timeout Constants
+export const MOUSE_REST_TIMEOUT = 100;
+export const LEAVE_TIMEOUT = 500;
+
+////////////////////////////////////////////////////////////////////////////////
 // ~The states~
 
 // nothing goin' on
@@ -199,7 +204,7 @@ let restTimeout;
 
 function startRestTimer() {
   clearTimeout(restTimeout);
-  restTimeout = setTimeout(() => transition("rest"), 100);
+  restTimeout = setTimeout(() => transition("rest"), MOUSE_REST_TIMEOUT);
 }
 
 function clearRestTimer() {
@@ -211,7 +216,10 @@ let leavingVisibleTimer;
 
 function startLeavingVisibleTimer() {
   clearTimeout(leavingVisibleTimer);
-  leavingVisibleTimer = setTimeout(() => transition("timecomplete"), 500);
+  leavingVisibleTimer = setTimeout(
+    () => transition("timecomplete"),
+    LEAVE_TIMEOUT
+  );
 }
 
 function clearLeavingVisibleTimer() {

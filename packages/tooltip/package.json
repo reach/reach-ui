@@ -20,6 +20,7 @@
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^9.3.0",
     "react-spring": "^8.0.27"
   },
   "author": "React Training <hello@reacttraining.com>",

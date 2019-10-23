@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tooltip hides on ESC 1`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip-5"
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip-5"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      Content
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`Tooltip hides on ESC 2`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Tooltip shows without timeout when one tooltip is already visible 1`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip-3"
+      data-reach-tooltip-trigger=""
+    >
+      First Trigger
+    </button>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Second Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip-3"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      First
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`Tooltip shows without timeout when one tooltip is already visible 2`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      First Trigger
+    </button>
+    <button
+      aria-describedby="tooltip-4"
+      data-reach-tooltip-trigger=""
+    >
+      Second Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip-4"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      Second
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`Tooltip shows/hides on hover 1`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Tooltip shows/hides on hover 2`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip-1"
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip-1"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      Content
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`Tooltip shows/hides on hover 3`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Tooltip shows/hides when trigger is activeElement 1`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
+
+exports[`Tooltip shows/hides when trigger is activeElement 2`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip-2"
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip-2"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      Content
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`Tooltip shows/hides when trigger is activeElement 3`] = `
+<body>
+  <div>
+    <button
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
