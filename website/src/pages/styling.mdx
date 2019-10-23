@@ -40,6 +40,15 @@ Here's an example:
 }
 ```
 
+Skipping the 'missing CSS' warning with setting the css variable `--reach-dialog` will not work in your tests. If you are using jest you can skip them by mocking the function which is checking the styles.
+
+```
+jest.mock('@reach/utils', () => ({
+  ...jest.requireActual('@reach/utils'),
+  checkStyles: jest.fn(),
+}));
+```
+
 ## Using a Bundler (webpack, parcel, etc.)
 
 If you are using a module bundler like webpack or parcel, you can import them where you import the component.
