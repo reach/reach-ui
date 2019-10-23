@@ -64,6 +64,12 @@ let NavTag = props => (
   />
 );
 
+let BetaTag = () => (
+  <NavTag>
+    <VisuallyHidden>Currently in </VisuallyHidden>Beta
+  </NavTag>
+);
+
 let Nav = ({ media }) => (
   <Component
     media={media}
@@ -179,12 +185,7 @@ let Nav = ({ media }) => (
               <NavLink to="/menu-button">MenuButton (Dropdown)</NavLink>
               <NavLink to="/portal">Portal</NavLink>
               <NavLink to="/skip-nav">SkipNav</NavLink>
-              <NavLink to="/slider">
-                Slider{" "}
-                <NavTag>
-                  <VisuallyHidden>Currently in </VisuallyHidden>Beta
-                </NavTag>
-              </NavLink>
+              <NavLink to="/slider">Slider</NavLink>
               <NavLink to="/tabs">Tabs</NavLink>
               <NavLink to="/tooltip">Tooltip</NavLink>
               <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
