@@ -21,7 +21,7 @@ export const CustomCheckboxContainer = forwardRef(
   function CustomCheckboxContainer({ children, ...props }, forwardedRef) {
     const [
       { checked, mixed, disabled, readOnly, focused },
-      _setContainerState
+      setContainerState
     ] = useState({
       checked: null,
       mixed: null,
@@ -32,7 +32,7 @@ export const CustomCheckboxContainer = forwardRef(
 
     return (
       <CustomCheckboxContext.Provider
-        value={{ _setContainerState, _hidden: true }}
+        value={{ setContainerState, visuallyHidden: true }}
       >
         <div
           ref={forwardedRef}
@@ -122,7 +122,7 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
   },
   forwardedRef
 ) {
-  const { _setContainerState, _hidden } = useCheckboxContext();
+  const { setContainerState, visuallyHidden } = useCheckboxContext();
   const [
     inputProps,
     { focused, checked, disabled, mixed, isControlled }
@@ -145,10 +145,10 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
   }, [mixed, checked]);
 
   useEffect(() => {
-    if (_setContainerState) {
-      _setContainerState({ checked, mixed, disabled, readOnly, focused });
+    if (setContainerState) {
+      setContainerState({ checked, mixed, disabled, readOnly, focused });
     }
-  }, [_setContainerState, checked, disabled, mixed, readOnly, focused]);
+  }, [setContainerState, checked, disabled, mixed, readOnly, focused]);
 
   if (__DEV__) {
     checkboxErrorChecks({
@@ -164,7 +164,7 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
       {...inputProps}
       ref={ref}
       data-reach-mixed-checkbox=""
-      data-reach-mixed-checkbox-hidden={_hidden && ""}
+      data-reach-mixed-checkbox-hidden={visuallyHidden && ""}
       name={name}
       readOnly={readOnly}
       type="checkbox"
