@@ -1,20 +1,10 @@
 import "@reach/slider/styles.css";
 
 import React from "react";
-import {
-  Slider,
-  SliderHandle,
-  SliderTrack,
-  SliderTrackHighlight
-} from "@reach/slider";
+import { Slider, SLIDER_HANDLE_ALIGN_CONTAIN } from "@reach/slider";
 
 export const name = "Contained Handle";
 
 export const Example = () => (
-  <Slider handleAlignment="contain">
-    <SliderTrack>
-      <SliderTrackHighlight />
-      <SliderHandle />
-    </SliderTrack>
-  </Slider>
+  <Slider handleAlignment={SLIDER_HANDLE_ALIGN_CONTAIN}></Slider>
 );

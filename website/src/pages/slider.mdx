@@ -10,7 +10,14 @@ import Helmet from "../components/DefaultHelmet";
   ]}
 />
 
-# Slider
+# Slider (Range)
+
+[Slider](#slider) -
+[SliderInput](#sliderinput) -
+[SliderTrack](#slidertrack) -
+[SliderTrackHighlight](#slidertrackhighlight) -
+[SliderMarker](#slidermarker) -
+[SliderHandle](#sliderhandle)
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/slider
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#slider
@@ -21,17 +28,25 @@ Sliders are composed by an outer `Slider` component with a `SliderTrack` child c
 
 _Pointer Events_: Slider uses pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). As such, to override default behavior you will need to use pointer events rather than mouse or touch events. For example, if you wish to call `event.preventDefault` to override the slider handle's activation on a mouse click event, you'll want to reach for `onPointerDown` instead of `onMouseDown`. [If you need to support older browsers without native pointer events](https://caniuse.com/#feat=pointer) (or ensure compatibility with some inconsistent native behavior in MacOS Safari < 13 and Safari), we recommend [`pepjs`](https://github.com/jquery/PEP) as a polyfill.
 
+You can use `Slider` as a simple standalone component, or compose its parts with `SliderInput`.
+
+```jsx-live
+function Example() {
+  return <Slider />;
+}
+```
+
 ```jsx-live
 function Example() {
   return (
     <div>
-      <Slider>
+      <SliderInput>
         <SliderTrack>
           <SliderTrackHighlight />
           <SliderMarker value={50} />
           <SliderHandle />
         </SliderTrack>
-      </Slider>
+      </SliderInput>
     </div>
   );
 }
@@ -73,19 +88,36 @@ function Example() {
 
 # Slider
 
-The parent component of the slider interface.
+High-level component to render a slider in its simplest form. This works simililarly to a native HTML range input.
 
-## Slider CSS Selectors
+```jsx
+<Slider min={0} max={100} />
+```
 
-Please see the [styling guide](/styling).
+## Slider Props
 
-```css
-[data-reach-slider] {
-}
-[data-reach-slider-disabled] {
-}
-[data-reach-slider-orientation="horizontal|vertical"] {
-}
+| Prop                                       | Type                        | Required | Default        |
+| ------------------------------------------ | --------------------------- | -------- | -------------- |
+| [children](#slider-children)               | node                        | true     |                |
+| [defaultValue](#slider-defaultvalue)       | number                      | false    |                |
+| [disabled](#slider-disabled)               | boolean                     | false    |                |
+| [getValueText](#slider-getvaluetext)       | func                        | false    |                |
+| [handleAlignment](#slider-handlealignment) | `'center' | 'contain'`      | false    | `'center'`     |
+| [max](#slider-max)                         | number                      | false    | 100            |
+| [min](#slider-min)                         | number                      | false    | 0              |
+| [name](#slider-name)                       | string                      | false    |                |
+| [onChange](#slider-onchange)               | func                        | false    |                |
+| [orientation](#slider-orientation)         | `'horizontal' | 'vertical'` | false    | `'horizontal'` |
+| [step](#slider-step)                       | number                      | false    |                |
+| [value](#slider-value)                     | number                      | false    |                |
+
+## Controlled Slider
+
+If you want to control the slider's value, you can do so by passing a `value` and `onChange` handler similar to form inputs.
+
+```jsx
+const [value, setValue] = useState(0);
+<Slider onChange={setValue} value={value} min={0} max={100} />;
 ```
 
 ## Slider Props
@@ -109,7 +141,17 @@ Please see the [styling guide](/styling).
 
 _Type_: `node`
 
-Slider expects `<SliderTrack>` as its sole child; The track will accept all additional slider sub-components as children.
+`Slider` can accept `SliderMarker` children to enhance display of specific values along the track.
+
+```jsx
+<Slider min={0} max={100}>
+  {new Array(11).fill("x").map((x, index) => (
+    <SliderMarker value={index * 10}>
+      <span>{index * 10}</span>
+    </SliderMarker>
+  ))}
+</Slider>
+```
 
 ### Slider defaultValue
 
@@ -176,6 +218,39 @@ The step attribute is a number that specifies the granularity that the value mus
 _Type_: `number`
 
 An explicit value for the slider. When this prop is used, the Slider state becomes controlled and `onChange` must be used to update the value in response to user interaction.
+
+## Slider CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-slider] {
+}
+[data-reach-slider-disabled] {
+}
+[data-reach-slider-orientation="horizontal|vertical"] {
+}
+```
+
+# SliderInput
+
+The parent component of the slider interface. This is a lower level component if you need more control over styles or rendering the slider's inner components.
+
+## SliderInput Props
+
+`SliderInput` accepts the same props as [`Slider`](#slider-props).
+
+### SliderInput children
+
+_Type_: `node | func: (args: SliderArgs) => node`
+
+Slider expects `<SliderTrack>` as its child; The track will accept all additional slider sub-components as children. It can also accept a function/render prop as its child to expose some of its internal state variables.
+
+`SliderArgs = { hasFocus: boolean, id: string, max: number, min: number, value: number, valueText: string }`
+
+## SliderInput CSS Selectors
+
+See selectors for [`Slider`](#slider-css-selectors).
 
 # SliderTrack
 
