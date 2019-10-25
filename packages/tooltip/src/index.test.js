@@ -6,9 +6,10 @@ jest.mock("@reach/utils", () => ({
   checkStyles: jest.fn()
 }));
 
+let Tooltip;
+let render, fireEvent, act, cleanup;
+
 describe("Tooltip", () => {
-  let Tooltip;
-  let render, fireEvent, act, cleanup;
   beforeEach(() => {
     ({ default: Tooltip } = require("."));
     ({ cleanup, render, fireEvent, act } = require("@testing-library/react"));
