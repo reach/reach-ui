@@ -4,7 +4,7 @@ exports[`Tooltip hides on ESC 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip-5"
+      aria-describedby="tooltip-1"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -13,7 +13,7 @@ exports[`Tooltip hides on ESC 1`] = `
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip-5"
+      id="tooltip-1"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -39,7 +39,7 @@ exports[`Tooltip shows without timeout when one tooltip is already visible 1`] =
 <body>
   <div>
     <button
-      aria-describedby="tooltip-3"
+      aria-describedby="tooltip-1"
       data-reach-tooltip-trigger=""
     >
       First Trigger
@@ -53,7 +53,7 @@ exports[`Tooltip shows without timeout when one tooltip is already visible 1`] =
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip-3"
+      id="tooltip-1"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -72,7 +72,7 @@ exports[`Tooltip shows without timeout when one tooltip is already visible 2`] =
       First Trigger
     </button>
     <button
-      aria-describedby="tooltip-4"
+      aria-describedby="tooltip-2"
       data-reach-tooltip-trigger=""
     >
       Second Trigger
@@ -81,7 +81,7 @@ exports[`Tooltip shows without timeout when one tooltip is already visible 2`] =
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip-4"
+      id="tooltip-2"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -154,7 +154,7 @@ exports[`Tooltip shows/hides when trigger is activeElement 2`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip-2"
+      aria-describedby="tooltip-1"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -163,7 +163,7 @@ exports[`Tooltip shows/hides when trigger is activeElement 2`] = `
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip-2"
+      id="tooltip-1"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >

@@ -1,6 +1,5 @@
 import React from "react";
-import { render, fireEvent, act } from "@testing-library/react";
-import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from ".";
+import { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from ".";
 
 jest.mock("@reach/utils", () => ({
   ...jest.requireActual("@reach/utils"),
@@ -8,8 +7,17 @@ jest.mock("@reach/utils", () => ({
 }));
 
 describe("Tooltip", () => {
+  let Tooltip;
+  let render, fireEvent, act, cleanup;
   beforeEach(() => {
+    ({ default: Tooltip } = require("."));
+    ({ cleanup, render, fireEvent, act } = require("@testing-library/react"));
+
     jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it("shows/hides on hover", () => {
