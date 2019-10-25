@@ -63,5 +63,8 @@
       "docs": "DOCUMENTATION",
       "enhancement": "FEATURE"
     }
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.0"
   }
 }
