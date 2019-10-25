@@ -19,7 +19,7 @@ describe("Tooltip", () => {
     jest.useFakeTimers();
   });
 
-  it.only("has correct markup", () => {
+  it("has correct markup", () => {
     const { baseElement, getByText } = render(
       <Tooltip label="Content">
         <button>Trigger</button>
