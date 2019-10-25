@@ -23,6 +23,8 @@
     "@babel/preset-react": "^7.6.3",
     "@storybook/addon-actions": "^5.2.4",
     "@storybook/react": "^5.2.4",
+    "@testing-library/jest-dom": "^4.2.0",
+    "@testing-library/react": "^9.3.0",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "autoprefixer": "^9.6.5",
@@ -63,8 +65,5 @@
       "docs": "DOCUMENTATION",
       "enhancement": "FEATURE"
     }
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.0"
   }
 }
