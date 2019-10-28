@@ -99,6 +99,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | 🛠      | Listbox              |
 | 🛠      | Menu or Menu bar     |
 | ✅     | Menu Button          |
+| ✅     | Popover              |
 | 🛠      | Radio Group          |
 | ✅     | Slider               |
 | 🛠      | Slider (Multi-Thumb) |
