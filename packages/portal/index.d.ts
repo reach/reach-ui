@@ -6,6 +6,6 @@ declare module "@reach/portal" {
     type?: string;
   };
 
-  declare const Portal: React.FunctionComponent<PortalProps>;
+  const Portal: React.FunctionComponent<PortalProps>;
   export default Portal;
 }
