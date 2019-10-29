@@ -13,8 +13,8 @@
     "@reach/portal": "^0.4.0",
     "@reach/utils": "^0.4.0",
     "prop-types": "^15.7.2",
-    "react-focus-lock": "^2.2.0",
-    "react-remove-scroll": "^2.1.1"
+    "react-focus-lock": "^2.2.1",
+    "react-remove-scroll": "^2.2.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
