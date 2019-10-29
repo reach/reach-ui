@@ -39,7 +39,7 @@ export const CustomCheckboxContainer = forwardRef(
           {...props}
           data-reach-custom-checkbox-container=""
           data-checked={checked ? "" : undefined}
-          data-focused={focused ? "" : undefined}
+          data-focus={focused ? "" : undefined}
           data-mixed={mixed ? "" : undefined}
           data-disabled={disabled ? "" : undefined}
           data-read-only={readOnly ? "" : undefined}
