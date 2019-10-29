@@ -48,6 +48,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 import {
   Slider,
+  SliderInput,
   SliderTrack,
   SliderTrackHighlight,
   SliderHandle,
@@ -108,6 +109,7 @@ const PreComponent = ({ className, ...props }) => {
           TabPanels,
           TabPanel,
           Slider,
+          SliderInput,
           SliderTrack,
           SliderTrackHighlight,
           SliderHandle,

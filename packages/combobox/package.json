@@ -24,8 +24,8 @@
   },
   "devDependencies": {
     "match-sorter": "^2.3.0",
-    "react": "^16.10.2",
-    "react-test-renderer": "^16.10.2",
+    "react": "^16.11.0",
+    "react-test-renderer": "^16.11.0",
     "use-throttle": "^0.0.3"
   },
   "files": [
