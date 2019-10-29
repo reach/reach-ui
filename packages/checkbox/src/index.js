@@ -175,11 +175,8 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
 if (__DEV__) {
   MixedCheckbox.propTypes = {
     checked: oneOfType([bool, string]),
-    defaultChecked: bool,
-    disabled: bool,
-    name: string.isRequired,
-    onChange: func,
-    value: any.isRequired
+    defaultChecked: oneOfType([bool, string]),
+    onChange: func
   };
   MixedCheckbox.displayName = "MixedCheckbox";
 }
