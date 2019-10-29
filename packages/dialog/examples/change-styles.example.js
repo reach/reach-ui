@@ -23,7 +23,10 @@ export const Example = () => {
       {transitions.map(
         ({ item, props: styles }) =>
           item && (
-            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+            <AnimatedDialogOverlay
+              key={item}
+              style={{ opacity: styles.opacity }}
+            >
               <AnimatedDialogContent
                 aria-labelledby="dialog-title"
                 style={{
