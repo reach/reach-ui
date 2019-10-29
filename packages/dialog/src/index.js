@@ -49,7 +49,7 @@ const DialogInner = React.forwardRef(function DialogInner(
   const overlayNode = React.useRef(null);
   const ref = useForkedRef(overlayNode, forwardedRef);
 
-  React.useEffect(() => createAriaHider(forwardedRef.current), [forwardedRef]);
+  React.useEffect(() => createAriaHider(overlayNode.current), []);
 
   return (
     <FocusLock
