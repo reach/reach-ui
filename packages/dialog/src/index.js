@@ -35,6 +35,7 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 const DialogInner = React.forwardRef(function DialogInner(
   {
+    allowPinchZoom,
     initialFocusRef,
     onClick,
     onDismiss = noop,
@@ -60,7 +61,7 @@ const DialogInner = React.forwardRef(function DialogInner(
         }
       }}
     >
-      <RemoveScroll>
+      <RemoveScroll allowPinchZoom={allowPinchZoom}>
         <div
           data-reach-dialog-overlay
           onClick={wrapEvent(onClick, event => {
