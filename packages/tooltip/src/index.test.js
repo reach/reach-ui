@@ -24,13 +24,13 @@ describe("Tooltip", () => {
     );
     const trigger = getByText("Trigger");
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("not visible");
     fireEvent.mouseOver(trigger);
     act(() => jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
     fireEvent.mouseLeave(trigger);
     act(() => jest.advanceTimersByTime(LEAVE_TIMEOUT));
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after leave timeout");
   });
 
   it("shows/hides when trigger is activeElement", () => {
@@ -41,12 +41,12 @@ describe("Tooltip", () => {
     );
     const trigger = getByText("Trigger");
 
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("not visible");
     fireEvent.focus(trigger);
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after focus");
     fireEvent.blur(trigger);
     act(() => jest.advanceTimersByTime(LEAVE_TIMEOUT));
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after blur");
   });
 
   it("shows without timeout when one tooltip is already visible", () => {
@@ -65,10 +65,10 @@ describe("Tooltip", () => {
 
     fireEvent.mouseOver(firstTrigger);
     act(() => jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
     fireEvent.mouseLeave(firstTrigger);
     fireEvent.mouseOver(secondTrigger);
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after switch without timeout");
   });
 
   it("hides on ESC", () => {
@@ -81,8 +81,8 @@ describe("Tooltip", () => {
     const trigger = getByText("Trigger");
     fireEvent.focus(trigger);
     act(() => jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
     fireEvent.keyDown(trigger, { key: "Escape" });
-    expect(baseElement).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("not visible after ESC");
   });
 });
