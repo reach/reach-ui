@@ -1,11 +1,6 @@
 import React from "react";
 import { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from ".";
 
-jest.mock("@reach/utils", () => ({
-  ...jest.requireActual("@reach/utils"),
-  checkStyles: jest.fn()
-}));
-
 let Tooltip;
 let render, fireEvent, act, cleanup;
 
