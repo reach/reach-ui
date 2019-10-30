@@ -1,17 +1,16 @@
-declare module "@reach/window-size" {
-  import * as React from "react";
+import * as React from "react";
 
-  export type WindowSize = {
-    width: number;
-    height: number;
-  };
+export type WindowSize = {
+  width: number;
+  height: number;
+};
 
-  export type WindowSizeProps = {
-    children: (size: WindowSize) => React.ReactElement<any>;
-  };
+export type WindowSizeProps = {
+  children: (size: WindowSize) => React.ReactElement<any>;
+};
 
-  export function useWindowSize(): WindowSize;
+export function useWindowSize(): WindowSize;
 
-  const WindowSize: React.FunctionComponent<WindowSizeProps>;
-  export default WindowSize;
-}
+declare const WindowSize: React.FunctionComponent<WindowSizeProps>;
+
+export default WindowSize;

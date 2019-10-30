@@ -1,19 +1,17 @@
-declare module "@reach/rect" {
-  import * as React from "react";
+import * as React from "react";
 
-  export type RectProps = {
-    observe?: boolean;
-    onChange?: (rect: DOMRect) => void;
-    children?(args: { rect: DOMRect; ref: React.Ref<any> }): React.ReactNode;
-  };
+export type RectProps<T = any> = {
+  observe?: boolean;
+  onChange?: (rect: DOMRect) => void;
+  children?(args: { rect: DOMRect; ref: React.Ref<T> }): React.ReactNode;
+};
 
-  const Rect: React.FunctionComponent<RectProps>;
+declare const Rect: React.FunctionComponent<RectProps>;
 
-  export function useRect(
-    ref: React.Ref<any>,
-    observe?: boolean,
-    onChange?: (rect: DOMRect) => void
-  ): DOMRect;
+export function useRect<T = any>(
+  ref: React.Ref<T>,
+  observe?: boolean,
+  onChange?: (rect: DOMRect) => void
+): DOMRect;
 
-  export default Rect;
-}
+export default Rect;
