@@ -16,6 +16,7 @@ import Helmet from "../components/DefaultHelmet";
 [Menu](#menu) -
 [MenuButton](#menubutton) -
 [MenuList](#menulist) -
+[MenuPopover](#menupopover) -
 [MenuItem](#menuitem) -
 [MenuLink](#menulink)
 
@@ -270,7 +271,8 @@ The stylesheet contains these rules to create the animation.
   }
 }
 
-.slide-down[data-reach-menu-list] {
+.slide-down[data-reach-menu-list],
+.slide-down[data-reach-menu-items] {
   border-radius: 5px;
   animation: slide-down 0.2s ease;
 }
@@ -287,6 +289,51 @@ Can contain only `MenuItem` or a `MenuLink`
   <MenuItem />
   <MenuLink />
 </MenuList>
+```
+
+# MenuPopover
+
+A `MenuPopover` is a low-level wrapper for menu items. You can compose it with `MenuItems` for direct access to each associated DOM element, or if you need to nest arbitrary components between the outer wrapper and your list.
+
+```jsx
+<Menu>
+  {/* ... */}
+  <MenuPopover>
+    <div className="arbitrary-element">
+      <MenuItems>
+        <MenuItem onSelect={() => {}}>Download</MenuItem>
+      </MenuItems>
+    </div>
+  </MenuPopover>
+</Menu>
+```
+
+## MenuPopover CSS Selectors
+
+```css
+[data-reach-menu-popover] {
+}
+```
+
+## MenuPopover Props
+
+| Prop                              | Type | Required |
+| --------------------------------- | ---- | -------- |
+| [children](#menupopover-children) | node | true     |
+
+### MenuPopover children props
+
+_Type_: `node`
+
+# MenuItems
+
+See [`MenuPopover`](#menupopover) for details. Accepts the same props as [`MenuList`](#menulist-props).
+
+## MenuItems CSS Selectors
+
+```css
+[data-reach-menu-items] {
+}
 ```
 
 # MenuItem
