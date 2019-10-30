@@ -1,6 +1,7 @@
 import React from "react";
 
 let style = {
+  display: "block",
   border: 0,
   clip: "rect(0 0 0 0)",
   height: "1px",
