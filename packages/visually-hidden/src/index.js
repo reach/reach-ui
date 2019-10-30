@@ -12,7 +12,7 @@ let style = {
 };
 
 function VisuallyHidden(props) {
-  return <div style={style} {...props} />;
+  return <span style={style} {...props} />;
 }
 
 export default VisuallyHidden;
