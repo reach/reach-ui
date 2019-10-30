@@ -13,7 +13,7 @@ import React, {
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, assignRef } from "@reach/utils";
+import { wrapEvent, useForkedRef } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -636,19 +636,4 @@ export function useDimensions(passedRef) {
     }
   }, [ref, width, height]);
   return { ref, width, height };
-}
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
 }

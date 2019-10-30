@@ -24,7 +24,7 @@ import React, {
   useState
 } from "react";
 import { func } from "prop-types";
-import { wrapEvent, assignRef } from "@reach/utils";
+import { wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -842,21 +842,6 @@ const makeHash = str => {
   }
   return hash;
 };
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Well alright, you made it all the way here to like 700 lines of code (geez,

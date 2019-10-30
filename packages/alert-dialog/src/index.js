@@ -1,6 +1,7 @@
 import React, { createContext } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
+import { makeId } from "@reach/utils";
 import invariant from "invariant";
 import { func, bool, node, object, oneOfType } from "prop-types";
 
@@ -110,9 +111,4 @@ if (__DEV__) {
     leastDestructiveRef: oneOfType([func, object]),
     children: node
   };
-}
-
-// TODO: Move to @reach/utils
-function makeId(id, index) {
-  return `${id}--${index}`;
 }
