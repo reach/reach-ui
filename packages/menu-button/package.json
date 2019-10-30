@@ -10,13 +10,16 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
+    "@reach/auto-id": "^0.4.0",
     "@reach/component-component": "^0.4.0",
     "@reach/portal": "^0.4.0",
     "@reach/rect": "^0.4.0",
     "@reach/utils": "^0.4.0",
     "@reach/window-size": "^0.4.0",
+    "@xstate/fsm": "^1.0.3",
     "prop-types": "^15.7.2",
-    "warning": "^4.0.3"
+    "warning": "^4.0.3",
+    "xstate": "^4.6.7"
   },
   "peerDependencies": {
     "react": "^16.8.0",

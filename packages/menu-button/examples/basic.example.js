@@ -1,21 +1,41 @@
 import "@reach/menu-button/styles.css";
-
 import React from "react";
-import { action } from "@storybook/addon-actions";
-import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import {
+  MenuProvider,
+  MenuButton,
+  MenuPopover,
+  Menu,
+  MenuItem
+} from "../src/index";
 
 export let name = "Basic";
 
 export let Example = () => (
-  <Menu>
-    <MenuButton id="example-button">
-      Actions <span aria-hidden="true">▾</span>
-    </MenuButton>
-    <MenuList>
-      <MenuItem onSelect={action("Download")}>Download</MenuItem>
-      <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
-      <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
-      <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
-    </MenuList>
-  </Menu>
+  <div>
+    <MenuProvider>
+      <MenuButton>
+        Actions <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuPopover>
+        <Menu>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <hr />
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <hr />
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+        </Menu>
+      </MenuPopover>
+    </MenuProvider>
+  </div>
 );
