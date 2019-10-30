@@ -10,16 +10,7 @@ import React, {
 import Portal from "@reach/portal";
 import Rect, { useRect } from "@reach/rect";
 import Component from "@reach/component-component";
-import {
-  node,
-  func,
-  object,
-  string,
-  number,
-  oneOfType,
-  any,
-  bool
-} from "prop-types";
+import { node, func, object, string, number, oneOfType, any } from "prop-types";
 import { wrapEvent, checkStyles, assignRef, useForkedRef } from "@reach/utils";
 
 const noop = () => {};
@@ -85,7 +76,6 @@ const selectItemAtIndex = index => _ => ({
   selectionIndex: index
 });
 
-////////////////////////////////////////////////////////////////////////////////
 const getMenuRefs = () => ({
   button: null,
   menu: null,
@@ -195,15 +185,14 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 export const MenuItem = forwardRef(function MenuItem(
   {
-    onSelect,
     onClick,
-    role = "menuitem",
     onKeyDown,
-    onMouseMove,
     onMouseLeave,
+    onMouseMove,
+    onSelect,
+    role = "menuitem",
     _index: index,
     _ref = null,
-    focusable,
     ...rest
   },
   forwardedRef
@@ -250,7 +239,6 @@ export const MenuItem = forwardRef(function MenuItem(
 
 if (__DEV__) {
   MenuItem.propTypes = {
-    focusable: bool,
     onSelect: func.isRequired,
     onClick: func,
     role: string,
@@ -267,14 +255,13 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 export const MenuLink = forwardRef(function MenuLink(
   {
-    onKeyDown,
-    onClick,
-    component: Comp,
     as: AsComp = "a",
-    style,
+    component: Comp,
+    onClick,
+    onKeyDown,
+    role,
     _index: index,
     _ref = null,
-    focusable,
     ...props
   },
   forwardedRef
@@ -306,7 +293,6 @@ export const MenuLink = forwardRef(function MenuLink(
           }
         })}
         ref={ref}
-        style={{ ...style }}
         {...props}
       />
     </MenuItem>
@@ -315,15 +301,11 @@ export const MenuLink = forwardRef(function MenuLink(
 
 if (__DEV__) {
   MenuLink.propTypes = {
-    onKeyDown: func,
-    onClick: func,
-    component: any,
-    focusable: bool,
     as: any,
-    style: object,
-    setState: func,
-    state: object,
-    index: number,
+    component: any,
+    onClick: func,
+    onKeyDown: func,
+    _index: number,
     _ref: func
   };
   MenuLink.displayName = "MenuLink";

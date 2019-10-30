@@ -62,13 +62,13 @@ import Alert from "@reach/alert";
 
 ## Alert Props
 
-| Prop                            | Type                         | Required |
-| ------------------------------- | ---------------------------- | -------- |
-| [element props](#element-props) | spread                       | n/a      |
-| [type](#type)                   | enum "assertive" or "polite" | false    |
-| [children](#children)           | node                         | false    |
+| Prop                                  | Type                         | Required |
+| ------------------------------------- | ---------------------------- | -------- |
+| [element props](#alert-element-props) | spread                       | n/a      |
+| [type](#alert-type)                   | enum "assertive" or "polite" | false    |
+| [children](#alert-children)           | node                         | false    |
 
-### element props
+### Alert element props
 
 _Type_: `spread`
 
@@ -89,7 +89,7 @@ function Example() {
 }
 ```
 
-### type
+### Alert type
 
 _Type_: `enum` `"assertive" | "polite"` default: `"polite"`
 
@@ -109,7 +109,7 @@ Controls whether the assistive technology should read immediately ("assertive") 
 
 You should probably stick with polite most of the time.
 
-### children
+### Alert children
 
 _Type_: `node`
 

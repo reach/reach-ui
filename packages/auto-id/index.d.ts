@@ -1,7 +1,10 @@
 /**
- * Generates a unique ID for handling DOM `id` attributes.
- * Note: The returned ID will initially be `null` and update after
- * a component mounts. Users may need to supply their own ID if
- * they need consistent values for SSR.
+ * Autogenerate IDs to facilitate WAI-ARIA and server rendering.
+ *
+ * Note: The returned ID will initially be `null` and will update after a
+ * component mounts. Users may need to supply their own ID if they need
+ * consistent values for SSR.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/auto-id
  */
 declare const useId: () => number;

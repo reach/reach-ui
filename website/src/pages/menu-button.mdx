@@ -296,7 +296,7 @@ Can contain only `MenuItem` or a `MenuLink`
 
 # MenuPopover
 
-A `MenuPopover` is a low-level wrapper for menu items. You can compose it with `MenuItems` for direct access to each associated DOM element, or if you need to nest arbitrary components between the outer wrapper and your list.
+A low-level wrapper for the popover that appears when a menu button is open. You can compose it with `MenuItems` for more control over the nested components and their rendered DOM nodes, or if you need to nest arbitrary components between the outer wrapper and your list.
 
 ```jsx
 <Menu>
@@ -330,7 +330,9 @@ _Type_: `node`
 
 # MenuItems
 
-See [`MenuPopover`](#menupopover) for details. Accepts the same props as [`MenuList`](#menulist-props).
+A low-level wrapper for menu items. Compose it with `MenuPopover` for more control over the nested components and their rendered DOM nodes, or if you need to nest arbitrary components between the outer wrapper and your list.
+
+See [`MenuPopover`](#menupopover) for details.
 
 ## MenuItems CSS Selectors
 
@@ -397,14 +399,11 @@ function Example() {
 
 ## MenuItem Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [element props](#menuitem-element-props) | spread               | n/a      |
-| [children](#menuitem-children)           | node                 | false    |
-| onClick                                  | preventableEventFunc | false    |
-| onKeyDown                                | preventableEventFunc | false    |
-| onMouseMove                              | preventableEventFunc | false    |
-| onSelect                                 | preventableEventFunc | true     |
+| Prop                                     | Type   | Required |
+| ---------------------------------------- | ------ | -------- |
+| [element props](#menuitem-element-props) | spread | n/a      |
+| [children](#menuitem-children)           | node   | false    |
+| [onSelect](#menuitem-onselect)           | func   | true     |
 
 ### MenuItem element props
 
@@ -468,6 +467,12 @@ function Example(props) {
 }
 ```
 
+### MenuItem onSelect
+
+_Type_: `func`
+
+Callback that fires when a `MenuItem` is selected.
+
 # MenuLink
 
 Handles linking to a different page in the menu. By default it renders `<a>`, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
@@ -507,14 +512,11 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 ## MenuLink Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [element props](#menulink-element-props) | spread               | n/a      |
-| [as](#menulink-as)                       | any                  | true     |
-| [component](#menulink-component)         | any                  | false    |
-| [children](#menulink-children)           | node                 | false    |
-| onClick                                  | preventableEventFunc | false    |
-| to                                       | string               | true     |
+| Prop                                     | Type   | Required |
+| ---------------------------------------- | ------ | -------- |
+| [element props](#menulink-element-props) | spread | n/a      |
+| [as](#menulink-as)                       | any    | true     |
+| [children](#menulink-children)           | node   | false    |
 
 ### MenuLink element props
 
@@ -531,10 +533,6 @@ All props are spread to the underlying element
 // the `href` prop is spread onto the underlying `a`
 <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
 ```
-
-### MenuLink component
-
-Deprecated, see `as` prop below.
 
 ### MenuLink as
 

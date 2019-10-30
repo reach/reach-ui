@@ -297,7 +297,7 @@ _Type_: `func`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss)
 
-### DialogContent initialFocus
+### DialogContent initialFocusRef
 
 _Type_: `ref`
 
@@ -494,7 +494,7 @@ function Example(props) {
       <p>This might take a while! Are you sure?</p>
       <button>Go Forward</button> <button>Go Back</button>
     </Dialog>
-  )
+  );
 }
 ```
 
@@ -502,14 +502,14 @@ function Example(props) {
 
 ```jsx
 function Example(props) {
-  const labelId = `label:${useId()}`
+  const labelId = `label:${useId()}`;
   return (
     <Dialog aria-labelledby={labelId} isOpen={true}>
       <h1 id={labelId}>Next Steps</h1>
       <p>Follow these steps carefully!</p>
       <button>Go Forward</button> <button>Go Back</button>
     </Dialog>
-  )
+  );
 }
 ```
 

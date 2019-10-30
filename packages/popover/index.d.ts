@@ -1,3 +1,7 @@
+/**
+ * Generic accessible popover component.
+ */
+
 import * as React from "react";
 
 export type Position = (
