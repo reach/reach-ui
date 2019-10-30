@@ -1,6 +1,6 @@
 import React from "react";
 import Portal from "@reach/portal";
-import { checkStyles, wrapEvent, assignRef } from "@reach/utils";
+import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import { string, func, bool } from "prop-types";
@@ -35,6 +35,7 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 const DialogInner = React.forwardRef(function DialogInner(
   {
+    allowPinchZoom,
     initialFocusRef,
     onClick,
     onDismiss = noop,
@@ -48,7 +49,7 @@ const DialogInner = React.forwardRef(function DialogInner(
   const overlayNode = React.useRef(null);
   const ref = useForkedRef(overlayNode, forwardedRef);
 
-  React.useEffect(() => createAriaHider(forwardedRef.current), [forwardedRef]);
+  React.useEffect(() => createAriaHider(overlayNode.current), []);
 
   return (
     <FocusLock
@@ -60,7 +61,7 @@ const DialogInner = React.forwardRef(function DialogInner(
         }
       }}
     >
-      <RemoveScroll>
+      <RemoveScroll allowPinchZoom={allowPinchZoom}>
         <div
           data-reach-dialog-overlay
           onClick={wrapEvent(onClick, event => {
@@ -185,21 +186,6 @@ function createAriaHider(dialogNode) {
       }
     });
   };
-}
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
 }
 
 function ariaLabelType(props, name, compName, ...rest) {

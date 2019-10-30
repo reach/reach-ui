@@ -22,6 +22,6 @@ declare module "@reach/popover" {
     position?: Position;
   } & React.HTMLProps<HTMLDivElement>;
 
-  declare const Popover: React.FunctionComponent<PopoverProps>;
+  const Popover: React.FunctionComponent<PopoverProps>;
   export default Popover;
 }

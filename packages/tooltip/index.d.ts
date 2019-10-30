@@ -38,7 +38,7 @@ declare module "@reach/tooltip" {
     children?: React.ReactNode;
   } & BaseTooltipProps;
 
-  declare const Tooltip: React.FunctionComponent<TooltipProps>;
+  const Tooltip: React.FunctionComponent<TooltipProps>;
   export const TooltipPopup: React.FunctionComponent<TooltipPopupProps>;
   export const TooltipContent: React.FunctionComponent<BaseTooltipProps>;
   export default Tooltip;

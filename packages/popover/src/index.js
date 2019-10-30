@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef, useEffect } from "react";
 import Portal from "@reach/portal";
 import { useRect } from "@reach/rect";
-import { assignRef } from "@reach/utils";
+import { useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
 export default forwardRef(function Popover(props, ref) {
@@ -235,19 +235,4 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
       element.tabIndex = tabIndex;
     });
   }
-}
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
 }

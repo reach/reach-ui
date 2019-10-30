@@ -7,9 +7,13 @@ declare module "@reach/rect" {
     children?(args: { rect: DOMRect; ref: React.Ref<any> }): React.ReactNode;
   };
 
-  declare const Rect: React.FunctionComponent<RectProps>;
+  const Rect: React.FunctionComponent<RectProps>;
 
-  export function useRect(ref: React.Ref<any>, isSelected?: boolean): DOMRect;
+  export function useRect(
+    ref: React.Ref<any>,
+    observe?: boolean,
+    onChange?: (rect: DOMRect) => void
+  ): DOMRect;
 
   export default Rect;
 }
