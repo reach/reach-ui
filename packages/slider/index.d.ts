@@ -11,8 +11,6 @@
 
 import * as React from "react";
 
-import { SLIDER_ORIENTATION_HORIZONTAL } from "@reach/slider";
-
 export enum SliderAlignment {
   center = "center",
   contain = "contain"
@@ -211,6 +209,15 @@ declare const SliderTrackHighlight: React.FunctionComponent<
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle
  */
 declare const SliderHandle: React.FunctionComponent<SliderHandleProps>;
+
+/**
+ * The parent component of the slider interface. This is a lower level component
+ * if you need more control over styles or rendering the slider's inner
+ * components.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput
+ */
+declare const SliderInput: React.FunctionComponent<SliderInputProps>;
 
 /**
  * A fixed value marker. These can be used to illustrate a range of steps or
