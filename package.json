@@ -10,7 +10,7 @@
     "build:changed": "lerna run build --parallel --since origin/master",
     "build": "lerna run build --parallel",
     "version": "lerna version --no-push",
-    "changes": "lerna-changelog",
+    "changes": "dotenv lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
     "lint": "eslint .",
     "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
@@ -30,6 +30,7 @@
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-dev-expression": "^0.2.2",
+    "dotenv-cli": "^3.0.0",
     "eslint": "6.x",
     "eslint-config-react-app": "^5.0.2",
     "eslint-plugin-flowtype": "3.x",
