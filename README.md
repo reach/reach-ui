@@ -127,7 +127,7 @@ $ yarn test
 $ yarn changes
 
 # Then create a new version and git tag locally. Don't push yet!
-$ lerna version [version] --no-push
+$ yarn ver [version]
 
 # Take a look around and make sure everything is as you'd expect.
 # You can inspect everything from the commit that lerna made with:
