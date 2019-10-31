@@ -137,13 +137,13 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const [hasFocus, setHasFocus] = useState(false);
   const [isPointerDown, setPointerDown] = useState(false);
-  const [value, setValue] = useState(defaultValue || min);
+  const [internalValue, setValue] = useState(defaultValue || min);
 
   const { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
-  const _value = isControlled ? controlledValue : value;
-  const actualValue = getAllowedValue(_value, min, max);
-  const trackPercent = valueToPercent(actualValue, min, max);
+  const _value = isControlled ? controlledValue : internalValue;
+  const value = getAllowedValue(_value, min, max);
+  const trackPercent = valueToPercent(value, min, max);
   const isVertical = orientation === SLIDER_ORIENTATION_VERTICAL;
   const step = stepProp || 1;
 
@@ -202,20 +202,20 @@ export const SliderInput = forwardRef(function SliderInput(
     switch (event.key) {
       case "ArrowLeft":
       case "ArrowDown":
-        newValue = actualValue - keyStep;
+        newValue = value - keyStep;
         flag = true;
         break;
       case "ArrowRight":
       case "ArrowUp":
-        newValue = actualValue + keyStep;
+        newValue = value + keyStep;
         flag = true;
         break;
       case "PageDown":
-        newValue = actualValue - tenSteps;
+        newValue = value - tenSteps;
         flag = true;
         break;
       case "PageUp":
-        newValue = actualValue + tenSteps;
+        newValue = value + tenSteps;
         flag = true;
         break;
       case "Home":
@@ -266,7 +266,7 @@ export const SliderInput = forwardRef(function SliderInput(
     setPointerDown(false);
   });
 
-  const valueText = getValueText ? getValueText(actualValue) : ariaValueText;
+  const valueText = getValueText ? getValueText(value) : ariaValueText;
 
   const sliderId = id || _id;
 
@@ -297,7 +297,7 @@ export const SliderInput = forwardRef(function SliderInput(
     sliderId,
     sliderMax: max,
     sliderMin: min,
-    sliderValue: actualValue,
+    value,
     valueText,
     disabled,
     isVertical,
@@ -365,7 +365,7 @@ export const SliderInput = forwardRef(function SliderInput(
           // (A `name` prop doesn't really make sense in any other context)
           <input
             type="hidden"
-            value={actualValue}
+            value={value}
             name={name}
             id={makeId("input", sliderId)}
           />
@@ -472,7 +472,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     setHasFocus,
     sliderMin,
     sliderMax,
-    sliderValue,
+    value,
     valueText
   } = useSliderContext();
 
@@ -493,7 +493,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
       aria-valuemin={sliderMin}
       aria-valuetext={valueText}
       aria-orientation={orientation}
-      aria-valuenow={sliderValue}
+      aria-valuenow={value}
       aria-valuemax={sliderMax}
       aria-labelledby={ariaLabelledBy}
       onBlur={wrapEvent(onBlur, () => {
@@ -522,7 +522,7 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderMarker = forwardRef(function SliderMarker(
-  { children, style = {}, value, ...props },
+  { children, style = {}, value: valueProp, ...props },
   forwardedRef
 ) {
   const {
@@ -531,12 +531,12 @@ export const SliderMarker = forwardRef(function SliderMarker(
     orientation,
     sliderMin,
     sliderMax,
-    sliderValue
+    value: sliderValue
   } = useSliderContext();
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualValue = valueToPercent(value, sliderMin, sliderMax);
+  const value = valueToPercent(valueProp, sliderMin, sliderMax);
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     orientation,
@@ -544,7 +544,7 @@ export const SliderMarker = forwardRef(function SliderMarker(
     highlight
   });
 
-  const absoluteStartPosition = `${actualValue}%`;
+  const absoluteStartPosition = `${value}%`;
 
   return value != null ? (
     <div
