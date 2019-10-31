@@ -1,6 +1,6 @@
 {
   "name": "@reach/slider",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Accessible React Slider Component",
   "main": "index.js",
   "module": "es/index.js",
