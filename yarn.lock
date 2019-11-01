@@ -2001,10 +2001,42 @@
   dependencies:
     "@types/node" "^12.11.1"
 
+"@reach/component-component@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.5.0.tgz#db2855a03795566ad301167a33822c7b886cd0fe"
+  integrity sha512-lP2pS7Bx0cVFNUQgC8TP1xRy9hs6Bfd2H4vD5l2SFnnYvOWr7cNWmu4rGQZ1y+fdznS7JgrTz0PrLNA2tDFsTQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@reach/observe-rect@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.3.tgz#2ea3dcc369ab22bd9f050a92ea319321356a61e8"
   integrity sha1-LqPcw2mrIr2fBQqS6jGTITVqYeg=
+
+"@reach/popover@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.5.0.tgz#deefde027366f8a2758be0e907da971bb84d97f1"
+  integrity sha512-VgOofkJKFNtT5X61lLvjhTqFSLVBuCj47ZDR0IXkVstkRiRSfwoQDiu3Oze499hAQ8We8IH7MRyIi28yeCLJgA==
+  dependencies:
+    "@reach/portal" "^0.5.0"
+    "@reach/rect" "^0.5.0"
+    "@reach/utils" "^0.5.0"
+    tabbable "^4.0.0"
+
+"@reach/portal@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.5.0.tgz#4ea4d345887f5b05861fec6762e33717775cb5e5"
+  integrity sha512-3WB6KLAVegGgWSvCVpXAUuo3tKOQi90l+V2ktzfUOCG5jxFTeEjDAA8MHZ7Zve5h1ZhBscGJKoO9UWxl1UNRhQ==
+  dependencies:
+    "@reach/component-component" "^0.5.0"
+
+"@reach/rect@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.5.0.tgz#943d1c97c2e662b194867badaebf263077df2069"
+  integrity sha512-5GGRDZ3ilO4WQMDtAwkA+mHwWw4Yio9pXx8y5q+Ecswu89Yd2kRs66YjTZR7seEysfwwmlb/EPCI+7QWq22R5Q==
+  dependencies:
+    "@reach/observe-rect" "^1.0.3"
+    prop-types "^15.7.2"
 
 "@reach/router@^1.2.1":
   version "1.2.1"
@@ -2016,6 +2048,11 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
+
+"@reach/utils@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.5.0.tgz#2a64238a5a3ee57ee9742cf2579cacf41ae3a036"
+  integrity sha512-MXYKmCz7BGiCLuZnPI1sBlxQFdpdv3O1Oc13k6oumJGd0eMN3+utGSs20gBH17Ml3IKVqY+9UOLEuqGfyWytHQ==
 
 "@storybook/addon-actions@^5.2.5":
   version "5.2.5"

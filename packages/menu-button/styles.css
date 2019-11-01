@@ -3,21 +3,29 @@
   --reach-menu-button: 1;
 }
 
-[data-reach-menu] {
+[data-reach-menu-popover] {
   font-family: sans-serif;
   display: block;
   position: absolute;
 }
 
 [data-reach-menu-list],
-[data-reach-menu-items] {
-  display: block;
+[data-reach-menu] {
   white-space: nowrap;
   border: solid 1px hsla(0, 0%, 0%, 0.25);
   background: hsla(0, 100%, 100%, 0.99);
   outline: none;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   font-size: 85%;
+  user-select: none;
+  visibility: visible;
+  opacity: 1;
+}
+
+[data-reach-menu][data-closed] {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 300ms, opacity 75ms;
 }
 
 [data-reach-menu-item] {
@@ -55,4 +63,8 @@
   background: hsl(211, 81%, 36%);
   color: white;
   outline: none;
+}
+
+[data-reach-menu-item][data-confirming] {
+  transition: background 25ms ease;
 }

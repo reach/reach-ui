@@ -16,24 +16,17 @@ export let Example = () => (
       <MenuButton>
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
-      <MenuPopover>
+      <MenuPopover portal={false}>
         <Menu>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
+          <MenuItem onSelect={() => console.log("download")}>Download</MenuItem>
+          <MenuItem onSelect={() => console.log("delete")}>Delete</MenuItem>
           <hr />
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <hr />
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
-          <MenuItem onSelect={() => console.log("beef")}>Beef</MenuItem>
-          <MenuItem onSelect={() => console.log("cheese")}>Cheese</MenuItem>
+          <MenuItem onSelect={() => console.log("view settings")}>
+            View Account Settings
+          </MenuItem>
+          <MenuItem onSelect={() => console.log("profile")}>
+            Update Profile
+          </MenuItem>
         </Menu>
       </MenuPopover>
     </MenuProvider>

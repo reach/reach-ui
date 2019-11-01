@@ -26,10 +26,13 @@ export function Example() {
   return (
     <div>
       <h2>No Portal</h2>
-      <Combobox style={{ width: "400px" }}>
+      <Combobox style={{ width: "400px", position: "relative" }}>
         <ComboboxInput onChange={handleChange} />
         {results && (
-          <ComboboxPopover portal={false}>
+          <ComboboxPopover
+            style={{ position: "absolute", top: "1.5rem" }}
+            portal={false}
+          >
             <hr />
             {results.length > 0 ? (
               <ComboboxList>
@@ -55,6 +58,7 @@ export function Example() {
           </ComboboxPopover>
         )}
       </Combobox>
+      <p>What happens?</p>
     </div>
   );
 }
