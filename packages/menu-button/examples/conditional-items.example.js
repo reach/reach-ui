@@ -22,14 +22,10 @@ export let Example = () => {
         </MenuButton>
         <MenuPopover>
           <Menu>
-            <MenuItem onSelect={action("Download")}>Download</MenuItem>
+            <MenuItem onSelect={action("Beef")}>Beef</MenuItem>
             {activeItem && (
               <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
             )}
-            <MenuItem onSelect={action("Mark as Draft")}>
-              Mark as Draft
-            </MenuItem>
-            <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
           </Menu>
         </MenuPopover>
       </MenuProvider>

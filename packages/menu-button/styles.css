@@ -25,7 +25,7 @@
 [data-reach-menu][data-closed] {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s linear 300ms, opacity 75ms;
+  transition: visibility 0s linear 75ms, opacity 75ms;
 }
 
 [data-reach-menu-item] {
@@ -58,13 +58,23 @@
   padding: 5px 20px;
 }
 
-/* pseudo pseudo selector */
-[data-reach-menu-item][data-selected] {
-  background: hsl(211, 81%, 36%);
-  color: white;
-  outline: none;
+@keyframes flash {
+  from {
+    background: inherit;
+    color: inherit;
+  }
+  to {
+    background: rgb(83, 147, 248);
+    color: white;
+  }
 }
 
-[data-reach-menu-item][data-confirming] {
-  transition: background 25ms ease;
+[data-reach-menu-item][data-selected] {
+  background: rgb(79, 144, 248);
+  color: white;
+}
+
+[data-reach-menu-item][data-selected][data-confirming] {
+  animation: flash 150ms;
+  animation-iteration-count: 1;
 }

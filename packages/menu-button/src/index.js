@@ -1,4 +1,4 @@
-import React, { Fragment, forwardRef, useRef, useEffect } from "react";
+import React, { forwardRef, useRef, useEffect } from "react";
 import { wrapEvent } from "@reach/utils";
 import {
   useDescendants,
@@ -6,25 +6,27 @@ import {
   useDescendant
 } from "./descendants.js";
 
-import menuButtonMachine from "./machine";
+import menuButtonChart from "./chart";
 import {
   MachineProvider,
   useMachineSend,
   useMachineState,
   useMachineContext,
-  useMachineBridge,
   useMachineRefs
 } from "./use-machine";
 import Popover from "@reach/popover";
 
 ////////////////////////////////////////////////////////////////////////////////
-export const MenuProvider = props => {
-  const buttonRef = useRef(null);
+export const MenuProvider = ({ children }) => {
   return (
     <MachineProvider
-      {...props}
-      machine={menuButtonMachine}
-      refs={{ buttonRef }}
+      children={children}
+      chart={menuButtonChart}
+      refs={{
+        button: useRef(null),
+        menu: useRef(null),
+        items: useDescendants()
+      }}
     />
   );
 };
@@ -43,12 +45,13 @@ export const MenuButton = forwardRef((
   forwardRef // eslint-disable-line
   // need to useForkedRef
 ) => {
-  const { buttonRef } = useMachineRefs();
+  const { button } = useMachineRefs();
   const send = useMachineSend();
 
-  useMachineBridge("button", buttonRef);
-
   // Can we do this in the state machine instead with enter/leave?
+  // Maybe a provider "setup" function?
+  // Maybe 1st class "doc" events if we need them?
+  // The button is a weird place though...
   useEffect(() => {
     const up = () => send("DOC_POINTER_UP");
     document.addEventListener("pointerup", up);
@@ -60,15 +63,15 @@ export const MenuButton = forwardRef((
   });
 
   const handlePointerMove = wrapEvent(onPointerMove, () => {
-    send({ type: "BUTTON_POINTER_MOVE" });
+    send("BUTTON_POINTER_MOVE");
   });
 
   const handlePointerUp = wrapEvent(onPointerDown, () => {
-    send({ type: "BUTTON_POINTER_UP" });
+    send("BUTTON_POINTER_UP");
   });
 
   const handlePointerLeave = wrapEvent(onPointerLeave, () => {
-    send({ type: "BUTTON_POINTER_LEAVE" });
+    send("BUTTON_POINTER_LEAVE");
   });
 
   const handleKeyDown = wrapEvent(onKeyDown, event => {
@@ -77,7 +80,6 @@ export const MenuButton = forwardRef((
         send("KEYDOWN_SPACE");
         break;
       case "Enter":
-        document.activeElement.blur();
         send("KEYDOWN_ENTER");
         break;
       case "ArrowDown":
@@ -93,7 +95,7 @@ export const MenuButton = forwardRef((
 
   return (
     <Comp
-      ref={buttonRef}
+      ref={button}
       data-reach-menu-button=""
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -110,8 +112,8 @@ MenuButton.displayName = "MenuButton";
 export const MenuPopover = forwardRef(
   ({ as = "div", portal = true, ...props }, forwardedRef) => {
     const Comp = portal ? Popover : as;
-    const { buttonRef } = useMachineRefs();
-    const popupProps = portal ? { targetRef: buttonRef } : {};
+    const { button } = useMachineRefs();
+    const popupProps = portal ? { targetRef: button } : {};
     return (
       <Comp
         ref={forwardedRef}
@@ -125,98 +127,88 @@ export const MenuPopover = forwardRef(
 MenuPopover.displayName = "MenuPopover";
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Menu = forwardRef(
-  (
-    {
-      as: Comp = "div",
-      onKeyDown,
-      onKeyPress,
-      onBlur,
-      onPointerUp,
-      onPointerLeave,
-      ...props
-    },
-    forwardedRef
-  ) => {
-    const ref = forwardedRef || useRef(null);
-    const send = useMachineSend();
+export const Menu = forwardRef((
+  {
+    as: Comp = "div",
+    onKeyDown,
+    onKeyPress,
+    onBlur,
+    onPointerUp,
+    onPointerLeave,
+    ...props
+  },
+  // TODO: useForkedRef
+  forwardedRef // eslint-disable-line
+) => {
+  const { menu, items } = useMachineRefs();
+  const send = useMachineSend();
 
-    const itemsRef = useDescendants();
-    useMachineBridge("menu", ref);
-    useMachineBridge("items", () =>
-      itemsRef.current.map(({ ref, onSelect }) => ({
-        innerText: ref.current.innerText,
-        onSelect
-      }))
-    );
-
-    const handleKeyDown = wrapEvent(onKeyDown, event => {
-      switch (event.key) {
-        case "Tab":
-          event.preventDefault();
-          break;
-        case "Escape":
-          send("KEY_ESCAPE");
-          break;
-        case "ArrowDown":
-          send("KEY_ARROW_DOWN");
-          break;
-        case "ArrowUp":
-          send("KEY_ARROW_UP");
-          break;
-        case "Enter": {
-          send("KEY_ENTER");
-          break;
-        }
-        case " ": {
-          send("KEY_SPACE");
-          break;
-        }
-        case "Home": {
-          send("HOME");
-          break;
-        }
-        case "End": {
-          send("END");
-          break;
-        }
-        default: {
-        }
+  const handleKeyDown = wrapEvent(onKeyDown, event => {
+    switch (event.key) {
+      case "Tab":
+        event.preventDefault();
+        break;
+      case "Escape":
+        send("KEY_ESCAPE");
+        break;
+      case "ArrowDown":
+        send("KEY_ARROW_DOWN");
+        break;
+      case "ArrowUp":
+        send("KEY_ARROW_UP");
+        break;
+      case "Enter": {
+        send("KEY_ENTER");
+        break;
       }
-    });
+      case " ": {
+        send("KEY_SPACE");
+        break;
+      }
+      case "Home": {
+        send("HOME");
+        break;
+      }
+      case "End": {
+        send("END");
+        break;
+      }
+      default: {
+      }
+    }
+  });
 
-    const handleBlur = wrapEvent(onBlur, event => {
-      send("BLUR");
-    });
+  const handleBlur = wrapEvent(onBlur, event => {
+    send("BLUR");
+  });
 
-    const handlePointerLeave = wrapEvent(onPointerLeave, event => {
-      send("POINTER_LEAVE_MENU");
-    });
+  const handlePointerLeave = wrapEvent(onPointerLeave, event => {
+    send("POINTER_LEAVE_MENU");
+  });
 
-    const handleKeyPress = wrapEvent(onKeyPress, event => {
-      send({ type: "KEY_PRESS", key: event.key });
-    });
+  const handleKeyPress = wrapEvent(onKeyPress, event => {
+    send({ type: "KEY_PRESS", key: event.key });
+  });
 
-    const state = useMachineState();
-    const isVisible = state.startsWith("open");
+  const state = useMachineState();
+  const isVisible = state.startsWith("open");
 
-    return (
-      <DescendantProvider items={itemsRef}>
-        <Comp
-          ref={ref}
-          data-reach-menu=""
-          data-closed={!isVisible ? "" : undefined}
-          tabIndex="-1"
-          onKeyDown={handleKeyDown}
-          onKeyPress={handleKeyPress}
-          onBlur={handleBlur}
-          onPointerLeave={handlePointerLeave}
-          {...props}
-        />
-      </DescendantProvider>
-    );
-  }
-);
+  return (
+    <DescendantProvider items={items}>
+      <Comp
+        ref={menu}
+        data-reach-menu=""
+        data-closed={!isVisible ? "" : undefined}
+        tabIndex="-1"
+        onKeyDown={handleKeyDown}
+        onKeyPress={handleKeyPress}
+        onBlur={handleBlur}
+        onPointerLeave={handlePointerLeave}
+        {...props}
+      />
+    </DescendantProvider>
+  );
+});
 Menu.displayName = "Menu";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -233,14 +225,10 @@ export const MenuItem = forwardRef(
     },
     forwardedRef
   ) => {
-    const ref = forwardedRef || useRef(null);
-    const index = useDescendant({ name: props.children, ref, onSelect });
+    // TODO: useForkedRef
+    const ref = useRef(null);
 
-    const mContext = useMachineContext();
     const send = useMachineSend();
-    const state = useMachineState();
-
-    const isActiveDescendant = mContext.activeIndex === index;
 
     const handlePointerDown = wrapEvent(onPointerDown, () => {
       send({ type: "ITEM_POINTER_DOWN" });
@@ -258,24 +246,18 @@ export const MenuItem = forwardRef(
       send({ type: "ITEM_POINTER_LEAVE" });
     });
 
-    const confirming = state.startsWith("open:confirming");
-    let selected = undefined;
-    if (isActiveDescendant && confirming) {
-      if (
-        state === "open:confirming:highlighted" ||
-        state === "open:confirming:final"
-      ) {
-        selected = "";
-      }
-    } else if (isActiveDescendant) {
-      selected = "";
-    }
+    const index = useDescendant({ name: props.children, ref, onSelect });
+    const { activeIndex } = useMachineContext();
+    const state = useMachineState();
+
+    const isSelected = activeIndex === index;
+    const confirming = isSelected && state === "open:confirming";
 
     return (
       <Comp
         ref={ref}
         data-reach-menu-item=""
-        data-selected={selected}
+        data-selected={isSelected ? "" : undefined}
         data-confirming={confirming ? "" : undefined}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}

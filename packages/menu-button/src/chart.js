@@ -28,11 +28,11 @@ const openEvents = {
   },
   ITEM_POINTER_DOWN: "open:clickingItem",
   KEY_ENTER: {
-    target: "open:confirming:highlighted",
+    target: "open:confirming",
     cond: "hasHighlight"
   },
   KEY_SPACE: {
-    target: "open:confirming:highlighted",
+    target: "open:confirming",
     cond: "hasHighlight"
   },
   HOME: {
@@ -51,37 +51,21 @@ const chart = {
   context: {
     searchStartIndex: -1,
     index: 0,
-    button: null,
-    menu: null,
-    items: [],
     search: "",
-    activeIndex: -1
+    activeIndex: -1,
+
+    // barf
+    button: null,
+    items: null
   },
 
-  initial: "unmounted",
+  initial: "idle",
 
   states: {
-    unmounted: {
-      on: {
-        UPDATE: {
-          target: "idle",
-          actions: ["bridgeView"]
-        }
-      }
-    },
-    "open:confirming:highlighted": {
+    "open:confirming": {
+      entry: ["assignRefsForClose"],
       after: {
-        50: "open:confirming:unhighlighted"
-      }
-    },
-    "open:confirming:unhighlighted": {
-      after: {
-        50: "open:confirming:final"
-      }
-    },
-    "open:confirming:final": {
-      after: {
-        100: {
+        200: {
           target: "idle",
           actions: ["focusButton", "selectItem"]
         }
@@ -108,10 +92,6 @@ const chart = {
         ARROW_UP: {
           target: "open:selecting",
           actions: ["highlightLast"]
-        },
-        UPDATE: {
-          target: "idle",
-          actions: ["bridgeView"]
         }
       }
     },
@@ -127,10 +107,6 @@ const chart = {
             "concatSearch",
             "setSearchStartIndex"
           ]
-        },
-        UPDATE: {
-          target: "open:selecting",
-          actions: ["bridgeView"]
         }
       }
     },
@@ -139,11 +115,10 @@ const chart = {
       exit: ["enableTooltips"],
       on: {
         ...openEvents,
+        ITEM_POINTER_UP: {
+          target: "open:confirming"
+        },
         DOC_POINTER_UP: [
-          {
-            target: "open:confirming:highlighted",
-            cond: "hasHighlight"
-          },
           {
             target: "idle",
             actions: ["focusButton"]
@@ -156,10 +131,6 @@ const chart = {
         ITEM_POINTER_LEAVE: {
           target: "open:selectingWithDrag",
           actions: ["resetIndex"]
-        },
-        UPDATE: {
-          target: "open:selectingWithDrag",
-          actions: ["bridgeView"]
         }
       }
     },
@@ -197,7 +168,7 @@ const chart = {
       on: {
         ITEM_POINTER_LEAVE: "open:selectingWithDrag",
         ITEM_POINTER_UP: {
-          target: "open:confirming:highlighted"
+          target: "open:confirming"
         }
       }
     }
@@ -205,43 +176,37 @@ const chart = {
 };
 
 const actions = {
-  bridgeView: assign({
-    button: (c, event) => event.button,
-    menu: (c, event) => event.menu,
-    items: (c, event) => event.items,
-    onSelectHandlers: (c, event) => event.onSelectHandlers
-  }),
-
-  highlightFirst: assign({
-    activeIndex: 0
-  }),
-
-  highlightLast: assign({
-    activeIndex: ctx => ctx.items.length - 1
-  }),
-
-  selectItem: (ctx, event) => {
-    const item = ctx.items[ctx.activeIndex];
-    item.onSelect();
+  focusButton: (ctx, event) => {
+    ctx.button.focus();
+  },
+  focusMenu: (ctx, event) => {
+    // need to let the keydown event finish before moving focus
+    requestAnimationFrame(() => {
+      event.refs.menu.focus();
+    });
   },
 
-  highlightItem: assign({
-    activeIndex: (ctx, event) => event.index
-  }),
-
+  // index stuff
+  highlightFirst: assign({ activeIndex: 0 }),
+  highlightLast: assign({ activeIndex: ctx => ctx.items().length - 1 }),
+  highlightItem: assign({ activeIndex: (ctx, event) => event.index }),
   navigateNext: assign({
-    activeIndex: ctx => (ctx.activeIndex + 1) % ctx.items.length
+    activeIndex: (ctx, event) => {
+      const { items } = event.refs;
+      console.log(items);
+      return (ctx.activeIndex + 1) % items.length;
+    }
   }),
-
   navigatePrev: assign({
-    activeIndex: ctx =>
-      (ctx.activeIndex + ctx.items.length - 1) % ctx.items.length
+    activeIndex: (ctx, event) => {
+      const { items } = event.refs;
+      return (ctx.activeIndex + items.length - 1) % items.length;
+    }
   }),
 
-  resetIndex: assign({
-    activeIndex: -1
-  }),
+  resetIndex: assign({ activeIndex: -1 }),
 
+  // tooltips
   disableTooltips: () => {
     window.__REACH_DISABLE_TOOLTIPS = false;
   },
@@ -250,60 +215,53 @@ const actions = {
     window.__REACH_DISABLE_TOOLTIPS = true;
   },
 
-  resetSearch: assign({
-    search: ""
-  }),
+  // Search
+  resetSearch: assign({ search: "" }),
 
-  concatSearch: assign({
-    search: (ctx, event) => {
-      return ctx.search + event.key;
-    }
-  }),
+  concatSearch: assign({ search: (ctx, event) => ctx.search + event.key }),
 
-  focusButton: ctx => {
-    ctx.button.focus();
-  },
+  setSearchStartIndex: assign({ searchStartIndex: ctx => ctx.activeIndex }),
 
-  focusMenu: ctx => {
-    // need to let the keydown event finish? But why?
-    setTimeout(() => {
-      ctx.menu.focus();
-    }, 200);
-  },
-
-  setSearchStartIndex: assign({
-    searchStartIndex: ctx => ctx.activeIndex
-  }),
-
-  resetSearchStartIndex: assign({
-    searchStartIndex: -1
-  }),
+  resetSearchStartIndex: assign({ searchStartIndex: -1 }),
 
   highlightSearchMatch: assign({
-    activeIndex: ({ items, searchStartIndex, search }, event) => {
-      // start from the current index, so we rearrange the array first
+    activeIndex: (ctx, event) => {
+      const { searchStartIndex, search } = ctx;
+      const searchString = search.toLowerCase();
+      const { items } = event.refs;
       const reordered = items
         .slice(searchStartIndex + 1)
         .concat(items.slice(0, searchStartIndex));
-      const searchString = search.toLowerCase();
 
       for (let i = 0, l = reordered.length; i < l; i++) {
-        const itemText = reordered[i].innerText.toLowerCase();
+        const itemText = reordered[i].searchText.toLowerCase();
         if (itemText.startsWith(searchString)) {
           // adjust the index back since we rearranged them
-          // there is a math way to do this but it's too late right now
-          // return searchStartIndex + 1 + i;
+          // there is a math way to do this like:
+          // return searchStartIndex + 1 + i % items.length;
+          // but it's too late right now
           return items.findIndex(item => item === reordered[i]);
         }
       }
       return -1;
     }
+  }),
+
+  selectItem: (ctx, event) => {
+    const { items } = ctx;
+    items[ctx.activeIndex].onSelect();
+  },
+
+  assignRefsForClose: assign({
+    button: (ctx, event) => event.refs.button,
+    items: (ctx, event) => event.refs.items
   })
 };
 
 const guards = {
   hasHighlight: ctx => ctx.activeIndex > -1,
-  clickedNonMenuItem: (ctx, event) => !ctx.menu.contains(event.relatedTarget)
+  clickedNonMenuItem: (ctx, event) =>
+    !event.refs.menu.contains(event.relatedTarget)
 };
 
 if (__DEV__) {
