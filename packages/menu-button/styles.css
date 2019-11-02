@@ -25,7 +25,7 @@
 [data-reach-menu][data-closed] {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s linear 75ms, opacity 75ms;
+  transition: visibility 0s linear 150ms, opacity 150ms ease;
 }
 
 [data-reach-menu-item] {
@@ -59,13 +59,20 @@
 }
 
 @keyframes flash {
-  from {
+  0% {
+    background: rgb(83, 147, 248);
+    color: white;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
     background: inherit;
     color: inherit;
   }
-  to {
+  100% {
     background: rgb(83, 147, 248);
     color: white;
+    opacity: 1;
   }
 }
 
@@ -75,6 +82,6 @@
 }
 
 [data-reach-menu-item][data-selected][data-confirming] {
-  animation: flash 150ms;
+  animation: flash 100ms;
   animation-iteration-count: 1;
 }
