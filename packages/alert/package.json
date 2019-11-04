@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@reach/visually-hidden": "^0.5.0",
+    "@reach/utils": "^0.5.0",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {

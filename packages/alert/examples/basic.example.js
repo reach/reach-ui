@@ -1,5 +1,6 @@
 import React from "react";
 import Alert from "@reach/alert";
+import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
 
 import LoremIpsum from "./LoremIpsum.js";
@@ -111,15 +112,6 @@ function useMessageTimeout(messages, callback, time = 5000) {
       allTimeouts.forEach(clearTimeout);
     };
   }, []);
-}
-
-// TODO: Move to @reach/utils
-function usePrevious(value) {
-  const ref = React.useRef();
-  React.useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
 }
 
 function getRandomInt(min = 1, max = 100) {
