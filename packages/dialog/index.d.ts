@@ -45,6 +45,12 @@ export type DialogProps = {
  */
 export type DialogOverlayProps = {
   /**
+   * Allow two-finger zoom gestures on iOS devices
+   *
+   * @see Docs https://github.com/reach/reach-ui/issues/325
+   */
+  allowPinchZoom?: boolean;
+  /**
    * By default the first focusable element will receive focus when the dialog
    * opens but you can provide a ref to focus instead.
    *
