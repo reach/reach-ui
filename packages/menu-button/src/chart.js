@@ -73,6 +73,10 @@ const chart = {
     },
     idle: {
       on: {
+        BUTTON_CLICK: {
+          target: "open:selecting",
+          actions: ["resetIndex"]
+        },
         BUTTON_POINTER_DOWN: {
           target: "open:clickingButton",
           actions: ["resetIndex"]
@@ -118,12 +122,15 @@ const chart = {
         ITEM_POINTER_UP: {
           target: "open:confirming"
         },
-        DOC_POINTER_UP: [
-          {
-            target: "idle",
-            actions: ["focusButton"]
-          }
-        ],
+        DOC_POINTER_UP: {
+          target: "idle",
+          actions: ["focusButton"]
+        },
+        BUTTON_POINTER_UP: {
+          // blocks DOC_POINTER_UP
+          target: "idle",
+          actions: ["focusButton"]
+        },
         ITEM_POINTER_ENTER: {
           target: "open:selectingWithDrag",
           actions: ["highlightItem"]
@@ -177,7 +184,7 @@ const chart = {
 
 const actions = {
   focusButton: (ctx, event) => {
-    ctx.button.focus();
+    ((event.refs && event.refs.button) || ctx.button).focus();
   },
   focusMenu: (ctx, event) => {
     // need to let the keydown event finish before moving focus

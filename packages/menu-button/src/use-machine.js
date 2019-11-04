@@ -6,35 +6,53 @@ import React, {
   createContext
 } from "react";
 import { interpret } from "xstate";
+import { useId } from "@reach/auto-id";
 
-const Context = createContext();
+const MachineContext = createContext();
 
-// send refs on every event
-// then every action can focus whatever it needs to!
+// 99% of the time people don't care to add IDs to their elements (because we
+// can auto generate them for ARIA). But if they do want to add an ID, it gets
+// incredibly cumbersome and error-prone for us ( lots of context trickery and
+// refs, and the IDs could potentially change and then it's a
+// synchronization-through-context mess). So instead, folks can add an "id" to
+// the very top component of any Reach package, and then we'll use that (or
+// generate our own if empty). So they can still get a custom ID to any
+// component in the tree, but this way we don't risk screwing it up and don't
+// have to add a bunch of extra code.
+const RootIdContext = createContext();
 
 export function MachineProvider({ chart, refs, children }) {
-  const context = useMachine(chart, refs);
-  return <Context.Provider children={children} value={context} />;
+  const rootId = useId();
+  const service = useMachine(chart, refs);
+  return (
+    <RootIdContext.Provider value={rootId}>
+      <MachineContext.Provider children={children} value={service} />
+    </RootIdContext.Provider>
+  );
+}
+
+export function useRootId() {
+  return useContext(RootIdContext);
 }
 
 export function useMachineState() {
-  return useContext(Context).state.value;
+  return useContext(MachineContext).state.value;
 }
 
 export function useMachineContext() {
-  return useContext(Context).state.context;
+  return useContext(MachineContext).state.context;
 }
 
 export function useMachineSend() {
-  return useContext(Context).send;
+  return useContext(MachineContext).send;
 }
 
 export function useMachineRefs() {
-  return useContext(Context).refs;
+  return useContext(MachineContext).refs;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function useMachine(chart, refs, debug = false) {
+function useMachine(chart, refs, debug = true) {
   const [state, setState] = useState(chart.initialState);
 
   const serviceRef = useRef(null);

@@ -12,7 +12,8 @@ import {
   useMachineSend,
   useMachineState,
   useMachineContext,
-  useMachineRefs
+  useMachineRefs,
+  useRootId
 } from "./use-machine";
 import Popover from "@reach/popover";
 
@@ -40,6 +41,7 @@ export const MenuButton = forwardRef((
     onPointerMove,
     onPointerLeave,
     onKeyDown,
+    onClick,
     ...props
   },
   forwardRef // eslint-disable-line
@@ -93,15 +95,31 @@ export const MenuButton = forwardRef((
     }
   });
 
+  // Need this one for Screen Readers
+  const handleClick = wrapEvent(onClick, event => {
+    send("BUTTON_CLICK");
+  });
+
+  const rootId = useRootId();
+  const id = `${rootId}--button`;
+  const controls = `${rootId}--menu`;
+  const expanded = useIsVisible();
+
   return (
     <Comp
       ref={button}
-      data-reach-menu-button=""
+      onClick={handleClick}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
       onKeyDown={handleKeyDown}
+      data-reach-menu-button=""
+      aria-haspopup="menu"
+      aria-expanded={expanded}
+      aria-controls={controls}
+      id={id}
+      type="button"
       {...props}
     />
   );
@@ -190,20 +208,28 @@ export const Menu = forwardRef((
     send({ type: "KEY_PRESS", key: event.key });
   });
 
-  const state = useMachineState();
-  const isVisible = state.startsWith("open");
+  const isVisible = useIsVisible();
+  const { activeIndex } = useMachineContext();
+  const rootId = useRootId();
+  const buttonId = `${rootId}--button`;
+  const activeDescendant = `${rootId}--menu-item-${activeIndex}`;
+  const id = `${rootId}--menu`;
 
   return (
     <DescendantProvider items={items}>
       <Comp
         ref={menu}
-        data-reach-menu=""
-        data-closed={!isVisible ? "" : undefined}
-        tabIndex="-1"
         onKeyDown={handleKeyDown}
         onKeyPress={handleKeyPress}
         onBlur={handleBlur}
         onPointerLeave={handlePointerLeave}
+        data-reach-menu=""
+        data-closed={!isVisible ? "" : undefined}
+        role="menu"
+        id={id}
+        tabIndex="-1"
+        aria-labelledby={buttonId}
+        aria-activedescendant={activeDescendant}
         {...props}
       />
     </DescendantProvider>
@@ -225,11 +251,11 @@ export const MenuItem = forwardRef(
     },
     forwardedRef
   ) => {
-    // TODO: useForkedRef
-    const ref = useRef(null);
-
     const send = useMachineSend();
 
+    // const events = wrapEvents(props, {
+    //   onPointerDown:
+    // })
     const handlePointerDown = wrapEvent(onPointerDown, () => {
       send({ type: "ITEM_POINTER_DOWN" });
     });
@@ -246,23 +272,28 @@ export const MenuItem = forwardRef(
       send({ type: "ITEM_POINTER_LEAVE" });
     });
 
+    // TODO: useForkedRef
+    const ref = forwardedRef || useRef(null);
     const index = useDescendant({ name: props.children, ref, onSelect });
     const { activeIndex } = useMachineContext();
     const state = useMachineState();
 
+    const id = `${useRootId()}--menu-item-${index}`;
     const isSelected = activeIndex === index;
     const confirming = isSelected && state === "open:confirming";
 
     return (
       <Comp
         ref={ref}
-        data-reach-menu-item=""
-        data-selected={isSelected ? "" : undefined}
-        data-confirming={confirming ? "" : undefined}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}
         onPointerEnter={handlePointerEnter}
+        data-reach-menu-item=""
+        data-selected={isSelected ? "" : undefined}
+        data-confirming={confirming ? "" : undefined}
+        role="menuitem"
+        id={id}
         {...props}
       />
     );
@@ -270,3 +301,9 @@ export const MenuItem = forwardRef(
 );
 
 MenuItem.displayName = "MenuItem";
+
+////////////////////////////////////////////////////////////////////////////////
+function useIsVisible() {
+  const state = useMachineState();
+  return state.startsWith("open");
+}
