@@ -54,7 +54,7 @@ declare const Tooltip: React.FunctionComponent<TooltipProps>;
 /**
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltippopup
  */
-declare const TooltipPopup: React.FunctionComponent<TooltipPopupProps>;
+export const TooltipPopup: React.FunctionComponent<TooltipPopupProps>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltipcontent
