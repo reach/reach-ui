@@ -21,6 +21,14 @@ export enum SliderOrientation {
   vertical = "vertical"
 }
 
+export const SLIDER_ORIENTATION_HORIZONTAL: SliderOrientation.horizontal;
+
+export const SLIDER_ORIENTATION_VERTICAL: SliderOrientation.vertical;
+
+export const SLIDER_HANDLE_ALIGN_CENTER: SliderAlignment.center;
+
+export const SLIDER_HANDLE_ALIGN_CONTAIN: SliderAlignment.contain;
+
 type SliderChildrenRender = (props: {
   hasFocus?: boolean;
   id?: string;
@@ -76,7 +84,7 @@ export type SliderProps = React.HTMLProps<HTMLDivElement> & {
    *
    * @see Docs https://reacttraining.com/reach-ui/slider#slider-handlealignment
    */
-  handleAlignment?: SliderAlignment;
+  handleAlignment?: "center" | "contain" | SliderAlignment;
   /**
    * The maximum value of the slider. Defaults to `100`.
    *
@@ -116,7 +124,7 @@ export type SliderProps = React.HTMLProps<HTMLDivElement> & {
    *
    * @see Docs https://reacttraining.com/reach-ui/slider#slider-orientation
    */
-  orientation?: SliderOrientation;
+  orientation?: "horizontal" | "vertical" | SliderOrientation;
   /**
    * The step attribute is a number that specifies the granularity that the
    * value must adhere to as it changes. Step sets minimum intervals of change,
@@ -186,12 +194,12 @@ export type SliderMarkerProps = React.HTMLProps<HTMLDivElement> & {
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slider
  */
-declare const Slider: React.FunctionComponent<SliderProps>;
+export const Slider: React.FunctionComponent<SliderProps>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack
  */
-declare const SliderTrack: React.FunctionComponent<SliderTrackProps>;
+export const SliderTrack: React.FunctionComponent<SliderTrackProps>;
 
 /**
  * The (typically) highlighted portion of the track that represents the space
@@ -199,7 +207,7 @@ declare const SliderTrack: React.FunctionComponent<SliderTrackProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
  */
-declare const SliderTrackHighlight: React.FunctionComponent<
+export const SliderTrackHighlight: React.FunctionComponent<
   SliderTrackHighlightProps
 >;
 
@@ -208,7 +216,7 @@ declare const SliderTrackHighlight: React.FunctionComponent<
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle
  */
-declare const SliderHandle: React.FunctionComponent<SliderHandleProps>;
+export const SliderHandle: React.FunctionComponent<SliderHandleProps>;
 
 /**
  * The parent component of the slider interface. This is a lower level component
@@ -217,7 +225,7 @@ declare const SliderHandle: React.FunctionComponent<SliderHandleProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput
  */
-declare const SliderInput: React.FunctionComponent<SliderInputProps>;
+export const SliderInput: React.FunctionComponent<SliderInputProps>;
 
 /**
  * A fixed value marker. These can be used to illustrate a range of steps or
@@ -225,4 +233,6 @@ declare const SliderInput: React.FunctionComponent<SliderInputProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker
  */
-declare const SliderMarker: React.FunctionComponent<SliderMarkerProps>;
+export const SliderMarker: React.FunctionComponent<SliderMarkerProps>;
+
+export default Slider;

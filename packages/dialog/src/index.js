@@ -147,6 +147,8 @@ if (__DEV__) {
   Dialog.displayName = "Dialog";
 }
 
+export default Dialog;
+
 ////////////////////////////////////////////////////////////////////////////////
 function createAriaHider(dialogNode) {
   let originalValues = [];

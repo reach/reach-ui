@@ -161,14 +161,14 @@ export type ComboboxOptionProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#combobox
  */
-declare const Combobox: React.FunctionComponent<ComboboxProps>;
+export const Combobox: React.FunctionComponent<ComboboxProps>;
 
 /**
  * Wraps an `<input/>` with a couple extra props that work with the combobox.
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput
  */
-declare const ComboboxInput: React.FunctionComponent<ComboboxInputProps>;
+export const ComboboxInput: React.FunctionComponent<ComboboxInputProps>;
 
 /**
  * Contains the popup that renders the list. Because some UI needs to render
@@ -177,7 +177,7 @@ declare const ComboboxInput: React.FunctionComponent<ComboboxInputProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover
  */
-declare const ComboboxPopover: React.FunctionComponent<ComboboxPopoverProps>;
+export const ComboboxPopover: React.FunctionComponent<ComboboxPopoverProps>;
 
 /**
  * Contains the `ComboboxOption` elements and sets up the proper aria
@@ -185,14 +185,14 @@ declare const ComboboxPopover: React.FunctionComponent<ComboboxPopoverProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist
  */
-declare const ComboboxList: React.FunctionComponent<ComboboxListProps>;
+export const ComboboxList: React.FunctionComponent<ComboboxListProps>;
 
 /**
  * An option that is suggested to the user as they interact with the combobox.
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption
  */
-declare const ComboboxOption: React.FunctionComponent<ComboboxOptionProps>;
+export const ComboboxOption: React.FunctionComponent<ComboboxOptionProps>;
 
 /**
  * Renders the value of a `ComboboxOption` as text but with spans wrapping the
@@ -205,4 +205,4 @@ declare const ComboboxOption: React.FunctionComponent<ComboboxOptionProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoptiontext
  */
-declare const ComboboxOptionText: React.FunctionComponent;
+export const ComboboxOptionText: React.FunctionComponent;

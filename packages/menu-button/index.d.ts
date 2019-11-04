@@ -153,7 +153,7 @@ export function MenuLink<T extends SupportedMenuLinkComponent>(
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menu
  */
-declare const Menu: React.FunctionComponent<MenuProps>;
+export const Menu: React.FunctionComponent<MenuProps>;
 
 /**
  * Wraps a DOM `button` that toggles the opening and closing of the dropdown
@@ -161,7 +161,7 @@ declare const Menu: React.FunctionComponent<MenuProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton
  */
-declare const MenuButton: React.FunctionComponent<MenuButtonProps>;
+export const MenuButton: React.FunctionComponent<MenuButtonProps>;
 
 /**
  * Wraps a DOM element that renders the menu items. Must be rendered inside of
@@ -169,14 +169,14 @@ declare const MenuButton: React.FunctionComponent<MenuButtonProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist
  */
-declare const MenuList: React.FunctionComponent<MenuListProps>;
+export const MenuList: React.FunctionComponent<MenuListProps>;
 
 /**
  * Handles menu selection. Must be a direct child of a `<MenuList>`.
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
  */
-declare const MenuItem: React.FunctionComponent<MenuItemProps>;
+export const MenuItem: React.FunctionComponent<MenuItemProps>;
 
 /**
  * A low-level wrapper for the popover that appears when a menu button is open.
@@ -186,7 +186,7 @@ declare const MenuItem: React.FunctionComponent<MenuItemProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
  */
-declare const MenuPopover: React.FunctionComponent<MenuPopoverProps>;
+export const MenuPopover: React.FunctionComponent<MenuPopoverProps>;
 
 /**
  * A low-level wrapper for menu items. Compose it with `MenuPopover` for more
@@ -195,4 +195,4 @@ declare const MenuPopover: React.FunctionComponent<MenuPopoverProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems
  */
-declare const MenuItems: React.FunctionComponent<MenuItemsProps>;
+export const MenuItems: React.FunctionComponent<MenuItemsProps>;

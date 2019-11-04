@@ -50,11 +50,11 @@ export type SkipNavContentProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink
  */
-declare const SkipNavLink: React.FunctionComponent<SkipNavProps>;
+export const SkipNavLink: React.FunctionComponent<SkipNavProps>;
 
 /**
  * Renders a div as the target for the link.
  *
  * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent
  */
-declare const SkipNavContent: React.FunctionComponent<SkipNavContentProps>;
+export const SkipNavContent: React.FunctionComponent<SkipNavContentProps>;

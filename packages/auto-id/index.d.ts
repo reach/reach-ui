@@ -7,4 +7,4 @@
  *
  * @see Docs https://reacttraining.com/reach-ui/auto-id
  */
-declare const useId: () => number;
+export const useId: () => number;

@@ -77,7 +77,7 @@ export type DialogContentProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
-declare const Dialog: React.FunctionComponent<DialogProps>;
+export const Dialog: React.FunctionComponent<DialogProps>;
 
 /**
  * Low-level component if you need more control over the styles or rendering of
@@ -87,7 +87,7 @@ declare const Dialog: React.FunctionComponent<DialogProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay
  */
-declare const DialogOverlay: React.FunctionComponent<DialogOverlayProps>;
+export const DialogOverlay: React.FunctionComponent<DialogOverlayProps>;
 
 /**
  * Low-level component if you need more control over the styles or rendering of
@@ -102,4 +102,6 @@ declare const DialogOverlay: React.FunctionComponent<DialogOverlayProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialogcontent
  */
-declare const DialogContent: React.FunctionComponent<DialogContentProps>;
+export const DialogContent: React.FunctionComponent<DialogContentProps>;
+
+export default Dialog;

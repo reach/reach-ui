@@ -32,6 +32,6 @@ export function useWindowSize(): WindowSize;
 /**
  * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize
  */
-declare const WindowSize: React.FunctionComponent<WindowSizeProps>;
+export const WindowSize: React.FunctionComponent<WindowSizeProps>;
 
 export default WindowSize;

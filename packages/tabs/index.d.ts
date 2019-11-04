@@ -131,32 +131,32 @@ export type TabProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabs
  */
-declare const Tabs: React.FunctionComponent<TabsProps>;
+export const Tabs: React.FunctionComponent<TabsProps>;
 
 /**
  * The parent component of the tabs.
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist
  */
-declare const TabList: React.FunctionComponent<TabContainerProps>;
+export const TabList: React.FunctionComponent<TabContainerProps>;
 
 /**
  * The parent component of the panels.
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels
  */
-declare const TabPanels: React.FunctionComponent<TabContainerProps>;
+export const TabPanels: React.FunctionComponent<TabContainerProps>;
 
 /**
  * The interactive element that changes the selected panel.
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab
  */
-declare const Tab: React.FunctionComponent<TabProps>;
+export const Tab: React.FunctionComponent<TabProps>;
 
 /**
  * The panel that displays when it's corresponding tab is active.
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel
  */
-declare const TabPanel: React.FunctionComponent<TabPanelProps>;
+export const TabPanel: React.FunctionComponent<TabPanelProps>;
