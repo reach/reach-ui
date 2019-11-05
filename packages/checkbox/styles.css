@@ -25,6 +25,7 @@
   height: 100%;
   border: 1px solid #b8b8b8;
   border-radius: 0.2em;
+  background-color: #edeced;
   background-image: linear-gradient(to bottom, #edeced, #fff 30%);
 }
 
@@ -35,14 +36,14 @@
 [data-reach-custom-checkbox-container][data-mixed]::before,
 [data-reach-custom-checkbox-container][data-checked]::before {
   border-color: #1159a6;
-  background: #3f94bf;
+  background-color: #3f94bf;
   background-image: linear-gradient(to bottom, #3f94bf, #007bff);
 }
 
 [data-reach-custom-checkbox-container][data-checked]::after {
   display: block;
-  width: 0.25em;
-  height: 0.4em;
+  width: calc(45% - 2px);
+  height: calc(90% - 4px);
   border: medium solid #fff;
   border-width: 0 0.125em 0.125em 0;
   transform: translateY(-65%) translateX(-50%) rotate(45deg);
@@ -50,13 +51,13 @@
 
 [data-reach-custom-checkbox-container][data-mixed]::after {
   display: block;
-  width: 0;
+  width: calc(100% - 6px);
   border-bottom: 0.125em solid #fff;
-  transform: translate(-50%, -50%) rotate(90deg);
+  transform: translate(-50%, -50%);
   transform-origin: center center;
 }
 
-[data-reach-mixed-checkbox-hidden] {
+[data-reach-custom-checkbox-input] {
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
@@ -67,4 +68,8 @@
   opacity: 0 !important;
   z-index: 1 !important;
   cursor: inherit;
+}
+
+[data-reach-custom-checkbox][data-custom-checkmarks]::after {
+  display: none;
 }
