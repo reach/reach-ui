@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { func } from "prop-types";
 
 let hasWindow = typeof window !== "undefined";
@@ -17,11 +17,11 @@ if (__DEV__) {
 export default WindowSize;
 
 export function useWindowSize() {
-  const [dimensions, setDimensions] = React.useState({
+  const [dimensions, setDimensions] = useState({
     width: hasWindow ? window.innerWidth : 0,
     height: hasWindow ? window.innerHeight : 0
   });
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const resize = () =>
       setDimensions({
         width: window.innerWidth,
