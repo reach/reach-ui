@@ -16,6 +16,12 @@ import { string, bool, func, oneOfType, node, shape } from "prop-types";
 const CustomCheckboxContext = createContext({});
 const useCustomCheckboxContext = () => useContext(CustomCheckboxContext);
 
+const inputPropTypes = {
+  checked: oneOfType([bool, string]),
+  defaultChecked: oneOfType([bool, string]),
+  onChange: func
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 export const CustomCheckboxContainer = forwardRef(
   function CustomCheckboxContainer({ children, ...props }, forwardedRef) {
@@ -107,6 +113,9 @@ export const CustomCheckboxInput = forwardRef(function CustomCheckboxInput(
 
 if (__DEV__) {
   CustomCheckboxInput.displayName = "CustomCheckboxInput";
+  CustomCheckboxInput.propTypes = {
+    ...inputPropTypes
+  };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +167,7 @@ export const CustomCheckbox = forwardRef(function CustomCheckbox(
 
 if (__DEV__) {
   CustomCheckbox.propTypes = {
+    ...inputPropTypes,
     checkmarks: shape({
       true: node,
       false: node,
@@ -187,9 +197,7 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
 
 if (__DEV__) {
   MixedCheckbox.propTypes = {
-    checked: oneOfType([bool, string]),
-    defaultChecked: oneOfType([bool, string]),
-    onChange: func
+    ...inputPropTypes
   };
   MixedCheckbox.displayName = "MixedCheckbox";
 }
