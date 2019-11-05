@@ -45,7 +45,7 @@ import React, {
   useEffect
 } from "react";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, checkStyles } from "@reach/utils";
+import { wrapEvent, checkStyles, useForkedRef, makeId } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
@@ -224,8 +224,6 @@ function clearContextId() {
   context.id = null;
 }
 
-const domId = id => `tooltip-${id}`;
-
 ////////////////////////////////////////////////////////////////////////////////
 // THE HOOK! It's about time we got to the goods!
 export function useTooltip({
@@ -236,7 +234,7 @@ export function useTooltip({
   onBlur,
   onKeyDown,
   onMouseDown,
-  ref,
+  ref: forwardedRef,
   DEBUG_STYLE
 } = {}) {
   const id = useId();
@@ -251,8 +249,8 @@ export function useTooltip({
 
   // hopefully they always pass a ref if they ever pass one
   const ownRef = useRef();
-  const triggerRef = ref || ownRef;
-  const triggerRect = useRect(triggerRef, isVisible);
+  const ref = forwardedRef || ownRef;
+  const triggerRect = useRect(ref, isVisible);
 
   useEffect(() => {
     return subscribe(() => {
@@ -342,9 +340,9 @@ export function useTooltip({
   };
 
   const trigger = {
-    "aria-describedby": isVisible ? domId(id) : undefined,
+    "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
     "data-reach-tooltip-trigger": "",
-    ref: triggerRef,
+    ref,
     onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
@@ -364,13 +362,7 @@ export function useTooltip({
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export default function Tooltip({
-  children,
-  label,
-  ariaLabel,
-  DEBUG_STYLE,
-  ...rest
-}) {
+function Tooltip({ children, label, ariaLabel, DEBUG_STYLE, ...rest }) {
   const child = Children.only(children);
 
   // We need to pass some properties from the child into useTooltip
@@ -405,7 +397,10 @@ if (__DEV__) {
     label: node.isRequired,
     ariaLabel: string
   };
+  Tooltip.displayName = "Tooltip";
 }
+
+export default Tooltip;
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TooltipPopup = forwardRef(function TooltipPopup(
@@ -430,7 +425,7 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
         ariaLabel={ariaLabel}
         position={position}
         isVisible={isVisible}
-        id={domId(id)}
+        id={makeId("tooltip", id)}
         triggerRect={triggerRect}
         ref={forwardRef}
         {...rest}
@@ -445,6 +440,7 @@ if (__DEV__) {
     ariaLabel: string,
     position: func
   };
+  TooltipPopup.displayName = "TooltipPopup";
 }
 
 // Need a separate component so that useRect works inside the portal
@@ -459,11 +455,12 @@ const TooltipContent = forwardRef(function TooltipContent(
     style,
     ...rest
   },
-  forwardRef
+  forwardedRef
 ) {
   const useAriaLabel = ariaLabel != null;
-  const tooltipRef = useRef();
-  const tooltipRect = useRect(tooltipRef, isVisible);
+  const ownRef = useRef(null);
+  const ref = useForkedRef(forwardedRef, ownRef);
+  const tooltipRect = useRect(ownRef, isVisible);
   return (
     <Fragment>
       <div
@@ -475,10 +472,7 @@ const TooltipContent = forwardRef(function TooltipContent(
           ...style,
           ...getStyles(position, triggerRect, tooltipRect)
         }}
-        ref={node => {
-          tooltipRef.current = node;
-          if (forwardRef) forwardRef(node);
-        }}
+        ref={ref}
         {...rest}
       />
       {useAriaLabel && (
@@ -489,6 +483,11 @@ const TooltipContent = forwardRef(function TooltipContent(
     </Fragment>
   );
 });
+
+if (__DEV__) {
+  TooltipContent.propTypes = {};
+  TooltipContent.displayName = "TooltipContent";
+}
 
 // feels awkward when it's perfectly aligned w/ the trigger
 const OFFSET = 8;

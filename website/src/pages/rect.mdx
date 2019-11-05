@@ -74,7 +74,7 @@ function Example() {
 
 Render prop component for use in class components to observe element measurements.
 
-## Props
+## Rect Props
 
 | Prop                  | Type |
 | --------------------- | ---- |
@@ -82,7 +82,7 @@ Render prop component for use in class components to observe element measurement
 | [observe](#observe)   | bool |
 | [onChange](#onchange) | func |
 
-### children
+### Rect children
 
 _Type_: `func: ({ ref, rect }) => node`
 
@@ -90,7 +90,7 @@ A function that calls back to you with a `ref` to place on an element and the `r
 
 **Note**: On the first render `rect` will be `undefined` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
 
-### observe
+### Rect observe
 
 _Type_: `bool` default `true`
 
@@ -114,7 +114,7 @@ Pass `true` to observe, `false` to ignore.
 </Rect>
 ```
 
-### onChange
+### Rect onChange
 
 _Type_: `func: (rect) => void`
 

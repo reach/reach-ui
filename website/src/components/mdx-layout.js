@@ -23,6 +23,8 @@ import {
   MenuList,
   MenuButton,
   MenuItem,
+  MenuItems,
+  MenuPopover,
   MenuLink
 } from "@reach/menu-button";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -90,6 +92,8 @@ const PreComponent = ({ className, ...props }) => {
           MenuList,
           MenuButton,
           MenuItem,
+          MenuItems,
+          MenuPopover,
           MenuLink,
           VisuallyHidden,
           Dialog,

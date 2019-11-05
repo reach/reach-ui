@@ -1,13 +1,7 @@
-import React, {
-  cloneElement,
-  useState,
-  useEffect,
-  useRef,
-  forwardRef
-} from "react";
+import React, { cloneElement, useState, useRef, forwardRef } from "react";
 import { node, func, number } from "prop-types";
 import warning from "warning";
-import { wrapEvent } from "@reach/utils";
+import { wrapEvent, useUpdateEffect, makeId, useForkedRef } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -184,7 +178,7 @@ export const Tab = forwardRef(function Tab(
     Comp === "button" && htmlProps.type == null ? "button" : undefined;
 
   const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
+  const ref = useForkedRef(forwardedRef, ownRef);
 
   useUpdateEffect(() => {
     if (isSelected && ref.current && _userInteractedRef.current) {
@@ -259,15 +253,15 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanel = forwardRef(function TabPanel(
   { children, as: Comp = "div", ...rest },
-  // TODO: Do we need to use this ref?
   forwardedRef
 ) {
   const { isSelected, _selectedPanelRef, _id, ...htmlProps } = rest;
+  const ref = useForkedRef(forwardedRef, isSelected ? _selectedPanelRef : null);
 
   return (
     <Comp
       data-reach-tab-panel=""
-      ref={isSelected ? _selectedPanelRef : undefined}
+      ref={ref}
       role="tabpanel"
       tabIndex={-1}
       aria-labelledby={makeId("tab", _id)}
@@ -284,19 +278,3 @@ if (__DEV__) {
     children: node
   };
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO: move into @reach/utils when something else needs it
-function useUpdateEffect(effect, deps) {
-  const mounted = useRef(false);
-  useEffect(() => {
-    if (mounted.current) {
-      effect();
-    } else {
-      mounted.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-}
-
-const makeId = (id, index) => `${id}--${index}`;

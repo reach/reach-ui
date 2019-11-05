@@ -13,21 +13,21 @@ import React, {
 import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, assignRef } from "@reach/utils";
+import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
 //   - https://github.com/Stanko/aria-progress-range-slider
 
-// TODO: Screen reader testing
-
 // Example todos:
 //  - Compose with other Reach elements (popover, tooltip, etc.)
 
 // Random thoughts/notes:
-//  - Currently testing this against the behavior of the native input range element to get
-//    our slider on par. We'll explore animated and multi-handle sliders next.
-//  - We may want to research some use cases for reversed sliders in RTL languages if that's a thing
+//  - Currently testing this against the behavior of the native input range
+//    element to get our slider on par. We'll explore animated and multi-handle
+//    sliders next.
+//  - We may want to research some use cases for reversed sliders in RTL
+//    languages if that's a thing
 
 export const SLIDER_ORIENTATION_HORIZONTAL = "horizontal";
 export const SLIDER_ORIENTATION_VERTICAL = "vertical";
@@ -42,7 +42,8 @@ export const SLIDER_HANDLE_ALIGN_CONTAIN = "contain";
 const SliderContext = createContext({});
 const useSliderContext = () => useContext(SliderContext);
 
-// These proptypes are shared between the composed SliderInput component and the simplified Slider
+// These proptypes are shared between the composed SliderInput component and the
+// simplified Slider
 const sliderPropTypes = {
   defaultValue: number,
   disabled: bool,
@@ -88,6 +89,8 @@ if (__DEV__) {
   };
 }
 
+export default Slider;
+
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderInput = forwardRef(function SliderInput(
   {
@@ -115,7 +118,8 @@ export const SliderInput = forwardRef(function SliderInput(
   },
   forwardedRef
 ) {
-  // Verify that the component is either controlled or uncontrolled throughout its lifecycle
+  // Verify that the component is either controlled or uncontrolled throughout
+  // its lifecycle
   const { current: isControlled } = useRef(controlledValue != null);
 
   warning(
@@ -137,13 +141,13 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const [hasFocus, setHasFocus] = useState(false);
   const [isPointerDown, setPointerDown] = useState(false);
-  const [value, setValue] = useState(defaultValue || min);
+  const [internalValue, setValue] = useState(defaultValue || min);
 
   const { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
-  const _value = isControlled ? controlledValue : value;
-  const actualValue = getAllowedValue(_value, min, max);
-  const trackPercent = valueToPercent(actualValue, min, max);
+  const _value = isControlled ? controlledValue : internalValue;
+  const value = getAllowedValue(_value, min, max);
+  const trackPercent = valueToPercent(value, min, max);
   const isVertical = orientation === SLIDER_ORIENTATION_VERTICAL;
   const step = stepProp || 1;
 
@@ -202,20 +206,20 @@ export const SliderInput = forwardRef(function SliderInput(
     switch (event.key) {
       case "ArrowLeft":
       case "ArrowDown":
-        newValue = actualValue - keyStep;
+        newValue = value - keyStep;
         flag = true;
         break;
       case "ArrowRight":
       case "ArrowUp":
-        newValue = actualValue + keyStep;
+        newValue = value + keyStep;
         flag = true;
         break;
       case "PageDown":
-        newValue = actualValue - tenSteps;
+        newValue = value - tenSteps;
         flag = true;
         break;
       case "PageUp":
-        newValue = actualValue + tenSteps;
+        newValue = value + tenSteps;
         flag = true;
         break;
       case "Home":
@@ -266,7 +270,7 @@ export const SliderInput = forwardRef(function SliderInput(
     setPointerDown(false);
   });
 
-  const valueText = getValueText ? getValueText(actualValue) : ariaValueText;
+  const valueText = getValueText ? getValueText(value) : ariaValueText;
 
   const sliderId = id || _id;
 
@@ -297,7 +301,7 @@ export const SliderInput = forwardRef(function SliderInput(
     sliderId,
     sliderMax: max,
     sliderMin: min,
-    sliderValue: actualValue,
+    value,
     valueText,
     disabled,
     isVertical,
@@ -360,12 +364,13 @@ export const SliderInput = forwardRef(function SliderInput(
             })
           : children}
         {name && (
-          // If the slider is used in a form we'll need an input field to capture the value.
-          // We'll assume this when the component is given a form field name
-          // (A `name` prop doesn't really make sense in any other context)
+          // If the slider is used in a form we'll need an input field to
+          // capture the value. We'll assume this when the component is given a
+          // form field name (A `name` prop doesn't really make sense in any
+          // other context).
           <input
             type="hidden"
-            value={actualValue}
+            value={value}
             name={name}
             id={makeId("input", sliderId)}
           />
@@ -472,7 +477,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     setHasFocus,
     sliderMin,
     sliderMax,
-    sliderValue,
+    value,
     valueText
   } = useSliderContext();
 
@@ -493,7 +498,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
       aria-valuemin={sliderMin}
       aria-valuetext={valueText}
       aria-orientation={orientation}
-      aria-valuenow={sliderValue}
+      aria-valuenow={value}
       aria-valuemax={sliderMax}
       aria-labelledby={ariaLabelledBy}
       onBlur={wrapEvent(onBlur, () => {
@@ -522,7 +527,7 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderMarker = forwardRef(function SliderMarker(
-  { children, style = {}, value, ...props },
+  { children, style = {}, value: valueProp, ...props },
   forwardedRef
 ) {
   const {
@@ -531,12 +536,12 @@ export const SliderMarker = forwardRef(function SliderMarker(
     orientation,
     sliderMin,
     sliderMax,
-    sliderValue
+    value: sliderValue
   } = useSliderContext();
 
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const actualValue = valueToPercent(value, sliderMin, sliderMax);
+  const value = valueToPercent(valueProp, sliderMin, sliderMax);
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     orientation,
@@ -544,7 +549,7 @@ export const SliderMarker = forwardRef(function SliderMarker(
     highlight
   });
 
-  const absoluteStartPosition = `${actualValue}%`;
+  const absoluteStartPosition = `${value}%`;
 
   return value != null ? (
     <div
@@ -572,29 +577,29 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export function valueToPercent(value, min, max) {
+function valueToPercent(value, min, max) {
   return ((value - min) * 100) / (max - min);
 }
 
-export function percentToValue(percent, min, max) {
+function percentToValue(percent, min, max) {
   return (max - min) * percent + min;
 }
 
-export function makeValuePrecise(value, step) {
+function makeValuePrecise(value, step) {
   const stepDecimalPart = step.toString().split(".")[1];
   const stepPrecision = stepDecimalPart ? stepDecimalPart.length : 0;
   return Number(value.toFixed(stepPrecision));
 }
 
-export function roundValueToStep(value, step) {
+function roundValueToStep(value, step) {
   return makeValuePrecise(Math.round(value / step) * step, step);
 }
 
-export function getAllowedValue(val, min, max) {
+function getAllowedValue(val, min, max) {
   return val > max ? max : val < min ? min : val;
 }
 
-export function makeDataAttributes(
+function makeDataAttributes(
   component = "slider",
   { orientation, highlight, disabled }
 ) {
@@ -606,16 +611,13 @@ export function makeDataAttributes(
   };
 }
 
-export function makeId(id, index) {
-  return `${id}--${index}`;
-}
-
-export function useDimensions(passedRef) {
+function useDimensions(passedRef) {
   const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
   // getBoundingClientRect does not work here when borders are applied.
-  // getComputedStyle is not as performant so we may want to create a utility to check
-  // for any conflicts with box sizing first and only use `getComputedStyle` if neccessary.
+  // getComputedStyle is not as performant so we may want to create a utility to
+  // check for any conflicts with box sizing first and only use
+  // `getComputedStyle` if neccessary.
   /* const { width, height } = ref.current
     ? ref.current.getBoundingClientRect()
     : 0; */
@@ -636,19 +638,4 @@ export function useDimensions(passedRef) {
     }
   }, [ref, width, height]);
   return { ref, width, height };
-}
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
 }

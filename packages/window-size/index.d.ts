@@ -1,17 +1,37 @@
-declare module "@reach/window-size" {
-  import * as React from "react";
+/**
+ * Measure the current window dimensions.
+ *
+ * @see Docs   https://reacttraining.com/reach-ui/window-size
+ * @see Source https://github.com/reach/reach-ui/tree/master/packages/window-size
+ */
 
-  export type WindowSize = {
-    width: number;
-    height: number;
-  };
+import * as React from "react";
 
-  export type WindowSizeProps = {
-    children: (size: WindowSize) => React.ReactElement<any>;
-  };
+export type WindowSize = {
+  width: number;
+  height: number;
+};
 
-  export function useWindowSize(): WindowSize;
+/**
+ * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-props
+ */
+export type WindowSizeProps = {
+  /**
+   * A function that calls back to you with the window size.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-children
+   */
+  children: (size: WindowSize) => React.ReactElement<any>;
+};
 
-  const WindowSize: React.FunctionComponent<WindowSizeProps>;
-  export default WindowSize;
-}
+/**
+ * @see Docs https://reacttraining.com/reach-ui/window-size#usewindowsize
+ */
+export function useWindowSize(): WindowSize;
+
+/**
+ * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize
+ */
+export const WindowSize: React.FunctionComponent<WindowSizeProps>;
+
+export default WindowSize;

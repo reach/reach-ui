@@ -14,6 +14,7 @@
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
+import { usePrevious } from "@reach/utils";
 import { node, string } from "prop-types";
 
 // singleton state is fine because you don't server render
@@ -143,13 +144,4 @@ function createMirror(type) {
   };
 
   return { mount, update, unmount };
-}
-
-// TODO: Move to @reach/utils
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
 }
