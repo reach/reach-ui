@@ -181,9 +181,9 @@ export const Tab = forwardRef(function Tab(
   const ref = useForkedRef(forwardedRef, ownRef);
 
   useUpdateEffect(() => {
-    if (isSelected && ref.current && _userInteractedRef.current) {
+    if (isSelected && ownRef.current && _userInteractedRef.current) {
       _userInteractedRef.current = false;
-      ref.current.focus();
+      ownRef.current.focus();
     }
   }, [isSelected]);
 
