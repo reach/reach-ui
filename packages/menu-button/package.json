@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Accessible React button dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@reach/router": "^1.2.1",
-    "@reach/tooltip": "^0.5.3",
+    "@reach/tooltip": "^0.5.4",
     "react": "^16.11.0",
     "react-test-renderer": "^16.11.0"
   },

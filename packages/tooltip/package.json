@@ -1,6 +1,6 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Accessible tooltips",
   "main": "index.js",
   "module": "es/index.js",
