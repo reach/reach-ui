@@ -63,7 +63,8 @@
       "bug": "🐛 Bugfixes",
       "potential-bug": "🐛 Bugfixes",
       "docs": "📝 Documentation",
-      "enhancement": "✨ Features",
+      "feature": "🚀 Features",
+      "enhancement": "✨ Enhancements",
       "housekeeping": "🏡 Housekeeping"
     }
   }
