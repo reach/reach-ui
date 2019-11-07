@@ -1,6 +1,7 @@
 import React, {
-  cloneElement,
+  createContext,
   forwardRef,
+  useContext,
   useEffect,
   useRef,
   useState
@@ -15,6 +16,17 @@ import {
   useForkedRef
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
+
+const createNamedContext = name => {
+  const context = createContext();
+  context.displayName = name;
+
+  return context;
+};
+
+const TabsContext = createNamedContext("Tabs");
+const TabContext = createNamedContext("Tab");
+const TabPanelContext = createNamedContext("TabPanel");
 
 ////////////////////////////////////////////////////////////////////////////////
 // Tabs
@@ -54,30 +66,33 @@ export const Tabs = forwardRef(function Tabs(
 
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
 
-  const clones = React.Children.map(children, child => {
-    if (elementIsNullOrString(child)) return child;
-    return cloneElement(child, {
-      selectedIndex: isControlled ? controlledIndex : selectedIndex,
-      _id: id,
-      _userInteractedRef,
-      _selectedPanelRef,
-      _onFocusPanel: () =>
-        _selectedPanelRef.current && _selectedPanelRef.current.focus(),
-      _onSelectTab: readOnly
-        ? () => {}
-        : index => {
-            _userInteractedRef.current = true;
-            onChange && onChange(index);
-            if (!isControlled) {
-              setSelectedIndex(index);
-            }
-          }
-    });
-  });
-
   useEffect(() => checkStyles("tabs"), []);
 
-  return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
+  return (
+    <Comp data-reach-tabs="" ref={ref} {...props}>
+      <TabsContext.Provider
+        value={{
+          selectedIndex: isControlled ? controlledIndex : selectedIndex,
+          _id: id,
+          _userInteractedRef,
+          _selectedPanelRef,
+          _onFocusPanel: () =>
+            _selectedPanelRef.current && _selectedPanelRef.current.focus(),
+          _onSelectTab: readOnly
+            ? () => {}
+            : index => {
+                _userInteractedRef.current = true;
+                onChange && onChange(index);
+                if (!isControlled) {
+                  setSelectedIndex(index);
+                }
+              }
+        }}
+      >
+        {children}
+      </TabsContext.Provider>
+    </Comp>
+  );
 });
 
 Tabs.displayName = "Tabs";
@@ -106,28 +121,12 @@ if (__DEV__) {
 // TabList
 
 export const TabList = forwardRef(function TabList(
-  { children, as: Comp = "div", onKeyDown, ...clonedProps },
+  { children, as: Comp = "div", onKeyDown, ...htmlProps },
   ref
 ) {
-  const {
-    selectedIndex,
-    _onSelectTab,
-    _userInteractedRef,
-    _onFocusPanel,
-    _selectedPanelRef,
-    _id,
-    ...htmlProps
-  } = clonedProps;
-
-  const clones = React.Children.map(children, (child, index) => {
-    if (elementIsNullOrString(child)) return child;
-    return cloneElement(child, {
-      isSelected: index === selectedIndex,
-      _id: makeId(_id, index),
-      _userInteractedRef,
-      _onSelect: () => _onSelectTab(index)
-    });
-  });
+  const { selectedIndex, _onSelectTab, _onFocusPanel } = useContext(
+    TabsContext
+  );
 
   const handleKeyDown = wrapEvent(onKeyDown, event => {
     const enabledIndexes = React.Children.map(children, (child, index) =>
@@ -169,13 +168,17 @@ export const TabList = forwardRef(function TabList(
     }
   });
 
+  const wrappedChildren = React.Children.map(children, (child, index) => (
+    <TabContext.Provider value={index}>{child}</TabContext.Provider>
+  ));
+
   return (
     <Comp
       data-reach-tab-list=""
       ref={ref}
       role="tablist"
       onKeyDown={handleKeyDown}
-      children={clones}
+      children={wrappedChildren}
       {...htmlProps}
     />
   );
@@ -192,10 +195,16 @@ if (__DEV__) {
 // Tab
 
 export const Tab = forwardRef(function Tab(
-  { children, as: Comp = "button", ...rest },
+  { children, as: Comp = "button", ...htmlProps },
   forwardedRef
 ) {
-  const { isSelected, _userInteractedRef, _onSelect, _id, ...htmlProps } = rest;
+  const index = useContext(TabContext);
+  const { selectedIndex, _onSelectTab, _userInteractedRef, _id } = useContext(
+    TabsContext
+  );
+
+  const isSelected = index === selectedIndex;
+
   const htmlType =
     Comp === "button" && htmlProps.type == null ? "button" : undefined;
 
@@ -214,12 +223,12 @@ export const Tab = forwardRef(function Tab(
       data-reach-tab=""
       ref={ref}
       role="tab"
-      id={makeId("tab", _id)}
+      id={makeId("tab", makeId(_id, index))}
       tabIndex={isSelected ? 0 : -1}
       aria-selected={isSelected}
-      aria-controls={makeId("panel", _id)}
+      aria-controls={makeId("panel", makeId(_id, index))}
       data-selected={isSelected ? "" : undefined}
-      onClick={_onSelect}
+      onClick={() => _onSelectTab(index)}
       children={children}
       type={htmlType}
       {...htmlProps}
@@ -238,34 +247,19 @@ if (__DEV__) {
 // TabPanels
 
 export const TabPanels = forwardRef(function TabPanels(
-  { children, as: Comp = "div", ...rest },
+  { children, as: Comp = "div", ...htmlAttrs },
   forwardedRef
 ) {
-  const {
-    selectedIndex,
-    _selectedPanelRef,
-    _userInteractedRef,
-    _onFocusPanel,
-    _onSelectTab,
-    _id,
-    ...htmlAttrs
-  } = rest;
-
-  const clones = React.Children.map(children, (child, index) => {
-    if (elementIsNullOrString(child)) return child;
-    return cloneElement(child, {
-      isSelected: index === selectedIndex,
-      _selectedPanelRef,
-      _id: makeId(_id, index)
-    });
-  });
+  const wrappedChildren = React.Children.map(children, (child, index) => (
+    <TabPanelContext.Provider value={index}>{child}</TabPanelContext.Provider>
+  ));
 
   return (
     <Comp
       data-reach-tab-panels=""
       ref={forwardedRef}
       {...htmlAttrs}
-      children={clones}
+      children={wrappedChildren}
     />
   );
 });
@@ -281,10 +275,12 @@ if (__DEV__) {
 // TabPanel
 
 export const TabPanel = forwardRef(function TabPanel(
-  { children, as: Comp = "div", ...rest },
+  { children, as: Comp = "div", ...htmlProps },
   forwardedRef
 ) {
-  const { isSelected, _selectedPanelRef, _id, ...htmlProps } = rest;
+  const index = useContext(TabPanelContext);
+  const { selectedIndex, _selectedPanelRef, _id } = useContext(TabsContext);
+  const isSelected = index === selectedIndex;
   const ref = useForkedRef(forwardedRef, isSelected ? _selectedPanelRef : null);
 
   return (
@@ -293,9 +289,9 @@ export const TabPanel = forwardRef(function TabPanel(
       ref={ref}
       role="tabpanel"
       tabIndex={-1}
-      aria-labelledby={makeId("tab", _id)}
+      aria-labelledby={makeId("tab", makeId(_id, index))}
       hidden={!isSelected}
-      id={makeId("panel", _id)}
+      id={makeId("panel", makeId(_id, index))}
       children={children}
       {...htmlProps}
     />
@@ -307,11 +303,4 @@ if (__DEV__) {
   TabPanel.propTypes = {
     children: PropTypes.node
   };
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-// Check children before cloning to ignore strings or null values
-function elementIsNullOrString(child) {
-  return !child || typeof child.type === "string";
 }
