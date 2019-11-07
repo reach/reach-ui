@@ -75,29 +75,32 @@ export const Tabs = forwardRef(function Tabs(
 
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
 
+  const tabsContext = React.useMemo(
+    () => ({
+      selectedIndex: isControlled ? controlledIndex : selectedIndex,
+      _id: id,
+      _userInteractedRef,
+      _selectedPanelRef,
+      _onFocusPanel: () =>
+        _selectedPanelRef.current && _selectedPanelRef.current.focus(),
+      _onSelectTab: readOnly
+        ? () => {}
+        : index => {
+            _userInteractedRef.current = true;
+            onChange && onChange(index);
+            if (!isControlled) {
+              setSelectedIndex(index);
+            }
+          }
+    }),
+    [id, controlledIndex, isControlled, onChange, readOnly, selectedIndex]
+  );
+
   useEffect(() => checkStyles("tabs"), []);
 
   return (
     <Comp data-reach-tabs="" ref={ref} {...props}>
-      <TabsContext.Provider
-        value={{
-          selectedIndex: isControlled ? controlledIndex : selectedIndex,
-          _id: id,
-          _userInteractedRef,
-          _selectedPanelRef,
-          _onFocusPanel: () =>
-            _selectedPanelRef.current && _selectedPanelRef.current.focus(),
-          _onSelectTab: readOnly
-            ? () => {}
-            : index => {
-                _userInteractedRef.current = true;
-                onChange && onChange(index);
-                if (!isControlled) {
-                  setSelectedIndex(index);
-                }
-              }
-        }}
-      >
+      <TabsContext.Provider value={tabsContext}>
         {children}
       </TabsContext.Provider>
     </Comp>
