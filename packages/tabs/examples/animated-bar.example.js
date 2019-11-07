@@ -5,7 +5,14 @@ import React, {
   useLayoutEffect,
   createContext
 } from "react";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  useTabState
+} from "@reach/tabs";
 import { useRect } from "@reach/rect";
 import "@reach/tabs/styles.css";
 
@@ -39,7 +46,7 @@ function ExampleAnimatedTabs({ color, ...rest }) {
 }
 
 function ExampleAnimatedTab(props) {
-  const { isSelected } = props;
+  const { isSelected } = useTabState();
 
   // measure the size of our element, only listen to rect if active
   const ref = useRef();

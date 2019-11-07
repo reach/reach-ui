@@ -28,6 +28,15 @@ const TabsContext = createNamedContext("Tabs");
 const TabContext = createNamedContext("Tab");
 const TabPanelContext = createNamedContext("TabPanel");
 
+export const useTabState = () => {
+  const index = useContext(TabContext);
+  const { selectedIndex } = useContext(TabsContext);
+
+  return {
+    isSelected: index === selectedIndex
+  };
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 // Tabs
 
