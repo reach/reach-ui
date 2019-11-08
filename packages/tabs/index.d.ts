@@ -29,10 +29,9 @@ type SupportedTabsComponent = object | keyof JSX.IntrinsicElements;
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
  */
-export type TabsProps<T extends SupportedTabsComponent> = Omit<
-  ResolvedTabsProps<T>,
-  "onChange"
-> & {
+export type TabsProps<
+  T extends SupportedTabsComponent = SupportedTabsComponent
+> = Omit<ResolvedTabsProps<T>, "onChange"> & {
   /**
    * Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't
    * matter, you can have tabs on the top or the bottom. In fact, you could have
