@@ -24,7 +24,7 @@ import React, {
   useState
 } from "react";
 import { func } from "prop-types";
-import { wrapEvent, useForkedRef } from "@reach/utils";
+import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -262,26 +262,29 @@ export const Combobox = forwardRef(function Combobox(
 
   useFocusManagement(data.lastActionType, inputRef);
 
-  const listboxId = `listbox--${useId()}`;
+  const defaultListboxId = makeId("listbox", useId());
+  const [listboxId, setListboxId] = useState(null);
 
   const context = useMemo(() => {
     return {
-      data,
-      inputRef,
-      popoverRef,
-      buttonRef,
-      onSelect,
-      optionsRef,
-      state,
-      transition,
-      listboxId,
       autocompletePropRef,
-      persistSelectionRef,
+      buttonRef,
+      data,
+      defaultListboxId,
+      inputRef,
       isVisible: isVisible(state),
-      openOnFocus
+      listboxId,
+      onSelect,
+      openOnFocus,
+      optionsRef,
+      persistSelectionRef,
+      popoverRef,
+      setListboxId,
+      state,
+      transition
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, onSelect, state, transition, listboxId]);
+  }, [data, onSelect, state, transition, defaultListboxId, listboxId]);
 
   return (
     <Context.Provider value={context}>
@@ -312,6 +315,7 @@ if (__DEV__) {
 export const ComboboxInput = forwardRef(function ComboboxInput(
   {
     as: Comp = "input",
+    id,
 
     // highlights all the text in the box on click when true
     selectOnClick = false,
@@ -333,13 +337,15 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   forwardedRef
 ) {
   const {
-    data: { navigationValue, value, lastActionType },
-    inputRef,
-    state,
-    transition,
-    listboxId,
     autocompletePropRef,
-    openOnFocus
+    data: { navigationValue, value, lastActionType },
+    defaultListboxId,
+    inputRef,
+    listboxId,
+    openOnFocus,
+    setListboxId,
+    state,
+    transition
   } = useContext(Context);
 
   const ref = useForkedRef(inputRef, forwardedRef);
@@ -356,6 +362,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
   useLayoutEffect(() => {
     autocompletePropRef.current = autocomplete;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autocomplete]);
 
   const handleValueChange = value => {
@@ -407,6 +414,14 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
         navigationValue || controlledValue || value
       : controlledValue || value;
+
+  useLayoutEffect(() => {
+    const _id = id || defaultListboxId;
+    if (_id != null) {
+      setListboxId(_id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, defaultListboxId]);
 
   return (
     <Comp
@@ -661,6 +676,7 @@ function useFocusManagement(lastActionType, inputRef) {
     ) {
       inputRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActionType]);
 }
 
