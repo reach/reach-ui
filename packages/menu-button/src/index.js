@@ -14,7 +14,7 @@ import Popover from "@reach/popover";
 import { container, button, popover, menu, item } from "./defs";
 
 ////////////////////////////////////////////////////////////////////////////////
-export const MenuProvider = createRootComponent(container);
+export const MenuProvider = adapt(container);
 export const MenuButton = adapt(button);
 export const MenuPopover = adapt(popover);
 export const Menu = adapt(menu);
@@ -23,20 +23,30 @@ export const MenuItem = adapt(item, {
 });
 
 function adapt(def, options) {
-  if (def.type === "popover") {
-    return createPopoverComponent(def);
+  let C = null;
+
+  switch (def.type) {
+    case "root-provider":
+      C = createRootProvider(def);
+      break;
+    case "root-component":
+      C = createRootComponent(def);
+      break;
+    case "popover":
+      C = createPopoverComponent(def);
+      break;
+    case "indexed-parent":
+      C = withDescendants(def.descendants, createComponent(def));
+      break;
+    case "indexed-child":
+      C = asDescendant(options.registerChild, createComponent(def));
+      break;
+    default:
+      C = createComponent(def);
   }
 
-  const C = createComponent(def);
   C.displayName = def.displayName;
-
-  if (def.type === "indexed-parent") {
-    return withDescendants(def.descendants, C);
-  } else if (def.type === "indexed-child") {
-    return asDescendant(options.registerChild, C);
-  } else {
-    return C;
-  }
+  return C;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,21 +56,18 @@ function adapt(def, options) {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-function createRootComponent({ displayName, chart, refs }) {
-  const C = ({ children }) => {
-    const reactRefs = Object.keys(refs).reduce((reactRefs, name) => {
-      reactRefs[name] = useRef(refs[name]); // eslint-disable-line
+function createRootComponent() {}
+function createRootProvider(def) {
+  return ({ children }) => {
+    const reactRefs = Object.keys(def.refs).reduce((reactRefs, name) => {
+      reactRefs[name] = useRef(def.refs[name]);
       return reactRefs;
     }, {});
 
     return (
-      <MachineProvider children={children} chart={chart} refs={reactRefs} />
+      <MachineProvider children={children} chart={def.chart} refs={reactRefs} />
     );
   };
-
-  C.displayName = displayName;
-
-  return C;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -145,14 +152,10 @@ function createComponent(def) {
 }
 
 function createPopoverComponent(def) {
-  const C = forwardRef(
-    ({ as = "div", portal = true, ...props }, forwardedRef) => {
-      const Comp = portal ? Popover : as;
-      const { [def.targetRef]: targetRef } = useMachineRefs();
-      const popupProps = portal ? { targetRef } : {};
-      return <Comp ref={forwardedRef} {...popupProps} {...props} />;
-    }
-  );
-  C.displayName = "PopoverParent";
-  return C;
+  return forwardRef(({ as = "div", portal = true, ...props }, forwardedRef) => {
+    const Comp = portal ? Popover : as;
+    const { [def.targetRef]: targetRef } = useMachineRefs();
+    const popupProps = portal ? { targetRef } : {};
+    return <Comp ref={forwardedRef} {...popupProps} {...props} />;
+  });
 }

@@ -3,7 +3,8 @@ import menuButtonChart from "./chart";
 // TODO: get rid of <MachineProvider>, do it all inside
 // createRootComponent
 export const container = {
-  displayName: "MenuContainer",
+  type: "root-provider",
+  displayName: "MenuButtonContainer",
   chart: menuButtonChart,
   refs: {
     button: null,
