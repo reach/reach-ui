@@ -3,13 +3,18 @@ import menuButtonChart from "./chart";
 // TODO: get rid of <MachineProvider>, do it all inside
 // createRootComponent
 export const container = {
-  type: "root-provider",
+  type: "ROOT_PROVIDER",
   displayName: "MenuButtonContainer",
   chart: menuButtonChart,
   refs: {
     button: null,
     menu: null,
     items: []
+  },
+  setup: send => {
+    let up = () => send("DOC_POINTER_UP");
+    document.addEventListener("pointerup", up);
+    return () => document.removeEventListener("pointerup", up);
   }
 };
 
@@ -19,7 +24,7 @@ export const button = {
   ref: "button",
   events: {
     onClick: "BUTTON_CLICK",
-    onPointerDown: "BUTTON_POINTER_DOWN",
+    onPointerDown: leftClick("BUTTON_POINTER_DOWN"),
     onPointerUp: "BUTTON_POINTER_UP",
     onPointerMove: "BUTTON_POINTER_MOVE",
     onPointerLeave: "BUTTON_POINTER_LEAVE",
@@ -32,7 +37,7 @@ export const button = {
   },
   attrs: {
     type: "button",
-    "data-reach-menu-button": "",
+    id: (state, ctx, rootId) => `${rootId}--button`,
     "aria-haspopup": "menu",
     "aria-expanded": state => {
       return state.startsWith("open");
@@ -41,23 +46,12 @@ export const button = {
       // TODO: put rootId in ctx
       return `${rootId}--menu`;
     },
-    id: (state, ctx, rootId) => {
-      return `${rootId}--button`;
-    }
-  },
-  setup: send => {
-    // Can we do this in the state machine instead with enter/leave?
-    // Maybe a provider "setup" function?
-    // Maybe 1st class "doc" events if we need them?
-    // The button is a weird place though...
-    let up = () => send("DOC_POINTER_UP");
-    document.addEventListener("pointerup", up);
-    return () => document.removeEventListener("pointerup", up);
+    "data-reach-menu-button": ""
   }
 };
 
 export const popover = {
-  type: "popover",
+  type: "POPOVER",
   displayName: "MenuPopover",
   targetRef: "button",
   attrs: {
@@ -66,20 +60,21 @@ export const popover = {
 };
 
 export const menu = {
-  type: "indexed-parent",
+  type: "INDEXED_PARENT",
   displayName: "Menu",
   tagName: "div",
   ref: "menu",
   descendants: "items",
-  attrs: (state, ctx, rootId) => ({
-    "data-reach-menu": "",
-    "data-closed": !state.startsWith("open") ? "" : undefined,
+  attrs: {
     role: "menu",
-    id: `${rootId}--menu`,
+    id: (state, ctx, rootId) => `${rootId}--menu`,
     tabIndex: "-1",
-    "aria-labelledby": `${rootId}--button`,
-    "aria-activedescendant": `${rootId}--menu-item-${ctx.activeIndex}`
-  }),
+    "aria-labelledby": (state, ctx, rootId) => `${rootId}--button`,
+    "aria-activedescendant": (state, ctx, rootId) =>
+      `${rootId}--menu-item-${ctx.activeIndex}`,
+    "data-reach-menu": "",
+    "data-closed": state => (!state.startsWith("open") ? "" : undefined)
+  },
   events: {
     onKeyDown: switchKey({
       Tab: event => event.preventDefault(),
@@ -103,7 +98,7 @@ export const menu = {
 // YOU ARE HERE:
 // Trying to figure out how to abstract these "descendants"
 export const item = {
-  type: "indexed-child",
+  type: "INDEXED_CHILD",
   tagName: "div",
   events: {
     onPointerDown: "ITEM_POINTER_DOWN",
@@ -114,13 +109,13 @@ export const item = {
     onPointerLeave: "ITEM_POINTER_LEAVE"
   },
   attrs: {
+    role: "menuitem",
+    id: (state, ctx, rootId, index) => `${rootId}--menu-item-${index}`,
     "data-reach-menu-item": "",
     "data-selected": (state, ctx, rootId, index) =>
       ctx.activeIndex === index ? "" : undefined,
     "data-confirming": (state, ctx, rootId, index) =>
-      ctx.activeIndex === index && state === "open:confirming" ? "" : undefined,
-    role: "menuitem",
-    id: (state, ctx, rootId, index) => `${rootId}--menu-item-${index}`
+      ctx.activeIndex === index && state === "open:confirming" ? "" : undefined
   }
 };
 
@@ -133,6 +128,14 @@ function switchKey(keys) {
       } else {
         send(handler);
       }
+    }
+  };
+}
+
+function leftClick(eventName) {
+  return (event, send) => {
+    if (event.button === 0) {
+      send(eventName);
     }
   };
 }
