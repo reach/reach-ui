@@ -16,7 +16,7 @@ export let Example = () => (
       <MenuButton>
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
-      <MenuPopover portal={false}>
+      <MenuPopover>
         <Menu>
           <MenuItem onSelect={() => console.log("download")}>Download</MenuItem>
           <MenuItem onSelect={() => console.log("delete")}>Delete</MenuItem>

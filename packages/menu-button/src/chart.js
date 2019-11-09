@@ -50,7 +50,6 @@ const chart = {
 
   context: {
     searchStartIndex: -1,
-    index: 0,
     search: "",
     activeIndex: -1,
 
@@ -73,10 +72,10 @@ const chart = {
     },
     idle: {
       on: {
-        BUTTON_CLICK: {
-          target: "open:selecting",
-          actions: ["resetIndex"]
-        },
+        // BUTTON_CLICK: {
+        //   target: "open:selecting",
+        //   actions: ["resetIndex"]
+        // },
         BUTTON_POINTER_DOWN: {
           target: "open:clickingButton",
           actions: ["resetIndex"]
@@ -225,7 +224,9 @@ const actions = {
   // Search
   resetSearch: assign({ search: "" }),
 
-  concatSearch: assign({ search: (ctx, event) => ctx.search + event.key }),
+  concatSearch: assign({
+    search: (ctx, event) => ctx.search + event.key
+  }),
 
   setSearchStartIndex: assign({ searchStartIndex: ctx => ctx.activeIndex }),
 
