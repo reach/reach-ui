@@ -21,14 +21,22 @@ const MachineContext = createContext();
 // have to add a bunch of extra code.
 const RootIdContext = createContext();
 
-export function MachineProvider({ chart, refs, children }) {
-  const rootId = useId();
-  const service = useMachine(chart, refs);
-  return (
-    <RootIdContext.Provider value={rootId}>
-      <MachineContext.Provider children={children} value={service} />
-    </RootIdContext.Provider>
-  );
+export function createRootProvider(def) {
+  return ({ children }) => {
+    const reactRefs = Object.keys(def.refs).reduce((reactRefs, name) => {
+      reactRefs[name] = useRef(def.refs[name]);
+      return reactRefs;
+    }, {});
+
+    const rootId = useId();
+    const service = useMachine(def.chart, reactRefs);
+
+    return (
+      <RootIdContext.Provider value={rootId}>
+        <MachineContext.Provider children={children} value={service} />
+      </RootIdContext.Provider>
+    );
+  };
 }
 
 export function useRootId() {
