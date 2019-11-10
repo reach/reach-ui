@@ -416,7 +416,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
       : controlledValue || value;
 
   useLayoutEffect(() => {
-    const _id = id || defaultListboxId;
+    const _id = id != null ? id : defaultListboxId;
     if (_id != null) {
       setListboxId(_id);
     }
