@@ -1,8 +1,7 @@
-import adapt from "./use-machine";
+import adapt from "./adapter";
 import { container, button, popover, menu, item } from "./defs";
 
-// TODO: rename to MenuContainer
-export const MenuProvider = adapt(container);
+export const MenuContainer = adapt(container);
 export const MenuButton = adapt(button);
 export const MenuPopover = adapt(popover);
 export const Menu = adapt(menu);

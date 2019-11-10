@@ -1,5 +1,4 @@
 import { Machine as createMachine, assign } from "xstate";
-console.clear();
 
 const openEvents = {
   KEY_ESCAPE: {
