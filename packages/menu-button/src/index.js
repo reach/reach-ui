@@ -1,4 +1,4 @@
-import adapt from "./adapter";
+import adapt from "@reach/adapter";
 import { container, button, popover, menu, item } from "./defs";
 
 export const MenuContainer = adapt(container);
