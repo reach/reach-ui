@@ -14,7 +14,7 @@ This works great as long as you don't server render your app. If you server
 render then when React in the client tries to reuse the markup from the server,
 the IDs won't match and React will then recreate the entire DOM tree.
 
-Solution 2: Increment an integer 
+Solution 2: Increment an integer
 
 This sounds great. Since we're rendering the exact same tree on the server and client,
 we can increment a counter and get a deterministic result between client and server.
@@ -57,9 +57,10 @@ export const useId = () => {
       // rendering flicker, though it'll make the first render slower (unlikely
       // to matter, you're welcome to measure your app and let us know if it's
       // a problem.)
-      setId(genId()), [];
+      setId(genId());
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (serverHandoffComplete === false) {
