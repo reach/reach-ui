@@ -1,6 +1,28 @@
-import { Machine as createMachine, assign } from "xstate";
+"use strict";
 
-const openEvents = {
+exports.__esModule = true;
+exports["default"] = void 0;
+
+var _xstate = require("xstate");
+
+function _extends() {
+  _extends =
+    Object.assign ||
+    function(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = arguments[i];
+        for (var key in source) {
+          if (Object.prototype.hasOwnProperty.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+      return target;
+    };
+  return _extends.apply(this, arguments);
+}
+
+var openEvents = {
   KEY_ESCAPE: {
     target: "idle",
     actions: ["focusButton"]
@@ -43,22 +65,17 @@ const openEvents = {
     actions: ["highlightLast"]
   }
 };
-
-export const chart = {
+var chart = {
   id: "menu-button",
-
   context: {
     searchStartIndex: -1,
     search: "",
     activeIndex: -1,
-
     // barf
     button: null,
     items: null
   },
-
   initial: "idle",
-
   states: {
     "open:confirming": {
       entry: ["assignRefsForClose"],
@@ -100,8 +117,7 @@ export const chart = {
     "open:selecting": {
       entry: ["disableTooltips", "focusMenu"],
       exit: ["enableTooltips"],
-      on: {
-        ...openEvents,
+      on: _extends({}, openEvents, {
         KEY_PRESS: {
           target: "open:searching",
           actions: [
@@ -110,13 +126,12 @@ export const chart = {
             "setSearchStartIndex"
           ]
         }
-      }
+      })
     },
     "open:selectingWithDrag": {
       entry: ["disableTooltips"],
       exit: ["enableTooltips"],
-      on: {
-        ...openEvents,
+      on: _extends({}, openEvents, {
         ITEM_POINTER_UP: {
           target: "open:confirming"
         },
@@ -137,7 +152,7 @@ export const chart = {
           target: "open:selectingWithDrag",
           actions: ["resetIndex"]
         }
-      }
+      })
     },
     // TODO THIS IS ALL BUSTED
     "open:searching": {
@@ -149,13 +164,12 @@ export const chart = {
           actions: ["resetSearch"]
         }
       },
-      on: {
-        ...openEvents,
+      on: _extends({}, openEvents, {
         KEY_PRESS: {
           target: "open:searching",
           actions: ["concatSearch"]
         }
-      }
+      })
     },
     "open:clickingButton": {
       after: {
@@ -179,149 +193,211 @@ export const chart = {
     }
   }
 };
-
-export const actions = {
-  focusButton: (ctx, event) => {
+var actions = {
+  focusButton: function focusButton(ctx, event) {
     ((event.refs && event.refs.button) || ctx.button).focus();
   },
-  focusMenu: (ctx, event) => {
+  focusMenu: function focusMenu(ctx, event) {
     // need to let the keydown event finish before moving focus
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
       event.refs.menu.focus();
     });
   },
-
   // index stuff
-  highlightFirst: assign({ activeIndex: 0 }),
-  highlightLast: assign({ activeIndex: ctx => ctx.items().length - 1 }),
-  highlightItem: assign({ activeIndex: (ctx, event) => event.index }),
-  navigateNext: assign({
-    activeIndex: (ctx, event) => {
-      const { items } = event.refs;
+  highlightFirst: (0, _xstate.assign)({
+    activeIndex: 0
+  }),
+  highlightLast: (0, _xstate.assign)({
+    activeIndex: function activeIndex(ctx) {
+      return ctx.items().length - 1;
+    }
+  }),
+  highlightItem: (0, _xstate.assign)({
+    activeIndex: function activeIndex(ctx, event) {
+      return event.index;
+    }
+  }),
+  navigateNext: (0, _xstate.assign)({
+    activeIndex: function activeIndex(ctx, event) {
+      var items = event.refs.items;
       console.log(items);
       return (ctx.activeIndex + 1) % items.length;
     }
   }),
-  navigatePrev: assign({
-    activeIndex: (ctx, event) => {
-      const { items } = event.refs;
+  navigatePrev: (0, _xstate.assign)({
+    activeIndex: function activeIndex(ctx, event) {
+      var items = event.refs.items;
       return (ctx.activeIndex + items.length - 1) % items.length;
     }
   }),
-
-  resetIndex: assign({ activeIndex: -1 }),
-
+  resetIndex: (0, _xstate.assign)({
+    activeIndex: -1
+  }),
   // tooltips
-  disableTooltips: () => {
+  disableTooltips: function disableTooltips() {
     window.__REACH_DISABLE_TOOLTIPS = false;
   },
-
-  enableTooltips: () => {
+  enableTooltips: function enableTooltips() {
     window.__REACH_DISABLE_TOOLTIPS = true;
   },
-
   // Search
-  resetSearch: assign({ search: "" }),
-
-  concatSearch: assign({
-    search: (ctx, event) => ctx.search + event.key
+  resetSearch: (0, _xstate.assign)({
+    search: ""
   }),
-
-  setSearchStartIndex: assign({ searchStartIndex: ctx => ctx.activeIndex }),
-
-  resetSearchStartIndex: assign({ searchStartIndex: -1 }),
-
-  highlightSearchMatch: assign({
-    activeIndex: (ctx, event) => {
-      const { searchStartIndex, search } = ctx;
-      const searchString = search.toLowerCase();
-      const { items } = event.refs;
-      const reordered = items
+  concatSearch: (0, _xstate.assign)({
+    search: function search(ctx, event) {
+      return ctx.search + event.key;
+    }
+  }),
+  setSearchStartIndex: (0, _xstate.assign)({
+    searchStartIndex: function searchStartIndex(ctx) {
+      return ctx.activeIndex;
+    }
+  }),
+  resetSearchStartIndex: (0, _xstate.assign)({
+    searchStartIndex: -1
+  }),
+  highlightSearchMatch: (0, _xstate.assign)({
+    activeIndex: function activeIndex(ctx, event) {
+      var searchStartIndex = ctx.searchStartIndex,
+        search = ctx.search;
+      var searchString = search.toLowerCase();
+      var items = event.refs.items;
+      var reordered = items
         .slice(searchStartIndex + 1)
         .concat(items.slice(0, searchStartIndex));
 
-      for (let i = 0, l = reordered.length; i < l; i++) {
-        const itemText = reordered[i].searchText.toLowerCase();
+      var _loop = function _loop(i, l) {
+        var itemText = reordered[i].searchText.toLowerCase();
+
         if (itemText.startsWith(searchString)) {
           // adjust the index back since we rearranged them
           // there is a math way to do this like:
           // return searchStartIndex + 1 + i % items.length;
           // but it's too late right now
-          return items.findIndex(item => item === reordered[i]);
+          return {
+            v: items.findIndex(function(item) {
+              return item === reordered[i];
+            })
+          };
         }
+      };
+
+      for (var i = 0, l = reordered.length; i < l; i++) {
+        var _ret = _loop(i, l);
+
+        if (typeof _ret === "object") return _ret.v;
       }
+
       return -1;
     }
   }),
-
-  selectItem: (ctx, event) => {
-    const { items } = ctx;
+  selectItem: function selectItem(ctx, event) {
+    var items = ctx.items;
     items[ctx.activeIndex].onSelect();
   },
-
-  assignRefsForClose: assign({
-    button: (ctx, event) => event.refs.button,
-    items: (ctx, event) => event.refs.items
+  assignRefsForClose: (0, _xstate.assign)({
+    button: function button(ctx, event) {
+      return event.refs.button;
+    },
+    items: function items(ctx, event) {
+      return event.refs.items;
+    }
   })
 };
-
-export const guards = {
-  hasHighlight: ctx => ctx.activeIndex > -1,
-  clickedNonMenuItem: (ctx, event) =>
-    !event.refs.menu.contains(event.relatedTarget)
+var guards = {
+  hasHighlight: function hasHighlight(ctx) {
+    return ctx.activeIndex > -1;
+  },
+  clickedNonMenuItem: function clickedNonMenuItem(ctx, event) {
+    return !event.refs.menu.contains(event.relatedTarget);
+  }
 };
 
-if (__DEV__) {
+if (process.env.NODE_ENV !== "production") {
   validate(chart, actions, guards);
 }
 
 function validate(chart, actions, guards) {
-  let usedActions = {};
-  let usedGuards = {};
+  var usedActions = {};
+  var usedGuards = {};
 
-  for (let state in chart.states) {
-    let eventActions = [];
-    let entry = chart.states[state].entry;
-    let exit = chart.states[state].exit;
-    if (entry) eventActions.push(...entry);
-    if (exit) eventActions.push(...exit);
-    let events = {
-      ...chart.states[state].on,
-      ...chart.states[state].after
-    };
-    for (let event in events) {
+  for (var state in chart.states) {
+    var eventActions = [];
+    var entry = chart.states[state].entry;
+    var exit = chart.states[state].exit;
+    if (entry) eventActions.push.apply(eventActions, entry);
+    if (exit) eventActions.push.apply(eventActions, exit);
+
+    var events = _extends(
+      {},
+      chart.states[state].on,
+      {},
+      chart.states[state].after
+    );
+
+    for (var event in events) {
       if (events[event].actions) {
-        eventActions.push(...events[event].actions);
+        eventActions.push.apply(eventActions, events[event].actions);
       }
-      const guard = events[event].cond;
+
+      var guard = events[event].cond;
+
       if (guard) {
         usedGuards[guard] = true;
+
         if (!guards[guard]) {
           console.warn(
-            `Guard not found: "${guard}" for ${chart.id} "${state}"`
+            'Guard not found: "' +
+              guard +
+              '" for ' +
+              chart.id +
+              ' "' +
+              state +
+              '"'
           );
         }
       }
     }
-    for (let action of eventActions) {
+
+    for (
+      var _i = 0, _eventActions = eventActions;
+      _i < _eventActions.length;
+      _i++
+    ) {
+      var action = _eventActions[_i];
       usedActions[action] = true;
+
       if (!actions[action]) {
         console.warn(
-          `Action not found: "${action}" for ${chart.id} "${state}"`
+          'Action not found: "' +
+            action +
+            '" for ' +
+            chart.id +
+            ' "' +
+            state +
+            '"'
         );
       }
     }
   }
 
-  for (let action in actions) {
-    if (!usedActions[action]) {
-      console.warn(`Defined action "${action}" is not used in the chart.`);
+  for (var _action in actions) {
+    if (!usedActions[_action]) {
+      console.warn(
+        'Defined action "' + _action + '" is not used in the chart.'
+      );
     }
-  }
-
-  // for (let guard in guards) {
+  } // for (let guard in guards) {
   //   if (!usedGuards[guard]) {
   //     console.warn(`Defined guard "${guard}" is not used in the chart.`);
   //   }
   // }
 }
+
+var _default = (0, _xstate.Machine)(chart, {
+  actions: actions,
+  guards: guards
+});
+
+exports["default"] = _default;

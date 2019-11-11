@@ -28,7 +28,7 @@ const MachineContext = createContext();
 // This function adapts any component definition into an actual React
 // component.  There are a few basic types of components, each case has an
 // explanation of the type.
-export default function adapt(def, options) {
+export default function adapt(def, options = {}) {
   let C = null;
 
   switch (def.type) {
@@ -91,7 +91,10 @@ export default function adapt(def, options) {
       // Indexed children receive their index from the indexed parent, and
       // provide a value to the parent that is then sent to the chart's
       // actions. The index is made available to `attrs` and `events`.
-      C = asDescendant(options.registerDescendant, createComponent(def));
+      C = asDescendant(
+        options.registerDescendant || (() => {}),
+        createComponent(def)
+      );
       break;
     default:
       // Everything else is just a component.

@@ -1,7 +1,7 @@
 import "@reach/menu-button/styles.css";
 import React from "react";
 import {
-  MenuProvider,
+  MenuContainer,
   MenuButton,
   MenuPopover,
   Menu,
@@ -12,7 +12,7 @@ export let name = "Basic";
 
 export let Example = () => (
   <div>
-    <MenuProvider>
+    <MenuContainer>
       <MenuButton>
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
@@ -29,6 +29,6 @@ export let Example = () => (
           </MenuItem>
         </Menu>
       </MenuPopover>
-    </MenuProvider>
+    </MenuContainer>
   </div>
 );

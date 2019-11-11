@@ -41,7 +41,6 @@ export const button = {
       return state.startsWith("open");
     },
     "aria-controls": (state, ctx, rootId) => {
-      // TODO: put rootId in ctx
       return `${rootId}--menu`;
     },
     "data-reach-menu-button": ""
@@ -93,8 +92,6 @@ export const menu = {
   }
 };
 
-// YOU ARE HERE:
-// Trying to figure out how to abstract these "descendants"
 export const item = {
   type: "INDEXED_CHILD",
   tagName: "div",
