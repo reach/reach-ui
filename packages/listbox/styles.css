@@ -1,0 +1,67 @@
+:root {
+  --reach-listbox: 1;
+}
+
+[data-reach-listbox-popover] {
+  font-family: sans-serif;
+  display: block;
+  position: absolute;
+}
+
+[data-reach-listbox] {
+  white-space: nowrap;
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+  background: hsla(0, 100%, 100%, 0.99);
+  outline: none;
+  padding: 0.5rem 0;
+  font-size: 85%;
+  user-select: none;
+  visibility: visible;
+  opacity: 1;
+}
+
+[data-reach-listbox][data-closed] {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 150ms, opacity 150ms ease;
+}
+
+[data-reach-listbox-option] {
+  display: block;
+}
+
+[data-reach-listbox-option] {
+  display: block;
+  color: inherit;
+  font: inherit;
+  text-decoration: initial;
+  padding: 5px;
+}
+
+@keyframes flash {
+  0% {
+    background: rgb(83, 147, 248);
+    color: white;
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+    background: inherit;
+    color: inherit;
+  }
+  100% {
+    background: rgb(83, 147, 248);
+    color: white;
+    opacity: 1;
+  }
+}
+
+[data-reach-listbox-option][data-selected] {
+  background: rgb(79, 144, 248);
+  color: white;
+}
+
+[data-reach-listbox-option][data-selected][data-confirming] {
+  animation: flash 100ms;
+  animation-iteration-count: 1;
+}

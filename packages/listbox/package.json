@@ -1,0 +1,35 @@
+{
+  "name": "@reach/listbox",
+  "version": "0.0.0",
+  "description": "Accessible React listbox input.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "node ../../shared/build-package"
+  },
+  "dependencies": {
+    "@reach/popover": "^0.5.0",
+    "@reach/utils": "^0.5.0",
+    "prop-types": "^15.7.2",
+    "warning": "^4.0.3",
+    "xstate": "^4.6.7"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@reach/tooltip": "^0.5.4",
+    "react": "^16.11.0"
+  },
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "index.d.ts",
+    "styles.css"
+  ]
+}
