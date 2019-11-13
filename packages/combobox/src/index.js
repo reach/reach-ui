@@ -24,7 +24,7 @@ import React, {
   useState
 } from "react";
 import { func } from "prop-types";
-import { makeId, wrapEvent, useForkedRef, assignRef } from "@reach/utils";
+import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -280,9 +280,11 @@ export const Combobox = forwardRef(function Combobox(
       persistSelectionRef,
       state,
       transition,
-      inputIdDictionary
+      inputIdDictionary,
+      openOnFocus,
+      autocompletePropRef
     };
-  }, [data, state, listboxId, onSelect, transition]);
+  }, [data, state, listboxId, onSelect, transition, openOnFocus]);
 
   return (
     <Context.Provider value={context}>
@@ -326,6 +328,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     onKeyDown,
     onBlur,
     onFocus,
+    id,
 
     // might be controlled
     value: controlledValue,
@@ -338,7 +341,11 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     inputRef,
     state,
     transition,
-    inputIdDictionary
+    inputIdDictionary,
+    autocompletePropRef,
+    openOnFocus,
+    setListboxId,
+    listboxId
   } = useContext(Context);
 
   const ref = useForkedRef(inputRef, forwardedRef);
@@ -355,7 +362,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
   useLayoutEffect(() => {
     autocompletePropRef.current = autocomplete;
-  }, [autocomplete]);
+  }, [autocomplete, autocompletePropRef]);
 
   useLayoutEffect(() => {
     if (id) {
@@ -674,7 +681,7 @@ function useFocusManagement(lastActionType, inputRef) {
     ) {
       inputRef.current.focus();
     }
-  }, [lastActionType]);
+  }, [inputRef, lastActionType]);
 }
 
 // We want the same events when the input or the popup have focus (HOW COOL ARE
