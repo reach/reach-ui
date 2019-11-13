@@ -48,17 +48,26 @@ let serverHandoffComplete = false;
 let id = 0;
 const genId = () => ++id;
 
-export const useId = () => {
+export const useId = fallback => {
+  /*
+   * We'll check for a fallback and use that if it is provided.
+   * React doesn't like us to call hooks conditionally, so no early bailout.
+   */
+  const hasFallback = fallback && typeof fallback === "string";
   /*
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
    */
-  const initialId = serverHandoffComplete ? genId() : null;
+  const initialId = hasFallback
+    ? fallback
+    : serverHandoffComplete
+    ? genId()
+    : null;
 
   const [id, setId] = useState(initialId);
 
   useLayoutEffect(() => {
-    if (id === null) {
+    if (!hasFallback && id === null) {
       /*
        * Patch the ID after render. We do this in `useLayoutEffect` to avoid any
        * rendering flicker, though it'll make the first render slower (unlikely
@@ -68,7 +77,7 @@ export const useId = () => {
       setId(genId());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [hasFallback]);
 
   useEffect(() => {
     if (serverHandoffComplete === false) {

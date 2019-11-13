@@ -132,8 +132,7 @@ export const SliderInput = forwardRef(function SliderInput(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const uid = useId();
-  const id = idProp || uid;
+  const id = useId(idProp);
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);

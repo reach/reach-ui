@@ -238,8 +238,7 @@ export function useTooltip({
   ref: forwardedRef,
   DEBUG_STYLE
 } = {}) {
-  const uid = useId();
-  const id = idProp || uid;
+  const id = useId(idProp);
 
   const [isVisible, setIsVisible] = useState(
     DEBUG_STYLE

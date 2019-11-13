@@ -31,8 +31,7 @@ export const Tabs = forwardRef(function Tabs(
     "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
   );
 
-  const uid = useId();
-  const id = idProp || uid;
+  const id = useId(idProp);
 
   // we only manage focus if the user caused the update vs.
   // a new controlled index coming in
