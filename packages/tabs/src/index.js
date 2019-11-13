@@ -11,6 +11,7 @@ export const Tabs = forwardRef(function Tabs(
     as: Comp = "div",
     onChange,
     index: controlledIndex = undefined,
+    id: idProp,
     readOnly = false,
     defaultIndex,
     ...props
@@ -30,7 +31,8 @@ export const Tabs = forwardRef(function Tabs(
     "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
   );
 
-  const _id = useId();
+  const uid = useId();
+  const id = idProp || uid;
 
   // we only manage focus if the user caused the update vs.
   // a new controlled index coming in
@@ -45,7 +47,7 @@ export const Tabs = forwardRef(function Tabs(
     if (!child || typeof child.type === "string") return child;
     return cloneElement(child, {
       selectedIndex: isControlled ? controlledIndex : selectedIndex,
-      _id,
+      _id: id,
       _userInteractedRef,
       _selectedPanelRef,
       _onFocusPanel: () =>
@@ -62,7 +64,9 @@ export const Tabs = forwardRef(function Tabs(
     });
   });
 
-  return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
+  return (
+    <Comp data-reach-tabs="" id={id} ref={ref} {...props} children={clones} />
+  );
 });
 
 if (__DEV__) {
@@ -170,7 +174,7 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const Tab = forwardRef(function Tab(
-  { children, as: Comp = "button", ...rest },
+  { children, as: Comp = "button", id: idProp, ...rest },
   forwardedRef
 ) {
   const { isSelected, _userInteractedRef, _onSelect, _id, ...htmlProps } = rest;
@@ -179,6 +183,8 @@ export const Tab = forwardRef(function Tab(
 
   const ownRef = useRef(null);
   const ref = useForkedRef(forwardedRef, ownRef);
+
+  const id = idProp || makeId("tab", _id);
 
   useUpdateEffect(() => {
     if (isSelected && ownRef.current && _userInteractedRef.current) {
@@ -192,7 +198,7 @@ export const Tab = forwardRef(function Tab(
       data-reach-tab=""
       ref={ref}
       role="tab"
-      id={makeId("tab", _id)}
+      id={id}
       tabIndex={isSelected ? 0 : -1}
       aria-selected={isSelected}
       aria-controls={makeId("panel", _id)}
@@ -252,11 +258,13 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const TabPanel = forwardRef(function TabPanel(
-  { children, as: Comp = "div", ...rest },
+  { children, as: Comp = "div", id: idProp, ...rest },
   forwardedRef
 ) {
   const { isSelected, _selectedPanelRef, _id, ...htmlProps } = rest;
   const ref = useForkedRef(forwardedRef, isSelected ? _selectedPanelRef : null);
+
+  const id = idProp || makeId("panel", _id);
 
   return (
     <Comp
@@ -266,7 +274,7 @@ export const TabPanel = forwardRef(function TabPanel(
       tabIndex={-1}
       aria-labelledby={makeId("tab", _id)}
       hidden={!isSelected}
-      id={makeId("panel", _id)}
+      id={id}
       children={children}
       {...htmlProps}
     />
