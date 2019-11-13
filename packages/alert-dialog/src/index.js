@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect, useRef } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
-import { makeId } from "@reach/utils";
 import invariant from "invariant";
 import { func, bool, node, object, oneOfType } from "prop-types";
 
