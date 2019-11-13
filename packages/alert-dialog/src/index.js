@@ -52,8 +52,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   const { labelId, leastDestructiveRef, descriptionId } = React.useContext(
     AlertDialogContext
   );
-  const ariaLabelledBy = props["aria-labelledby"] || labelId;
-  const ariaDescribedBy = props["aria-describedby"] || descriptionId;
+
   const timer = useRef();
   React.useEffect(() => {
     // defer these checks for 1 tick to allow <AlertDialogLabel> and
@@ -64,21 +63,6 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
         `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
         inside an \`<AlertDialog/>\`.`
       );
-      invariant(
-        ariaLabelledBy === labelId,
-        `@reach/alert-dialog: User-defined \`aria-labelledby\` value must match
-      \`id\` set on \`<AlertDialogLabel>\`. Recieved \`aria-labelledby="${ariaLabelledBy}"\`,
-      \`labelId="${labelId}"\``
-      );
-
-      if (ariaDescribedBy) {
-        invariant(
-          ariaDescribedBy === descriptionId,
-          `@reach/alert-dialog: User-defined \`aria-describedby\` value must match
-        \`id\` set on \`<AlertDialogDescription>\`. Recieved \`aria-describedby="${ariaDescribedBy}"\`,
-        \`descriptionId="${descriptionId}"\``
-        );
-      }
     }, 1);
     invariant(
       leastDestructiveRef,
@@ -90,13 +74,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
     return () => {
       clearTimeout(timer.current);
     };
-  }, [
-    labelId,
-    leastDestructiveRef,
-    ariaLabelledBy,
-    ariaDescribedBy,
-    descriptionId
-  ]);
+  }, [labelId, leastDestructiveRef, descriptionId]);
   return (
     <DialogContent
       ref={forwardRef}
@@ -104,9 +82,9 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
       data-reach-alert-dialong-content
       data-reach-alert-dialog-content
       role="alertdialog"
-      aria-labelledby={ariaLabelledBy}
-      {...(ariaDescribedBy ? { "aria-describedby": ariaDescribedBy } : {})}
       {...props}
+      aria-labelledby={labelId}
+      {...(descriptionId ? { "aria-describedby": descriptionId } : {})}
     >
       {children}
     </DialogContent>
