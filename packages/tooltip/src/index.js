@@ -227,6 +227,7 @@ function clearContextId() {
 ////////////////////////////////////////////////////////////////////////////////
 // THE HOOK! It's about time we got to the goods!
 export function useTooltip({
+  id: idProp,
   onMouseEnter,
   onMouseMove,
   onMouseLeave,
@@ -237,7 +238,8 @@ export function useTooltip({
   ref: forwardedRef,
   DEBUG_STYLE
 } = {}) {
-  const id = useId("tooltip");
+  const uid = useId();
+  const id = idProp || uid;
 
   const [isVisible, setIsVisible] = useState(
     DEBUG_STYLE
@@ -362,12 +364,13 @@ export function useTooltip({
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function Tooltip({ children, label, ariaLabel, DEBUG_STYLE, ...rest }) {
+function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
   const child = Children.only(children);
 
   // We need to pass some properties from the child into useTooltip
   // to make sure users can maintain control over the trigger's ref and events
   const [trigger, tooltip] = useTooltip({
+    id,
     DEBUG_STYLE,
     onMouseEnter: child.props.onMouseEnter,
     onMouseMove: child.props.onMouseMove,
@@ -384,6 +387,7 @@ function Tooltip({ children, label, ariaLabel, DEBUG_STYLE, ...rest }) {
       <TooltipPopup
         label={label}
         ariaLabel={ariaLabel}
+        id={id}
         {...tooltip}
         {...rest}
       />
