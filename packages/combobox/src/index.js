@@ -272,20 +272,17 @@ export const Combobox = forwardRef(function Combobox(
       inputRef,
       popoverRef,
       buttonRef,
-      onSelect,
-      optionsRef,
-      state,
-      transition,
+      isVisible: isVisible(state),
       listboxId,
       setListboxId,
-      autocompletePropRef,
+      onSelect,
+      optionsRef,
       persistSelectionRef,
-      inputIdDictionary,
-      isVisible: isVisible(state),
-      openOnFocus
+      state,
+      transition,
+      inputIdDictionary
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, onSelect, state, transition, listboxId]);
+  }, [data, state, listboxId, onSelect, transition]);
 
   return (
     <Context.Provider value={context}>
@@ -332,7 +329,6 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
     // might be controlled
     value: controlledValue,
-    id,
     ...props
   },
   forwardedRef
@@ -342,10 +338,6 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     inputRef,
     state,
     transition,
-    listboxId,
-    setListboxId,
-    autocompletePropRef,
-    openOnFocus,
     inputIdDictionary
   } = useContext(Context);
 

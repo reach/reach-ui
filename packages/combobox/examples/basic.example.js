@@ -27,7 +27,11 @@ export function Example() {
     <div>
       <h2>Clientside Search</h2>
       <Combobox>
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+        <ComboboxInput
+          onChange={handleChange}
+          style={inputStyle}
+          id="my-combobox-input"
+        />
         {results && (
           <ComboboxPopover style={popupStyle}>
             <p>
@@ -38,6 +42,7 @@ export function Example() {
                 <ComboboxOption
                   key={index}
                   value={`${result.city}, ${result.state}`}
+                  id={`option_${index}`}
                 />
               ))}
             </ComboboxList>
