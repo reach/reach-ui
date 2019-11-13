@@ -102,7 +102,6 @@ export const SliderInput = forwardRef(function SliderInput(
     value: controlledValue,
     getValueText,
     handleAlignment = SLIDER_HANDLE_ALIGN_CENTER,
-    id: idProp,
     max = 100,
     min = 0,
     name,
@@ -132,7 +131,7 @@ export const SliderInput = forwardRef(function SliderInput(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const id = useId(idProp);
+  const id = useId(rest.id);
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
@@ -347,7 +346,6 @@ export const SliderInput = forwardRef(function SliderInput(
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         aria-disabled={disabled}
-        id={idProp}
         {...dataAttributes}
         {...rest}
       >

@@ -11,7 +11,6 @@ export const Tabs = forwardRef(function Tabs(
     as: Comp = "div",
     onChange,
     index: controlledIndex = undefined,
-    id: idProp,
     readOnly = false,
     defaultIndex,
     ...props
@@ -31,7 +30,7 @@ export const Tabs = forwardRef(function Tabs(
     "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
   );
 
-  const id = useId(idProp);
+  const id = useId(props.id);
 
   // we only manage focus if the user caused the update vs.
   // a new controlled index coming in
@@ -63,15 +62,7 @@ export const Tabs = forwardRef(function Tabs(
     });
   });
 
-  return (
-    <Comp
-      data-reach-tabs=""
-      ref={ref}
-      id={idProp}
-      {...props}
-      children={clones}
-    />
-  );
+  return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
 });
 
 if (__DEV__) {

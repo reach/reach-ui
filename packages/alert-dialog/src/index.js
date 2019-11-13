@@ -8,10 +8,10 @@ import { func, bool, node, object, oneOfType } from "prop-types";
 let AlertDialogContext = createContext({});
 
 export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
-  { leastDestructiveRef, id: idProp, ...props },
+  { leastDestructiveRef, ...props },
   forwardRef
 ) {
-  const id = useId(idProp);
+  const id = useId(props.id);
   const labelId = makeId("alert-dialog", id);
   const descriptionId = makeId("alert-dialog-description", id);
 
@@ -24,7 +24,6 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
       }}
     >
       <DialogOverlay
-        id={idProp}
         ref={forwardRef}
         data-reach-alert-dialog-overlay
         initialFocusRef={leastDestructiveRef}

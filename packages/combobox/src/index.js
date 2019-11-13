@@ -207,7 +207,6 @@ export const Combobox = forwardRef(function Combobox(
   {
     // Called whenever the user selects an item from the list
     onSelect,
-    id: idProp,
 
     // opens the list when the input receives focused (but only if there are
     // items in the list)
@@ -260,7 +259,7 @@ export const Combobox = forwardRef(function Combobox(
 
   useFocusManagement(data.lastActionType, inputRef);
 
-  const id = useId(idProp);
+  const id = useId(rest.id);
   const listboxId = makeId("listbox", id);
 
   const context = useMemo(() => {
@@ -292,7 +291,6 @@ export const Combobox = forwardRef(function Combobox(
         aria-haspopup="listbox"
         aria-owns={listboxId}
         aria-expanded={context.isVisible}
-        id={idProp}
       >
         {children}
       </Comp>
