@@ -48,12 +48,14 @@ let serverHandoffComplete = false;
 let id = 0;
 const genId = () => ++id;
 
-export const useId = () => {
+const combineId = (label, id) => (label ? `${label}_${id}` : id);
+
+export const useId = label => {
   /*
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
    */
-  const initialId = serverHandoffComplete ? genId() : null;
+  const initialId = serverHandoffComplete ? combineId(label, genId()) : null;
 
   const [id, setId] = useState(initialId);
 
@@ -65,7 +67,7 @@ export const useId = () => {
        * to matter, but you're welcome to measure your app and let us know if
        * it's a problem).
        */
-      setId(genId());
+      setId(combineId(genId()));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
