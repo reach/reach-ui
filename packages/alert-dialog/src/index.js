@@ -11,7 +11,8 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   forwardRef
 ) {
   // generate a label ID, but allow it to be overwritten by setting an ID on <AlertDialogLabel>
-  const [labelId, setLabelId] = useState(useId("alert-dialog-label"));
+  const uid = useId("alert-dialog-label");
+  const [labelId, setLabelId] = useState(uid || "alert-dialog-label");
   // don't set immediately, since <AlertDialogDescription> is not required
   const [descriptionId, setDescriptionId] = useState();
 
