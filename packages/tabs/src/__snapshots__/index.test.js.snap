@@ -11,7 +11,7 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="panel--2--0"
+          aria-controls="panel--3--0"
           aria-selected="false"
           data-reach-tab=""
           id="tab-1"
@@ -22,7 +22,7 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           Tab One
         </button>
         <button
-          aria-controls="panel--2--1"
+          aria-controls="panel--3--1"
           aria-selected="true"
           data-reach-tab=""
           data-selected=""
@@ -34,7 +34,7 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           Tab Two
         </button>
         <button
-          aria-controls="panel--2--2"
+          aria-controls="panel--3--2"
           aria-selected="false"
           data-reach-tab=""
           id="tab-3"
@@ -49,10 +49,10 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tab--2--0"
+          aria-labelledby="tab--3--0"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--2--0"
+          id="panel--3--0"
           role="tabpanel"
           tabindex="-1"
         >
@@ -64,9 +64,9 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="tab--2--1"
+          aria-labelledby="tab--3--1"
           data-reach-tab-panel=""
-          id="panel--2--1"
+          id="panel--3--1"
           role="tabpanel"
           tabindex="-1"
         >
@@ -75,10 +75,10 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           </h1>
         </div>
         <div
-          aria-labelledby="tab--2--2"
+          aria-labelledby="tab--3--2"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--2--2"
+          id="panel--3--2"
           role="tabpanel"
           tabindex="-1"
         >

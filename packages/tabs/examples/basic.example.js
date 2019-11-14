@@ -6,7 +6,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 export const name = "Basic";
 
 export const Example = () => (
-  <Tabs>
+  <Tabs id="awesome">
     <TabList>
       <Tab>One</Tab>
       <Tab>Two</Tab>
