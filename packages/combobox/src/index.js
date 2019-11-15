@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/role-has-required-aria-props */
-/* eslint-disable jsx-a11y/aria-proptypes */
-/* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable default-case */
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +21,7 @@ import React, {
   useState
 } from "react";
 import { func } from "prop-types";
-import { wrapEvent, useForkedRef } from "@reach/utils";
+import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -262,7 +259,8 @@ export const Combobox = forwardRef(function Combobox(
 
   useFocusManagement(data.lastActionType, inputRef);
 
-  const listboxId = `listbox--${useId()}`;
+  const id = useId(rest.id);
+  const listboxId = makeId("listbox", id);
 
   const context = useMemo(() => {
     return {
@@ -356,6 +354,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
 
   useLayoutEffect(() => {
     autocompletePropRef.current = autocomplete;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autocomplete]);
 
   const handleValueChange = value => {
@@ -661,6 +660,7 @@ function useFocusManagement(lastActionType, inputRef) {
     ) {
       inputRef.current.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastActionType]);
 }
 

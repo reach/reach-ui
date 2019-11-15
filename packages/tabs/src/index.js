@@ -30,7 +30,7 @@ export const Tabs = forwardRef(function Tabs(
     "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
   );
 
-  const _id = useId();
+  const id = useId(props.id);
 
   // we only manage focus if the user caused the update vs.
   // a new controlled index coming in
@@ -45,7 +45,7 @@ export const Tabs = forwardRef(function Tabs(
     if (!child || typeof child.type === "string") return child;
     return cloneElement(child, {
       selectedIndex: isControlled ? controlledIndex : selectedIndex,
-      _id,
+      _id: id,
       _userInteractedRef,
       _selectedPanelRef,
       _onFocusPanel: () =>

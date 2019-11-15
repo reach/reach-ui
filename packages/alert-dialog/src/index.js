@@ -11,9 +11,9 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   { leastDestructiveRef, ...props },
   forwardRef
 ) {
-  const uid = useId();
-  const labelId = makeId("alert-dialog", uid);
-  const descriptionId = makeId("alert-dialog-description", uid);
+  const id = useId(props.id);
+  const labelId = makeId("alert-dialog", id);
+  const descriptionId = makeId("alert-dialog-description", id);
 
   return (
     <AlertDialogContext.Provider

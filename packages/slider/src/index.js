@@ -102,7 +102,6 @@ export const SliderInput = forwardRef(function SliderInput(
     value: controlledValue,
     getValueText,
     handleAlignment = SLIDER_HANDLE_ALIGN_CENTER,
-    id,
     max = 100,
     min = 0,
     name,
@@ -132,7 +131,7 @@ export const SliderInput = forwardRef(function SliderInput(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const _id = makeId("slider", useId());
+  const id = useId(rest.id);
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
@@ -272,8 +271,6 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const valueText = getValueText ? getValueText(value) : ariaValueText;
 
-  const sliderId = id || _id;
-
   const trackHighlightStyle = isVertical
     ? {
         width: `100%`,
@@ -298,7 +295,7 @@ export const SliderInput = forwardRef(function SliderInput(
     onPointerUp,
     onHandleKeyDown: handleKeyDown,
     setHasFocus,
-    sliderId,
+    sliderId: id,
     sliderMax: max,
     sliderMin: min,
     value,
@@ -349,14 +346,13 @@ export const SliderInput = forwardRef(function SliderInput(
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         aria-disabled={disabled}
-        id={sliderId}
         {...dataAttributes}
         {...rest}
       >
         {typeof children === "function"
           ? children({
               hasFocus,
-              id: sliderId,
+              id,
               max,
               min,
               value,
@@ -372,7 +368,7 @@ export const SliderInput = forwardRef(function SliderInput(
             type="hidden"
             value={value}
             name={name}
-            id={makeId("input", sliderId)}
+            id={makeId("input", id)}
           />
         )}
       </div>
