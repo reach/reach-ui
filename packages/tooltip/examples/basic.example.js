@@ -10,7 +10,7 @@ export function Example() {
   const coolRef = React.useRef();
   return (
     <div>
-      <Tooltip label="Notifications">
+      <Tooltip id="wow" label="Notifications">
         <button style={{ fontSize: 25 }} ref={coolRef}>
           <span aria-hidden>🔔</span>
         </button>

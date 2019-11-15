@@ -53,7 +53,7 @@ export const useId = fallback => {
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
    */
-  const initialId = fallback || serverHandoffComplete ? genId() : null;
+  const initialId = fallback || (serverHandoffComplete ? genId() : null);
 
   const [id, setId] = useState(initialId);
 

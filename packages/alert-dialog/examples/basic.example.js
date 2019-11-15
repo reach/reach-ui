@@ -14,7 +14,7 @@ export let Example = () => {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       {showDialog && (
-        <AlertDialog leastDestructiveRef={close}>
+        <AlertDialog leastDestructiveRef={close} id="great-work">
           <AlertDialogLabel>Confirmation!</AlertDialogLabel>
           <AlertDialogDescription>
             Are you sure you want to have that milkshake?

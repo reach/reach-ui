@@ -97,12 +97,13 @@ export const AlertDialogDescription = props => {
 };
 
 export const AlertDialog = ({
+  id,
   isOpen,
   onDismiss,
   leastDestructiveRef,
   ...props
 }) => (
-  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
+  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
     <AlertDialogContent {...props} />
   </AlertDialogOverlay>
 );
