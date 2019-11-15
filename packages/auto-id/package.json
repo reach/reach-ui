@@ -1,6 +1,6 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
   "main": "index.js",
   "module": "es/index.js",

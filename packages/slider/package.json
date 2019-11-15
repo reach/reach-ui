@@ -1,6 +1,6 @@
 {
   "name": "@reach/slider",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Accessible React Slider Component",
   "main": "index.js",
   "module": "es/index.js",
@@ -8,8 +8,8 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.0",
-    "@reach/utils": "^0.6.0",
+    "@reach/auto-id": "^0.6.1",
+    "@reach/utils": "^0.6.1",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
