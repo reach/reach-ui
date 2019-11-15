@@ -71,6 +71,7 @@ module.exports = {
         display: "minimal-ui",
         icon: "src/images/reach-icon.png" // This path is relative to the root of the site.
       }
-    }
+    },
+    `gatsby-plugin-sass`
   ]
 };

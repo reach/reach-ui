@@ -38,8 +38,8 @@
     "gatsby-plugin-google-analytics": "^2.1.27",
     "gatsby-plugin-manifest": "^2.2.28",
     "gatsby-plugin-mdx": "^1.0.56",
-    "gatsby-plugin-postcss": "^2.1.15",
     "gatsby-plugin-react-helmet": "^3.1.15",
+    "gatsby-plugin-sass": "^2.1.23",
     "gatsby-plugin-sharp": "^2.3.0",
     "gatsby-remark-autolink-headers": "^2.1.18",
     "gatsby-remark-emoji": "^0.0.3",
@@ -49,6 +49,8 @@
     "gatsby-transformer-react-docgen": "^5.0.21",
     "gatsby-transformer-sharp": "^2.3.5",
     "match-sorter": "^4.0.2",
+    "node-sass": "^4.13.0",
+    "postcss-preset-env": "^6.7.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -60,5 +62,11 @@
   },
   "devDependencies": {
     "prettier": "^1.19.1"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 2%",
+    "maintained node versions",
+    "IE 11"
+  ]
 }

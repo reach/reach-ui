@@ -38,8 +38,8 @@ body {
   font-weight: 400;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  background: var(--body-background);
-  color: var(--body-color);
+  background: $color-body-background;
+  color: $color-body;
 }
 
 /* Typography
@@ -124,8 +124,8 @@ textarea,
 select {
   height: 38px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
-  background-color: var(--input-background-color);
-  border: 1px solid var(--input-border-color);
+  background-color: $color-input-background;
+  border: 1px solid $color-input-border;
   box-shadow: none;
   box-sizing: border-box;
 }
@@ -156,7 +156,7 @@ input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid var(--focus-outline-color);
+  border: 1px solid $color-focus-outline;
 }
 label,
 legend {
@@ -219,7 +219,7 @@ th,
 td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid var(--table-cell-border-color);
+  border-bottom: 1px solid $color-table-cell-border;
 }
 th:first-child,
 td:first-child {
@@ -279,7 +279,7 @@ hr {
   border-bottom: none;
   border-left: none;
   border-right: none;
-  border-top: 1px solid var(--rule-border-color);
+  border-top: 1px solid $color-rule-border;
 }
 
 /* Clearing
