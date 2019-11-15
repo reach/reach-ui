@@ -49,7 +49,7 @@ import { wrapEvent, checkStyles, useForkedRef, makeId } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
-import { node, string, func } from "prop-types";
+import PropTypes from "prop-types";
 
 ////////////////////////////////////////////////////////////////////////////////
 // ~The states~
@@ -243,8 +243,8 @@ export function useTooltip({
     DEBUG_STYLE
       ? true
       : id === null
-      ? false
-      : context.id === id && state === VISIBLE
+        ? false
+        : context.id === id && state === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
@@ -393,9 +393,9 @@ function Tooltip({ children, label, ariaLabel, DEBUG_STYLE, ...rest }) {
 
 if (__DEV__) {
   Tooltip.propTypes = {
-    children: node.isRequired,
-    label: node.isRequired,
-    ariaLabel: string
+    children: PropTypes.node.isRequired,
+    label: PropTypes.node.isRequired,
+    ariaLabel: PropTypes.string
   };
   Tooltip.displayName = "Tooltip";
 }
@@ -436,9 +436,9 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
 
 if (__DEV__) {
   TooltipPopup.propTypes = {
-    label: node.isRequired,
-    ariaLabel: string,
-    position: func
+    label: PropTypes.node.isRequired,
+    ariaLabel: PropTypes.string,
+    position: PropTypes.func
   };
   TooltipPopup.displayName = "TooltipPopup";
 }
@@ -518,12 +518,12 @@ const positionDefault = (triggerRect, tooltipRect) => {
       : `${triggerRect.left + window.pageXOffset}px`,
     top: directionUp
       ? `${triggerRect.top -
-          OFFSET -
-          tooltipRect.height +
-          window.pageYOffset}px`
+      OFFSET -
+      tooltipRect.height +
+      window.pageYOffset}px`
       : `${triggerRect.top +
-          OFFSET +
-          triggerRect.height +
-          window.pageYOffset}px`
+      OFFSET +
+      triggerRect.height +
+      window.pageYOffset}px`
   };
 };

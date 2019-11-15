@@ -1,5 +1,5 @@
 import React, { cloneElement, useState, useRef, forwardRef } from "react";
-import { node, func, number } from "prop-types";
+import PropTypes from "prop-types";
 import warning from "warning";
 import { wrapEvent, useUpdateEffect, makeId, useForkedRef } from "@reach/utils";
 import { useId } from "@reach/auto-id";
@@ -51,14 +51,14 @@ export const Tabs = forwardRef(function Tabs(
       _onFocusPanel: () =>
         _selectedPanelRef.current && _selectedPanelRef.current.focus(),
       _onSelectTab: readOnly
-        ? () => {}
+        ? () => { }
         : index => {
-            _userInteractedRef.current = true;
-            onChange && onChange(index);
-            if (!isControlled) {
-              setSelectedIndex(index);
-            }
+          _userInteractedRef.current = true;
+          onChange && onChange(index);
+          if (!isControlled) {
+            setSelectedIndex(index);
           }
+        }
     });
   });
 
@@ -67,8 +67,8 @@ export const Tabs = forwardRef(function Tabs(
 
 if (__DEV__) {
   Tabs.propTypes = {
-    children: node.isRequired,
-    onChange: func,
+    children: PropTypes.node.isRequired,
+    onChange: PropTypes.func,
     index: (props, name, compName, ...rest) => {
       if (
         props.index > -1 &&
@@ -79,10 +79,10 @@ if (__DEV__) {
           "You provided a `value` prop to `Tabs` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
       } else {
-        return number(name, props, compName, ...rest);
+        return PropTypes.number(name, props, compName, ...rest);
       }
     },
-    defaultIndex: number
+    defaultIndex: PropTypes.number
   };
 }
 
@@ -164,7 +164,7 @@ export const TabList = forwardRef(function TabList(
 
 if (__DEV__) {
   TabList.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -207,7 +207,7 @@ export const Tab = forwardRef(function Tab(
 
 if (__DEV__) {
   Tab.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -246,7 +246,7 @@ export const TabPanels = forwardRef(function TabPanels(
 
 if (__DEV__) {
   TabPanels.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -275,6 +275,6 @@ export const TabPanel = forwardRef(function TabPanel(
 
 if (__DEV__) {
   TabPanel.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }

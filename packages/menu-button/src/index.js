@@ -10,10 +10,10 @@ import React, {
 import Portal from "@reach/portal";
 import Rect, { useRect } from "@reach/rect";
 import Component from "@reach/component-component";
-import { node, func, object, string, number, oneOfType, any } from "prop-types";
+import PropTypes from "prop-types";
 import { wrapEvent, checkStyles, assignRef, useForkedRef } from "@reach/utils";
 
-const noop = () => {};
+const noop = () => { };
 let id = 0;
 const genId = () => `button-${++id}`;
 
@@ -115,7 +115,7 @@ export const Menu = ({ children }) => {
 
 if (__DEV__) {
   Menu.propTypes = {
-    children: oneOfType([func, node])
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
   Menu.displayName = "Menu";
 }
@@ -175,9 +175,9 @@ export const MenuButton = forwardRef(function MenuButton(
 
 if (__DEV__) {
   MenuButton.propTypes = {
-    onClick: func,
-    onKeyDown: func,
-    children: node
+    onClick: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    children: PropTypes.node
   };
   MenuButton.displayName = "MenuButton";
 }
@@ -239,15 +239,15 @@ export const MenuItem = forwardRef(function MenuItem(
 
 if (__DEV__) {
   MenuItem.propTypes = {
-    onSelect: func.isRequired,
-    onClick: func,
-    role: string,
-    state: object,
-    setState: func,
-    onKeyDown: func,
-    onMouseMove: func,
-    _ref: func,
-    _index: number
+    onSelect: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
+    role: PropTypes.string,
+    state: PropTypes.object,
+    setState: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    onMouseMove: PropTypes.func,
+    _ref: PropTypes.func,
+    _index: PropTypes.number
   };
   MenuItem.displayName = "MenuItem";
 }
@@ -301,12 +301,12 @@ export const MenuLink = forwardRef(function MenuLink(
 
 if (__DEV__) {
   MenuLink.propTypes = {
-    as: any,
-    component: any,
-    onClick: func,
-    onKeyDown: func,
-    _index: number,
-    _ref: func
+    as: PropTypes.any,
+    component: PropTypes.any,
+    onClick: PropTypes.func,
+    onKeyDown: PropTypes.func,
+    _index: PropTypes.number,
+    _ref: PropTypes.func
   };
   MenuLink.displayName = "MenuLink";
 }
@@ -346,7 +346,7 @@ export const MenuPopover = forwardRef(function MenuPopover(
 
 if (__DEV__) {
   MenuPopover.propTypes = {
-    children: node
+    children: PropTypes.node
   };
   MenuPopover.displayName = "MenuPopover";
 }
@@ -364,7 +364,7 @@ export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
 
 if (__DEV__) {
   MenuList.propTypes = {
-    children: node.isRequired
+    children: PropTypes.node.isRequired
   };
   MenuList.displayName = "MenuList";
 }
@@ -446,12 +446,12 @@ export const MenuItems = forwardRef(function MenuItems(
 
 if (__DEV__) {
   MenuItems.propTypes = {
-    refs: object,
-    state: object,
-    setState: func,
-    children: node,
-    onKeyDown: func,
-    onBlur: func
+    refs: PropTypes.object,
+    state: PropTypes.object,
+    setState: PropTypes.func,
+    children: PropTypes.node,
+    onKeyDown: PropTypes.func,
+    onBlur: PropTypes.func
   };
   MenuItems.displayName = "MenuItems";
 }

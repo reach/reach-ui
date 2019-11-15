@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
@@ -45,23 +45,23 @@ const useSliderContext = () => useContext(SliderContext);
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
 const sliderPropTypes = {
-  defaultValue: number,
-  disabled: bool,
-  getValueText: func,
-  handleAlignment: oneOf([
+  defaultValue: PropTypes.number,
+  disabled: PropTypes.bool,
+  getValueText: PropTypes.func,
+  handleAlignment: PropTypes.oneOf([
     SLIDER_HANDLE_ALIGN_CENTER,
     SLIDER_HANDLE_ALIGN_CONTAIN
   ]),
-  min: number,
-  max: number,
-  name: string,
-  orientation: oneOf([
+  min: PropTypes.number,
+  max: PropTypes.number,
+  name: PropTypes.string,
+  orientation: PropTypes.oneOf([
     SLIDER_ORIENTATION_HORIZONTAL,
     SLIDER_ORIENTATION_VERTICAL
   ]),
-  onChange: func,
-  step: number,
-  value: number
+  onChange: PropTypes.func,
+  step: PropTypes.number,
+  value: PropTypes.number
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ Slider.displayName = "Slider";
 if (__DEV__) {
   Slider.propTypes = {
     ...sliderPropTypes,
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -159,7 +159,7 @@ export const SliderInput = forwardRef(function SliderInput(
     handleAlignment === SLIDER_HANDLE_ALIGN_CENTER
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
-  })`;
+    })`;
 
   const updateValue = useCallback(
     function updateValue(newValue) {
@@ -197,7 +197,7 @@ export const SliderInput = forwardRef(function SliderInput(
     [isVertical, max, min, step]
   );
 
-  const handleKeyDown = wrapEvent(onKeyDown, function(event) {
+  const handleKeyDown = wrapEvent(onKeyDown, function (event) {
     let flag = false;
     let newValue;
     const tenSteps = (max - min) / 10;
@@ -244,7 +244,7 @@ export const SliderInput = forwardRef(function SliderInput(
     updateValue(newValue);
   });
 
-  const handlePointerDown = wrapEvent(onPointerDown, function(event) {
+  const handlePointerDown = wrapEvent(onPointerDown, function (event) {
     event.preventDefault();
     if (disabled) {
       if (isPointerDown) setPointerDown(false);
@@ -262,7 +262,7 @@ export const SliderInput = forwardRef(function SliderInput(
     }
   });
 
-  const handlePointerUp = wrapEvent(onPointerUp, function(event) {
+  const handlePointerUp = wrapEvent(onPointerUp, function (event) {
     if (sliderRef.current && event.pointerId) {
       sliderRef.current.releasePointerCapture &&
         sliderRef.current.releasePointerCapture(event.pointerId);
@@ -276,15 +276,15 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const trackHighlightStyle = isVertical
     ? {
-        width: `100%`,
-        height: `${trackPercent}%`,
-        bottom: 0
-      }
+      width: `100%`,
+      height: `${trackPercent}%`,
+      bottom: 0
+    }
     : {
-        width: `${trackPercent}%`,
-        height: `100%`,
-        left: 0
-      };
+      width: `${trackPercent}%`,
+      height: `100%`,
+      left: 0
+    };
 
   const ctx = {
     ariaLabelledBy,
@@ -319,7 +319,7 @@ export const SliderInput = forwardRef(function SliderInput(
   });
 
   useEffect(() => {
-    const handlePointerMove = wrapEvent(onPointerMove, function(event) {
+    const handlePointerMove = wrapEvent(onPointerMove, function (event) {
       const newValue = getNewValueFromPointer(event);
       if (newValue !== value) {
         updateValue(newValue);
@@ -355,13 +355,13 @@ export const SliderInput = forwardRef(function SliderInput(
       >
         {typeof children === "function"
           ? children({
-              hasFocus,
-              id: sliderId,
-              max,
-              min,
-              value,
-              valueText
-            })
+            hasFocus,
+            id: sliderId,
+            max,
+            min,
+            value,
+            valueText
+          })
           : children}
         {name && (
           // If the slider is used in a form we'll need an input field to
@@ -385,7 +385,7 @@ SliderInput.displayName = "SliderInput";
 if (__DEV__) {
   SliderInput.propTypes = {
     ...sliderPropTypes,
-    children: oneOfType([node, func]).isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   };
 }
 
@@ -420,7 +420,7 @@ SliderTrack.displayName = "SliderTrack";
 
 if (__DEV__) {
   SliderTrack.propTypes = {
-    children: node.isRequired
+    children: PropTypes.node.isRequired
   };
 }
 
@@ -572,7 +572,7 @@ SliderMarker.displayName = "SliderMarker";
 
 if (__DEV__) {
   SliderMarker.propTypes = {
-    value: number.isRequired
+    value: PropTypes.number.isRequired
   };
 }
 

@@ -23,7 +23,7 @@ import React, {
   useReducer,
   useState
 } from "react";
-import { func } from "prop-types";
+import PropTypes from "prop-types";
 import { wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
@@ -302,7 +302,7 @@ export const Combobox = forwardRef(function Combobox(
 
 if (__DEV__) {
   Combobox.propTypes = {
-    onSelect: func
+    onSelect: PropTypes.func
   };
 }
 
@@ -405,7 +405,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   const inputValue =
     autocomplete && (state === NAVIGATING || state === INTERACTING)
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
-        navigationValue || controlledValue || value
+      navigationValue || controlledValue || value
       : controlledValue || value;
 
   return (
@@ -462,9 +462,9 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
 
   const popupProps = portal
     ? {
-        targetRef: inputRef,
-        position: positionMatchWidth
-      }
+      targetRef: inputRef,
+      position: positionMatchWidth
+    }
     : null;
 
   return (
@@ -594,17 +594,17 @@ export function ComboboxOptionText() {
 
   return results.length
     ? results.map((result, index) => {
-        const str = value.slice(result.start, result.end);
-        return (
-          <span
-            key={index}
-            data-user-value={result.highlight ? true : undefined}
-            data-suggested-value={result.highlight ? undefined : true}
-          >
-            {str}
-          </span>
-        );
-      })
+      const str = value.slice(result.start, result.end);
+      return (
+        <span
+          key={index}
+          data-user-value={result.highlight ? true : undefined}
+          data-suggested-value={result.highlight ? undefined : true}
+        >
+          {str}
+        </span>
+      );
+    })
     : value;
 }
 

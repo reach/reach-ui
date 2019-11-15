@@ -3,7 +3,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import { makeId } from "@reach/utils";
 import invariant from "invariant";
-import { func, bool, node, object, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 
 let AlertDialogContext = createContext({});
 
@@ -35,10 +35,10 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
 
 if (__DEV__) {
   AlertDialogOverlay.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    children: PropTypes.node
   };
 }
 
@@ -77,7 +77,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
 
 if (__DEV__) {
   AlertDialogContent.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -99,16 +99,16 @@ export const AlertDialog = ({
   leastDestructiveRef,
   ...props
 }) => (
-  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
-    <AlertDialogContent {...props} />
-  </AlertDialogOverlay>
-);
+    <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
+      <AlertDialogContent {...props} />
+    </AlertDialogOverlay>
+  );
 
 if (__DEV__) {
   AlertDialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    children: PropTypes.node
   };
 }

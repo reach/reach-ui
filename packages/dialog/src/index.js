@@ -3,9 +3,9 @@ import Portal from "@reach/portal";
 import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import { string, func, bool } from "prop-types";
+import PropTypes from "prop-types";
 
-const noop = () => {};
+const noop = () => { };
 
 ////////////////////////////////////////////////////////////////////////////////
 export const DialogOverlay = React.forwardRef(function DialogOverlay(
@@ -27,7 +27,7 @@ export const DialogOverlay = React.forwardRef(function DialogOverlay(
 
 if (__DEV__) {
   DialogOverlay.propTypes = {
-    initialFocusRef: () => {}
+    initialFocusRef: () => { }
   };
   DialogOverlay.displayName = "DialogOverlay";
 }
@@ -139,8 +139,8 @@ export const Dialog = React.forwardRef(function Dialog(
 
 if (__DEV__) {
   Dialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
@@ -202,12 +202,13 @@ function ariaLabelType(props, name, compName, ...rest) {
   if (props["aria-label"] && props["aria-labelledby"]) {
     return new Error(
       "You provided both `aria-label` and `aria-labelledby` props to a <" +
-        compName +
-        ">. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into <" +
-        compName +
-        ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
-        details
+      compName +
+      ">. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into <" +
+      compName +
+      ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
+      details
     );
   }
-  return string(name, props, compName, ...rest);
+  return PropTypes.string(name, props, compName, ...rest);
+
 }
