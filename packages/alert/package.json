@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.6.0",
+  "version": "0.5.3",
   "description": "Screenreader friendly alert messages.",
   "main": "index.js",
   "module": "es/index.js",
@@ -8,8 +8,8 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/utils": "^0.6.0",
-    "@reach/visually-hidden": "^0.6.0",
+    "@reach/utils": "^0.5.0",
+    "@reach/visually-hidden": "^0.5.0",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
