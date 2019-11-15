@@ -268,6 +268,21 @@ export function useTooltip({
 
   useEffect(() => checkStyles("tooltip"));
 
+  useEffect(() => {
+    const listener = event => {
+      if (event.key === "Escape" || event.key === "Esc") {
+        console.log("whoa");
+        switch (state) {
+          case VISIBLE: {
+            transition("selectWithKeyboard");
+          }
+        }
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, []);
+
   const handleMouseEnter = () => {
     switch (state) {
       case IDLE:
@@ -331,7 +346,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
+    if (event.key === "Enter" || event.key === " ") {
       switch (state) {
         case VISIBLE: {
           transition("selectWithKeyboard");
