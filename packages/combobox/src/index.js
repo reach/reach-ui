@@ -20,7 +20,7 @@ import React, {
   useReducer,
   useState
 } from "react";
-import { func } from "prop-types";
+import PropTypes from "prop-types";
 import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
@@ -300,7 +300,7 @@ export const Combobox = forwardRef(function Combobox(
 
 if (__DEV__) {
   Combobox.propTypes = {
-    onSelect: func
+    onSelect: PropTypes.func
   };
 }
 
