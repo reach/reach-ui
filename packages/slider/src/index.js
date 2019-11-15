@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
@@ -45,23 +45,23 @@ const useSliderContext = () => useContext(SliderContext);
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
 const sliderPropTypes = {
-  defaultValue: number,
-  disabled: bool,
-  getValueText: func,
-  handleAlignment: oneOf([
+  defaultValue: PropTypes.number,
+  disabled: PropTypes.bool,
+  getValueText: PropTypes.func,
+  handleAlignment: PropTypes.oneOf([
     SLIDER_HANDLE_ALIGN_CENTER,
     SLIDER_HANDLE_ALIGN_CONTAIN
   ]),
-  min: number,
-  max: number,
-  name: string,
-  orientation: oneOf([
+  min: PropTypes.number,
+  max: PropTypes.number,
+  name: PropTypes.string,
+  orientation: PropTypes.oneOf([
     SLIDER_ORIENTATION_HORIZONTAL,
     SLIDER_ORIENTATION_VERTICAL
   ]),
-  onChange: func,
-  step: number,
-  value: number
+  onChange: PropTypes.func,
+  step: PropTypes.number,
+  value: PropTypes.number
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ Slider.displayName = "Slider";
 if (__DEV__) {
   Slider.propTypes = {
     ...sliderPropTypes,
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -381,7 +381,7 @@ SliderInput.displayName = "SliderInput";
 if (__DEV__) {
   SliderInput.propTypes = {
     ...sliderPropTypes,
-    children: oneOfType([node, func]).isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   };
 }
 
@@ -416,7 +416,7 @@ SliderTrack.displayName = "SliderTrack";
 
 if (__DEV__) {
   SliderTrack.propTypes = {
-    children: node.isRequired
+    children: PropTypes.node.isRequired
   };
 }
 
@@ -568,7 +568,7 @@ SliderMarker.displayName = "SliderMarker";
 
 if (__DEV__) {
   SliderMarker.propTypes = {
-    value: number.isRequired
+    value: PropTypes.number.isRequired
   };
 }
 

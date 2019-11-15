@@ -49,7 +49,7 @@ import { wrapEvent, checkStyles, useForkedRef, makeId } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
-import { node, string, func } from "prop-types";
+import PropTypes from "prop-types";
 
 ////////////////////////////////////////////////////////////////////////////////
 // ~The states~
@@ -395,9 +395,9 @@ function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
 
 if (__DEV__) {
   Tooltip.propTypes = {
-    children: node.isRequired,
-    label: node.isRequired,
-    ariaLabel: string
+    children: PropTypes.node.isRequired,
+    label: PropTypes.node.isRequired,
+    ariaLabel: PropTypes.string
   };
   Tooltip.displayName = "Tooltip";
 }
@@ -438,9 +438,9 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
 
 if (__DEV__) {
   TooltipPopup.propTypes = {
-    label: node.isRequired,
-    ariaLabel: string,
-    position: func
+    label: PropTypes.node.isRequired,
+    ariaLabel: PropTypes.string,
+    position: PropTypes.func
   };
   TooltipPopup.displayName = "TooltipPopup";
 }

@@ -3,7 +3,7 @@ import Portal from "@reach/portal";
 import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import { string, func, bool } from "prop-types";
+import PropTypes from "prop-types";
 
 const noop = () => {};
 
@@ -139,8 +139,8 @@ export const Dialog = React.forwardRef(function Dialog(
 
 if (__DEV__) {
   Dialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
@@ -209,5 +209,5 @@ function ariaLabelType(props, name, compName, ...rest) {
         details
     );
   }
-  return string(name, props, compName, ...rest);
+  return PropTypes.string(name, props, compName, ...rest);
 }

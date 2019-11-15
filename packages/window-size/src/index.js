@@ -1,5 +1,5 @@
 import React from "react";
-import { func } from "prop-types";
+import PropTypes from "prop-types";
 
 let hasWindow = typeof window !== "undefined";
 
@@ -10,7 +10,7 @@ export const WindowSize = ({ children }) => {
 
 if (__DEV__) {
   WindowSize.propTypes = {
-    children: func.isRequired
+    children: PropTypes.func.isRequired
   };
 }
 
