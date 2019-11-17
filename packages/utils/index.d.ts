@@ -55,6 +55,16 @@ export function usePrevious<T>(value: T): T;
 export function useUpdateEffect(effect: () => any, deps?: any[]): void;
 
 /**
+ * Returns a stable reference to an input callback
+ * which changes its reference throughout component's lifetime.
+ *
+ * @param callback A function for which we want to create a stable reference.
+ */
+export function useStableCallback<T extends (...args: any[]) => any>(
+  callback: T
+): T;
+
+/**
  * Wraps a lib-defined event handler and a user-defined event handler,
  * returning a single handler that allows a user to prevent lib-defined
  * handlers from firing.

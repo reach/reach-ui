@@ -19,5 +19,8 @@
     "lib",
     "index.js",
     "index.d.ts"
-  ]
+  ],
+  "dependencies": {
+    "use-latest": "^1.0.0"
+  }
 }

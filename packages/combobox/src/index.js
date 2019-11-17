@@ -21,7 +21,12 @@ import React, {
   useState
 } from "react";
 import PropTypes from "prop-types";
-import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
+import {
+  makeId,
+  wrapEvent,
+  useForkedRef,
+  useStableCallback
+} from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -810,7 +815,7 @@ function useReducerMachine(chart, reducer, initialData) {
   const [state, setState] = useState(chart.initial);
   const [data, dispatch] = useReducer(reducer, initialData);
 
-  const transition = (action, payload = {}) => {
+  const transition = useStableCallback((action, payload = {}) => {
     const currentState = chart.states[state];
     const nextState = currentState.on[action];
     if (!nextState) {
@@ -818,7 +823,7 @@ function useReducerMachine(chart, reducer, initialData) {
     }
     dispatch({ type: action, state, nextState: state, ...payload });
     setState(nextState);
-  };
+  });
 
   return [state, data, transition];
 }

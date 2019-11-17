@@ -1,4 +1,5 @@
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useCallback } from "react";
+import useLatest from "use-latest";
 
 let checkedPkgs = {};
 
@@ -94,6 +95,11 @@ export function useUpdateEffect(effect, deps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
+}
+
+export function useStableCallback(callback) {
+  const latestRef = useLatest(callback);
+  return useCallback((...args) => latestRef.current(...args), [latestRef]);
 }
 
 export function wrapEvent(theirHandler, ourHandler) {
