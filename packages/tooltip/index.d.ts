@@ -37,7 +37,7 @@ export function useTooltip<T = any>(
 
 export type BaseTooltipProps = {
   ariaLabel?: string;
-  position?: (position1: DOMRect, position2: DOMRect) => DOMRect;
+  position?: (position1: DOMRect, position2: DOMRect) => Partial<DOMRect>;
   label: React.ReactNode;
 } & Omit<React.HTMLProps<HTMLDivElement>, "label">;
 
