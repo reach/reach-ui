@@ -1,6 +1,6 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
 import observeRect from "@reach/observe-rect";
-import { func, bool } from "prop-types";
+import PropTypes from "prop-types";
 
 let Rect = ({ onChange, observe, children }) => {
   const ref = React.useRef(null);
@@ -14,9 +14,9 @@ Rect.defaultProps = {
 
 if (__DEV__) {
   Rect.propTypes = {
-    children: func,
-    observe: bool,
-    onChange: func
+    children: PropTypes.func,
+    observe: PropTypes.bool,
+    onChange: PropTypes.func
   };
 }
 

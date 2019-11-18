@@ -1,6 +1,6 @@
 {
   "name": "@reach/utils",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "Internal, shared utilities for Reach UI.",
   "main": "index.js",
   "module": "es/index.js",

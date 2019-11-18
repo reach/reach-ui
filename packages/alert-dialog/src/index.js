@@ -3,7 +3,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import { makeId } from "@reach/utils";
 import invariant from "invariant";
-import { func, bool, node, object, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 
 let AlertDialogContext = createContext({});
 
@@ -11,9 +11,9 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   { leastDestructiveRef, ...props },
   forwardRef
 ) {
-  const uid = useId();
-  const labelId = makeId("alert-dialog", uid);
-  const descriptionId = makeId("alert-dialog-description", uid);
+  const id = useId(props.id);
+  const labelId = makeId("alert-dialog", id);
+  const descriptionId = makeId("alert-dialog-description", id);
 
   return (
     <AlertDialogContext.Provider
@@ -35,10 +35,13 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
 
 if (__DEV__) {
   AlertDialogOverlay.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
+    ]),
+    children: PropTypes.node
   };
 }
 
@@ -77,7 +80,7 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
 
 if (__DEV__) {
   AlertDialogContent.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -94,21 +97,25 @@ export const AlertDialogDescription = props => {
 };
 
 export const AlertDialog = ({
+  id,
   isOpen,
   onDismiss,
   leastDestructiveRef,
   ...props
 }) => (
-  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
+  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
     <AlertDialogContent {...props} />
   </AlertDialogOverlay>
 );
 
 if (__DEV__) {
   AlertDialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
+    ]),
+    children: PropTypes.node
   };
 }

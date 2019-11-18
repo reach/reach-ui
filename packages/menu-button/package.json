@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.5.4",
+  "version": "0.6.1",
   "description": "Accessible React button dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,23 +10,17 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^0.5.0",
-    "@reach/portal": "^0.5.0",
-    "@reach/rect": "^0.5.0",
-    "@reach/utils": "^0.5.0",
-    "@reach/window-size": "^0.5.3",
+    "@reach/component-component": "^0.6.1",
+    "@reach/portal": "^0.6.1",
+    "@reach/rect": "^0.6.1",
+    "@reach/utils": "^0.6.1",
+    "@reach/window-size": "^0.6.1",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  },
-  "devDependencies": {
-    "@reach/router": "^1.2.1",
-    "@reach/tooltip": "^0.5.4",
-    "react": "^16.11.0",
-    "react-test-renderer": "^16.11.0"
   },
   "files": [
     "es",

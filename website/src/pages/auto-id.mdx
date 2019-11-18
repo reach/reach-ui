@@ -15,6 +15,8 @@ import Helmet from "../components/DefaultHelmet";
 
 Autogenerate IDs to facilitate WAI-ARIA and server rendering.
 
+A string can be supplied as an argument to be used in lieu of the auto-generated ID. This is handy for accepting user-provided prop IDs that need to be deterministic.
+
 ## Installation
 
 ```bash
@@ -28,5 +30,6 @@ yarn add @reach/auto-id
 ```js
 import { useId } from "@reach/auto-id";
 
-const id = `tooltip:${useId()}`;
+// Pass in a user-supplied ID that will be used conditionally if provided
+const id = useId(props.id);
 ```

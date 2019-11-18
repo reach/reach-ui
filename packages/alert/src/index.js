@@ -15,7 +15,7 @@ import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
 import { usePrevious, useForkedRef } from "@reach/utils";
-import { node, string } from "prop-types";
+import PropTypes from "prop-types";
 
 // singleton state is fine because you don't server render
 // an alert (SRs don't read them on first load anyway)
@@ -56,8 +56,8 @@ const Alert = forwardRef(function Alert(
 
 if (__DEV__) {
   Alert.propTypes = {
-    children: node,
-    type: string
+    children: PropTypes.node,
+    type: PropTypes.string
   };
 }
 

@@ -7,4 +7,4 @@
  *
  * @see Docs https://reacttraining.com/reach-ui/auto-id
  */
-export const useId: () => number;
+export const useId: (hasFallback?: string) => number;
