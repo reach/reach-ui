@@ -122,6 +122,7 @@ function reducer(data, action) {
       };
     case NAVIGATE:
     case OPEN_LISTBOX:
+      console.log(findNavigationValue(nextState, action));
       return {
         ...nextState,
         navigationValue: findNavigationValue(nextState, action)
@@ -341,6 +342,8 @@ export const ListboxPopover = forwardRef(function ListboxPopover(
   // whatever).
   const hidden = !isExpanded;
 
+  console.log({ hidden });
+
   const Container = portal ? Popover : "div";
 
   const popupProps = portal
@@ -351,18 +354,20 @@ export const ListboxPopover = forwardRef(function ListboxPopover(
     : null;
 
   return (
-    <Container
-      {...props}
-      data-reach-listbox-popover=""
-      {...popupProps}
-      ref={ref}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      onBlur={wrapEvent(onBlur, handleBlur)}
-      hidden={hidden}
-      // Allow the user to click empty space inside the popover without causing
-      // to close from useBlur
-      tabIndex={-1}
-    />
+    isExpanded && (
+      <Container
+        {...props}
+        data-reach-listbox-popover=""
+        {...popupProps}
+        ref={ref}
+        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onBlur={wrapEvent(onBlur, handleBlur)}
+        hidden={hidden}
+        // Allow the user to click empty space inside the popover without causing
+        // to close from useBlur
+        tabIndex={-1}
+      />
+    )
   );
 });
 
@@ -620,7 +625,7 @@ function useFocusManagement(lastActionType, buttonRef, listRef) {
         break;
       case NAVIGATE:
       case OPEN_LISTBOX:
-        listRef.current.focus();
+        // listRef.current.focus();
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -647,6 +652,8 @@ function useKeyDown() {
       case "ArrowDown": {
         // Don't scroll the page
         event.preventDefault();
+
+        console.log(options);
 
         if (options.length < 1) {
           return;
