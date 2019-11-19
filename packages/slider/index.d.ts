@@ -42,7 +42,7 @@ type SliderChildrenRender = (props: {
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slider-props
  */
-export type SliderProps = React.HTMLProps<HTMLDivElement> & {
+export type SliderProps = Omit<React.HTMLProps<HTMLDivElement>, "onChange"> & {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -207,9 +207,7 @@ export const SliderTrack: React.FunctionComponent<SliderTrackProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
  */
-export const SliderTrackHighlight: React.FunctionComponent<
-  SliderTrackHighlightProps
->;
+export const SliderTrackHighlight: React.FunctionComponent<SliderTrackHighlightProps>;
 
 /**
  * The handle that the user drags along the track to set the slider value.
