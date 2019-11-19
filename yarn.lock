@@ -2435,10 +2435,47 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@reach/auto-id@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.5.3.tgz#f86ed38b04fa464c5d48a8c4ba27f07993e37e6a"
+  integrity sha512-IkWKzMxNUG1xYXYDhkDtwfcslnNAQgUKTch4Vx+whswTGhhoXMjIzIjlxeufIvOvJ3HGWBzaNYdY7OUDTq37AQ==
+
+"@reach/component-component@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.5.0.tgz#db2855a03795566ad301167a33822c7b886cd0fe"
+  integrity sha512-lP2pS7Bx0cVFNUQgC8TP1xRy9hs6Bfd2H4vD5l2SFnnYvOWr7cNWmu4rGQZ1y+fdznS7JgrTz0PrLNA2tDFsTQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 "@reach/observe-rect@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.3.tgz#2ea3dcc369ab22bd9f050a92ea319321356a61e8"
   integrity sha1-LqPcw2mrIr2fBQqS6jGTITVqYeg=
+
+"@reach/popover@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.5.0.tgz#deefde027366f8a2758be0e907da971bb84d97f1"
+  integrity sha512-VgOofkJKFNtT5X61lLvjhTqFSLVBuCj47ZDR0IXkVstkRiRSfwoQDiu3Oze499hAQ8We8IH7MRyIi28yeCLJgA==
+  dependencies:
+    "@reach/portal" "^0.5.0"
+    "@reach/rect" "^0.5.0"
+    "@reach/utils" "^0.5.0"
+    tabbable "^4.0.0"
+
+"@reach/portal@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.5.0.tgz#4ea4d345887f5b05861fec6762e33717775cb5e5"
+  integrity sha512-3WB6KLAVegGgWSvCVpXAUuo3tKOQi90l+V2ktzfUOCG5jxFTeEjDAA8MHZ7Zve5h1ZhBscGJKoO9UWxl1UNRhQ==
+  dependencies:
+    "@reach/component-component" "^0.5.0"
+
+"@reach/rect@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.5.0.tgz#943d1c97c2e662b194867badaebf263077df2069"
+  integrity sha512-5GGRDZ3ilO4WQMDtAwkA+mHwWw4Yio9pXx8y5q+Ecswu89Yd2kRs66YjTZR7seEysfwwmlb/EPCI+7QWq22R5Q==
+  dependencies:
+    "@reach/observe-rect" "^1.0.3"
+    prop-types "^15.7.2"
 
 "@reach/router@^1.2.1":
   version "1.2.1"
@@ -2450,6 +2487,28 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
+
+"@reach/tooltip@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@reach/tooltip/-/tooltip-0.5.4.tgz#fe72525e89de1113dafafc1dd4f71c01b8988a33"
+  integrity sha512-1AUaZ6UUffm/8v9SPjN1d0uR7uo93VFoXlvqWYvQjI2oersqps0ecq2Xm/0bJpGwL0daYfqRY2BuyuAftyu4aQ==
+  dependencies:
+    "@reach/auto-id" "^0.5.3"
+    "@reach/portal" "^0.5.0"
+    "@reach/rect" "^0.5.0"
+    "@reach/utils" "^0.5.0"
+    "@reach/visually-hidden" "^0.5.0"
+    prop-types "^15.7.2"
+
+"@reach/utils@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.5.0.tgz#2a64238a5a3ee57ee9742cf2579cacf41ae3a036"
+  integrity sha512-MXYKmCz7BGiCLuZnPI1sBlxQFdpdv3O1Oc13k6oumJGd0eMN3+utGSs20gBH17Ml3IKVqY+9UOLEuqGfyWytHQ==
+
+"@reach/visually-hidden@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.5.0.tgz#f09cf164762b53a6c297f48dfdd67f576d9147f8"
+  integrity sha512-jL/QuqIcKBXKdtY8l/l+rRZrnrxFTqH6YoIVfBp+OXOned5TwuFdmpPdt7WRw+9c/adeLqIDqvFTWQMVKS/5Bw==
 
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.2"
@@ -10868,7 +10927,7 @@ react-textarea-autosize@^7.1.0:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.0"
 
-react@^16.12.0:
+react@^16.11.0, react@^16.12.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.12.0.tgz#0c0a9c6a142429e3614834d5a778e18aa78a0b83"
   integrity sha512-fglqy3k5E+81pA8s+7K0/T3DBCF0ZDOher1elBFzF7O6arXJgzyu/FW+COxFvAWXJoJN9KIZbT2LXlukwphYTA==
@@ -13184,6 +13243,11 @@ xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
   integrity sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==
+
+xstate@^4.6.7:
+  version "4.6.7"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.6.7.tgz#1f325df07d75676c90d65b17a3a56692f259fd41"
+  integrity sha512-mqgtH6BXOgjOHVDxZPyW/h6QUC5kfEggh5IN8uOitjzrdCScE/a/cwcRvgcH8CGAXYReDNvasOKD0aFBWAZ1fg==
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.2"
