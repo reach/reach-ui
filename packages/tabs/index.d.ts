@@ -29,7 +29,7 @@ type SupportedTabsComponent = object | keyof JSX.IntrinsicElements;
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
  */
-export type TabsProps<T extends SupportedTabsComponent> = Omit<
+export type TabsProps<T extends SupportedTabsComponent = "div"> = Omit<
   ResolvedTabsProps<T>,
   "onChange"
 > & {

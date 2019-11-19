@@ -1,8 +1,4 @@
-import "./normalize.css";
-import "./root.css";
-import "./skeleton.css";
-import "./syntax.css";
-import "./app.css";
+import "./app.scss";
 
 import React from "react";
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";

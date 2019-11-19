@@ -97,7 +97,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Grids                |
 | ❓     | Link                 |
 | 🛠      | Listbox              |
-| 🛠      | Menu or Menu bar     |
+| ❓     | Menu or Menu bar     |
 | ✅     | Menu Button          |
 | 🛠      | Radio Group          |
 | ✅     | Slider               |

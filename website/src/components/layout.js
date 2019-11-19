@@ -11,11 +11,7 @@ import "@reach/tabs/styles.css";
 import "@reach/tooltip/styles.css";
 import "@reach/combobox/styles.css";
 
-import "./normalize.css";
-import "./root.css";
-import "./skeleton.css";
-import "./syntax.css";
-import "./app.css";
+import "./app.scss";
 
 import Logo from "./Logo";
 import MatchMedia from "./MatchMedia";
@@ -64,6 +60,7 @@ let NavTag = props => (
   />
 );
 
+// eslint-disable-next-line no-unused-vars
 let BetaTag = () => (
   <NavTag>
     <VisuallyHidden>Currently in </VisuallyHidden>Beta

@@ -1,7 +1,6 @@
 import React from "react";
 
 let style = {
-  display: "block",
   border: 0,
   clip: "rect(0 0 0 0)",
   height: "1px",
@@ -9,7 +8,11 @@ let style = {
   margin: "-1px",
   padding: 0,
   overflow: "hidden",
-  position: "absolute"
+  position: "absolute",
+
+  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+  whiteSpace: "nowrap",
+  wordWrap: "normal"
 };
 
 function VisuallyHidden(props) {

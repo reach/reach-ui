@@ -502,7 +502,7 @@ function Example(props) {
 
 ```jsx
 function Example(props) {
-  const labelId = `label:${useId()}`;
+  const labelId = `label--${useId(props.id)}`;
   return (
     <Dialog aria-labelledby={labelId} isOpen={true}>
       <h1 id={labelId}>Next Steps</h1>

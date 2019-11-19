@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { node, func, number, string, bool, oneOf, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
 import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
@@ -45,23 +45,23 @@ const useSliderContext = () => useContext(SliderContext);
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
 const sliderPropTypes = {
-  defaultValue: number,
-  disabled: bool,
-  getValueText: func,
-  handleAlignment: oneOf([
+  defaultValue: PropTypes.number,
+  disabled: PropTypes.bool,
+  getValueText: PropTypes.func,
+  handleAlignment: PropTypes.oneOf([
     SLIDER_HANDLE_ALIGN_CENTER,
     SLIDER_HANDLE_ALIGN_CONTAIN
   ]),
-  min: number,
-  max: number,
-  name: string,
-  orientation: oneOf([
+  min: PropTypes.number,
+  max: PropTypes.number,
+  name: PropTypes.string,
+  orientation: PropTypes.oneOf([
     SLIDER_ORIENTATION_HORIZONTAL,
     SLIDER_ORIENTATION_VERTICAL
   ]),
-  onChange: func,
-  step: number,
-  value: number
+  onChange: PropTypes.func,
+  step: PropTypes.number,
+  value: PropTypes.number
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ Slider.displayName = "Slider";
 if (__DEV__) {
   Slider.propTypes = {
     ...sliderPropTypes,
-    children: node
+    children: PropTypes.node
   };
 }
 
@@ -102,7 +102,6 @@ export const SliderInput = forwardRef(function SliderInput(
     value: controlledValue,
     getValueText,
     handleAlignment = SLIDER_HANDLE_ALIGN_CENTER,
-    id,
     max = 100,
     min = 0,
     name,
@@ -132,7 +131,7 @@ export const SliderInput = forwardRef(function SliderInput(
     "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
   );
 
-  const _id = makeId("slider", useId());
+  const id = useId(rest.id);
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
@@ -272,8 +271,6 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const valueText = getValueText ? getValueText(value) : ariaValueText;
 
-  const sliderId = id || _id;
-
   const trackHighlightStyle = isVertical
     ? {
         width: `100%`,
@@ -298,7 +295,7 @@ export const SliderInput = forwardRef(function SliderInput(
     onPointerUp,
     onHandleKeyDown: handleKeyDown,
     setHasFocus,
-    sliderId,
+    sliderId: id,
     sliderMax: max,
     sliderMin: min,
     value,
@@ -349,14 +346,13 @@ export const SliderInput = forwardRef(function SliderInput(
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         aria-disabled={disabled}
-        id={sliderId}
         {...dataAttributes}
         {...rest}
       >
         {typeof children === "function"
           ? children({
               hasFocus,
-              id: sliderId,
+              id,
               max,
               min,
               value,
@@ -372,7 +368,7 @@ export const SliderInput = forwardRef(function SliderInput(
             type="hidden"
             value={value}
             name={name}
-            id={makeId("input", sliderId)}
+            id={makeId("input", id)}
           />
         )}
       </div>
@@ -385,7 +381,7 @@ SliderInput.displayName = "SliderInput";
 if (__DEV__) {
   SliderInput.propTypes = {
     ...sliderPropTypes,
-    children: oneOfType([node, func]).isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   };
 }
 
@@ -420,7 +416,7 @@ SliderTrack.displayName = "SliderTrack";
 
 if (__DEV__) {
   SliderTrack.propTypes = {
-    children: node.isRequired
+    children: PropTypes.node.isRequired
   };
 }
 
@@ -572,7 +568,7 @@ SliderMarker.displayName = "SliderMarker";
 
 if (__DEV__) {
   SliderMarker.propTypes = {
-    value: number.isRequired
+    value: PropTypes.number.isRequired
   };
 }
 

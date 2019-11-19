@@ -18,7 +18,7 @@ export type SkipNavProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
    */
-  children: string | JSX.Element;
+  children?: string | JSX.Element;
 } & Omit<React.HTMLProps<HTMLAnchorElement>, "href">;
 
 /**
@@ -35,14 +35,14 @@ export type SkipNavContentProps = {
    * @example
    *   <SkipNavContent />
    *   <YourMainContent />
-   *
+   *   // vs.
    *   <SkipNavContent>
    *     <YourMainContent/>
    *   </SkipNavContent>
    *
    * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
    */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 } & Omit<React.HTMLProps<HTMLDivElement>, "id">;
 
 /**
