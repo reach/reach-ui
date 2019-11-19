@@ -270,13 +270,11 @@ export function useTooltip({
 
   useEffect(() => {
     const listener = event => {
-      if (event.key === "Escape" || event.key === "Esc") {
-        console.log("whoa");
-        switch (state) {
-          case VISIBLE: {
-            transition("selectWithKeyboard");
-          }
-        }
+      if (
+        (event.key === "Escape" || event.key === "Esc") &&
+        state === VISIBLE
+      ) {
+        transition("selectWithKeyboard");
       }
     };
     document.addEventListener("keydown", listener);
