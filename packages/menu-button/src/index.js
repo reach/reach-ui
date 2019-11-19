@@ -425,6 +425,18 @@ export const MenuItems = forwardRef(function MenuItems(
           }
         } else if (event.key === "Tab") {
           event.preventDefault(); // prevent leaving
+          const nextIndex = state.selectionIndex + 1;
+          if (nextIndex !== focusableChildren.length) {
+            setState({ selectionIndex: nextIndex });
+          } else {
+            setState({ selectionIndex: 0 });
+          }
+        } else if (event.key === "Home") {
+          event.preventDefault(); // prevent window scroll
+          setState({ selectionIndex: 0 });
+        } else if (event.key === "End") {
+          event.preventDefault(); // prevent window scroll
+          setState({ selectionIndex: focusableChildren.length - 1 });
         }
       })}
     >
