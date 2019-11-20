@@ -122,7 +122,6 @@ function reducer(data, action) {
       };
     case NAVIGATE:
     case OPEN_LISTBOX:
-      console.log(findNavigationValue(nextState, action));
       return {
         ...nextState,
         navigationValue: findNavigationValue(nextState, action)
@@ -208,8 +207,6 @@ export const ListboxInput = forwardRef(function ListboxInput(
     navigationValue: null
   };
 
-  console.log(defaultData.value);
-
   const [state, data, transition] = useReducerMachine(
     stateChart,
     reducer,
@@ -240,8 +237,6 @@ export const ListboxInput = forwardRef(function ListboxInput(
   // caused by clicking inside the list, and if so, don't close the List.
   const selectOnClickRef = useRef(false);
 
-  const handleKeyDown = wrapEvent(onKeyDown, useKeyDown());
-
   const handleValueChange = value => {
     transition(CHANGE, { value });
   };
@@ -267,7 +262,7 @@ export const ListboxInput = forwardRef(function ListboxInput(
       selectOnClickRef.current = false;
       // ...
     }
-  });
+  }); // ???
 
   const persistSelectionRef = useRef();
 
@@ -296,7 +291,6 @@ export const ListboxInput = forwardRef(function ListboxInput(
         data-reach-listbox=""
         data-expanded={context.isExpanded}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
         {...props}
       >
         {children}
@@ -328,7 +322,7 @@ export const ListboxPopover = forwardRef(function ListboxPopover(
   },
   forwardedRef
 ) {
-  const { popoverRef, inputRef, isExpanded } = useContext(ListboxContext);
+  const { popoverRef, buttonRef, isExpanded } = useContext(ListboxContext);
   const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
@@ -342,13 +336,11 @@ export const ListboxPopover = forwardRef(function ListboxPopover(
   // whatever).
   const hidden = !isExpanded;
 
-  console.log({ hidden });
-
   const Container = portal ? Popover : "div";
 
   const popupProps = portal
     ? {
-        targetRef: inputRef,
+        targetRef: buttonRef,
         position: positionMatchWidth
       }
     : null;
@@ -423,25 +415,37 @@ export const ListboxList = forwardRef(function ListboxList(
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxOption
 
-// Allows us to put the option's value on context so that ListboxOptionText
-// can work it's highlight text magic no matter what else is rendered around
-// it.
-const OptionContext = createContext();
-
 export const ListboxOption = forwardRef(function ListboxOption(
-  { children, value: valueProp, onClick, ...props },
+  {
+    children,
+    value: valueProp,
+
+    // Value text should be a human readable version of the value. It does not
+    // need to be provided if the option's child is a text string.
+    // Alternatively, the developer can use the `getValueText` function if the
+    // valuetext depends on the actual value of the input.
+    // If no children are passed to ListboxOption, value text will be displayed
+    // as the option, but we also want value text as a reasonable default for
+    // what is displayed in the ListboxButton when the option is selected.
+    valueText,
+    getValueText,
+
+    onClick,
+    ...props
+  },
   forwardedRef
 ) {
   const {
     onSelect,
-    data: { value: inputValue },
+    data: { value: inputValue, navigationValue },
     transition,
     optionsRef
   } = useContext(ListboxContext);
 
   let value = valueProp;
 
-  // let child = React.Children.only(children);
+  // Infer value from string child if omitted, otherwise error becaure what the
+  // heck … we  need a value!
   if (!valueProp) {
     if (typeof children === "string") {
       value = children;
@@ -452,20 +456,28 @@ export const ListboxOption = forwardRef(function ListboxOption(
     }
   }
 
+  // If valueText is omitted, first we check for getValueText. If that isn't
+  // there then we try to infer it from a string child. If we can't, then we
+  // just use the value.
+  if (!valueText) {
+    if (getValueText) {
+      valueText = getValueText(value);
+    } else if (typeof children === "string") {
+      valueText = children;
+    } else {
+      valueText = value;
+    }
+  }
+
   useEffect(() => {
-    // The input value is initially set by either a controlled value prop or a
-    // defaultValue prop. If neither is set, we need to set a default value from
-    // the first option. We'll check for an empty optionsRef array to verify
-    // we're rendering the first option here, then push our option into the
-    // array for later. The effect runs on each render, but the transition
-    // should only be set when there is no inputValue, which should only be true
-    // the first go-round.
+    // See @reach/combobox > `ComboboxOption` for more info on this effect
     if (!inputValue && !optionsRef.current.length) {
       transition(CHANGE, { value });
     }
-    optionsRef.current.push({ value });
+    optionsRef.current.push({ value, valueText });
   });
 
+  const isHighlighted = navigationValue === value;
   const isActive = inputValue === value;
 
   const handleClick = wrapEvent(onClick, () => {
@@ -474,60 +486,34 @@ export const ListboxOption = forwardRef(function ListboxOption(
   });
 
   return (
-    <OptionContext.Provider value={value}>
-      <li
-        {...props}
-        data-reach-listbox-option=""
-        ref={forwardedRef}
-        id={value ? makeHash(value) : undefined}
-        role="option"
-        aria-selected={isActive}
-        data-highlighted={isActive ? "" : undefined}
-        // without this the menu will close from `onBlur`, but with it the
-        // element can be `document.activeElement` and then our focus checks in
-        // onBlur will work as intended
-        tabIndex={-1}
-        onClick={handleClick}
-        children={children || <ListboxOptionText />}
-      />
-    </OptionContext.Provider>
+    <li
+      {...props}
+      data-reach-listbox-option=""
+      ref={forwardedRef}
+      id={value ? makeHash(value) : undefined}
+      role="option"
+      aria-selected={isActive}
+      data-highlighted={isHighlighted ? "" : undefined}
+      // without this the menu will close from `onBlur`, but with it the
+      // element can be `document.activeElement` and then our focus checks in
+      // onBlur will work as intended
+      tabIndex={-1}
+      onClick={handleClick}
+    >
+      <span data-reach-listbox-option-text="">
+        {typeof children === "function"
+          ? children({ value, valueText })
+          : valueText}
+      </span>
+    </li>
   );
 });
 
-////////////////////////////////////////////////////////////////////////////////
-// ListboxOptionText
-
-// We don't forwardRef or spread props because we render multiple spans or null,
-// should be fine 🤙
-export function ListboxOptionText() {
-  const value = useContext(OptionContext);
-  const {
-    data: { value: contextValue }
-  } = useContext(ListboxContext);
-
-  const results = useMemo(
-    () =>
-      findAll({
-        searchWords: escapeRegexp(contextValue).split(/\s+/),
-        textToHighlight: value
-      }),
-    [contextValue, value]
-  );
-
-  return results.length
-    ? results.map((result, index) => {
-        const str = value.slice(result.start, result.end);
-        return (
-          <span
-            key={index}
-            data-user-value={result.highlight ? true : undefined}
-            data-suggested-value={result.highlight ? undefined : true}
-          >
-            {str}
-          </span>
-        );
-      })
-    : value;
+if (__DEV__) {
+  ListboxOption.propTypes = {
+    valueText: PropTypes.string,
+    getValueText: PropTypes.func
+  };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -557,8 +543,6 @@ export const ListboxButton = forwardRef(function ListboxButton(
     isExpanded
   } = useContext(ListboxContext);
   const ref = useForkedRef(buttonRef, forwardedRef);
-
-  console.log(value);
 
   const handleKeyDown = useKeyDown();
 
@@ -625,6 +609,7 @@ function useFocusManagement(lastActionType, buttonRef, listRef) {
         break;
       case NAVIGATE:
       case OPEN_LISTBOX:
+        setTimeout(() => listRef.current.focus(), 1); // TODO: Gross...
         // listRef.current.focus();
         break;
     }
@@ -644,18 +629,35 @@ function useKeyDown() {
     persistSelectionRef
   } = useContext(ListboxContext);
 
-  const { navigationValue } = data || {};
+  const { navigationValue } = data;
 
   return function handleKeyDown(event) {
     const { current: options } = optionsRef;
+    const hasOptions = Array.isArray(options) && !!options.length;
+    const optionValues = hasOptions ? options.map(({ value }) => value) : [];
+    const index =
+      hasOptions && navigationValue
+        ? optionValues.indexOf(navigationValue.value)
+        : -1;
+
     switch (event.key) {
+      case "Home": {
+        // Don't scroll the page
+        event.preventDefault();
+        transition(NAVIGATE, { value: optionValues[0] });
+        break;
+      }
+      case "End": {
+        // Don't scroll the page
+        event.preventDefault();
+        transition(NAVIGATE, { value: optionValues[optionValues.length - 1] });
+        break;
+      }
       case "ArrowDown": {
         // Don't scroll the page
         event.preventDefault();
 
-        console.log(options);
-
-        if (options.length < 1) {
+        if (!hasOptions) {
           return;
         }
 
@@ -665,18 +667,13 @@ function useKeyDown() {
             persistSelection: persistSelectionRef.current
           });
         } else {
-          const index = options
-            .map(({ value }) => value)
-            .indexOf(navigationValue);
-          const atBottom = index === options.length - 1;
+          const atBottom = index === optionValues.length - 1;
           if (atBottom) {
-            // cycle through
-            const firstOption = options[0];
-            transition(NAVIGATE, { value: firstOption.value });
+            return;
           } else {
             // Go to the next item in the list
-            const nextValue = options[(index + 1) % options.length];
-            transition(NAVIGATE, { value: nextValue.value });
+            const nextValue = optionValues[(index + 1) % optionValues.length];
+            transition(NAVIGATE, { value: nextValue });
           }
         }
         break;
@@ -686,26 +683,27 @@ function useKeyDown() {
         // Don't scroll the page
         event.preventDefault();
 
-        if (options.length < 1) {
+        if (!hasOptions) {
           return;
         }
 
         if (state === IDLE) {
           transition(NAVIGATE);
         } else {
-          const index = options.indexOf(navigationValue);
           if (index === 0) {
-            // cycle through
-            const lastOption = options[options.length - 1];
-            transition(NAVIGATE, { value: lastOption });
+            return;
           } else if (index === -1) {
             // displaying the user's value, so go select the last one
-            const value = options.length ? options[options.length - 1] : null;
+            const value = optionValues.length
+              ? optionValues[optionValues.length - 1]
+              : null;
             transition(NAVIGATE, { value });
           } else {
             // normal case, select previous
             const nextValue =
-              options[(index - 1 + options.length) % options.length];
+              optionValues[
+                (index - 1 + optionValues.length) % optionValues.length
+              ];
             transition(NAVIGATE, { value: nextValue });
           }
         }

@@ -6,28 +6,24 @@
   font-family: sans-serif;
   display: block;
   position: absolute;
+  background: hsl(0, 0%, 100%);
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+  min-width: -moz-fit-content;
+  min-width: -webkit-min-content;
+  min-width: min-content;
 }
 
-[data-reach-listbox] {
+[data-reach-listbox-list] {
+  padding: 0;
+  margin: 0;
+  list-style: none;
   white-space: nowrap;
-  border: solid 1px hsla(0, 0%, 0%, 0.25);
-  background: hsla(0, 100%, 100%, 0.99);
   outline: none;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   font-size: 85%;
   user-select: none;
   visibility: visible;
   opacity: 1;
-}
-
-[data-reach-listbox][data-closed] {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s linear 150ms, opacity 150ms ease;
-}
-
-[data-reach-listbox-option] {
-  display: block;
 }
 
 [data-reach-listbox-option] {
@@ -35,13 +31,27 @@
   color: inherit;
   font: inherit;
   text-decoration: initial;
-  padding: 5px;
+  padding: 0.25rem 0.5rem;
+}
+
+[data-reach-listbox-option][data-highlighted] {
+  background: hsl(211, 81%, 46%);
+  color: hsl(0, 0%, 100%);
+}
+
+[data-reach-listbox-option][aria-selected="true"] {
+  font-weight: bolder;
+}
+
+[data-reach-listbox-option][aria-selected="true"][data-confirming] {
+  animation: flash 100ms;
+  animation-iteration-count: 1;
 }
 
 @keyframes flash {
   0% {
-    background: rgb(83, 147, 248);
-    color: white;
+    background: hsla(211, 81%, 36%, 1);
+    color: hsl(0, 0%, 100%);
     opacity: 1;
   }
   50% {
@@ -50,18 +60,8 @@
     color: inherit;
   }
   100% {
-    background: rgb(83, 147, 248);
-    color: white;
+    background: hsla(211, 81%, 36%, 1);
+    color: hsl(0, 0%, 100%);
     opacity: 1;
   }
-}
-
-[data-reach-listbox-option][data-selected] {
-  background: rgb(79, 144, 248);
-  color: white;
-}
-
-[data-reach-listbox-option][data-selected][data-confirming] {
-  animation: flash 100ms;
-  animation-iteration-count: 1;
 }
