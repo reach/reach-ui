@@ -541,6 +541,14 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
 
   useEffect(() => {
     optionsRef.current.push(value);
+    const element = document.querySelector("li[data-highlighted]");
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest"
+      });
+    }
   });
 
   const isActive = navigationValue === value;
