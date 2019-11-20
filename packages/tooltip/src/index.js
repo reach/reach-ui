@@ -144,11 +144,10 @@ function transition(action, newContext) {
 
   // Really useful for debugging
   // console.log({ action, state, nextState, contextId: context.id });
+  // !nextState && console.log('no transition taken')
 
   if (!nextState) {
-    throw new Error(
-      `Unknown state for action "${action}" from state "${state}"`
-    );
+    return;
   }
 
   if (stateDef.leave) {
@@ -269,74 +268,37 @@ export function useTooltip({
   useEffect(() => checkStyles("tooltip"));
 
   const handleMouseEnter = () => {
-    switch (state) {
-      case IDLE:
-      case VISIBLE:
-      case LEAVING_VISIBLE: {
-        transition("mouseenter", { id });
-      }
-    }
+    transition("mouseenter", { id });
   };
 
   const handleMouseMove = () => {
-    switch (state) {
-      case FOCUSED: {
-        transition("mousemove", { id });
-      }
-    }
+    transition("mousemove", { id });
   };
 
   const handleFocus = event => {
     if (window.__REACH_DISABLE_TOOLTIPS) return;
-    switch (state) {
-      case IDLE:
-      case VISIBLE:
-      case LEAVING_VISIBLE: {
-        transition("focus", { id });
-      }
-    }
+    transition("focus", { id });
   };
 
   const handleMouseLeave = () => {
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE:
-      case DISMISSED: {
-        transition("mouseleave");
-      }
-    }
+    transition("mouseleave");
   };
 
   const handleBlur = () => {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE:
-      case DISMISSED: {
-        transition("blur");
-      }
-    }
+    transition("blur");
   };
 
   const handleMouseDown = () => {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE: {
-        transition("mousedown");
-      }
-    }
+    transition("mousedown");
   };
 
   const handleKeyDown = event => {
     if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
-      switch (state) {
-        case VISIBLE: {
-          transition("selectWithKeyboard");
-        }
-      }
+      transition("selectWithKeyboard");
     }
   };
 
