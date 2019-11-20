@@ -267,6 +267,19 @@ export function useTooltip({
 
   useEffect(() => checkStyles("tooltip"));
 
+  useEffect(() => {
+    const listener = event => {
+      if (
+        (event.key === "Escape" || event.key === "Esc") &&
+        state === VISIBLE
+      ) {
+        transition("selectWithKeyboard");
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, []);
+
   const handleMouseEnter = () => {
     transition("mouseenter", { id });
   };
@@ -297,7 +310,7 @@ export function useTooltip({
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
+    if (event.key === "Enter" || event.key === " ") {
       transition("selectWithKeyboard");
     }
   };
