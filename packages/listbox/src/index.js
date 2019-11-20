@@ -795,5 +795,43 @@ const makeHash = str => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// Well alright, you made it all the way here to like 700 lines of code (geez,
-// what the heck?). Have a great day :D
+// See @reach/descendants in dev-descendants branch for context/notes
+// until this is finalized and merged
+const DescendantContext = createContext({});
+
+export function useDescendants() {
+  return useRef([]);
+}
+
+export function DescendantProvider({ items, ...props }) {
+  const assigning = useRef(true);
+  const [, forceUpdate] = useState();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    if (assigning.current) {
+      assigning.current = false;
+      forceUpdate({});
+    } else {
+      assigning.current = true;
+    }
+    return () => {
+      if (assigning.current) {
+        items.current = [];
+      }
+    };
+  });
+
+  return <DescendantContext.Provider {...props} value={{ items, assigning }} />;
+}
+
+export function useDescendant(descendant) {
+  const { assigning, items } = useContext(DescendantContext);
+  const index = useRef(-1);
+
+  useLayoutEffect(() => {
+    if (assigning.current) {
+      index.current = items.current.push(descendant) - 1;
+    }
+  });
+  return index.current;
+}
