@@ -135,8 +135,8 @@ export const SliderInput = forwardRef(function SliderInput(
 
   const trackRef = useRef(null);
   const handleRef = useRef(null);
-  const ownRef = useRef(null);
-  const sliderRef = forwardedRef || ownRef;
+  const sliderRef = useRef(null);
+  const ref = useForkedRef(sliderRef, forwardedRef);
 
   const [hasFocus, setHasFocus] = useState(false);
   const [isPointerDown, setPointerDown] = useState(false);
@@ -341,7 +341,7 @@ export const SliderInput = forwardRef(function SliderInput(
   return (
     <SliderContext.Provider value={ctx}>
       <div
-        ref={sliderRef}
+        ref={ref}
         tabIndex={-1}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
@@ -391,9 +391,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
   forwardedRef
 ) {
   const { disabled, orientation, trackRef } = useSliderContext();
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
-  const actualRef = useForkedRef(ref, trackRef);
+  const ref = useForkedRef(trackRef, forwardedRef);
 
   const dataAttributes = makeDataAttributes("slider-track", {
     orientation,
@@ -402,7 +400,7 @@ export const SliderTrack = forwardRef(function SliderTrack(
 
   return (
     <div
-      ref={actualRef}
+      ref={ref}
       style={{ ...style, position: "relative" }}
       {...dataAttributes}
       {...props}
@@ -426,16 +424,13 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   forwardedRef
 ) {
   const { disabled, orientation, trackHighlightStyle } = useSliderContext();
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
-
   const dataAttributes = makeDataAttributes("slider-track-highlight", {
     orientation,
     disabled
   });
   return (
     <div
-      ref={ref}
+      ref={forwardedRef}
       style={{ position: "absolute", ...trackHighlightStyle, ...style }}
       {...dataAttributes}
       {...props}
@@ -477,9 +472,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
     valueText
   } = useSliderContext();
 
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
-  const actualRef = useForkedRef(ref, handleRef);
+  const ref = useForkedRef(handleRef, forwardedRef);
   const dataAttributes = makeDataAttributes("slider-handle", {
     orientation,
     disabled
@@ -487,7 +480,7 @@ export const SliderHandle = forwardRef(function SliderHandle(
 
   return (
     <div
-      ref={actualRef}
+      ref={ref}
       role="slider"
       tabIndex={disabled ? undefined : 0}
       aria-disabled={disabled}
@@ -536,9 +529,6 @@ export const SliderMarker = forwardRef(function SliderMarker(
   } = useSliderContext();
 
   const inRange = !(value < sliderMin || value > sliderMax);
-
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     orientation,
@@ -554,7 +544,7 @@ export const SliderMarker = forwardRef(function SliderMarker(
 
   return inRange ? (
     <div
-      ref={ref}
+      ref={forwardedRef}
       style={{
         position: "absolute",
         ...(isVertical
@@ -612,7 +602,7 @@ function makeDataAttributes(
   };
 }
 
-function useDimensions(passedRef) {
+function useDimensions(ref) {
   const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
   // getBoundingClientRect does not work here when borders are applied.
@@ -622,8 +612,6 @@ function useDimensions(passedRef) {
   /* const { width, height } = ref.current
     ? ref.current.getBoundingClientRect()
     : 0; */
-  const ownRef = useRef(null);
-  const ref = passedRef || ownRef;
 
   React.useLayoutEffect(() => {
     if (ref.current) {
