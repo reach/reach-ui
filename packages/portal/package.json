@@ -2,6 +2,11 @@
   "name": "@reach/portal",
   "version": "0.6.1",
   "description": "Declarative portals for React",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/portal"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {

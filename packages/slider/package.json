@@ -2,6 +2,11 @@
   "name": "@reach/slider",
   "version": "0.6.1",
   "description": "Accessible React Slider Component",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/slider"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {

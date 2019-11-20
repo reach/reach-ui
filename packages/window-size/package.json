@@ -2,6 +2,11 @@
   "name": "@reach/window-size",
   "version": "0.6.1",
   "description": "Measure the window size in React",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/window-size"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {

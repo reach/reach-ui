@@ -2,6 +2,11 @@
   "name": "@reach/alert",
   "version": "0.6.1",
   "description": "Screenreader friendly alert messages.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/alert"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
