@@ -80,9 +80,8 @@ export const Slider = forwardRef(function Slider(
   );
 });
 
-Slider.displayName = "Slider";
-
 if (__DEV__) {
+  Slider.displayName = "Slider";
   Slider.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.node
@@ -376,9 +375,8 @@ export const SliderInput = forwardRef(function SliderInput(
   );
 });
 
-SliderInput.displayName = "SliderInput";
-
 if (__DEV__) {
+  SliderInput.displayName = "SliderInput";
   SliderInput.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -410,9 +408,8 @@ export const SliderTrack = forwardRef(function SliderTrack(
   );
 });
 
-SliderTrack.displayName = "SliderTrack";
-
 if (__DEV__) {
+  SliderTrack.displayName = "SliderTrack";
   SliderTrack.propTypes = {
     children: PropTypes.node.isRequired
   };
@@ -438,9 +435,8 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   );
 });
 
-SliderTrackHighlight.displayName = "SliderTrackHighlight";
-
 if (__DEV__) {
+  SliderTrackHighlight.displayName = "SliderTrackHighlight";
   SliderTrackHighlight.propTypes = {};
 }
 
@@ -508,9 +504,8 @@ export const SliderHandle = forwardRef(function SliderHandle(
   );
 });
 
-SliderHandle.displayName = "SliderHandle";
-
 if (__DEV__) {
+  SliderHandle.displayName = "SliderHandle";
   SliderHandle.propTypes = {};
 }
 
@@ -559,9 +554,8 @@ export const SliderMarker = forwardRef(function SliderMarker(
   ) : null;
 });
 
-SliderMarker.displayName = "SliderMarker";
-
 if (__DEV__) {
+  SliderMarker.displayName = "SliderMarker";
   SliderMarker.propTypes = {
     value: PropTypes.number.isRequired
   };
