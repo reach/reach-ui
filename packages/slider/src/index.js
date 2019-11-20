@@ -523,7 +523,7 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 export const SliderMarker = forwardRef(function SliderMarker(
-  { children, style = {}, value: valueProp, ...props },
+  { children, style = {}, value, ...props },
   forwardedRef
 ) {
   const {
@@ -535,9 +535,10 @@ export const SliderMarker = forwardRef(function SliderMarker(
     value: sliderValue
   } = useSliderContext();
 
+  const inRange = !(value < sliderMin || value > sliderMax);
+
   const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  const value = valueToPercent(valueProp, sliderMin, sliderMax);
   const highlight = sliderValue >= value;
   const dataAttributes = makeDataAttributes("slider-marker", {
     orientation,
@@ -545,9 +546,13 @@ export const SliderMarker = forwardRef(function SliderMarker(
     highlight
   });
 
-  const absoluteStartPosition = `${value}%`;
+  const absoluteStartPosition = `${valueToPercent(
+    value,
+    sliderMin,
+    sliderMax
+  )}%`;
 
-  return value != null ? (
+  return inRange ? (
     <div
       ref={ref}
       style={{
