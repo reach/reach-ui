@@ -2,25 +2,22 @@
   "name": "@reach/checkbox",
   "version": "0.0.0",
   "description": "Accessible React Checkbox Component",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "test": "echo \"Write some tests you bum!\"",
-    "build": "node ../../shared/build-package",
-    "lint": "eslint . --max-warnings=0"
+    "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.5.3",
-    "@reach/utils": "^0.5.0",
+    "@reach/auto-id": "^0.6.1",
+    "@reach/utils": "^0.6.1",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
   "files": [
     "es",
     "src",
