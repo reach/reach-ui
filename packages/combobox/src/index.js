@@ -262,24 +262,21 @@ export const Combobox = forwardRef(function Combobox(
   const id = useId(rest.id);
   const listboxId = makeId("listbox", id);
 
-  const context = useMemo(() => {
-    return {
-      data,
-      inputRef,
-      popoverRef,
-      buttonRef,
-      onSelect,
-      optionsRef,
-      state,
-      transition,
-      listboxId,
-      autocompletePropRef,
-      persistSelectionRef,
-      isVisible: isVisible(state),
-      openOnFocus
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, onSelect, state, transition, listboxId]);
+  const context = {
+    data,
+    inputRef,
+    popoverRef,
+    buttonRef,
+    onSelect,
+    optionsRef,
+    state,
+    transition,
+    listboxId,
+    autocompletePropRef,
+    persistSelectionRef,
+    isVisible: isVisible(state),
+    openOnFocus
+  };
 
   return (
     <Context.Provider value={context}>
