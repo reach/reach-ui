@@ -481,7 +481,7 @@ It is recommended to have at least one tabbable element in the dialog content. I
 
 As with many other complex UI components, a dialog needs to be properly labeled to provide context for users with assistive technology such as screen readers. If a dialog is announced to the user without a label, it can be confusing and difficult to navigate.
 
-There are two general approaches to labeling UI components on the web: `aria-label` and `aria-labelledby`. If the text of the is visible on screen, you should provide the label's HTML element with a unique `id` attribute. That `id` value is then given to an `aria-labelledby` attribute (or in React, an `aria-labelledby` prop) on the `Dialog`. With this context, the screen reader will announce whatever text is nested inside that ID'd markup as the title for the `Dialog`.
+There are two general approaches to labeling UI components on the web: `aria-label` and `aria-labelledby`. If the text is visible on screen, you should provide the label's HTML element with a unique `id` attribute. That `id` value is then given to an `aria-labelledby` attribute (or in React, an `aria-labelledby` prop) on the `Dialog`. With this context, the screen reader will announce whatever text is nested inside that ID'd markup as the title for the `Dialog`.
 
 Alternatively, a design may not include a visible label on the screen, but this context is still important for non-sighted users. In this case, you need to provide an `aria-label` prop to your `Dialog` instead.
 
