@@ -1,0 +1,24 @@
+{
+  "name": "@reach/descendants",
+  "version": "0.0.1",
+  "description": "Identify relevant descendent components in a tree",
+  "main": "index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build": "node ../../shared/build-package"
+  },
+  "peerDependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "files": [
+    "es",
+    "src",
+    "lib",
+    "index.js",
+    "index.d.ts",
+    "styles.css"
+  ]
+}
