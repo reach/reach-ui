@@ -3,14 +3,15 @@
 }
 
 [data-reach-listbox-popover] {
-  font-family: sans-serif;
   display: block;
   position: absolute;
-  background: hsl(0, 0%, 100%);
-  border: solid 1px hsla(0, 0%, 0%, 0.25);
   min-width: -moz-fit-content;
   min-width: -webkit-min-content;
   min-width: min-content;
+}
+
+[data-reach-listbox-popover][hidden] {
+  display: none;
 }
 
 [data-reach-listbox-list] {
@@ -24,6 +25,13 @@
   user-select: none;
   visibility: visible;
   opacity: 1;
+  background: hsl(0, 0%, 100%);
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+}
+
+[data-reach-listbox-list]:focus {
+  box-shadow: 0 0 4px Highlight;
+  outline: -webkit-focus-ring-color auto 4px;
 }
 
 [data-reach-listbox-option] {

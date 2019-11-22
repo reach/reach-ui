@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
@@ -5,13 +6,12 @@ import "@reach/listbox/styles.css";
 export let name = "Basic";
 
 export let Example = () => (
-  <Listbox defaultValue="download">
-    <ListboxOption value="default" disabled>
-      Select an Option
-    </ListboxOption>
-    <ListboxOption value="download">Download</ListboxOption>
-    <ListboxOption value="create">Create a Copy</ListboxOption>
-    <ListboxOption value="draft">Mark as Draft</ListboxOption>
-    <ListboxOption value="delete">Delete</ListboxOption>
+  <Listbox>
+    <ListboxOption value="default">Choose a taco</ListboxOption>
+    <hr />
+    <ListboxOption value="asada">🌮 Carne Asada</ListboxOption>
+    <ListboxOption value="pollo">🌮 Pollo</ListboxOption>
+    <ListboxOption value="pastor">🌮 Pastor</ListboxOption>
+    <ListboxOption value="lengua">🌮 Lengua</ListboxOption>
   </Listbox>
 );
