@@ -191,6 +191,7 @@ if (__DEV__) {
 
 export const MenuItem = forwardRef(function MenuItem(
   {
+    as: Comp = "div",
     onClick,
     onKeyDown,
     onMouseLeave,
@@ -212,7 +213,7 @@ export const MenuItem = forwardRef(function MenuItem(
     setState(close);
   };
   return (
-    <div
+    <Comp
       {...rest}
       ref={ref}
       data-reach-menu-item={role === "menuitem" ? true : undefined}
