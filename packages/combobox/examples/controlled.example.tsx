@@ -9,23 +9,23 @@ import {
   ComboboxPopover
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
-import { useThrottle } from "use-throttle";
+import { useThrottle } from "./use-throttle";
 
 import cities from "./cities";
 
-export let name = "Controlled";
+export let name = "Controlled (TS)";
 
 export function Example() {
   let [term, setTerm] = useState("");
   let [selection, setSelection] = useState("");
   let results = useCityMatch(term);
-  let ref = useRef();
+  let ref = useRef(null);
 
-  const handleChange = event => {
+  const handleChange = (event: any) => {
     setTerm(event.target.value);
   };
 
-  const handleSelect = value => {
+  const handleSelect = (value: string) => {
     setSelection(value);
     setTerm("");
   };
@@ -52,6 +52,7 @@ export function Example() {
                   onClick={() => {
                     console.log("YOOOOOO");
                     setTerm("");
+                    // @ts-ignore
                     ref.current.focus();
                   }}
                 >
@@ -77,7 +78,7 @@ export function Example() {
   );
 }
 
-function useCityMatch(term) {
+function useCityMatch(term: string) {
   let throttledTerm = useThrottle(term, 100);
   return useMemo(
     () =>

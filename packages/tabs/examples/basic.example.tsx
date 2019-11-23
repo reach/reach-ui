@@ -3,7 +3,7 @@ import "@reach/tabs/styles.css";
 import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
-export const name = "Basic (typed)";
+export const name = "Basic (TS)";
 
 export const Example: React.FC = () => (
   <Tabs>

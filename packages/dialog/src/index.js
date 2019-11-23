@@ -7,6 +7,12 @@ import PropTypes from "prop-types";
 
 const noop = () => {};
 
+const overlayPropTypes = {
+  initialFocusRef: () => {},
+  allowPinchZoom: PropTypes.bool,
+  onDismiss: PropTypes.func
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 // DialogOverlay
 
@@ -30,7 +36,8 @@ export const DialogOverlay = forwardRef(function DialogOverlay(
 DialogOverlay.displayName = "DialogOverlay";
 if (__DEV__) {
   DialogOverlay.propTypes = {
-    initialFocusRef: () => {}
+    ...overlayPropTypes,
+    isOpen: PropTypes.bool
   };
 }
 
@@ -92,6 +99,11 @@ const DialogInner = forwardRef(function DialogInner(
 });
 
 DialogOverlay.displayName = "DialogOverlay";
+if (__DEV__) {
+  DialogOverlay.propTypes = {
+    ...overlayPropTypes
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // DialogContent

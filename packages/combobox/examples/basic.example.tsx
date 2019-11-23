@@ -5,33 +5,34 @@ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
-  ComboboxPopover,
   ComboboxOption,
-  ComboboxButton
+  ComboboxPopover
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
-import { useThrottle } from "use-throttle";
+import { useThrottle } from "./use-throttle";
 
 import cities from "./cities";
 
-export let name = "With Button";
+export let name = "Basic (TS)";
 
 export function Example() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
-  const handleChange = event => {
+  const handleChange = (event: any) => {
     setTerm(event.target.value);
   };
 
   return (
     <div>
-      <h2>No Portal</h2>
-      <Combobox>
-        <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
-        <ComboboxButton aria-label="toggle menu">▾</ComboboxButton>
+      <h2>Clientside Search</h2>
+      <Combobox id="holy-smokes">
+        <ComboboxInput onChange={handleChange} style={inputStyle} />
         {results && (
-          <ComboboxPopover>
+          <ComboboxPopover style={popupStyle}>
+            <p>
+              <button>Hi</button>
+            </p>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
@@ -47,7 +48,7 @@ export function Example() {
   );
 }
 
-function useCityMatch(term) {
+function useCityMatch(term: string) {
   let throttledTerm = useThrottle(term, 100);
   return useMemo(
     () =>
@@ -60,3 +61,14 @@ function useCityMatch(term) {
     [throttledTerm]
   );
 }
+
+const inputStyle = {
+  width: 400,
+  fontSize: "100%",
+  padding: "0.33rem"
+};
+
+const popupStyle = {
+  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
+  border: "none"
+};

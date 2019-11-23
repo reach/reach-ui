@@ -3,7 +3,7 @@ import "@reach/tabs/styles.css";
 import React, { useState } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
-export const name = "Controlled (typed)";
+export const name = "Controlled (TS)";
 
 const tabsStyle = {
   width: 400,
