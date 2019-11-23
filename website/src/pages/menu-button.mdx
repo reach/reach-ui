@@ -194,6 +194,10 @@ Any props not listed above will be spread onto the underlying button element. Yo
 </Menu>
 ```
 
+### MenuButton as
+
+_Type_: ``
+
 ### MenuButton children
 
 _Type_: `node`
@@ -402,6 +406,7 @@ function Example() {
 | Prop                                     | Type   | Required |
 | ---------------------------------------- | ------ | -------- |
 | [element props](#menuitem-element-props) | spread | n/a      |
+| [as](#menuitem-as)                       | any    | false    |
 | [children](#menuitem-children)           | node   | false    |
 | [onSelect](#menuitem-onselect)           | func   | true     |
 
@@ -430,6 +435,44 @@ function Example(props) {
         </MenuItem>
         <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
         <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+### MenuItem as
+
+_Type_: `any`
+
+By default, `MenuItem` renders a div. You can pass another element or use this prop to render a styled component.
+
+```jsx
+const StyledItem = styled.div`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+function Example() {
+  return (
+    <Menu>
+      <MenuButton id="example-button">
+        Actions <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList>
+        <MenuItem as={StyledItem} onSelect={action("Download")}>
+          Download
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Copy")}>
+          Create a Copy
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Mark as Draft")}>
+          Mark as Draft
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Delete")}>
+          Delete
+        </MenuItem>
       </MenuList>
     </Menu>
   );

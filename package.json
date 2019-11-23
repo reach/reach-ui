@@ -28,6 +28,7 @@
     "@testing-library/react": "^9.3.2",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
+    "@types/styled-components": "^4.4.0",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "awesome-typescript-loader": "^5.2.1",
