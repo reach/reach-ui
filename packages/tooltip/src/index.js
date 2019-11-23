@@ -224,7 +224,8 @@ function clearContextId() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// THE HOOK! It's about time we got to the goods!
+// useTooltip
+
 export function useTooltip({
   id: idProp,
   onMouseEnter,
@@ -338,7 +339,16 @@ export function useTooltip({
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
+// Tooltip
+
+export function Tooltip({
+  children,
+  label,
+  ariaLabel,
+  id,
+  DEBUG_STYLE,
+  ...rest
+}) {
   const child = Children.only(children);
 
   // We need to pass some properties from the child into useTooltip
@@ -368,18 +378,20 @@ function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
   );
 }
 
+Tooltip.displayName = "Tooltip";
 if (__DEV__) {
   Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string
   };
-  Tooltip.displayName = "Tooltip";
 }
 
 export default Tooltip;
 
 ////////////////////////////////////////////////////////////////////////////////
+// TooltipPopup
+
 export const TooltipPopup = forwardRef(function TooltipPopup(
   {
     // own props
@@ -411,16 +423,19 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
   ) : null;
 });
 
+TooltipPopup.displayName = "TooltipPopup";
 if (__DEV__) {
   TooltipPopup.propTypes = {
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string,
     position: PropTypes.func
   };
-  TooltipPopup.displayName = "TooltipPopup";
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// TooltipContent
 // Need a separate component so that useRect works inside the portal
+
 const TooltipContent = forwardRef(function TooltipContent(
   {
     label,
@@ -461,23 +476,25 @@ const TooltipContent = forwardRef(function TooltipContent(
   );
 });
 
+TooltipContent.displayName = "TooltipContent";
 if (__DEV__) {
   TooltipContent.propTypes = {};
-  TooltipContent.displayName = "TooltipContent";
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 // feels awkward when it's perfectly aligned w/ the trigger
 const OFFSET = 8;
 
-const getStyles = (position, triggerRect, tooltipRect) => {
+function getStyles(position, triggerRect, tooltipRect) {
   const haventMeasuredTooltipYet = !tooltipRect;
   if (haventMeasuredTooltipYet) {
     return { visibility: "hidden" };
   }
   return position(triggerRect, tooltipRect);
-};
+}
 
-const positionDefault = (triggerRect, tooltipRect) => {
+function positionDefault(triggerRect, tooltipRect) {
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
@@ -503,4 +520,4 @@ const positionDefault = (triggerRect, tooltipRect) => {
           triggerRect.height +
           window.pageYOffset}px`
   };
-};
+}

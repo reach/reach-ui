@@ -5,6 +5,8 @@ import { wrapEvent, useUpdateEffect, makeId, useForkedRef } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
 ////////////////////////////////////////////////////////////////////////////////
+// Tabs
+
 export const Tabs = forwardRef(function Tabs(
   {
     children,
@@ -65,6 +67,7 @@ export const Tabs = forwardRef(function Tabs(
   return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
 });
 
+Tabs.displayName = "Tabs";
 if (__DEV__) {
   Tabs.propTypes = {
     children: PropTypes.node.isRequired,
@@ -87,6 +90,8 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// TabList
+
 export const TabList = forwardRef(function TabList(
   { children, as: Comp = "div", onKeyDown, ...clonedProps },
   ref
@@ -162,6 +167,7 @@ export const TabList = forwardRef(function TabList(
   );
 });
 
+TabList.displayName = "TabList";
 if (__DEV__) {
   TabList.propTypes = {
     children: PropTypes.node
@@ -169,6 +175,8 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Tab
+
 export const Tab = forwardRef(function Tab(
   { children, as: Comp = "button", ...rest },
   forwardedRef
@@ -205,6 +213,7 @@ export const Tab = forwardRef(function Tab(
   );
 });
 
+Tab.displayName = "Tab";
 if (__DEV__) {
   Tab.propTypes = {
     children: PropTypes.node
@@ -212,6 +221,8 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// TabPanels
+
 export const TabPanels = forwardRef(function TabPanels(
   { children, as: Comp = "div", ...rest },
   forwardedRef
@@ -244,6 +255,7 @@ export const TabPanels = forwardRef(function TabPanels(
   );
 });
 
+TabPanels.displayName = "TabPanels";
 if (__DEV__) {
   TabPanels.propTypes = {
     children: PropTypes.node
@@ -251,6 +263,8 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// TabPanel
+
 export const TabPanel = forwardRef(function TabPanel(
   { children, as: Comp = "div", ...rest },
   forwardedRef
@@ -273,6 +287,7 @@ export const TabPanel = forwardRef(function TabPanel(
   );
 });
 
+TabPanel.displayName = "TabPanel";
 if (__DEV__) {
   TabPanel.propTypes = {
     children: PropTypes.node

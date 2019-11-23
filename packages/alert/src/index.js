@@ -34,7 +34,12 @@ let liveRegions = {
   assertive: null
 };
 
-const Alert = forwardRef(function Alert(
+let renderTimer = null;
+
+////////////////////////////////////////////////////////////////////////////////
+// Alert
+
+export const Alert = forwardRef(function Alert(
   { children, type = "polite", ...props },
   forwardedRef
 ) {
@@ -54,6 +59,7 @@ const Alert = forwardRef(function Alert(
   return child;
 });
 
+Alert.displayName = "Alert";
 if (__DEV__) {
   Alert.propTypes = {
     children: PropTypes.node,
@@ -64,7 +70,36 @@ if (__DEV__) {
 export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
-let renderTimer = null;
+
+function createMirror(type, doc = document) {
+  let key = ++keys[type];
+
+  let mount = element => {
+    if (liveRegions[type]) {
+      elements[type][key] = element;
+      renderAlerts();
+    } else {
+      let node = doc.createElement("div");
+      node.setAttribute(`data-reach-live-${type}`, "true");
+      liveRegions[type] = node;
+      doc.body.appendChild(liveRegions[type]);
+      mount(element);
+    }
+  };
+
+  let update = element => {
+    elements[type][key] = element;
+    renderAlerts();
+  };
+
+  let unmount = () => {
+    delete elements[type][key];
+    renderAlerts();
+  };
+
+  return { mount, update, unmount };
+}
+
 function renderAlerts() {
   clearTimeout(renderTimer);
   renderTimer = setTimeout(() => {
@@ -117,33 +152,4 @@ function useMirrorEffects(type, element, ref) {
       mirror.current && mirror.current.unmount();
     };
   }, []);
-}
-
-function createMirror(type, doc = document) {
-  let key = ++keys[type];
-
-  let mount = element => {
-    if (liveRegions[type]) {
-      elements[type][key] = element;
-      renderAlerts();
-    } else {
-      let node = doc.createElement("div");
-      node.setAttribute(`data-reach-live-${type}`, "true");
-      liveRegions[type] = node;
-      doc.body.appendChild(liveRegions[type]);
-      mount(element);
-    }
-  };
-
-  let update = element => {
-    elements[type][key] = element;
-    renderAlerts();
-  };
-
-  let unmount = () => {
-    delete elements[type][key];
-    renderAlerts();
-  };
-
-  return { mount, update, unmount };
 }

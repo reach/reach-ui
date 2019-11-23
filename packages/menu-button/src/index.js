@@ -93,6 +93,8 @@ const getInitialMenuState = () => ({
 const checkIfStylesIncluded = () => checkStyles("menu-button");
 
 ////////////////////////////////////////////////////////////////////////////////
+// Menu
+
 export const Menu = ({ children }) => {
   return (
     <Component
@@ -113,14 +115,16 @@ export const Menu = ({ children }) => {
   );
 };
 
+Menu.displayName = "Menu";
 if (__DEV__) {
   Menu.propTypes = {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
-  Menu.displayName = "Menu";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuButton
+
 export const MenuButton = forwardRef(function MenuButton(
   { onClick, onKeyDown, onMouseDown, id, ...props },
   forwardedRef
@@ -173,16 +177,18 @@ export const MenuButton = forwardRef(function MenuButton(
   );
 });
 
+MenuButton.displayName = "MenuButton";
 if (__DEV__) {
   MenuButton.propTypes = {
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func,
     children: PropTypes.node
   };
-  MenuButton.displayName = "MenuButton";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuItem
+
 export const MenuItem = forwardRef(function MenuItem(
   {
     onClick,
@@ -237,6 +243,7 @@ export const MenuItem = forwardRef(function MenuItem(
   );
 });
 
+MenuItem.displayName = "MenuItem";
 if (__DEV__) {
   MenuItem.propTypes = {
     onSelect: PropTypes.func.isRequired,
@@ -249,10 +256,11 @@ if (__DEV__) {
     _ref: PropTypes.func,
     _index: PropTypes.number
   };
-  MenuItem.displayName = "MenuItem";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuLink
+
 export const MenuLink = forwardRef(function MenuLink(
   {
     as: AsComp = "a",
@@ -299,6 +307,7 @@ export const MenuLink = forwardRef(function MenuLink(
   );
 });
 
+MenuLink.displayName = "MenuLink";
 if (__DEV__) {
   MenuLink.propTypes = {
     as: PropTypes.any,
@@ -308,10 +317,11 @@ if (__DEV__) {
     _index: PropTypes.number,
     _ref: PropTypes.func
   };
-  MenuLink.displayName = "MenuLink";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuPopover
+
 export const MenuPopover = forwardRef(function MenuPopover(
   { children, style, ...props },
   forwardedRef
@@ -344,14 +354,16 @@ export const MenuPopover = forwardRef(function MenuPopover(
   );
 });
 
+MenuPopover.displayName = "MenuPopover";
 if (__DEV__) {
   MenuPopover.propTypes = {
     children: PropTypes.node
   };
-  MenuPopover.displayName = "MenuPopover";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuList
+
 export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
   const ownRef = useRef(null);
   const ref = useForkedRef(ownRef, forwardedRef);
@@ -362,32 +374,23 @@ export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
   );
 });
 
+MenuList.displayName = "MenuList";
 if (__DEV__) {
   MenuList.propTypes = {
     children: PropTypes.node.isRequired
   };
-  MenuList.displayName = "MenuList";
 }
-////////////////////////////////////////////////////////////////////////////////
-
-const focusableChildrenTypes = [MenuItem, MenuLink];
-
-const isFocusableChildType = child =>
-  focusableChildrenTypes.includes(child.type);
-
-const getFocusableMenuChildren = childrenArray => {
-  const focusable = childrenArray.filter(child => isFocusableChildType(child));
-  return focusable;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuItems
+
 export const MenuItems = forwardRef(function MenuItems(
   { children, onKeyDown, onBlur, ...rest },
   ref
 ) {
   const { state, setState, refs } = useContext(MenuContext);
   const clones = Children.toArray(children).filter(Boolean);
-  const focusableChildren = getFocusableMenuChildren(clones);
+  const focusableChildren = clones.filter(child => isFocusableChildType(child));
 
   return (
     <div
@@ -444,6 +447,7 @@ export const MenuItems = forwardRef(function MenuItems(
   );
 });
 
+MenuItems.displayName = "MenuItems";
 if (__DEV__) {
   MenuItems.propTypes = {
     refs: PropTypes.object,
@@ -453,11 +457,13 @@ if (__DEV__) {
     onKeyDown: PropTypes.func,
     onBlur: PropTypes.func
   };
-  MenuItems.displayName = "MenuItems";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const getStyles = (buttonRect, menuRect) => {
+
+const focusableChildrenTypes = [MenuItem, MenuLink];
+
+function getStyles(buttonRect, menuRect) {
   const haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
     return { opacity: 0 };
@@ -500,4 +506,8 @@ const getStyles = (buttonRect, menuRect) => {
       ? `${buttonRect.top - menuRect.height + window.pageYOffset}px`
       : `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
-};
+}
+
+function isFocusableChildType(child) {
+  return focusableChildrenTypes.includes(child.type);
+}

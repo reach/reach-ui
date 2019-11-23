@@ -7,6 +7,9 @@ import PropTypes from "prop-types";
 
 let AlertDialogContext = createContext({});
 
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogOverlay
+
 export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   { leastDestructiveRef, ...props },
   forwardRef
@@ -33,6 +36,7 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   );
 });
 
+AlertDialogOverlay.displayName = "AlertDialogOverlay";
 if (__DEV__) {
   AlertDialogOverlay.propTypes = {
     isOpen: PropTypes.bool,
@@ -44,6 +48,9 @@ if (__DEV__) {
     children: PropTypes.node
   };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogContent
 
 export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   { children, ...props },
@@ -59,8 +66,8 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
     invariant(
       leastDestructiveRef,
       `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
-        \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
-        https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
+          \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
+          https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
     );
   }, [labelId, leastDestructiveRef]);
   return (
@@ -78,36 +85,51 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   );
 });
 
+AlertDialogContent.displayName = "AlertDialogContent";
 if (__DEV__) {
   AlertDialogContent.propTypes = {
     children: PropTypes.node
   };
 }
 
-export const AlertDialogLabel = props => {
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogLabel
+
+export function AlertDialogLabel(props) {
   const { labelId } = React.useContext(AlertDialogContext);
   return <div id={labelId} data-reach-alert-dialog-label {...props} />;
-};
+}
 
-export const AlertDialogDescription = props => {
+AlertDialogLabel.displayName = "AlertDialogLabel";
+
+////////////////////////////////////////////////////////////////////////////////
+export function AlertDialogDescription(props) {
   const { descriptionId } = React.useContext(AlertDialogContext);
   return (
     <div id={descriptionId} data-reach-alert-dialog-description {...props} />
   );
-};
+}
 
-export const AlertDialog = ({
+AlertDialogDescription.displayName = "AlertDialogDescription";
+
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialog
+
+export function AlertDialog({
   id,
   isOpen,
   onDismiss,
   leastDestructiveRef,
   ...props
-}) => (
-  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
-    <AlertDialogContent {...props} />
-  </AlertDialogOverlay>
-);
+}) {
+  return (
+    <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
+      <AlertDialogContent {...props} />
+    </AlertDialogOverlay>
+  );
+}
 
+AlertDialog.displayName = "AlertDialog";
 if (__DEV__) {
   AlertDialog.propTypes = {
     isOpen: PropTypes.bool,

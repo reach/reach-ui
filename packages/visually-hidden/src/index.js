@@ -19,4 +19,6 @@ function VisuallyHidden(props) {
   return <span style={style} {...props} />;
 }
 
+VisuallyHidden.displayName = "VisuallyHidden";
+
 export default VisuallyHidden;
