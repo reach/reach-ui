@@ -392,6 +392,52 @@ export const MenuItems = forwardRef(function MenuItems(
   const clones = Children.toArray(children).filter(Boolean);
   const focusableChildren = clones.filter(child => isFocusableChildType(child));
 
+  function handleBlur(event) {
+    if (
+      !state.closingWithClick &&
+      !refs.menu.contains(event.relatedTarget || document.activeElement)
+    ) {
+      setState(close);
+    }
+  }
+
+  function handleKeyDown(event) {
+    switch (event.key) {
+      case "Escape":
+        setState(close);
+        break;
+      case "Home":
+        event.preventDefault(); // prevent window scroll
+        setState({ selectionIndex: 0 });
+        break;
+      case "End":
+        event.preventDefault(); // prevent window scroll
+        setState({
+          selectionIndex: focusableChildren.length - 1
+        });
+        break;
+      case "ArrowDown":
+        event.preventDefault(); // prevent window scroll
+        const nextIndex = state.selectionIndex + 1;
+        if (nextIndex !== focusableChildren.length) {
+          setState({ selectionIndex: nextIndex });
+        }
+        break;
+      case "ArrowUp":
+        event.preventDefault(); // prevent window scroll
+        const prevIndex = state.selectionIndex - 1;
+        if (prevIndex !== -1) {
+          setState({ selectionIndex: prevIndex });
+        }
+        break;
+      case "Tab":
+        event.preventDefault(); // prevent leaving
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <div
       data-reach-menu-items
@@ -403,33 +449,8 @@ export const MenuItems = forwardRef(function MenuItems(
         refs.menu = node;
         assignRef(ref, node);
       }}
-      onBlur={event => {
-        if (
-          !state.closingWithClick &&
-          !refs.menu.contains(event.relatedTarget || document.activeElement)
-        ) {
-          setState(close);
-        }
-      }}
-      onKeyDown={wrapEvent(onKeyDown, event => {
-        if (event.key === "Escape") {
-          setState(close);
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault(); // prevent window scroll
-          const nextIndex = state.selectionIndex + 1;
-          if (nextIndex !== focusableChildren.length) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault(); // prevent window scroll
-          const nextIndex = state.selectionIndex - 1;
-          if (nextIndex !== -1) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "Tab") {
-          event.preventDefault(); // prevent leaving
-        }
-      })}
+      onBlur={wrapEvent(onBlur, handleBlur)}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
     >
       {clones.map(child => {
         if (isFocusableChildType(child)) {
