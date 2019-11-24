@@ -532,7 +532,8 @@ function getStyles(buttonRect, menuRect) {
   const collisions = {
     top: buttonRect.top - menuRect.height < 0,
     right: window.innerWidth < buttonRect.left + menuRect.width,
-    bottom: window.innerHeight < buttonRect.top + menuRect.height,
+    bottom:
+      window.innerHeight < buttonRect.top + buttonRect.height + menuRect.height,
     left: buttonRect.left + buttonRect.width - menuRect.width < 0
   };
 
