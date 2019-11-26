@@ -2,12 +2,22 @@ import React from "react";
 
 let id = "reach-skip-nav";
 
-const SkipNavLink = ({ children = "Skip to content", ...props }) => (
-  <a {...props} href={`#${id}`} data-reach-skip-link>
-    {children}
-  </a>
-);
+////////////////////////////////////////////////////////////////////////////////
+// SkipNavLink
 
-const SkipNavContent = props => <div {...props} id={id} />;
+export function SkipNavLink({ children = "Skip to content", ...props }) {
+  return (
+    <a {...props} href={`#${id}`} data-reach-skip-link>
+      {children}
+    </a>
+  );
+}
 
-export { SkipNavLink, SkipNavContent };
+SkipNavLink.displayName = "SkipNavLink";
+
+////////////////////////////////////////////////////////////////////////////////
+// SkipNavContent
+
+export const SkipNavContent = props => <div {...props} id={id} />;
+
+SkipNavContent.displayName = "SkipNavContent";

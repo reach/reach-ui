@@ -8,14 +8,25 @@
  */
 
 import * as React from "react";
+import { StyledComponent } from "styled-components";
+
+type ResolvedMenuItemComponent<T> = T extends keyof JSX.IntrinsicElements
+  ? T
+  : React.ComponentType<ResolvedMenuItemProps<T>>;
+
+type ResolvedMenuItemProps<T> = T extends keyof JSX.IntrinsicElements
+  ? Omit<JSX.IntrinsicElements[T], "role">
+  : Omit<React.HTMLProps<HTMLDivElement>, "onSelect" | "role">;
 
 type ResolvedMenuLinkComponent<T> = T extends keyof JSX.IntrinsicElements
   ? T
-  : React.ComponentType<T>;
+  : React.ComponentType<ResolvedMenuLinkProps<T>>;
 
 type ResolvedMenuLinkProps<T> = T extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[T]
-  : T;
+  ? Omit<JSX.IntrinsicElements[T], "role">
+  : Omit<React.HTMLProps<HTMLAnchorElement>, "role">;
+
+type SupportedMenuItemComponent = object | keyof JSX.IntrinsicElements;
 
 type SupportedMenuLinkComponent = object | keyof JSX.IntrinsicElements;
 
@@ -67,7 +78,7 @@ export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-props
  */
 export type MenuLinkProps<
-  T extends SupportedMenuLinkComponent
+  T extends SupportedMenuLinkComponent = "a"
 > = ResolvedMenuLinkProps<T> & {
   /**
    * By default, `MenuLink` renders an anchor, but if you are using a router
@@ -93,10 +104,16 @@ export type MenuLinkProps<
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-props
  */
-export type MenuItemProps = Omit<
-  Omit<React.HTMLProps<HTMLDivElement>, "role">,
-  "onSelect"
-> & {
+export type MenuItemProps<
+  T extends SupportedMenuItemComponent = "div"
+> = ResolvedMenuItemProps<T> & {
+  /**
+   * By default, `MenuItem` renders a div. You can pass another element or use
+   * this prop to render a styled component.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-as
+   */
+  as?: ResolvedMenuItemComponent<T>;
   /**
    * You can put any type of content inside of a `<MenuItem>`.
    *
@@ -144,7 +161,7 @@ export type MenuItemsProps = React.HTMLProps<HTMLDivElement> & {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink
  */
-export function MenuLink<T extends SupportedMenuLinkComponent>(
+export function MenuLink<T extends SupportedMenuLinkComponent = "a">(
   props: MenuLinkProps<T>
 ): React.ReactElement<MenuLinkProps<T>>;
 
@@ -176,7 +193,9 @@ export const MenuList: React.FunctionComponent<MenuListProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
  */
-export const MenuItem: React.FunctionComponent<MenuItemProps>;
+export function MenuItem<T extends SupportedMenuItemComponent = "div">(
+  props: MenuItemProps<T>
+): React.ReactElement<MenuItemProps<T>>;
 
 /**
  * A low-level wrapper for the popover that appears when a menu button is open.

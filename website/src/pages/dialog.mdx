@@ -490,7 +490,7 @@ Alternatively, a design may not include a visible label on the screen, but this 
 ```jsx
 function Example(props) {
   return (
-    <Dialog aria-label="Warning about next steps" isOpen={true}>
+    <Dialog aria-label="Warning about next steps">
       <p>This might take a while! Are you sure?</p>
       <button>Go Forward</button> <button>Go Back</button>
     </Dialog>
@@ -504,7 +504,7 @@ function Example(props) {
 function Example(props) {
   const labelId = `label--${useId(props.id)}`;
   return (
-    <Dialog aria-labelledby={labelId} isOpen={true}>
+    <Dialog aria-labelledby={labelId}>
       <h1 id={labelId}>Next Steps</h1>
       <p>Follow these steps carefully!</p>
       <button>Go Forward</button> <button>Go Back</button>

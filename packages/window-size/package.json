@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Measure the window size in React",
   "main": "index.js",
   "module": "es/index.js",

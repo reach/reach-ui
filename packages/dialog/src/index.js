@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
 import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
@@ -8,13 +8,15 @@ import PropTypes from "prop-types";
 const noop = () => {};
 
 ////////////////////////////////////////////////////////////////////////////////
-export const DialogOverlay = React.forwardRef(function DialogOverlay(
+// DialogOverlay
+
+export const DialogOverlay = forwardRef(function DialogOverlay(
   { isOpen = true, ...props },
   forwardedRef
 ) {
-  const ownRef = React.useRef(null);
+  const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  React.useEffect(() => {
+  useEffect(() => {
     checkStyles("dialog");
   }, []);
 
@@ -25,15 +27,17 @@ export const DialogOverlay = React.forwardRef(function DialogOverlay(
   ) : null;
 });
 
+DialogOverlay.displayName = "DialogOverlay";
 if (__DEV__) {
   DialogOverlay.propTypes = {
     initialFocusRef: () => {}
   };
-  DialogOverlay.displayName = "DialogOverlay";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DialogInner = React.forwardRef(function DialogInner(
+// DialogInner
+
+const DialogInner = forwardRef(function DialogInner(
   {
     allowPinchZoom,
     initialFocusRef,
@@ -45,11 +49,11 @@ const DialogInner = React.forwardRef(function DialogInner(
   },
   forwardedRef
 ) {
-  const mouseDownTarget = React.useRef(null);
-  const overlayNode = React.useRef(null);
+  const mouseDownTarget = useRef(null);
+  const overlayNode = useRef(null);
   const ref = useForkedRef(overlayNode, forwardedRef);
 
-  React.useEffect(() => createAriaHider(overlayNode.current), []);
+  useEffect(() => createAriaHider(overlayNode.current), []);
 
   return (
     <FocusLock
@@ -87,12 +91,12 @@ const DialogInner = React.forwardRef(function DialogInner(
   );
 });
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 ////////////////////////////////////////////////////////////////////////////////
-export const DialogContent = React.forwardRef(function DialogContent(
+// DialogContent
+
+export const DialogContent = forwardRef(function DialogContent(
   { onClick, onKeyDown, ...props },
   forwardedRef
 ) {
@@ -111,20 +115,22 @@ export const DialogContent = React.forwardRef(function DialogContent(
   );
 });
 
+DialogContent.displayName = "DialogContent";
 if (__DEV__) {
   DialogContent.propTypes = {
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
-  DialogContent.displayName = "DialogContent";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Dialog = React.forwardRef(function Dialog(
+// Dialog
+
+export const Dialog = forwardRef(function Dialog(
   { isOpen, onDismiss = noop, initialFocusRef, ...props },
   forwardedRef
 ) {
-  const ownRef = React.useRef(null);
+  const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
   return (
     <DialogOverlay
@@ -137,6 +143,7 @@ export const Dialog = React.forwardRef(function Dialog(
   );
 });
 
+Dialog.displayName = "Dialog";
 if (__DEV__) {
   Dialog.propTypes = {
     isOpen: PropTypes.bool,
@@ -144,7 +151,6 @@ if (__DEV__) {
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
-  Dialog.displayName = "Dialog";
 }
 
 export default Dialog;

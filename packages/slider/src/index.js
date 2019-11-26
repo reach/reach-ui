@@ -19,9 +19,6 @@ import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
 //   - http://www.oaa-accessibility.org/examplep/slider1/
 //   - https://github.com/Stanko/aria-progress-range-slider
 
-// Example todos:
-//  - Compose with other Reach elements (popover, tooltip, etc.)
-
 // Random thoughts/notes:
 //  - Currently testing this against the behavior of the native input range
 //    element to get our slider on par. We'll explore animated and multi-handle
@@ -65,6 +62,8 @@ const sliderPropTypes = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// Slider
+
 export const Slider = forwardRef(function Slider(
   { children, ...props },
   forwardedRef
@@ -80,8 +79,8 @@ export const Slider = forwardRef(function Slider(
   );
 });
 
+Slider.displayName = "Slider";
 if (__DEV__) {
-  Slider.displayName = "Slider";
   Slider.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.node
@@ -91,6 +90,8 @@ if (__DEV__) {
 export default Slider;
 
 ////////////////////////////////////////////////////////////////////////////////
+// SliderInput
+
 export const SliderInput = forwardRef(function SliderInput(
   {
     "aria-label": ariaLabel,
@@ -375,8 +376,8 @@ export const SliderInput = forwardRef(function SliderInput(
   );
 });
 
+SliderInput.displayName = "SliderInput";
 if (__DEV__) {
-  SliderInput.displayName = "SliderInput";
   SliderInput.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -384,6 +385,8 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// SliderTrack
+
 export const SliderTrack = forwardRef(function SliderTrack(
   { children, style = {}, ...props },
   forwardedRef
@@ -408,14 +411,16 @@ export const SliderTrack = forwardRef(function SliderTrack(
   );
 });
 
+SliderTrack.displayName = "SliderTrack";
 if (__DEV__) {
-  SliderTrack.displayName = "SliderTrack";
   SliderTrack.propTypes = {
     children: PropTypes.node.isRequired
   };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// SliderTrackHighlight
+
 export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   { children, style = {}, ...props },
   forwardedRef
@@ -435,12 +440,14 @@ export const SliderTrackHighlight = forwardRef(function SliderTrackHighlight(
   );
 });
 
+SliderTrackHighlight.displayName = "SliderTrackHighlight";
 if (__DEV__) {
-  SliderTrackHighlight.displayName = "SliderTrackHighlight";
   SliderTrackHighlight.propTypes = {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// SliderHandle
+
 export const SliderHandle = forwardRef(function SliderHandle(
   {
     // min,
@@ -504,12 +511,14 @@ export const SliderHandle = forwardRef(function SliderHandle(
   );
 });
 
+SliderHandle.displayName = "SliderHandle";
 if (__DEV__) {
-  SliderHandle.displayName = "SliderHandle";
   SliderHandle.propTypes = {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// SliderMarker
+
 export const SliderMarker = forwardRef(function SliderMarker(
   { children, style = {}, value, ...props },
   forwardedRef
@@ -554,32 +563,14 @@ export const SliderMarker = forwardRef(function SliderMarker(
   ) : null;
 });
 
+SliderMarker.displayName = "SliderMarker";
 if (__DEV__) {
-  SliderMarker.displayName = "SliderMarker";
   SliderMarker.propTypes = {
     value: PropTypes.number.isRequired
   };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function valueToPercent(value, min, max) {
-  return ((value - min) * 100) / (max - min);
-}
-
-function percentToValue(percent, min, max) {
-  return (max - min) * percent + min;
-}
-
-function makeValuePrecise(value, step) {
-  const stepDecimalPart = step.toString().split(".")[1];
-  const stepPrecision = stepDecimalPart ? stepDecimalPart.length : 0;
-  return Number(value.toFixed(stepPrecision));
-}
-
-function roundValueToStep(value, step) {
-  return makeValuePrecise(Math.round(value / step) * step, step);
-}
-
 function getAllowedValue(val, min, max) {
   return val > max ? max : val < min ? min : val;
 }
@@ -594,6 +585,20 @@ function makeDataAttributes(
     [`data-reach-${component}-orientation`]: orientation,
     [`data-reach-${component}-highlight`]: highlight ? orientation : undefined
   };
+}
+
+function makeValuePrecise(value, step) {
+  const stepDecimalPart = step.toString().split(".")[1];
+  const stepPrecision = stepDecimalPart ? stepDecimalPart.length : 0;
+  return Number(value.toFixed(stepPrecision));
+}
+
+function percentToValue(percent, min, max) {
+  return (max - min) * percent + min;
+}
+
+function roundValueToStep(value, step) {
+  return makeValuePrecise(Math.round(value / step) * step, step);
 }
 
 function useDimensions(ref) {
@@ -621,4 +626,8 @@ function useDimensions(ref) {
     }
   }, [ref, width, height]);
   return { ref, width, height };
+}
+
+function valueToPercent(value, min, max) {
+  return ((value - min) * 100) / (max - min);
 }

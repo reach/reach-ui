@@ -1,12 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Welcome to @reach/listbox!
 // TODO:
-//  - test controlled components
-//  - navigate by searching with char keys
-//  - navigate on button mouse down instead of click
 //  - `confirming` state
 //  - figure out touch events
-//  - make sure arbitrary elements in popover work
 //  - SR tests
 //  - Deal with overlapping popver/button issues
 
@@ -24,66 +20,66 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
-// import { findAll } from "highlight-words-core";
-// import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
-// Nothing going on, waiting for the user to type or use the arrow keys
-const IDLE = "IDLE";
-
-// The user is navigate the list with a pointer
-const NAVIGATING = "NAVIGATING";
-
-// The user is navigate the list with a keyboard
-const NAVIGATING_WITH_KEYS = "NAVIGATING_WITH_KEYS";
-
-// The user is interacting with arbitrary elements inside the popup that
-// are not ListboxInputs
-const INTERACTING = "INTERACTING";
+const IDLE = "IDLE"; // Resting/closed state.
+const NAVIGATING = "NAVIGATING"; // The user is navigate the list with a pointer
+const NAVIGATING_WITH_KEYS = "NAVIGATING_WITH_KEYS"; // The user is navigate the list with a keyboard
+const INTERACTING = "INTERACTING"; // The user is interacting with arbitrary elements inside the popover
 
 ////////////////////////////////////////////////////////////////////////////////
-// Actions:
+// Actions
 
-const CHANGE = "CHANGE";
-
-// User is typing
-const SEARCHING_WHILE_EXPANDED = "SEARCHING_WHILE_EXPANDED";
-const SEARCHING_WHILE_CLOSED = "SEARCHING_WHILE_CLOSED";
-
-const NAVIGATE = "NAVIGATE";
-const NAVIGATE_WITH_KEYS = "NAVIGATE_WITH_KEYS";
-
-// User can be navigating with keyboard and then click instead, we want the
-// value from the click, not the current nav item
-const SELECT_WITH_KEYBOARD = "SELECT_WITH_KEYBOARD";
-const SELECT_WITH_CLICK = "SELECT_WITH_CLICK";
-
-// Pretty self-explanatory, user can hit escape or blur to close the popover
+const CHANGE = "CHANGE"; // Change selection values
+const SEARCHING = "SEARCHING"; // Type a search query
+const NAVIGATE = "NAVIGATE"; // Navigate with a pointer of some kind
+const BUTTON_CLICK = "BUTTON_CLICK"; // Click the ListboxButton
+const INTERACT = "INTERACT"; // Interacts with elements in the popover but not in our list
+const MOUSE_ENTER = "MOUSE_ENTER";
+const KEY_DOWN_ARROW_DOWN = "KEY_DOWN_ARROW_DOWN";
+const KEY_DOWN_ARROW_UP = "KEY_DOWN_ARROW_UP";
+const KEY_DOWN_HOME = "KEY_DOWN_HOME";
+const KEY_DOWN_END = "KEY_DOWN_HOME";
+const KEY_DOWN_TAB = "KEY_DOWN_TAB";
+const KEY_DOWN_ENTER = "KEY_DOWN_ENTER";
+const KEY_DOWN_SPACE = "KEY_DOWN_SPACE";
+const MOUSE_DOWN = "MOUSE_DOWN";
+const MOUSE_LEAVE = "MOUSE_LEAVE";
+const MOUSE_SELECT = "MOUSE_SELECT";
 const ESCAPE = "ESCAPE";
 const BLUR = "BLUR";
 
-// The user left the input to interact with arbitrary elements inside the popup
-const INTERACT = "INTERACT";
-
-const OPEN_LISTBOX = "OPEN_LISTBOX";
-
-const CLOSE_WITH_BUTTON = "CLOSE_WITH_BUTTON";
+////////////////////////////////////////////////////////////////////////////////
+// State chart
 
 const openEvents = {
   [BLUR]: IDLE,
   [ESCAPE]: IDLE,
   [NAVIGATE]: NAVIGATING,
-  [SELECT_WITH_KEYBOARD]: IDLE,
-  [CLOSE_WITH_BUTTON]: IDLE,
-  [SELECT_WITH_CLICK]: IDLE,
+  [MOUSE_ENTER]: NAVIGATING,
+  [MOUSE_LEAVE]: NAVIGATING,
+  [MOUSE_SELECT]: IDLE,
+  [BUTTON_CLICK]: IDLE,
   [INTERACT]: INTERACTING
 };
 
-////////////////////////////////////////////////////////////////////////////////
+const navigatingEvents = {
+  [SEARCHING]: NAVIGATING_WITH_KEYS,
+  [KEY_DOWN_SPACE]: IDLE,
+  [KEY_DOWN_ENTER]: IDLE,
+  [KEY_DOWN_ARROW_DOWN]: NAVIGATING_WITH_KEYS,
+  [KEY_DOWN_ARROW_UP]: NAVIGATING_WITH_KEYS,
+  [KEY_DOWN_HOME]: NAVIGATING_WITH_KEYS,
+  [KEY_DOWN_END]: NAVIGATING_WITH_KEYS,
+  [KEY_DOWN_TAB]: NAVIGATING_WITH_KEYS,
+  [MOUSE_DOWN]: NAVIGATING,
+  [MOUSE_LEAVE]: NAVIGATING
+};
+
 const stateChart = {
   initial: IDLE,
   states: {
@@ -91,24 +87,27 @@ const stateChart = {
       on: {
         [CHANGE]: IDLE,
         [BLUR]: IDLE,
-        [SEARCHING_WHILE_CLOSED]: IDLE,
-        [OPEN_LISTBOX]: NAVIGATING
+        [SEARCHING]: IDLE,
+        [BUTTON_CLICK]: NAVIGATING,
+        [KEY_DOWN_SPACE]: NAVIGATING,
+        [KEY_DOWN_ARROW_DOWN]: NAVIGATING,
+        [KEY_DOWN_ARROW_UP]: NAVIGATING,
+        [KEY_DOWN_HOME]: NAVIGATING,
+        [KEY_DOWN_END]: NAVIGATING
       }
     },
     [NAVIGATING]: {
       on: {
         ...openEvents,
-        [CHANGE]: NAVIGATING,
-        [NAVIGATE_WITH_KEYS]: NAVIGATING_WITH_KEYS,
-        [SEARCHING_WHILE_EXPANDED]: NAVIGATING_WITH_KEYS
+        ...navigatingEvents,
+        [CHANGE]: NAVIGATING
       }
     },
     [NAVIGATING_WITH_KEYS]: {
       on: {
         ...openEvents,
-        [CHANGE]: NAVIGATING_WITH_KEYS,
-        [NAVIGATE_WITH_KEYS]: NAVIGATING_WITH_KEYS,
-        [SEARCHING_WHILE_EXPANDED]: NAVIGATING_WITH_KEYS
+        ...navigatingEvents,
+        [CHANGE]: NAVIGATING_WITH_KEYS
       }
     },
     [INTERACTING]: {
@@ -120,110 +119,27 @@ const stateChart = {
   }
 };
 
-function reducer(data, action) {
-  const {
-    refs: { optionsRef }
-  } = action;
-  const nextState = { ...data, lastActionType: action.type };
-  const searchValue = findOptionValueFromSearch(
-    optionsRef.current,
-    action.query
-  );
-
-  switch (action.type) {
-    case CHANGE:
-      return {
-        ...nextState,
-        ...action
-      };
-    case SEARCHING_WHILE_CLOSED:
-      return searchValue
-        ? {
-            ...nextState,
-            selection: searchValue
-          }
-        : nextState;
-    case SEARCHING_WHILE_EXPANDED:
-      return searchValue
-        ? {
-            ...nextState,
-            navigationSelection: searchValue
-          }
-        : nextState;
-    case NAVIGATE:
-      return {
-        ...nextState,
-        navigationSelection: action.navigationSelection
-      };
-    case NAVIGATE_WITH_KEYS:
-      return {
-        ...nextState,
-        navigationSelection: action.navigationSelection
-      };
-    case OPEN_LISTBOX:
-      return {
-        ...nextState,
-        navigationSelection: nextState.selection
-      };
-    case BLUR:
-    case ESCAPE:
-      return {
-        ...nextState,
-        navigationSelection: null
-      };
-    case SELECT_WITH_CLICK:
-      return {
-        ...nextState,
-        selection: action.selection,
-        navigationSelection: null
-      };
-    case SELECT_WITH_KEYBOARD:
-      return {
-        ...nextState,
-        selection: data.navigationSelection,
-        navigationSelection: null
-      };
-    case CLOSE_WITH_BUTTON:
-      return {
-        ...nextState,
-        navigationSelection: null
-      };
-    case INTERACT:
-      return nextState;
-
-    default:
-      throw new Error(`Unknown action ${action.type}`);
-  }
-}
-
 const expandedStates = [NAVIGATING, NAVIGATING_WITH_KEYS, INTERACTING];
 const isExpanded = state => expandedStates.includes(state);
 
+////////////////////////////////////////////////////////////////////////////////
+// ListboxContext
+
 const ListboxContext = createContext({});
+const useListboxContext = () => useContext(ListboxContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxInput
 
 export const ListboxInput = forwardRef(function ListboxInput(
-  {
-    as: Comp = "div",
-    children,
-    defaultValue,
-    name,
-    onBlur,
-    onChange,
-    onClick,
-    onKeyDown,
-    onSelect,
-    value: controlledValue,
-    ...props
-  },
+  { as: Comp = "div", children, name, onChange, value, ...props },
   forwardedRef
 ) {
   const initialData = {
+    onChange,
     // the value the user has selected. We derived this also when the developer
     // is controlling the value
-    selection: defaultValue,
+    selection: value,
     // the value the user has navigated to with the keyboard
     navigationSelection: null
   };
@@ -232,12 +148,8 @@ export const ListboxInput = forwardRef(function ListboxInput(
     state,
     data,
     transition,
-    { popoverRef, buttonRef, inputRef, listRef, selectOnClickRef, optionsRef }
+    { buttonRef, inputRef, listRef, mouseMovedRef, optionsRef, popoverRef }
   ] = useReducerMachine(stateChart, reducer, initialData);
-
-  const isControlled = controlledValue != null;
-
-  const value = isControlled ? controlledValue : data.value;
 
   const id = useId(props.id);
 
@@ -247,58 +159,35 @@ export const ListboxInput = forwardRef(function ListboxInput(
 
   const ref = useForkedRef(inputRef, forwardedRef);
 
-  const handleValueChange = selection => {
-    transition(CHANGE, { selection });
-  };
-
-  // If they are controlling the value we still need to do our transitions, so
-  // we have this derived state to emulate onChange of the input as we receive
-  // new `value`s ...[*]
-  if (isControlled && controlledValue !== data.value) {
-    handleValueChange(controlledValue);
-  }
-
-  // [*]... and when controlled, we don't trigger handleValueChange as the user
-  // types, instead the developer controls it with the normal input onChange
-  // prop
-  const handleChange = wrapEvent(onChange, event => {
-    if (!isControlled) {
-      handleValueChange(event.target.value);
-    }
-  }); // ???
-
-  const handleClick = wrapEvent(onClick, () => {
-    if (selectOnClickRef.current) {
-      selectOnClickRef.current = false;
-      // ...
-    }
-  }); // ???
-
-  useFocusManagement(data.lastActionType, buttonRef, listRef);
+  // Parses our children to find the selected option.
+  // See docblock on the function for more deets.
+  const selectedNode = recursivelyFindChildByValue(children, value);
 
   const context = {
     buttonId,
+    buttonRef,
     data,
     inputRef,
-    popoverRef,
-    buttonRef,
-    onSelect,
-    optionsRef,
-    state,
-    transition,
-    listRef,
+    instanceId: id,
+    isExpanded: isExpanded(state),
     listboxId,
-    isExpanded: isExpanded(state)
+    listRef,
+    mouseMovedRef,
+    optionsRef,
+    popoverRef,
+    selectedNode,
+    state,
+    transition
   };
 
   return (
     <ListboxContext.Provider value={context}>
       <Comp
+        {...props}
         ref={ref}
         data-reach-listbox=""
         data-expanded={context.isExpanded}
-        onClick={handleClick}
-        {...props}
+        data-value={value}
       >
         {children}
       </Comp>
@@ -309,28 +198,17 @@ export const ListboxInput = forwardRef(function ListboxInput(
 
 ListboxInput.displayName = "ListboxInput";
 if (__DEV__) {
-  ListboxInput.propTypes = {
-    onSelect: PropTypes.func
-  };
+  ListboxInput.propTypes = {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxPopover
 
 export const ListboxPopover = forwardRef(function ListboxPopover(
-  {
-    // if true, will render in a portal, otherwise inline
-    portal = true,
-
-    // wrapped events
-    onKeyDown,
-    onBlur,
-
-    ...props
-  },
+  { portal = true, onKeyDown, onBlur, ...props },
   forwardedRef
 ) {
-  const { popoverRef, buttonRef, isExpanded } = useContext(ListboxContext);
+  const { popoverRef, buttonRef, isExpanded } = useListboxContext();
   const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
@@ -343,75 +221,83 @@ export const ListboxPopover = forwardRef(function ListboxPopover(
         targetRef: buttonRef,
         position: positionMatchWidth
       }
-    : null;
+    : {};
 
   return (
     <Container
       {...props}
-      hidden={hidden}
-      data-reach-listbox-popover=""
-      {...popupProps}
       ref={ref}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      data-reach-listbox-popover=""
+      hidden={hidden}
       onBlur={wrapEvent(onBlur, handleBlur)}
-      // Allow the user to click empty space inside the popover without causing
-      // to close from useBlur
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       tabIndex={-1}
+      {...popupProps}
     />
   );
 });
+
+ListboxPopover.displayName = "ListboxPopover";
+if (__DEV__) {
+  ListboxPopover.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxList
 
 export const ListboxList = forwardRef(function ListboxList(
-  { as: Comp = "ul", children, ...props },
+  { as: Comp = "div", children, ...props },
   forwardedRef
 ) {
-  const { listboxId, listRef, optionsRef } = useContext(ListboxContext);
+  const {
+    data: { value },
+    listboxId,
+    listRef,
+    optionsRef
+  } = useListboxContext();
 
   const ref = useForkedRef(listRef, forwardedRef);
 
-  const childCount = Children.count(children);
-  const focusCount = useRef(-1);
-
-  const {
-    data: { value }
-  } = useContext(ListboxContext);
-
-  let clones = useChildrenWithFocusIndicies(
-    children,
-    isFocusableChildType,
-    getChildValueAndValueText,
-    optionsRef
-  );
+  useLayoutEffect(() => {
+    optionsRef.current = [];
+    return () => (optionsRef.current = []);
+  });
 
   return (
     <Comp
+      {...props}
       ref={ref}
       data-reach-listbox-list=""
-      role="listbox"
+      aria-activedescendant={useOptionId(value)}
       id={listboxId}
+      role="listbox"
       tabIndex={-1}
-      aria-activedescendant={makeId(
-        "option",
-        value ? makeHash(value) : undefined
-      )}
-      onClick={event => {
-        listRef.current.focus();
-      }}
-      {...props}
+      style={{ maxWidth: 300 }} // TODO: remove this
     >
-      {clones}
+      {Children.map(children, child => {
+        let _valueText;
+        if (child.props.valueText) {
+          _valueText = child.props.valueText;
+        } else if (child.props.value) {
+          _valueText = child.props.value;
+        }
+        return _valueText ? cloneElement(child, { _valueText }) : child;
+      })}
     </Comp>
   );
 });
+
+ListboxList.displayName = "ListboxList";
+if (__DEV__) {
+  ListboxList.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxOption
 
 export const ListboxOption = forwardRef(function ListboxOption(
   {
+    as: Comp = "div",
     children,
     onClick,
     onMouseDown,
@@ -419,29 +305,24 @@ export const ListboxOption = forwardRef(function ListboxOption(
     onMouseLeave,
     onMouseMove,
     onMouseUp,
-    // TODO: Touch events
-
-    _index: index,
-    _value: value,
-    _valueText: valueText,
-
-    // These props are intercepted in ListboxList and used to determine the real
-    // value and valuetext in case they are to be inferred from somewhere other
-    // than direct prop passing
-    value: interceptedValue,
+    value,
     valueText: interceptedValueText,
-    getValueText,
-
+    _valueText: valueText,
     ...props
   },
   forwardedRef
 ) {
+  if (!value) {
+    throw Error(`A ListboxOption must have a value prop.`);
+  }
+
   const {
-    onSelect,
     data: { selection: inputValue, navigationSelection },
+    mouseMovedRef,
+    optionsRef,
     state,
     transition
-  } = useContext(ListboxContext);
+  } = useListboxContext();
 
   const ownRef = useRef(null);
   const ref = useForkedRef(ownRef, forwardedRef);
@@ -452,85 +333,72 @@ export const ListboxOption = forwardRef(function ListboxOption(
   const isActive = inputValue === value;
 
   function handleMouseEnter() {
-    transition(NAVIGATE, { navigationSelection: value });
+    transition(MOUSE_ENTER, { navigationSelection: value });
   }
 
   function handleMouseLeave() {
-    transition(NAVIGATE, { navigationSelection: null });
+    transition(MOUSE_LEAVE);
   }
 
   function handleMouseDown(event) {
-    // TODO: Ignore right clicks
-    if (event.nativeEvent.which === 3) {
-      // return;
-    }
-
-    // Prevent the item from stealing focus from the list
-    event.preventDefault();
+    event.persist();
+    transition(MOUSE_DOWN, { reactEvent: event });
   }
 
   function handleMouseMove() {
+    mouseMovedRef.current = true;
+
+    // We don't really *need* this guard if we put this in the state machine,
+    // but in this case it seems wise not to needlessly run our transitions
+    // every time the user's mouse moves. Seems like a lot.
     if (state === NAVIGATING_WITH_KEYS) {
       transition(NAVIGATE, { navigationSelection: value });
     }
   }
 
   function handleMouseUp(event) {
-    // Ignore right clicks
-    if (event.nativeEvent.which === 3) {
-      // return;
-    }
-
-    onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { selection: value });
+    event.persist();
+    transition(MOUSE_SELECT, {
+      selection: value,
+      reactEvent: event
+    });
   }
 
-  // We use layout effect here to avoid a flash
-  useLayoutEffect(() => {
-    // If no value is set and we're looking at the first option, set the value
-    if (!inputValue && index === 0) {
-      transition(CHANGE, { selection: value });
-    }
-    // eslint is telling us to include transition, but it *should* be stable
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, inputValue, value]);
+  useEffect(() => {
+    optionsRef.current.push({ value, valueText });
+  });
 
   return (
-    <li
+    <Comp
       {...props}
       data-reach-listbox-option=""
       ref={ref}
-      id={makeId("option", value ? makeHash(value) : undefined)}
+      id={useOptionId(value)}
       role="option"
       aria-selected={isActive}
       data-value={value}
       data-valuetext={valueText}
       data-highlighted={isHighlighted ? "" : undefined}
-      // without this the menu will close from `onBlur`, but with it the
-      // element can be `document.activeElement` and then our focus checks in
-      // onBlur will work as intended
-      tabIndex={-1}
       onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
       onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
       onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
       onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
       onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
+      tabIndex={-1}
     >
       <span data-reach-listbox-option-text="">
         {typeof children === "function"
           ? children({ value, valueText })
-          : valueText}
+          : children || valueText}
       </span>
-    </li>
+    </Comp>
   );
 });
 
-ListboxOption.isReachType = "ListboxOption";
 ListboxOption.displayName = "ListboxOption";
 if (__DEV__) {
   ListboxOption.propTypes = {
-    valueText: PropTypes.string,
-    getValueText: PropTypes.func
+    valueText: PropTypes.string
   };
 }
 
@@ -540,78 +408,85 @@ export const ListboxButton = forwardRef(function ListboxButton(
   {
     as: Comp = "button",
     children,
-    onBlur,
     onMouseDown,
-    onTouchStart,
-    onFocus,
+    // onTouchStart,
     onKeyDown,
+    arrow,
     ...props
   },
   forwardedRef
 ) {
   const {
-    data,
     transition,
-    state,
     buttonRef,
     buttonId,
     listboxId,
-    optionsRef,
+    selectedNode,
     isExpanded
-  } = useContext(ListboxContext);
+  } = useListboxContext();
 
   const ref = useForkedRef(buttonRef, forwardedRef);
-
-  const selection =
-    data.selection && optionsRef.current.length
-      ? optionsRef.current.find(({ props }) => props._value === data.selection)
-      : null;
-
-  const valueText = selection ? selection.props._valueText : null;
-  const value = selection ? selection.props._value : null;
 
   const handleKeyDown = useKeyDown();
 
   function handleMouseDown(event) {
-    // Ignore right clicks
-    if (event.nativeEvent.which === 3) {
-      return;
-    }
+    event.persist();
+    transition(BUTTON_CLICK, { reactEvent: event });
+  }
 
-    if (state === IDLE) {
-      transition(OPEN_LISTBOX);
-    } else {
-      transition(CLOSE_WITH_BUTTON);
+  let inner = null;
+  if (children) {
+    inner = children;
+  } else if (selectedNode) {
+    if (selectedNode.props && selectedNode.props.children) {
+      inner = selectedNode.props.children;
+    } else if (selectedNode.props && selectedNode.props.valueText) {
+      inner = selectedNode.props.valueText;
+    } else if (selectedNode.props && selectedNode.props.value) {
+      inner = selectedNode.props.value;
     }
   }
 
   return (
     <Comp
+      {...props}
+      ref={ref}
       data-reach-listbox-button=""
       aria-controls={listboxId} // TODO: verify that this is needed
-      aria-labelledby={`${buttonId} ${listboxId}`}
-      aria-haspopup="listbox"
       aria-expanded={isExpanded}
-      ref={ref}
-      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+      aria-haspopup="listbox"
+      aria-labelledby={`${buttonId} ${listboxId}`}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      style={{ border: "2px solid black" }}
-      {...props}
+      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+      style={{ border: "2px solid black" }} // TODO: Delete this
     >
-      {valueText}
+      <span data-reach-listbox-button-inner="">{inner}</span>
+      {arrow && (
+        <span data-reach-listbox-button-arrow="" aria-hidden>
+          {arrow}
+        </span>
+      )}
     </Comp>
   );
 });
 
+ListboxButton.displayName = "ListboxButton";
+if (__DEV__) {
+  ListboxButton.propTypes = {
+    arrow: PropTypes.node
+  };
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Listbox
+
 export const Listbox = forwardRef(function Listbox(
-  { children, ...props },
+  { arrow = "▼", children, ...props },
   forwardedRef
 ) {
   return (
     <ListboxInput ref={forwardedRef} data-listbox="" {...props}>
-      <ListboxButton />
+      <ListboxButton arrow={arrow} />
       <ListboxPopover>
         <ListboxList>{children}</ListboxList>
       </ListboxPopover>
@@ -625,176 +500,299 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// The rest is all implementation details
-
-// Move focus back to the input if we start navigating w/ the
-// keyboard after focus has moved to any focusable content in
-// the popup.
-function useFocusManagement(lastActionType, buttonRef, listRef) {
-  // useLayoutEffect so that the cursor goes to the end of the input instead
-  // of awkwardly at the beginning, unclear to my why ...
-  useLayoutEffect(() => {
-    switch (lastActionType) {
-      case ESCAPE:
-      case SELECT_WITH_CLICK:
-      case SELECT_WITH_KEYBOARD:
-        requestAnimationFrame(() => {
-          buttonRef.current.focus();
-        });
-        break;
-      // case NAVIGATE:
-      // case NAVIGATE_WITH_KEYS:
-      case OPEN_LISTBOX:
-        requestAnimationFrame(() => {
-          listRef.current.focus();
-        });
-        break;
-      default:
-        break;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastActionType]);
+function findOptionValueFromSearch(opts, string = "") {
+  if (!string) return;
+  const found = opts.find(
+    ({ valueText }) => valueText && valueText.toLowerCase().startsWith(string)
+  );
+  return found ? found.value : null;
 }
 
-// We want the same events when the input or the popup have focus, so … hooks!
-function useKeyDown() {
+/**
+ * Parses through all children at the top level to find our active child node
+ * based on the given value. We can then stick this node in context without
+ * needing to re-render anything. This needs to be recursive because
+ * ListboxOption is always nested inside a ListboxList, which is nested inside
+ * a ListboxPopover.
+ *
+ * This works ONLY if no children other than ListboxOption elements have a
+ * `value` prop that happens to equal the value of the Listbox (that seems super
+ * unlikely and confusing TBH). It will also break if they wrap the option's
+ * child node in an abstracted component. If a developer needs either they will
+ * need to use the lower level API and explicitly render the ListboxButton.
+ */
+function recursivelyFindChildByValue(children, value) {
+  const childrenArray = Children.toArray(children);
+  for (let i = 0; i <= childrenArray.length; i++) {
+    let child = childrenArray[i];
+
+    // Optional chaining lol
+    if (child && child.props) {
+      if (child.props.value && child.props.value === value) {
+        return child;
+      }
+      if (child.props.children) {
+        let grandChild = recursivelyFindChildByValue(
+          child.props.children,
+          value
+        );
+        if (grandChild) {
+          return grandChild;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+function reducer(data, action) {
+  const { refs = {}, state, type: actionType, reactEvent } = action;
   const {
-    data,
-    onSelect,
-    state,
+    buttonRef,
+    listRef,
     optionsRef: { current: options },
-    transition
-  } = useContext(ListboxContext);
+    mouseMovedRef,
+    userInteractedRef
+  } = refs;
 
-  const { navigationSelection } = data;
-  const [searchString, setSearchString] = useState("");
+  const { onChange } = data;
+  const nextState = { ...data, lastActionType: actionType };
+  const hasOptions = Array.isArray(options) && !!options.length;
+  const optionValues = options.map(({ value }) => value);
+  const searchValue = action.query
+    ? findOptionValueFromSearch(options, action.query)
+    : null;
+  const index =
+    hasOptions && data.navigationSelection
+      ? optionValues.indexOf(data.navigationSelection)
+      : -1;
+  const atBottom = index === optionValues.length - 1;
+  const atTop = index === 0;
+  const isNavigating =
+    (state === NAVIGATING || state === NAVIGATING_WITH_KEYS) &&
+    data.navigationSelection !== null;
 
-  useEffect(() => {
-    if (searchString) {
-      if (state === IDLE) {
-        transition(SEARCHING_WHILE_CLOSED, { query: searchString });
-      } else {
-        transition(SEARCHING_WHILE_EXPANDED, { query: searchString });
+  function select(selection) {
+    requestAnimationFrame(() => {
+      if (buttonRef.current && userInteractedRef.current) {
+        userInteractedRef.current = false;
+        buttonRef.current.focus();
       }
-    }
-    let timeout = window.setTimeout(() => {
-      searchString && setSearchString("");
-    }, 1000);
-    return () => {
-      window.clearTimeout(timeout);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchString]);
+    });
+    onChange && onChange(selection);
+    mouseMovedRef.current = false;
+  }
 
-  return function handleKeyDown(event) {
-    const hasOptions = Array.isArray(options) && !!options.length;
-    const optionValues = hasOptions
-      ? options.map(({ props }) => props._value)
-      : [];
-    const index =
-      hasOptions && navigationSelection
-        ? optionValues.indexOf(navigationSelection)
-        : -1;
-
-    // We need do a few things before each navigation event, sooooo
-    function onReadyToNavigate(nav) {
-      if (!hasOptions) {
-        return false;
+  function open() {
+    requestAnimationFrame(() => {
+      if (listRef.current && userInteractedRef.current) {
+        userInteractedRef.current = false;
+        listRef.current.focus();
       }
+    });
+  }
 
-      // Don't scroll the page
-      event.preventDefault();
-      if (state === IDLE) {
-        transition(OPEN_LISTBOX);
-      } else {
-        nav();
-      }
-    }
+  switch (actionType) {
+    case CHANGE:
+      select(action.selection);
+      return {
+        ...nextState,
+        selection: action.selection
+      };
+    case SEARCHING:
+      return searchValue
+        ? {
+            ...nextState,
 
-    switch (event.key) {
-      case "Home":
-        onReadyToNavigate(() => {
-          transition(NAVIGATE_WITH_KEYS, {
-            navigationSelection: optionValues[0]
-          });
-        });
-        break;
-
-      case "End":
-        onReadyToNavigate(() => {
-          transition(NAVIGATE_WITH_KEYS, {
-            navigationSelection: optionValues[optionValues.length - 1]
-          });
-        });
-        break;
-
-      case "ArrowDown":
-        onReadyToNavigate(() => {
-          const atBottom = index === optionValues.length - 1;
-          if (atBottom) {
-            return;
-          } else {
-            // Go to the next item in the list
-            const navigationSelection =
-              optionValues[(index + 1) % optionValues.length];
-            transition(NAVIGATE_WITH_KEYS, { navigationSelection });
+            // When navigating with a keyboard, if the listbox is expanded the
+            // navigationSelection changes. If the listbox is closed, we change
+            // the actual selection value.
+            [state === IDLE ? "selection" : "navigationSelection"]: searchValue
           }
-        });
-        break;
-
-      // A lot of duplicate code with ArrowDown up next, I'm already over it.
-      case "ArrowUp":
-        onReadyToNavigate(() => {
-          if (index === 0) {
-            return;
+        : nextState;
+    case MOUSE_ENTER:
+      // If the user hasn't moved their mouse but mouse enter event still fires
+      // (this happens if the popup opens due to a keyboard event), we don't
+      // want to change the navigationSelect value
+      return mouseMovedRef.current
+        ? {
+            ...nextState,
+            navigationSelection: action.navigationSelection
           }
-          // normal case, select previous
-          const navigationSelection =
-            optionValues[
-              (index - 1 + optionValues.length) % optionValues.length
-            ];
-          transition(NAVIGATE_WITH_KEYS, { navigationSelection });
-        });
-        break;
+        : nextState;
+    case NAVIGATE:
+      return {
+        ...nextState,
+        navigationSelection: action.navigationSelection
+      };
+    case KEY_DOWN_ARROW_DOWN:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        open();
+      }
 
-      case "Escape":
-        if (state !== IDLE) {
-          transition(ESCAPE);
-        }
-        break;
+      return {
+        ...nextState,
+        navigationSelection:
+          state === IDLE
+            ? nextState.selection
+            : atBottom
+            ? nextState.navigationSelection
+            : optionValues[(index + 1) % optionValues.length]
+      };
+    case KEY_DOWN_ARROW_UP:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        open();
+      }
 
-      // TODO: Verify enter key, behaves differently with native select
-      case " ":
-      case "Enter":
-        if (state === IDLE) {
-          transition(OPEN_LISTBOX);
-        } else if (
-          (state === NAVIGATING || state === NAVIGATING_WITH_KEYS) &&
-          navigationSelection !== null
+      return {
+        ...nextState,
+        navigationSelection:
+          state === IDLE
+            ? nextState.selection
+            : atTop
+            ? nextState.navigationSelection
+            : optionValues[
+                (index - 1 + optionValues.length) % optionValues.length
+              ]
+      };
+    case KEY_DOWN_HOME:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        open();
+      }
+
+      return {
+        ...nextState,
+        navigationSelection:
+          state === IDLE ? nextState.selection : optionValues[0]
+      };
+    case KEY_DOWN_END:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        open();
+      }
+
+      return {
+        ...nextState,
+        navigationSelection:
+          state === IDLE
+            ? nextState.selection
+            : optionValues[optionValues.length - 1]
+      };
+    case KEY_DOWN_ENTER:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        return nextState;
+      } else if (isNavigating) {
+        reactEvent && reactEvent.preventDefault();
+        select(data.navigationSelection);
+        return {
+          ...nextState,
+          selection: data.navigationSelection,
+          navigationSelection: null
+        };
+      }
+      return nextState;
+    case KEY_DOWN_SPACE:
+      userInteractedRef.current = true;
+      if (state === IDLE) {
+        open();
+        return {
+          ...nextState,
+          navigationSelection: nextState.selection
+        };
+      } else if (isNavigating) {
+        select(data.navigationSelection);
+        return {
+          ...nextState,
+          selection: data.navigationSelection,
+          navigationSelection: null
+        };
+      }
+      return nextState;
+    case MOUSE_DOWN:
+      userInteractedRef.current = true;
+      if (reactEvent) {
+        // TODO: Prevent right click, maybe?
+        if (
+          reactEvent &&
+          reactEvent.nativeEvent &&
+          reactEvent.nativeEvent.which === 3
         ) {
-          // don't want to submit forms
-          event.preventDefault();
-          onSelect && onSelect(navigationSelection);
-          transition(SELECT_WITH_KEYBOARD);
+          // return;
         }
-        break;
 
-      default:
-        break;
-    }
+        // Prevent item from stealing focus
+        reactEvent.preventDefault();
+      }
 
-    if (typeof event.key === "string" && event.key.length === 1) {
-      setSearchString(searchString + event.key.toLowerCase());
-    }
-  };
+      // We don't change state until MOUSE_UP
+      return nextState;
+
+    case MOUSE_LEAVE:
+      return {
+        ...nextState,
+        navigationSelection: null
+      };
+    case BUTTON_CLICK:
+      userInteractedRef.current = true;
+      // Ignore right clicks
+      if (
+        reactEvent &&
+        reactEvent.nativeEvent &&
+        reactEvent.nativeEvent.which === 3
+      ) {
+        return nextState;
+      }
+
+      if (state === IDLE) {
+        open();
+      }
+
+      return {
+        ...nextState,
+        navigationSelection: state === IDLE ? nextState.selection : null
+      };
+    case BLUR:
+    case ESCAPE:
+      userInteractedRef.current = true;
+      return {
+        ...nextState,
+        navigationSelection: null
+      };
+    case MOUSE_SELECT:
+      userInteractedRef.current = true;
+      mouseMovedRef.current = false;
+
+      // TODO: Ignore right clicks maybe?
+      if (
+        reactEvent &&
+        reactEvent.nativeEvent &&
+        reactEvent.nativeEvent.which === 3
+      ) {
+        // return;
+      }
+
+      select(action.selection);
+      return {
+        ...nextState,
+        selection: action.selection,
+        navigationSelection: null
+      };
+    case INTERACT:
+      return nextState;
+
+    default:
+      throw new Error(`Unknown action ${actionType}`);
+  }
 }
 
 function useBlur() {
   const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
     ListboxContext
   );
-
-  const contextMenu = useRef(false);
 
   /* useEffect(() => {
     let listener = () => {
@@ -809,19 +807,19 @@ function useBlur() {
 
   return function handleBlur(event) {
     requestAnimationFrame(() => {
-      // we on want to close only if focus rests outside the listbox
+      // We on want to close only if focus rests outside the listbox
       if (
         document.activeElement !== inputRef.current &&
         document.activeElement !== buttonRef.current &&
         popoverRef.current
       ) {
         if (popoverRef.current.contains(document.activeElement)) {
-          // focus landed inside the listbox, keep it open
+          // focus landed inside the listbox; keep it open
           if (state !== INTERACTING) {
             transition(INTERACT);
           }
         } else {
-          // focus landed outside the listbox, close it.
+          // focus landed outside the listbox; close it
           transition(BLUR);
         }
       }
@@ -829,32 +827,121 @@ function useBlur() {
   };
 }
 
-// This manages transitions between states with a built in reducer to manage
-// the data that goes with those transitions.
+function useKeyDown() {
+  const {
+    optionsRef: { current: options },
+    transition
+  } = useListboxContext();
+
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    transition(SEARCHING, { query });
+    let timeout = window.setTimeout(() => query && setQuery(""), 1000);
+    return () => window.clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
+  return function handleKeyDown(event) {
+    event.persist();
+
+    switch (event.key) {
+      case "Home":
+        event.preventDefault();
+        transition(KEY_DOWN_HOME);
+        break;
+
+      case "End":
+        event.preventDefault();
+        transition(KEY_DOWN_END);
+        break;
+
+      case "ArrowDown":
+        event.preventDefault();
+        transition(KEY_DOWN_ARROW_DOWN);
+        break;
+
+      // A lot of duplicate code with ArrowDown up next, I'm already over it.
+      case "ArrowUp":
+        event.preventDefault();
+        transition(KEY_DOWN_ARROW_UP);
+        break;
+
+      case "Escape":
+        transition(ESCAPE);
+        break;
+
+      case " ":
+        transition(KEY_DOWN_SPACE);
+        break;
+      case "Enter":
+        transition(KEY_DOWN_ENTER, { reactEvent: event });
+        break;
+
+      default:
+        // Check if a user is typing some char keys and respond by setting the
+        // query state.
+        if (typeof event.key === "string" && event.key.length === 1) {
+          // Instead of firing a transition here, we'll do it in an effect so we
+          // can set/clear a timeout that resets the user query after some time
+          // has passed.
+          setQuery(query + event.key.toLowerCase());
+        }
+        break;
+    }
+  };
+}
+
+function useOptionId(value) {
+  const { instanceId } = useListboxContext();
+  return makeId(`option-${value}`, instanceId);
+}
+
+/**
+ * This manages transitions between states with a built in reducer to manage the
+ * data that goes with those transitions.
+ */
 function useReducerMachine(chart, reducer, initialData) {
   const [state, setState] = useState(chart.initial);
-  const [data, dispatch] = useReducer(reducer, initialData);
+  const [data, dispatch] = useReducer(reducer, {
+    ...initialData,
+    state: chart.initial
+  });
+
+  /*
+   * We will track when a mouse has moved in a ref, then reset it to false each
+   * time a menu closes. This is useful because we want the selected value of
+   * the listbox to be highlighted when the user opens it, but if the pointer
+   * is resting above an option it will steal the highlight.
+   * This will be a lot cleaner when we get the state machine cleaned up and
+   * replaced with xstate!
+   */
+  const mouseMovedRef = useRef(false);
 
   const popoverRef = useRef(null);
+
   const buttonRef = useRef(null);
+
   const inputRef = useRef(null);
+
   const listRef = useRef(null);
 
-  // Because we close the List on blur, we need to track if the blur is
-  // caused by clicking inside the list, and if so, don't close the List.
-  const selectOnClickRef = useRef(false); // ???
+  const userInteractedRef = useRef(false);
 
-  // Options ref will be used to store all of the listbox's options as they are
-  // rendered. We initialize options as an empty array to avoid type errors.
+  /*
+   * Options ref will be used to store all of the listbox's options as they are
+   * rendered. We initialize options as an empty array to avoid type errors.
+   */
   const optionsRef = useRef([]);
 
   const refs = {
-    popoverRef,
     buttonRef,
     inputRef,
     listRef,
-    selectOnClickRef,
-    optionsRef
+    mouseMovedRef,
+    optionsRef,
+    popoverRef,
+    userInteractedRef
   };
 
   const transition = (action, payload = {}) => {
@@ -868,133 +955,4 @@ function useReducerMachine(chart, reducer, initialData) {
   };
 
   return [state, data, transition, refs];
-}
-
-// We don't want to track the active descendant with indexes because nothing is
-// more annoying in a listbox than having it change values RIGHT AS YOU HIT
-// ENTER. That only happens if you use the index as your data, rather than
-// *your data as your data*. We use this to generate a unique ID based on the
-// value of each item.  This function is short, sweet, and good enough™ (I also
-// don't know how it works, tbqh)
-// https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
-const makeHash = str => {
-  let hash = 0;
-  if (str.length === 0) {
-    return hash;
-  }
-  for (let i = 0; i < str.length; i++) {
-    var char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
-  }
-  return hash;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-function isFocusableChildType(child) {
-  return child.isReach === ListboxOption || child.type === ListboxOption;
-}
-
-function findOptionValueFromSearch(opts, string = "") {
-  if (!string) return;
-  const found = opts.find(
-    ({ props }) =>
-      props._valueText && props._valueText.toLowerCase().startsWith(string)
-  );
-  return found ? found.props._value : null;
-}
-
-// <Option><span>My thing</span></Option>
-//
-// NOT
-//
-// <span><Option>My thing</Option></span>
-//
-// const StyledListbox = styled(ListboxList)``
-//
-// StyledListbox.isReach = ListboxList;
-//
-// export default StyledListbox;
-
-function getChildValueAndValueText(child) {
-  // We will figure out the relevant value and valueText so we can store
-  // both in our optionsRef, so we can callback to them anywhere.
-  // Value text should be a human readable version of the value. It does
-  // not need to be provided if the option's child is a text string.
-  // Alternatively, the developer can use the `getValueText` function if
-  // the valuetext depends on the actual value of the input.
-  // If no children are passed to ListboxOption, value text will be
-  // displayed as the option, but we also want value text as a
-  // reasonable default for what is displayed in the ListboxButton when
-  // the option is selected.
-  let { value, valueText, getValueText, children } = child.props;
-
-  // Infer value from string child if omitted, otherwise error becaure
-  // what the heck … we need a value!
-  if (!value) {
-    if (typeof children === "string") {
-      value = children;
-    } else {
-      throw Error(
-        `A ListboxOption with a non-string child must have a provided value prop.`
-      );
-    }
-  }
-
-  // If valueText is omitted, first we check for getValueText. If that
-  // isn't there then we try to infer it from a string child. If we
-  // can't, then we just use the value.
-  if (!valueText) {
-    if (getValueText) {
-      valueText = getValueText(value);
-    } else if (typeof children === "string") {
-      valueText = children;
-    } else {
-      valueText = value;
-    }
-  }
-
-  return { _value: value, _valueText: valueText };
-}
-
-// TODO: Need a strategy for recurive cloning, TBD
-function useChildrenWithFocusIndicies(
-  children,
-  condition,
-  getAdditionalProps,
-  storageRef
-) {
-  const [newChildren, setNewChildren] = useState(children);
-  const childCount = Children.count(children);
-  let focusCount = useRef(-1);
-
-  useEffect(() => {
-    setNewChildren(
-      Children.map(children, (child, index) => {
-        let clone;
-        if (condition(child)) {
-          focusCount.current++;
-          const focusIndex = focusCount.current;
-          const newProps = getAdditionalProps ? getAdditionalProps(child) : {};
-
-          clone = cloneElement(child, {
-            _index: focusIndex,
-            ...newProps
-          });
-          storageRef.current[focusIndex] = clone;
-        } else {
-          clone = child;
-        }
-
-        // On the last child, reset our focusIndex counter for the next render
-        if (index === childCount - 1) {
-          focusCount.current = -1;
-        }
-
-        return clone;
-      })
-    );
-  }, [children, childCount]);
-
-  return newChildren;
 }

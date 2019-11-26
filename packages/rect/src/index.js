@@ -2,15 +2,16 @@ import React, { useRef, useState, useLayoutEffect } from "react";
 import observeRect from "@reach/observe-rect";
 import PropTypes from "prop-types";
 
-let Rect = ({ onChange, observe, children }) => {
+////////////////////////////////////////////////////////////////////////////////
+// Rect
+
+export function Rect({ onChange, observe = true, children }) {
   const ref = React.useRef(null);
   const rect = useRect(ref, observe, onChange);
   return children({ ref, rect });
-};
+}
 
-Rect.defaultProps = {
-  observe: true
-};
+Rect.displayName = "Rect";
 
 if (__DEV__) {
   Rect.propTypes = {
@@ -19,6 +20,9 @@ if (__DEV__) {
     onChange: PropTypes.func
   };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// useRect
 
 export function useRect(nodeRef, observe = true, onChange) {
   let [rect, setRect] = useState(null);

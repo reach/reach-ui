@@ -10,7 +10,11 @@ export let Example = () => {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog aria-label="Announcement" isOpen={showDialog}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>This is killer!</p>
         <input type="text" />

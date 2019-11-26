@@ -14,6 +14,7 @@ export let Example = () => {
       <Dialog
         aria-label="Announcement"
         isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
         initialFocusRef={button}
       >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>

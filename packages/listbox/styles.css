@@ -15,14 +15,9 @@
 }
 
 [data-reach-listbox-list] {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  white-space: nowrap;
   outline: none;
   padding: 0.25rem 0;
   font-size: 85%;
-  user-select: none;
   visibility: visible;
   opacity: 1;
   background: hsl(0, 0%, 100%);
@@ -40,6 +35,8 @@
   font: inherit;
   text-decoration: initial;
   padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+  user-select: none;
 }
 
 [data-reach-listbox-option][data-highlighted] {
@@ -54,6 +51,21 @@
 [data-reach-listbox-option][aria-selected="true"][data-confirming] {
   animation: flash 100ms;
   animation-iteration-count: 1;
+}
+
+[data-reach-listbox-button] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+[data-reach-listbox-button-inner] {
+  display: block;
+}
+
+[data-reach-listbox-button-arrow] {
+  margin-left: 0.5rem;
+  display: block;
 }
 
 @keyframes flash {

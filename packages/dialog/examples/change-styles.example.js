@@ -26,6 +26,7 @@ export const Example = () => {
             <AnimatedDialogOverlay
               key={item}
               style={{ opacity: styles.opacity }}
+              onDismiss={() => setShowDialog(false)}
             >
               <AnimatedDialogContent
                 aria-labelledby="dialog-title"
