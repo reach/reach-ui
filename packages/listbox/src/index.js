@@ -163,6 +163,8 @@ export const ListboxInput = forwardRef(function ListboxInput(
   // See docblock on the function for more deets.
   const selectedNode = recursivelyFindChildByValue(children, value);
 
+  console.log({ value, selectedNode });
+
   const context = {
     buttonId,
     buttonRef,
@@ -272,12 +274,15 @@ export const ListboxList = forwardRef(function ListboxList(
       id={listboxId}
       role="listbox"
       tabIndex={-1}
-      style={{ maxWidth: 300 }} // TODO: remove this
     >
       {Children.map(children, child => {
+        if (!child.props) return child;
+
         let _valueText;
         if (child.props.valueText) {
           _valueText = child.props.valueText;
+        } else if (typeof child.props.children === "string") {
+          _valueText = child.props.children;
         } else if (child.props.value) {
           _valueText = child.props.value;
         }
@@ -458,7 +463,6 @@ export const ListboxButton = forwardRef(function ListboxButton(
       aria-labelledby={`${buttonId} ${listboxId}`}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-      style={{ border: "2px solid black" }} // TODO: Delete this
     >
       <span data-reach-listbox-button-inner="">{inner}</span>
       {arrow && (
@@ -600,16 +604,18 @@ function reducer(data, action) {
         selection: action.selection
       };
     case SEARCHING:
-      return searchValue
-        ? {
-            ...nextState,
+      if (searchValue) {
+        select(searchValue);
+        return {
+          ...nextState,
 
-            // When navigating with a keyboard, if the listbox is expanded the
-            // navigationSelection changes. If the listbox is closed, we change
-            // the actual selection value.
-            [state === IDLE ? "selection" : "navigationSelection"]: searchValue
-          }
-        : nextState;
+          // When navigating with a keyboard, if the listbox is expanded the
+          // navigationSelection changes. If the listbox is closed, we change
+          // the actual selection value.
+          [state === IDLE ? "selection" : "navigationSelection"]: searchValue
+        };
+      }
+      return nextState;
     case MOUSE_ENTER:
       // If the user hasn't moved their mouse but mouse enter event still fires
       // (this happens if the popup opens due to a keyboard event), we don't

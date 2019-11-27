@@ -6,10 +6,10 @@ import "@reach/listbox/styles.css";
 export let name = "Basic";
 
 export let Example = () => {
-  let [value, setValue] = useState("pollo");
+  let [value, setValue] = useState("default");
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
-      <ListboxOption value="default">Choose a taco</ListboxOption>
+      <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
       <hr />
       <ListboxOption value="asada" valueText="Carne Asada">
         🌮 Carne Asada
@@ -23,16 +23,6 @@ export let Example = () => {
       <ListboxOption value="lengua" valueText="Lengua">
         🌮 Lengua
       </ListboxOption>
-      <hr />
-      <div style={{ padding: "0 10px" }}>
-        <p>
-          I really like tacos. I hope you enjoy them as well!
-          <br />
-          🌮 🌮 🌮
-        </p>
-        <button type="button">Useless Button</button>
-        <button type="button">Silly Button</button>
-      </div>
     </Listbox>
   );
 };
