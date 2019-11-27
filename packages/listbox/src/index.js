@@ -26,31 +26,60 @@ import Popover, { positionMatchWidth } from "@reach/popover";
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
-const IDLE = "IDLE"; // Resting/closed state.
-const NAVIGATING = "NAVIGATING"; // The user is navigate the list with a pointer
-const NAVIGATING_WITH_KEYS = "NAVIGATING_WITH_KEYS"; // The user is navigate the list with a keyboard
-const INTERACTING = "INTERACTING"; // The user is interacting with arbitrary elements inside the popover
+// Resting/closed state.
+const IDLE = "IDLE";
+
+// The user is navigate the list with a pointer
+const NAVIGATING = "NAVIGATING";
+
+// The user is navigate the list with a keyboard
+const NAVIGATING_WITH_KEYS = "NAVIGATING_WITH_KEYS";
+
+// The user is interacting with arbitrary elements inside the popover
+const INTERACTING = "INTERACTING";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions
 
-const CHANGE = "CHANGE"; // Change selection values
-const SEARCHING = "SEARCHING"; // Type a search query
-const NAVIGATE = "NAVIGATE"; // Navigate with a pointer of some kind
-const BUTTON_CLICK = "BUTTON_CLICK"; // Click the ListboxButton
-const INTERACT = "INTERACT"; // Interacts with elements in the popover but not in our list
+// Change selection values, not necessarily a user-event
+const CHANGE = "CHANGE";
+
+// Type a search query
+const SEARCHING = "SEARCHING";
+
+// Navigate with a pointer of some kind
+const NAVIGATE = "NAVIGATE";
+
+// Click the ListboxButton
+const BUTTON_CLICK = "BUTTON_CLICK";
+
+// Interacts with elements in the popover but not in our list
+const INTERACT = "INTERACT";
+
 const MOUSE_ENTER = "MOUSE_ENTER";
+
 const KEY_DOWN_ARROW_DOWN = "KEY_DOWN_ARROW_DOWN";
+
 const KEY_DOWN_ARROW_UP = "KEY_DOWN_ARROW_UP";
+
 const KEY_DOWN_HOME = "KEY_DOWN_HOME";
+
 const KEY_DOWN_END = "KEY_DOWN_HOME";
+
 const KEY_DOWN_TAB = "KEY_DOWN_TAB";
+
 const KEY_DOWN_ENTER = "KEY_DOWN_ENTER";
+
 const KEY_DOWN_SPACE = "KEY_DOWN_SPACE";
+
 const MOUSE_DOWN = "MOUSE_DOWN";
+
 const MOUSE_LEAVE = "MOUSE_LEAVE";
+
 const MOUSE_SELECT = "MOUSE_SELECT";
+
 const ESCAPE = "ESCAPE";
+
 const BLUR = "BLUR";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -137,10 +166,13 @@ export const ListboxInput = forwardRef(function ListboxInput(
 ) {
   const initialData = {
     onChange,
-    // the value the user has selected. We derived this also when the developer
-    // is controlling the value
+    /*
+     * The value the user has selected.
+     */
     selection: value,
-    // the value the user has navigated to with the keyboard
+    /*
+     * The value the user has navigated to when the list is expanded.
+     */
     navigationSelection: null
   };
 
@@ -162,8 +194,6 @@ export const ListboxInput = forwardRef(function ListboxInput(
   // Parses our children to find the selected option.
   // See docblock on the function for more deets.
   const selectedNode = recursivelyFindChildByValue(children, value);
-
-  console.log({ value, selectedNode });
 
   const context = {
     buttonId,
@@ -252,7 +282,7 @@ export const ListboxList = forwardRef(function ListboxList(
   forwardedRef
 ) {
   const {
-    data: { value },
+    data: { selection: value },
     listboxId,
     listRef,
     optionsRef
@@ -353,9 +383,11 @@ export const ListboxOption = forwardRef(function ListboxOption(
   function handleMouseMove() {
     mouseMovedRef.current = true;
 
-    // We don't really *need* this guard if we put this in the state machine,
-    // but in this case it seems wise not to needlessly run our transitions
-    // every time the user's mouse moves. Seems like a lot.
+    /*
+     * We don't really *need* this guard if we put this in the state machine,
+     * but in this case it seems wise not to needlessly run our transitions
+     * every time the user's mouse moves. Seems like a lot.
+     */
     if (state === NAVIGATING_WITH_KEYS) {
       transition(NAVIGATE, { navigationSelection: value });
     }
@@ -605,21 +637,30 @@ function reducer(data, action) {
       };
     case SEARCHING:
       if (searchValue) {
-        select(searchValue);
+        /*
+         * When navigating with a keyboard, if the listbox is expanded the
+         * navigationSelection changes. If the listbox is idle, we change the
+         * actual selection value.
+         */
+        if (state === IDLE) {
+          select(searchValue);
+          return {
+            ...nextState,
+            selection: searchValue
+          };
+        }
         return {
           ...nextState,
-
-          // When navigating with a keyboard, if the listbox is expanded the
-          // navigationSelection changes. If the listbox is closed, we change
-          // the actual selection value.
-          [state === IDLE ? "selection" : "navigationSelection"]: searchValue
+          navigationSelection: searchValue
         };
       }
       return nextState;
     case MOUSE_ENTER:
-      // If the user hasn't moved their mouse but mouse enter event still fires
-      // (this happens if the popup opens due to a keyboard event), we don't
-      // want to change the navigationSelect value
+      /*
+       * If the user hasn't moved their mouse but mouse enter event still fires
+       * (this happens if the popup opens due to a keyboard event), we don't
+       * want to change the navigationSelect value
+       */
       return mouseMovedRef.current
         ? {
             ...nextState,
@@ -867,7 +908,6 @@ function useKeyDown() {
         transition(KEY_DOWN_ARROW_DOWN);
         break;
 
-      // A lot of duplicate code with ArrowDown up next, I'm already over it.
       case "ArrowUp":
         event.preventDefault();
         transition(KEY_DOWN_ARROW_UP);
@@ -885,12 +925,16 @@ function useKeyDown() {
         break;
 
       default:
-        // Check if a user is typing some char keys and respond by setting the
-        // query state.
+        /*
+         * Check if a user is typing some char keys and respond by setting the
+         * query state.
+         */
         if (typeof event.key === "string" && event.key.length === 1) {
-          // Instead of firing a transition here, we'll do it in an effect so we
-          // can set/clear a timeout that resets the user query after some time
-          // has passed.
+          /*
+           * Instead of firing a transition here, we'll do it in an effect so we
+           * can set/clear a timeout that resets the user query after some time
+           * has passed.
+           */
           setQuery(query + event.key.toLowerCase());
         }
         break;
