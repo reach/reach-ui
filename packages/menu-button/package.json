@@ -10,11 +10,9 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/component-component": "^0.6.2",
-    "@reach/portal": "^0.6.2",
-    "@reach/rect": "^0.6.2",
+    "@reach/auto-id": "^0.6.1",
+    "@reach/popover": "^0.6.2",
     "@reach/utils": "^0.6.1",
-    "@reach/window-size": "^0.6.2",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },

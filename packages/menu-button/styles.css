@@ -21,6 +21,7 @@
 
 [data-reach-menu-item] {
   display: block;
+  user-select: none;
 }
 
 /*
@@ -54,4 +55,8 @@
   background: hsl(211, 81%, 36%);
   color: white;
   outline: none;
+}
+
+[data-reach-menu-popover][hidden] {
+  display: none;
 }

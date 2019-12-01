@@ -688,9 +688,9 @@ However, if you have no text and only an icon, please make sure your icon has a 
 </MenuButton>
 
 // add screen reader only text for svgs
-import AriaText from "@reach/aria-text"
+import VisuallyHidden from "@reach/visually-hidden"
 <MenuButton>
-  <AriaText>Actions</AriaText>
+  <VisuallyHidden>Actions</VisuallyHidden>
   <svg aria-hidden>
     <polygon points="0,0 20,0 10,10 " />
   </svg>
