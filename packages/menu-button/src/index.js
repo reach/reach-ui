@@ -93,6 +93,8 @@ const getInitialMenuState = () => ({
 const checkIfStylesIncluded = () => checkStyles("menu-button");
 
 ////////////////////////////////////////////////////////////////////////////////
+// Menu
+
 export const Menu = ({ children }) => {
   return (
     <Component
@@ -113,14 +115,16 @@ export const Menu = ({ children }) => {
   );
 };
 
+Menu.displayName = "Menu";
 if (__DEV__) {
   Menu.propTypes = {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
-  Menu.displayName = "Menu";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuButton
+
 export const MenuButton = forwardRef(function MenuButton(
   { onClick, onKeyDown, onMouseDown, id, ...props },
   forwardedRef
@@ -135,56 +139,65 @@ export const MenuButton = forwardRef(function MenuButton(
     [] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  function handleClick() {
+    if (state.isOpen) {
+      setState(close);
+    } else {
+      setState(openAtFirstItem);
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault(); // prevent scroll
+      setState(openAtFirstItem);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault(); // prevent scroll
+      setState(openAtFirstItem);
+    }
+  }
+
+  function handleMouseDown() {
+    if (state.isOpen) {
+      setState({ closingWithClick: true });
+    }
+  }
+
   return (
     <button
-      id={state.buttonId}
-      aria-haspopup="menu"
-      aria-expanded={state.isOpen}
-      data-reach-menu-button
-      type="button"
+      {...props}
       ref={node => {
         assignRef(forwardedRef, node);
         assignRef(ownRef, node);
         refs.button = node;
       }}
-      onMouseDown={wrapEvent(onMouseDown, () => {
-        if (state.isOpen) {
-          setState({ closingWithClick: true });
-        }
-      })}
-      onClick={wrapEvent(onClick, () => {
-        if (state.isOpen) {
-          setState(close);
-        } else {
-          setState(openAtFirstItem);
-        }
-      })}
-      onKeyDown={wrapEvent(onKeyDown, event => {
-        if (event.key === "ArrowDown") {
-          event.preventDefault(); // prevent scroll
-          setState(openAtFirstItem);
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault(); // prevent scroll
-          setState(openAtFirstItem);
-        }
-      })}
-      {...props}
+      data-reach-menu-button=""
+      aria-expanded={state.isOpen}
+      aria-haspopup="menu"
+      id={state.buttonId}
+      onClick={wrapEvent(onClick, handleClick)}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+      type="button"
     />
   );
 });
 
+MenuButton.displayName = "MenuButton";
 if (__DEV__) {
   MenuButton.propTypes = {
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func,
     children: PropTypes.node
   };
-  MenuButton.displayName = "MenuButton";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuItem
+
 export const MenuItem = forwardRef(function MenuItem(
   {
+    as: Comp = "div",
     onClick,
     onKeyDown,
     onMouseLeave,
@@ -193,7 +206,7 @@ export const MenuItem = forwardRef(function MenuItem(
     role = "menuitem",
     _index: index,
     _ref = null,
-    ...rest
+    ...props
   },
   forwardedRef
 ) {
@@ -205,38 +218,48 @@ export const MenuItem = forwardRef(function MenuItem(
     onSelect();
     setState(close);
   };
+
+  function handleClick(event) {
+    select();
+  }
+
+  function handleMouseLeave(event) {
+    // clear out selection when mouse over a non-menu item child
+    setState({ selectionIndex: -1 });
+  }
+
+  function handleMouseMove(event) {
+    if (!isSelected) {
+      setState(selectItemAtIndex(index));
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      // prevent the button from being "clicked" by
+      // this "Enter" keydown
+      event.preventDefault();
+      select();
+    }
+  }
+
   return (
-    <div
-      {...rest}
+    <Comp
+      {...props}
       ref={ref}
       data-reach-menu-item={role === "menuitem" ? true : undefined}
+      data-selected={role === "menuitem" && isSelected ? true : undefined}
+      onClick={wrapEvent(onClick, handleClick)}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
+      onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
       role={role}
       tabIndex={-1}
-      data-selected={role === "menuitem" && isSelected ? true : undefined}
-      onClick={wrapEvent(onClick, event => {
-        select();
-      })}
-      onKeyDown={wrapEvent(onKeyDown, event => {
-        if (event.key === "Enter" || event.key === " ") {
-          // prevent the button from being "clicked" by
-          // this "Enter" keydown
-          event.preventDefault();
-          select();
-        }
-      })}
-      onMouseMove={wrapEvent(onMouseMove, event => {
-        if (!isSelected) {
-          setState(selectItemAtIndex(index));
-        }
-      })}
-      onMouseLeave={wrapEvent(onMouseLeave, event => {
-        // clear out selection when mouse over a non-menu item child
-        setState({ selectionIndex: -1 });
-      })}
     />
   );
 });
 
+MenuItem.displayName = "MenuItem";
 if (__DEV__) {
   MenuItem.propTypes = {
     onSelect: PropTypes.func.isRequired,
@@ -249,10 +272,11 @@ if (__DEV__) {
     _ref: PropTypes.func,
     _index: PropTypes.number
   };
-  MenuItem.displayName = "MenuItem";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuLink
+
 export const MenuLink = forwardRef(function MenuLink(
   {
     as: AsComp = "a",
@@ -268,37 +292,43 @@ export const MenuLink = forwardRef(function MenuLink(
 ) {
   const { state, setState } = useContext(MenuContext);
   const Link = Comp || AsComp;
-  const ownRef = useRef(null);
-  const ref = useForkedRef(_ref, forwardedRef, ownRef);
+  const ref = useForkedRef(_ref, forwardedRef);
+
   if (Comp) {
     console.warn(
       "[@reach/menu-button]: Please use the `as` prop instead of `component`."
     );
   }
+
+  function handleClick() {
+    setState(close);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter") {
+      // prevent MenuItem's preventDefault from firing,
+      // allowing this link to work w/ the keyboard
+      event.stopPropagation();
+    }
+  }
+
   return (
     <MenuItem role="none" onSelect={noop} _index={index} _ref={noop}>
       <Link
-        role="menuitem"
-        data-reach-menu-item
-        tabIndex={-1}
-        data-selected={index === state.selectionIndex ? true : undefined}
-        onClick={wrapEvent(onClick, event => {
-          setState(close);
-        })}
-        onKeyDown={wrapEvent(onKeyDown, event => {
-          if (event.key === "Enter") {
-            // prevent MenuItem's preventDefault from firing,
-            // allowing this link to work w/ the keyboard
-            event.stopPropagation();
-          }
-        })}
-        ref={ref}
         {...props}
+        ref={ref}
+        data-reach-menu-item=""
+        data-selected={index === state.selectionIndex ? true : undefined}
+        onClick={wrapEvent(onClick, handleClick)}
+        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        role="menuitem"
+        tabIndex={-1}
       />
     </MenuItem>
   );
 });
 
+MenuLink.displayName = "MenuLink";
 if (__DEV__) {
   MenuLink.propTypes = {
     as: PropTypes.any,
@@ -308,10 +338,11 @@ if (__DEV__) {
     _index: PropTypes.number,
     _ref: PropTypes.func
   };
-  MenuLink.displayName = "MenuLink";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuPopover
+
 export const MenuPopover = forwardRef(function MenuPopover(
   { children, style, ...props },
   forwardedRef
@@ -323,16 +354,16 @@ export const MenuPopover = forwardRef(function MenuPopover(
         <Rect>
           {({ rect: menuRect, ref }) => (
             <div
-              data-reach-menu-popover
-              data-reach-menu // deprecate for naming consistency?
+              {...props}
               ref={node => {
                 assignRef(ref, node);
                 assignRef(forwardedRef, node);
               }}
-              {...props}
+              data-reach-menu-popover=""
+              data-reach-menu="" // deprecate for naming consistency?
               style={{
-                ...style,
-                ...getStyles(state.buttonRect, menuRect)
+                ...getStyles(state.buttonRect, menuRect),
+                ...style
               }}
             >
               {children}
@@ -344,89 +375,103 @@ export const MenuPopover = forwardRef(function MenuPopover(
   );
 });
 
+MenuPopover.displayName = "MenuPopover";
 if (__DEV__) {
   MenuPopover.propTypes = {
     children: PropTypes.node
   };
-  MenuPopover.displayName = "MenuPopover";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuList
+
 export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
   const ownRef = useRef(null);
   const ref = useForkedRef(ownRef, forwardedRef);
   return (
     <MenuPopover>
-      <MenuItems {...props} data-reach-menu-list="" ref={ref} />
+      <MenuItems {...props} ref={ref} data-reach-menu-list="" />
     </MenuPopover>
   );
 });
 
+MenuList.displayName = "MenuList";
 if (__DEV__) {
   MenuList.propTypes = {
     children: PropTypes.node.isRequired
   };
-  MenuList.displayName = "MenuList";
 }
-////////////////////////////////////////////////////////////////////////////////
-
-const focusableChildrenTypes = [MenuItem, MenuLink];
-
-const isFocusableChildType = child =>
-  focusableChildrenTypes.includes(child.type);
-
-const getFocusableMenuChildren = childrenArray => {
-  const focusable = childrenArray.filter(child => isFocusableChildType(child));
-  return focusable;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
+// MenuItems
+
 export const MenuItems = forwardRef(function MenuItems(
-  { children, onKeyDown, onBlur, ...rest },
+  { children, onKeyDown, onBlur, ...props },
   ref
 ) {
   const { state, setState, refs } = useContext(MenuContext);
   const clones = Children.toArray(children).filter(Boolean);
-  const focusableChildren = getFocusableMenuChildren(clones);
+  const focusableChildren = clones.filter(child => isFocusableChildType(child));
+
+  function handleBlur(event) {
+    if (
+      !state.closingWithClick &&
+      !refs.menu.contains(event.relatedTarget || document.activeElement)
+    ) {
+      setState(close);
+    }
+  }
+
+  function handleKeyDown(event) {
+    switch (event.key) {
+      case "Escape":
+        setState(close);
+        break;
+      case "Home":
+        event.preventDefault(); // prevent window scroll
+        setState({ selectionIndex: 0 });
+        break;
+      case "End":
+        event.preventDefault(); // prevent window scroll
+        setState({
+          selectionIndex: focusableChildren.length - 1
+        });
+        break;
+      case "ArrowDown":
+        event.preventDefault(); // prevent window scroll
+        const nextIndex = state.selectionIndex + 1;
+        if (nextIndex !== focusableChildren.length) {
+          setState({ selectionIndex: nextIndex });
+        }
+        break;
+      case "ArrowUp":
+        event.preventDefault(); // prevent window scroll
+        const prevIndex = state.selectionIndex - 1;
+        if (prevIndex !== -1) {
+          setState({ selectionIndex: prevIndex });
+        }
+        break;
+      case "Tab":
+        event.preventDefault(); // prevent leaving
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <div
-      data-reach-menu-items
-      {...rest}
-      role="menu"
-      aria-labelledby={state.buttonId}
-      tabIndex={-1}
+      {...props}
       ref={node => {
         refs.menu = node;
         assignRef(ref, node);
       }}
-      onBlur={event => {
-        if (
-          !state.closingWithClick &&
-          !refs.menu.contains(event.relatedTarget || document.activeElement)
-        ) {
-          setState(close);
-        }
-      }}
-      onKeyDown={wrapEvent(onKeyDown, event => {
-        if (event.key === "Escape") {
-          setState(close);
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault(); // prevent window scroll
-          const nextIndex = state.selectionIndex + 1;
-          if (nextIndex !== focusableChildren.length) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "ArrowUp") {
-          event.preventDefault(); // prevent window scroll
-          const nextIndex = state.selectionIndex - 1;
-          if (nextIndex !== -1) {
-            setState({ selectionIndex: nextIndex });
-          }
-        } else if (event.key === "Tab") {
-          event.preventDefault(); // prevent leaving
-        }
-      })}
+      data-reach-menu-items=""
+      aria-labelledby={state.buttonId}
+      onBlur={wrapEvent(onBlur, handleBlur)}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      role="menu"
+      tabIndex={-1}
     >
       {clones.map(child => {
         if (isFocusableChildType(child)) {
@@ -444,6 +489,7 @@ export const MenuItems = forwardRef(function MenuItems(
   );
 });
 
+MenuItems.displayName = "MenuItems";
 if (__DEV__) {
   MenuItems.propTypes = {
     refs: PropTypes.object,
@@ -453,11 +499,13 @@ if (__DEV__) {
     onKeyDown: PropTypes.func,
     onBlur: PropTypes.func
   };
-  MenuItems.displayName = "MenuItems";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const getStyles = (buttonRect, menuRect) => {
+
+const focusableChildrenTypes = [MenuItem, MenuLink];
+
+function getStyles(buttonRect, menuRect) {
   const haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
     return { opacity: 0 };
@@ -500,4 +548,8 @@ const getStyles = (buttonRect, menuRect) => {
       ? `${buttonRect.top - menuRect.height + window.pageYOffset}px`
       : `${buttonRect.top + buttonRect.height + window.pageYOffset}px`
   };
-};
+}
+
+function isFocusableChildType(child) {
+  return focusableChildrenTypes.includes(child.type);
+}

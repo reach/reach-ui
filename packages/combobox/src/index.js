@@ -44,7 +44,7 @@ const NAVIGATING = "NAVIGATING";
 const INTERACTING = "INTERACTING";
 
 ////////////////////////////////////////////////////////////////////////////////
-// Actions:
+// Actions
 
 // User cleared the value w/ backspace, but input still has focus
 const CLEAR = "CLEAR";
@@ -198,10 +198,15 @@ const findNavigationValue = (state, action) => {
   }
 };
 
+const ComboboxContext = createContext();
+
+// Allows us to put the option's value on context so that ComboboxOptionText
+// can work it's highlight text magic no matter what else is rendered around
+// it.
+const OptionContext = createContext();
+
 ////////////////////////////////////////////////////////////////////////////////
 // Combobox
-
-const Context = createContext();
 
 export const Combobox = forwardRef(function Combobox(
   {
@@ -262,27 +267,24 @@ export const Combobox = forwardRef(function Combobox(
   const id = useId(rest.id);
   const listboxId = makeId("listbox", id);
 
-  const context = useMemo(() => {
-    return {
-      data,
-      inputRef,
-      popoverRef,
-      buttonRef,
-      onSelect,
-      optionsRef,
-      state,
-      transition,
-      listboxId,
-      autocompletePropRef,
-      persistSelectionRef,
-      isVisible: isVisible(state),
-      openOnFocus
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, onSelect, state, transition, listboxId]);
+  const context = {
+    data,
+    inputRef,
+    popoverRef,
+    buttonRef,
+    onSelect,
+    optionsRef,
+    state,
+    transition,
+    listboxId,
+    autocompletePropRef,
+    persistSelectionRef,
+    isVisible: isVisible(state),
+    openOnFocus
+  };
 
   return (
-    <Context.Provider value={context}>
+    <ComboboxContext.Provider value={context}>
       <Comp
         {...rest}
         data-reach-combobox=""
@@ -294,10 +296,11 @@ export const Combobox = forwardRef(function Combobox(
       >
         {children}
       </Comp>
-    </Context.Provider>
+    </ComboboxContext.Provider>
   );
 });
 
+Combobox.displayName = "Combobox";
 if (__DEV__) {
   Combobox.propTypes = {
     onSelect: PropTypes.func
@@ -338,7 +341,7 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
     listboxId,
     autocompletePropRef,
     openOnFocus
-  } = useContext(Context);
+  } = useContext(ComboboxContext);
 
   const ref = useForkedRef(inputRef, forwardedRef);
 
@@ -427,6 +430,8 @@ export const ComboboxInput = forwardRef(function ComboboxInput(
   );
 });
 
+ComboboxInput.displayName = "ComboboxInput";
+
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxPopover
 
@@ -443,7 +448,7 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
   },
   forwardedRef
 ) {
-  const { popoverRef, inputRef, isVisible } = useContext(Context);
+  const { popoverRef, inputRef, isVisible } = useContext(ComboboxContext);
   const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
@@ -482,6 +487,8 @@ export const ComboboxPopover = forwardRef(function ComboboxPopover(
   );
 });
 
+ComboboxPopover.displayName = "ComboboxPopover";
+
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxList
 
@@ -495,7 +502,7 @@ export const ComboboxList = forwardRef(function ComboboxList(
   },
   forwardedRef
 ) {
-  const { optionsRef, persistSelectionRef } = useContext(Context);
+  const { optionsRef, persistSelectionRef } = useContext(ComboboxContext);
 
   if (persistSelection) {
     persistSelectionRef.current = true;
@@ -520,13 +527,10 @@ export const ComboboxList = forwardRef(function ComboboxList(
   );
 });
 
+ComboboxList.displayName = "ComboboxList";
+
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxOption
-
-// Allows us to put the option's value on context so that ComboboxOptionText
-// can work it's highlight text magic no matter what else is rendered around
-// it.
-const OptionContext = createContext();
 
 export const ComboboxOption = forwardRef(function ComboboxOption(
   { children, value, onClick, ...props },
@@ -537,7 +541,7 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
     data: { navigationValue },
     transition,
     optionsRef
-  } = useContext(Context);
+  } = useContext(ComboboxContext);
 
   useEffect(() => {
     optionsRef.current.push(value);
@@ -571,6 +575,8 @@ export const ComboboxOption = forwardRef(function ComboboxOption(
   );
 });
 
+ComboboxOption.displayName = "ComboboxOption";
+
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxOptionText
 
@@ -580,7 +586,7 @@ export function ComboboxOptionText() {
   const value = useContext(OptionContext);
   const {
     data: { value: contextValue }
-  } = useContext(Context);
+  } = useContext(ComboboxContext);
 
   const results = useMemo(
     () =>
@@ -607,14 +613,17 @@ export function ComboboxOptionText() {
     : value;
 }
 
+ComboboxOptionText.displayName = "ComboboxOptionText";
+
 ////////////////////////////////////////////////////////////////////////////////
 // ComboboxButton
+
 export const ComboboxButton = forwardRef(function ComboboxButton(
   { as: Comp = "button", onClick, onKeyDown, ...props },
   forwardedRef
 ) {
   const { transition, state, buttonRef, listboxId, isVisible } = useContext(
-    Context
+    ComboboxContext
   );
   const ref = useForkedRef(buttonRef, forwardedRef);
 
@@ -641,6 +650,8 @@ export const ComboboxButton = forwardRef(function ComboboxButton(
     />
   );
 });
+
+ComboboxButton.displayName = "ComboboxButton";
 
 ////////////////////////////////////////////////////////////////////////////////
 // The rest is all implementation details
@@ -675,7 +686,7 @@ function useKeyDown() {
     transition,
     autocompletePropRef,
     persistSelectionRef
-  } = useContext(Context);
+  } = useContext(ComboboxContext);
 
   return function handleKeyDown(event) {
     const { current: options } = optionsRef;
@@ -779,7 +790,7 @@ function useKeyDown() {
 
 function useBlur() {
   const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
-    Context
+    ComboboxContext
   );
 
   return function handleBlur(event) {

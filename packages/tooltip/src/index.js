@@ -144,11 +144,10 @@ function transition(action, newContext) {
 
   // Really useful for debugging
   // console.log({ action, state, nextState, contextId: context.id });
+  // !nextState && console.log('no transition taken')
 
   if (!nextState) {
-    throw new Error(
-      `Unknown state for action "${action}" from state "${state}"`
-    );
+    return;
   }
 
   if (stateDef.leave) {
@@ -225,7 +224,8 @@ function clearContextId() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// THE HOOK! It's about time we got to the goods!
+// useTooltip
+
 export function useTooltip({
   id: idProp,
   onMouseEnter,
@@ -268,75 +268,51 @@ export function useTooltip({
 
   useEffect(() => checkStyles("tooltip"));
 
-  const handleMouseEnter = () => {
-    switch (state) {
-      case IDLE:
-      case VISIBLE:
-      case LEAVING_VISIBLE: {
-        transition("mouseenter", { id });
+  useEffect(() => {
+    const listener = event => {
+      if (
+        (event.key === "Escape" || event.key === "Esc") &&
+        state === VISIBLE
+      ) {
+        transition("selectWithKeyboard");
       }
-    }
+    };
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener);
+  }, []);
+
+  const handleMouseEnter = () => {
+    transition("mouseenter", { id });
   };
 
   const handleMouseMove = () => {
-    switch (state) {
-      case FOCUSED: {
-        transition("mousemove", { id });
-      }
-    }
+    transition("mousemove", { id });
   };
 
   const handleFocus = event => {
     if (window.__REACH_DISABLE_TOOLTIPS) return;
-    switch (state) {
-      case IDLE:
-      case VISIBLE:
-      case LEAVING_VISIBLE: {
-        transition("focus", { id });
-      }
-    }
+    transition("focus", { id });
   };
 
   const handleMouseLeave = () => {
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE:
-      case DISMISSED: {
-        transition("mouseleave");
-      }
-    }
+    transition("mouseleave");
   };
 
   const handleBlur = () => {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE:
-      case DISMISSED: {
-        transition("blur");
-      }
-    }
+    transition("blur");
   };
 
   const handleMouseDown = () => {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
-    switch (state) {
-      case FOCUSED:
-      case VISIBLE: {
-        transition("mousedown");
-      }
-    }
+    transition("mousedown");
   };
 
   const handleKeyDown = event => {
-    if (event.key === "Enter" || event.key === " " || event.key === "Escape") {
-      switch (state) {
-        case VISIBLE: {
-          transition("selectWithKeyboard");
-        }
-      }
+    if (event.key === "Enter" || event.key === " ") {
+      transition("selectWithKeyboard");
     }
   };
 
@@ -363,7 +339,16 @@ export function useTooltip({
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
+// Tooltip
+
+export function Tooltip({
+  children,
+  label,
+  ariaLabel,
+  id,
+  DEBUG_STYLE,
+  ...rest
+}) {
   const child = Children.only(children);
 
   // We need to pass some properties from the child into useTooltip
@@ -393,18 +378,20 @@ function Tooltip({ children, label, ariaLabel, id, DEBUG_STYLE, ...rest }) {
   );
 }
 
+Tooltip.displayName = "Tooltip";
 if (__DEV__) {
   Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string
   };
-  Tooltip.displayName = "Tooltip";
 }
 
 export default Tooltip;
 
 ////////////////////////////////////////////////////////////////////////////////
+// TooltipPopup
+
 export const TooltipPopup = forwardRef(function TooltipPopup(
   {
     // own props
@@ -436,16 +423,19 @@ export const TooltipPopup = forwardRef(function TooltipPopup(
   ) : null;
 });
 
+TooltipPopup.displayName = "TooltipPopup";
 if (__DEV__) {
   TooltipPopup.propTypes = {
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string,
     position: PropTypes.func
   };
-  TooltipPopup.displayName = "TooltipPopup";
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// TooltipContent
 // Need a separate component so that useRect works inside the portal
+
 const TooltipContent = forwardRef(function TooltipContent(
   {
     label,
@@ -486,23 +476,25 @@ const TooltipContent = forwardRef(function TooltipContent(
   );
 });
 
+TooltipContent.displayName = "TooltipContent";
 if (__DEV__) {
   TooltipContent.propTypes = {};
-  TooltipContent.displayName = "TooltipContent";
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 // feels awkward when it's perfectly aligned w/ the trigger
 const OFFSET = 8;
 
-const getStyles = (position, triggerRect, tooltipRect) => {
+function getStyles(position, triggerRect, tooltipRect) {
   const haventMeasuredTooltipYet = !tooltipRect;
   if (haventMeasuredTooltipYet) {
     return { visibility: "hidden" };
   }
   return position(triggerRect, tooltipRect);
-};
+}
 
-const positionDefault = (triggerRect, tooltipRect) => {
+function positionDefault(triggerRect, tooltipRect) {
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
@@ -528,4 +520,4 @@ const positionDefault = (triggerRect, tooltipRect) => {
           triggerRect.height +
           window.pageYOffset}px`
   };
-};
+}

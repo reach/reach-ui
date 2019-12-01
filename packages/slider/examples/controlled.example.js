@@ -52,7 +52,7 @@ export const Example = () => {
       <button onClick={() => setValue(MAX)}>Max Out!</button>
       <Slider onChange={setValue} value={value} min={MIN} max={MAX}>
         {markers.map(({ face, label, value: val }) => (
-          <SliderMarker value={val}>
+          <SliderMarker value={val} key={val}>
             <span role="img" aria-label={label}>
               {face}
             </span>

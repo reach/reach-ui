@@ -4,13 +4,23 @@ import { useRect } from "@reach/rect";
 import { useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
-export default forwardRef(function Popover(props, ref) {
+////////////////////////////////////////////////////////////////////////////////
+// Popover
+
+const Popover = forwardRef(function Popover(props, ref) {
   return (
     <Portal>
       <PopoverImpl ref={ref} {...props} />
     </Portal>
   );
 });
+
+Popover.displayName = "Popover";
+
+export default Popover;
+
+////////////////////////////////////////////////////////////////////////////////
+// PopoverImpl
 
 // Popover is conditionally rendered so we can't start measuring until it shows
 // up, so useRect needs to live down here not up in Popover
@@ -39,13 +49,17 @@ const PopoverImpl = forwardRef(function PopoverImpl(
   );
 });
 
-const getStyles = (position, targetRect, popoverRect) => {
+PopoverImpl.displayName = "PopoverImpl";
+
+////////////////////////////////////////////////////////////////////////////////
+
+function getStyles(position, targetRect, popoverRect) {
   const needToMeasurePopup = !popoverRect;
   if (needToMeasurePopup) {
     return { visibility: "hidden" };
   }
   return position(targetRect, popoverRect);
-};
+}
 
 export function positionDefault(targetRect, popoverRect) {
   const { directionUp, directionRight } = getCollisions(

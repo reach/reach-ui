@@ -1,6 +1,6 @@
 {
   "name": "@reach/combobox",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Accessible React Combobox (Autocomplete).",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.6.1",
-    "@reach/popover": "^0.6.1",
-    "@reach/portal": "^0.6.1",
+    "@reach/popover": "^0.6.2",
+    "@reach/portal": "^0.6.2",
     "@reach/utils": "^0.6.1",
     "escape-regexp": "0.0.1",
     "highlight-words-core": "1.2.0",
