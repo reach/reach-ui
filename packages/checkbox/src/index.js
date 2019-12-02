@@ -10,21 +10,27 @@ import React, {
   useState
 } from "react";
 import { wrapEvent, useForkedRef } from "@reach/utils";
-import warning from "warning";
-import { string, bool, func, oneOfType, node, shape } from "prop-types";
+import PropTypes from "prop-types";
 
 const CustomCheckboxContext = createContext({});
 const useCustomCheckboxContext = () => useContext(CustomCheckboxContext);
 
 const inputPropTypes = {
-  checked: oneOfType([bool, string]),
-  defaultChecked: oneOfType([bool, string]),
-  onChange: func
+  checked: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  name: PropTypes.string,
+  onChange: PropTypes.func,
+  readOnly: PropTypes.bool
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// CustomCheckboxContainer
+
 export const CustomCheckboxContainer = forwardRef(
-  function CustomCheckboxContainer({ children, ...props }, forwardedRef) {
+  function CustomCheckboxContainer(
+    { children, onClick, ...props },
+    forwardedRef
+  ) {
+    const inputRef = useRef(null);
     const [
       { checked, disabled, readOnly, focused },
       setContainerState
@@ -34,56 +40,54 @@ export const CustomCheckboxContainer = forwardRef(
       readOnly: null,
       focused: null
     });
-    const mixed = checked === "mixed";
+
+    function handleClick() {
+      // Wait a frame so the input event is triggered, then focus the input
+      window.requestAnimationFrame(() => {
+        inputRef.current && inputRef.current.focus();
+      });
+    }
+
     return (
       <CustomCheckboxContext.Provider
         value={{
+          inputRef,
           containerState: { checked, disabled, readOnly, focused },
           setContainerState
         }}
       >
-        <div
-          ref={forwardedRef}
+        <span
           {...props}
+          ref={forwardedRef}
           data-reach-custom-checkbox-container=""
           data-checked={checked === true ? "" : undefined}
           data-focus={focused ? "" : undefined}
-          data-mixed={mixed ? "" : undefined}
+          data-mixed={checked === "mixed" ? "" : undefined}
           data-disabled={disabled ? "" : undefined}
           data-read-only={readOnly ? "" : undefined}
+          onClick={wrapEvent(onClick, handleClick)}
         >
-          {typeof children === "function" ? children({ checked }) : children}
-        </div>
+          {children}
+        </span>
       </CustomCheckboxContext.Provider>
     );
   }
 );
 
-if (__DEV__) {
-  CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
-}
+CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
 
 ////////////////////////////////////////////////////////////////////////////////
+// CustomCheckboxInput
+
 export const CustomCheckboxInput = forwardRef(function CustomCheckboxInput(
-  {
-    checked: controlledChecked,
-    defaultChecked,
-    name,
-    onBlur,
-    onChange,
-    onFocus,
-    readOnly,
-    ...props
-  },
+  { checked, onBlur, onChange, onFocus, readOnly, ...props },
   forwardedRef
 ) {
+  const { setContainerState, inputRef } = useCustomCheckboxContext();
   const [focused, setFocused] = useState(false);
-  const ownRef = useRef(null);
-  const ref = useForkedRef(forwardedRef, ownRef);
-  const { setContainerState } = useCustomCheckboxContext();
-  const [inputProps, { checked }] = useMixedCheckbox(ownRef, {
-    checked: controlledChecked,
-    defaultChecked,
+  const ref = useForkedRef(forwardedRef, inputRef);
+  const [inputProps] = useMixedCheckbox(inputRef, {
+    checked,
     onChange,
     readOnly
   });
@@ -111,20 +115,20 @@ export const CustomCheckboxInput = forwardRef(function CustomCheckboxInput(
   );
 });
 
+CustomCheckboxInput.displayName = "CustomCheckboxInput";
 if (__DEV__) {
-  CustomCheckboxInput.displayName = "CustomCheckboxInput";
   CustomCheckboxInput.propTypes = {
     ...inputPropTypes
   };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// CustomCheckbox
+
 export const CustomCheckbox = forwardRef(function CustomCheckbox(
   {
-    checked: controlledChecked,
-    defaultChecked,
+    checked,
     disabled,
-    checkmarks,
     children,
     id,
     name,
@@ -136,8 +140,7 @@ export const CustomCheckbox = forwardRef(function CustomCheckbox(
   forwardedRef
 ) {
   const inputProps = {
-    checked: controlledChecked,
-    defaultChecked,
+    checked,
     disabled,
     id,
     name,
@@ -147,47 +150,32 @@ export const CustomCheckbox = forwardRef(function CustomCheckbox(
   };
 
   return (
-    <CustomCheckboxContainer
-      data-reach-custom-checkbox=""
-      data-custom-checkmarks={checkmarks != null ? "" : undefined}
-      {...props}
-    >
-      {({ checked }) => (
-        <>
-          <CustomCheckboxInput ref={forwardedRef} {...inputProps} />
-          {checked === true && checkmarks && checkmarks.true}
-          {checked === false && checkmarks && checkmarks.false}
-          {checked === "mixed" && checkmarks && checkmarks.mixed}
-          {children}
-        </>
-      )}
+    <CustomCheckboxContainer data-reach-custom-checkbox="" {...props}>
+      <CustomCheckboxInput ref={forwardedRef} {...inputProps} />
+      {children}
     </CustomCheckboxContainer>
   );
 });
 
+CustomCheckbox.displayName = "CustomCheckbox";
 if (__DEV__) {
   CustomCheckbox.propTypes = {
-    ...inputPropTypes,
-    checkmarks: shape({
-      true: node,
-      false: node,
-      mixed: node
-    })
+    ...inputPropTypes
   };
-  CustomCheckbox.displayName = "CustomCheckbox";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// MixedCheckbox
+
 export const MixedCheckbox = forwardRef(function MixedCheckbox(
-  { checked: controlledChecked, defaultChecked, onChange, readOnly, ...props },
+  { checked, onChange, readOnly, ...props },
   forwardedRef
 ) {
   const ownRef = useRef(null);
   const ref = useForkedRef(forwardedRef, ownRef);
 
   const [inputProps] = useMixedCheckbox(ownRef, {
-    checked: controlledChecked,
-    defaultChecked,
+    checked,
     onChange,
     readOnly
   });
@@ -195,49 +183,33 @@ export const MixedCheckbox = forwardRef(function MixedCheckbox(
   return <input {...props} {...inputProps} ref={ref} />;
 });
 
+MixedCheckbox.displayName = "MixedCheckbox";
 if (__DEV__) {
   MixedCheckbox.propTypes = {
     ...inputPropTypes
   };
-  MixedCheckbox.displayName = "MixedCheckbox";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export function useMixedCheckbox(
-  ref,
-  { checked: controlledChecked, defaultChecked, onChange, readOnly }
-) {
-  const { current: isControlled } = React.useRef(controlledChecked != null);
-  const [checkedState, setCheckedState] = React.useState(
-    Boolean(defaultChecked)
-  );
-  const checked = isControlled ? controlledChecked : checkedState;
+// useMixedCheckbox
+
+export function useMixedCheckbox(ref, { checked, onChange, readOnly }) {
   const mixed = checked === "mixed";
-  const state = { checked };
   const props = {
-    "aria-checked": mixed ? "mixed" : String(checked),
+    "aria-checked": String(checked),
     "data-reach-mixed-checkbox": "",
-    checked: mixed || checked,
+    checked: checked === true,
     readOnly,
-    onChange: wrapEvent(onChange, handleChange),
+    onChange: handleChange,
     type: "checkbox"
   };
 
   function handleChange(event) {
-    const { checked: targetChecked } = event.target;
     if (readOnly) {
       event.preventDefault();
-    } else if (!isControlled) {
-      setCheckedState(targetChecked);
+    } else {
+      onChange(event);
     }
-  }
-
-  if (__DEV__) {
-    checkboxErrorChecks({
-      isControlled,
-      controlledChecked,
-      defaultChecked
-    });
   }
 
   useEffect(() => {
@@ -246,33 +218,9 @@ export function useMixedCheckbox(
       return;
     }
     ref.current.indeterminate = mixed;
-    ref.current.checked = checked === true ? true : false;
+    // We know ref is, indeed, a ref, so we can ignore the warning here
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mixed, checked]);
 
-  return [props, state];
-}
-
-////////////////////////////////////////////////////////////////////////////////
-const controlledPropWarning = `A checkbox should not switch from controlled to uncontrolled (or vice versa). Decide between controlled or uncontrolled for the lifetime of the component. Check the \`checked\` prop.`;
-
-function checkboxErrorChecks({
-  isControlled,
-  controlledChecked,
-  defaultChecked
-}) {
-  warning(
-    !(isControlled && defaultChecked != null),
-    `A checkbox component contains both checked and defaultChecked props. Input elements must be either controlled or uncontrolled (specify either the checked prop, or the defaultChecked prop, but not both). Decide between using a controlled or uncontrolled input element and remove one of these props. More info: https://fb.me/react-controlled-components}`
-  );
-
-  warning(
-    !(isControlled && controlledChecked == null),
-    `A checkbox is changing from controlled to uncontrolled. ${controlledPropWarning}`
-  );
-
-  warning(
-    !(!isControlled && controlledChecked != null),
-    `A checkbox is changing from uncontrolled to controlled. ${controlledPropWarning}`
-  );
+  return [props];
 }
