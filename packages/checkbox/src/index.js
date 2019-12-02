@@ -107,8 +107,12 @@ export const CustomCheckboxInput = forwardRef(function CustomCheckboxInput(
     <input
       ref={ref}
       data-reach-custom-checkbox-input=""
-      onBlur={wrapEvent(onBlur, () => setFocused(false))}
-      onFocus={wrapEvent(onFocus, () => setFocused(true))}
+      onBlur={wrapEvent(onBlur, () => {
+        window.requestAnimationFrame(() => setFocused(false));
+      })}
+      onFocus={wrapEvent(onFocus, () => {
+        window.requestAnimationFrame(() => setFocused(true));
+      })}
       {...props}
       {...inputProps}
     />
