@@ -27,6 +27,7 @@ function CheckboxGroup({ name, label, legend, children }) {
       >
         <CheckboxLegend>{legend}</CheckboxLegend>
         <SmileyCheckbox
+          id={`box-group-${name}`}
           value={name}
           checked={
             Object.values(state.boxes).every(t => t)
@@ -58,12 +59,11 @@ function CheckboxGroup({ name, label, legend, children }) {
   );
 }
 
-function SmileyCheckbox({ checked, children, ...props }) {
+function SmileyCheckbox({ checked, children, id, ...props }) {
   return (
-    <label
-      style={{ display: "flex", alignItems: "center", margin: "0.5rem 0" }}
-    >
+    <span style={{ display: "flex", alignItems: "center", margin: "0.5rem 0" }}>
       <CustomCheckbox
+        id={id}
         style={{
           background:
             checked === true
@@ -84,6 +84,8 @@ function SmileyCheckbox({ checked, children, ...props }) {
           style={{
             display: "block",
             fontSize: 16,
+            height: 16,
+            width: 16,
             zIndex: 10,
             position: "absolute",
             lineHeight: 1,
@@ -96,8 +98,8 @@ function SmileyCheckbox({ checked, children, ...props }) {
           {checked === true ? "😃" : checked === "mixed" ? "😐" : "🙁"}
         </span>
       </CustomCheckbox>
-      {children}
-    </label>
+      <label htmlFor={id}>{children}</label>
+    </span>
   );
 }
 
@@ -119,6 +121,7 @@ function FriendCheckbox({ name, defaultChecked = false, children, ...props }) {
   return (
     <div>
       <SmileyCheckbox
+        id={`box-${name}`}
         name={name}
         checked={checked}
         onChange={event =>
