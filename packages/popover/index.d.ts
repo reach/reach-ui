@@ -1,27 +1,30 @@
-declare module "@reach/popover" {
-  import * as React from "react";
+/**
+ * Generic accessible popover component.
+ */
 
-  export type Position = (
-    targetRect: DOMRect,
-    popoverRect: DOMRect
-  ) => React.CSSProperties;
+import * as React from "react";
 
-  export function positionDefault(
-    targetRect: DOMRect,
-    popoverRect: DOMRect
-  ): { left: string; top: string };
+export type Position = (
+  targetRect: DOMRect,
+  popoverRect: DOMRect
+) => React.CSSProperties;
 
-  export function positionMatchWidth(
-    targetRect: DOMRect,
-    popoverRect: DOMRect
-  ): { width: string; left: number; top: string };
+export function positionDefault(
+  targetRect: DOMRect,
+  popoverRect: DOMRect
+): { left: string; top: string };
 
-  export type PopoverProps = {
-    children: React.ReactNode;
-    targetRef: React.RefObject<HTMLElement>;
-    position?: Position;
-  } & React.HTMLProps<HTMLDivElement>;
+export function positionMatchWidth(
+  targetRect: DOMRect,
+  popoverRect: DOMRect
+): { width: string; left: number; top: string };
 
-  const Popover: React.FunctionComponent<PopoverProps>;
-  export default Popover;
-}
+export type PopoverProps = {
+  children: React.ReactNode;
+  targetRef: React.RefObject<HTMLElement>;
+  position?: Position;
+} & React.HTMLProps<HTMLDivElement>;
+
+declare const Popover: React.FunctionComponent<PopoverProps>;
+
+export default Popover;

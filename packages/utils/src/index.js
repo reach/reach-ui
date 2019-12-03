@@ -36,14 +36,7 @@ if (__DEV__) {
 
 export { checkStyles };
 
-export let wrapEvent = (theirHandler, ourHandler) => event => {
-  theirHandler && theirHandler(event);
-  if (!event.defaultPrevented) {
-    return ourHandler(event);
-  }
-};
-
-export const assignRef = (ref, value) => {
+export function assignRef(ref, value) {
   if (ref == null) return;
   if (typeof ref === "function") {
     ref(value);
@@ -54,18 +47,19 @@ export const assignRef = (ref, value) => {
       throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
     }
   }
-};
+}
 
-export function useUpdateEffect(effect, deps) {
-  const mounted = useRef(false);
-  useEffect(() => {
-    if (mounted.current) {
-      effect();
-    } else {
-      mounted.current = true;
+export function getScrollbarOffset() {
+  try {
+    if (window.innerWidth > document.documentElement.clientWidth) {
+      return window.innerWidth - document.documentElement.clientWidth;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+  } catch (err) {}
+  return 0;
+}
+
+export function makeId(id, index) {
+  return `${id}--${index}`;
 }
 
 export function useForkedRef(...refs) {
@@ -82,4 +76,31 @@ export function useForkedRef(...refs) {
   }, refs);
 }
 
-export const makeId = (id, index) => `${id}--${index}`;
+export function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+export function useUpdateEffect(effect, deps) {
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) {
+      effect();
+    } else {
+      mounted.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}
+
+export function wrapEvent(theirHandler, ourHandler) {
+  return event => {
+    theirHandler && theirHandler(event);
+    if (!event.defaultPrevented) {
+      return ourHandler(event);
+    }
+  };
+}

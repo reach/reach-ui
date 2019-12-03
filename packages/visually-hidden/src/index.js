@@ -8,11 +8,17 @@ let style = {
   margin: "-1px",
   padding: 0,
   overflow: "hidden",
-  position: "absolute"
+  position: "absolute",
+
+  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+  whiteSpace: "nowrap",
+  wordWrap: "normal"
 };
 
 function VisuallyHidden(props) {
-  return <div style={style} {...props} />;
+  return <span style={style} {...props} />;
 }
+
+VisuallyHidden.displayName = "VisuallyHidden";
 
 export default VisuallyHidden;

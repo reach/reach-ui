@@ -14,7 +14,8 @@
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
-import { node, string } from "prop-types";
+import { usePrevious, useForkedRef } from "@reach/utils";
+import PropTypes from "prop-types";
 
 // singleton state is fine because you don't server render
 // an alert (SRs don't read them on first load anyway)
@@ -33,12 +34,17 @@ let liveRegions = {
   assertive: null
 };
 
-const Alert = forwardRef(function Alert(
+let renderTimer = null;
+
+////////////////////////////////////////////////////////////////////////////////
+// Alert
+
+export const Alert = forwardRef(function Alert(
   { children, type = "polite", ...props },
   forwardedRef
 ) {
   const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
+  const ref = useForkedRef(forwardedRef, ownRef);
   const child = useMemo(
     () => (
       <div {...props} ref={ref} data-reach-alert>
@@ -48,22 +54,52 @@ const Alert = forwardRef(function Alert(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [children, props]
   );
-  useMirrorEffects(type, child);
+  useMirrorEffects(type, child, ownRef);
 
   return child;
 });
 
+Alert.displayName = "Alert";
 if (__DEV__) {
   Alert.propTypes = {
-    children: node,
-    type: string
+    children: PropTypes.node,
+    type: PropTypes.string
   };
 }
 
 export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
-let renderTimer = null;
+
+function createMirror(type, doc = document) {
+  let key = ++keys[type];
+
+  let mount = element => {
+    if (liveRegions[type]) {
+      elements[type][key] = element;
+      renderAlerts();
+    } else {
+      let node = doc.createElement("div");
+      node.setAttribute(`data-reach-live-${type}`, "true");
+      liveRegions[type] = node;
+      doc.body.appendChild(liveRegions[type]);
+      mount(element);
+    }
+  };
+
+  let update = element => {
+    elements[type][key] = element;
+    renderAlerts();
+  };
+
+  let unmount = () => {
+    delete elements[type][key];
+    renderAlerts();
+  };
+
+  return { mount, update, unmount };
+}
+
 function renderAlerts() {
   clearTimeout(renderTimer);
   renderTimer = setTimeout(() => {
@@ -91,22 +127,24 @@ function renderAlerts() {
   }, 500);
 }
 
-function useMirrorEffects(type, element) {
+function useMirrorEffects(type, element, ref) {
   const prevType = usePrevious(type);
   const mirror = useRef(null);
   const mounted = useRef(false);
   useEffect(() => {
+    const { ownerDocument } = ref.current || {};
     if (!mounted.current) {
       mounted.current = true;
-      mirror.current = createMirror(type);
+      mirror.current = createMirror(type, ownerDocument);
       mirror.current.mount(element);
     } else if (!prevType !== type) {
       mirror.current.unmount();
-      mirror.current = createMirror(type);
+      mirror.current = createMirror(type, ownerDocument);
       mirror.current.mount(element);
     } else {
       mirror.current.update(element, prevType, type);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element, type, prevType]);
 
   useEffect(() => {
@@ -114,42 +152,4 @@ function useMirrorEffects(type, element) {
       mirror.current && mirror.current.unmount();
     };
   }, []);
-}
-
-function createMirror(type) {
-  let key = ++keys[type];
-
-  let mount = element => {
-    if (liveRegions[type]) {
-      elements[type][key] = element;
-      renderAlerts();
-    } else {
-      let node = document.createElement("div");
-      node.setAttribute(`data-reach-live-${type}`, "true");
-      liveRegions[type] = node;
-      document.body.appendChild(liveRegions[type]);
-      mount(element);
-    }
-  };
-
-  let update = element => {
-    elements[type][key] = element;
-    renderAlerts();
-  };
-
-  let unmount = () => {
-    delete elements[type][key];
-    renderAlerts();
-  };
-
-  return { mount, update, unmount };
-}
-
-// TODO: Move to @reach/utils
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
 }

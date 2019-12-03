@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.4.0",
+  "version": "0.6.2",
   "description": "Accessible React Modal Dialog.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,21 +10,15 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/portal": "^0.4.0",
-    "@reach/utils": "^0.4.0",
+    "@reach/portal": "^0.6.2",
+    "@reach/utils": "^0.6.1",
     "prop-types": "^15.7.2",
-    "react-focus-lock": "^2.2.0",
-    "react-remove-scroll": "^2.1.1"
+    "react-focus-lock": "^2.2.1",
+    "react-remove-scroll": "^2.2.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  },
-  "devDependencies": {
-    "@reach/menu-button": "^0.4.0",
-    "react": "^16.11.0",
-    "react-spring": "^8.0.27",
-    "react-test-renderer": "^16.11.0"
   },
   "files": [
     "es",

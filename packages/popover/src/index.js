@@ -1,16 +1,26 @@
 import React, { useRef, forwardRef, useEffect } from "react";
 import Portal from "@reach/portal";
 import { useRect } from "@reach/rect";
-import { assignRef } from "@reach/utils";
+import { useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
-export default forwardRef(function Popover(props, ref) {
+////////////////////////////////////////////////////////////////////////////////
+// Popover
+
+const Popover = forwardRef(function Popover(props, ref) {
   return (
     <Portal>
       <PopoverImpl ref={ref} {...props} />
     </Portal>
   );
 });
+
+Popover.displayName = "Popover";
+
+export default Popover;
+
+////////////////////////////////////////////////////////////////////////////////
+// PopoverImpl
 
 // Popover is conditionally rendered so we can't start measuring until it shows
 // up, so useRect needs to live down here not up in Popover
@@ -39,13 +49,17 @@ const PopoverImpl = forwardRef(function PopoverImpl(
   );
 });
 
-const getStyles = (position, targetRect, popoverRect) => {
+PopoverImpl.displayName = "PopoverImpl";
+
+////////////////////////////////////////////////////////////////////////////////
+
+function getStyles(position, targetRect, popoverRect) {
   const needToMeasurePopup = !popoverRect;
   if (needToMeasurePopup) {
     return { visibility: "hidden" };
   }
   return position(targetRect, popoverRect);
-};
+}
 
 export function positionDefault(targetRect, popoverRect) {
   const { directionUp, directionRight } = getCollisions(
@@ -235,19 +249,4 @@ function useSimulateTabNavigationForReactTree(triggerRef, popoverRef) {
       element.tabIndex = tabIndex;
     });
   }
-}
-
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
 }

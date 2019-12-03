@@ -1,18 +1,22 @@
 import React, { createContext } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
+import { makeId } from "@reach/utils";
 import invariant from "invariant";
-import { func, bool, node, object, oneOfType } from "prop-types";
+import PropTypes from "prop-types";
 
 let AlertDialogContext = createContext({});
+
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogOverlay
 
 export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   { leastDestructiveRef, ...props },
   forwardRef
 ) {
-  const uid = useId();
-  const labelId = makeId("alert-dialog", uid);
-  const descriptionId = makeId("alert-dialog-description", uid);
+  const id = useId(props.id);
+  const labelId = makeId("alert-dialog", id);
+  const descriptionId = makeId("alert-dialog-description", id);
 
   return (
     <AlertDialogContext.Provider
@@ -32,14 +36,21 @@ export const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   );
 });
 
+AlertDialogOverlay.displayName = "AlertDialogOverlay";
 if (__DEV__) {
   AlertDialogOverlay.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
+    ]),
+    children: PropTypes.node
   };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogContent
 
 export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   { children, ...props },
@@ -55,8 +66,8 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
     invariant(
       leastDestructiveRef,
       `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
-        \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
-        https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
+          \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
+          https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
     );
   }, [labelId, leastDestructiveRef]);
   return (
@@ -74,45 +85,59 @@ export const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   );
 });
 
+AlertDialogContent.displayName = "AlertDialogContent";
 if (__DEV__) {
   AlertDialogContent.propTypes = {
-    children: node
+    children: PropTypes.node
   };
 }
 
-export const AlertDialogLabel = props => {
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialogLabel
+
+export function AlertDialogLabel(props) {
   const { labelId } = React.useContext(AlertDialogContext);
   return <div id={labelId} data-reach-alert-dialog-label {...props} />;
-};
+}
 
-export const AlertDialogDescription = props => {
+AlertDialogLabel.displayName = "AlertDialogLabel";
+
+////////////////////////////////////////////////////////////////////////////////
+export function AlertDialogDescription(props) {
   const { descriptionId } = React.useContext(AlertDialogContext);
   return (
     <div id={descriptionId} data-reach-alert-dialog-description {...props} />
   );
-};
+}
 
-export const AlertDialog = ({
+AlertDialogDescription.displayName = "AlertDialogDescription";
+
+////////////////////////////////////////////////////////////////////////////////
+// AlertDialog
+
+export function AlertDialog({
+  id,
   isOpen,
   onDismiss,
   leastDestructiveRef,
   ...props
-}) => (
-  <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef }}>
-    <AlertDialogContent {...props} />
-  </AlertDialogOverlay>
-);
-
-if (__DEV__) {
-  AlertDialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
-    leastDestructiveRef: oneOfType([func, object]),
-    children: node
-  };
+}) {
+  return (
+    <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
+      <AlertDialogContent {...props} />
+    </AlertDialogOverlay>
+  );
 }
 
-// TODO: Move to @reach/utils
-function makeId(id, index) {
-  return `${id}--${index}`;
+AlertDialog.displayName = "AlertDialog";
+if (__DEV__) {
+  AlertDialog.propTypes = {
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
+    leastDestructiveRef: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.object
+    ]),
+    children: PropTypes.node
+  };
 }

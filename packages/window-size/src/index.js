@@ -1,20 +1,27 @@
 import React from "react";
-import { func } from "prop-types";
+import PropTypes from "prop-types";
 
 let hasWindow = typeof window !== "undefined";
 
-export const WindowSize = ({ children }) => {
+////////////////////////////////////////////////////////////////////////////////
+// WindowSize
+
+export function WindowSize({ children }) {
   const dimensions = useWindowSize();
   return children(dimensions);
-};
+}
 
+WindowSize.displayName = "WindowSize";
 if (__DEV__) {
   WindowSize.propTypes = {
-    children: func.isRequired
+    children: PropTypes.func.isRequired
   };
 }
 
 export default WindowSize;
+
+////////////////////////////////////////////////////////////////////////////////
+// useWindowSize
 
 export function useWindowSize() {
   const [dimensions, setDimensions] = React.useState({

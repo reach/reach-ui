@@ -33,24 +33,27 @@
     "@reach/visually-hidden": "file:../packages/visually-hidden",
     "@reach/window-size": "file:../packages/window-size",
     "@reach/slider": "file:../packages/slider",
-    "gatsby": "^2.17.6",
-    "gatsby-image": "^2.2.30",
-    "gatsby-plugin-google-analytics": "^2.1.23",
-    "gatsby-plugin-manifest": "^2.2.25",
-    "gatsby-plugin-mdx": "^1.0.54",
-    "gatsby-plugin-react-helmet": "^3.1.13",
-    "gatsby-plugin-sharp": "^2.2.34",
-    "gatsby-remark-autolink-headers": "^2.1.16",
+    "gatsby": "^2.17.15",
+    "gatsby-image": "^2.2.33",
+    "gatsby-plugin-google-analytics": "^2.1.27",
+    "gatsby-plugin-manifest": "^2.2.28",
+    "gatsby-plugin-mdx": "^1.0.56",
+    "gatsby-plugin-react-helmet": "^3.1.15",
+    "gatsby-plugin-sass": "^2.1.23",
+    "gatsby-plugin-sharp": "^2.3.0",
+    "gatsby-remark-autolink-headers": "^2.1.18",
     "gatsby-remark-emoji": "^0.0.3",
-    "gatsby-remark-images": "^3.1.28",
+    "gatsby-remark-images": "^3.1.31",
     "gatsby-remark-slug": "^0.1.0",
-    "gatsby-source-filesystem": "^2.1.35",
-    "gatsby-transformer-react-docgen": "^5.0.19",
-    "gatsby-transformer-sharp": "^2.3.1",
+    "gatsby-source-filesystem": "^2.1.37",
+    "gatsby-transformer-react-docgen": "^5.0.21",
+    "gatsby-transformer-sharp": "^2.3.5",
     "match-sorter": "^4.0.2",
+    "node-sass": "^4.13.0",
+    "postcss-preset-env": "^6.7.0",
     "prop-types": "^15.7.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-live": "^2.2.1",
     "react-spring": "^8.0.27",
@@ -58,6 +61,12 @@
     "use-throttle": "^0.0.3"
   },
   "devDependencies": {
-    "prettier": "^1.18.2"
-  }
+    "prettier": "^1.19.1"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 2%",
+    "maintained node versions",
+    "IE 11"
+  ]
 }

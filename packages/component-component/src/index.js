@@ -1,5 +1,5 @@
 import React from "react";
-import { object, func, oneOfType, node } from "prop-types";
+import PropTypes from "prop-types";
 
 let cleanProps = props => {
   let {
@@ -106,17 +106,17 @@ class Component extends React.Component {
 
 if (__DEV__) {
   Component.propTypes = {
-    initialState: object,
-    getInitialState: func,
-    refs: object,
-    getRefs: func,
-    didMount: func,
-    didUpdate: func,
-    willUnmount: func,
-    getSnapshotBeforeUpdate: func,
-    shouldUpdate: func,
-    render: func,
-    children: oneOfType([func, node])
+    initialState: PropTypes.object,
+    getInitialState: PropTypes.func,
+    refs: PropTypes.object,
+    getRefs: PropTypes.func,
+    didMount: PropTypes.func,
+    didUpdate: PropTypes.func,
+    willUnmount: PropTypes.func,
+    getSnapshotBeforeUpdate: PropTypes.func,
+    shouldUpdate: PropTypes.func,
+    render: PropTypes.func,
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
 }
 

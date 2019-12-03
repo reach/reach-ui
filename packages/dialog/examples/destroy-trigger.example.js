@@ -2,6 +2,7 @@ import "@reach/dialog/styles.css";
 
 import React from "react";
 import { Dialog } from "@reach/dialog";
+import { usePrevious } from "@reach/utils";
 
 export let name = "Destroy Trigger";
 
@@ -46,12 +47,3 @@ export let Example = () => {
     </div>
   );
 };
-
-// TODO: Move to @reach/utils
-function usePrevious(value) {
-  const ref = React.useRef();
-  React.useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}

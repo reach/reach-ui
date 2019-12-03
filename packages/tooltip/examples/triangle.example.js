@@ -3,6 +3,7 @@ import "@reach/tooltip/styles.css";
 
 import React, { Fragment, cloneElement } from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
+import { getScrollbarOffset } from "@reach/utils";
 
 export const name = "Triangle";
 
@@ -16,16 +17,6 @@ const centered = (triggerRect, tooltipRect) => {
     top: triggerRect.bottom + 8 + window.scrollY
   };
 };
-
-// TODO: Move to @reach/utils
-function getScrollbarOffset() {
-  try {
-    if (window.innerWidth > document.documentElement.clientWidth) {
-      return window.innerWidth - document.documentElement.clientWidth;
-    }
-  } catch (err) {}
-  return 0;
-}
 
 function ExampleTriangle({ children, ...rest }) {
   // get the props from useTooltip

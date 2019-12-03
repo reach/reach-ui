@@ -24,7 +24,8 @@ You can animate the "enter" phase with just a little CSS.
   }
 }
 
-.slide-down[data-reach-menu-list] {
+.slide-down[data-reach-menu-list],
+.slide-down[data-reach-menu-items] {
   border-radius: 5px;
   animation: slide-down 0.2s ease;
 }
@@ -122,7 +123,7 @@ function Example(props) {
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: `translate3d(0px, ${styles.y}px, 0px)`,
+                  transform: styles.y.interpolate((value) => `translate3d(0px, ${value}px, 0px)`),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10
                 }}

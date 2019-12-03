@@ -1,20 +1,22 @@
-import React from "react";
+import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
-import { checkStyles, wrapEvent, assignRef } from "@reach/utils";
+import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import { string, func, bool } from "prop-types";
+import PropTypes from "prop-types";
 
 const noop = () => {};
 
 ////////////////////////////////////////////////////////////////////////////////
-export const DialogOverlay = React.forwardRef(function DialogOverlay(
+// DialogOverlay
+
+export const DialogOverlay = forwardRef(function DialogOverlay(
   { isOpen = true, ...props },
   forwardedRef
 ) {
-  const ownRef = React.useRef(null);
+  const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
-  React.useEffect(() => {
+  useEffect(() => {
     checkStyles("dialog");
   }, []);
 
@@ -25,16 +27,19 @@ export const DialogOverlay = React.forwardRef(function DialogOverlay(
   ) : null;
 });
 
+DialogOverlay.displayName = "DialogOverlay";
 if (__DEV__) {
   DialogOverlay.propTypes = {
     initialFocusRef: () => {}
   };
-  DialogOverlay.displayName = "DialogOverlay";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DialogInner = React.forwardRef(function DialogInner(
+// DialogInner
+
+const DialogInner = forwardRef(function DialogInner(
   {
+    allowPinchZoom,
     initialFocusRef,
     onClick,
     onDismiss = noop,
@@ -44,23 +49,21 @@ const DialogInner = React.forwardRef(function DialogInner(
   },
   forwardedRef
 ) {
-  const mouseDownTarget = React.useRef(null);
-  const overlayNode = React.useRef(null);
+  const mouseDownTarget = useRef(null);
+  const overlayNode = useRef(null);
   const ref = useForkedRef(overlayNode, forwardedRef);
 
-  React.useEffect(() => createAriaHider(forwardedRef.current), [forwardedRef]);
+  useEffect(() => createAriaHider(overlayNode.current), []);
+
+  const activateFocusLock = useCallback(() => {
+    if (initialFocusRef && initialFocusRef.current) {
+      initialFocusRef.current.focus();
+    }
+  }, [initialFocusRef]);
 
   return (
-    <FocusLock
-      autoFocus
-      returnFocus
-      onActivation={() => {
-        if (initialFocusRef && initialFocusRef.current) {
-          initialFocusRef.current.focus();
-        }
-      }}
-    >
-      <RemoveScroll>
+    <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
+      <RemoveScroll allowPinchZoom={allowPinchZoom}>
         <div
           data-reach-dialog-overlay
           onClick={wrapEvent(onClick, event => {
@@ -86,12 +89,12 @@ const DialogInner = React.forwardRef(function DialogInner(
   );
 });
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 ////////////////////////////////////////////////////////////////////////////////
-export const DialogContent = React.forwardRef(function DialogContent(
+// DialogContent
+
+export const DialogContent = forwardRef(function DialogContent(
   { onClick, onKeyDown, ...props },
   forwardedRef
 ) {
@@ -110,20 +113,22 @@ export const DialogContent = React.forwardRef(function DialogContent(
   );
 });
 
+DialogContent.displayName = "DialogContent";
 if (__DEV__) {
   DialogContent.propTypes = {
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
-  DialogContent.displayName = "DialogContent";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-export const Dialog = React.forwardRef(function Dialog(
+// Dialog
+
+export const Dialog = forwardRef(function Dialog(
   { isOpen, onDismiss = noop, initialFocusRef, ...props },
   forwardedRef
 ) {
-  const ownRef = React.useRef(null);
+  const ownRef = useRef(null);
   const ref = forwardedRef || ownRef;
   return (
     <DialogOverlay
@@ -136,15 +141,17 @@ export const Dialog = React.forwardRef(function Dialog(
   );
 });
 
+Dialog.displayName = "Dialog";
 if (__DEV__) {
   Dialog.propTypes = {
-    isOpen: bool,
-    onDismiss: func,
+    isOpen: PropTypes.bool,
+    onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
   };
-  Dialog.displayName = "Dialog";
 }
+
+export default Dialog;
 
 ////////////////////////////////////////////////////////////////////////////////
 function createAriaHider(dialogNode) {
@@ -187,21 +194,6 @@ function createAriaHider(dialogNode) {
   };
 }
 
-// TODO: Remove and import from @reach/utils once it's been added to the package
-function useForkedRef(...refs) {
-  return React.useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return node => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
-}
-
 function ariaLabelType(props, name, compName, ...rest) {
   const details =
     "\nSee https://www.w3.org/TR/wai-aria/#aria-label for details.";
@@ -221,5 +213,5 @@ function ariaLabelType(props, name, compName, ...rest) {
         details
     );
   }
-  return string(name, props, compName, ...rest);
+  return PropTypes.string(name, props, compName, ...rest);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.4.0",
+  "version": "0.6.2",
   "description": "Accessible tooltips",
   "main": "index.js",
   "module": "es/index.js",
@@ -8,19 +8,16 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.4.0",
-    "@reach/portal": "^0.4.0",
-    "@reach/rect": "^0.4.0",
-    "@reach/utils": "^0.4.0",
-    "@reach/visually-hidden": "^0.4.0",
+    "@reach/auto-id": "^0.6.1",
+    "@reach/portal": "^0.6.2",
+    "@reach/rect": "^0.6.2",
+    "@reach/utils": "^0.6.1",
+    "@reach/visually-hidden": "^0.6.2",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  },
-  "devDependencies": {
-    "react-spring": "^8.0.27"
   },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",

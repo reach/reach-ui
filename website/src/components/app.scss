@@ -1,4 +1,44 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
+@import "normalize";
+@import "root";
+@import "skeleton";
+@import "syntax";
+
+:root {
+  --font-family-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-family-mono: "SFMono-Regular", Consolas, "Roboto Mono",
+    "Droid Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
+  --error-color: #bf4a3f;
+  --primary-color: #1159a6;
+  --primary-color-bright: #007bff;
+  --primary-color-light: #3f94bf;
+  --body-color: #222;
+  --body-background: #fafafa;
+  --focus-outline-color: #1eaedb;
+  --input-background-color: #fff;
+  --input-border-color: #d1d1d1;
+  --rule-border-color: #e1e1e1;
+  --table-cell-border-color: #eee;
+}
+
+:root {
+  --font-family-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-family-mono: "SFMono-Regular", Consolas, "Roboto Mono",
+    "Droid Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
+  --error-color: #bf4a3f;
+  --primary-color: #1159a6;
+  --primary-color-bright: #007bff;
+  --primary-color-light: #3f94bf;
+  --body-color: #222;
+  --body-background: #fafafa;
+  --focus-outline-color: #1eaedb;
+  --input-background-color: #fff;
+  --input-border-color: #d1d1d1;
+  --rule-border-color: #e1e1e1;
+  --table-cell-border-color: #eee;
+}
 
 @keyframes slide-down {
   0% {
@@ -11,7 +51,8 @@
   }
 }
 
-.slide-down[data-reach-menu-list] {
+.slide-down[data-reach-menu-list],
+.slide-down[data-reach-menu-items] {
   border-radius: 5px;
   animation: slide-down 0.2s ease;
 }
@@ -23,7 +64,7 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   width: 250px;
-  background: var(--primary-color);
+  background: $color-primary;
   transition: left 200ms ease;
   z-index: 1;
 }
@@ -97,7 +138,7 @@ code {
 }
 
 .react-live-editor:focus-within {
-  outline: 1px solid var(--focus-outline-color);
+  outline: 1px solid $color-focus-outline;
 }
 
 .react-live-editor:before,
@@ -107,7 +148,7 @@ code {
   right: 0;
   top: 0px;
   text-align: center;
-  font-family: var(--font-family-sans);
+  font-family: $ff-sans;
   font-size: 0.8em;
   text-transform: uppercase;
   opacity: 0.5;
@@ -130,7 +171,7 @@ code {
 .react-live-error {
   margin: 0;
   padding: 20px;
-  background: var(--error-color);
+  background: $color-error;
   color: #fff;
 }
 
@@ -139,7 +180,7 @@ pre > code {
 }
 
 h1 {
-  color: var(--primary-color);
+  color: $color-primary;
 }
 
 h1:not(:first-child) {
@@ -160,11 +201,11 @@ reach-menu li {
 }
 
 a {
-  color: var(--primary-color-bright);
+  color: $color-primary-bright;
 }
 
 a:active {
-  color: var(--primary-color);
+  color: $color-primary;
 }
 
 .bold {
@@ -220,15 +261,15 @@ a:active {
 }
 
 [data-reach-dialog-content] > button.close-button:focus {
-  color: var(--primary-color-bright);
+  color: $color-primary-bright;
 }
 
 button#hamburger {
-  background: var(--primary-color);
+  background: $color-primary;
 }
 
 #hamburger:focus {
-  background: var(--primary-color-bright);
+  background: $color-primary-bright;
 }
 
 [data-reach-dialog-overlay] {
@@ -236,7 +277,7 @@ button#hamburger {
 }
 
 [data-reach-alert-dialog-label] {
-  color: var(--primary-color-light);
+  color: $color-primary-light;
   font-size: 150%;
   text-align: center;
   margin-bottom: 10px;
@@ -354,7 +395,7 @@ button#hamburger {
 [data-reach-slider-handle] {
   width: 12px;
   height: 12px;
-  border: 2px solid var(--primary-color);
+  border: 2px solid $color-primary;
   background: #fff;
   border-radius: 10px;
   z-index: 1;
@@ -381,7 +422,7 @@ button#hamburger {
 
 [data-reach-slider-track-highlight] {
   border-radius: inherit;
-  background: var(--primary-color);
+  background: $color-primary;
 }
 
 [data-reach-slider-track-highlight-orientation="horizontal"] {
@@ -412,7 +453,7 @@ button#hamburger {
 }
 
 [data-reach-slider-marker-highlight] {
-  background: var(--primary-color);
+  background: $color-primary;
 }
 
 [data-reach-slider-marker] > span {

@@ -97,7 +97,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Grids                |
 | ❓     | Link                 |
 | 🛠      | Listbox              |
-| 🛠      | Menu or Menu bar     |
+| ❓     | Menu or Menu bar     |
 | ✅     | Menu Button          |
 | 🛠      | Radio Group          |
 | ✅     | Slider               |
@@ -121,8 +121,13 @@ This is our current release process. It's not perfect, but it has almost the rig
 $ yarn build
 $ yarn test
 
+# Generate the changelog and copy it somewhere for later. We'll
+# automate this part eventually, but for now you can get the changelog
+# with:
+$ yarn changes
+
 # Then create a new version and git tag locally. Don't push yet!
-$ lerna version [version] --no-push
+$ yarn ver [version]
 
 # Take a look around and make sure everything is as you'd expect.
 # You can inspect everything from the commit that lerna made with:
@@ -140,11 +145,8 @@ $ git push origin master --follow-tags
 # automatically publish to npm if everything passes. If there's a
 # problem, we have to figure out how to fix manually.
 
-# Now generate the changelog and edit the release on GitHub for the tag.
-# You can get the changelog with:
-$ lerna-changelog
-
-# Then copy the output and paste it into the release on GitHub.
+# Paste the changelog into the release on GitHub. The release is
+# complete … huzzah!
 ```
 
 You need to be careful when publishing a new package because the `lerna publish` on Travis CI will fail for new packages. To get around this, you should publish a `0.0.0` version of the package manually ahead of time. Then the release from CI will be ok. This is really janky but AFAICT the only workaround.

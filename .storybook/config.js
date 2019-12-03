@@ -23,7 +23,7 @@ configure(() => {
   const req = require.context(
     "../packages",
     true,
-    /^((?!node_modules).)*\.example\.js$/
+    /^((?!node_modules).)*\.example\.(js|ts|tsx)$/
   );
 
   req.keys().forEach(pathToExample => {

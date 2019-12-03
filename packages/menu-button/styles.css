@@ -4,12 +4,12 @@
 }
 
 [data-reach-menu] {
-  font-family: sans-serif;
   display: block;
   position: absolute;
 }
 
-[data-reach-menu-list] {
+[data-reach-menu-list],
+[data-reach-menu-items] {
   display: block;
   white-space: nowrap;
   border: solid 1px hsla(0, 0%, 0%, 0.25);
