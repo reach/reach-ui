@@ -1,6 +1,41 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Welcome to @reach/checkbox!
 
+/*
+ * This package is provides two top-level components:
+ *   - MixedCheckbox
+ *   - CustomCheckbox
+ *
+ * A MixedCheckbox is a tri-state HTML input element. Whereas the native element
+ * technically only has two states, there is a third visual state of
+ * `indeterminate` that is designed to suggest that a user has fulfilled some
+ * part of whatever the checkbox is meant to control. For example, you may have
+ * multiple checkboxes nested in a hierarchy like a checklist that looks like:
+ *
+ *   [-] All fruits
+ *     [ ] Apple
+ *     [x] Banana
+ *     [x] Orange
+ *
+ * The `All fruits` checkbox is in an indeterminate state because some (but not
+ * all) fruits in the list are checked. While this effect is possible with plain
+ * input components, the MixedCheckbox component makes managing/syncing its
+ * state with the correct DOM attributes much simpler.
+ *
+ * A mixed checkbox is not something you can naturally toggle by simply clicking
+ * the box itself. As such, you must manage its state in your app by passing a
+ * `checked` prop and an `onChange` handler.
+ *
+ * A CustomCheckbox is useful because full control of a native HTML input's
+ * design is not always possible. You may want to provide custom check graphics
+ * or change the shape of the check or its color. This component provides a
+ * handy wrapper around a visually hidden native checkbox so that we avoid
+ * re-creating all of its native event behavior.
+ *
+ * CustomCheckbox uses our MixedCheckbox so you get the same benefits for
+ * dealing with indeterminate state when you use either!
+ */
+
 import React, {
   forwardRef,
   createContext,
