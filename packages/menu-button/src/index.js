@@ -344,7 +344,7 @@ if (__DEV__) {
 // MenuPopover
 
 export const MenuPopover = forwardRef(function MenuPopover(
-  { children, style, ...props },
+  { children, style, position = positionDefault, ...props },
   forwardedRef
 ) {
   const { state } = useContext(MenuContext);
@@ -362,7 +362,7 @@ export const MenuPopover = forwardRef(function MenuPopover(
               data-reach-menu-popover=""
               data-reach-menu="" // deprecate for naming consistency?
               style={{
-                ...getStyles(state.buttonRect, menuRect),
+                ...getStyles(position, state.buttonRect, menuRect),
                 ...style
               }}
             >
@@ -378,18 +378,22 @@ export const MenuPopover = forwardRef(function MenuPopover(
 MenuPopover.displayName = "MenuPopover";
 if (__DEV__) {
   MenuPopover.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
+    position: PropTypes.func
   };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // MenuList
 
-export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
+export const MenuList = forwardRef(function MenuList(
+  { position, ...props },
+  forwardedRef
+) {
   const ownRef = useRef(null);
   const ref = useForkedRef(ownRef, forwardedRef);
   return (
-    <MenuPopover>
+    <MenuPopover position={position}>
       <MenuItems {...props} ref={ref} data-reach-menu-list="" />
     </MenuPopover>
   );
@@ -398,7 +402,8 @@ export const MenuList = forwardRef(function MenuList(props, forwardedRef) {
 MenuList.displayName = "MenuList";
 if (__DEV__) {
   MenuList.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    position: PropTypes.func
   };
 }
 
@@ -505,7 +510,7 @@ if (__DEV__) {
 
 const focusableChildrenTypes = [MenuItem, MenuLink];
 
-function getStyles(buttonRect, menuRect) {
+function getStyles(position, buttonRect, menuRect) {
   const haventMeasuredButtonYet = !buttonRect;
   if (haventMeasuredButtonYet) {
     return { opacity: 0 };
@@ -524,6 +529,12 @@ function getStyles(buttonRect, menuRect) {
       opacity: 0
     };
   }
+
+  return position(buttonRect, menuRect);
+}
+
+function positionDefault(buttonRect, menuRect) {
+  const styles = {};
 
   if (buttonRect.width < 500) {
     styles.minWidth = buttonRect.width;
