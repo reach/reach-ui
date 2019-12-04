@@ -72,6 +72,7 @@ export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-children
    */
   children: React.ReactNode;
+  position?: (buttonRect: DOMRect, menuRect: DOMRect) => Partial<DOMRect>;
 };
 
 /**
@@ -138,6 +139,7 @@ export type MenuPopoverProps = React.HTMLProps<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-children
    */
   children: React.ReactNode;
+  position?: (buttonRect: DOMRect, menuRect: DOMRect) => Partial<DOMRect>;
 };
 
 /**
