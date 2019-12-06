@@ -13,7 +13,7 @@ export const name = "Basic";
 export const Example = () => (
   <Accordion>
     <AccordionItem>
-      <AccordionHeader>You can toggle me</AccordionHeader>
+      <AccordionHeader>You can activate me</AccordionHeader>
       <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -21,7 +21,7 @@ export const Example = () => (
       </AccordionPanel>
     </AccordionItem>
     <AccordionItem disabled>
-      <AccordionHeader>You can't toggle me</AccordionHeader>
+      <AccordionHeader>You can't touch me</AccordionHeader>
       <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -29,7 +29,7 @@ export const Example = () => (
       </AccordionPanel>
     </AccordionItem>
     <AccordionItem>
-      <AccordionHeader>You can also toggle me</AccordionHeader>
+      <AccordionHeader>You can definitely activate me</AccordionHeader>
       <AccordionPanel>
         <ExampleForm />
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur

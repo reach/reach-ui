@@ -10,10 +10,10 @@ import {
 export const name = "Read Only";
 
 export const Example = () => (
-  <Accordion readOnly>
+  <Accordion readOnly defaultIndex={1}>
     <AccordionItem>
       <AccordionHeader>Good Luck!</AccordionHeader>
-      <AccordionPanel active>
+      <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
         congue gravida malesuada proin scelerisque luctus est convallis.

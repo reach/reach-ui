@@ -11,14 +11,16 @@ export const name = "Controlled";
 
 export const Example = () => {
   const [activeItem, setActiveItem] = React.useState(null);
-  const handleAccordionChange = index =>
-    setActiveItem(activeItem === index ? null : index);
   return (
     <>
       <button onClick={() => setActiveItem(activeItem === 0 ? null : 0)}>
         {activeItem === 0 ? "Close" : "Open"} Numero Uno
       </button>
-      <Accordion index={activeItem} onChange={handleAccordionChange}>
+      <Accordion
+        toggle={true}
+        index={activeItem}
+        onChange={index => setActiveItem(activeItem === index ? null : index)}
+      >
         <AccordionItem>
           <AccordionHeader>You can toggle me</AccordionHeader>
           <AccordionPanel>
