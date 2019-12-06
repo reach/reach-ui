@@ -22,7 +22,6 @@ import warning from "warning";
 //   - https://inclusive-components.design/collapsible-sections/
 
 // TODO: Screen reader testing
-// TODO: Read only state bugs
 
 const AccordionContext = createContext({});
 const AccordionItemContext = createContext({});
@@ -64,9 +63,9 @@ export const Accordion = forwardRef(function Accordion(
   );
 
   /*
-   * We will store all AccordionHeader refs inside this array to manage focus.
+   * We will store all AccordionTrigger refs inside this array to manage focus.
    */
-  const focusabledHeaderNodes = useRef([]);
+  const focusabledTriggerNodes = useRef([]);
 
   /*
    * Loop through children and find all `disabled` items. This will allow us
@@ -93,13 +92,8 @@ export const Accordion = forwardRef(function Accordion(
 
   if (__DEV__) {
     warning(
-      !(isControlled && !wasControlled),
+      !((isControlled && !wasControlled) || (!isControlled && wasControlled)),
       "Accordion is changing from controlled to uncontrolled. Accordion should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
-    );
-
-    warning(
-      !(!isControlled && wasControlled),
-      "Accordion is changing from uncontrolled to controlled. Accordion should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
     );
   }
 
@@ -119,7 +113,7 @@ export const Accordion = forwardRef(function Accordion(
   const context = {
     accordionId: id,
     activeIndex,
-    focusabledHeaderNodes,
+    focusabledTriggerNodes,
     enabledIndices,
     onSelectPanel: readOnly ? noop : onSelectPanel,
     readOnly
@@ -171,15 +165,15 @@ export const AccordionItem = forwardRef(function AccordionItem(
 ) {
   const { accordionId, activeIndex, readOnly } = useAccordionContext();
 
-  // We need unique IDs for the panel and header to point to one another
+  // We need unique IDs for the panel and trigger to point to one another
   const itemId = makeId(accordionId, index);
   const panelId = makeId("panel", itemId);
-  const headerId = makeId("header", itemId);
+  const triggerId = makeId("trigger", itemId);
 
   const context = {
     active: activeIndex === index,
     disabled,
-    headerId,
+    triggerId,
     index,
     itemId,
     panelId
@@ -209,9 +203,9 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// AccordionHeader
+// AccordionTrigger
 
-export const AccordionHeader = forwardRef(function AccordionHeader(
+export const AccordionTrigger = forwardRef(function AccordionTrigger(
   {
     as: Comp = "button",
     children,
@@ -225,7 +219,7 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
 ) {
   const {
     enabledIndices,
-    focusabledHeaderNodes,
+    focusabledTriggerNodes,
     onSelectPanel,
     readOnly
   } = useAccordionContext();
@@ -233,7 +227,7 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
   const {
     active,
     disabled,
-    headerId,
+    triggerId,
     index,
     panelId
   } = useAccordionItemContext();
@@ -266,22 +260,22 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
       };
 
   /*
-   * We only need an array of refs for our headers for keyboard navigation, and
+   * We only need an array of refs for our triggers for keyboard navigation, and
    * we already know the index because we can constrain Accordion children to
    * only AccordionItems. So we shouldn't need to do any funky render dancing
    * here, just update the ref in the same order if the index changes.
    */
-  const setFocusableHeaderRefs = useCallback(
+  const setFocusableTriggerRefs = useCallback(
     node => {
       if (node && !disabled) {
-        focusabledHeaderNodes.current[index] = node;
+        focusabledTriggerNodes.current[index] = node;
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [disabled, index]
   );
 
-  const ref = useForkedRef(forwardedRef, setButtonRef, setFocusableHeaderRefs);
+  const ref = useForkedRef(forwardedRef, setButtonRef, setFocusableTriggerRefs);
 
   function handleClick(event) {
     event.preventDefault();
@@ -294,7 +288,7 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
 
   function handleKeyDown(event) {
     const { key, ctrlKey } = event;
-    const { current: focusNodes } = focusabledHeaderNodes;
+    const { current: focusNodes } = focusabledTriggerNodes;
     const focusNodeIndex = focusNodes.indexOf(document.activeElement);
     const enabledFocusedIndex = enabledIndices.indexOf(focusNodeIndex);
     const count = enabledIndices.length;
@@ -347,11 +341,11 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
       ref={ref}
       aria-controls={panelId}
       aria-expanded={active}
-      data-reach-accordion-header=""
+      data-reach-accordion-trigger=""
       data-active={active ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
       data-read-only={readOnly ? "" : undefined}
-      id={headerId}
+      id={triggerId}
       onClick={wrapEvent(onClick, handleClick)}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       {...buttonAttributeProps}
@@ -362,9 +356,9 @@ export const AccordionHeader = forwardRef(function AccordionHeader(
   );
 });
 
-AccordionHeader.displayName = "AccordionHeader";
+AccordionTrigger.displayName = "AccordionTrigger";
 if (__DEV__) {
-  AccordionHeader.propTypes = {
+  AccordionTrigger.propTypes = {
     as: PropTypes.any,
     children: PropTypes.node
   };
@@ -379,12 +373,12 @@ export const AccordionPanel = forwardRef(function AccordionPanel(
 ) {
   const { readOnly } = useAccordionContext();
 
-  const { disabled, panelId, headerId, active } = useAccordionItemContext();
+  const { disabled, panelId, triggerId, active } = useAccordionItemContext();
 
   return (
     <div
       ref={forwardedRef}
-      aria-labelledby={headerId}
+      aria-labelledby={triggerId}
       data-reach-accordion-panel=""
       data-active={active ? "" : undefined}
       data-disabled={disabled ? "" : undefined}

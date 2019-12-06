@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionHeader,
+  AccordionTrigger,
   AccordionPanel
 } from "@reach/accordion";
 
@@ -22,7 +22,7 @@ export const Example = () => {
         onChange={index => setActiveItem(activeItem === index ? null : index)}
       >
         <AccordionItem>
-          <AccordionHeader>You can toggle me</AccordionHeader>
+          <AccordionTrigger>You can toggle me</AccordionTrigger>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -31,7 +31,7 @@ export const Example = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem disabled>
-          <AccordionHeader>You can't toggle me</AccordionHeader>
+          <AccordionTrigger>You can't toggle me</AccordionTrigger>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -40,7 +40,7 @@ export const Example = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionHeader>You can also toggle me</AccordionHeader>
+          <AccordionTrigger>You can also toggle me</AccordionTrigger>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula

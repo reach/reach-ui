@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionHeader,
+  AccordionTrigger,
   AccordionPanel
 } from "@reach/accordion";
 import ExampleForm from "./ExampleForm";
@@ -15,7 +15,7 @@ export const Example = () => {
   return (
     <Accordion index={activeItem} onChange={index => setActiveItem(index)}>
       <AccordionItem>
-        <ArrowHeader active={activeItem === 0}>ABCs</ArrowHeader>
+        <ArrowTrigger active={activeItem === 0}>ABCs</ArrowTrigger>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -23,7 +23,7 @@ export const Example = () => {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <ArrowHeader active={activeItem === 1}>Easy As</ArrowHeader>
+        <ArrowTrigger active={activeItem === 1}>Easy As</ArrowTrigger>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -31,7 +31,7 @@ export const Example = () => {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <ArrowHeader active={activeItem === 2}>123s</ArrowHeader>
+        <ArrowTrigger active={activeItem === 2}>123s</ArrowTrigger>
         <AccordionPanel>
           <ExampleForm />
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
@@ -43,9 +43,9 @@ export const Example = () => {
   );
 };
 
-function ArrowHeader({ children, active, ...props }) {
+function ArrowTrigger({ children, active, ...props }) {
   return (
-    <AccordionHeader
+    <AccordionTrigger
       as="div"
       {...props}
       style={{
@@ -64,7 +64,7 @@ function ArrowHeader({ children, active, ...props }) {
           transform: `rotate(${active ? "180deg" : "0"})`
         }}
       />
-    </AccordionHeader>
+    </AccordionTrigger>
   );
 }
 

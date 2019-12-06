@@ -19,22 +19,7 @@
   padding: 1.25em;
 }
 
-[data-reach-accordion-header] {
-  background: hsla(0, 0%, 0%, 0.05);
-  cursor: pointer;
-  padding: 0.75em 1.25em 0.625em;
-}
-
-[data-reach-accordion-header][data-disabled] {
-  opacity: 0.9;
-  cursor: not-allowed;
-}
-
-[data-reach-accordion-header][data-read-only] {
-  cursor: default;
-}
-
-button[data-reach-accordion-header] {
+[data-reach-accordion-trigger] {
   display: block;
   width: 100%;
   border: 0;
@@ -43,4 +28,16 @@ button[data-reach-accordion-header] {
   font: inherit;
   -webkit-appearance: none;
   -moz-appearance: none;
+  background: hsla(0, 0%, 0%, 0.05);
+  cursor: pointer;
+  padding: 0.75em 1.25em 0.625em;
+}
+
+[data-reach-accordion-trigger][data-disabled] {
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
+[data-reach-accordion-trigger][data-read-only] {
+  cursor: default;
 }

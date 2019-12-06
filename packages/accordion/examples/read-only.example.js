@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionHeader,
+  AccordionTrigger,
   AccordionPanel
 } from "@reach/accordion";
 
@@ -12,7 +12,7 @@ export const name = "Read Only";
 export const Example = () => (
   <Accordion readOnly defaultIndex={1}>
     <AccordionItem>
-      <AccordionHeader>Good Luck!</AccordionHeader>
+      <AccordionTrigger>Good Luck!</AccordionTrigger>
       <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -20,7 +20,7 @@ export const Example = () => (
       </AccordionPanel>
     </AccordionItem>
     <AccordionItem>
-      <AccordionHeader>NOPE!</AccordionHeader>
+      <AccordionTrigger>NOPE!</AccordionTrigger>
       <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -28,7 +28,7 @@ export const Example = () => (
       </AccordionPanel>
     </AccordionItem>
     <AccordionItem>
-      <AccordionHeader>Sorry, Charlie</AccordionHeader>
+      <AccordionTrigger>Sorry, Charlie</AccordionTrigger>
       <AccordionPanel>
         Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
         pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
