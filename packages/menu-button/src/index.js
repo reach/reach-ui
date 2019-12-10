@@ -11,9 +11,14 @@ import Portal from "@reach/portal";
 import Rect, { useRect } from "@reach/rect";
 import Component from "@reach/component-component";
 import PropTypes from "prop-types";
-import { wrapEvent, checkStyles, assignRef, useForkedRef } from "@reach/utils";
+import {
+  assignRef,
+  checkStyles,
+  noop,
+  useForkedRef,
+  wrapEvent
+} from "@reach/utils";
 
-const noop = () => {};
 let id = 0;
 const genId = () => `button-${++id}`;
 
