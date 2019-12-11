@@ -8,7 +8,6 @@
  */
 
 import * as React from "react";
-import { StyledComponent } from "styled-components";
 
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.

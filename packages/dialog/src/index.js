@@ -1,11 +1,9 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
-import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
+import { checkStyles, noop, useForkedRef, wrapEvent } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
-
-const noop = () => {};
 
 ////////////////////////////////////////////////////////////////////////////////
 // DialogOverlay
@@ -55,16 +53,14 @@ const DialogInner = forwardRef(function DialogInner(
 
   useEffect(() => createAriaHider(overlayNode.current), []);
 
+  const activateFocusLock = useCallback(() => {
+    if (initialFocusRef && initialFocusRef.current) {
+      initialFocusRef.current.focus();
+    }
+  }, [initialFocusRef]);
+
   return (
-    <FocusLock
-      autoFocus
-      returnFocus
-      onActivation={() => {
-        if (initialFocusRef && initialFocusRef.current) {
-          initialFocusRef.current.focus();
-        }
-      }}
-    >
+    <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
       <RemoveScroll allowPinchZoom={allowPinchZoom}>
         <div
           data-reach-dialog-overlay

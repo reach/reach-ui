@@ -2,6 +2,9 @@ import { useRef, useMemo, useEffect } from "react";
 
 let checkedPkgs = {};
 
+/**
+ * When in dev mode, checks that styles for a given @reach package are loaded.
+ */
 let checkStyles = () => {};
 
 if (__DEV__) {
@@ -36,6 +39,9 @@ if (__DEV__) {
 
 export { checkStyles };
 
+/**
+ * Passes or assigns an arbitrary value to a ref function or object.
+ */
 export function assignRef(ref, value) {
   if (ref == null) return;
   if (typeof ref === "function") {
@@ -49,6 +55,9 @@ export function assignRef(ref, value) {
   }
 }
 
+/**
+ * Get the scrollbar offset distance.
+ */
 export function getScrollbarOffset() {
   try {
     if (window.innerWidth > document.documentElement.clientWidth) {
@@ -58,10 +67,23 @@ export function getScrollbarOffset() {
   return 0;
 }
 
-export function makeId(id, index) {
-  return `${id}--${index}`;
+/**
+ * Joins strings to format IDs for compound components.
+ */
+export function makeId(...args) {
+  return args.join("--");
 }
 
+/**
+ * No-op function.
+ */
+export function noop() {}
+
+/**
+ * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
+ * dealing with components that need an explicit ref for DOM calculations but
+ * also forwards refs assigned by an app.
+ */
 export function useForkedRef(...refs) {
   return useMemo(() => {
     if (refs.every(ref => ref == null)) {
@@ -76,6 +98,9 @@ export function useForkedRef(...refs) {
   }, refs);
 }
 
+/**
+ * Returns the previous value of a reference after a component update.
+ */
 export function usePrevious(value) {
   const ref = useRef();
   useEffect(() => {
@@ -84,6 +109,9 @@ export function usePrevious(value) {
   return ref.current;
 }
 
+/**
+ * Call an effect after a component update, skipping the initial mount.
+ */
 export function useUpdateEffect(effect, deps) {
   const mounted = useRef(false);
   useEffect(() => {
@@ -96,6 +124,11 @@ export function useUpdateEffect(effect, deps) {
   }, deps);
 }
 
+/**
+ * Wraps a lib-defined event handler and a user-defined event handler, returning
+ * a single handler that allows a user to prevent lib-defined handlers from
+ * firing.
+ */
 export function wrapEvent(theirHandler, ourHandler) {
   return event => {
     theirHandler && theirHandler(event);

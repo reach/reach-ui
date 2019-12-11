@@ -250,21 +250,13 @@ Accepts any renderable content but should generally be restricted to `AlertDialo
 
 ```jsx
 <AlertDialog>
-  <AlertDialogLabel>
-    Please Confirm!
-  </AlertDialog>
+  <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-  <AlertDialogDescription>
-    A longer message
-  </AlertDialogDescription>
+  <AlertDialogDescription>A longer message</AlertDialogDescription>
 
   <div>
-    <button onClick={destroyStuff}>
-      A Destructive Action
-    </button>{" "}
-    <button ref={leastDestructiveRef}>
-      Least Destructive Action
-    </button>
+    <button onClick={destroyStuff}>A Destructive Action</button>{" "}
+    <button ref={leastDestructiveRef}>Least Destructive Action</button>
   </div>
 </AlertDialog>
 ```

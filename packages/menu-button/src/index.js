@@ -9,10 +9,16 @@ import React, {
   useRef,
   useState
 } from "react";
+import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover from "@reach/popover";
-import { wrapEvent, checkStyles, useForkedRef, makeId } from "@reach/utils";
-import PropTypes from "prop-types";
+import {
+  checkStyles,
+  makeId,
+  noop,
+  useForkedRef,
+  wrapEvent
+} from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions
@@ -617,8 +623,6 @@ function findItemFromSearch(items, string = "") {
   );
   return found ? items.indexOf(found) : null;
 }
-
-function noop() {}
 
 /**
  * MenuItem or MenuLink components should likely have a plain string passed as a
