@@ -8,7 +8,6 @@
  */
 
 import * as React from "react";
-import { StyledComponent } from "styled-components";
 
 type ResolvedMenuItemComponent<T> = T extends keyof JSX.IntrinsicElements
   ? T
