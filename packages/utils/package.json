@@ -2,6 +2,11 @@
   "name": "@reach/utils",
   "version": "0.6.4",
   "description": "Internal, shared utilities for Reach UI.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/utils"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {

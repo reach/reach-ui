@@ -2,6 +2,11 @@
   "name": "@reach/menu-button",
   "version": "0.6.4",
   "description": "Accessible React button dropdown menu.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/menu-button"
+  },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "index.js",
