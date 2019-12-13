@@ -341,8 +341,7 @@ export const ListboxOption = forwardRef(function ListboxOption(
     onMouseMove,
     onMouseUp,
     value,
-    valueText: interceptedValueText,
-    _valueText: valueText,
+    valueText: valueTextProp,
     ...props
   },
   forwardedRef
@@ -361,6 +360,15 @@ export const ListboxOption = forwardRef(function ListboxOption(
 
   const ownRef = useRef(null);
   const ref = useForkedRef(ownRef, forwardedRef);
+
+  let valueText = value;
+  if (valueTextProp) {
+    valueText = valueTextProp;
+  } else if (typeof children === "string") {
+    valueText = children;
+  } else if (ownRef.current && ownRef.current.innerText) {
+    valueText = ownRef.current.innerText;
+  }
 
   const isHighlighted = navigationSelection
     ? navigationSelection === value
@@ -556,6 +564,8 @@ function findOptionValueFromSearch(opts, string = "") {
  * unlikely and confusing TBH). It will also break if they wrap the option's
  * child node in an abstracted component. If a developer needs either they will
  * need to use the lower level API and explicitly render the ListboxButton.
+ *
+ * This limits composition, but the tradeoff
  */
 function recursivelyFindChildByValue(children, value) {
   const childrenArray = Children.toArray(children);
