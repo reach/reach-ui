@@ -36,9 +36,6 @@
 
 [data-reach-listbox-option] {
   display: block;
-  color: inherit;
-  font: inherit;
-  text-decoration: initial;
   margin: 0;
   padding: 0.25rem 0.5rem;
   white-space: nowrap;
@@ -75,6 +72,16 @@
   display: block;
 }
 
+[data-reach-listbox-group-label] {
+  display: block;
+  display: block;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+  user-select: none;
+  font-weight: bolder;
+}
+
 @keyframes flash {
   0% {
     background: hsla(211, 81%, 36%, 1);
@@ -91,9 +98,4 @@
     color: hsl(0, 0%, 100%);
     opacity: 1;
   }
-}
-
-[data-reach-listbox-group-label] {
-  display: block;
-  font-weight: bolder;
 }

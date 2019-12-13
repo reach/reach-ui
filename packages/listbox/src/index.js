@@ -170,9 +170,10 @@ export const ListboxGroup = forwardRef(function ListboxGroup(
   const { listboxId } = useListboxContext();
   const labelId = makeId(
     "label",
-    useId(typeof label === "string" ? label : null),
+    useId(typeof label === "string" ? kebabCase(label) : null),
     listboxId
   );
+
   return (
     <ListboxGroupContext.Provider value={{ label, labelId }}>
       <div
@@ -1087,4 +1088,12 @@ function useReducerMachine(chart, reducer, initialData) {
   };
 
   return [state, data, transition, refs];
+}
+
+function kebabCase(str) {
+  return str
+    .match(/[A-Z]{2,}(?=[A-Z][a-z0-9]*|\b)|[A-Z]?[a-z0-9]*|[A-Z]|[0-9]+/g)
+    .filter(Boolean)
+    .join("-")
+    .toLowerCase();
 }

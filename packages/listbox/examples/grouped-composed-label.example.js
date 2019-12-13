@@ -1,9 +1,22 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from "react";
-import { Listbox, ListboxGroup, ListboxOption } from "@reach/listbox";
+import {
+  Listbox,
+  ListboxGroup,
+  ListboxGroupLabel,
+  ListboxOption
+} from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-export let name = "Grouped";
+export let name = "Grouped with Composed Label";
+
+function GroupLabel({ icon, children, ...props }) {
+  return (
+    <ListboxGroupLabel {...props}>
+      <span>{icon}</span> {children}
+    </ListboxGroupLabel>
+  );
+}
 
 export let Example = () => {
   let [value, setValue] = useState("default");
@@ -11,7 +24,8 @@ export let Example = () => {
     <Listbox value={value} onChange={value => setValue(value)}>
       <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
       <hr />
-      <ListboxGroup label={<span style={{ color: "crimson" }}>Meat</span>}>
+      <ListboxGroup>
+        <GroupLabel icon="🍖">Meat</GroupLabel>
         <ListboxOption value="asada" valueText="Carne Asada">
           🌮 Carne Asada
         </ListboxOption>
@@ -25,7 +39,8 @@ export let Example = () => {
           🌮 Lengua
         </ListboxOption>
       </ListboxGroup>
-      <ListboxGroup label="Veggie">
+      <ListboxGroup>
+        <GroupLabel icon="🥕">Veggie</GroupLabel>
         <ListboxOption value="hibiscus" valueText="Hibiscus">
           🌮 Hibiscus
         </ListboxOption>
