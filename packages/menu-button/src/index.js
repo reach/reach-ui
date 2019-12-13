@@ -136,14 +136,15 @@ export const MenuButton = forwardRef(function MenuButton(
   } = useMenuContext();
   const ref = useForkedRef(buttonRef, forwardedRef);
 
-  useEffect(
-    () =>
+  useEffect(() => {
+    let newButtonId = id != null ? id : makeId("menu-button", menuId);
+    if (buttonId !== newButtonId) {
       dispatch({
         type: SET_BUTTON_ID,
-        payload: id != null ? id : makeId("menu-button", menuId)
-      }),
-    [] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+        payload: newButtonId
+      });
+    }
+  }, [buttonId, dispatch, id, menuId]);
 
   function handleKeyDown(event) {
     switch (event.key) {
@@ -325,8 +326,7 @@ export const MenuItems = forwardRef(function MenuItems(
       1000
     );
     return () => window.clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+  }, [dispatch, itemsRef, searchQuery]);
 
   function handleKeyDown(event) {
     const { key } = event;
@@ -386,7 +386,6 @@ export const MenuItems = forwardRef(function MenuItems(
   }
 
   // https://github.com/reach/reach-ui/blob/dev-descendants/packages/descendants/src/index.js
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
     if (assigningItems.current) {
       assigningItems.current = false;
@@ -758,6 +757,9 @@ function useMenuItemFocus(ref, index, exclude = false) {
         window.__REACH_DISABLE_TOOLTIPS = false;
       }
     }
+    // This hook accepts a ref as an argument. Of course we know that refs won't
+    // cause a re-render and are thus useless as hook dependencies, but the
+    // linter can't know this so we'll safely ignore the warning here.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exclude, index, isOpen, selectionIndex]);
 }
