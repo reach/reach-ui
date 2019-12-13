@@ -15,12 +15,14 @@ import React, {
   useRef,
   useContext,
   useReducer,
-  useState
+  useState,
+  cloneElement
 } from "react";
 import PropTypes from "prop-types";
 import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
+import warning from "warning";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -154,7 +156,93 @@ const isExpanded = state => expandedStates.includes(state);
 // ListboxContext
 
 const ListboxContext = createContext({});
+const ListboxGroupContext = createContext({});
 const useListboxContext = () => useContext(ListboxContext);
+const useListboxGroupContext = () => useContext(ListboxGroupContext);
+
+////////////////////////////////////////////////////////////////////////////////
+// ListboxGroup
+
+export const ListboxGroup = forwardRef(function ListboxGroup(
+  { children, label, ...props },
+  forwardedRef
+) {
+  const { listboxId } = useListboxContext();
+  const labelId = makeId(
+    "label",
+    useId(typeof label === "string" ? label : null),
+    listboxId
+  );
+  return (
+    <ListboxGroupContext.Provider value={{ label, labelId }}>
+      <div
+        {...props}
+        ref={forwardedRef}
+        data-reach-listbox-group=""
+        aria-labelledby={labelId}
+        role="group"
+      >
+        {typeof label === "string" ? (
+          <span
+            id={labelId}
+            role="presentation"
+            data-reach-listbox-group-label=""
+          >
+            {label}
+          </span>
+        ) : label ? (
+          cloneElement(label, {
+            id: labelId,
+            "data-reach-listbox-group-label": "",
+            role: "presentation"
+          })
+        ) : null}
+        {children}
+      </div>
+    </ListboxGroupContext.Provider>
+  );
+});
+
+ListboxGroup.displayName = "ListboxGroup";
+if (__DEV__) {
+  ListboxGroup.propTypes = {
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// ListboxGroupLabel
+
+export const ListboxGroupLabel = forwardRef(function ListboxGroupLabel(
+  { children, ...props },
+  forwardedRef
+) {
+  const { label, labelId } = useListboxGroupContext();
+
+  if (__DEV__) {
+    warning(
+      !label,
+      "A ListboxGroup can only have one label. A label prop in `ListboxGroup` was detected along with a `ListboxGroupLabel` component. Remove the label prop or the `ListboxGroupLabel` component to avoid accessibility problems."
+    );
+  }
+
+  return (
+    <span
+      {...props}
+      ref={forwardedRef}
+      id={labelId}
+      role="presentation"
+      data-reach-listbox-group-label=""
+    >
+      {children}
+    </span>
+  );
+});
+
+ListboxGroupLabel.displayName = "ListboxGroupLabel";
+if (__DEV__) {
+  ListboxGroupLabel.propTypes = {};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxInput
@@ -872,10 +960,7 @@ function useBlur() {
 }
 
 function useKeyDown() {
-  const {
-    optionsRef: { current: options },
-    transition
-  } = useListboxContext();
+  const { transition } = useListboxContext();
 
   const [query, setQuery] = useState("");
 

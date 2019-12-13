@@ -92,3 +92,8 @@
     opacity: 1;
   }
 }
+
+[data-reach-listbox-group-label] {
+  display: block;
+  font-weight: bolder;
+}
