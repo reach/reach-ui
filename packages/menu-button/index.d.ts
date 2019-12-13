@@ -84,6 +84,12 @@ export type MenuLinkProps = {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-children
    */
   children: React.ReactNode;
+  /**
+   * Callback that fires when a `MenuLink` is selected.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-onselect
+   */
+  onSelect?: () => any;
   to?: string;
 };
 

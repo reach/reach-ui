@@ -189,8 +189,6 @@ export const MenuButton = forwardRef(function MenuButton(
 MenuButton.displayName = "MenuButton";
 if (__DEV__) {
   MenuButton.propTypes = {
-    onClick: PropTypes.func,
-    onKeyDown: PropTypes.func,
     children: PropTypes.node
   };
 }
@@ -231,11 +229,15 @@ export const MenuItem = forwardRef(function MenuItem(
 
   const isSelected = index !== null && index === selectionIndex;
 
-  function handleMouseUp() {
+  function select() {
     dispatch({
       type: CLICK_MENU_ITEM,
       payload: { buttonRef, callback: onSelect }
     });
+  }
+
+  function handleMouseUp() {
+    select();
   }
 
   function handleMouseLeave() {
@@ -251,13 +253,9 @@ export const MenuItem = forwardRef(function MenuItem(
 
   function handleKeyDown(event) {
     if (event.key === "Enter" || event.key === " ") {
-      // prevent the button from being "clicked" by
-      // this "Enter" keydown
+      // prevent the button from being "clicked" by this keydown
       event.preventDefault();
-      dispatch({
-        type: CLICK_MENU_ITEM,
-        payload: { buttonRef, callback: onSelect }
-      });
+      select();
     }
   }
 
@@ -285,13 +283,7 @@ MenuItem.displayName = "MenuItem";
 if (__DEV__) {
   MenuItem.propTypes = {
     as: PropTypes.any,
-    onSelect: PropTypes.func.isRequired,
-    onClick: PropTypes.func,
-    role: PropTypes.string,
-    state: PropTypes.object,
-    setState: PropTypes.func,
-    onKeyDown: PropTypes.func,
-    onMouseMove: PropTypes.func
+    onSelect: PropTypes.func.isRequired
   };
 }
 
@@ -418,12 +410,7 @@ export const MenuItems = forwardRef(function MenuItems(
 MenuItems.displayName = "MenuItems";
 if (__DEV__) {
   MenuItems.propTypes = {
-    refs: PropTypes.object,
-    state: PropTypes.object,
-    setState: PropTypes.func,
-    children: PropTypes.node,
-    onKeyDown: PropTypes.func,
-    onBlur: PropTypes.func
+    children: PropTypes.node
   };
 }
 
@@ -435,10 +422,10 @@ export const MenuLink = forwardRef(function MenuLink(
     as = "a",
     children,
     component,
-    onClick,
     onKeyDown,
     onMouseMove,
     onMouseUp,
+    onSelect,
     role,
     valueText: valueTextProp,
     ...props
@@ -446,6 +433,7 @@ export const MenuLink = forwardRef(function MenuLink(
   forwardedRef
 ) {
   const {
+    buttonRef,
     dispatch,
     state: { selectionIndex }
   } = useMenuContext();
@@ -470,20 +458,32 @@ export const MenuLink = forwardRef(function MenuLink(
     );
   }
 
-  function handleClick() {
-    dispatch({ type: CLOSE_MENU });
-  }
-
-  function handleMouseUp() {
-    ownRef.current && ownRef.current.click();
+  function select() {
+    /*
+     * Imperatively trigger a click event to navigate to the link.
+     * Focus is managed in the state chart so the link should never actually
+     * receive focus as a result of this event. Focus should be directed to the
+     * MenuButton or may be redirected by a user event.
+     */
+    ownRef.current.click();
+    dispatch({
+      type: CLICK_MENU_ITEM,
+      payload: { buttonRef, callback: onSelect }
+    });
   }
 
   function handleKeyDown(event) {
-    if (event.key === "Enter") {
-      // prevent MenuItem's preventDefault from firing,
-      // allowing this link to work w/ the keyboard
-      event.stopPropagation();
+    if (event.key === "Enter" || event.key === " ") {
+      // Prevent the MenuItem's event handler from firing
+      event.preventDefault();
+      select();
     }
+  }
+
+  function handleMouseUp(event) {
+    // Prevent the MenuItem's event handler from firing
+    event.preventDefault();
+    select();
   }
 
   function handleMouseMove() {
@@ -508,7 +508,6 @@ export const MenuLink = forwardRef(function MenuLink(
         data-reach-menu-link=""
         data-selected={isSelected}
         as={as}
-        onClick={wrapEvent(onClick, handleClick)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
@@ -526,8 +525,7 @@ if (__DEV__) {
   MenuLink.propTypes = {
     as: PropTypes.any,
     component: PropTypes.any,
-    onClick: PropTypes.func,
-    onKeyDown: PropTypes.func
+    onSelect: PropTypes.func
   };
 }
 
@@ -757,11 +755,7 @@ function useMenuItemFocus(ref, index, exclude = false) {
         window.__REACH_DISABLE_TOOLTIPS = false;
       }
     }
-    // This hook accepts a ref as an argument. Of course we know that refs won't
-    // cause a re-render and are thus useless as hook dependencies, but the
-    // linter can't know this so we'll safely ignore the warning here.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exclude, index, isOpen, selectionIndex]);
+  }, [exclude, index, isOpen, menuRef, ref, selectionIndex]);
 }
 
 /**
