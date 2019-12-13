@@ -22,8 +22,13 @@ export let Example = () => (
       <StyledItem onSelect={action("Download")}>Download</StyledItem>
       <StyledItem onSelect={action("Copy")}>Create a Copy</StyledItem>
       <StyledItem onSelect={action("Mark as Draft")}>Mark as Draft</StyledItem>
-      <StyledItem onSelect={action("Delete")}>Delete</StyledItem>
+      <MenuItem as={StyledItemAs} onSelect={action("Delete")}>
+        Delete
+      </MenuItem>
       <StyledLink href="https://google.com">Google</StyledLink>
+      <MenuLink as={StyledLinkAs} href="https://duckduckgo.com">
+        DuckDuckGo
+      </MenuLink>
     </StyledList>
   </Menu>
 );
@@ -51,6 +56,18 @@ const StyledItem = styled(MenuItem)`
 `;
 
 const StyledLink = styled(MenuLink)`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+const StyledItemAs = styled.div`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+const StyledLinkAs = styled.a`
   &[data-selected] {
     background: palevioletred;
   }
