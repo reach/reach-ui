@@ -9,7 +9,6 @@
 import React, {
   forwardRef,
   Children,
-  cloneElement,
   createContext,
   useEffect,
   useLayoutEffect,
@@ -305,19 +304,7 @@ export const ListboxList = forwardRef(function ListboxList(
       role="listbox"
       tabIndex={-1}
     >
-      {Children.map(children, child => {
-        if (!child.props) return child;
-
-        let _valueText;
-        if (child.props.valueText) {
-          _valueText = child.props.valueText;
-        } else if (typeof child.props.children === "string") {
-          _valueText = child.props.children;
-        } else if (child.props.value) {
-          _valueText = child.props.value;
-        }
-        return _valueText ? cloneElement(child, { _valueText }) : child;
-      })}
+      {children}
     </Comp>
   );
 });
