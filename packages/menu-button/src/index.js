@@ -223,7 +223,7 @@ export const MenuItem = forwardRef(function MenuItem(
   const ref = useForkedRef(ownRef, forwardedRef);
 
   const valueText =
-    valueTextProp || recursivelyFindStringChild(children) || null;
+    valueTextProp || (ownRef.current && ownRef.current.innerText) || null;
 
   const index = useMenuDescendant(valueText, _excludeFromItemsArray);
 
@@ -443,7 +443,7 @@ export const MenuLink = forwardRef(function MenuLink(
   const ref = useForkedRef(ownRef, forwardedRef);
 
   const valueText =
-    valueTextProp || recursivelyFindStringChild(children) || null;
+    valueTextProp || (ownRef.current && ownRef.current.innerText) || null;
 
   const Comp = component || as;
 
@@ -619,31 +619,6 @@ function findItemFromSearch(items, string = "") {
     search => search && search.toLowerCase().startsWith(string)
   );
   return found ? items.indexOf(found) : null;
-}
-
-/**
- * MenuItem or MenuLink components should likely have a plain string passed as a
- * child (or perhaps nested as a child somewhere in its tree). This function
- * searches for child props recurssively to identify the text string if it
- * exists, otherwise a valueText prop should be passed for keyboard nav to work.
- */
-function recursivelyFindStringChild(children) {
-  const childrenArray = Children.toArray(children);
-  for (let i = 0; i <= childrenArray.length; i++) {
-    let child = childrenArray[i];
-
-    if (typeof child === "string") {
-      return child;
-    }
-
-    if (child && child.props && child.props.children) {
-      let grandChild = recursivelyFindStringChild(child.props.children);
-      if (grandChild) {
-        return grandChild;
-      }
-    }
-  }
-  return false;
 }
 
 function reducer(state, action = {}) {
