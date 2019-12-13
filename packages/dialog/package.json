@@ -1,7 +1,12 @@
 {
   "name": "@reach/dialog",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Accessible React Modal Dialog.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/dialog"
+  },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "index.js",
@@ -11,7 +16,7 @@
   },
   "dependencies": {
     "@reach/portal": "^0.6.2",
-    "@reach/utils": "^0.6.1",
+    "@reach/utils": "^0.6.4",
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.2.1",
     "react-remove-scroll": "^2.2.0"

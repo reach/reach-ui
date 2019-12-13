@@ -250,8 +250,8 @@ export function useTooltip({
 
   // hopefully they always pass a ref if they ever pass one
   const ownRef = useRef();
-  const ref = forwardedRef || ownRef;
-  const triggerRect = useRect(ref, isVisible);
+  const ref = useForkedRef(forwardedRef, ownRef);
+  const triggerRect = useRect(ownRef, isVisible);
 
   useEffect(() => {
     return subscribe(() => {

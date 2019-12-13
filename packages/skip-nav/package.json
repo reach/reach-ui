@@ -2,6 +2,11 @@
   "name": "@reach/skip-nav",
   "version": "0.6.2",
   "description": "Skip navigation links for screen reader and keyboard users.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/skip-nav"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {

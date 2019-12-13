@@ -1,7 +1,12 @@
 {
   "name": "@reach/combobox",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Accessible React Combobox (Autocomplete).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/combobox"
+  },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "index.js",
@@ -11,9 +16,9 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.6.1",
-    "@reach/popover": "^0.6.2",
+    "@reach/popover": "^0.6.4",
     "@reach/portal": "^0.6.2",
-    "@reach/utils": "^0.6.1",
+    "@reach/utils": "^0.6.4",
     "escape-regexp": "0.0.1",
     "highlight-words-core": "1.2.0",
     "prop-types": "^15.7.2"

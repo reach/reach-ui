@@ -9,7 +9,7 @@ import * as React from "react";
 export function checkStyles(packageName: string): void;
 
 /**
- * Assigns a given value to a variable ref.
+ * Passes or assigns an arbitrary value to a ref function or object.
  *
  * @param ref
  * @param value
@@ -22,32 +22,35 @@ export function assignRef<T = any>(ref: React.Ref<T>, value: any): void;
 export function getScrollbarOffset(): number;
 
 /**
- * Appends a given index to a ID for easy ID formatting.
+ * Joins strings to format IDs for compound components.
  *
- * @param id
- * @param index
+ * @param args
  */
-export function makeId(id: string | number, index: string | number): string;
+export function makeId(...args: (string | number)[]): string;
 
 /**
- * Assigns multiple refs to the same value (typically a DOM node).
- * Useful for dealing with components that need an explicit ref
- * for DOM calculations but also accept user-passed refs.
+ * No-op function.
+ */
+export function noop(): void;
+
+/**
+ * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
+ * dealing with components that need an explicit ref for DOM calculations but
+ * also forwards refs assigned by an app.
  *
  * @param refs Refs to fork
  */
 export function useForkedRef<T = any>(...refs: React.Ref<T>[]): void;
 
 /**
- * Returns the most recent previous value of a given value
- * before an update.
+ * Returns the previous value of a reference after a component update.
  *
  * @param value
  */
 export function usePrevious<T>(value: T): T;
 
 /**
- * Call an effect only after a component has mounted.
+ * Call an effect after a component update, skipping the initial mount.
  *
  * @param effect Effect to call
  * @param deps Effect dependency list
@@ -55,9 +58,9 @@ export function usePrevious<T>(value: T): T;
 export function useUpdateEffect(effect: () => any, deps?: any[]): void;
 
 /**
- * Wraps a lib-defined event handler and a user-defined event handler,
- * returning a single handler that allows a user to prevent lib-defined
- * handlers from firing.
+ * Wraps a lib-defined event handler and a user-defined event handler, returning
+ * a single handler that allows a user to prevent lib-defined handlers from
+ * firing.
  *
  * @param theirHandler User-supplied event handler
  * @param ourHandler Library-supplied event handler

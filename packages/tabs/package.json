@@ -1,7 +1,12 @@
 {
   "name": "@reach/tabs",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Accessible React Tabs Component",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/tabs"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
@@ -9,7 +14,7 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.6.1",
-    "@reach/utils": "^0.6.1",
+    "@reach/utils": "^0.6.4",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },

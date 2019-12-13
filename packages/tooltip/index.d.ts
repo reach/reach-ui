@@ -30,7 +30,7 @@ export interface TooltipParams {
 
 export function useTooltip<T = any>(
   attrs?: {
-    ref: React.Ref<T>;
+    ref?: React.Ref<T>;
     DEBUG_STYLE?: boolean;
   } & React.HTMLProps<T>
 ): [TriggerParams, TooltipParams, boolean];

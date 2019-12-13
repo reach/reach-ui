@@ -1,7 +1,12 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Accessible React Alert Dialog.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/alert-dialog"
+  },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "index.js",
@@ -11,8 +16,8 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.6.1",
-    "@reach/dialog": "^0.6.2",
-    "@reach/utils": "^0.6.1",
+    "@reach/dialog": "^0.6.4",
+    "@reach/utils": "^0.6.4",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2"
   },
