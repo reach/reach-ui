@@ -37,9 +37,19 @@
  * client have the same markup no matter how wild the concurrent rendering may
  * have gotten.
  *
- * After the render, we patch up the components with an incremented ID. It
- * doesn't have to be incremented, though; we could do something random, but
- * incrementing a number is probably the cheapest thing we can do.
+ * After the render, we patch up the components with an incremented ID. This
+ * causes a double render on any components with `useId`. Shouldn't be a problem
+ * since the components using this hook should be small, and we're only updating
+ * the ID attribute on the DOM, nothing big is happening.
+ *
+ * It doesn't have to be an incremented number, though--we could do generate
+ * random strings instead, but incrementing a number is probably the cheapest
+ * thing we can do.
+ *
+ * Additionally, we only do this patchup on the very first client render ever.
+ * Any calls to `useId` that happen dynamically in the client will be
+ * populated immediately with a value. So, we only get the double render after
+ * server hydration and never again, SO BACK OFF ALRIGHT?
  */
 
 import { useState, useEffect, useLayoutEffect } from "react";

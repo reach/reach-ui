@@ -2,6 +2,11 @@
   "name": "@reach/component-component",
   "version": "0.6.2",
   "description": "Declarative React Component Definitions",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/component-component"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
