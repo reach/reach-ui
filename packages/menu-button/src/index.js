@@ -1,7 +1,7 @@
 import React, {
-  Children,
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -17,6 +17,7 @@ import {
   makeId,
   noop,
   useForkedRef,
+  usePrevious,
   wrapEvent
 } from "@reach/utils";
 
@@ -68,8 +69,6 @@ export const Menu = ({ id, children }) => {
 
   const menuRef = useRef(null);
 
-  const itemsRef = useRef([]);
-
   const popoverRef = useRef(null);
 
   /*
@@ -100,7 +99,6 @@ export const Menu = ({ id, children }) => {
     buttonRef,
     dispatch,
     forceUpdate,
-    itemsRef,
     menuId,
     menuRef,
     popoverRef,
@@ -108,9 +106,11 @@ export const Menu = ({ id, children }) => {
   };
 
   return (
-    <MenuContext.Provider value={context}>
-      {typeof children === "function" ? children({ isOpen }) : children}
-    </MenuContext.Provider>
+    <DescendantProvider>
+      <MenuContext.Provider value={context}>
+        {typeof children === "function" ? children({ isOpen }) : children}
+      </MenuContext.Provider>
+    </DescendantProvider>
   );
 };
 
@@ -200,78 +200,76 @@ export const MenuItem = forwardRef(function MenuItem(
   {
     as: Comp = "div",
     children,
+    index: indexProp,
     onKeyDown,
+    onMouseDown,
+    onMouseEnter,
     onMouseLeave,
     onMouseMove,
     onMouseUp,
     onSelect,
     role = "menuitem",
     valueText: valueTextProp,
-    _excludeFromItemsArray = false,
     ...props
   },
   forwardedRef
 ) {
   const {
-    buttonRef,
-    dispatch,
     state: { selectionIndex }
   } = useMenuContext();
 
+  /*
+   * `MenuItem` components that contain `MenuLink` components will have a role
+   * of `none`. `MenuLink` will handle selection logic so we'll use this to
+   * override/ignore those behaviors here.
+   */
+  const isValidMenuItem = role === "menuitem";
+
   const ownRef = useRef(null);
 
-  const ref = useForkedRef(ownRef, forwardedRef);
+  const [valueText, callbackRef] = useValueText(
+    isValidMenuItem ? ownRef : null,
+    valueTextProp
+  );
 
-  const valueText =
-    valueTextProp || (ownRef.current && ownRef.current.innerText) || null;
+  const ref = useForkedRef(forwardedRef, callbackRef);
 
-  const index = useMenuDescendant(valueText, _excludeFromItemsArray);
+  const key = indexProp ?? valueText;
 
-  const isSelected = index !== null && index === selectionIndex;
+  const index = useDescendant(isValidMenuItem ? key : null, ownRef);
 
-  function select() {
-    dispatch({
-      type: CLICK_MENU_ITEM,
-      payload: { buttonRef, callback: onSelect }
-    });
-  }
+  const isSelected =
+    isValidMenuItem && index !== null && index === selectionIndex;
 
-  function handleMouseUp() {
-    select();
-  }
+  const {
+    handleKeyDown,
+    handleMouseDown,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseUp
+  } = useMenuItemSelectHandlers(isValidMenuItem ? "item" : null, key, {
+    index,
+    isSelected,
+    onSelect
+  });
 
-  function handleMouseLeave() {
-    // clear out selection when mouse over a non-menu item child
-    dispatch({ type: CLEAR_SELECTION_INDEX });
-  }
-
-  function handleMouseMove() {
-    if (!isSelected && index != null) {
-      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: index });
-    }
-  }
-
-  function handleKeyDown(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      // prevent the button from being "clicked" by this keydown
-      event.preventDefault();
-      select();
-    }
-  }
-
-  useMenuItemFocus(ownRef, index, _excludeFromItemsArray);
+  useMenuItemFocus(ownRef, index, !isValidMenuItem);
 
   return (
     <Comp
+      role={role}
       {...props}
       ref={ref}
-      data-reach-menu-item={role === "menuitem" ? "" : undefined}
-      data-selected={role === "menuitem" && isSelected ? true : undefined}
+      data-reach-menu-item={isValidMenuItem ? "" : undefined}
+      data-selected={isSelected ? "" : undefined}
+      data-valuetext={isValidMenuItem ? valueText : undefined}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+      onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
       onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
       onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
       onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-      role={role}
       tabIndex={-1}
     >
       {children}
@@ -295,22 +293,20 @@ export const MenuItems = forwardRef(function MenuItems(
   forwardedRef
 ) {
   const {
-    assigningItems,
     dispatch,
-    forceUpdate,
     buttonRef,
-    itemsRef,
     menuRef,
     state: { isOpen, buttonId, selectionIndex, searchQuery }
   } = useMenuContext();
+  const { descendants: menuItems } = useDescendantContext();
   const ref = useForkedRef(menuRef, forwardedRef);
 
   useEffect(() => {
-    const match = findItemFromSearch(itemsRef.current, searchQuery);
+    const match = findItemFromSearch(menuItems, searchQuery);
     if (searchQuery && match != null) {
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
-        payload: match
+        payload: { index: match }
       });
     }
     let timeout = window.setTimeout(
@@ -318,11 +314,49 @@ export const MenuItems = forwardRef(function MenuItems(
       1000
     );
     return () => window.clearTimeout(timeout);
-  }, [dispatch, itemsRef, searchQuery]);
+  }, [dispatch, menuItems, searchQuery]);
+
+  const prevMenuItemsLength = usePrevious(menuItems.length);
+  const prevSelected = usePrevious(menuItems[selectionIndex]);
+  const prevSelectionIndex = usePrevious(selectionIndex);
+
+  useEffect(() => {
+    if (selectionIndex > menuItems.length - 1) {
+      dispatch({
+        type: SELECT_ITEM_AT_INDEX,
+        payload: { index: menuItems.length - 1 }
+      });
+    } else if (
+      /*
+       * Checks if
+       *  - menu length has changed
+       *  - selection index has not changed BUT selected item has changed
+       *
+       * This prevents any dynamic adding/removing of menu items from actually
+       * changing a user's expected selection.
+       */
+      prevMenuItemsLength !== menuItems.length &&
+      selectionIndex > -1 &&
+      prevSelected &&
+      prevSelectionIndex === selectionIndex &&
+      menuItems[selectionIndex] !== prevSelected
+    ) {
+      dispatch({
+        type: SELECT_ITEM_AT_INDEX,
+        payload: { index: menuItems.findIndex(i => i.key === prevSelected.key) }
+      });
+    }
+  }, [
+    dispatch,
+    menuItems,
+    prevMenuItemsLength,
+    prevSelected,
+    prevSelectionIndex,
+    selectionIndex
+  ]);
 
   function handleKeyDown(event) {
     const { key } = event;
-    const items = itemsRef.current.map(({ node }) => node);
 
     if (!isOpen) {
       return;
@@ -335,27 +369,27 @@ export const MenuItems = forwardRef(function MenuItems(
       case "Home":
         // prevent window scroll
         event.preventDefault();
-        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: 0 });
+        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index: 0 } });
         break;
       case "End":
         // prevent window scroll
         event.preventDefault();
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
-          payload: items.length - 1
+          payload: { index: menuItems.length - 1 }
         });
         break;
       case "ArrowDown":
         // prevent window scroll
         event.preventDefault();
-        const nextIndex = Math.min(selectionIndex + 1, items.length - 1);
-        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: nextIndex });
+        const nextIndex = Math.min(selectionIndex + 1, menuItems.length - 1);
+        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index: nextIndex } });
         break;
       case "ArrowUp":
         // prevent window scroll
         event.preventDefault();
         const prevIndex = Math.max(selectionIndex - 1, 0);
-        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: prevIndex });
+        dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index: prevIndex } });
         break;
       case "Tab":
         // prevent leaving
@@ -376,21 +410,6 @@ export const MenuItems = forwardRef(function MenuItems(
         break;
     }
   }
-
-  // https://github.com/reach/reach-ui/blob/dev-descendants/packages/descendants/src/index.js
-  useLayoutEffect(() => {
-    if (assigningItems.current) {
-      assigningItems.current = false;
-      forceUpdate({});
-    } else {
-      assigningItems.current = true;
-    }
-    return () => {
-      if (assigningItems.current) {
-        itemsRef.current = [];
-      }
-    };
-  });
 
   return (
     <div
@@ -422,7 +441,11 @@ export const MenuLink = forwardRef(function MenuLink(
     as = "a",
     children,
     component,
+    index: indexProp,
     onKeyDown,
+    onMouseDown,
+    onMouseEnter,
+    onMouseLeave,
     onMouseMove,
     onMouseUp,
     onSelect,
@@ -433,21 +456,20 @@ export const MenuLink = forwardRef(function MenuLink(
   forwardedRef
 ) {
   const {
-    buttonRef,
-    dispatch,
     state: { selectionIndex }
   } = useMenuContext();
 
   const ownRef = useRef(null);
 
-  const ref = useForkedRef(ownRef, forwardedRef);
+  const [valueText, callbackRef] = useValueText(ownRef, valueTextProp);
 
-  const valueText =
-    valueTextProp || (ownRef.current && ownRef.current.innerText) || null;
+  const ref = useForkedRef(callbackRef, forwardedRef);
+
+  const key = indexProp ?? valueText;
+
+  const index = useDescendant(key, ownRef);
 
   const Comp = component || as;
-
-  const index = useMenuDescendant(valueText);
 
   const isSelected =
     index !== null && index === selectionIndex ? true : undefined;
@@ -458,57 +480,35 @@ export const MenuLink = forwardRef(function MenuLink(
     );
   }
 
-  function select() {
-    /*
-     * Imperatively trigger a click event to navigate to the link.
-     * Focus is managed in the state chart so the link should never actually
-     * receive focus as a result of this event. Focus should be directed to the
-     * MenuButton or may be redirected by a user event.
-     */
-    ownRef.current.click();
-    dispatch({
-      type: CLICK_MENU_ITEM,
-      payload: { buttonRef, callback: onSelect }
-    });
-  }
-
-  function handleKeyDown(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      // Prevent the MenuItem's event handler from firing
-      event.preventDefault();
-      select();
-    }
-  }
-
-  function handleMouseUp(event) {
-    // Prevent the MenuItem's event handler from firing
-    event.preventDefault();
-    select();
-  }
-
-  function handleMouseMove() {
-    if (!isSelected && index != null) {
-      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: index });
-    }
-  }
+  const {
+    handleKeyDown,
+    handleMouseDown,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseUp
+  } = useMenuItemSelectHandlers("link", key, {
+    index,
+    isSelected,
+    onSelect,
+    ref: ownRef
+  });
 
   useMenuItemFocus(ownRef, index);
 
   return (
-    <MenuItem
-      role="none"
-      onSelect={noop}
-      valueText={valueText}
-      _excludeFromItemsArray={true}
-    >
+    <MenuItem index={null} role="none" onSelect={noop}>
       <Comp
         {...props}
         ref={ref}
         data-reach-menu-item=""
         data-reach-menu-link=""
-        data-selected={isSelected}
-        as={as}
+        data-selected={isSelected ? "" : undefined}
+        data-valuetext={valueText}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+        onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
+        onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
         role="menuitem"
@@ -581,19 +581,18 @@ export const MenuPopover = forwardRef(function MenuPopover(
       }
     });
   }
-  return (
+  return isOpen ? (
     <Popover
       {...props}
       ref={ref}
       data-reach-menu="" // deprecate for naming consistency?
       data-reach-menu-popover=""
-      hidden={!isOpen}
       onBlur={wrapEvent(onBlur, handleBlur)}
       targetRef={buttonRef}
     >
       {children}
     </Popover>
-  );
+  ) : null;
 });
 
 MenuPopover.displayName = "MenuPopover";
@@ -601,6 +600,97 @@ if (__DEV__) {
   MenuPopover.propTypes = {
     children: PropTypes.node
   };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+const DescendantContext = createContext();
+
+function useDescendantContext() {
+  return useContext(DescendantContext);
+}
+
+/**
+ * This hook registers our menu item by passing it into an array. We can then
+ * search that array by a unique key to find its index. We use this for focus
+ * management and keyboard navigation.
+ */
+function useDescendant(key, ref) {
+  // If the key is a number, it's coming from an index prop.
+  const indexProp = typeof key === "number" ? key : undefined;
+
+  let [index, setIndex] = useState(indexProp ?? -1);
+  let {
+    descendants,
+    registerDescendant,
+    deregisterDescendant
+  } = useDescendantContext();
+
+  useEffect(() => {
+    // Descendants require a unique key. Skip updates if none exists.
+    if (key == null) return;
+
+    registerDescendant(key, ref);
+    return () => void deregisterDescendant(key);
+  }, [ref, registerDescendant, deregisterDescendant, key]);
+
+  useEffect(() => {
+    if (indexProp == null) {
+      let newIndex = descendants.findIndex(i => i.key === key);
+      if (newIndex !== index) {
+        setIndex(newIndex);
+      }
+    }
+  }, [descendants, key, index, indexProp]);
+
+  if (indexProp != null && indexProp !== index) {
+    setIndex(indexProp);
+  }
+
+  return index;
+}
+
+function DescendantProvider({ children }) {
+  let [descendants, setDescendants] = useState([]);
+
+  const registerDescendant = useCallback(function registerDescendant(key, ref) {
+    setDescendants(items => {
+      let index = items.findIndex(el => {
+        if (!el.ref.current || !ref.current) {
+          return false;
+        }
+        /*
+         * Compare each elements' position in the DOM to make ensure the
+         * elements are registered in the correct order.
+         */
+        return Boolean(
+          el.ref.current.compareDocumentPosition(ref.current) &
+            Node.DOCUMENT_POSITION_PRECEDING
+        );
+      });
+
+      // If the an index is not found we will push the element to the end
+      if (index === -1) {
+        return [...items, { key, ref }];
+      }
+      return [...items.slice(0, index), { key, ref }, ...items.slice(index)];
+    });
+  }, []);
+
+  const deregisterDescendant = useCallback(function deregisterDescendant(key) {
+    setDescendants(items => items.filter(el => el.key !== key));
+  }, []);
+
+  return (
+    <DescendantContext.Provider
+      value={{
+        descendants,
+        registerDescendant,
+        deregisterDescendant
+      }}
+    >
+      {children}
+    </DescendantContext.Provider>
+  );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -615,8 +705,8 @@ function findItemFromSearch(items, string = "") {
     return null;
   }
 
-  const found = items.find(
-    search => search && search.toLowerCase().startsWith(string)
+  const found = items.find(({ ref }) =>
+    ref?.current?.dataset?.valuetext?.toLowerCase().startsWith(string)
   );
   return found ? items.indexOf(found) : null;
 }
@@ -656,10 +746,12 @@ function reducer(state, action = {}) {
         selectionIndex: 0
       };
     case SELECT_ITEM_AT_INDEX:
-      if (payload != null && payload >= 0) {
+      if (payload != null && payload.index >= 0) {
         return {
           ...state,
-          selectionIndex: payload
+          selectionIndex: payload.max
+            ? Math.min(Math.max(payload.index, 0), payload.max)
+            : Math.max(payload.index, 0)
         };
       }
       return state;
@@ -734,24 +826,136 @@ function useMenuItemFocus(ref, index, exclude = false) {
 }
 
 /**
- * This hook registers our menu item by passing it into an array and returning
- * its index.
- *
- * https://github.com/reach/reach-ui/blob/dev-descendants/packages/descendants/src/index.js
- *
- * We use this for focus management and keyboard navigation. As with
- * the hook above, MenuItem components that wrap MenuLink components are skipped
- * with the exclude param so we don't count them twice!
+ * If a MenuItem or MenuLink do not have an explicit valueText prop, we look for
+ * the DOM node's inner textContent to use for type-ahead functionality.
  */
-function useMenuDescendant(valueText, exclude = false) {
-  const index = useRef(null);
-  const { assigningItems, itemsRef } = useMenuContext();
+function useValueText(ref, valueTextProp) {
+  const [valueText, setValueText] = useState(valueTextProp || "");
 
-  useLayoutEffect(() => {
-    if (assigningItems.current && !exclude) {
-      index.current = itemsRef.current.push(valueText) - 1;
+  const setValueTextFromDom = useCallback(
+    node => {
+      if (node && ref) {
+        ref.current = node;
+        if (!valueTextProp || valueText !== node.textContent) {
+          setValueText(node.textContent);
+        }
+      }
+    },
+    [ref, valueText, valueTextProp]
+  );
+
+  return [String(valueText), setValueTextFromDom];
+}
+
+/**
+ * MenuItem and MenuLink will use the same event handlers to manage selection
+ * and activation, and we set them up here.
+ *
+ * @param {"item"|"link"|null} itemType
+ * @param {*} key
+ * @param {Object} itemProps
+ * @param {number} itemProps.index
+ * @param {boolean} itemProps.isSelected
+ * @param {Function} itemProps.onSelect
+ * @param {Object} itemProps.ref
+ */
+function useMenuItemSelectHandlers(
+  itemType,
+  key,
+  { index, isSelected, onSelect, ref }
+) {
+  const { buttonRef, dispatch } = useMenuContext();
+
+  const isLink = itemType === "link";
+
+  /*
+   * We'll use this to prevent dispatching state changes twice in `MenuLink`s
+   * nested inside `MenuItem`s
+   */
+  const exclude = itemType == null;
+
+  function select() {
+    /*
+     * Imperatively trigger a click event for MenuLinks to navigate to the href.
+     * Focus is managed in the state chart so the link should not keep focus
+     * as a result of this event. Focus should be directed to the MenuButton or
+     * may be redirected by a user event.
+     */
+    isLink && ref && ref.current && ref.current.click();
+    dispatch({
+      type: CLICK_MENU_ITEM,
+      payload: { buttonRef, callback: onSelect }
+    });
+  }
+
+  function handleKeyDown(event) {
+    if (exclude) {
+      return;
     }
-  });
 
-  return index.current;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      select();
+    }
+  }
+
+  function handleMouseDown(event) {
+    if (exclude) {
+      return;
+    }
+
+    event.preventDefault();
+  }
+
+  function handleMouseEnter(event) {
+    if (exclude) {
+      return;
+    }
+
+    if (!isSelected && index != null) {
+      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
+    }
+  }
+
+  function handleMouseLeave(event) {
+    if (exclude) {
+      return;
+    }
+
+    // clear out selection when mouse over a non-menu item child
+    dispatch({ type: CLEAR_SELECTION_INDEX });
+  }
+
+  function handleMouseMove(event) {
+    if (exclude) {
+      return;
+    }
+
+    if (!isSelected && index != null) {
+      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
+    }
+  }
+
+  function handleMouseUp(event) {
+    if (exclude) {
+      return;
+    }
+
+    /*
+     * Prevent link event from triggering a click. We'll do this imperatively
+     * after setting state in select.
+     */
+    isLink && event.preventDefault();
+
+    select();
+  }
+
+  return {
+    handleKeyDown,
+    handleMouseDown,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMouseMove,
+    handleMouseUp
+  };
 }
