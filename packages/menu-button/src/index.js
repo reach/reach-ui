@@ -15,7 +15,6 @@ import Popover from "@reach/popover";
 import {
   checkStyles,
   makeId,
-  noop,
   useForkedRef,
   usePrevious,
   wrapEvent
@@ -24,22 +23,25 @@ import {
 ////////////////////////////////////////////////////////////////////////////////
 // Actions
 
+const CLEAR_SELECTION_INDEX = "CLEAR_SELECTION_INDEX";
+const CLICK_MENU_ITEM = "CLICK_MENU_ITEM";
 const CLOSE_MENU = "CLOSE_MENU";
 const OPEN_MENU_AT_FIRST_ITEM = "OPEN_MENU_AT_FIRST_ITEM";
-const SET_BUTTON_ID = "SET_BUTTON_ID";
-const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
-const CLICK_MENU_ITEM = "CLICK_MENU_ITEM";
-const CLEAR_SELECTION_INDEX = "CLEAR_SELECTION_INDEX";
 const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
+const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
+const SET_BUTTON_ID = "SET_BUTTON_ID";
 
+const DescendantContext = createContext();
 const MenuContext = createContext();
+const useDescendantContext = () => useContext(DescendantContext);
 const useMenuContext = () => useContext(MenuContext);
 
 const initialState = {
   /*
    * The button ID is needed for aria controls and can be set directly and
-   * updated for top-level use via context. Otherwise a default is set by useId
-   *
+   * updated for top-level use via context. Otherwise a default is set by useId.
+   * TODO: Consider deprecating direct ID in 1.0 in favor of id at the top level
+   *       for passing deterministic IDs to descendent components.
    */
   buttonId: null,
 
@@ -66,49 +68,28 @@ const initialState = {
 
 export const Menu = ({ id, children }) => {
   const buttonRef = useRef(null);
-
   const menuRef = useRef(null);
-
   const popoverRef = useRef(null);
-
-  /*
-   * On the first render we say we're "assigning", and the menu items will be
-   * pushed into the array when they show up in their own useLayoutEffect.
-   */
-  const assigningItems = useRef(true);
-
-  /*
-   * since children are pushed into the array in useLayoutEffect of the child,
-   * children can't read their index on first render.  So we need to cause a
-   * second render so they can read their index.
-   */
-  const [, forceUpdate] = useState();
-
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const { isOpen } = state;
-
   const menuId = useId(id);
 
-  useEffect(() => {
-    checkStyles("menu-button");
-  }, []);
-
   const context = {
-    assigningItems,
     buttonRef,
     dispatch,
-    forceUpdate,
     menuId,
     menuRef,
     popoverRef,
     state
   };
 
+  useEffect(() => void checkStyles("menu-button"), []);
+
   return (
     <DescendantProvider>
       <MenuContext.Provider value={context}>
-        {typeof children === "function" ? children({ isOpen }) : children}
+        {typeof children === "function"
+          ? children({ isOpen: state.isOpen })
+          : children}
       </MenuContext.Provider>
     </DescendantProvider>
   );
@@ -162,13 +143,8 @@ export const MenuButton = forwardRef(function MenuButton(
     }
   }
 
-  function handleMouseDown(event) {
-    // event.preventDefault();
-    if (isOpen) {
-      dispatch({ type: CLOSE_MENU });
-    } else {
-      dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
-    }
+  function handleMouseDown() {
+    dispatch({ type: isOpen ? CLOSE_MENU : OPEN_MENU_AT_FIRST_ITEM });
   }
 
   return (
@@ -194,13 +170,14 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// MenuItem
+// MenuItemImpl
+// MenuItem and MenuLink share most of the same functionality captured here.
 
-export const MenuItem = forwardRef(function MenuItem(
+const MenuItemImpl = forwardRef(function MenuItemImpl(
   {
-    as: Comp = "div",
-    children,
+    as: Comp,
     index: indexProp,
+    isLink = false,
     onKeyDown,
     onMouseDown,
     onMouseEnter,
@@ -208,73 +185,169 @@ export const MenuItem = forwardRef(function MenuItem(
     onMouseMove,
     onMouseUp,
     onSelect,
-    role = "menuitem",
     valueText: valueTextProp,
     ...props
   },
   forwardedRef
 ) {
   const {
-    state: { selectionIndex }
+    buttonRef,
+    dispatch,
+    menuRef,
+    state: { isOpen, selectionIndex }
   } = useMenuContext();
-
-  /*
-   * `MenuItem` components that contain `MenuLink` components will have a role
-   * of `none`. `MenuLink` will handle selection logic so we'll use this to
-   * override/ignore those behaviors here.
-   */
-  const isValidMenuItem = role === "menuitem";
 
   const ownRef = useRef(null);
 
-  const [valueText, callbackRef] = useValueText(
-    isValidMenuItem ? ownRef : null,
-    valueTextProp
+  /*
+   * After the ref is mounted to the DOM node, we check to see if we have an
+   * explicit valueText prop before looking for the node's textContent for
+   * typeahead functionality.
+   */
+  const [valueText, setValueText] = useState(valueTextProp || "");
+  const setValueTextFromDom = useCallback(
+    node => {
+      if (node) {
+        ownRef.current = node;
+        if (
+          !valueTextProp ||
+          (node.textContent && valueText !== node.textContent)
+        ) {
+          setValueText(node.textContent);
+        }
+      }
+    },
+    [valueText, valueTextProp]
   );
 
-  const ref = useForkedRef(forwardedRef, callbackRef);
+  const ref = useForkedRef(forwardedRef, setValueTextFromDom);
 
+  /*
+   * By default, we assume valueText is a unique value for all menu items, so it
+   * should be sufficient as an unique identifier we can use to find our index.
+   * However there may be some use cases where this is not the case and an
+   * explicit unique index may be provided by the app.
+   */
   const key = indexProp ?? valueText;
 
-  const index = useDescendant(isValidMenuItem ? key : null, ownRef);
+  const index = useDescendant(key, ownRef);
+  const isSelected = index === selectionIndex;
 
-  const isSelected =
-    isValidMenuItem && index !== null && index === selectionIndex;
+  function select() {
+    /*
+     * Imperatively trigger a click event for MenuLinks to navigate to the href.
+     * Focus is managed in the state chart so the link should not keep focus
+     * as a result of this event. Focus should be directed to the MenuButton or
+     * may be redirected by a user event.
+     */
+    isLink && ownRef.current && ownRef.current.click();
+    dispatch({
+      type: CLICK_MENU_ITEM,
+      payload: { buttonRef, callback: onSelect }
+    });
+  }
 
-  const {
-    handleKeyDown,
-    handleMouseDown,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleMouseMove,
-    handleMouseUp
-  } = useMenuItemSelectHandlers(isValidMenuItem ? "item" : null, key, {
-    index,
-    isSelected,
-    onSelect
-  });
+  function handleKeyDown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      select();
+    }
+  }
 
-  useMenuItemFocus(ownRef, index, !isValidMenuItem);
+  function handleMouseDown(event) {
+    event.preventDefault();
+  }
+
+  function handleMouseEnter(event) {
+    if (!isSelected && index != null) {
+      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
+    }
+  }
+
+  function handleMouseLeave(event) {
+    // clear out selection when mouse over a non-menu item child
+    dispatch({ type: CLEAR_SELECTION_INDEX });
+  }
+
+  function handleMouseMove(event) {
+    if (!isSelected && index != null) {
+      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
+    }
+  }
+
+  function handleMouseUp(event) {
+    if (isRightClick(event.nativeEvent)) return;
+
+    /*
+     * Prevent link event from triggering a click. We'll do this imperatively
+     * after setting state in select.
+     */
+    isLink && event.preventDefault();
+    select();
+  }
+
+  /**
+   * When a new selection is made the item should receive focus. When no item is
+   * selected, focus is placed on the menu itself so that keyboard navigation is
+   * still possible.
+   */
+  useLayoutEffect(() => {
+    if (isOpen) {
+      window.__REACH_DISABLE_TOOLTIPS = true;
+      window.requestAnimationFrame(() => {
+        if (selectionIndex !== -1) {
+          /*
+           * We haven't measured the popover yet, so give it a frame otherwise
+           * we'll scroll to the bottom of the page >.<
+           */
+          if (ownRef.current && index === selectionIndex) {
+            ownRef.current.focus();
+          }
+        } else {
+          /*
+           * Clear highlight when mousing over non-menu items, but focus the
+           * menu so the the keyboard will work after a mouseover.
+           */
+          menuRef.current && menuRef.current.focus();
+        }
+      });
+    } else {
+      /*
+       * We want to ignore the immediate focus of a tooltip so it doesn't pop
+       * up again when the menu closes, only pops up when focus returns again
+       * to the tooltip (like native OS tooltips).
+       */
+      window.__REACH_DISABLE_TOOLTIPS = false;
+    }
+  }, [index, isOpen, menuRef, selectionIndex]);
 
   return (
     <Comp
-      role={role}
       {...props}
       ref={ref}
-      data-reach-menu-item={isValidMenuItem ? "" : undefined}
+      data-reach-menu-item=""
       data-selected={isSelected ? "" : undefined}
-      data-valuetext={isValidMenuItem ? valueText : undefined}
+      data-valuetext={valueText}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
       onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
       onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
       onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
       onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+      role="menuitem"
       tabIndex={-1}
-    >
-      {children}
-    </Comp>
+    />
   );
+});
+
+////////////////////////////////////////////////////////////////////////////////
+// MenuItem
+
+export const MenuItem = forwardRef(function MenuItem(
+  { as = "div", ...props },
+  forwardedRef
+) {
+  return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
 });
 
 MenuItem.displayName = "MenuItem";
@@ -302,6 +375,7 @@ export const MenuItems = forwardRef(function MenuItems(
   const ref = useForkedRef(menuRef, forwardedRef);
 
   useEffect(() => {
+    // Respond to user char key input with typeahead
     const match = findItemFromSearch(menuItems, searchQuery);
     if (searchQuery && match != null) {
       dispatch({
@@ -322,6 +396,11 @@ export const MenuItems = forwardRef(function MenuItems(
 
   useEffect(() => {
     if (selectionIndex > menuItems.length - 1) {
+      /*
+       * If for some reason our selection index is larger than our possible
+       * index range (let's say the last item is selected and the list
+       * dynamically updates), we need to select the last item in the list.
+       */
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
         payload: { index: menuItems.length - 1 }
@@ -437,86 +516,25 @@ if (__DEV__) {
 // MenuLink
 
 export const MenuLink = forwardRef(function MenuLink(
-  {
-    as = "a",
-    children,
-    component,
-    index: indexProp,
-    onKeyDown,
-    onMouseDown,
-    onMouseEnter,
-    onMouseLeave,
-    onMouseMove,
-    onMouseUp,
-    onSelect,
-    role,
-    valueText: valueTextProp,
-    ...props
-  },
+  { as = "a", component, ...props },
   forwardedRef
 ) {
-  const {
-    state: { selectionIndex }
-  } = useMenuContext();
-
-  const ownRef = useRef(null);
-
-  const [valueText, callbackRef] = useValueText(ownRef, valueTextProp);
-
-  const ref = useForkedRef(callbackRef, forwardedRef);
-
-  const key = indexProp ?? valueText;
-
-  const index = useDescendant(key, ownRef);
-
-  const Comp = component || as;
-
-  const isSelected =
-    index !== null && index === selectionIndex ? true : undefined;
-
   if (component) {
     console.warn(
       "[@reach/menu-button]: Please use the `as` prop instead of `component`."
     );
   }
 
-  const {
-    handleKeyDown,
-    handleMouseDown,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleMouseMove,
-    handleMouseUp
-  } = useMenuItemSelectHandlers("link", key, {
-    index,
-    isSelected,
-    onSelect,
-    ref: ownRef
-  });
-
-  useMenuItemFocus(ownRef, index);
-
   return (
-    <MenuItem index={null} role="none" onSelect={noop}>
-      <Comp
+    <div role="none" tabIndex={-1}>
+      <MenuItemImpl
         {...props}
-        ref={ref}
-        data-reach-menu-item=""
+        ref={forwardedRef}
         data-reach-menu-link=""
-        data-selected={isSelected ? "" : undefined}
-        data-valuetext={valueText}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-        onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
-        onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
-        onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
-        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        role="menuitem"
-        tabIndex={-1}
-      >
-        {children}
-      </Comp>
-    </MenuItem>
+        as={component || as}
+        isLink={true}
+      />
+    </div>
   );
 });
 
@@ -603,11 +621,6 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-const DescendantContext = createContext();
-
-function useDescendantContext() {
-  return useContext(DescendantContext);
-}
 
 /**
  * This hook registers our menu item by passing it into an array. We can then
@@ -711,6 +724,15 @@ function findItemFromSearch(items, string = "") {
   return found ? items.indexOf(found) : null;
 }
 
+function isRightClick(nativeEvent) {
+  if ("which" in nativeEvent) {
+    return nativeEvent.which === 3;
+  } else if ("button" in nativeEvent) {
+    return nativeEvent.button === 2;
+  }
+  return false;
+}
+
 function reducer(state, action = {}) {
   const { payload, type: actionType } = action;
   switch (actionType) {
@@ -776,186 +798,4 @@ function reducer(state, action = {}) {
     default:
       return state;
   }
-}
-
-/**
- * This hook allows us to manage focus for the menu. When a new selection is
- * made the item should receive focus. When no item is selected focus is placed
- * on the menu itself so that keyboard navigation is still possible.
- * Since either a MenuItem or a MenuLink component can be registered as valid
- * menu items, and since we cannot call hooks conditionally, we pass a third
- * parameter to exclude all of our hook logic altogether for MenuItem components
- * that serve as wrappers for MenuLink components.
- */
-function useMenuItemFocus(ref, index, exclude = false) {
-  const {
-    menuRef,
-    state: { isOpen, selectionIndex }
-  } = useMenuContext();
-  useLayoutEffect(() => {
-    if (!exclude) {
-      if (isOpen) {
-        window.__REACH_DISABLE_TOOLTIPS = true;
-        window.requestAnimationFrame(() => {
-          if (selectionIndex !== -1) {
-            /*
-             * We haven't measured the popover yet, so give it a frame otherwise
-             * we'll scroll to the bottom of the page >.<
-             */
-            if (ref.current && index === selectionIndex) {
-              ref.current.focus();
-            }
-          } else {
-            /*
-             * Clear highlight when mousing over non-menu items, but focus the
-             * menu so the the keyboard will work after a mouseover.
-             */
-            menuRef.current && menuRef.current.focus();
-          }
-        });
-      } else {
-        /*
-         * We want to ignore the immediate focus of a tooltip so it doesn't pop
-         * up again when the menu closes, only pops up when focus returns again
-         * to the tooltip (like native OS tooltips).
-         */
-        window.__REACH_DISABLE_TOOLTIPS = false;
-      }
-    }
-  }, [exclude, index, isOpen, menuRef, ref, selectionIndex]);
-}
-
-/**
- * If a MenuItem or MenuLink do not have an explicit valueText prop, we look for
- * the DOM node's inner textContent to use for type-ahead functionality.
- */
-function useValueText(ref, valueTextProp) {
-  const [valueText, setValueText] = useState(valueTextProp || "");
-
-  const setValueTextFromDom = useCallback(
-    node => {
-      if (node && ref) {
-        ref.current = node;
-        if (!valueTextProp || valueText !== node.textContent) {
-          setValueText(node.textContent);
-        }
-      }
-    },
-    [ref, valueText, valueTextProp]
-  );
-
-  return [String(valueText), setValueTextFromDom];
-}
-
-/**
- * MenuItem and MenuLink will use the same event handlers to manage selection
- * and activation, and we set them up here.
- *
- * @param {"item"|"link"|null} itemType
- * @param {*} key
- * @param {Object} itemProps
- * @param {number} itemProps.index
- * @param {boolean} itemProps.isSelected
- * @param {Function} itemProps.onSelect
- * @param {Object} itemProps.ref
- */
-function useMenuItemSelectHandlers(
-  itemType,
-  key,
-  { index, isSelected, onSelect, ref }
-) {
-  const { buttonRef, dispatch } = useMenuContext();
-
-  const isLink = itemType === "link";
-
-  /*
-   * We'll use this to prevent dispatching state changes twice in `MenuLink`s
-   * nested inside `MenuItem`s
-   */
-  const exclude = itemType == null;
-
-  function select() {
-    /*
-     * Imperatively trigger a click event for MenuLinks to navigate to the href.
-     * Focus is managed in the state chart so the link should not keep focus
-     * as a result of this event. Focus should be directed to the MenuButton or
-     * may be redirected by a user event.
-     */
-    isLink && ref && ref.current && ref.current.click();
-    dispatch({
-      type: CLICK_MENU_ITEM,
-      payload: { buttonRef, callback: onSelect }
-    });
-  }
-
-  function handleKeyDown(event) {
-    if (exclude) {
-      return;
-    }
-
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      select();
-    }
-  }
-
-  function handleMouseDown(event) {
-    if (exclude) {
-      return;
-    }
-
-    event.preventDefault();
-  }
-
-  function handleMouseEnter(event) {
-    if (exclude) {
-      return;
-    }
-
-    if (!isSelected && index != null) {
-      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
-    }
-  }
-
-  function handleMouseLeave(event) {
-    if (exclude) {
-      return;
-    }
-
-    // clear out selection when mouse over a non-menu item child
-    dispatch({ type: CLEAR_SELECTION_INDEX });
-  }
-
-  function handleMouseMove(event) {
-    if (exclude) {
-      return;
-    }
-
-    if (!isSelected && index != null) {
-      dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
-    }
-  }
-
-  function handleMouseUp(event) {
-    if (exclude) {
-      return;
-    }
-
-    /*
-     * Prevent link event from triggering a click. We'll do this imperatively
-     * after setting state in select.
-     */
-    isLink && event.preventDefault();
-
-    select();
-  }
-
-  return {
-    handleKeyDown,
-    handleMouseDown,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleMouseMove,
-    handleMouseUp
-  };
 }
