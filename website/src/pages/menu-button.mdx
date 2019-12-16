@@ -1,17 +1,11 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Menu Button (Dropdown)"
-  meta={[
-    {
-      name: "description",
-      content:
-        "An accessible dropdown menu for the common dropdown menu button design pattern."
-    }
-  ]}
+<SEO
+  title="Menu Button"
+  description="An accessible component for the common dropdown menu button design pattern in React"
 />
 
-# MenuButton (Dropdown)
+# MenuButton
 
 [Menu](#menu) -
 [MenuButton](#menubutton) -
@@ -623,7 +617,7 @@ You can render any kind of content inside of a MenuLink.
 
 If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `<MenuLink>` and Reach Router. In this case, the router will handle focus for you.
 
-Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screenreader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
+Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screen reader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
 
 ```jsx
 function Example(props) {
@@ -670,7 +664,7 @@ function Example(props) {
 
 ## Icons
 
-If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screenreaders will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
+If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screen readers will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
 
 ```jsx
 <MenuButton>
@@ -678,7 +672,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 </MenuButton>
 ```
 
-However, if you have no text and only an icon, please make sure your icon has a screenreader friendly label:
+However, if you have no text and only an icon, please make sure your icon has a screen reader friendly label:
 
 ```jsx
 // we'd rather it said "Actions" than
