@@ -22,16 +22,32 @@ import "@reach/combobox/styles.css";
 import "../styles/app.scss";
 
 const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
-  return props.href ? (
-    <a ref={ref} className="NavLink" target="_blank" rel="noopener" {...props}>
-      {children} <span aria-hidden>↗</span>
-    </a>
-  ) : (
-    <Link ref={ref} className="NavLink" {...props}>
-      {children}
-    </Link>
+  return (
+    <li style={{ margin: 0, padding: 0 }}>
+      {props.href ? (
+        <a
+          ref={ref}
+          className="NavLink"
+          target="_blank"
+          rel="noopener"
+          {...props}
+        >
+          {children} <span aria-hidden>↗</span>
+        </a>
+      ) : (
+        <Link ref={ref} className="NavLink" {...props}>
+          {children}
+        </Link>
+      )}
+    </li>
   );
 });
+
+function NavList({ children }) {
+  return (
+    <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>{children}</ul>
+  );
+}
 
 function Bar() {
   return (
@@ -130,7 +146,7 @@ function Header({ children, style = {}, ...props }) {
 
       <div style={{ height: 10 }} aria-hidden />
 
-      <nav>{children}</nav>
+      {children}
     </header>
   );
 }
@@ -175,40 +191,52 @@ function Nav({ media }) {
           }}
         >
           <Header>
-            <NavLink to="/" ref={navNode}>
-              Home
-            </NavLink>
-            <NavLink to="/funding">Funding</NavLink>
-            <NavLink href="https://spectrum.chat/reach">
-              Spectrum Community
-            </NavLink>
-            <NavLink href="https://github.com/reach/reach-ui">GitHub</NavLink>
+            <nav>
+              <NavList>
+                <NavLink to="/" ref={navNode}>
+                  Home
+                </NavLink>
+                <NavLink to="/funding">Funding</NavLink>
+                <NavLink href="https://spectrum.chat/reach">
+                  Spectrum Community
+                </NavLink>
+                <NavLink href="https://github.com/reach/reach-ui">
+                  GitHub
+                </NavLink>
+              </NavList>
 
-            <hr />
+              <hr aria-hidden />
 
-            <NavLink to="/animation">Animation</NavLink>
-            <NavLink to="/styling">Styling</NavLink>
+              <NavList>
+                <NavLink to="/animation">Animation</NavLink>
+                <NavLink to="/styling">Styling</NavLink>
+              </NavList>
 
-            <hr />
+              <hr aria-hidden />
 
-            <NavLink to="/alert">Alert</NavLink>
-            <NavLink to="/alert-dialog">AlertDialog</NavLink>
-            <NavLink to="/combobox">Combobox</NavLink>
-            <NavLink to="/dialog">Dialog (Modal)</NavLink>
-            <NavLink to="/menu-button">MenuButton</NavLink>
-            <NavLink to="/portal">Portal</NavLink>
-            <NavLink to="/skip-nav">SkipNav</NavLink>
-            <NavLink to="/slider">Slider</NavLink>
-            <NavLink to="/tabs">Tabs</NavLink>
-            <NavLink to="/tooltip">Tooltip</NavLink>
-            <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
+              <NavList>
+                <NavLink to="/alert">Alert</NavLink>
+                <NavLink to="/alert-dialog">AlertDialog</NavLink>
+                <NavLink to="/combobox">Combobox</NavLink>
+                <NavLink to="/dialog">Dialog (Modal)</NavLink>
+                <NavLink to="/menu-button">MenuButton</NavLink>
+                <NavLink to="/portal">Portal</NavLink>
+                <NavLink to="/skip-nav">SkipNav</NavLink>
+                <NavLink to="/slider">Slider</NavLink>
+                <NavLink to="/tabs">Tabs</NavLink>
+                <NavLink to="/tooltip">Tooltip</NavLink>
+                <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
+              </NavList>
 
-            <hr />
+              <hr aria-hidden />
 
-            <NavLink to="/auto-id">Auto ID</NavLink>
-            <NavLink to="/component-component">Component²</NavLink>
-            <NavLink to="/rect">Rect</NavLink>
-            <NavLink to="/window-size">WindowSize</NavLink>
+              <NavList>
+                <NavLink to="/auto-id">Auto ID</NavLink>
+                <NavLink to="/component-component">Component²</NavLink>
+                <NavLink to="/rect">Rect</NavLink>
+                <NavLink to="/window-size">WindowSize</NavLink>
+              </NavList>
+            </nav>
           </Header>
           <Footer />
         </div>
