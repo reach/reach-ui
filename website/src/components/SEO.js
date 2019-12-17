@@ -23,8 +23,12 @@ function SEO({ description = "", lang = "en", meta = [], title }) {
   return (
     <Helmet
       htmlAttributes={{ lang }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      title={title || site.siteMetadata.title}
+      titleTemplate={
+        title === site.siteMetadata.title
+          ? title
+          : `%s | ${site.siteMetadata.title}`
+      }
       meta={[
         { name: "description", content: metaDescription },
         { property: "og:title", content: title },
@@ -43,7 +47,7 @@ SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired
+  title: PropTypes.string
 };
 
 export default SEO;
