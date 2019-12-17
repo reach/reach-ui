@@ -3,7 +3,7 @@ import "./app.scss";
 import React from "react";
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
 import { MDXProvider } from "@mdx-js/react";
-import Layout from "./layout";
+import Layout from "./Layout";
 import { useThrottle } from "use-throttle";
 import matchSorter from "match-sorter";
 
