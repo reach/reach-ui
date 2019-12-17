@@ -133,7 +133,11 @@ function MyPageLayout({ children }) {
     if (firstLoad) {
       firstLoad = false;
     } else if (contentFocusRef.current) {
-      contentFocusRef.current.focus();
+      let sectionHeading = contentFocusRef.current.querySelector("h1");
+      let focusNode = sectionHeading || contentFocusRef.current;
+      focusNode.style.outline = "none";
+      focusNode.tabIndex = -1;
+      focusNode.focus();
     }
     // I dunno, I just made it global on window, whatever...
     import("./cities.js");
@@ -142,13 +146,10 @@ function MyPageLayout({ children }) {
   return (
     <Layout>
       <MDXProvider components={{ pre: PreComponent, table: Table }}>
-        <main
-          ref={contentFocusRef}
-          tabIndex={-1}
-          style={{ outline: "none" }}
-          role="group"
-        >
-          {children}
+        <main>
+          <div ref={contentFocusRef} tabIndex={-1} role="group">
+            {children}
+          </div>
         </main>
       </MDXProvider>
     </Layout>
