@@ -1,10 +1,10 @@
 /**
- * Screenreader friendly alert messages. In many apps developers add "alert"
+ * Screen-reader-friendly alert messages. In many apps developers add "alert"
  * messages when network events or other things happen. Users with assistive
  * technologies may not know about the message unless you develop for it.
  *
  * The Alert component will announce to assistive technologies whatever you
- * render to the screen. If you don't have a screenreader on you won't notice a
+ * render to the screen. If you don't have a screen reader on you won't notice a
  * difference between rendering `<Alert>` vs. a `<div>`.
  *
  * @see Docs     https://reacttraining.com/reach-ui/alert
@@ -28,7 +28,7 @@ export type AlertProps = {
 } & React.HTMLProps<HTMLDivElement>;
 
 /**
- * Screenreader friendly alert messages. In many apps developers add "alert"
+ * Screen-reader-friendly alert messages. In many apps developers add "alert"
  * messages when network events or other things happen. Users with assistive
  * technologies may not know about the message unless you develop for it.
  *
