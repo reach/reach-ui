@@ -18,9 +18,9 @@ export let Example = () => {
         <Menu>
           <MenuButton>Dropdown</MenuButton>
           <MenuList>
-            <MenuItem onSelect={action("Test")}>Test</MenuItem>
-            <MenuItem onSelect={action("Test")}>Test</MenuItem>
-            <MenuItem onSelect={action("Test")}>Test</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test 1</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test 2</MenuItem>
+            <MenuItem onSelect={action("Test")}>Test 3</MenuItem>
           </MenuList>
         </Menu>
       </Dialog>
