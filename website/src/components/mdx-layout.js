@@ -133,11 +133,13 @@ function MyPageLayout({ children }) {
     if (firstLoad) {
       firstLoad = false;
     } else if (contentFocusRef.current) {
-      // If it exists, focus the first H1 heading we find in the main content
-      // area instead of the content area itself.
-      // We could also consider injecting a "skip back" link component per the
-      // suggestions in the Gatsby blog which could be a cool POC
-      // https://www.gatsbyjs.org/blog/2019-07-11-user-testing-accessible-client-routing/
+      /*
+       * If it exists, focus the first H1 heading we find in the main content
+       * area instead of the content area itself.
+       * We could also consider injecting a "skip back" link component per the
+       * suggestions in the Gatsby blog which could be a cool POC
+       * https://www.gatsbyjs.org/blog/2019-07-11-user-testing-accessible-client-routing/
+       */
       let sectionHeading = contentFocusRef.current.querySelector("h1");
       let focusNode = sectionHeading || contentFocusRef.current;
       focusNode.tabIndex = -1;
