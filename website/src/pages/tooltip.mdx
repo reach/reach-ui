@@ -1,14 +1,6 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Tooltip"
-  meta={[
-    {
-      name: "description",
-      content: "Accessible Tooltips for React.js"
-    }
-  ]}
-/>
+<SEO title="Tooltip" description="Accessible tooltips component for React" />
 
 # Tooltip
 
@@ -79,7 +71,7 @@ function Example() {
 }
 ```
 
-Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
+Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screen reader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
 
 ```jsx-live
 function Example() {
@@ -87,7 +79,7 @@ function Example() {
     <Tooltip
       // What the tooltip renders
       label="Notifications"
-      // What the screenreader announces
+      // What the screen reader announces
       ariaLabel="3 Notifications"
     >
       <button style={{ fontSize: 25 }}>🔔 3</button>

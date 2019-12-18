@@ -9,20 +9,31 @@
 
 import * as React from "react";
 
-type ResolvedMenuLinkComponent<T> = T extends keyof JSX.IntrinsicElements
-  ? T
-  : React.ComponentType<T>;
+////////////////////////////////////////////////////////////////////////////////
+// The following types help us deal with the `as` prop.
+// I kind of hacked around until I got this to work using some other projects,
+// as a rough guide, but it does seem to work so, err, that's cool? Yay TS!
+// Anyway, we should consider moving this into @reach/utils since we'll use this
+// pattern elsewhere.
+// P = additional props
+// T = type of component to render
 
-type ResolvedMenuLinkProps<T> = T extends keyof JSX.IntrinsicElements
-  ? JSX.IntrinsicElements[T]
-  : T;
+type As<P = any> = React.ElementType<P>;
 
-type SupportedMenuLinkComponent = object | keyof JSX.IntrinsicElements;
+type PropsWithAs<T extends As, P> = P &
+  Omit<React.ComponentPropsWithRef<T>, "as" | keyof P> & {
+    as?: T;
+  };
+
+interface DynamicComponent<T extends As, P> {
+  <TT extends As>(props: PropsWithAs<TT, P> & { as: TT }): JSX.Element;
+  (props: PropsWithAs<T, P>): JSX.Element;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 export interface MenuItemState {
   buttonId: string;
-  buttonRect: undefined | DOMRect;
-  closingWithClick: boolean;
   isOpen: boolean;
   selectionIndex: number;
 }
@@ -66,37 +77,26 @@ export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-props
  */
-export type MenuLinkProps<
-  T extends SupportedMenuLinkComponent
-> = ResolvedMenuLinkProps<T> & {
-  /**
-   * By default, `MenuLink` renders an anchor, but if you are using a router
-   * with its own `Link` component, you can use `as={Link}`.
-   *
-   * Additionally, if other routers' `Link` component uses the
-   * `React.forwardRef` API, you can pass them in as well. If they don’t it
-   * won't work because we will not be able to manage focus on the element the
-   * component renders.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-as
-   */
-  as?: ResolvedMenuLinkComponent<T>;
+export type MenuLinkProps = {
   /**
    * You can render any kind of content inside of a MenuLink.
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-children
    */
   children: React.ReactNode;
+  /**
+   * Callback that fires when a `MenuLink` is selected.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-onselect
+   */
+  onSelect?: () => any;
   to?: string;
 };
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-props
  */
-export type MenuItemProps = Omit<
-  Omit<React.HTMLProps<HTMLDivElement>, "role">,
-  "onSelect"
-> & {
+export type MenuItemProps = {
   /**
    * You can put any type of content inside of a `<MenuItem>`.
    *
@@ -144,9 +144,7 @@ export type MenuItemsProps = React.HTMLProps<HTMLDivElement> & {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink
  */
-export function MenuLink<T extends SupportedMenuLinkComponent>(
-  props: MenuLinkProps<T>
-): React.ReactElement<MenuLinkProps<T>>;
+export const MenuLink: DynamicComponent<"a", MenuLinkProps>;
 
 /**
  * The wrapper component for the other components. No DOM element is rendered.
@@ -176,7 +174,7 @@ export const MenuList: React.FunctionComponent<MenuListProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
  */
-export const MenuItem: React.FunctionComponent<MenuItemProps>;
+export const MenuItem: DynamicComponent<"div", MenuItemProps>;
 
 /**
  * A low-level wrapper for the popover that appears when a menu button is open.

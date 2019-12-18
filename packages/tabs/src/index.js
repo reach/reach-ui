@@ -43,8 +43,7 @@ export const Tabs = forwardRef(function Tabs(
   const [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
 
   const clones = React.Children.map(children, child => {
-    // ignore random <div/>s etc.
-    if (!child || typeof child.type === "string") return child;
+    if (elementIsNullOrString(child)) return child;
     return cloneElement(child, {
       selectedIndex: isControlled ? controlledIndex : selectedIndex,
       _id: id,
@@ -107,6 +106,7 @@ export const TabList = forwardRef(function TabList(
   } = clonedProps;
 
   const clones = React.Children.map(children, (child, index) => {
+    if (elementIsNullOrString(child)) return child;
     return cloneElement(child, {
       isSelected: index === selectedIndex,
       _id: makeId(_id, index),
@@ -237,13 +237,14 @@ export const TabPanels = forwardRef(function TabPanels(
     ...htmlAttrs
   } = rest;
 
-  const clones = React.Children.map(children, (child, index) =>
-    cloneElement(child, {
+  const clones = React.Children.map(children, (child, index) => {
+    if (elementIsNullOrString(child)) return child;
+    return cloneElement(child, {
       isSelected: index === selectedIndex,
       _selectedPanelRef,
       _id: makeId(_id, index)
-    })
-  );
+    });
+  });
 
   return (
     <Comp
@@ -292,4 +293,11 @@ if (__DEV__) {
   TabPanel.propTypes = {
     children: PropTypes.node
   };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+// Check children before cloning to ignore strings or null values
+function elementIsNullOrString(child) {
+  return !child || typeof child.type === "string";
 }

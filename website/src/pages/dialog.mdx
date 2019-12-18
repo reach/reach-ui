@@ -1,13 +1,8 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Dialog (Modal)"
-  meta={[
-    {
-      name: "description",
-      content: "An accessible React.js modal dialog."
-    }
-  ]}
+<SEO
+  title="Dialog (Modal)"
+  description="An accessible modal dialog component for React"
 />
 
 # Dialog (Modal)
@@ -519,7 +514,7 @@ For more details, see the [W3C recommendations for `aria-label`](https://www.w3.
 
 ### Aria Hiding Other Elements
 
-The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screenreader users. Instead, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog. This traps the virtual cursor inside the dialog.
+The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screen reader users. Instead, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog. This traps the virtual cursor inside the dialog.
 
 This is a little unusual for a React component to traverse the DOM that it isn't a part of. Care has been taken to restore the manipulated attributes back to their original values.
 

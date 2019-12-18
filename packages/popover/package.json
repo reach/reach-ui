@@ -1,7 +1,12 @@
 {
   "name": "@reach/popover",
-  "version": "0.6.2",
+  "version": "0.6.4",
   "description": "Render a portal positioned relative to another element.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/popover"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
@@ -10,7 +15,7 @@
   "dependencies": {
     "@reach/portal": "^0.6.2",
     "@reach/rect": "^0.6.2",
-    "@reach/utils": "^0.6.1",
+    "@reach/utils": "^0.6.4",
     "tabbable": "^4.0.0"
   },
   "peerDependencies": {

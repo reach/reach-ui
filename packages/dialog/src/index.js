@@ -1,11 +1,11 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
+import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
-import { checkStyles, wrapEvent, useForkedRef } from "@reach/utils";
+import { checkStyles, noop, useForkedRef, wrapEvent } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
-
-const noop = () => {};
 
 const overlayPropTypes = {
   initialFocusRef: () => {},
@@ -20,15 +20,10 @@ export const DialogOverlay = forwardRef(function DialogOverlay(
   { isOpen = true, ...props },
   forwardedRef
 ) {
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
-  useEffect(() => {
-    checkStyles("dialog");
-  }, []);
-
+  useEffect(() => checkStyles("dialog"), []);
   return isOpen ? (
-    <Portal data-reach-dialog-wrapper>
-      <DialogInner ref={ref} {...props} />
+    <Portal data-reach-dialog-wrapper="">
+      <DialogInner ref={forwardedRef} {...props} />
     </Portal>
   ) : null;
 });
@@ -60,38 +55,47 @@ const DialogInner = forwardRef(function DialogInner(
   const overlayNode = useRef(null);
   const ref = useForkedRef(overlayNode, forwardedRef);
 
+  const activateFocusLock = useCallback(() => {
+    if (initialFocusRef && initialFocusRef.current) {
+      initialFocusRef.current.focus();
+    }
+  }, [initialFocusRef]);
+
+  function handleClick(event) {
+    if (mouseDownTarget.current === event.target) {
+      event.stopPropagation();
+      onDismiss(event);
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Escape") {
+      event.stopPropagation();
+      onDismiss(event);
+    }
+  }
+
+  function handleMouseDown(event) {
+    mouseDownTarget.current = event.target;
+  }
+
   useEffect(() => createAriaHider(overlayNode.current), []);
 
   return (
-    <FocusLock
-      autoFocus
-      returnFocus
-      onActivation={() => {
-        if (initialFocusRef && initialFocusRef.current) {
-          initialFocusRef.current.focus();
-        }
-      }}
-    >
+    <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
       <RemoveScroll allowPinchZoom={allowPinchZoom}>
         <div
-          data-reach-dialog-overlay
-          onClick={wrapEvent(onClick, event => {
-            if (mouseDownTarget.current === event.target) {
-              event.stopPropagation();
-              onDismiss(event);
-            }
-          })}
-          onMouseDown={wrapEvent(onMouseDown, event => {
-            mouseDownTarget.current = event.target;
-          })}
-          onKeyDown={wrapEvent(onKeyDown, event => {
-            if (event.key === "Escape") {
-              event.stopPropagation();
-              onDismiss(event);
-            }
-          })}
-          ref={ref}
           {...props}
+          ref={ref}
+          data-reach-dialog-overlay=""
+          /*
+           * We can ignore the `no-static-element-interactions` warning here
+           * because our overlay is only designed to capture any outside
+           * clicks, not to serve as a clickable element itself.
+           */
+          onClick={wrapEvent(onClick, handleClick)}
+          onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+          onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         />
       </RemoveScroll>
     </FocusLock>
@@ -114,15 +118,15 @@ export const DialogContent = forwardRef(function DialogContent(
 ) {
   return (
     <div
-      role="dialog"
+      {...props}
+      ref={forwardedRef}
+      data-reach-dialog-content=""
       aria-modal="true"
-      data-reach-dialog-content
-      tabIndex="-1"
       onClick={wrapEvent(onClick, event => {
         event.stopPropagation();
       })}
-      ref={forwardedRef}
-      {...props}
+      role="dialog"
+      tabIndex={-1}
     />
   );
 });
@@ -142,15 +146,13 @@ export const Dialog = forwardRef(function Dialog(
   { isOpen, onDismiss = noop, initialFocusRef, ...props },
   forwardedRef
 ) {
-  const ownRef = useRef(null);
-  const ref = forwardedRef || ownRef;
   return (
     <DialogOverlay
+      initialFocusRef={initialFocusRef}
       isOpen={isOpen}
       onDismiss={onDismiss}
-      initialFocusRef={initialFocusRef}
     >
-      <DialogContent ref={ref} {...props} />
+      <DialogContent ref={forwardedRef} {...props} />
     </DialogOverlay>
   );
 });

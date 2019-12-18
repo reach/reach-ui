@@ -1,13 +1,8 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Alert Dialog"
-  meta={[
-    {
-      name: "description",
-      content: "Accessible alert dialog for React"
-    }
-  ]}
+<SEO
+  title="Alert Dialog"
+  description="Accessible alert dialog component for React"
 />
 
 # AlertDialog
@@ -250,21 +245,13 @@ Accepts any renderable content but should generally be restricted to `AlertDialo
 
 ```jsx
 <AlertDialog>
-  <AlertDialogLabel>
-    Please Confirm!
-  </AlertDialog>
+  <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-  <AlertDialogDescription>
-    A longer message
-  </AlertDialogDescription>
+  <AlertDialogDescription>A longer message</AlertDialogDescription>
 
   <div>
-    <button onClick={destroyStuff}>
-      A Destructive Action
-    </button>{" "}
-    <button ref={leastDestructiveRef}>
-      Least Destructive Action
-    </button>
+    <button onClick={destroyStuff}>A Destructive Action</button>{" "}
+    <button ref={leastDestructiveRef}>Least Destructive Action</button>
   </div>
 </AlertDialog>
 ```

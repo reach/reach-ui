@@ -9,9 +9,8 @@ listener.getState()
 listenter.dispose()
 */
 
-export default media => {
+function createMediaListener(media) {
   let transientListener = null;
-
   const mediaKeys = Object.keys(media);
 
   const queryLists = mediaKeys.reduce((queryLists, key) => {
@@ -58,4 +57,6 @@ export default media => {
   const getState = () => mediaState;
 
   return { listen, dispose, getState };
-};
+}
+
+export default createMediaListener;

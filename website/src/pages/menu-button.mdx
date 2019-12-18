@@ -1,17 +1,11 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Menu Button (Dropdown)"
-  meta={[
-    {
-      name: "description",
-      content:
-        "An accessible dropdown menu for the common dropdown menu button design pattern."
-    }
-  ]}
+<SEO
+  title="Menu Button"
+  description="An accessible component for the common dropdown menu button design pattern in React"
 />
 
-# MenuButton (Dropdown)
+# MenuButton
 
 [Menu](#menu) -
 [MenuButton](#menubutton) -
@@ -193,6 +187,10 @@ Any props not listed above will be spread onto the underlying button element. Yo
   </MenuList>
 </Menu>
 ```
+
+### MenuButton as
+
+_Type_: ``
 
 ### MenuButton children
 
@@ -402,6 +400,7 @@ function Example() {
 | Prop                                     | Type   | Required |
 | ---------------------------------------- | ------ | -------- |
 | [element props](#menuitem-element-props) | spread | n/a      |
+| [as](#menuitem-as)                       | any    | false    |
 | [children](#menuitem-children)           | node   | false    |
 | [onSelect](#menuitem-onselect)           | func   | true     |
 
@@ -430,6 +429,44 @@ function Example(props) {
         </MenuItem>
         <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
         <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+```
+
+### MenuItem as
+
+_Type_: `any`
+
+By default, `MenuItem` renders a div. You can pass another element or use this prop to render a styled component.
+
+```jsx
+const StyledItem = styled.div`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+function Example() {
+  return (
+    <Menu>
+      <MenuButton id="example-button">
+        Actions <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList>
+        <MenuItem as={StyledItem} onSelect={action("Download")}>
+          Download
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Copy")}>
+          Create a Copy
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Mark as Draft")}>
+          Mark as Draft
+        </MenuItem>
+        <MenuItem as={StyledItem} onSelect={action("Delete")}>
+          Delete
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -517,6 +554,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 | [element props](#menulink-element-props) | spread | n/a      |
 | [as](#menulink-as)                       | any    | true     |
 | [children](#menulink-children)           | node   | false    |
+| [onSelect](#menulink-onselect)           | func   | false    |
 
 ### MenuLink element props
 
@@ -574,13 +612,19 @@ You can render any kind of content inside of a MenuLink.
 </MenuLink>
 ```
 
+### MenuLink onSelect
+
+_Type_: `func`
+
+Callback that fires when a `MenuLink` is selected.
+
 # Notes
 
 ## Unmounting the Menu after an action
 
 If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `<MenuLink>` and Reach Router. In this case, the router will handle focus for you.
 
-Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screenreader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
+Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screen reader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
 
 ```jsx
 function Example(props) {
@@ -627,7 +671,7 @@ function Example(props) {
 
 ## Icons
 
-If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screenreaders will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
+If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screen readers will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
 
 ```jsx
 <MenuButton>
@@ -635,7 +679,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 </MenuButton>
 ```
 
-However, if you have no text and only an icon, please make sure your icon has a screenreader friendly label:
+However, if you have no text and only an icon, please make sure your icon has a screen reader friendly label:
 
 ```jsx
 // we'd rather it said "Actions" than
@@ -645,9 +689,9 @@ However, if you have no text and only an icon, please make sure your icon has a 
 </MenuButton>
 
 // add screen reader only text for svgs
-import AriaText from "@reach/aria-text"
+import VisuallyHidden from "@reach/visually-hidden"
 <MenuButton>
-  <AriaText>Actions</AriaText>
+  <VisuallyHidden>Actions</VisuallyHidden>
   <svg aria-hidden>
     <polygon points="0,0 20,0 10,10 " />
   </svg>
@@ -665,6 +709,38 @@ import AriaText from "@reach/aria-text"
   </span>
 </MenuButton>
 ```
+
+## Events
+
+You may want to pass your own click handler to a MenuButton, MenuItem or MenuLink that, in some cases, intercepts and prevents the default behavior from ocurring. You may think to do this by passing a handler to the `onClick` prop:
+
+```jsx
+<Menu>
+  <MenuButton>Actions</MenuButton>
+  <MenuList>
+    <MenuItem
+      onClick={event => {
+        if (!userLoggedIn) {
+          event.preventDefault();
+          openDialog();
+        }
+      }}
+      onSelect={() => alert("Download")}
+    >
+      Download
+    </MenuItem>
+  </MenuList>
+</Menu>
+```
+
+This won't work because we actually do not call the `onClick` handler to activate `Menu` or select `MenuItem` or `MenuLink` components. This is because a user may mouse down on a menu button, drag over a menu item and then select it by releasing the mouse trigger. A user may also start clicking one item, then drag to another item before `mouseup` to change their selectiion.
+
+As such, events for each component look more like this:
+
+- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (`"Enter"` or space `" "` keys)
+- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys)
+- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys).
+  - For `MenuLink`, the `click` event is fired after the selection events. So if you only need to intercept the event that triggers the anchor link, you can still use `onClick`, but the rest of the event handlers called in `MenuLink` will still be which means the `Menu` will close and your `onSelect` handler will be triggered.
 
 ## Keyboard Accessibility
 

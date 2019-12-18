@@ -1,14 +1,19 @@
 {
   "name": "@reach/alert",
-  "version": "0.6.2",
-  "description": "Screenreader friendly alert messages.",
+  "version": "0.6.4",
+  "description": "Screen-reader-friendly alert messages.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/alert"
+  },
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/utils": "^0.6.1",
+    "@reach/utils": "^0.6.4",
     "@reach/visually-hidden": "^0.6.2",
     "prop-types": "^15.7.2"
   },
