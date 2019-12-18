@@ -554,6 +554,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 | [element props](#menulink-element-props) | spread | n/a      |
 | [as](#menulink-as)                       | any    | true     |
 | [children](#menulink-children)           | node   | false    |
+| [onSelect](#menulink-onselect)           | func   | false    |
 
 ### MenuLink element props
 
@@ -610,6 +611,12 @@ You can render any kind of content inside of a MenuLink.
   <UserName>Ryan Florence</UserName>
 </MenuLink>
 ```
+
+### MenuLink onSelect
+
+_Type_: `func`
+
+Callback that fires when a `MenuLink` is selected.
 
 # Notes
 
@@ -682,9 +689,9 @@ However, if you have no text and only an icon, please make sure your icon has a 
 </MenuButton>
 
 // add screen reader only text for svgs
-import AriaText from "@reach/aria-text"
+import VisuallyHidden from "@reach/visually-hidden"
 <MenuButton>
-  <AriaText>Actions</AriaText>
+  <VisuallyHidden>Actions</VisuallyHidden>
   <svg aria-hidden>
     <polygon points="0,0 20,0 10,10 " />
   </svg>
@@ -702,6 +709,38 @@ import AriaText from "@reach/aria-text"
   </span>
 </MenuButton>
 ```
+
+## Events
+
+You may want to pass your own click handler to a MenuButton, MenuItem or MenuLink that, in some cases, intercepts and prevents the default behavior from ocurring. You may think to do this by passing a handler to the `onClick` prop:
+
+```jsx
+<Menu>
+  <MenuButton>Actions</MenuButton>
+  <MenuList>
+    <MenuItem
+      onClick={event => {
+        if (!userLoggedIn) {
+          event.preventDefault();
+          openDialog();
+        }
+      }}
+      onSelect={() => alert("Download")}
+    >
+      Download
+    </MenuItem>
+  </MenuList>
+</Menu>
+```
+
+This won't work because we actually do not call the `onClick` handler to activate `Menu` or select `MenuItem` or `MenuLink` components. This is because a user may mouse down on a menu button, drag over a menu item and then select it by releasing the mouse trigger. A user may also start clicking one item, then drag to another item before `mouseup` to change their selectiion.
+
+As such, events for each component look more like this:
+
+- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (`"Enter"` or space `" "` keys)
+- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys)
+- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys).
+  - For `MenuLink`, the `click` event is fired after the selection events. So if you only need to intercept the event that triggers the anchor link, you can still use `onClick`, but the rest of the event handlers called in `MenuLink` will still be which means the `Menu` will close and your `onSelect` handler will be triggered.
 
 ## Keyboard Accessibility
 

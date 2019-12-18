@@ -21,6 +21,7 @@
 
 [data-reach-menu-item] {
   display: block;
+  user-select: none;
 }
 
 /*
