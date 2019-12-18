@@ -4,7 +4,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useReducer,
   useRef,
   useState
@@ -178,6 +177,8 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
     as: Comp,
     index: indexProp,
     isLink = false,
+    onClick,
+    onDragStart,
     onKeyDown,
     onMouseDown,
     onMouseEnter,
@@ -222,6 +223,8 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
 
   const ref = useForkedRef(forwardedRef, setValueTextFromDom);
 
+  const mouseEventStarted = useRef(false);
+
   /*
    * By default, we assume valueText is a unique value for all menu items, so it
    * should be sufficient as an unique identifier we can use to find our index.
@@ -234,28 +237,59 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
   const isSelected = index === selectionIndex;
 
   function select() {
-    /*
-     * Imperatively trigger a click event for MenuLinks to navigate to the href.
-     * Focus is managed in the state chart so the link should not keep focus
-     * as a result of this event. Focus should be directed to the MenuButton or
-     * may be redirected by a user event.
-     */
-    isLink && ownRef.current && ownRef.current.click();
     dispatch({
       type: CLICK_MENU_ITEM,
       payload: { buttonRef, callback: onSelect }
     });
   }
 
-  function handleKeyDown(event) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
+  function handleClick(event) {
+    if (isLink && !isRightClick(event.nativeEvent)) {
       select();
     }
   }
 
+  function handleDragStart(event) {
+    /*
+     * Because we don't preventDefault on mousedown for links (we need the
+     * native click event), clicking and holding on a link triggers a dragstart
+     * which we don't want.
+     */
+    if (isLink) {
+      event.preventDefault();
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" || event.key === " ") {
+      /*
+       * For links, the Enter key will trigger a click by default, but for
+       * consistent behavior across menu items we'll trigger a click when the
+       * spacebar is pressed.
+       */
+      if (isLink) {
+        if (event.key === " " && ownRef.current) {
+          ownRef.current.click();
+        }
+      } else {
+        event.preventDefault();
+        select();
+      }
+    }
+  }
+
   function handleMouseDown(event) {
-    event.preventDefault();
+    if (isRightClick(event.nativeEvent)) return;
+
+    if (isLink) {
+      /*
+       * Signal that the mouse is down so we can react call the right function
+       * if the user is clicking on a link.
+       */
+      mouseEventStarted.current = true;
+    } else {
+      event.preventDefault();
+    }
   }
 
   function handleMouseEnter(event) {
@@ -265,7 +299,7 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
   }
 
   function handleMouseLeave(event) {
-    // clear out selection when mouse over a non-menu item child
+    // Clear out selection when mouse over a non-menu item child.
     dispatch({ type: CLEAR_SELECTION_INDEX });
   }
 
@@ -278,20 +312,38 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
   function handleMouseUp(event) {
     if (isRightClick(event.nativeEvent)) return;
 
-    /*
-     * Prevent link event from triggering a click. We'll do this imperatively
-     * after setting state in select.
-     */
-    isLink && event.preventDefault();
-    select();
+    if (isLink) {
+      /*
+       * If a mousedown event was initiated on a menu link followed be a mouseup
+       * event on the same link, we do nothing; a click event will come next and
+       * handle selection. Otherwise, we trigger a click event imperatively.
+       */
+      if (mouseEventStarted.current) {
+        mouseEventStarted.current = false;
+      } else if (ownRef.current) {
+        ownRef.current.click();
+      }
+    } else {
+      select();
+    }
   }
+
+  /*
+   * Any time a mouseup event occurs anywhere in the document, we reset the
+   * mouseEventStarted ref so we can check it again when needed.
+   */
+  useEffect(() => {
+    let listener = () => (mouseEventStarted.current = false);
+    document.addEventListener("mouseup", listener);
+    return () => document.removeEventListener("mouseup", listener);
+  }, []);
 
   /**
    * When a new selection is made the item should receive focus. When no item is
    * selected, focus is placed on the menu itself so that keyboard navigation is
    * still possible.
    */
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       window.__REACH_DISABLE_TOOLTIPS = true;
       window.requestAnimationFrame(() => {
@@ -328,6 +380,8 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
       data-reach-menu-item=""
       data-selected={isSelected ? "" : undefined}
       data-valuetext={valueText}
+      onClick={wrapEvent(onClick, handleClick)}
+      onDragStart={wrapEvent(onDragStart, handleDragStart)}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
       onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}

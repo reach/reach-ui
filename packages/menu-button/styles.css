@@ -56,7 +56,3 @@
   color: white;
   outline: none;
 }
-
-[data-reach-menu-popover][hidden] {
-  display: none;
-}
