@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
+// import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
 import { MDXProvider } from "@mdx-js/react";
 import Alert from "@reach/alert";
 import {
@@ -49,77 +49,8 @@ import { useTransition, animated } from "react-spring/web.cjs";
 import { Phased } from "recondition";
 import { useThrottle } from "use-throttle";
 import Layout from "./Layout";
+import { PreComponent } from "./MdxPre";
 import "../styles/app.scss";
-
-function PreComponent({ className, ...props }) {
-  return props?.children?.props?.className === "language-jsx-live" ? (
-    <div className="react-live">
-      <LiveProvider
-        theme={{ plain: {}, styles: [] }}
-        code={props.children.props.children.trim()}
-        scope={{
-          ...React,
-          animated,
-          GatsbyLink,
-          Component,
-          Rect,
-          useRect,
-          WindowSize,
-          useWindowSize,
-          Portal,
-          Menu,
-          MenuList,
-          MenuButton,
-          MenuItem,
-          MenuItems,
-          MenuPopover,
-          MenuLink,
-          VisuallyHidden,
-          Dialog,
-          DialogOverlay,
-          DialogContent,
-          useTransition,
-          Phased,
-          Alert,
-          AlertDialog,
-          AlertDialogDescription,
-          AlertDialogLabel,
-          AlertDialogOverlay,
-          AlertDialogContent,
-          Tabs,
-          TabList,
-          Tab,
-          TabPanels,
-          TabPanel,
-          Slider,
-          SliderInput,
-          SliderTrack,
-          SliderTrackHighlight,
-          SliderHandle,
-          SliderMarker,
-          useId,
-          Tooltip,
-          TooltipPopup,
-          useTooltip,
-          Combobox,
-          ComboboxInput,
-          ComboboxPopover,
-          ComboboxList,
-          ComboboxOption,
-          ComboboxOptionText,
-          useThrottle,
-          matchSorter
-        }}
-      >
-        <LiveEditor className="react-live-editor" tabIndex={-1} />
-        <LiveError className="react-live-error" />
-        <LivePreview className="react-live-preview" />
-      </LiveProvider>
-    </div>
-  ) : (
-    <pre {...props} />
-  );
-}
 
 function Table(props) {
   return <table className="u-full-width" {...props} />;
@@ -151,7 +82,72 @@ function MyPageLayout({ children }) {
 
   return (
     <Layout>
-      <MDXProvider components={{ pre: PreComponent, table: Table }}>
+      <MDXProvider
+        components={{
+          pre: function(props) {
+            return (
+              <PreComponent
+                {...props}
+                theme={{ plain: {}, styles: [] }}
+                scope={{
+                  ...React,
+                  animated,
+                  GatsbyLink,
+                  Component,
+                  Rect,
+                  useRect,
+                  WindowSize,
+                  useWindowSize,
+                  Portal,
+                  Menu,
+                  MenuList,
+                  MenuButton,
+                  MenuItem,
+                  MenuItems,
+                  MenuPopover,
+                  MenuLink,
+                  VisuallyHidden,
+                  Dialog,
+                  DialogOverlay,
+                  DialogContent,
+                  useTransition,
+                  Phased,
+                  Alert,
+                  AlertDialog,
+                  AlertDialogDescription,
+                  AlertDialogLabel,
+                  AlertDialogOverlay,
+                  AlertDialogContent,
+                  Tabs,
+                  TabList,
+                  Tab,
+                  TabPanels,
+                  TabPanel,
+                  Slider,
+                  SliderInput,
+                  SliderTrack,
+                  SliderTrackHighlight,
+                  SliderHandle,
+                  SliderMarker,
+                  useId,
+                  Tooltip,
+                  TooltipPopup,
+                  useTooltip,
+                  Combobox,
+                  ComboboxInput,
+                  ComboboxPopover,
+                  ComboboxList,
+                  ComboboxOption,
+                  ComboboxOptionText,
+                  useThrottle,
+                  matchSorter
+                }}
+              />
+            );
+          },
+          table: Table
+        }}
+      >
         <main>
           <div ref={contentFocusRef}>{children}</div>
         </main>

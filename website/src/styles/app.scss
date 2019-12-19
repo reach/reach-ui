@@ -128,12 +128,9 @@ code {
   position: relative;
 }
 
-.react-live > pre {
-  padding-top: 15px;
-}
-
 .react-live-editor {
   position: relative;
+  padding: 30px 20px 20px 20px;
   font-size: 14px;
 }
 
@@ -155,7 +152,7 @@ code {
 }
 
 .react-live-editor:before {
-  content: "Editable Example";
+  content: "Code Example";
 }
 
 .react-live-preview:before {
