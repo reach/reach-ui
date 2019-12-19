@@ -216,25 +216,28 @@ function Nav({ media }) {
 
               <NavList>
                 <NavLink to="/alert">Alert</NavLink>
-                <NavLink to="/alert-dialog">AlertDialog</NavLink>
+                <NavLink to="/alert-dialog">Alert Dialog</NavLink>
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
-                <NavLink to="/menu-button">MenuButton</NavLink>
+                <NavLink to="/menu-button">Menu Button</NavLink>
                 <NavLink to="/portal">Portal</NavLink>
-                <NavLink to="/skip-nav">SkipNav</NavLink>
+                <NavLink to="/skip-nav">Skip Nav</NavLink>
                 <NavLink to="/slider">Slider</NavLink>
                 <NavLink to="/tabs">Tabs</NavLink>
                 <NavLink to="/tooltip">Tooltip</NavLink>
-                <NavLink to="/visually-hidden">VisuallyHidden</NavLink>
+                <NavLink to="/visually-hidden">Visually Hidden</NavLink>
               </NavList>
 
               <hr aria-hidden />
 
               <NavList>
                 <NavLink to="/auto-id">Auto ID</NavLink>
-                <NavLink to="/component-component">Component²</NavLink>
+                <NavLink to="/component-component">
+                  Component<span aria-hidden>²</span>
+                  <VisuallyHidden> Component</VisuallyHidden>
+                </NavLink>
                 <NavLink to="/rect">Rect</NavLink>
-                <NavLink to="/window-size">WindowSize</NavLink>
+                <NavLink to="/window-size">Window Size</NavLink>
               </NavList>
             </nav>
           </Header>
@@ -258,6 +261,7 @@ function Layout({ children }) {
   useEffect(() => {
     let rootEl = document.getElementById("gatsby-focus-wrapper");
     rootEl && rootEl.removeAttribute("role");
+    rootEl && rootEl.removeAttribute("tabindex");
   }, []);
 
   return (
