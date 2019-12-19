@@ -56,7 +56,8 @@ To get you started, let's take a look at a few examples that grow from simple to
 
 Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <div>
@@ -82,7 +83,8 @@ function Example() {
 
 Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Combobox>
@@ -125,7 +127,8 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [term, setTerm] = useState("");
@@ -179,7 +182,8 @@ There is nothing special about managing state for a combobox, it's like managing
 
 This is the same demo as above, except this time we're going to a server to get the match. This is recommended as the previous example had to download 350kb of city text! Again, there is nothing special about a ComboboxList as any other list in React. As the input changes, fetch data, set state, render options.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -248,7 +252,8 @@ Sometimes your list is a bit more complicated, like categories of results, and l
 
 You can even have other interactive elements inside the popover, it won't close when the user interacts with them.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [term, setTerm] = useState("");
@@ -333,7 +338,8 @@ You can even have other interactive elements inside the popover, it won't close 
 
 This demo shows how you can control a lot about the styling. It uses `portal={false}` on the ComboboxPopover which allows us to create a continuous outline around the entire thing.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     let [term, setTerm] = useState("");

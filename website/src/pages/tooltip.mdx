@@ -17,7 +17,8 @@ A couple notes on using tooltips:
 
 _Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <div>
@@ -62,7 +63,8 @@ import "@reach/tooltip/styles.css";
 
 ## Usage
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip label="Save">
@@ -74,7 +76,8 @@ function Example() {
 
 Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screen reader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip
@@ -91,7 +94,8 @@ function Example() {
 
 All props passed to `Tooltip` will go to the popover.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip
@@ -135,7 +139,8 @@ You may want to drop down to this lower level API if you need animation or you w
 
 ### Triangle pointers and custom styles
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   // Center the tooltip, but collisions will win
   const centered = (triggerRect, tooltipRect) => {

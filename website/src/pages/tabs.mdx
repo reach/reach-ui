@@ -24,7 +24,8 @@ The `Tab` and `TabPanel` elements are associated by their order in the tree. Non
 
 You can render any other elements you want inside of `Tabs`, but `TabList` should only render `Tab` elements, and `TabPanels` should only render `TabPanel` elements.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs>
@@ -99,7 +100,8 @@ _Type_: `node`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs>
@@ -130,7 +132,8 @@ _Type_: `function`
 
 Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   const colors = ["firebrick", "goldenrod", "dodgerblue"];
   const [tabIndex, setTabIndex] = useState(0);
@@ -164,7 +167,8 @@ _Type_: `number`
 
 Starts the tabs at a specific index.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs defaultIndex={1}>
@@ -194,7 +198,8 @@ _Type_: `number`
 
 Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -476,7 +481,8 @@ _Type_: `number` - cloned
 
 Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function CoolTab(props) {
     // `isSelected` comes from `TabList` cloning the `CoolTab`.
@@ -570,7 +576,8 @@ These demos show off how you can add quite a bit of behavior to your Tabs interf
 
 If you'd like to drive your tabs with data you can create a `DataTabs` component.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function DataTabs({ data }) {
     return (
@@ -608,7 +615,8 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
 
 With a little composition we can animate the selected tab bar.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   const AnimatedContext = React.createContext();
 

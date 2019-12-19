@@ -31,7 +31,8 @@ Every dialog must render an `AlertDialogLabel` so the screen reader knows what t
 
 This is built on top of [Dialog](/dialog), so `AlertDialog` spreads its props and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and `AlertDialogContent` to `DialogContent`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const cancelRef = React.useRef();
@@ -160,7 +161,8 @@ When the user clicks outside the modal or hits the escape key, this function wil
 
 **IMPORTANT**: Ensure that `onDismiss` and the click handler of the `leastDestructiveRef` are identical!
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const cancelRef = React.useRef();
@@ -208,7 +210,8 @@ _Type_: `node`
 
 To prevent accidental data loss, an alert dialog should focus the least destructive action button when it opens.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -277,7 +280,6 @@ Use the following CSS to target the label:
 
 ```css
 [data-reach-alert-dialog-label] {
-  color: red;
 }
 ```
 
@@ -309,7 +311,6 @@ Use the following CSS to target the description:
 
 ```css
 [data-reach-alert-dialog-description] {
-  text-align: center;
 }
 ```
 
@@ -335,7 +336,8 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render an `AlertDialogContent` inside.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -383,7 +385,6 @@ Use the following CSS to target the overlay:
 
 ```css
 [data-reach-alert-dialog-overlay] {
-  background: hsla(0, 0%, 0%, 0.2);
 }
 ```
 
@@ -459,7 +460,6 @@ Use the following CSS to target the content:
 
 ```css
 [data-reach-alert-dialog-content] {
-  border: solid 5px hsla(0, 0%, 0%, 0.5);
 }
 ```
 

@@ -36,7 +36,8 @@ You can animate the "enter" phase with just a little CSS.
 
 And then add the class to your menu:
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -87,7 +88,8 @@ import { Phased } from "recondition";
 
 Now we're ready to go:
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   // TODO: Update with Phased example
   return (
@@ -107,7 +109,8 @@ function Example() {
 
 ## React Spring
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   let AnimatedDialogOverlay = animated(DialogOverlay);
   let AnimatedDialogContent = animated(DialogContent);
@@ -126,7 +129,9 @@ function Example(props) {
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: styles.y.interpolate((value) => `translate3d(0px, ${value}px, 0px)`),
+                  transform: styles.y.interpolate(
+                    value => `translate3d(0px, ${value}px, 0px)`
+                  ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10
                 }}

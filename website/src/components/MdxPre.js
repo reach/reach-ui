@@ -7,6 +7,7 @@ import React, {
   useReducer,
   useLayoutEffect
 } from "react";
+import assign from "core-js/fn/object/assign";
 import Highlight, { Prism } from "prism-react-renderer";
 // import oceanicNextTheme from "prism-react-renderer/themes/oceanicNext";
 // import CopyButton from "./CopyButton";
@@ -22,18 +23,35 @@ import { transform as bubleTransform } from "@philpl/buble";
 const CodeContext = createContext();
 
 export function PreComponent({ children, scope, ...props }) {
+  /*
+   * We will look for a leading comment in a js or jsx markdown block to signify
+   * we need to run a code demo. This is a little nicer than adding a new
+   * language key because we can still get proper editor highlighting support
+   * that works with existing markdown parsing tools (also Prettier!)
+   */
+  const demoKey = "// jsx-demo";
   const language = children?.props?.className.replace("language-", "") || null;
-  const code = children?.props?.children.trim();
+  const trimmed = children?.props?.children.trim();
+  const isDemo =
+    trimmed &&
+    typeof trimmed === "string" &&
+    (language === "jsx" || language === "js")
+      ? trimmed.startsWith(demoKey)
+      : false;
+
+  const code = isDemo
+    ? trimmed.replace(new RegExp(`^${demoKey}(\\n|\\s)*`), "")
+    : trimmed;
 
   // TODO: Change this and react-live classnames
-  const isDemo = language === "jsx-live";
+  // const isDemo = language === "jsx-live";
   return code ? (
     <div className="react-live">
       <CodeProvider
         // theme={oceanicNextTheme}
         theme={{ plain: {}, styles: [] }}
         code={code}
-        language={isDemo ? "jsx" : language}
+        language={language}
         scope={scope}
       >
         <CodeBlock className="react-live-editor" />
@@ -206,7 +224,9 @@ function CodePreview({ ...props }) {
 ////////////////////////////////////////////////////////////////////////////////
 
 // If we need polyfills for the preview they can go here
-const _polyfills = {};
+const _polyfills = {
+  assign
+};
 
 // https://github.com/FormidableLabs/react-live/blob/master/src/utils/transpile
 function evalCode(code, scope) {
@@ -247,7 +267,7 @@ function errorBoundary(Element, callback) {
 
 function transform(input) {
   const { code } = bubleTransform(input, {
-    // objectAssign: "_polyfills.assign",
+    objectAssign: "_polyfills.assign",
     transforms: {
       dangerousForOf: true,
       dangerousTaggedTemplateString: true

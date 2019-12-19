@@ -27,7 +27,8 @@ An accessible dropdown menu for the common dropdown menu button design pattern.
 
 Please note that the buttons on this page are styled by this website. They are just buttons, so they will appear the same as any other button in your app.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -91,7 +92,8 @@ _Type_: `oneOfType(node, function)`
 
 Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -107,7 +109,8 @@ function Example() {
 
 Alternatively, you can provide a render callback. This is helpful if you need to access the internal state of the Menu.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -249,7 +252,8 @@ _Type_: `spread`
 
 All props are spread to the underlying element. Here we apply a `className` the element.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -383,7 +387,8 @@ The following example has this css applied:
 }
 ```
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Menu>
@@ -420,7 +425,8 @@ All props are spread to the underlying element.
 
 In this example the `onFocus` prop is passed down to the element.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [focusCount, setFocusCount] = React.useState(0);
   return (
@@ -487,7 +493,8 @@ _Type_: `node`
 
 You can put any type of content inside of a `<MenuItem>`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   return (
     <Menu>

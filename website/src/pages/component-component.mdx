@@ -78,7 +78,8 @@ _Type_: `object`
 
 An object of initial state.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ count: 10 }}>
@@ -115,7 +116,8 @@ _Type_: `object`
 
 Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component refs={{ input: null }}>
@@ -213,7 +215,8 @@ Return `true` to signify the component needs an update, `false` if it does not. 
 
 For example: often you find just one part of your component is expensive to render, maybe because of a large SVG with a dynamic style or two. Rather than pulling the elements out of your component and putting them in a new `PureComponent`, you can inline a `shoudlUpdate` check:
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ hue: 0 }}>
@@ -259,7 +262,8 @@ _Type_: `node`
 
 Usual React children prop.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component>
@@ -273,7 +277,8 @@ _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ hue: 0 }}>
@@ -302,7 +307,8 @@ function Example() {
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component
@@ -338,7 +344,8 @@ Here is a pretty involved example showing just how composable this component is:
 - Optimized todo rendering, avoiding updates if the color has not changed
 - Tracked refs
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component

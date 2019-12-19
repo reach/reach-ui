@@ -21,7 +21,8 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 An accessible dialog or "modal" window.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -85,7 +86,8 @@ _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -124,7 +126,8 @@ If you'd rather not have the dialog always rendered, you can put a guard in fron
 
 Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. You should probably do this when your dialog contains a lot of elements.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -156,7 +159,8 @@ This function is called whenever the user hits "Escape" or clicks outside the di
 
 The only time you shouldn't close the dialog on dismiss is when the dialog requires a choice and none of them are "cancel". For example, perhaps two records need to be merged and the user needs to pick the surviving record. Neither choice is less destructive than the other, in these cases you may want to alert the user they need to a make a choice on dismiss instead of closing the dialog.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -178,7 +182,8 @@ function Example(props) {
 }
 ```
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const [showWarning, setShowWarning] = React.useState(false);
@@ -224,7 +229,8 @@ Low-level component if you need more control over the styles or rendering of the
 
 Note: You must render a `DialogContent` inside.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -262,7 +268,6 @@ Use the following CSS to target the overlay:
 
 ```css
 [data-reach-dialog-overlay] {
-  background: hsla(0, 0%, 0%, 0.2);
 }
 ```
 
@@ -306,7 +311,8 @@ _Type_: `ref`
 
 By default the first focusable element will receive focus when the dialog opens but you can provide a ref to focus instead.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -355,7 +361,8 @@ Note: Must be a child of `DialogOverlay`.
 
 Note: You only need to use this when you are also styling `DialogOverlay`, otherwise you can use the high-level `Dialog` component and pass the props to it. Any props passed to `Dialog` component (besides `isOpen` and `onDismiss`) will be spread onto `DialogContent`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -394,7 +401,6 @@ Use the following CSS to target the overlay:
 
 ```css
 [data-reach-dialog-content] {
-  border: solid 5px hsla(0, 0%, 0%, 0.5);
 }
 ```
 
@@ -433,7 +439,8 @@ Accepts any renderable content.
 
 If you'd like to animate the content, give [React Spring](https://github.com/drcmda/react-spring) a shot.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
@@ -452,7 +459,9 @@ function Example(props) {
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: styles.y.interpolate((value) => `translate3d(0px, ${value}px, 0px)`),
+                  transform: styles.y.interpolate(
+                    value => `translate3d(0px, ${value}px, 0px)`
+                  ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10
                 }}
