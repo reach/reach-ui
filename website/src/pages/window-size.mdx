@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
   title="Window Size"
@@ -7,8 +8,12 @@ import SEO from "../components/SEO";
 
 # Window Size
 
-[useWindowSize](#usewindowsize) -
-[WindowSize](#windowsize)
+<TOC>
+  <TOCList>
+    <TOCLink href="#usewindowsize">useWindowSize</TOCLink>
+    <TOCLink href="#windowsize">WindowSize</TOCLink>
+  </TOCList>
+</TOC>
 
 Measure the current window dimensions.
 
@@ -26,23 +31,9 @@ yarn add @reach/window-size
 import WindowSize, { useWindowSize } from "@reach/window-size";
 ```
 
-# useWindowSize
+## Component API
 
-```jsx-live
-function Example() {
-  const { width, height } = useWindowSize();
-  return (
-    <div>
-      <p>Resize your window.</p>
-      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
-    </div>
-  );
-}
-```
-
-Hook that observes and returns the measurements of the browser window.
-
-# WindowSize
+### WindowSize
 
 ```jsx-live
 function Example() {
@@ -59,14 +50,30 @@ function Example() {
 }
 ```
 
-## WindowSize Props
+#### WindowSize Props
 
 | Prop                  | Type | Required |
 | --------------------- | ---- | -------- |
 | [children](#children) | func | true     |
 
-### WindowSize children
+##### WindowSize children
 
 _Type_: `func: (({ width, height })) => node`
 
 A function that calls back to you with the window size.
+
+### useWindowSize
+
+A hook that observes and returns the measurements of the browser window.
+
+```jsx-live
+function Example() {
+  const { width, height } = useWindowSize();
+  return (
+    <div>
+      <p>Resize your window.</p>
+      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
+    </div>
+  );
+}
+```

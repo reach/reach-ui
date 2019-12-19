@@ -54,7 +54,9 @@ yarn add @reach/component-component
 import Component from "@reach/component-component";
 ```
 
-## Props
+## Component API
+
+### Props
 
 | Prop                                                  | Type   |
 | ----------------------------------------------------- | ------ |
@@ -70,7 +72,7 @@ import Component from "@reach/component-component";
 | [ children ](#children)                               | func   |
 | [ render ](#render)                                   | func   |
 
-### initialState
+#### initialState
 
 _Type_: `object`
 
@@ -86,7 +88,7 @@ function Example() {
 }
 ```
 
-### getInitialState
+#### getInitialState
 
 _Type_: `func: () => object`
 
@@ -107,7 +109,7 @@ However, in the next example, `Date.now()` would be called with every re-render,
 <Component initialState={{ now: Date.now() }} />
 ```
 
-### refs
+#### refs
 
 _Type_: `object`
 
@@ -133,7 +135,7 @@ function Example() {
 }
 ```
 
-### getRefs
+#### getRefs
 
 _Type_: `func: () => object`
 
@@ -150,7 +152,7 @@ Use this when any of your refs are computed.
 />
 ```
 
-### didMount
+#### didMount
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
 
@@ -185,19 +187,19 @@ Perhaps you want some async data but don't want to make an entirely new componen
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#componentdidmount).
 
-### didUpdate
+#### didUpdate
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate, prevProps, prevState }) => undefined`
 
 Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
-### willUnmount
+#### willUnmount
 
 _Type_: `func: ({ state, props, refs }) => undefined`
 
 Called when the component will be removed from the page. See [React Docs](https://reactjs.org/docs/react-component.html#componentwillunmount).
 
-### getSnapshotBeforeUpdate
+#### getSnapshotBeforeUpdate
 
 _Type_: `func: ({ state, props, refs, prevProps, prevState }) => any`
 
@@ -251,7 +253,7 @@ function Example() {
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcomponentupdate).
 
-### children
+#### children
 
 _Type_: `node`
 
@@ -296,7 +298,7 @@ function Example() {
 }
 ```
 
-### render
+#### render
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 

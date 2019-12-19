@@ -1,11 +1,16 @@
 import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO title="Rect" description="Measures a DOM node's bounding box in React" />
 
 # Rect
 
-[useRect](#userect) -
-[Rect](#rect-1)
+<TOC>
+  <TOCList>
+    <TOCLink href="#userect">useRect</TOCLink>
+    <TOCLink href="#rect-1">Rect</TOCLink>
+  </TOCList>
+</TOC>
 
 Measures DOM elements (aka. bounding client rect). See also [Element.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
 
@@ -23,7 +28,9 @@ yarn add @reach/rect
 import Rect, { useRect } from "@reach/rect";
 ```
 
-# useRect
+## Component API
+
+### useRect
 
 ```jsx
 rect = useRect(ref [, observe=true, onChange=undefined ])
@@ -62,11 +69,11 @@ function Example() {
 }
 ```
 
-# Rect
+### Rect
 
 Render prop component for use in class components to observe element measurements.
 
-## Rect Props
+#### Rect Props
 
 | Prop                  | Type |
 | --------------------- | ---- |
@@ -74,7 +81,7 @@ Render prop component for use in class components to observe element measurement
 | [observe](#observe)   | bool |
 | [onChange](#onchange) | func |
 
-### Rect children
+##### Rect children
 
 _Type_: `func: ({ ref, rect }) => node`
 
@@ -82,7 +89,7 @@ A function that calls back to you with a `ref` to place on an element and the `r
 
 **Note**: On the first render `rect` will be `undefined` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
 
-### Rect observe
+##### Rect observe
 
 _Type_: `bool` default `true`
 
@@ -106,7 +113,7 @@ Pass `true` to observe, `false` to ignore.
 </Rect>
 ```
 
-### Rect onChange
+##### Rect onChange
 
 _Type_: `func: (rect) => void`
 

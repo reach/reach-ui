@@ -55,7 +55,11 @@ yarn add @reach/alert
 import Alert from "@reach/alert";
 ```
 
-## Alert Props
+## Component API
+
+### Alert
+
+#### Alert Props
 
 | Prop                                  | Type                         | Required |
 | ------------------------------------- | ---------------------------- | -------- |
@@ -63,7 +67,7 @@ import Alert from "@reach/alert";
 | [type](#alert-type)                   | enum "assertive" or "polite" | false    |
 | [children](#alert-children)           | node                         | false    |
 
-### Alert element props
+##### Alert element props
 
 _Type_: `spread`
 
@@ -84,7 +88,7 @@ function Example() {
 }
 ```
 
-### Alert type
+##### Alert type
 
 _Type_: `enum` `"assertive" | "polite"` default: `"polite"`
 
@@ -104,7 +108,7 @@ Controls whether the assistive technology should read immediately ("assertive") 
 
 You should probably stick with polite most of the time.
 
-### Alert children
+##### Alert children
 
 _Type_: `node`
 

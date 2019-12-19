@@ -47,11 +47,13 @@ import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
 ```
 
-# SkipNavLink
+## Component API
+
+### SkipNavLink
 
 Renders a link that remains hidden until focused to skip to the main content.
 
-## SkipNavLink CSS Selectors
+#### SkipNavLink CSS Selectors
 
 ```css
 [data-reach-skip-link] {
@@ -60,20 +62,20 @@ Renders a link that remains hidden until focused to skip to the main content.
 }
 ```
 
-## SkipNavLink Props
+#### SkipNavLink Props
 
 | Prop                                        | Type   |
 | ------------------------------------------- | ------ |
 | [element props](#skipnavlink-element-props) | spread |
 | [children](#skipnavlink-children)           | node   |
 
-### SkipNavLink element props
+##### SkipNavLink element props
 
 _Type_: `spread`
 
 Element props are spread to the underlying link.
 
-### SkipNavLink children
+##### SkipNavLink children
 
 _Type_: `node` default: `"Skip to content"`
 
@@ -83,17 +85,17 @@ Allows you to change the text for your preferred phrase or localization.
 <SkipNavLink>saltar al contenido</SkipNavLink>
 ```
 
-# SkipNavContent
+### SkipNavContent
 
 Renders a div as the target for the link.
 
-## SkipNavLink Props
+#### SkipNavLink Props
 
 | Prop                                 | Type |
 | ------------------------------------ | ---- |
 | [children](#skipnavcontent-children) | node |
 
-### SkipNavLink children
+##### SkipNavLink children
 
 _Type_: `node`
 

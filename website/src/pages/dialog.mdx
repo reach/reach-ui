@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
   title="Dialog (Modal)"
@@ -7,9 +8,13 @@ import SEO from "../components/SEO";
 
 # Dialog (Modal)
 
-[Dialog](#dialog) -
-[DialogOverlay](#dialogoverlay) -
-[DialogContent](#dialogcontent)
+<TOC>
+  <TOCList>
+    <TOCLink href="#dialog">Dialog</TOCLink>
+    <TOCLink href="#dialogoverlay">DialogOverlay</TOCLink>
+    <TOCLink href="#dialogcontent">DialogContent</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/dialog
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal
@@ -53,7 +58,9 @@ import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 ```
 
-# Dialog
+## Component API
+
+### Dialog
 
 High-level component to render a modal dialog window over the top of the page (or another dialog).
 
@@ -63,7 +70,7 @@ High-level component to render a modal dialog window over the top of the page (o
 </Dialog>
 ```
 
-## Dialog Props
+#### Dialog Props
 
 | Prop                                   | Type   |
 | -------------------------------------- | ------ |
@@ -72,7 +79,7 @@ High-level component to render a modal dialog window over the top of the page (o
 | [onDismiss](#dialog-ondismiss)         | func   |
 | [children](#dialog-element-props)      | node   |
 
-### Dialog element props
+##### Dialog element props
 
 _Type_: `spread`
 
@@ -97,7 +104,7 @@ function Example(props) {
 }
 ```
 
-### Dialog isOpen
+##### Dialog isOpen
 
 _Type_: `bool` default: `true`
 
@@ -141,7 +148,7 @@ function Example(props) {
 }
 ```
 
-### Dialog onDismiss
+##### Dialog onDismiss
 
 _Type_: `func: (event) => void`
 
@@ -199,7 +206,7 @@ function Example(props) {
 }
 ```
 
-### Dialog children
+##### Dialog children
 
 _Type_: `node`
 
@@ -211,7 +218,7 @@ Accepts any renderable content.
 </Dialog>
 ```
 
-# DialogOverlay
+### DialogOverlay
 
 Low-level component if you need more control over the styles or rendering of the dialog overlay.
 
@@ -247,7 +254,7 @@ function Example(props) {
 }
 ```
 
-## DialogOverlay CSS Selectors
+#### DialogOverlay CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -259,7 +266,7 @@ Use the following CSS to target the overlay:
 }
 ```
 
-## DialogOverlay Props
+#### DialogOverlay Props
 
 | Prop                                              | Type   |
 | ------------------------------------------------- | ------ |
@@ -269,7 +276,7 @@ Use the following CSS to target the overlay:
 | [initialFocusRef](#dialogoverlay-initialfocusref) | ref    |
 | [children](#dialogoverlay-element-props)          | node   |
 
-### DialogOverlay element props
+##### DialogOverlay element props
 
 _Type_: `spread`
 
@@ -281,19 +288,19 @@ Any props not listed above will be spread onto the underlying `div`.
 </DialogOverlay>
 ```
 
-### DialogOverlay isOpen
+##### DialogOverlay isOpen
 
 _Type_: `bool`
 
 Same as [Dialog `isOpen`](#dialog-isopen)
 
-### DialogOverlay onDismiss
+##### DialogOverlay onDismiss
 
 _Type_: `func`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss)
 
-### DialogContent initialFocusRef
+##### DialogContent initialFocusRef
 
 _Type_: `ref`
 
@@ -328,7 +335,7 @@ function Example(props) {
 }
 ```
 
-### DialogOverlay children
+##### DialogOverlay children
 
 _Type_: `node`
 
@@ -340,7 +347,7 @@ Should be a `DialogContent`.
 </DialogOverlay>
 ```
 
-# DialogContent
+### DialogContent
 
 Low-level component if you need more control over the styles or rendering of the dialog content.
 
@@ -379,7 +386,7 @@ function Example(props) {
 }
 ```
 
-## DialogContent CSS Selectors
+#### DialogContent CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -391,14 +398,14 @@ Use the following CSS to target the overlay:
 }
 ```
 
-## DialogContent Props
+#### DialogContent Props
 
 | Prop                                          | Type   |
 | --------------------------------------------- | ------ |
 | [element props](#dialogcontent-element-props) | spread |
 | [children](#dialogcontent-element-props)      | node   |
 
-### DialogContent element props
+##### DialogContent element props
 
 _Type_: `spread`
 
@@ -410,7 +417,7 @@ Any props not listed above will be spread onto the underlying `div`.
 </DialogOverlay>
 ```
 
-### DialogContent children
+##### DialogContent children
 
 _Type_: `node`
 

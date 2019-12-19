@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
   title="Menu Button"
@@ -7,13 +8,17 @@ import SEO from "../components/SEO";
 
 # Menu Button
 
-[Menu](#menu) -
-[MenuButton](#menubutton) -
-[MenuList](#menulist) -
-[MenuPopover](#menupopover) -
-[MenuItems](#menuitems) -
-[MenuItem](#menuitem) -
-[MenuLink](#menulink)
+<TOC>
+  <TOCList>
+    <TOCLink href="#menu">Menu</TOCLink>
+    <TOCLink href="#menubutton">MenuButton</TOCLink>
+    <TOCLink href="#menulist">MenuList</TOCLink>
+    <TOCLink href="#menupopover">MenuPopover</TOCLink>
+    <TOCLink href="#menuitems">MenuItems</TOCLink>
+    <TOCLink href="#menuitem">MenuItem</TOCLink>
+    <TOCLink href="#menulink">MenuLink</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
@@ -68,17 +73,19 @@ import {
 import "@reach/menu-button/styles.css";
 ```
 
-# Menu
+## Component API
+
+### Menu
 
 The wrapper component for the other components. No DOM element is rendered.
 
-## Menu Props
+#### Menu Props
 
 | Prop                       | Type | Required |
 | -------------------------- | ---- | -------- |
 | [children](#menu-children) | node | false    |
 
-### Menu children
+##### Menu children
 
 _Type_: `oneOfType(node, function)`
 
@@ -120,7 +127,7 @@ function Example() {
 }
 ```
 
-# MenuButton
+### MenuButton
 
 Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. Must be rendered inside of a `<Menu>`.
 
@@ -131,7 +138,7 @@ Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. 
 </Menu>
 ```
 
-## MenuButton CSS Selectors
+#### MenuButton CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -160,7 +167,7 @@ If you'd like to target when the menu is open use `aria-expanded`:
 }
 ```
 
-## MenuButton Props
+#### MenuButton Props
 
 | Prop                                     | Type                 | Required |
 | ---------------------------------------- | -------------------- | -------- |
@@ -169,7 +176,7 @@ If you'd like to target when the menu is open use `aria-expanded`:
 | onClick                                  | preventableEventFunc | false    |
 | onKeyDown                                | preventableEventFunc | false    |
 
-### MenuButton button props
+##### MenuButton button props
 
 _Type_: `spread`
 
@@ -189,11 +196,11 @@ Any props not listed above will be spread onto the underlying button element. Yo
 </Menu>
 ```
 
-### MenuButton as
+##### MenuButton as
 
 _Type_: ``
 
-### MenuButton children
+##### MenuButton children
 
 _Type_: `node`
 
@@ -208,7 +215,7 @@ Accepts any renderable content.
 </MenuButton>
 ```
 
-# MenuList
+### MenuList
 
 Wraps a DOM element that renders the menu items. Must be rendered inside of a `<Menu>`.
 
@@ -221,7 +228,7 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 </Menu>
 ```
 
-## MenuList CSS Selectors
+#### MenuList CSS Selectors
 
 ```css
 [data-reach-menu-list] {
@@ -229,14 +236,14 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 }
 ```
 
-## MenuList Props
+#### MenuList Props
 
 | Prop                                      | Type   | Required |
 | ----------------------------------------- | ------ | -------- |
 | [element props](#menuitems-element-props) | spread | n/a      |
 | [children](#menuitems-children)           | node   | false    |
 
-### MenuList element props
+##### MenuList element props
 
 _Type_: `spread`
 
@@ -280,7 +287,7 @@ The stylesheet contains these rules to create the animation.
 }
 ```
 
-### MenuList children
+##### MenuList children
 
 _Type_: `node`
 
@@ -293,7 +300,7 @@ Can contain only `MenuItem` or a `MenuLink`
 </MenuList>
 ```
 
-# MenuPopover
+### MenuPopover
 
 A low-level wrapper for the popover that appears when a menu button is open. You can compose it with `MenuItems` for more control over the nested components and their rendered DOM nodes, or if you need to nest arbitrary components between the outer wrapper and your list.
 
@@ -310,37 +317,37 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 </Menu>
 ```
 
-## MenuPopover CSS Selectors
+#### MenuPopover CSS Selectors
 
 ```css
 [data-reach-menu-popover] {
 }
 ```
 
-## MenuPopover Props
+#### MenuPopover Props
 
 | Prop                              | Type | Required |
 | --------------------------------- | ---- | -------- |
 | [children](#menupopover-children) | node | true     |
 
-### MenuPopover children props
+##### MenuPopover children props
 
 _Type_: `node`
 
-# MenuItems
+### MenuItems
 
 A low-level wrapper for menu items. Compose it with `MenuPopover` for more control over the nested components and their rendered DOM nodes, or if you need to nest arbitrary components between the outer wrapper and your list.
 
 See [`MenuPopover`](#menupopover) for details.
 
-## MenuItems CSS Selectors
+#### MenuItems CSS Selectors
 
 ```css
 [data-reach-menu-items] {
 }
 ```
 
-# MenuItem
+### MenuItem
 
 Handles menu selection. Must be a direct child of a `<MenuList>`.
 
@@ -350,7 +357,7 @@ Handles menu selection. Must be a direct child of a `<MenuList>`.
 </MenuList>
 ```
 
-## MenuItem CSS Selectors
+#### MenuItem CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -396,7 +403,7 @@ function Example() {
 }
 ```
 
-## MenuItem Props
+#### MenuItem Props
 
 | Prop                                     | Type   | Required |
 | ---------------------------------------- | ------ | -------- |
@@ -405,7 +412,7 @@ function Example() {
 | [children](#menuitem-children)           | node   | false    |
 | [onSelect](#menuitem-onselect)           | func   | true     |
 
-### MenuItem element props
+##### MenuItem element props
 
 _Type_: `spread`
 
@@ -436,7 +443,7 @@ function Example(props) {
 }
 ```
 
-### MenuItem as
+##### MenuItem as
 
 _Type_: `any`
 
@@ -474,7 +481,7 @@ function Example() {
 }
 ```
 
-### MenuItem children
+##### MenuItem children
 
 _Type_: `node`
 
@@ -505,13 +512,13 @@ function Example(props) {
 }
 ```
 
-### MenuItem onSelect
+##### MenuItem onSelect
 
 _Type_: `func`
 
 Callback that fires when a `MenuItem` is selected.
 
-# MenuLink
+### MenuLink
 
 Handles linking to a different page in the menu. By default it renders `<a>`, but also accepts any other kind of Link as long as the `Link` uses the `React.forwardRef` API.
 
@@ -530,7 +537,7 @@ import { Link } from "@reach/router";
 </MenuList>;
 ```
 
-## MenuLink CSS Selectors
+#### MenuLink CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -548,7 +555,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 }
 ```
 
-## MenuLink Props
+#### MenuLink Props
 
 | Prop                                     | Type   | Required |
 | ---------------------------------------- | ------ | -------- |
@@ -557,7 +564,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 | [children](#menulink-children)           | node   | false    |
 | [onSelect](#menulink-onselect)           | func   | false    |
 
-### MenuLink element props
+##### MenuLink element props
 
 _Type_: `spread`
 
@@ -573,7 +580,7 @@ All props are spread to the underlying element
 <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
 ```
 
-### MenuLink as
+##### MenuLink as
 
 _Type_: `any`
 
@@ -600,7 +607,7 @@ import GatsbyLink from "gatsby/link";
 <MenuLink as={GatsbyLink} to="/somewhere" />;
 ```
 
-### MenuLink children
+##### MenuLink children
 
 _Type_: `node`
 
@@ -613,15 +620,15 @@ You can render any kind of content inside of a MenuLink.
 </MenuLink>
 ```
 
-### MenuLink onSelect
+##### MenuLink onSelect
 
 _Type_: `func`
 
 Callback that fires when a `MenuLink` is selected.
 
-# Notes
+## Notes
 
-## Unmounting the Menu after an action
+### Unmounting the Menu after an action
 
 If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `<MenuLink>` and Reach Router. In this case, the router will handle focus for you.
 
@@ -670,7 +677,7 @@ function Example(props) {
 }
 ```
 
-## Icons
+### Icons
 
 If you add an icon to indicate to users the button is a dropdown menu, use `aria-hidden` on the icon. Screen readers will already announce to the user that the element is a dropdown menu; adding a label to your icon would be redundant.
 
@@ -711,7 +718,7 @@ import VisuallyHidden from "@reach/visually-hidden"
 </MenuButton>
 ```
 
-## Events
+### Events
 
 You may want to pass your own click handler to a MenuButton, MenuItem or MenuLink that, in some cases, intercepts and prevents the default behavior from ocurring. You may think to do this by passing a handler to the `onClick` prop:
 
@@ -743,14 +750,14 @@ As such, events for each component look more like this:
 - `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys).
   - For `MenuLink`, the `click` event is fired after the selection events. So if you only need to intercept the event that triggers the anchor link, you can still use `onClick`, but the rest of the event handlers called in `MenuLink` will still be which means the `Menu` will close and your `onSelect` handler will be triggered.
 
-## Keyboard Accessibility
+### Keyboard Accessibility
 
-| Key                   | Action                   |
-| --------------------- | ------------------------ |
-| `Enter`               | Open/close               |
-| `ArrowUp`             | Highlight previous item  |
-| `ArrowDown`           | Highlight next item      |
-| `Enter`               | Select item              |
-| `Escape`              | Close                    |
-| `Tab`                 | No effect                |
-| TODO: Type characters | Highlights matching item |
+| Key             | Action                   |
+| --------------- | ------------------------ |
+| `Enter`         | Open/close               |
+| `ArrowUp`       | Highlight previous item  |
+| `ArrowDown`     | Highlight next item      |
+| `Enter`         | Select item              |
+| `Escape`        | Close                    |
+| `Tab`           | No effect                |
+| Type characters | Highlights matching item |

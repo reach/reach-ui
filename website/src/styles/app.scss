@@ -475,3 +475,11 @@ button#hamburger {
   transform: translateY(-50%);
   white-space: nowrap;
 }
+
+.toc {
+  li:not(:last-of-type)::after {
+    content: "-";
+    display: inline-block;
+    margin: 0 0.25em;
+  }
+}

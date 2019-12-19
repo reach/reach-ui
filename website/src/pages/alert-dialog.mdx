@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
   title="Alert Dialog"
@@ -7,11 +8,15 @@ import SEO from "../components/SEO";
 
 # Alert Dialog
 
-[AlertDialog](#alertdialog) -
-[AlertDialogContent](#alertdialogcontent) -
-[AlertDialogDescription](#alertdialogdescription) -
-[AlertDialogOverlay](#alertdialogoverlay) -
-[AlertDialogContent](#alertdialogcontent)
+<TOC>
+  <TOCList>
+    <TOCLink href="#alertdialog">AlertDialog</TOCLink>
+    <TOCLink href="#alertdialogcontent">AlertDialogContent</TOCLink>
+    <TOCLink href="#alertdialogdescription">AlertDialogDescription</TOCLink>
+    <TOCLink href="#alertdialogoverlay">AlertDialogOverlay</TOCLink>
+    <TOCLink href="#alertdialogcontent">AlertDialogContent</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/alert-dialog
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog
@@ -80,7 +85,9 @@ import {
 } from "@reach/alert-dialog";
 ```
 
-# AlertDialog
+## Component API
+
+### AlertDialog
 
 High-level component to render an alert dialog.
 
@@ -91,7 +98,7 @@ High-level component to render an alert dialog.
 </AlertDialog>
 ```
 
-## AlertDialog Props
+#### AlertDialog Props
 
 | Prop                                                    | Type   |
 | ------------------------------------------------------- | ------ |
@@ -101,7 +108,7 @@ High-level component to render an alert dialog.
 | [leastDestructiveRef](#alertdialog-leastdestructiveref) | func   |
 | [children](#dialog-element-props)                       | node   |
 
-### AlertDialog Dialog props
+##### AlertDialog Dialog props
 
 _Type_: `spread`
 
@@ -115,7 +122,7 @@ Any props not listed above will be spread onto the underlying `Dialog` element, 
 </AlertDialog>
 ```
 
-### AlertDialog isOpen
+##### AlertDialog isOpen
 
 _Type_: `bool` default: `true`
 
@@ -145,7 +152,7 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
 
 You should probably do this when your dialog contains a lot of elements. It's also useful for transition animations.
 
-### AlertDialog onDismiss
+##### AlertDialog onDismiss
 
 _Type_: `func: (event) => void`
 
@@ -195,7 +202,7 @@ function Example(props) {
 }
 ```
 
-### AlertDialog leastDestructiveRef
+##### AlertDialog leastDestructiveRef
 
 _Type_: `node`
 
@@ -237,7 +244,7 @@ function Example(props) {
 }
 ```
 
-### AlertDialog children
+##### AlertDialog children
 
 _Type_: `node`
 
@@ -256,13 +263,13 @@ Accepts any renderable content but should generally be restricted to `AlertDialo
 </AlertDialog>
 ```
 
-# AlertDialogLabel
+### AlertDialogLabel
 
 The first thing ready by screen readers when the dialog opens, usually the title of the dialog like "Warning!" or "Please confirm!".
 
 This is required. The `AlertDialog` will throw an error if no label is rendered.
 
-## AlertDialogLabel CSS Selectors
+#### AlertDialogLabel CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -274,13 +281,13 @@ Use the following CSS to target the label:
 }
 ```
 
-## AlertDialogLabel Props
+#### AlertDialogLabel Props
 
 | Prop                                             | Type   |
 | ------------------------------------------------ | ------ |
 | [element props](#alertdialoglabel-element-props) | spread |
 
-### AlertDialogLabel element props
+##### AlertDialogLabel element props
 
 _Type_: `spread`
 
@@ -290,11 +297,11 @@ All props are spread to an underlying `div`.
 <AlertDialogLabel className="alert-label" />
 ```
 
-# AlertDialogDescription
+### AlertDialogDescription
 
 Additional content read by screen readers, usually a longer description about what you need from the user like "This action is permanent, are you sure?" etc.
 
-## AlertDialogDescription CSS Selectors
+#### AlertDialogDescription CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -306,13 +313,13 @@ Use the following CSS to target the description:
 }
 ```
 
-## AlertDialogDescription Props
+#### AlertDialogDescription Props
 
 | Prop                                                   | Type   |
 | ------------------------------------------------------ | ------ |
 | [element props](#alertdialogdescription-element-props) | spread |
 
-### AlertDialogDescription element props
+##### AlertDialogDescription element props
 
 _Type_: `spread`
 
@@ -322,7 +329,7 @@ All props are spread to an underlying `div`.
 <AlertDialogDescription className="alert-description" />
 ```
 
-# AlertDialogOverlay
+### AlertDialogOverlay
 
 Low-level component if you need more control over the styles or rendering of the dialog overlay. In the following example we use the AlertDialogOverlay and AlertDialogContent to have more control over the styles.
 
@@ -368,7 +375,7 @@ function Example(props) {
 }
 ```
 
-## AlertDialogOverlay CSS Selectors
+#### AlertDialogOverlay CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -380,7 +387,7 @@ Use the following CSS to target the overlay:
 }
 ```
 
-## AlertDialogOverlay Props
+#### AlertDialogOverlay Props
 
 | Prop                                                           | Type   |
 | -------------------------------------------------------------- | ------ |
@@ -390,7 +397,7 @@ Use the following CSS to target the overlay:
 | [leastDestructiveRef](#alertdialogoverlay-leastdestructiveref) | ref    |
 | [children](#alertdialogoverlay-children)                       | node   |
 
-### AlertDialogOverlay element props
+##### AlertDialogOverlay element props
 
 _Type_: `spread`
 
@@ -400,25 +407,25 @@ Any props not listed above will be spread onto the underlying `DialogOverlay`, a
 <AlertDialogOverlay className="light-modal" />
 ```
 
-### AlertDialogOverlay isOpen
+##### AlertDialogOverlay isOpen
 
 _Type_: `bool`
 
 Same as [AlertDialog `isOpen`](#alertdialog-isopen)
 
-### AlertDialogOverlay onDismiss
+##### AlertDialogOverlay onDismiss
 
 _Type_: `func`: (event) => void
 
 Same as [AlertDialog `onDismiss`](#alertdialog-ondismiss)
 
-### AlertDialogOverlay leastDestructiveRef
+##### AlertDialogOverlay leastDestructiveRef
 
 _Type_: `ref`
 
 Same as [AlertDialog `leastDestructiveRef`](#alertdialog-leastdestructiveref)
 
-### AlertDialogOverlay children
+##### AlertDialogOverlay children
 
 _Type_: `node`
 
@@ -430,7 +437,7 @@ Should be an `AlertDialogContent`.
 </AlertDialogOverlay>
 ```
 
-# AlertDialogContent
+### AlertDialogContent
 
 Low-level component if you need more control over the styles or rendering of the dialog content.
 
@@ -444,7 +451,7 @@ Note: You only need to use this when you are also styling `AlertDialogOverlay`, 
 </AlertDialogOverlay>
 ```
 
-## AlertDialogContent CSS Selectors
+#### AlertDialogContent CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -456,14 +463,14 @@ Use the following CSS to target the content:
 }
 ```
 
-## AlertDialogContent Props
+#### AlertDialogContent Props
 
 | Prop                                                           | Type   |
 | -------------------------------------------------------------- | ------ |
 | [DialogContent props](#alertdialogcontent-dialogcontent-props) | spread |
 | [children](#alertdialogcontent-element-props)                  | node   |
 
-### AlertDialogContent DialogContent props
+##### AlertDialogContent DialogContent props
 
 _Type_: `spread`
 
@@ -473,7 +480,7 @@ Any props not listed above will be spread onto the underlying `DialogContent` el
 <AlertDialogContent className="nice-border" />
 ```
 
-### AlertDialogContent children
+##### AlertDialogContent children
 
 _Type_: `node`
 
