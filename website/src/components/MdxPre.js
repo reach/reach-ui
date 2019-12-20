@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import assign from "core-js/fn/object/assign";
 import Highlight, { Prism } from "prism-react-renderer";
-// import oceanicNextTheme from "prism-react-renderer/themes/oceanicNext";
+import theme from "prism-react-renderer/themes/github";
 // import CopyButton from "./CopyButton";
 
 /*
@@ -43,22 +43,14 @@ export function PreComponent({ children, scope, ...props }) {
     ? trimmed.replace(new RegExp(`^${demoKey}(\\n|\\s)*`), "")
     : trimmed;
 
-  // TODO: Change this and react-live classnames
-  // const isDemo = language === "jsx-live";
   return code ? (
-    <div className="react-live">
-      <CodeProvider
-        // theme={oceanicNextTheme}
-        theme={{ plain: {}, styles: [] }}
-        code={code}
-        language={language}
-        scope={scope}
-      >
-        <CodeBlock className="react-live-editor" />
+    <div className="jsx-demo">
+      <CodeProvider code={code} language={language} scope={scope} theme={theme}>
+        <CodeBlock className="jsx-demo-code" />
         {isDemo && (
           <Fragment>
-            <CodeError className="react-live-error" />
-            <CodePreview className="react-live-preview" />
+            <CodeError className="jsx-demo-error" />
+            <CodePreview className="jsx-demo-preview" />
           </Fragment>
         )}
       </CodeProvider>

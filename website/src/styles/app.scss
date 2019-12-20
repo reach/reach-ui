@@ -121,25 +121,25 @@ code {
   font-family: "Source Code Pro", monospace;
 }
 
-.react-live {
+.jsx-demo {
   background: #fff;
   margin-bottom: 2.5rem;
   border: solid 1px hsla(0, 0%, 0%, 0.1);
   position: relative;
 }
 
-.react-live-editor {
+.jsx-demo-code {
   position: relative;
   padding: 30px 20px 20px 20px;
   font-size: 14px;
 }
 
-.react-live-editor:focus-within {
+.jsx-demo-code:focus-within {
   outline: 1px solid $color-focus-outline;
 }
 
-.react-live-editor:before,
-.react-live-preview:before {
+.jsx-demo-code:before,
+.jsx-demo-preview:before {
   position: absolute;
   left: 0;
   right: 0;
@@ -151,21 +151,21 @@ code {
   opacity: 0.5;
 }
 
-.react-live-editor:before {
+.jsx-demo-code:before {
   content: "Code Example";
 }
 
-.react-live-preview:before {
+.jsx-demo-preview:before {
   content: "Preview";
 }
 
-.react-live-preview {
+.jsx-demo-preview {
   position: relative;
   padding: 30px 20px 20px 20px;
   border-top: solid 1px hsla(0, 0%, 0%, 0.1);
 }
 
-.react-live-error {
+.jsx-demo-error {
   margin: 0;
   padding: 20px;
   background: $color-error;
