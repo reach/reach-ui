@@ -45,25 +45,25 @@ export const Example = () => {
 
 function ArrowTrigger({ children, active, ...props }) {
   return (
-    <AccordionTrigger
-      as="div"
-      {...props}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between"
-      }}
-    >
-      <span>{children}</span>
-      <ArrowIcon
-        aria-hidden
+    <AccordionTrigger {...props}>
+      <span
         style={{
-          width: 20,
-          height: 20,
-          transition: "200ms transform",
-          transform: `rotate(${active ? "180deg" : "0"})`
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
         }}
-      />
+      >
+        <span>{children}</span>
+        <ArrowIcon
+          aria-hidden
+          style={{
+            width: 20,
+            height: 20,
+            transition: "200ms transform",
+            transform: `rotate(${active ? "180deg" : "0"})`
+          }}
+        />
+      </span>
     </AccordionTrigger>
   );
 }

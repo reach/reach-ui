@@ -4,7 +4,6 @@ import {
   DisclosureTrigger,
   DisclosurePanel
 } from "@reach/disclosure";
-import "@reach/disclosure/styles.css";
 
 export const name = "Controlled";
 

@@ -12,7 +12,7 @@ import React, {
   useRef,
   useState
 } from "react";
-import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
+import { makeId, noop, wrapEvent, useForkedRef } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -65,7 +65,7 @@ export const Accordion = forwardRef(function Accordion(
   /*
    * We will store all AccordionTrigger refs inside this array to manage focus.
    */
-  const focusabledTriggerNodes = useRef([]);
+  const focusableTriggerNodes = useRef([]);
 
   /*
    * Loop through children and find all `disabled` items. This will allow us
@@ -113,7 +113,7 @@ export const Accordion = forwardRef(function Accordion(
   const context = {
     accordionId: id,
     activeIndex,
-    focusabledTriggerNodes,
+    focusableTriggerNodes,
     enabledIndices,
     onSelectPanel: readOnly ? noop : onSelectPanel,
     readOnly
@@ -160,11 +160,16 @@ if (__DEV__) {
 // AccordionItem
 
 export const AccordionItem = forwardRef(function AccordionItem(
-  { _index: index, children, disabled = false, ...props },
+  {
+    _index: index,
+
+    children,
+    disabled = false,
+    ...props
+  },
   forwardedRef
 ) {
   const { accordionId, activeIndex, readOnly } = useAccordionContext();
-
   // We need unique IDs for the panel and trigger to point to one another
   const itemId = makeId(accordionId, index);
   const panelId = makeId("panel", itemId);
@@ -213,13 +218,14 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
     onKeyDown,
     onMouseDown,
     onPointerDown,
+    tabIndex,
     ...props
   },
   forwardedRef
 ) {
   const {
     enabledIndices,
-    focusabledTriggerNodes,
+    focusableTriggerNodes,
     onSelectPanel,
     readOnly
   } = useAccordionContext();
@@ -232,32 +238,7 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
     panelId
   } = useAccordionItemContext();
 
-  /*
-   * If the user decides to use a div instead of a native button, we check the
-   * ref's node type after it mounts to the DOM in order to shim the necessary
-   * attributes.
-   */
-  const [isButtonElement, setIsButtonElement] = useState(Comp === "button");
   const ownRef = useRef(null);
-  const setButtonRef = useCallback(
-    node => {
-      ownRef.current = node;
-      if (node && Comp !== "button") {
-        setIsButtonElement(node.nodeName === "BUTTON");
-      }
-    },
-    [Comp]
-  );
-  const buttonAttributeProps = isButtonElement
-    ? {
-        disabled: disabled || undefined,
-        tabIndex: disabled ? -1 : undefined
-      }
-    : {
-        "aria-disabled": disabled || undefined,
-        role: "button",
-        tabIndex: disabled ? -1 : 0
-      };
 
   /*
    * We only need an array of refs for our triggers for keyboard navigation, and
@@ -268,14 +249,14 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
   const setFocusableTriggerRefs = useCallback(
     node => {
       if (node && !disabled) {
-        focusabledTriggerNodes.current[index] = node;
+        focusableTriggerNodes.current[index] = node;
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [disabled, index]
   );
 
-  const ref = useForkedRef(forwardedRef, setButtonRef, setFocusableTriggerRefs);
+  const ref = useForkedRef(forwardedRef, ownRef, setFocusableTriggerRefs);
 
   function handleClick(event) {
     event.preventDefault();
@@ -288,20 +269,20 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
 
   function handleKeyDown(event) {
     const { key, ctrlKey } = event;
-    const { current: focusNodes } = focusabledTriggerNodes;
+    const { current: focusNodes } = focusableTriggerNodes;
     const focusNodeIndex = focusNodes.indexOf(document.activeElement);
     const enabledFocusedIndex = enabledIndices.indexOf(focusNodeIndex);
     const count = enabledIndices.length;
 
-    const isMovingFocus =
+    // Check if we are moving focus
+    if (
       key === "ArrowDown" ||
       key === "ArrowUp" ||
       (ctrlKey && key === "PageDown") ||
       (ctrlKey && key === "PageUp") ||
       key === "Home" ||
-      key === "End";
-
-    if (isMovingFocus) {
+      key === "End"
+    ) {
       event.preventDefault();
     }
 
@@ -329,15 +310,11 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
       focusNodes[lastIndex] && focusNodes[lastIndex].focus();
       return;
     }
-
-    if (!isButtonElement && (key === " " || key === "Enter")) {
-      event.preventDefault();
-      ownRef.current.click();
-    }
   }
 
   return (
     <Comp
+      {...props}
       ref={ref}
       aria-controls={panelId}
       aria-expanded={active}
@@ -345,11 +322,11 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
       data-active={active ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
       data-read-only={readOnly ? "" : undefined}
+      disabled={disabled || undefined}
       id={triggerId}
       onClick={wrapEvent(onClick, handleClick)}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      {...buttonAttributeProps}
-      {...props}
+      tabIndex={disabled ? -1 : tabIndex}
     >
       {children}
     </Comp>
@@ -377,17 +354,17 @@ export const AccordionPanel = forwardRef(function AccordionPanel(
 
   return (
     <div
+      {...props}
       ref={forwardedRef}
       aria-labelledby={triggerId}
-      data-reach-accordion-panel=""
       data-active={active ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
+      data-reach-accordion-panel=""
       data-read-only={readOnly ? "" : undefined}
       hidden={!active}
       id={panelId}
-      role={"region"}
+      role="region"
       tabIndex={-1}
-      {...props}
     >
       {children}
     </div>
@@ -400,7 +377,3 @@ if (__DEV__) {
     children: PropTypes.node
   };
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-function noop() {}
