@@ -1,23 +1,28 @@
 {
   "name": "@reach/disclosure",
   "version": "0.0.0",
-  "description": "Accessible React Disclosure Component",
+  "description": "Accessible React disclosure component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
-  "main": "index.js",
-  "module": "es/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/disclosure"
+  },
   "scripts": {
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
     "@reach/auto-id": "0.6.1",
-    "@reach/utils": "0.6.1",
+    "@reach/utils": "0.6.4",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
+  "main": "index.js",
+  "module": "es/index.js",
   "files": [
     "es",
     "src",
