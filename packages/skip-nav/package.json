@@ -12,6 +12,9 @@
   "scripts": {
     "build": "node ../../shared/build-package"
   },
+  "dependencies": {
+    "@reach/utils": "^0.6.4"
+  },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"

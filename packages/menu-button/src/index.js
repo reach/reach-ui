@@ -81,7 +81,7 @@ export const Menu = ({ id, children }) => {
     state
   };
 
-  useEffect(() => void checkStyles("menu-button"), []);
+  useEffect(() => checkStyles("menu-button"), []);
 
   return (
     <DescendantProvider>
