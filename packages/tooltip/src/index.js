@@ -210,7 +210,7 @@ let leavingVisibleTimer;
 
 function startLeavingVisibleTimer() {
   clearTimeout(leavingVisibleTimer);
-  leavingVisibleTimer = setTimeout(() => transition("timecomplete"), 500);
+  leavingVisibleTimer = setTimeout(() => transition("timecomplete"), 100);
 }
 
 function clearLeavingVisibleTimer() {
