@@ -1,14 +1,8 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Component Component"
-  meta={[
-    {
-      name: "description",
-      content:
-        "A dynamic, functional version of a React.Component; a component component if you will."
-    }
-  ]}
+<SEO
+  title="Component Component"
+  description="A dynamic, functional version of a React.Component; a component component if you will."
 />
 
 # Component Component
@@ -48,19 +42,21 @@ A dynamic, functional version of `React.Component`, a component component if you
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/component-component` or `yarn add @reach/component-component`. Then import the component:
+
 ```bash
 npm install @reach/component-component
 # or
 yarn add @reach/component-component
 ```
 
-And then import it:
-
 ```js
 import Component from "@reach/component-component";
 ```
 
-## Props
+## Component API
+
+### Props
 
 | Prop                                                  | Type   |
 | ----------------------------------------------------- | ------ |
@@ -76,13 +72,14 @@ import Component from "@reach/component-component";
 | [ children ](#children)                               | func   |
 | [ render ](#render)                                   | func   |
 
-### initialState
+#### initialState
 
 _Type_: `object`
 
 An object of initial state.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ count: 10 }}>
@@ -92,7 +89,7 @@ function Example() {
 }
 ```
 
-### getInitialState
+#### getInitialState
 
 _Type_: `func: () => object`
 
@@ -113,13 +110,14 @@ However, in the next example, `Date.now()` would be called with every re-render,
 <Component initialState={{ now: Date.now() }} />
 ```
 
-### refs
+#### refs
 
 _Type_: `object`
 
 Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component refs={{ input: null }}>
@@ -139,7 +137,7 @@ function Example() {
 }
 ```
 
-### getRefs
+#### getRefs
 
 _Type_: `func: () => object`
 
@@ -156,7 +154,7 @@ Use this when any of your refs are computed.
 />
 ```
 
-### didMount
+#### didMount
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
 
@@ -191,19 +189,19 @@ Perhaps you want some async data but don't want to make an entirely new componen
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#componentdidmount).
 
-### didUpdate
+#### didUpdate
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate, prevProps, prevState }) => undefined`
 
 Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
-### willUnmount
+#### willUnmount
 
 _Type_: `func: ({ state, props, refs }) => undefined`
 
 Called when the component will be removed from the page. See [React Docs](https://reactjs.org/docs/react-component.html#componentwillunmount).
 
-### getSnapshotBeforeUpdate
+#### getSnapshotBeforeUpdate
 
 _Type_: `func: ({ state, props, refs, prevProps, prevState }) => any`
 
@@ -217,7 +215,8 @@ Return `true` to signify the component needs an update, `false` if it does not. 
 
 For example: often you find just one part of your component is expensive to render, maybe because of a large SVG with a dynamic style or two. Rather than pulling the elements out of your component and putting them in a new `PureComponent`, you can inline a `shoudlUpdate` check:
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ hue: 0 }}>
@@ -257,13 +256,14 @@ function Example() {
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcomponentupdate).
 
-### children
+#### children
 
 _Type_: `node`
 
 Usual React children prop.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component>
@@ -277,7 +277,8 @@ _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
 A render prop callback to provide the stateful parts of your component at render time.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component initialState={{ hue: 0 }}>
@@ -302,11 +303,12 @@ function Example() {
 }
 ```
 
-### render
+#### render
 
 _Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component
@@ -342,7 +344,8 @@ Here is a pretty involved example showing just how composable this component is:
 - Optimized todo rendering, avoiding updates if the color has not changed
 - Tracked refs
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Component

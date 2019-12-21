@@ -9,7 +9,7 @@ export let name = "With Other Tabbables";
 export let Example = () => (
   <div>
     <p>
-      <label for="cheers">How many cheers for Reach?</label>
+      <label htmlFor="cheers">How many cheers for Reach?</label>
       <select id="cheers">
         <option>one</option>
         <option>two</option>

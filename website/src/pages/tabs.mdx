@@ -1,22 +1,19 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
-<Helmet
-  title="Reach UI - Tabs"
-  meta={[
-    {
-      name: "description",
-      content: "Accessible Tabs"
-    }
-  ]}
-/>
+<SEO title="Tabs" description="Accessible tabs component for React" />
 
-# @reach/tabs
+# Tabs
 
-[Tabs](#tabs) -
-[TabList](#tablist) -
-[Tab](#tab) -
-[TabPanels](#tabpanels) -
-[TabPanel](#tabpanel)
+<TOC>
+  <TOCList>
+    <TOCLink href="#tabs-1">Tabs</TOCLink>
+    <TOCLink href="#tablist">TabList</TOCLink>
+    <TOCLink href="#tab">Tab</TOCLink>
+    <TOCLink href="#tabpanels">TabPanels</TOCLink>
+    <TOCLink href="#tabpanel">TabPanel</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/tabs
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
@@ -27,7 +24,8 @@ The `Tab` and `TabPanel` elements are associated by their order in the tree. Non
 
 You can render any other elements you want inside of `Tabs`, but `TabList` should only render `Tab` elements, and `TabPanels` should only render `TabPanel` elements.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs>
@@ -57,31 +55,35 @@ function Example() {
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/tabs` or `yarn add @reach/tabs`. Then import the components and styles that you need:
+
 ```bash
 npm install @reach/tabs
 # or
 yarn add @reach/tabs
 ```
 
-And then import the components:
-
 ```js
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import "@reach/tabs/styles.css";
 ```
 
-# Tabs
+## Component API
+
+### Tabs
 
 The parent component of the tab interface.
 
-## Tabs CSS Selectors
+#### Tabs CSS Selectors
 
 Please see the [styling guide](/styling).
 
-```
-[data-reach-tabs] { }
+```css
+[data-reach-tabs] {
+}
 ```
 
-## Tabs Props
+#### Tabs Props
 
 | Prop                               | Type          | Required |
 | ---------------------------------- | ------------- | -------- |
@@ -92,13 +94,14 @@ Please see the [styling guide](/styling).
 | [as](#tabs-as)                     | ComponentType | false    |
 | [rest](#tabs-rest)                 | HTMLDivProps  | false    |
 
-### Tabs children
+##### Tabs children
 
 _Type_: `node`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs>
@@ -123,13 +126,14 @@ function Example() {
 }
 ```
 
-### Tabs onChange
+##### Tabs onChange
 
 _Type_: `function`
 
 Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   const colors = ["firebrick", "goldenrod", "dodgerblue"];
   const [tabIndex, setTabIndex] = useState(0);
@@ -157,13 +161,14 @@ function Example() {
 }
 ```
 
-### Tabs defaultIndex
+##### Tabs defaultIndex
 
 _Type_: `number`
 
 Starts the tabs at a specific index.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tabs defaultIndex={1}>
@@ -187,13 +192,14 @@ function Example() {
 }
 ```
 
-### Tabs index
+##### Tabs index
 
 _Type_: `number`
 
 Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -238,19 +244,19 @@ function Example() {
 }
 ```
 
-### Tabs as
+##### Tabs as
 
 _Type_: `ComponentType`
 
 Tabs will render a `div` unless you specify a different element.
 
-### Tabs rest
+##### Tabs rest
 
 _Type_: `rest`
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
-# TabList
+### TabList
 
 The parent component of the tabs.
 
@@ -261,23 +267,24 @@ The parent component of the tabs.
 </TabList>
 ```
 
-## TabList CSS Selectors
+#### TabList CSS Selectors
 
 Please see the [styling guide](/styling).
 
-```
-[data-reach-tab-list] { }
+```css
+[data-reach-tab-list] {
+}
 ```
 
-## TabList Props
+#### TabList Props
 
 | Prop                          | Type           | Required |
 | ----------------------------- | -------------- | -------- |
 | [children](#tablist-children) | node           | false    |
 | [as](#tablist-as)             | ComponentType  | false    |
-| rest                          | ForwardedProps | false    |
+| [rest](#tablist-rest)         | ForwardedProps | false    |
 
-### TabList children
+##### TabList children
 
 `TabList` expects multiple `Tab` elements as children.
 
@@ -307,7 +314,7 @@ const TabPage = () => (
 );
 ```
 
-### TabList as
+##### TabList as
 
 _Type_: `ComponentType`
 
@@ -317,13 +324,13 @@ Tabs will render a `div` unless you specify a different element.
 <TabList as={View} />
 ```
 
-### TabList rest
+##### TabList rest
 
 _Type_: `rest`
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
-# TabPanels
+### TabPanels
 
 The parent component of the panels.
 
@@ -334,15 +341,16 @@ The parent component of the panels.
 </TabPanels>
 ```
 
-## TabPanels CSS Selectors
+#### TabPanels CSS Selectors
 
 Please see the [styling guide](/styling).
 
-```
-[data-reach-tab-panels] { }
+```css
+[data-reach-tab-panels] {
+}
 ```
 
-## TabPanels Props
+#### TabPanels Props
 
 | Prop                            | Type          | Required |
 | ------------------------------- | ------------- | -------- |
@@ -350,7 +358,7 @@ Please see the [styling guide](/styling).
 | [as](#tabpanels-as)             | ComponentType | false    |
 | rest                            | HTMLDivProps  | false    |
 
-### TabPanels children
+##### TabPanels children
 
 `TabPanels` expects multiple `TabPanel` elements as children.
 
@@ -380,7 +388,7 @@ const TabPage = () => (
 );
 ```
 
-### TabPanels as
+##### TabPanels as
 
 _Type_: `ComponentType`
 
@@ -390,13 +398,13 @@ Tabs will render a `div` unless you specify a different element.
 <TabPanels as={View} />
 ```
 
-### TabPanels rest
+##### TabPanels rest
 
 _Type_: `rest`
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
-# Tab
+### Tab
 
 The interactive element that changes the selected panel.
 
@@ -404,19 +412,21 @@ The interactive element that changes the selected panel.
 <Tab>Coconut Korma</Tab>
 ```
 
-## Tab CSS Selectors
+#### Tab CSS Selectors
 
 Please see the [styling guide](/styling).
 
-```
+```css
 /* styles all tabs */
-[data-reach-tab] { }
+[data-reach-tab] {
+}
 
 /* styles only the selected tab */
-[data-reach-tab][data-selected] { }
+[data-reach-tab][data-selected] {
+}
 ```
 
-## Tab Props
+#### Tab Props
 
 | Prop                      | Type          | Required |
 | ------------------------- | ------------- | -------- |
@@ -425,13 +435,13 @@ Please see the [styling guide](/styling).
 | [as](#tab-as)             | ComponentType | false    |
 | rest                      | rest          | false    |
 
-## Tab Clone Props
+#### Tab Clone Props
 
 | Prop                          | Type    | Required |
 | ----------------------------- | ------- | -------- |
 | [isSelected](#tab-isselected) | boolean | false    |
 
-### Tab children
+##### Tab children
 
 `Tab` can receive any type of children.
 
@@ -441,7 +451,7 @@ Please see the [styling guide](/styling).
 </Tab>
 ```
 
-### Tab disabled
+##### Tab disabled
 
 Disables a tab when true. Clicking will not work and keyboard navigation will skip over it.
 
@@ -449,7 +459,7 @@ Disables a tab when true. Clicking will not work and keyboard navigation will sk
 <Tab disabled />
 ```
 
-### Tab as
+##### Tab as
 
 _Type_: `ComponentType`
 
@@ -459,19 +469,20 @@ Tab will render a `button` unless you specify a different element.
 <Tab as={ReactNativeWebButton} />
 ```
 
-### Tab rest
+##### Tab rest
 
 _Type_: `rest`
 
 All other props are passed to the underlying `button` (or component passed to `as`).
 
-### Tab isSelected
+##### Tab isSelected
 
 _Type_: `number` - cloned
 
 Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function CoolTab(props) {
     // `isSelected` comes from `TabList` cloning the `CoolTab`.
@@ -501,7 +512,7 @@ Because TabList needs to know the order of the children, we use `cloneElement` t
 })();
 ```
 
-# TabPanel
+### TabPanel
 
 The panel that displays when it's corresponding tab is active.
 
@@ -512,16 +523,17 @@ The panel that displays when it's corresponding tab is active.
 </TabPanel>
 ```
 
-## TabPanel CSS Selectors
+#### TabPanel CSS Selectors
 
 Please see the [styling guide](/styling).
 
-```
+```css
 /* styles all tabs */
-[data-reach-tab-panel] { }
+[data-reach-tab-panel] {
+}
 ```
 
-## TabPanel Props
+#### TabPanel Props
 
 | Prop                      | Type          | Required |
 | ------------------------- | ------------- | -------- |
@@ -529,7 +541,7 @@ Please see the [styling guide](/styling).
 | [as](#tab-as)             | ComponentType | false    |
 | rest                      | rest          | false    |
 
-### TabPanel children
+##### TabPanel children
 
 `TabPanel` can receive any type of children.
 
@@ -540,7 +552,7 @@ Please see the [styling guide](/styling).
 </TabPanel>
 ```
 
-### TabPanel as
+##### TabPanel as
 
 _Type_: `ComponentType`
 
@@ -550,21 +562,22 @@ TabPanel will render a `div` unless you specify a different element.
 <Tab as={View} />
 ```
 
-### TabPanel rest
+##### TabPanel rest
 
 _Type_: `rest`
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
-# Demos
+## Demos
 
 These demos show off how you can add quite a bit of behavior to your Tabs interfaces.
 
-## DataTabs
+### DataTabs
 
 If you'd like to drive your tabs with data you can create a `DataTabs` component.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function DataTabs({ data }) {
     return (
@@ -598,11 +611,12 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
 })();
 ```
 
-## Animation
+### Animation
 
 With a little composition we can animate the selected tab bar.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   const AnimatedContext = React.createContext();
 

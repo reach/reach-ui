@@ -1,27 +1,28 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
-<Helmet
-  title="Reach UI - Dialog (Modal)"
-  meta={[
-    {
-      name: "description",
-      content: "An accessible React.js modal dialog."
-    }
-  ]}
+<SEO
+  title="Dialog (Modal)"
+  description="An accessible modal dialog component for React"
 />
 
 # Dialog (Modal)
 
-[Dialog](#dialog) -
-[DialogOverlay](#dialogoverlay) -
-[DialogContent](#dialogcontent)
+<TOC>
+  <TOCList>
+    <TOCLink href="#dialog">Dialog</TOCLink>
+    <TOCLink href="#dialogoverlay">DialogOverlay</TOCLink>
+    <TOCLink href="#dialogcontent">DialogContent</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/dialog
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal
 
 An accessible dialog or "modal" window.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -45,19 +46,22 @@ function Example(props) {
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/dialog` or `yarn add @reach/dialog`. Then import the components and styles that you need:
+
 ```bash
 npm install @reach/dialog
 # or
 yarn add @reach/dialog
 ```
 
-And then import the components you need:
-
 ```js
 import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 ```
 
-# Dialog
+## Component API
+
+### Dialog
 
 High-level component to render a modal dialog window over the top of the page (or another dialog).
 
@@ -67,7 +71,7 @@ High-level component to render a modal dialog window over the top of the page (o
 </Dialog>
 ```
 
-## Dialog Props
+#### Dialog Props
 
 | Prop                                   | Type   |
 | -------------------------------------- | ------ |
@@ -76,13 +80,14 @@ High-level component to render a modal dialog window over the top of the page (o
 | [onDismiss](#dialog-ondismiss)         | func   |
 | [children](#dialog-element-props)      | node   |
 
-### Dialog element props
+##### Dialog element props
 
 _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -101,7 +106,7 @@ function Example(props) {
 }
 ```
 
-### Dialog isOpen
+##### Dialog isOpen
 
 _Type_: `bool` default: `true`
 
@@ -121,7 +126,8 @@ If you'd rather not have the dialog always rendered, you can put a guard in fron
 
 Note, however, that the dialog will not render to the DOM when `isOpen={false}`, but you may want to save on the number of elements created in your render function. You should probably do this when your dialog contains a lot of elements.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -145,7 +151,7 @@ function Example(props) {
 }
 ```
 
-### Dialog onDismiss
+##### Dialog onDismiss
 
 _Type_: `func: (event) => void`
 
@@ -153,7 +159,8 @@ This function is called whenever the user hits "Escape" or clicks outside the di
 
 The only time you shouldn't close the dialog on dismiss is when the dialog requires a choice and none of them are "cancel". For example, perhaps two records need to be merged and the user needs to pick the surviving record. Neither choice is less destructive than the other, in these cases you may want to alert the user they need to a make a choice on dismiss instead of closing the dialog.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -175,7 +182,8 @@ function Example(props) {
 }
 ```
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const [showWarning, setShowWarning] = React.useState(false);
@@ -203,7 +211,7 @@ function Example(props) {
 }
 ```
 
-### Dialog children
+##### Dialog children
 
 _Type_: `node`
 
@@ -215,13 +223,14 @@ Accepts any renderable content.
 </Dialog>
 ```
 
-# DialogOverlay
+### DialogOverlay
 
 Low-level component if you need more control over the styles or rendering of the dialog overlay.
 
 Note: You must render a `DialogContent` inside.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
@@ -251,7 +260,7 @@ function Example(props) {
 }
 ```
 
-## DialogOverlay CSS Selectors
+#### DialogOverlay CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -259,11 +268,10 @@ Use the following CSS to target the overlay:
 
 ```css
 [data-reach-dialog-overlay] {
-  background: hsla(0, 0%, 0%, 0.2);
 }
 ```
 
-## DialogOverlay Props
+#### DialogOverlay Props
 
 | Prop                                              | Type   |
 | ------------------------------------------------- | ------ |
@@ -273,7 +281,7 @@ Use the following CSS to target the overlay:
 | [initialFocusRef](#dialogoverlay-initialfocusref) | ref    |
 | [children](#dialogoverlay-element-props)          | node   |
 
-### DialogOverlay element props
+##### DialogOverlay element props
 
 _Type_: `spread`
 
@@ -285,25 +293,26 @@ Any props not listed above will be spread onto the underlying `div`.
 </DialogOverlay>
 ```
 
-### DialogOverlay isOpen
+##### DialogOverlay isOpen
 
 _Type_: `bool`
 
 Same as [Dialog `isOpen`](#dialog-isopen)
 
-### DialogOverlay onDismiss
+##### DialogOverlay onDismiss
 
 _Type_: `func`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss)
 
-### DialogContent initialFocusRef
+##### DialogContent initialFocusRef
 
 _Type_: `ref`
 
 By default the first focusable element will receive focus when the dialog opens but you can provide a ref to focus instead.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -332,7 +341,7 @@ function Example(props) {
 }
 ```
 
-### DialogOverlay children
+##### DialogOverlay children
 
 _Type_: `node`
 
@@ -344,7 +353,7 @@ Should be a `DialogContent`.
 </DialogOverlay>
 ```
 
-# DialogContent
+### DialogContent
 
 Low-level component if you need more control over the styles or rendering of the dialog content.
 
@@ -352,7 +361,8 @@ Note: Must be a child of `DialogOverlay`.
 
 Note: You only need to use this when you are also styling `DialogOverlay`, otherwise you can use the high-level `Dialog` component and pass the props to it. Any props passed to `Dialog` component (besides `isOpen` and `onDismiss`) will be spread onto `DialogContent`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [showDialog, setShowDialog] = React.useState(false);
   const buttonRef = React.useRef();
@@ -383,7 +393,7 @@ function Example(props) {
 }
 ```
 
-## DialogContent CSS Selectors
+#### DialogContent CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -391,18 +401,17 @@ Use the following CSS to target the overlay:
 
 ```css
 [data-reach-dialog-content] {
-  border: solid 5px hsla(0, 0%, 0%, 0.5);
 }
 ```
 
-## DialogContent Props
+#### DialogContent Props
 
 | Prop                                          | Type   |
 | --------------------------------------------- | ------ |
 | [element props](#dialogcontent-element-props) | spread |
 | [children](#dialogcontent-element-props)      | node   |
 
-### DialogContent element props
+##### DialogContent element props
 
 _Type_: `spread`
 
@@ -414,7 +423,7 @@ Any props not listed above will be spread onto the underlying `div`.
 </DialogOverlay>
 ```
 
-### DialogContent children
+##### DialogContent children
 
 _Type_: `node`
 
@@ -430,7 +439,8 @@ Accepts any renderable content.
 
 If you'd like to animate the content, give [React Spring](https://github.com/drcmda/react-spring) a shot.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
@@ -449,7 +459,9 @@ function Example(props) {
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: styles.y.interpolate((value) => `translate3d(0px, ${value}px, 0px)`),
+                  transform: styles.y.interpolate(
+                    value => `translate3d(0px, ${value}px, 0px)`
+                  ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10
                 }}
@@ -519,7 +531,7 @@ For more details, see the [W3C recommendations for `aria-label`](https://www.w3.
 
 ### Aria Hiding Other Elements
 
-The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screenreader users. Instead, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog. This traps the virtual cursor inside the dialog.
+The aria role "dialog" has been problematic in the past with the virtual cursor, effectively hiding a lot of dialog content from screen reader users. Instead, Dialog will set `aria-hidden` on all nodes at the `document.body` root except for the currently active dialog. This traps the virtual cursor inside the dialog.
 
 This is a little unusual for a React component to traverse the DOM that it isn't a part of. Care has been taken to restore the manipulated attributes back to their original values.
 

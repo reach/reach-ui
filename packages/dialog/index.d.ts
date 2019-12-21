@@ -38,6 +38,13 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
    */
   children?: React.ReactNode;
+  /**
+   * By default the first focusable element will receive focus when the dialog
+   * opens but you can provide a ref to focus instead.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
+   */
+  initialFocusRef?: React.Ref<any>;
 } & React.HTMLProps<HTMLDivElement>;
 
 /**
@@ -50,13 +57,6 @@ export type DialogOverlayProps = {
    * @see Docs https://github.com/reach/reach-ui/issues/325
    */
   allowPinchZoom?: boolean;
-  /**
-   * By default the first focusable element will receive focus when the dialog
-   * opens but you can provide a ref to focus instead.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
-   */
-  initialFocusRef?: React.Ref<any>;
 } & DialogProps;
 
 /**

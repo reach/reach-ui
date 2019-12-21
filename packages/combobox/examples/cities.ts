@@ -1,4 +1,9 @@
-export default [
+interface City {
+  city: string;
+  state: string;
+}
+
+let cities: City[] = [
   {
     city: "Abbeville",
     state: "Louisiana"
@@ -23188,3 +23193,5 @@ export default [
     state: "New Mexico"
   }
 ];
+
+export default cities;

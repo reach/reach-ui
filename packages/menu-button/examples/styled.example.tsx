@@ -13,33 +13,21 @@ import styled from "styled-components";
 
 export let name = "With Styled Components (TS)";
 
-/**
- * Because we check a component's type to determine whether or not it should be
- * focusable, MenuItem and MenuLink components cannot be wrapped or subbed for
- * styled compoments. While we work on updating our implementation, you can use
- * the `as` prop to support styled components in your MenuButton today!
- */
-
 export let Example = () => (
   <Menu>
     <StyledButton id="example-button">
       Actions <span aria-hidden="true">▾</span>
     </StyledButton>
     <StyledList>
-      <MenuItem as={StyledItem} onSelect={action("Download")}>
-        Download
-      </MenuItem>
-      <MenuItem as={StyledItem} onSelect={action("Copy")}>
-        Create a Copy
-      </MenuItem>
-      <MenuItem as={StyledItem} onSelect={action("Mark as Draft")}>
-        Mark as Draft
-      </MenuItem>
-      <MenuItem as={StyledItem} onSelect={action("Delete")}>
+      <StyledItem onSelect={action("Download")}>Download</StyledItem>
+      <StyledItem onSelect={action("Copy")}>Create a Copy</StyledItem>
+      <StyledItem onSelect={action("Mark as Draft")}>Mark as Draft</StyledItem>
+      <MenuItem as={StyledItemAs} onSelect={action("Delete")}>
         Delete
       </MenuItem>
-      <MenuLink as={StyledLink} href="https://google.com">
-        Google
+      <StyledLink href="https://google.com">Google</StyledLink>
+      <MenuLink as={StyledLinkAs} href="https://duckduckgo.com">
+        DuckDuckGo
       </MenuLink>
     </StyledList>
   </Menu>
@@ -61,14 +49,25 @@ const StyledList = styled(MenuList)`
   color: palevioletred;
 `;
 
-// Use a div for your styled MenuItem and a tags for your styled MenuLink
-const StyledItem = styled.div`
+const StyledItem = styled(MenuItem)`
   &[data-selected] {
     background: palevioletred;
   }
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(MenuLink)`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+const StyledItemAs = styled.div`
+  &[data-selected] {
+    background: palevioletred;
+  }
+`;
+
+const StyledLinkAs = styled.a`
   &[data-selected] {
     background: palevioletred;
   }

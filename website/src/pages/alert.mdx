@@ -1,13 +1,8 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Alert"
-  meta={[
-    {
-      name: "description",
-      content: "Accessible alert messages for React"
-    }
-  ]}
+<SEO
+  title="Alert"
+  description="Accessible component to create alert messages for React"
 />
 
 # Alert
@@ -15,11 +10,12 @@ import Helmet from "../components/DefaultHelmet";
 - Source: https://github.com/reach/reach-ui/tree/master/packages/alert
 - WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#alert
 
-Screenreader friendly alert messages. In many apps developers add "alert" messages when network events or other things happen. Users with assistive technologies may not know about the message unless you develop for it.
+Screen-reader-friendly alert messages. In many apps developers add "alert" messages when network events or other things happen. Users with assistive technologies may not know about the message unless you develop for it.
 
-The Alert component will announce to assistive technologies whatever you render to the screen. If you don't have a screenreader on you won't notice a difference between rendering `<Alert>` vs. a `<div>`.
+The Alert component will announce to assistive technologies whatever you render to the screen. If you don't have a screen reader on you won't notice a difference between rendering `<Alert>` vs. a `<div>`.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example(props) {
   const [messages, setMessages] = React.useState([]);
   return (
@@ -48,19 +44,23 @@ function Example(props) {
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/alert` or `yarn add @reach/alert`. Then import the component:
+
 ```bash
 npm install @reach/alert
 # or
 yarn add @reach/alert
 ```
 
-And then import the components you need:
-
 ```js
 import Alert from "@reach/alert";
 ```
 
-## Alert Props
+## Component API
+
+### Alert
+
+#### Alert Props
 
 | Prop                                  | Type                         | Required |
 | ------------------------------------- | ---------------------------- | -------- |
@@ -68,13 +68,14 @@ import Alert from "@reach/alert";
 | [type](#alert-type)                   | enum "assertive" or "polite" | false    |
 | [children](#alert-children)           | node                         | false    |
 
-### Alert element props
+##### Alert element props
 
 _Type_: `spread`
 
 Any props not listed above will be spread onto the underlying `div` element.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Alert
@@ -89,7 +90,7 @@ function Example() {
 }
 ```
 
-### Alert type
+##### Alert type
 
 _Type_: `enum` `"assertive" | "polite"` default: `"polite"`
 
@@ -101,7 +102,7 @@ Controls whether the assistive technology should read immediately ("assertive") 
 </Alert>
 
 <Alert type="assertive">
-  If a screenreader is currently reading something and
+  If a screen reader is currently reading something and
   you render this, it will interrupt the user and read
   this immediately.
 </Alert>
@@ -109,7 +110,7 @@ Controls whether the assistive technology should read immediately ("assertive") 
 
 You should probably stick with polite most of the time.
 
-### Alert children
+##### Alert children
 
 _Type_: `node`
 

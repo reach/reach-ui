@@ -20,7 +20,7 @@ import { wrapEvent } from "@reach/utils";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 
-import cities from "./cities.js";
+import cities from "./cities";
 
 export let name = "Controlled";
 
