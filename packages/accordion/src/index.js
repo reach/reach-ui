@@ -8,11 +8,18 @@ import React, {
   forwardRef,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState
 } from "react";
-import { makeId, noop, wrapEvent, useForkedRef } from "@reach/utils";
+import {
+  checkStyles,
+  makeId,
+  noop,
+  wrapEvent,
+  useForkedRef
+} from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -83,7 +90,7 @@ export const Accordion = forwardRef(function Accordion(
 
     for (let i = 0; i < childrenArray.length; i++) {
       const child = childrenArray[i];
-      if (!(typeof child.type === "string" || child.props.disabled === true)) {
+      if (!(typeof child.type === "string" || child.props.disabled)) {
         enabledIndices.push(i);
       }
     }
@@ -126,6 +133,8 @@ export const Accordion = forwardRef(function Accordion(
      */
     setActiveIndex(controlledIndex);
   }
+
+  useEffect(() => checkStyles("accordion"), []);
 
   return (
     <AccordionContext.Provider value={context}>
