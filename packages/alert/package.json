@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Screen-reader-friendly alert messages.",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/utils": "^0.6.4",
-    "@reach/visually-hidden": "^0.6.2",
+    "@reach/utils": "^0.7.0",
+    "@reach/visually-hidden": "^0.7.0",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {

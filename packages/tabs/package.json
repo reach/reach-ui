@@ -1,6 +1,6 @@
 {
   "name": "@reach/tabs",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Accessible React Tabs Component",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.1",
-    "@reach/utils": "^0.6.4",
+    "@reach/auto-id": "^0.7.0",
+    "@reach/utils": "^0.7.0",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },

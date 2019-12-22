@@ -1,6 +1,6 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Skip navigation links for screen reader and keyboard users.",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/utils": "^0.6.4"
+    "@reach/utils": "^0.7.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

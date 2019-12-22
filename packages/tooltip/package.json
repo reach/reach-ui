@@ -1,6 +1,6 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Accessible tooltips",
   "main": "index.js",
   "module": "es/index.js",
@@ -13,11 +13,11 @@
     "directory": "packages/tooltip"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.1",
-    "@reach/portal": "^0.6.2",
-    "@reach/rect": "^0.6.2",
-    "@reach/utils": "^0.6.4",
-    "@reach/visually-hidden": "^0.6.2",
+    "@reach/auto-id": "^0.7.0",
+    "@reach/portal": "^0.7.0",
+    "@reach/rect": "^0.7.0",
+    "@reach/utils": "^0.7.0",
+    "@reach/visually-hidden": "^0.7.0",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
