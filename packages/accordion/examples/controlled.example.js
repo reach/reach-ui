@@ -10,17 +10,21 @@ import {
 export const name = "Controlled";
 
 export const Example = () => {
-  const [activeItem, setActiveItem] = React.useState(null);
+  const [activeItems, setActiveItems] = React.useState([0]);
+  function toggleItem(index) {
+    if (activeItems.includes(index)) {
+      setActiveItems(activeItems.filter(item => item !== index));
+    } else {
+      setActiveItems([...activeItems, index].sort());
+    }
+  }
+
   return (
     <>
-      <button onClick={() => setActiveItem(activeItem === 0 ? null : 0)}>
-        {activeItem === 0 ? "Close" : "Open"} Numero Uno
+      <button onClick={() => toggleItem(0)}>
+        {activeItems.includes(0) ? "Close" : "Open"} Numero Uno
       </button>
-      <Accordion
-        toggle={true}
-        index={activeItem}
-        onChange={index => setActiveItem(activeItem === index ? null : index)}
-      >
+      <Accordion toggle={true} index={activeItems} onChange={toggleItem}>
         <AccordionItem>
           <AccordionTrigger>You can toggle me</AccordionTrigger>
           <AccordionPanel>

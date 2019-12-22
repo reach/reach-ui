@@ -81,7 +81,7 @@ export const Accordion = forwardRef(function Accordion(
    * on an accordion with multiple active children.
    */
   const childrenArray = useMemo(() => {
-    const arr = React.Children.toArray(children);
+    const arr = Children.toArray(children);
     return Array.isArray(arr) ? arr : [];
   }, [children]);
 
@@ -126,7 +126,11 @@ export const Accordion = forwardRef(function Accordion(
     readOnly
   };
 
-  if (isControlled && controlledIndex !== activeIndex) {
+  if (
+    isControlled &&
+    // Quickly compare array or numeric indexes without type checking
+    JSON.stringify(activeIndex) !== JSON.stringify(controlledIndex)
+  ) {
     /*
      * If the component is controlled, we'll sync internal state with the
      * controlled state
@@ -152,10 +156,17 @@ if (__DEV__) {
   Accordion.propTypes = {
     children: PropTypes.node.isRequired,
     index: (props, name, compName, ...rest) => {
-      if (props.index == null && props.onChange == null) {
+      if (props.index != null && props.onChange == null) {
         return new Error(
-          "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be mutable, remove `index` and use the `active` prop on the nested items that should be active. Otherwise, set `onChange`."
+          "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be functional, remove the `index` value to render an uncontrolled accordion or set an `onChange` handler to set an index when a change occurs."
         );
+      }
+      if (Array.isArray(props.index)) {
+        return props.index.every(i => typeof i === "number")
+          ? null
+          : new Error(
+              "You provided an array as an index in `Accordion` but one or more of the values are not numeric. Please check to make sure all indices are valid numbers."
+            );
       }
       return PropTypes.number(name, props, compName, ...rest);
     },
@@ -169,13 +180,7 @@ if (__DEV__) {
 // AccordionItem
 
 export const AccordionItem = forwardRef(function AccordionItem(
-  {
-    _index: index,
-
-    children,
-    disabled = false,
-    ...props
-  },
+  { _index: index, children, disabled = false, ...props },
   forwardedRef
 ) {
   const { accordionId, activeIndex, readOnly } = useAccordionContext();
@@ -184,8 +189,12 @@ export const AccordionItem = forwardRef(function AccordionItem(
   const panelId = makeId("panel", itemId);
   const triggerId = makeId("trigger", itemId);
 
+  const active = Array.isArray(activeIndex)
+    ? activeIndex.includes(index)
+    : activeIndex === index;
+
   const context = {
-    active: activeIndex === index,
+    active,
     disabled,
     triggerId,
     index,
@@ -198,7 +207,7 @@ export const AccordionItem = forwardRef(function AccordionItem(
       <div
         ref={forwardedRef}
         data-reach-accordion-item=""
-        data-active={activeIndex === index ? "" : undefined}
+        data-active={active ? "" : undefined}
         data-disabled={disabled ? "" : undefined}
         data-read-only={readOnly ? "" : undefined}
         {...props}

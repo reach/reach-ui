@@ -2048,6 +2048,11 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@reach/auto-id@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.7.0.tgz#da7f11c11bc5aff809ccec9706a9f5d8da6052dd"
+  integrity sha512-8NU8NKItNBBscC7qsTvRFCxtHMzBy/wFTrPkAVqraUxfEhNc4UnA4vr1XsduTNfHRwr262+NbDTSeO9EqTRIjA==
+
 "@reach/observe-rect@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.3.tgz#2ea3dcc369ab22bd9f050a92ea319321356a61e8"
@@ -2063,6 +2068,11 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
+
+"@reach/utils@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.0.tgz#d089552bee11b9900cb8b54d4f151362a509eb54"
+  integrity sha512-sqPUQzpA+ofGd+38kZ3PylG5NrsbPCP6U+W5+YOrrxGDobX04807ofNRrq30unGo1ueIBzwcm5C5pu33FshpmQ==
 
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.2"
