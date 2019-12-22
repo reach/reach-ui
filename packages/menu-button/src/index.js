@@ -66,13 +66,14 @@ const initialState = {
 // Menu
 
 export const Menu = ({ id, children }) => {
-  const buttonRef = useRef(null);
-  const menuRef = useRef(null);
-  const popoverRef = useRef(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const menuId = useId(id);
+  let buttonRef = useRef(null);
+  let menuRef = useRef(null);
+  let popoverRef = useRef(null);
+  let [descendants, setDescendants] = useDescendants();
+  let [state, dispatch] = useReducer(reducer, initialState);
+  let menuId = useId(id);
 
-  const context = {
+  let context = {
     buttonRef,
     dispatch,
     menuId,
@@ -84,7 +85,7 @@ export const Menu = ({ id, children }) => {
   useEffect(() => checkStyles("menu-button"), []);
 
   return (
-    <DescendantProvider>
+    <DescendantProvider descendants={descendants} set={setDescendants}>
       <MenuContext.Provider value={context}>
         {typeof children === "function"
           ? children({ isOpen: state.isOpen })
@@ -108,13 +109,13 @@ export const MenuButton = forwardRef(function MenuButton(
   { onKeyDown, onMouseDown, id, ...props },
   forwardedRef
 ) {
-  const {
+  let {
     buttonRef,
     menuId,
     state: { buttonId, isOpen },
     dispatch
   } = useMenuContext();
-  const ref = useForkedRef(buttonRef, forwardedRef);
+  let ref = useForkedRef(buttonRef, forwardedRef);
 
   useEffect(() => {
     let newButtonId = id != null ? id : makeId("menu-button", menuId);
@@ -191,22 +192,22 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
   },
   forwardedRef
 ) {
-  const {
+  let {
     buttonRef,
     dispatch,
     menuRef,
     state: { isOpen, selectionIndex }
   } = useMenuContext();
 
-  const ownRef = useRef(null);
+  let ownRef = useRef(null);
 
   /*
    * After the ref is mounted to the DOM node, we check to see if we have an
    * explicit valueText prop before looking for the node's textContent for
    * typeahead functionality.
    */
-  const [valueText, setValueText] = useState(valueTextProp || "");
-  const setValueTextFromDom = useCallback(
+  let [valueText, setValueText] = useState(valueTextProp || "");
+  let setValueTextFromDom = useCallback(
     node => {
       if (node) {
         ownRef.current = node;
@@ -221,9 +222,9 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
     [valueText, valueTextProp]
   );
 
-  const ref = useForkedRef(forwardedRef, setValueTextFromDom);
+  let ref = useForkedRef(forwardedRef, setValueTextFromDom);
 
-  const mouseEventStarted = useRef(false);
+  let mouseEventStarted = useRef(false);
 
   /*
    * By default, we assume valueText is a unique value for all menu items, so it
@@ -231,10 +232,9 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
    * However there may be some use cases where this is not the case and an
    * explicit unique index may be provided by the app.
    */
-  const key = indexProp ?? valueText;
-
-  const index = useDescendant(key, ownRef);
-  const isSelected = index === selectionIndex;
+  let key = indexProp ?? valueText;
+  let index = useDescendant(key, ownRef);
+  let isSelected = index === selectionIndex;
 
   function select() {
     dispatch({
@@ -717,53 +717,61 @@ function useDescendant(key, ref) {
   return index;
 }
 
-function DescendantProvider({ children }) {
-  let [descendants, setDescendants] = useState([]);
+function useDescendants() {
+  return useState([]);
+}
 
-  let registerDescendant = useCallback((key, ref) => {
-    setDescendants(items => {
-      let newItem = { key, ref };
+function DescendantProvider({ children, descendants, set }) {
+  let registerDescendant = useCallback(
+    (key, ref) => {
+      set(items => {
+        let newItem = { key, ref };
 
-      /*
-       * When registering a descendant, we need to make sure we insert in into
-       * the array in the same order that it appears in the DOM. So as new
-       * descendants are added or maybe some are removed, we always know that
-       * the array is up-to-date and correct.
-       *
-       * So here we look at our registered descendants and see if the new
-       * element we are adding appears earlier than an existing descendant's DOM
-       * node via `node.compareDocumentPosition`. If it does, we insert the new
-       * element at this index. Because `registerDescendant` will be called in
-       * an effect every time the descendants state value changes, we should be
-       * sure that this index is accurate when descendent elements come or go
-       * from our component.
-       */
-      let index = items.findIndex(el => {
-        if (!el.ref.current || !ref.current) {
-          return false;
-        }
         /*
-         * Does this element's DOM node appear before another item in the array
-         * in our DOM tree? If so, return true to grab the index at this point
-         * in the array so we know where to insert the new element.
+         * When registering a descendant, we need to make sure we insert in into
+         * the array in the same order that it appears in the DOM. So as new
+         * descendants are added or maybe some are removed, we always know that
+         * the array is up-to-date and correct.
+         *
+         * So here we look at our registered descendants and see if the new
+         * element we are adding appears earlier than an existing descendant's DOM
+         * node via `node.compareDocumentPosition`. If it does, we insert the new
+         * element at this index. Because `registerDescendant` will be called in
+         * an effect every time the descendants state value changes, we should be
+         * sure that this index is accurate when descendent elements come or go
+         * from our component.
          */
-        return Boolean(
-          el.ref.current.compareDocumentPosition(ref.current) &
-            Node.DOCUMENT_POSITION_PRECEDING
-        );
+        let index = items.findIndex(el => {
+          if (!el.ref.current || !ref.current) {
+            return false;
+          }
+          /*
+           * Does this element's DOM node appear before another item in the array
+           * in our DOM tree? If so, return true to grab the index at this point
+           * in the array so we know where to insert the new element.
+           */
+          return Boolean(
+            el.ref.current.compareDocumentPosition(ref.current) &
+              Node.DOCUMENT_POSITION_PRECEDING
+          );
+        });
+
+        // If an index is not found we will push the element to the end.
+        if (index === -1) {
+          return [...items, newItem];
+        }
+        return [...items.slice(0, index), newItem, ...items.slice(index)];
       });
+    },
+    [set]
+  );
 
-      // If an index is not found we will push the element to the end.
-      if (index === -1) {
-        return [...items, newItem];
-      }
-      return [...items.slice(0, index), newItem, ...items.slice(index)];
-    });
-  }, []);
-
-  let deregisterDescendant = useCallback(key => {
-    setDescendants(items => items.filter(el => el.key !== key));
-  }, []);
+  let deregisterDescendant = useCallback(
+    key => {
+      set(items => items.filter(el => el.key !== key));
+    },
+    [set]
+  );
 
   return (
     <DescendantContext.Provider
