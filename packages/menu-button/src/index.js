@@ -53,7 +53,7 @@ const initialState = {
    * When a user begins typing a character string, the selection will change if
    * a matching item is found
    */
-  searchQuery: "",
+  typeaheadQuery: "",
 
   /*
    * The index of the current selected item. When the selection is cleared a
@@ -423,26 +423,26 @@ export const MenuItems = forwardRef(function MenuItems(
     dispatch,
     buttonRef,
     menuRef,
-    state: { isOpen, buttonId, selectionIndex, searchQuery }
+    state: { isOpen, buttonId, selectionIndex, typeaheadQuery }
   } = useMenuContext();
   const { descendants: menuItems } = useDescendantContext();
   const ref = useForkedRef(menuRef, forwardedRef);
 
   useEffect(() => {
     // Respond to user char key input with typeahead
-    const match = findItemFromSearch(menuItems, searchQuery);
-    if (searchQuery && match != null) {
+    const match = findItemFromTypeahead(menuItems, typeaheadQuery);
+    if (typeaheadQuery && match != null) {
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
         payload: { index: match }
       });
     }
     let timeout = window.setTimeout(
-      () => searchQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
+      () => typeaheadQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
       1000
     );
     return () => window.clearTimeout(timeout);
-  }, [dispatch, menuItems, searchQuery]);
+  }, [dispatch, menuItems, typeaheadQuery]);
 
   const prevMenuItemsLength = usePrevious(menuItems.length);
   const prevSelected = usePrevious(menuItems[selectionIndex]);
@@ -534,7 +534,7 @@ export const MenuItems = forwardRef(function MenuItems(
          * query state.
          */
         if (typeof key === "string" && key.length === 1) {
-          const query = searchQuery + key.toLowerCase();
+          const query = typeaheadQuery + key.toLowerCase();
           dispatch({
             type: SEARCH_FOR_ITEM,
             payload: query
@@ -683,8 +683,7 @@ if (__DEV__) {
  */
 function useDescendant(key, ref) {
   // If the key is a number, it's coming from an index prop.
-  const indexProp = typeof key === "number" ? key : undefined;
-
+  let indexProp = typeof key === "number" ? key : undefined;
   let [index, setIndex] = useState(indexProp ?? -1);
   let {
     descendants,
@@ -694,7 +693,9 @@ function useDescendant(key, ref) {
 
   useEffect(() => {
     // Descendants require a unique key. Skip updates if none exists.
-    if (key == null) return;
+    if (key == null) {
+      return;
+    }
 
     registerDescendant(key, ref);
     return () => void deregisterDescendant(key);
@@ -719,15 +720,32 @@ function useDescendant(key, ref) {
 function DescendantProvider({ children }) {
   let [descendants, setDescendants] = useState([]);
 
-  const registerDescendant = useCallback(function registerDescendant(key, ref) {
+  let registerDescendant = useCallback((key, ref) => {
     setDescendants(items => {
+      let newItem = { key, ref };
+
+      /*
+       * When registering a descendant, we need to make sure we insert in into
+       * the array in the same order that it appears in the DOM. So as new
+       * descendants are added or maybe some are removed, we always know that
+       * the array is up-to-date and correct.
+       *
+       * So here we look at our registered descendants and see if the new
+       * element we are adding appears earlier than an existing descendant's DOM
+       * node via `node.compareDocumentPosition`. If it does, we insert the new
+       * element at this index. Because `registerDescendant` will be called in
+       * an effect every time the descendants state value changes, we should be
+       * sure that this index is accurate when descendent elements come or go
+       * from our component.
+       */
       let index = items.findIndex(el => {
         if (!el.ref.current || !ref.current) {
           return false;
         }
         /*
-         * Compare each elements' position in the DOM to make ensure the
-         * elements are registered in the correct order.
+         * Does this element's DOM node appear before another item in the array
+         * in our DOM tree? If so, return true to grab the index at this point
+         * in the array so we know where to insert the new element.
          */
         return Boolean(
           el.ref.current.compareDocumentPosition(ref.current) &
@@ -735,15 +753,15 @@ function DescendantProvider({ children }) {
         );
       });
 
-      // If the an index is not found we will push the element to the end
+      // If an index is not found we will push the element to the end.
       if (index === -1) {
-        return [...items, { key, ref }];
+        return [...items, newItem];
       }
-      return [...items.slice(0, index), { key, ref }, ...items.slice(index)];
+      return [...items.slice(0, index), newItem, ...items.slice(index)];
     });
   }, []);
 
-  const deregisterDescendant = useCallback(function deregisterDescendant(key) {
+  let deregisterDescendant = useCallback(key => {
     setDescendants(items => items.filter(el => el.key !== key));
   }, []);
 
@@ -767,7 +785,7 @@ function DescendantProvider({ children }) {
  * expected that the matching menu item is selected. This is our matching
  * function.
  */
-function findItemFromSearch(items, string = "") {
+function findItemFromTypeahead(items, string = "") {
   if (!string) {
     return null;
   }
@@ -845,7 +863,7 @@ function reducer(state, action = {}) {
       if (typeof payload !== "undefined") {
         return {
           ...state,
-          searchQuery: payload
+          typeaheadQuery: payload
         };
       }
       return state;

@@ -39,10 +39,10 @@ export let Example = () => {
             <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
           )}
           <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
-          <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
           {disappearingItem && (
             <MenuItem onSelect={action("Surprise")}>Surprise Again!</MenuItem>
           )}
+          <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
         </MenuList>
       </Menu>
       <button onClick={() => void setActiveItem(!activeItem)}>
