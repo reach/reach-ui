@@ -128,7 +128,10 @@ export const Accordion = forwardRef(function Accordion(
 
   if (
     isControlled &&
-    // Quickly compare array or numeric indexes without type checking
+    /*
+     * A controlled index may be a number or an array of numbers.
+     * Quickly compare array or numeric indices without type checking
+     */
     JSON.stringify(activeIndex) !== JSON.stringify(controlledIndex)
   ) {
     /*
