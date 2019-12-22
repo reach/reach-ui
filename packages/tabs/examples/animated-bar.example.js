@@ -1,5 +1,3 @@
-import "@reach/tabs/styles.css";
-
 import React, {
   useState,
   useRef,
@@ -9,6 +7,7 @@ import React, {
 } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { useRect } from "@reach/rect";
+import "@reach/tabs/styles.css";
 
 export const name = "Animated Bar";
 

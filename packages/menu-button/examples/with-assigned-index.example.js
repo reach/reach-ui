@@ -1,11 +1,9 @@
-import "@reach/menu-button/styles.css";
-
-import React from "react";
+import React, { useState } from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
-
 import PeteOlder from "./pete-older.png";
 import PeteYounger from "./pete-younger.png";
+import "@reach/menu-button/styles.css";
 
 export let name = "With Assigned Indices";
 
@@ -18,8 +16,8 @@ export let name = "With Assigned Indices";
  * this to work in the rare cases this might occur.
  */
 
-export let Example = () => {
-  const [activeItem, setActiveItem] = React.useState(false);
+export function Example() {
+  const [activeItem, setActiveItem] = useState(false);
   const items = [
     {
       label: "Pete",
@@ -77,4 +75,4 @@ export let Example = () => {
       </button>
     </>
   );
-};
+}

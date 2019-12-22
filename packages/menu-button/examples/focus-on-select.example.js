@@ -1,14 +1,13 @@
-import "@reach/menu-button/styles.css";
-
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 
 export let name = "Move Focus on Item Select";
 
-export let Example = () => {
-  const [buttonText, setButtonText] = React.useState(null);
-  const [linkText, setLinkText] = React.useState(null);
+export function Example() {
+  const [buttonText, setButtonText] = useState(null);
+  const [linkText, setLinkText] = useState(null);
   const linkRef = useRef(null);
   return (
     <div>
@@ -57,4 +56,4 @@ export let Example = () => {
       </a>
     </div>
   );
-};
+}
