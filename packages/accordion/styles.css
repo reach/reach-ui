@@ -2,42 +2,17 @@
   --reach-accordion: 1;
 }
 
-[data-reach-accordion] {
-  border: 1px solid #c5c5c5;
-}
-
-[data-reach-accordion-item] {
-  border-bottom: 1px solid #c5c5c5;
-}
-
-[data-reach-accordion-item]:last-child {
-  border-bottom: 0;
-}
-
 [data-reach-accordion-panel] {
   outline: none;
-  padding: 1.25em;
 }
 
 [data-reach-accordion-trigger] {
   display: block;
   width: 100%;
-  border: 0;
-  margin: 0;
   text-align: inherit;
   font: inherit;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: hsla(0, 0%, 0%, 0.05);
-  cursor: pointer;
-  padding: 0.75em 1.25em 0.625em;
 }
 
 [data-reach-accordion-trigger][data-disabled] {
-  opacity: 0.9;
   cursor: not-allowed;
-}
-
-[data-reach-accordion-trigger][data-read-only] {
-  cursor: default;
 }
