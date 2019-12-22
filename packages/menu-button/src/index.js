@@ -84,6 +84,8 @@ export const Menu = ({ id, children }) => {
 
   useEffect(() => checkStyles("menu-button"), []);
 
+  console.log("You should see me in the console in CodeSandbox!");
+
   return (
     <DescendantProvider descendants={descendants} set={setDescendants}>
       <MenuContext.Provider value={context}>
