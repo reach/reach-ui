@@ -387,6 +387,11 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * TODO: Still thinking through some challenges/limitations with this hook. The
+ *       following is an attempt to explain my thoughts and goals. The
+ *       motivation for all of this can be distilled from Ryan's thoughts here:
+ *       https://gist.github.com/ryanflorence/10e9387f633f9d2e6f444a9bddaabf6e
+ *
  * This hook registers our descendant by passing it into an array. We can then
  * search that array by a unique key to find its index. We use this for focus
  * management and keyboard navigation. We would like to skip any updates if an
