@@ -6,46 +6,48 @@ import {
   AccordionTrigger,
   AccordionPanel
 } from "@reach/accordion";
-import ExampleForm from "./ExampleForm";
+import styled from "styled-components";
 
 export const name = "With Arrows";
 
 export const Example = () => {
   const [activeItem, setActiveItem] = React.useState(null);
   return (
-    <Accordion index={activeItem} onChange={index => setActiveItem(index)}>
-      <AccordionItem>
+    <StyledAccordion
+      index={activeItem}
+      onChange={index => setActiveItem(index)}
+    >
+      <StyledItem>
         <ArrowTrigger active={activeItem === 0}>ABCs</ArrowTrigger>
-        <AccordionPanel>
+        <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
+        </StyledPanel>
+      </StyledItem>
+      <StyledItem>
         <ArrowTrigger active={activeItem === 1}>Easy As</ArrowTrigger>
-        <AccordionPanel>
+        <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
+        </StyledPanel>
+      </StyledItem>
+      <StyledItem>
         <ArrowTrigger active={activeItem === 2}>123s</ArrowTrigger>
-        <AccordionPanel>
-          <ExampleForm />
+        <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
+        </StyledPanel>
+      </StyledItem>
+    </StyledAccordion>
   );
 };
 
 function ArrowTrigger({ children, active, ...props }) {
   return (
-    <AccordionTrigger {...props}>
+    <StyledTrigger {...props}>
       <span
         style={{
           display: "flex",
@@ -54,17 +56,9 @@ function ArrowTrigger({ children, active, ...props }) {
         }}
       >
         <span>{children}</span>
-        <ArrowIcon
-          aria-hidden
-          style={{
-            width: 20,
-            height: 20,
-            transition: "200ms transform",
-            transform: `rotate(${active ? "180deg" : "0"})`
-          }}
-        />
+        <StyledIcon active={active} aria-hidden />
       </span>
-    </AccordionTrigger>
+    </StyledTrigger>
   );
 }
 
@@ -83,3 +77,45 @@ function ArrowIcon(props) {
     </svg>
   );
 }
+
+const StyledTrigger = styled(AccordionTrigger)`
+  appearance: none;
+  background: linear-gradient(to bottom, darkslategray, slategray);
+  border: 0;
+  font-size: 16px;
+  font-weight: bolder;
+  color: white;
+  box-shadow: none;
+  padding: 0.675em 0.875em;
+
+  &[data-disabled] {
+    color: rgba(255, 255, 255, 0.5);
+  }
+`;
+
+const StyledPanel = styled(AccordionPanel)`
+  padding: 0.875em;
+`;
+
+const StyledItem = styled(AccordionItem)`
+  background: #ffffff;
+  border: 1px solid lightsteelblue;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  overflow: hidden;
+`;
+
+const StyledAccordion = styled(Accordion)``;
+
+const StyledIcon = styled(ArrowIcon)`
+  width: 1rem;
+  height: 1rem;
+  transition: ${props => (props.active ? "600" : "500")}ms transform ease-out;
+  transform: rotate(${props => (props.active ? "2.5turn" : "0")});
+  fill: #fff;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+`;

@@ -64,6 +64,10 @@ const StyledTrigger = styled(AccordionTrigger)`
   color: white;
   box-shadow: none;
   padding: 0.375em 0.5em;
+
+  &[data-disabled] {
+    color: rgba(255, 255, 255, 0.5);
+  }
 `;
 
 const StyledPanel = styled(AccordionPanel)`
@@ -73,7 +77,7 @@ const StyledPanel = styled(AccordionPanel)`
 const StyledItem = styled(AccordionItem)`
   padding: 1px;
   background: #c0c0c0;
-  border-width: 1px solid;
+  border: 2px solid;
   border-color: #ffffff #808080 #808080 #ffffff;
   margin-bottom: 0.5rem;
 `;
