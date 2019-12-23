@@ -1,7 +1,6 @@
-import "@reach/tooltip/styles.css";
-
 import React from "react";
 import Tooltip from "@reach/tooltip";
+import "@reach/tooltip/styles.css";
 
 export const name = "With Disabled Button";
 

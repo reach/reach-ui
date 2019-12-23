@@ -1,5 +1,3 @@
-import "@reach/menu-button/styles.css";
-
 import React from "react";
 import { action } from "@storybook/addon-actions";
 import {
@@ -11,6 +9,7 @@ import {
 } from "@reach/menu-button";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import styled from "styled-components";
+import "@reach/menu-button/styles.css";
 
 export let name = "With React Router Links + Styled Components";
 
@@ -22,7 +21,37 @@ export let name = "With React Router Links + Styled Components";
  * `styled(MenuLink)` disregards the MenuLink argument.
  */
 
-const Home = () => {
+export function Example() {
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route path="/settings">
+          <Settings />
+        </Route>
+        <Route>
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
+  );
+}
+
+const StyledItem = styled(MenuItem)`
+  &[data-selected] {
+    background: crimson;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  &[data-selected] {
+    background: crimson;
+  }
+`;
+
+function Home() {
   console.log({ StyledLink });
   return (
     <div>
@@ -43,41 +72,15 @@ const Home = () => {
       </Menu>
     </div>
   );
-};
+}
 
-const Settings = () => (
-  <div>
-    <h2>Settings</h2>
-    <p>
-      <Link to="/">Go Home</Link>
-    </p>
-  </div>
-);
-
-export let Example = () => (
-  <Router>
-    <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
-      <Route path="/settings">
-        <Settings />
-      </Route>
-      <Route>
-        <Home />
-      </Route>
-    </Switch>
-  </Router>
-);
-
-const StyledItem = styled(MenuItem)`
-  &[data-selected] {
-    background: crimson;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  &[data-selected] {
-    background: crimson;
-  }
-`;
+function Settings() {
+  return (
+    <div>
+      <h2>Settings</h2>
+      <p>
+        <Link to="/">Go Home</Link>
+      </p>
+    </div>
+  );
+}

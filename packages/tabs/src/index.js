@@ -1,7 +1,19 @@
-import React, { cloneElement, useState, useRef, forwardRef } from "react";
+import React, {
+  cloneElement,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
-import { wrapEvent, useUpdateEffect, makeId, useForkedRef } from "@reach/utils";
+import {
+  checkStyles,
+  wrapEvent,
+  useUpdateEffect,
+  makeId,
+  useForkedRef
+} from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +74,8 @@ export const Tabs = forwardRef(function Tabs(
           }
     });
   });
+
+  useEffect(() => checkStyles("tabs"), []);
 
   return <Comp data-reach-tabs="" ref={ref} {...props} children={clones} />;
 });

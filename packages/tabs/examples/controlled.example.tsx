@@ -1,7 +1,6 @@
-import "@reach/tabs/styles.css";
-
 import React, { useState } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import "@reach/tabs/styles.css";
 
 export const name = "Controlled (TS)";
 
@@ -12,7 +11,7 @@ const tabsStyle = {
   overflow: "hidden"
 };
 
-export const Example: React.FC = () => {
+export function Example() {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -58,4 +57,4 @@ export const Example: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+}

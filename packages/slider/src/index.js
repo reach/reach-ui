@@ -13,7 +13,7 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, useForkedRef, makeId } from "@reach/utils";
+import { checkStyles, wrapEvent, useForkedRef, makeId } from "@reach/utils";
 
 // A11y reference:
 //   - http://www.oaa-accessibility.org/examplep/slider1/
@@ -337,6 +337,8 @@ export const SliderInput = forwardRef(function SliderInput(
     isPointerDown,
     value
   ]);
+
+  useEffect(() => checkStyles("slider"), []);
 
   return (
     <SliderContext.Provider value={ctx}>

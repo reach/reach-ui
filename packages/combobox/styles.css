@@ -1,3 +1,7 @@
+:root {
+  --reach-combobox: 1;
+}
+
 [data-reach-combobox-popover] {
   border: solid 1px hsla(0, 0%, 0%, 0.25);
   background: hsla(0, 100%, 100%, 0.99);

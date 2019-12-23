@@ -53,7 +53,7 @@ const initialState = {
    * When a user begins typing a character string, the selection will change if
    * a matching item is found
    */
-  searchQuery: "",
+  typeaheadQuery: "",
 
   /*
    * The index of the current selected item. When the selection is cleared a
@@ -66,13 +66,14 @@ const initialState = {
 // Menu
 
 export const Menu = ({ id, children }) => {
-  const buttonRef = useRef(null);
-  const menuRef = useRef(null);
-  const popoverRef = useRef(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const menuId = useId(id);
+  let buttonRef = useRef(null);
+  let menuRef = useRef(null);
+  let popoverRef = useRef(null);
+  let [descendants, setDescendants] = useDescendants();
+  let [state, dispatch] = useReducer(reducer, initialState);
+  let menuId = useId(id);
 
-  const context = {
+  let context = {
     buttonRef,
     dispatch,
     menuId,
@@ -81,10 +82,10 @@ export const Menu = ({ id, children }) => {
     state
   };
 
-  useEffect(() => void checkStyles("menu-button"), []);
+  useEffect(() => checkStyles("menu-button"), []);
 
   return (
-    <DescendantProvider>
+    <DescendantProvider descendants={descendants} set={setDescendants}>
       <MenuContext.Provider value={context}>
         {typeof children === "function"
           ? children({ isOpen: state.isOpen })
@@ -108,13 +109,13 @@ export const MenuButton = forwardRef(function MenuButton(
   { onKeyDown, onMouseDown, id, ...props },
   forwardedRef
 ) {
-  const {
+  let {
     buttonRef,
     menuId,
     state: { buttonId, isOpen },
     dispatch
   } = useMenuContext();
-  const ref = useForkedRef(buttonRef, forwardedRef);
+  let ref = useForkedRef(buttonRef, forwardedRef);
 
   useEffect(() => {
     let newButtonId = id != null ? id : makeId("menu-button", menuId);
@@ -191,22 +192,22 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
   },
   forwardedRef
 ) {
-  const {
+  let {
     buttonRef,
     dispatch,
     menuRef,
     state: { isOpen, selectionIndex }
   } = useMenuContext();
 
-  const ownRef = useRef(null);
+  let ownRef = useRef(null);
 
   /*
    * After the ref is mounted to the DOM node, we check to see if we have an
    * explicit valueText prop before looking for the node's textContent for
    * typeahead functionality.
    */
-  const [valueText, setValueText] = useState(valueTextProp || "");
-  const setValueTextFromDom = useCallback(
+  let [valueText, setValueText] = useState(valueTextProp || "");
+  let setValueTextFromDom = useCallback(
     node => {
       if (node) {
         ownRef.current = node;
@@ -221,9 +222,9 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
     [valueText, valueTextProp]
   );
 
-  const ref = useForkedRef(forwardedRef, setValueTextFromDom);
+  let ref = useForkedRef(forwardedRef, setValueTextFromDom);
 
-  const mouseEventStarted = useRef(false);
+  let mouseEventStarted = useRef(false);
 
   /*
    * By default, we assume valueText is a unique value for all menu items, so it
@@ -231,10 +232,9 @@ const MenuItemImpl = forwardRef(function MenuItemImpl(
    * However there may be some use cases where this is not the case and an
    * explicit unique index may be provided by the app.
    */
-  const key = indexProp ?? valueText;
-
-  const index = useDescendant(key, ownRef);
-  const isSelected = index === selectionIndex;
+  let key = indexProp ?? valueText;
+  let index = useDescendant(key, ownRef);
+  let isSelected = index === selectionIndex;
 
   function select() {
     dispatch({
@@ -423,26 +423,26 @@ export const MenuItems = forwardRef(function MenuItems(
     dispatch,
     buttonRef,
     menuRef,
-    state: { isOpen, buttonId, selectionIndex, searchQuery }
+    state: { isOpen, buttonId, selectionIndex, typeaheadQuery }
   } = useMenuContext();
   const { descendants: menuItems } = useDescendantContext();
   const ref = useForkedRef(menuRef, forwardedRef);
 
   useEffect(() => {
     // Respond to user char key input with typeahead
-    const match = findItemFromSearch(menuItems, searchQuery);
-    if (searchQuery && match != null) {
+    const match = findItemFromTypeahead(menuItems, typeaheadQuery);
+    if (typeaheadQuery && match != null) {
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
         payload: { index: match }
       });
     }
     let timeout = window.setTimeout(
-      () => searchQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
+      () => typeaheadQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
       1000
     );
     return () => window.clearTimeout(timeout);
-  }, [dispatch, menuItems, searchQuery]);
+  }, [dispatch, menuItems, typeaheadQuery]);
 
   const prevMenuItemsLength = usePrevious(menuItems.length);
   const prevSelected = usePrevious(menuItems[selectionIndex]);
@@ -534,7 +534,7 @@ export const MenuItems = forwardRef(function MenuItems(
          * query state.
          */
         if (typeof key === "string" && key.length === 1) {
-          const query = searchQuery + key.toLowerCase();
+          const query = typeaheadQuery + key.toLowerCase();
           dispatch({
             type: SEARCH_FOR_ITEM,
             payload: query
@@ -683,8 +683,7 @@ if (__DEV__) {
  */
 function useDescendant(key, ref) {
   // If the key is a number, it's coming from an index prop.
-  const indexProp = typeof key === "number" ? key : undefined;
-
+  let indexProp = typeof key === "number" ? key : undefined;
   let [index, setIndex] = useState(indexProp ?? -1);
   let {
     descendants,
@@ -694,7 +693,9 @@ function useDescendant(key, ref) {
 
   useEffect(() => {
     // Descendants require a unique key. Skip updates if none exists.
-    if (key == null) return;
+    if (key == null) {
+      return;
+    }
 
     registerDescendant(key, ref);
     return () => void deregisterDescendant(key);
@@ -716,36 +717,61 @@ function useDescendant(key, ref) {
   return index;
 }
 
-function DescendantProvider({ children }) {
-  let [descendants, setDescendants] = useState([]);
+function useDescendants() {
+  return useState([]);
+}
 
-  const registerDescendant = useCallback(function registerDescendant(key, ref) {
-    setDescendants(items => {
-      let index = items.findIndex(el => {
-        if (!el.ref.current || !ref.current) {
-          return false;
-        }
+function DescendantProvider({ children, descendants, set }) {
+  let registerDescendant = useCallback(
+    (key, ref) => {
+      set(items => {
+        let newItem = { key, ref };
+
         /*
-         * Compare each elements' position in the DOM to make ensure the
-         * elements are registered in the correct order.
+         * When registering a descendant, we need to make sure we insert in into
+         * the array in the same order that it appears in the DOM. So as new
+         * descendants are added or maybe some are removed, we always know that
+         * the array is up-to-date and correct.
+         *
+         * So here we look at our registered descendants and see if the new
+         * element we are adding appears earlier than an existing descendant's DOM
+         * node via `node.compareDocumentPosition`. If it does, we insert the new
+         * element at this index. Because `registerDescendant` will be called in
+         * an effect every time the descendants state value changes, we should be
+         * sure that this index is accurate when descendent elements come or go
+         * from our component.
          */
-        return Boolean(
-          el.ref.current.compareDocumentPosition(ref.current) &
-            Node.DOCUMENT_POSITION_PRECEDING
-        );
+        let index = items.findIndex(el => {
+          if (!el.ref.current || !ref.current) {
+            return false;
+          }
+          /*
+           * Does this element's DOM node appear before another item in the array
+           * in our DOM tree? If so, return true to grab the index at this point
+           * in the array so we know where to insert the new element.
+           */
+          return Boolean(
+            el.ref.current.compareDocumentPosition(ref.current) &
+              Node.DOCUMENT_POSITION_PRECEDING
+          );
+        });
+
+        // If an index is not found we will push the element to the end.
+        if (index === -1) {
+          return [...items, newItem];
+        }
+        return [...items.slice(0, index), newItem, ...items.slice(index)];
       });
+    },
+    [set]
+  );
 
-      // If the an index is not found we will push the element to the end
-      if (index === -1) {
-        return [...items, { key, ref }];
-      }
-      return [...items.slice(0, index), { key, ref }, ...items.slice(index)];
-    });
-  }, []);
-
-  const deregisterDescendant = useCallback(function deregisterDescendant(key) {
-    setDescendants(items => items.filter(el => el.key !== key));
-  }, []);
+  let deregisterDescendant = useCallback(
+    key => {
+      set(items => items.filter(el => el.key !== key));
+    },
+    [set]
+  );
 
   return (
     <DescendantContext.Provider
@@ -767,7 +793,7 @@ function DescendantProvider({ children }) {
  * expected that the matching menu item is selected. This is our matching
  * function.
  */
-function findItemFromSearch(items, string = "") {
+function findItemFromTypeahead(items, string = "") {
   if (!string) {
     return null;
   }
@@ -845,7 +871,7 @@ function reducer(state, action = {}) {
       if (typeof payload !== "undefined") {
         return {
           ...state,
-          searchQuery: payload
+          typeaheadQuery: payload
         };
       }
       return state;

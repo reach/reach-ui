@@ -14,6 +14,7 @@ if (__DEV__) {
     checkedPkgs[pkg] = true;
 
     if (
+      process.env.NODE_ENV !== "test" &&
       parseInt(
         window
           .getComputedStyle(document.body)

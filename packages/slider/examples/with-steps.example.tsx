@@ -1,11 +1,10 @@
-import "@reach/slider/styles.css";
-
 import React from "react";
 import { Slider, SliderMarker } from "@reach/slider";
+import "@reach/slider/styles.css";
 
 export const name = "With Steps (TS)";
 
-export const Example = () => {
+export function Example() {
   const step = 20;
   const min = 0;
   const max = 120;
@@ -24,4 +23,4 @@ export const Example = () => {
       })}
     </Slider>
   );
-};
+}

@@ -1,6 +1,6 @@
 {
   "name": "@reach/visually-hidden",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Render text that is announced to screen readers but visually hidden.",
   "repository": {
     "type": "git",

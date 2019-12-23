@@ -45,7 +45,7 @@ import React, {
   useEffect
 } from "react";
 import { useId } from "@reach/auto-id";
-import { wrapEvent, checkStyles, useForkedRef, makeId } from "@reach/utils";
+import { checkStyles, makeId, useForkedRef, wrapEvent } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";

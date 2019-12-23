@@ -1,9 +1,8 @@
-import "@reach/menu-button/styles.css";
-
 import React, { Fragment } from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { createGlobalStyle } from "styled-components";
+import "@reach/menu-button/styles.css";
 
 const GlobalStyle = createGlobalStyle`
   html,

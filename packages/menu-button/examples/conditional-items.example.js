@@ -1,12 +1,11 @@
-import "@reach/menu-button/styles.css";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import "@reach/menu-button/styles.css";
 
 export let name = "Conditional Items";
 
-export let Example = () => {
+export function Example() {
   const [activeItem, setActiveItem] = useState(false);
 
   /*
@@ -18,7 +17,7 @@ export let Example = () => {
    * or wrong item here, hence why devs should avoid this behavior!
    */
   const [disappearingItem, setDisappearingItem] = useState(false);
-  React.useEffect(() => {
+  useEffect(() => {
     let interval = window.setInterval(() => {
       setDisappearingItem(!disappearingItem);
     }, 3000);
@@ -39,10 +38,10 @@ export let Example = () => {
             <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
           )}
           <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
-          <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
           {disappearingItem && (
             <MenuItem onSelect={action("Surprise")}>Surprise Again!</MenuItem>
           )}
+          <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
         </MenuList>
       </Menu>
       <button onClick={() => void setActiveItem(!activeItem)}>
@@ -50,4 +49,4 @@ export let Example = () => {
       </button>
     </>
   );
-};
+}

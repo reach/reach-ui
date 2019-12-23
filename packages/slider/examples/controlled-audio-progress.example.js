@@ -1,15 +1,13 @@
-import "@reach/slider/styles.css";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Slider } from "@reach/slider";
-
 import { useAudio, timeToMs, msToTime } from "./utils.js";
+import "@reach/slider/styles.css";
 
 export const name = "Audio Progress";
 
-export const Example = () => {
-  const [value, setValue] = React.useState(0);
-  const [max, setMax] = React.useState(1000);
+export function Example() {
+  const [value, setValue] = useState(0);
+  const [max, setMax] = useState(1000);
   const [audio, audioState, audioControls, audioRef] = useAudio({
     src: "http://techslides.com/demos/samples/sample.mp3",
     autoPlay: false,
@@ -27,7 +25,7 @@ export const Example = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (audioState.time != null) {
       setValue(timeToMs(audioState.time));
     }
@@ -45,4 +43,4 @@ export const Example = () => {
       {audio}
     </div>
   );
-};
+}

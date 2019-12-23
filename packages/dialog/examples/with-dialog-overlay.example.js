@@ -1,14 +1,13 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useRef, useState } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "With Separate Overlay";
 
-export let Example = () => {
-  const overlayRef = React.useRef(null);
-  const contentRef = React.useRef(null);
-  const [showDialog, setShowDialog] = React.useState(false);
+export function Example() {
+  const overlayRef = useRef(null);
+  const contentRef = useRef(null);
+  const [showDialog, setShowDialog] = useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
 
@@ -36,4 +35,4 @@ export let Example = () => {
       </DialogOverlay>
     </div>
   );
-};
+}

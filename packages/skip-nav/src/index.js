@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { checkStyles } from "@reach/utils";
 
 let id = "reach-skip-nav";
 
@@ -6,6 +7,7 @@ let id = "reach-skip-nav";
 // SkipNavLink
 
 export function SkipNavLink({ children = "Skip to content", ...props }) {
+  useEffect(() => checkStyles("skip-nav"));
   return (
     <a {...props} href={`#${id}`} data-reach-skip-link>
       {children}

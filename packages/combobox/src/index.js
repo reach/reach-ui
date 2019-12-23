@@ -21,7 +21,7 @@ import React, {
   useState
 } from "react";
 import PropTypes from "prop-types";
-import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
+import { checkStyles, makeId, wrapEvent, useForkedRef } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
@@ -282,6 +282,8 @@ export const Combobox = forwardRef(function Combobox(
     isVisible: isVisible(state),
     openOnFocus
   };
+
+  useEffect(() => checkStyles("combobox"));
 
   return (
     <ComboboxContext.Provider value={context}>

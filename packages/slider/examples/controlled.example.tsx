@@ -1,16 +1,15 @@
-import "@reach/slider/styles.css";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Slider, SliderMarker } from "@reach/slider";
+import "@reach/slider/styles.css";
 
 export const name = "Controlled (TS)";
 
 const MIN = 0;
 const MAX = 120;
 
-export const Example = () => {
-  const [value, setValue] = React.useState(0);
-  const [status, setStatus] = React.useState("Give us some happiness!");
+export function Example() {
+  const [value, setValue] = useState(0);
+  const [status, setStatus] = useState("Give us some happiness!");
   const markers = [
     {
       face: "🙁",
@@ -29,7 +28,7 @@ export const Example = () => {
     }
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     const absVar = 0 - MIN;
     const absMin = MIN + absVar;
     const absMax = MAX + absVar;
@@ -64,4 +63,4 @@ export const Example = () => {
       </p>
     </div>
   );
-};
+}

@@ -1,14 +1,13 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import "../styles.css";
-
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "@reach/dialog";
 import Tooltip from "@reach/tooltip";
+import "@reach/tooltip/styles.css";
 
 export const name = "With Dialog";
 
 export function Example() {
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Accessible React Alert Dialog.",
   "repository": {
     "type": "git",
@@ -15,9 +15,9 @@
     "build": "node ../../shared/build-package"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.1",
-    "@reach/dialog": "^0.6.4",
-    "@reach/utils": "^0.6.4",
+    "@reach/auto-id": "^0.7.0",
+    "@reach/dialog": "^0.7.0",
+    "@reach/utils": "^0.7.0",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2"
   },

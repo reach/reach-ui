@@ -1,5 +1,3 @@
-import "@reach/menu-button/styles.css";
-
 import React from "react";
 import { action } from "@storybook/addon-actions";
 import {
@@ -10,28 +8,33 @@ import {
   MenuItem
 } from "@reach/menu-button";
 import styled from "styled-components";
+import "@reach/menu-button/styles.css";
 
 export let name = "With Styled Components (TS)";
 
-export let Example = () => (
-  <Menu>
-    <StyledButton id="example-button">
-      Actions <span aria-hidden="true">▾</span>
-    </StyledButton>
-    <StyledList>
-      <StyledItem onSelect={action("Download")}>Download</StyledItem>
-      <StyledItem onSelect={action("Copy")}>Create a Copy</StyledItem>
-      <StyledItem onSelect={action("Mark as Draft")}>Mark as Draft</StyledItem>
-      <MenuItem as={StyledItemAs} onSelect={action("Delete")}>
-        Delete
-      </MenuItem>
-      <StyledLink href="https://google.com">Google</StyledLink>
-      <MenuLink as={StyledLinkAs} href="https://duckduckgo.com">
-        DuckDuckGo
-      </MenuLink>
-    </StyledList>
-  </Menu>
-);
+export function Example() {
+  return (
+    <Menu>
+      <StyledButton id="example-button">
+        Actions <span aria-hidden="true">▾</span>
+      </StyledButton>
+      <StyledList>
+        <StyledItem onSelect={action("Download")}>Download</StyledItem>
+        <StyledItem onSelect={action("Copy")}>Create a Copy</StyledItem>
+        <StyledItem onSelect={action("Mark as Draft")}>
+          Mark as Draft
+        </StyledItem>
+        <MenuItem as={StyledItemAs} onSelect={action("Delete")}>
+          Delete
+        </MenuItem>
+        <StyledLink href="https://google.com">Google</StyledLink>
+        <MenuLink as={StyledLinkAs} href="https://duckduckgo.com">
+          DuckDuckGo
+        </MenuLink>
+      </StyledList>
+    </Menu>
+  );
+}
 
 const StyledButton = styled(MenuButton)`
   background: 0;
