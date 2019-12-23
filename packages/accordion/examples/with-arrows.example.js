@@ -79,6 +79,8 @@ function ArrowIcon(props) {
 }
 
 const StyledTrigger = styled(AccordionTrigger)`
+  display: block;
+  width: 100%;
   appearance: none;
   background: linear-gradient(to bottom, darkslategray, slategray);
   border: 0;
@@ -109,6 +111,7 @@ const StyledItem = styled(AccordionItem)`
 const StyledAccordion = styled(Accordion)``;
 
 const StyledIcon = styled(ArrowIcon)`
+  margin-left: 1rem;
   width: 1rem;
   height: 1rem;
   transition: ${props => (props.active ? "600" : "500")}ms transform ease-out;

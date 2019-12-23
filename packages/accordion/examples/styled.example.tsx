@@ -56,6 +56,8 @@ export function Example() {
 }
 
 const StyledTrigger = styled(AccordionTrigger)`
+  display: block;
+  width: 100%;
   appearance: none;
   background: linear-gradient(to right, #040a84, #0c7ecc);
   border: 0;

@@ -7,8 +7,6 @@
 }
 
 [data-reach-accordion-trigger] {
-  display: block;
-  width: 100%;
   text-align: inherit;
   font: inherit;
 }

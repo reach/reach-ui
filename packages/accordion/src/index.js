@@ -336,6 +336,18 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// AccordionHeader
+
+/* export const AccordionHeader = forwardRef(function AccordionHeader(
+  { children, ...props },
+  forwardedRef
+) {
+  return (
+    <div {...props} ref={forwardedRef}></div>
+  )
+}) */
+
+////////////////////////////////////////////////////////////////////////////////
 // AccordionPanel
 
 export const AccordionPanel = forwardRef(function AccordionPanel(
