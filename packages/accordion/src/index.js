@@ -168,8 +168,8 @@ export const AccordionItem = forwardRef(function AccordionItem(
   const { accordionId, activeIndex, readOnly } = useAccordionContext();
 
   const ownRef = useRef(null);
-  const [index, setRef] = useDescendant(ownRef, indexProp, disabled);
-  const ref = useForkedRef(setRef, forwardedRef);
+  const index = useDescendant(ownRef, indexProp, disabled);
+  const ref = useForkedRef(ownRef, forwardedRef);
 
   // We need unique IDs for the panel and trigger to point to one another
   const itemId = makeId(accordionId, index);
@@ -188,6 +188,10 @@ export const AccordionItem = forwardRef(function AccordionItem(
     itemId,
     panelId
   };
+
+  let { descendants } = useDescendantContext();
+
+  console.log(descendants);
 
   return (
     <AccordionItemContext.Provider value={context}>
@@ -252,7 +256,7 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
    */
   const setFocusableTriggerRefs = useCallback(
     node => {
-      if (node && !disabled) {
+      if (node && !disabled && index >= 0) {
         focusableTriggerNodes.current[index] = node;
       }
     },
@@ -384,6 +388,12 @@ if (__DEV__) {
   };
 }
 
+export function AccordionState() {
+  let { descendants } = useDescendantContext();
+  console.log({ descendants });
+  return null;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -429,66 +439,37 @@ if (__DEV__) {
  * component. TBH that might still be better (or at much less convoluted and
  * easier for folks to see what's going on).
  */
-function useDescendant(ref, indexOrKey, bypass) {
-  /*
-   * If the first argument is a number we'll treat it as an index. If it is a
-   * string, we treat it as a value/key.
-   */
-  let indexProp = typeof indexOrKey === "number" ? indexOrKey : null;
+function useDescendant(ref, indexProp, bypass) {
   let [index, setIndex] = useState(indexProp ?? -1);
 
-  // If a falsey value is provided as the second arg, this returns null.
-  let [domText, setRef] = useDomTextContent(ref, indexOrKey != null || bypass);
-  let key = indexOrKey ?? domText;
-
-  let {
-    descendants,
-    registerDescendant,
-    deregisterDescendant
-  } = useDescendantContext();
+  let { registerDescendant, deregisterDescendant } = useDescendantContext();
 
   // First effect registers our descendant
   useEffect(() => {
-    // Descendants require a unique key. Skip updates if none exists.
-    if (key == null) {
+    if (bypass || indexProp != null) {
       return;
     }
-
-    registerDescendant(key, ref);
-    return () => void deregisterDescendant(key);
-  }, [ref, registerDescendant, deregisterDescendant, key]);
-
-  // Second effect finds our index and updates accordingly any time descendants
-  // are updated
-  useEffect(() => {
-    if (key == null) {
-      return;
+    let i = registerDescendant(ref);
+    if (index !== i) {
+      setIndex(i);
     }
-
-    if (indexProp == null) {
-      let newIndex = descendants.findIndex(i => i.key === key);
-      if (newIndex !== index) {
-        setIndex(newIndex);
-      }
-    }
-  }, [descendants, key, index, indexProp]);
-
-  if (indexProp != null && indexProp !== index) {
-    setIndex(indexProp);
-  }
-
-  return [index, setRef];
+    return () => void deregisterDescendant(ref);
+  }, [ref, registerDescendant, deregisterDescendant, bypass, indexProp, index]);
+  return index;
 }
 
 function useDescendants() {
   return useState([]);
 }
 
+let n = -1;
+
 function DescendantProvider({ children, descendants, set }) {
   let registerDescendant = useCallback(
-    (key, ref) => {
-      set(items => {
-        let newItem = { key, ref };
+    ref => {
+      console.log(`CALLING ${++n}`);
+      if (ref.current && !descendants.includes(ref.current)) {
+        let newItems = descendants;
 
         /*
          * When registering a descendant, we need to make sure we insert in into
@@ -504,8 +485,8 @@ function DescendantProvider({ children, descendants, set }) {
          * sure that this index is accurate when descendent elements come or go
          * from our component.
          */
-        let index = items.findIndex(el => {
-          if (!el.ref.current || !ref.current) {
+        let index = descendants.findIndex(el => {
+          if (!el || !ref.current) {
             return false;
           }
           /*
@@ -514,26 +495,35 @@ function DescendantProvider({ children, descendants, set }) {
            * in the array so we know where to insert the new element.
            */
           return Boolean(
-            el.ref.current.compareDocumentPosition(ref.current) &
+            el.compareDocumentPosition(ref.current) &
               Node.DOCUMENT_POSITION_PRECEDING
           );
         });
 
         // If an index is not found we will push the element to the end.
         if (index === -1) {
-          return [...items, newItem];
+          newItems.push(ref.current);
+        } else {
+          newItems = [
+            ...descendants.slice(0, index),
+            ref.current,
+            ...descendants.slice(index)
+          ];
         }
-        return [...items.slice(0, index), newItem, ...items.slice(index)];
-      });
+        set(newItems);
+      }
+      return descendants.findIndex(i => (ref.current ? i === ref.current : -1));
     },
-    [set]
+    [descendants, set]
   );
 
   let deregisterDescendant = useCallback(
-    key => {
-      set(items => items.filter(el => el.key !== key));
+    ref => {
+      if (ref.current) {
+        set(items => items.filter(el => el !== ref.current));
+      }
     },
-    [set]
+    [descendants, set]
   );
 
   return (
