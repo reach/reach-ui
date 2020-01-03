@@ -14,8 +14,8 @@ import * as React from "react";
  * Provides text for screen readers that is visually hidden.
  * It is the logical opposite of the `aria-hidden` attribute.
  */
-declare const VisuallyHidden: React.FunctionComponent<
-  React.HTMLProps<HTMLSpanElement>
->;
+declare const VisuallyHidden: React.FunctionComponent<React.HTMLAttributes<
+  HTMLSpanElement
+>>;
 
 export default VisuallyHidden;

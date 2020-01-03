@@ -23,7 +23,7 @@ export type PopoverProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
-} & React.HTMLProps<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 declare const Popover: React.FunctionComponent<PopoverProps>;
 

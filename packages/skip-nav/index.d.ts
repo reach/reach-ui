@@ -19,7 +19,7 @@ export type SkipNavProps = {
    * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
    */
   children?: string | JSX.Element;
-} & Omit<React.HTMLProps<HTMLAnchorElement>, "href">;
+} & Omit<React.HTMLAttributes<HTMLAnchorElement>, "href">;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent-props
@@ -43,7 +43,7 @@ export type SkipNavContentProps = {
    * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
    */
   children?: React.ReactNode;
-} & Omit<React.HTMLProps<HTMLDivElement>, "id">;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "id">;
 
 /**
  * Renders a link that remains hidden until focused to skip to the main content.

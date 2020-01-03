@@ -98,7 +98,7 @@ export type TabContainerProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels-as
    */
   as?: string;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel-props
@@ -117,7 +117,7 @@ export type TabPanelProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel-as
    */
   as?: string;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab-props

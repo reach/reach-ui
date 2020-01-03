@@ -45,7 +45,7 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
    */
   initialFocusRef?: React.Ref<any>;
-} & React.HTMLProps<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-props
@@ -69,7 +69,7 @@ export type DialogContentProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialogcontent-children
    */
   children?: React.ReactNode;
-} & React.HTMLProps<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * High-level component to render a modal dialog window over the top of the page

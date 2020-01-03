@@ -32,14 +32,14 @@ export function useTooltip<T = any>(
   attrs?: {
     ref?: React.Ref<T>;
     DEBUG_STYLE?: boolean;
-  } & React.HTMLProps<T>
+  } & React.HTMLAttributes<T>
 ): [TriggerParams, TooltipParams, boolean];
 
 export type BaseTooltipProps = {
   ariaLabel?: string;
   position?: (position1: DOMRect, position2: DOMRect) => Partial<DOMRect>;
   label: React.ReactNode;
-} & Omit<React.HTMLProps<HTMLDivElement>, "label">;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "label">;
 
 export type TooltipProps = {
   children: React.ReactNode;

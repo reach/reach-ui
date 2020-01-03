@@ -97,9 +97,9 @@ export const AlertDialog: React.FunctionComponent<AlertDialogProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialoglabel
  */
-export const AlertDialogLabel: React.FunctionComponent<
-  React.HTMLProps<HTMLDivElement>
->;
+export const AlertDialogLabel: React.FunctionComponent<React.HTMLAttributes<
+  HTMLDivElement
+>>;
 
 /**
  * Additional content read by screen readers, usually a longer description
@@ -108,9 +108,9 @@ export const AlertDialogLabel: React.FunctionComponent<
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogdescription
  */
-export const AlertDialogDescription: React.FunctionComponent<
-  React.HTMLProps<HTMLDivElement>
->;
+export const AlertDialogDescription: React.FunctionComponent<React.HTMLAttributes<
+  HTMLDivElement
+>>;
 
 /**
  * Low-level component if you need more control over the styles or rendering of
@@ -135,6 +135,4 @@ export const AlertDialogOverlay: React.FunctionComponent<AlertDialogProps>;
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent
  */
-export const AlertDialogContent: React.FunctionComponent<
-  AlertDialogContentProps
->;
+export const AlertDialogContent: React.FunctionComponent<AlertDialogContentProps>;

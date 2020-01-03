@@ -25,7 +25,7 @@ export type AlertProps = {
    * @see Docs https://reacttraining.com/reach-ui/alert#alert-type
    */
   type?: "assertive" | "polite";
-} & React.HTMLProps<HTMLDivElement>;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * Screen-reader-friendly alert messages. In many apps developers add "alert"
