@@ -67,4 +67,7 @@ export function useUpdateEffect(effect: () => any, deps?: any[]): void;
  */
 export function wrapEvent<
   E extends React.SyntheticEvent = React.SyntheticEvent
->(theirHandler: (event: E) => any, ourHandler: (event: E) => any): void;
+>(
+  theirHandler: (event: E) => any,
+  ourHandler: (event: E) => any
+): (event: E) => any;
