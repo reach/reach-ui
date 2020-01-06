@@ -14,7 +14,14 @@ export function checkStyles(packageName: string): void;
  * @param ref
  * @param value
  */
-export function assignRef<T = any>(ref: React.Ref<T>, value: any): void;
+export function assignRef<T = any>(
+  ref:
+    | ((instance: T | null) => void)
+    | React.RefObject<T>
+    | React.MutableRefObject<T | null>
+    | null,
+  value: any
+): void;
 
 /**
  * Get the scrollbar offset distance.
@@ -40,7 +47,14 @@ export function noop(): void;
  *
  * @param refs Refs to fork
  */
-export function useForkedRef<T = any>(...refs: React.Ref<T>[]): void;
+export function useForkedRef<T>(
+  ...refs: (
+    | ((instance: T | null) => void)
+    | React.RefObject<T>
+    | React.MutableRefObject<T | null>
+    | null
+  )[]
+): ((node: T) => void) | null;
 
 /**
  * Returns the previous value of a reference after a component update.
