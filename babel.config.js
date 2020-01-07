@@ -12,7 +12,8 @@ module.exports = {
         modules: moduleFormat === "esm" ? false : moduleFormat
       }
     ],
-    "@babel/preset-react"
+    "@babel/preset-react",
+    "@babel/preset-typescript"
   ],
   plugins: [
     "@babel/plugin-proposal-class-properties",
