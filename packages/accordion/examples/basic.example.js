@@ -12,7 +12,7 @@ export const name = "Basic";
 
 export function Example() {
   return (
-    <Accordion>
+    <Accordion defaultIndex={2}>
       <AccordionItem>
         <AccordionTrigger>You can activate me</AccordionTrigger>
         <AccordionPanel>

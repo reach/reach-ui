@@ -7,11 +7,12 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
 import {
-  assignRef,
   checkStyles,
   makeId,
   noop,
@@ -72,11 +73,6 @@ export const Accordion = forwardRef(function Accordion(
       : 0
   );
 
-  /*
-   * We will store all AccordionTrigger refs inside this array to manage focus.
-   */
-  const focusableTriggerNodes = useRef([]);
-
   if (__DEV__) {
     warning(
       !((isControlled && !wasControlled) || (!isControlled && wasControlled)),
@@ -84,26 +80,31 @@ export const Accordion = forwardRef(function Accordion(
     );
   }
 
-  function onSelectPanel(index) {
-    onChange && onChange(index);
-    /*
-     * Before updating the active item internally, check that:
-     *   - Component is uncontrolled
-     *   - If toggle is not allowed, check that the change isn't coming from an
-     *     item that is already active.
-     */
-    if (!isControlled && !(activeIndex === index && !toggle)) {
-      setActiveIndex(activeIndex === index && toggle ? -1 : index);
-    }
-  }
+  const onSelectPanel = useCallback(
+    index => {
+      onChange && onChange(index);
+      /*
+       * Before updating the active item internally, check that:
+       *   - Component is uncontrolled
+       *   - If toggle is not allowed, check that the change isn't coming from an
+       *     item that is already active.
+       */
+      if (!isControlled && !(activeIndex === index && !toggle)) {
+        setActiveIndex(activeIndex === index && toggle ? -1 : index);
+      }
+    },
+    [activeIndex, isControlled, onChange, toggle]
+  );
 
-  const context = {
-    accordionId: id,
-    activeIndex,
-    focusableTriggerNodes,
-    onSelectPanel: readOnly ? noop : onSelectPanel,
-    readOnly
-  };
+  const context = useMemo(
+    () => ({
+      accordionId: id,
+      activeIndex,
+      onSelectPanel: readOnly ? noop : onSelectPanel,
+      readOnly
+    }),
+    [activeIndex, id, onSelectPanel, readOnly]
+  );
 
   if (
     isControlled &&
@@ -123,7 +124,10 @@ export const Accordion = forwardRef(function Accordion(
   useEffect(() => checkStyles("accordion"), []);
 
   return (
-    <DescendantProvider descendants={descendants} set={setDescendants}>
+    <DescendantProvider
+      descendants={descendants}
+      setDescendants={setDescendants}
+    >
       <AccordionContext.Provider value={context}>
         <div data-reach-accordion="" ref={forwardedRef} {...props}>
           {children}
@@ -137,10 +141,16 @@ Accordion.displayName = "Accordion";
 if (__DEV__) {
   Accordion.propTypes = {
     children: PropTypes.node.isRequired,
+    defaultIndex: PropTypes.number,
     index: (props, name, compName, ...rest) => {
       if (props.index != null && props.onChange == null) {
         return new Error(
           "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be functional, remove the `index` value to render an uncontrolled accordion or set an `onChange` handler to set an index when a change occurs."
+        );
+      }
+      if (props.index != null && props.defaultIndex != null) {
+        return new Error(
+          "You provided an `index` prop as well as a `defaultIndex` prop to `Accordion`. If you want a controlled component, use the index prop with an onChange handler. If you want an uncontrolled component, remove the index prop and use `defaultIndex` instead."
         );
       }
       if (Array.isArray(props.index)) {
@@ -162,14 +172,15 @@ if (__DEV__) {
 // AccordionItem
 
 export const AccordionItem = forwardRef(function AccordionItem(
-  { children, disabled = false, index: indexProp, ...props },
+  { children, disabled = false, index: indexProp, key, ...props },
   forwardedRef
 ) {
   const { accordionId, activeIndex, readOnly } = useAccordionContext();
-
-  const ownRef = useRef(null);
-  const index = useDescendant(ownRef, indexProp, disabled);
-  const ref = useForkedRef(ownRef, forwardedRef);
+  const triggerRef = useRef(null);
+  const index = useDescendant(
+    { disabled, element: triggerRef.current, key },
+    indexProp
+  );
 
   // We need unique IDs for the panel and trigger to point to one another
   const itemId = makeId(accordionId, index);
@@ -186,18 +197,15 @@ export const AccordionItem = forwardRef(function AccordionItem(
     triggerId,
     index,
     itemId,
+    triggerRef,
     panelId
   };
-
-  let { descendants } = useDescendantContext();
-
-  console.log(descendants);
 
   return (
     <AccordionItemContext.Provider value={context}>
       <div
         {...props}
-        ref={ref}
+        ref={forwardedRef}
         data-reach-accordion-item=""
         data-active={active ? "" : undefined}
         data-disabled={disabled ? "" : undefined}
@@ -232,39 +240,20 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
   },
   forwardedRef
 ) {
-  const {
-    focusableTriggerNodes,
-    onSelectPanel,
-    readOnly
-  } = useAccordionContext();
+  const { onSelectPanel, readOnly } = useAccordionContext();
 
   const {
     active,
     disabled,
     triggerId,
+    triggerRef: ownRef,
     index,
     panelId
   } = useAccordionItemContext();
 
-  const ownRef = useRef(null);
+  let { focusNodes } = useDescendantContext();
 
-  /*
-   * We only need an array of refs for our triggers for keyboard navigation, and
-   * we already know the index because we can constrain Accordion children to
-   * only AccordionItems. So we shouldn't need to do any funky render dancing
-   * here, just update the ref in the same order if the index changes.
-   */
-  const setFocusableTriggerRefs = useCallback(
-    node => {
-      if (node && !disabled && index >= 0) {
-        focusableTriggerNodes.current[index] = node;
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [disabled, index]
-  );
-
-  const ref = useForkedRef(forwardedRef, ownRef, setFocusableTriggerRefs);
+  const ref = useForkedRef(forwardedRef, ownRef);
 
   function handleClick(event) {
     event.preventDefault();
@@ -277,11 +266,12 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
 
   function handleKeyDown(event) {
     const { key, ctrlKey } = event;
-    const { current: focusNodes } = focusableTriggerNodes;
+    const focusIndex = focusNodes.findIndex(el => el === ownRef.current);
+
     const firstItem = focusNodes[0];
     const lastItem = focusNodes[focusNodes.length - 1];
-    const nextItem = focusNodes[index + 1];
-    const prevItem = focusNodes[index - 1];
+    const nextItem = focusNodes[focusIndex + 1];
+    const prevItem = focusNodes[focusIndex - 1];
 
     // Bail if we aren't moving focus
     if (
@@ -316,9 +306,9 @@ export const AccordionTrigger = forwardRef(function AccordionTrigger(
       ref={ref}
       aria-controls={panelId}
       aria-expanded={active}
-      data-reach-accordion-trigger=""
       data-active={active ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
+      data-reach-accordion-trigger=""
       data-read-only={readOnly ? "" : undefined}
       disabled={disabled || undefined}
       id={triggerId}
@@ -388,174 +378,192 @@ if (__DEV__) {
   };
 }
 
-export function AccordionState() {
-  let { descendants } = useDescendantContext();
-  console.log({ descendants });
-  return null;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * TODO: Still thinking through some challenges/limitations with this hook. The
- *       following is an attempt to explain my thoughts and goals. The
- *       motivation for all of this can be distilled from Ryan's thoughts here:
- *       https://gist.github.com/ryanflorence/10e9387f633f9d2e6f444a9bddaabf6e
- *
+ * @typedef {{ element: HTMLElement; key?: string; disabled?: boolean }} Descendant
+ */
+
+/**
  * This hook registers our descendant by passing it into an array. We can then
- * search that array by a unique key to find its index. We use this for focus
- * management and keyboard navigation. We would like to skip any updates if an
- * explicit index OR a bypass arg is provided (such is the case for disabled
- * button elements, etc.), as we can't call hooks conditionally.
+ * search that array by to find its index when registering it in the component.
+ * We use this for focus management, keyboard navigation, and typeahead
+ * functionality for some components.
  *
- * The key can be
- *   1) an explicit index prop passed by the app which bypasses most of our work
- *      here,
- *   2) a value string passed by the app, or
- *   3) we look at the DOM node's inner text and use it as the key
+ * The hook accepts the element node and (optionally) a key. The key is useful
+ * if multiple descendants have identical text values and we need to
+ * differentiate siblings for some reason.
  *
  * Our main goals with this are:
  *   1) maximum composability,
  *   2) minimal API friction
- *   3) SSR compatibility
+ *   3) SSR compatibility*
  *   4) concurrent safe
  *   5) index always up-to-date with the tree despite changes
  *   6) works with memoization of any component in the tree (hopefully)
  *
- * As for SSR, the good news is that we don't actually need the index on the
+ * * As for SSR, the good news is that we don't actually need the index on the
  * server for most use-cases, as we are only using it to determine the order of
  * composed descendants for keyboard navigation. However, in the few cases where
- * this is not the case, we can either
- *   1) require an explicit key, or
- *   2) require a controlled component where the parent always knows the state
- *      of its descendants
+ * this is not the case, we can require an explicit index from the app.
  *
- * This still feels like it could be a lot clearer TBH, but it works for now
- * and we can reassess if we find issues and fix as needed.
- *
- * An alternative would be to bail on React altogether an just use DOM APIs in
- * the parent and find the child nodes on every render. Again, if we need
- * something from the server we just require an explicit index or controlled
- * component. TBH that might still be better (or at much less convoluted and
- * easier for folks to see what's going on).
+ * @param {Descendant} descendant
+ * @param {number} [indexProp]
+ * @returns {number}
  */
-function useDescendant(ref, indexProp, bypass) {
-  let [index, setIndex] = useState(indexProp ?? -1);
+function useDescendant({ element, key, disabled }, indexProp) {
+  let [, forceUpdate] = useState();
+  let {
+    registerDescendant,
+    unregisterDescendant,
+    descendants
+  } = useDescendantContext();
 
-  let { registerDescendant, deregisterDescendant } = useDescendantContext();
+  // Prevent any flashing
+  useIsomorphicLayoutEffect(() => {
+    if (!element) forceUpdate({});
+    registerDescendant({ element, key, disabled });
+    return () => unregisterDescendant(element);
+  }, [element, key, disabled]);
 
-  // First effect registers our descendant
-  useEffect(() => {
-    if (bypass || indexProp != null) {
-      return;
-    }
-    let i = registerDescendant(ref);
-    if (index !== i) {
-      setIndex(i);
-    }
-    return () => void deregisterDescendant(ref);
-  }, [ref, registerDescendant, deregisterDescendant, bypass, indexProp, index]);
-  return index;
+  return (
+    indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
+  );
 }
 
+/**
+ * @returns {[Descendant[], React.Dispatch<React.SetStateAction<Descendant[]>>]}
+ */
 function useDescendants() {
   return useState([]);
 }
 
-let n = -1;
+function DescendantProvider({ children, descendants, setDescendants }) {
+  /*
+  type Descendant = { element: HTMLElement; key: string | number }
+  */
+  let registerDescendant = React.useCallback(
+    ({ disabled, element, key: providedKey }) => {
+      if (!element) {
+        return;
+      }
 
-function DescendantProvider({ children, descendants, set }) {
-  let registerDescendant = useCallback(
-    ref => {
-      console.log(`CALLING ${++n}`);
-      if (ref.current && !descendants.includes(ref.current)) {
-        let newItems = descendants;
+      setDescendants(items => {
+        if (items.find(({ element: _el }) => _el === element) == null) {
+          let key = providedKey ?? element.textContent;
 
-        /*
-         * When registering a descendant, we need to make sure we insert in into
-         * the array in the same order that it appears in the DOM. So as new
-         * descendants are added or maybe some are removed, we always know that
-         * the array is up-to-date and correct.
-         *
-         * So here we look at our registered descendants and see if the new
-         * element we are adding appears earlier than an existing descendant's DOM
-         * node via `node.compareDocumentPosition`. If it does, we insert the new
-         * element at this index. Because `registerDescendant` will be called in
-         * an effect every time the descendants state value changes, we should be
-         * sure that this index is accurate when descendent elements come or go
-         * from our component.
-         */
-        let index = descendants.findIndex(el => {
-          if (!el || !ref.current) {
-            return false;
-          }
           /*
-           * Does this element's DOM node appear before another item in the array
-           * in our DOM tree? If so, return true to grab the index at this point
-           * in the array so we know where to insert the new element.
+           * When registering a descendant, we need to make sure we insert in
+           * into the array in the same order that it appears in the DOM. So as
+           * new descendants are added or maybe some are removed, we always know
+           * that the array is up-to-date and correct.
+           *
+           * So here we look at our registered descendants and see if the new
+           * element we are adding appears earlier than an existing descendant's
+           * DOM node via `node.compareDocumentPosition`. If it does, we insert
+           * the new element at this index. Because `registerDescendant` will be
+           * called in an effect every time the descendants state value changes,
+           * we should be sure that this index is accurate when descendent
+           * elements come or go from our component.
            */
-          return Boolean(
-            el.compareDocumentPosition(ref.current) &
-              Node.DOCUMENT_POSITION_PRECEDING
-          );
-        });
+          let index = items.findIndex(({ element: existingElement }) => {
+            if (!existingElement || !element) {
+              return false;
+            }
+            /*
+             * Does this element's DOM node appear before another item in the
+             * array in our DOM tree? If so, return true to grab the index at
+             * this point in the array so we know where to insert the new
+             * element.
+             */
+            return Boolean(
+              existingElement.compareDocumentPosition(element) &
+                Node.DOCUMENT_POSITION_PRECEDING
+            );
+          });
 
-        // If an index is not found we will push the element to the end.
-        if (index === -1) {
-          newItems.push(ref.current);
-        } else {
-          newItems = [
-            ...descendants.slice(0, index),
-            ref.current,
-            ...descendants.slice(index)
-          ];
+          let newItem = { disabled, element, key };
+
+          // If an index is not found we will push the element to the end.
+          if (index === -1) {
+            return [...items, newItem];
+          }
+          return [...items.slice(0, index), newItem, ...items.slice(index)];
         }
-        set(newItems);
-      }
-      return descendants.findIndex(i => (ref.current ? i === ref.current : -1));
+      });
     },
-    [descendants, set]
+    /*
+     * setDescendants is a state setter initialized by the useDescendants hook.
+     * We can safely ignore the lint warning here because it will not change
+     * between renders.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
-  let deregisterDescendant = useCallback(
-    ref => {
-      if (ref.current) {
-        set(items => items.filter(el => el !== ref.current));
+  let unregisterDescendant = useCallback(
+    element => {
+      if (!element) {
+        return;
       }
+
+      setDescendants(items =>
+        items.filter(({ element: _el }) => element !== _el)
+      );
     },
-    [descendants, set]
+    /*
+     * setDescendants is a state setter initialized by the useDescendants hook.
+     * We can safely ignore the lint warning here because it will not change
+     * between renders.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
+
+  let focusNodes = descendants
+    .filter(({ disabled }) => !disabled)
+    .map(({ element }) => element);
+
+  const value = useMemo(() => {
+    return {
+      descendants,
+      focusNodes,
+      registerDescendant,
+      unregisterDescendant
+    };
+  }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
 
   return (
-    <DescendantContext.Provider
-      value={{
-        descendants,
-        registerDescendant,
-        deregisterDescendant
-      }}
-    >
+    <DescendantContext.Provider value={value}>
       {children}
     </DescendantContext.Provider>
   );
 }
 
-/**
- * This hook gives us a DOM node's inner text content. Because we cannot call
- * hooks conditionally, we accept a bypass argument in the event that an
- * explicit value is passed and we don't need the DOM text.
+/*
+ * React currently throws a warning when using useLayoutEffect on the server.
+ * To get around it, we can conditionally useEffect on the server (no-op) and
+ * useLayoutEffect in the browser. We occasionally need useLayoutEffect to ensure
+ * we don't get a render flash for certain operations, but we may also need
+ * affected components to render on the server. One example is when setting a
+ * component's descendants to retrieve their index values. The index value may be
+ * needed to determine whether a descendant is active, but with useEffect in the
+ * browser there will be an initial frame where the active descendant is not set.
+ *
+ * Important to note that using this hook as an escape hatch will break the
+ * eslint dependency warnings, so use sparingly only when needed and pay close
+ * attention to the dependency array!
+ *
+ * TODO: Move to `utils`
+ *
+ * https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.js
  */
-function useDomTextContent(ref, bypass) {
-  let [domText, setDomText] = useState(null);
-  let setRef = useCallback(
-    node => {
-      if (node) {
-        assignRef(ref, node);
-        if (!bypass && node.textContent && domText !== node.textContent) {
-          setDomText(node.textContent);
-        }
-      }
-    },
-    [bypass, domText, ref]
+const useIsomorphicLayoutEffect = canUseDOM() ? useLayoutEffect : useEffect;
+
+function canUseDOM() {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.document !== "undefined" &&
+    typeof window.document.createElement !== "undefined"
   );
-  return [domText, setRef];
 }
