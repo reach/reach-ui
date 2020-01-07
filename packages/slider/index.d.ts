@@ -42,7 +42,10 @@ type SliderChildrenRender = (props: {
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slider-props
  */
-export type SliderProps = Omit<React.HTMLProps<HTMLDivElement>, "onChange"> & {
+export type SliderProps = Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "onChange"
+> & {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -153,7 +156,7 @@ export type SliderInputProps = Omit<SliderProps, "children"> & {
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-props
  */
-export type SliderTrackProps = React.HTMLProps<HTMLDivElement> & {
+export type SliderTrackProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
@@ -170,19 +173,19 @@ export type SliderTrackProps = React.HTMLProps<HTMLDivElement> & {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight-props
  */
-export type SliderTrackHighlightProps = React.HTMLProps<HTMLDivElement>;
+export type SliderTrackHighlightProps = React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle-props
  */
-export type SliderHandleProps = React.HTMLProps<HTMLDivElement>;
+export type SliderHandleProps = React.HTMLAttributes<HTMLDivElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-props
  */
-export type SliderMarkerProps = React.HTMLProps<HTMLDivElement> & {
+export type SliderMarkerProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * The value to denote where the marker should appear along the track.
    *

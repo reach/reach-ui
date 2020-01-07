@@ -42,7 +42,7 @@ export type ComboboxProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-as
    */
   as?: string;
-} & Omit<React.HTMLProps<HTMLElement>, "onSelect">;
+} & Omit<React.HTMLAttributes<HTMLElement>, "onSelect">;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-props
@@ -81,7 +81,7 @@ export type ComboboxInputProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-as
    */
   as?: string;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-props
@@ -96,7 +96,7 @@ export type ComboboxPopoverProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-portal
    */
   portal?: boolean;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist-props
@@ -120,7 +120,7 @@ export type ComboboxListProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist-as
    */
   as?: string;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-props
@@ -147,7 +147,7 @@ export type ComboboxOptionProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-value
    */
   value: string;
-} & React.HTMLProps<HTMLElement>;
+} & React.HTMLAttributes<HTMLElement>;
 
 /**
  * Accessible combobox (autocomplete or autosuggest) component for React.

@@ -53,7 +53,7 @@ export interface MenuProps {
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton-props
  */
-export type MenuButtonProps = React.HTMLProps<HTMLButtonElement> & {
+export type MenuButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
   /**
    * Accepts any renderable content.
    *
@@ -65,7 +65,7 @@ export type MenuButtonProps = React.HTMLProps<HTMLButtonElement> & {
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-props
  */
-export type MenuListProps = React.HTMLProps<HTMLDivElement> & {
+export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
@@ -114,7 +114,7 @@ export type MenuItemProps = {
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-props
  */
-export type MenuPopoverProps = React.HTMLProps<HTMLDivElement> & {
+export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Must contain a `MenuItems`
    *
@@ -126,7 +126,7 @@ export type MenuPopoverProps = React.HTMLProps<HTMLDivElement> & {
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems-props
  */
-export type MenuItemsProps = React.HTMLProps<HTMLDivElement> & {
+export type MenuItemsProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
