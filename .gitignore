@@ -6,8 +6,9 @@ lerna-debug.log*
 .env
 .DS_Store
 
-/packages/*/es/
-/packages/*/umd/
+/packages/*/dist
+/packages/*/es
+/packages/*/umd
 /packages/*/index.js
 /doc.json
 

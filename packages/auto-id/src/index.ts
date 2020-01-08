@@ -60,7 +60,18 @@ let serverHandoffComplete = false;
 let id = 0;
 const genId = () => ++id;
 
-export const useId = fallback => {
+/**
+ * useId
+ *
+ * Autogenerate IDs to facilitate WAI-ARIA and server rendering.
+ *
+ * Note: The returned ID will initially be `null` and will update after a
+ * component mounts. Users may need to supply their own ID if they need
+ * consistent values for SSR.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/auto-id
+ */
+export const useId = (fallback?: string | null) => {
   /*
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
@@ -92,5 +103,5 @@ export const useId = fallback => {
       serverHandoffComplete = true;
     }
   }, []);
-  return id;
+  return id != null ? String(id) : undefined;
 };

@@ -6,7 +6,7 @@ const execSync = require("child_process").execSync;
 const path = require("path");
 
 // let pkg = path.basename(process.env.PWD || process.cwd());
-let babel = path.resolve(__dirname, "../node_modules/.bin/babel");
+let babel = path.resolve(__dirname, "../../node_modules/.bin/babel");
 // let rollup = `${__dirname}/../node_modules/.bin/rollup`;
 // let rollupConfig = `${__dirname}/rollup-config.js`;
 
@@ -17,12 +17,15 @@ const exec = (command, extraEnv) =>
   });
 
 console.log("\nBuilding ES modules ...");
-exec(`${babel} src -d es --ignore src/*.test.js --root-mode upward`, {
-  MODULE_FORMAT: "esm"
-});
+exec(
+  `${babel} src -o dist/component-component.esm.js --ignore src/*.test.js --root-mode upward`,
+  {
+    MODULE_FORMAT: "esm"
+  }
+);
 
 console.log("Building CommonJS modules ...");
-exec(`${babel} src -d . --ignore src/*.test.js --root-mode upward`, {
+exec(`${babel} src -d dist --ignore src/*.test.js --root-mode upward`, {
   MODULE_FORMAT: "cjs"
 });
 

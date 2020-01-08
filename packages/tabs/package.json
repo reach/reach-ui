@@ -7,14 +7,20 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/tabs"
   },
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
+  "umd:main": "dist/tabs.umd.production.js",
+  "module": "dist/tabs.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "styles.css"
+  ],
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
   },
   "dependencies": {
     "@reach/auto-id": "^0.7.0",
-    "@reach/utils": "^0.7.0",
+    "@reach/utils": "^0.7.1",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },
@@ -23,13 +29,5 @@
     "react-dom": "^16.8.0"
   },
   "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
-    "styles.css"
-  ]
+  "license": "MIT"
 }
