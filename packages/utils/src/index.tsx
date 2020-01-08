@@ -1,7 +1,14 @@
 /* eslint-disable no-unused-vars */
 
 import { useRef, useMemo, useEffect } from "react";
-import { AssignableRef, PropsFromAs, As, ComponentWithAs } from "./types";
+import {
+  As,
+  AssignableRef,
+  ComponentWithAs,
+  ComponentWithForwardedRef,
+  PropsFromAs,
+  PropsWithAs
+} from "./types";
 import React from "react";
 
 let checkedPkgs: { [key: string]: boolean } = {};
@@ -175,8 +182,17 @@ export function wrapEvent<
  *
  * @param Comp
  */
-export function forwardRefWithAs<P, T extends As>(
+export function forwardRefWithAs<T extends As, P>(
   Comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
 ) {
   return (React.forwardRef(Comp as any) as unknown) as ComponentWithAs<T, P>;
 }
+
+export {
+  As,
+  AssignableRef,
+  ComponentWithAs,
+  ComponentWithForwardedRef,
+  PropsFromAs,
+  PropsWithAs
+};
