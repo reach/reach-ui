@@ -1,5 +1,3 @@
-/* eslint-disable default-case */
-
 /**
  * Welcome to @reach/combobox!
  *
