@@ -7,7 +7,7 @@ let id = "reach-skip-nav";
 // SkipNavLink
 
 export function SkipNavLink({ children = "Skip to content", ...props }) {
-  useEffect(() => checkStyles("skip-nav"));
+  useEffect(() => checkStyles("skip-nav"), []);
   return (
     <a {...props} href={`#${id}`} data-reach-skip-link>
       {children}

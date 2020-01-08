@@ -2702,6 +2702,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/escape-regexp@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@types/escape-regexp/-/escape-regexp-0.0.0.tgz#bff0225f9ef30d0dbdbe0e2a24283ee5342990c3"
+  integrity sha512-HTansGo4tJ7K7W9I9LBdQqnHtPB/Y7tlS+EMrkboaAQLsRPhRpHaqAHe01K1HVXM5e1u1IplRd8EBh+pJrp7Dg==
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -2720,6 +2725,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/highlight-words-core@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/highlight-words-core/-/highlight-words-core-1.2.0.tgz#0eadd10546f335c3e16698b8ae7491b062133163"
+  integrity sha512-yy+e7t3P5ABzT/Bl0Wy0hxworXGKKSJVQljaUQxco9ddXY5OZVbRm+yyzZAPBhP4C7KwfkZRRhNOCYkLbloFYw==
 
 "@types/history@*":
   version "4.7.3"

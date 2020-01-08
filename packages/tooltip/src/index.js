@@ -266,7 +266,7 @@ export function useTooltip({
     });
   }, [id]);
 
-  useEffect(() => checkStyles("tooltip"));
+  useEffect(() => checkStyles("tooltip"), []);
 
   useEffect(() => {
     const listener = event => {
