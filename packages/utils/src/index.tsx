@@ -185,7 +185,7 @@ export function wrapEvent<
 export function forwardRefWithAs<T extends As, P>(
   Comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
 ) {
-  return (React.forwardRef(Comp as any) as unknown) as ComponentWithAs<T, P>;
+  return React.forwardRef(Comp as any) as ComponentWithAs<T, P>;
 }
 
 export {
