@@ -1,4 +1,6 @@
 /**
+ * Welcome to @reach/visually-hidden!
+ *
  * Provides text for screen readers that is visually hidden.
  * It is the logical opposite of the `aria-hidden` attribute.
  *

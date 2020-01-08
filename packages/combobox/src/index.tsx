@@ -1,13 +1,24 @@
 /* eslint-disable default-case */
 
-////////////////////////////////////////////////////////////////////////////////
-// Welcome to @reach/combobox! State transitions are managed by a state chart,
-// state mutations are managed by a reducer. Please enjoy the read here, I
-// figured out a few new tricks with context and refs I think you might love or
-// hate 😂
-
-// ???: navigate w/ arrows, then hit backspace: should it delete the
-// autocompleted text or the old value the user had typed?!
+/**
+ * Welcome to @reach/combobox!
+ *
+ * Accessible combobox (autocomplete or autosuggest) component for React.
+ *
+ * A combobox is the combination of an `<input type="text"/>` and a list. The
+ * list is designed to help the user arrive at a value, but the value does not
+ * necessarily have to come from that list. Don't think of it like a
+ * `<select/>`, but more of an `<input type="text"/>` with some suggestions. You
+ * can, however, validate that the value comes from the list, that's up to your
+ * app.
+ *
+ * ???: navigate w/ arrows, then hit backspace: should it delete the
+ *      autocompleted text or the old value the user had typed?!
+ *
+ * @see Docs     https://reacttraining.com/reach-ui/combobox
+ * @see Source   https://github.com/reach/reach-ui/tree/master/packages/combobox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#combobox
+ */
 
 import React, {
   forwardRef,
@@ -193,9 +204,11 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
 
 const visibleStates: State[] = [SUGGESTING, NAVIGATING, INTERACTING];
 const isVisible = (state: State) => visibleStates.includes(state);
-// When we open a list, set the navigation value to the value in the input, if
-// it's in the list, then it'll automatically be highlighted.
 
+/*
+ * When we open a list, set the navigation value to the value in the input, if
+ * it's in the list, then it'll automatically be highlighted.
+ */
 function findNavigationValue(stateData: StateData, event: MachineEvent) {
   // @ts-ignore
   if (event.value) {
@@ -227,14 +240,20 @@ interface IComboboxContext {
 
 const ComboboxContext = createContext({} as IComboboxContext);
 
-// Allows us to put the option's value on context so that ComboboxOptionText
-// can work it's highlight text magic no matter what else is rendered around
-// it.
+/*
+ * Allows us to put the option's value on context so that ComboboxOptionText
+ * can work it's highlight text magic no matter what else is rendered around
+ * it.
+ */
 const OptionContext = createContext((null as unknown) as ComboboxValue);
 
 ////////////////////////////////////////////////////////////////////////////////
-// Combobox
 
+/**
+ * Combobox
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#combobox
+ */
 export const Combobox = forwardRefWithAs<"div", ComboboxProps>(
   function Combobox(
     { onSelect, openOnFocus = false, children, as: Comp = "div", ...rest },
@@ -359,8 +378,14 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxInput
 
+/**
+ * ComboboxInput
+ *
+ * Wraps an `<input/>` with a couple extra props that work with the combobox.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput
+ */
 export const ComboboxInput = forwardRefWithAs<"div", ComboboxInputProps>(
   function ComboboxInput(
     {
@@ -514,8 +539,16 @@ export type ComboboxInputProps = {
 ComboboxInput.displayName = "ComboboxInput";
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxPopover
 
+/**
+ * ComboboxPopover
+ *
+ * Contains the popup that renders the list. Because some UI needs to render
+ * more than the list in the popup, you need to render one of these around the
+ * list. For example, maybe you want to render the number of results suggested.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover
+ */
 export const ComboboxPopover: ComponentWithForwardedRef<
   "div",
   ComboboxPopoverProps & __ComboboxPopoverProps
@@ -587,8 +620,15 @@ export type ComboboxPopoverProps = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxList
 
+/**
+ * ComboboxList
+ *
+ * Contains the `ComboboxOption` elements and sets up the proper aria attributes
+ * for the list.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist
+ */
 export const ComboboxList = forwardRefWithAs<"ul", ComboboxListProps>(
   function ComboboxList(
     {
@@ -653,8 +693,14 @@ export type ComboboxListProps = {
 ComboboxList.displayName = "ComboboxList";
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxOption
 
+/**
+ * ComboboxOption
+ *
+ * An option that is suggested to the user as they interact with the combobox.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption
+ */
 export const ComboboxOption: ComponentWithForwardedRef<
   "li",
   ComboboxOptionProps
@@ -734,10 +780,23 @@ export type ComboboxOptionProps = {
 ComboboxOption.displayName = "ComboboxOption";
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxOptionText
 
-// We don't forwardRef or spread props because we render multiple spans or null,
-// should be fine 🤙
+/**
+ * ComboboxOptionText
+ *
+ * Renders the value of a `ComboboxOption` as text but with spans wrapping the
+ * matching and non-matching segments of text.
+ *
+ * We don't forwardRef or spread props because we render multiple spans or null,
+ * should be fine 🤙
+ *
+ * @example
+ *   <ComboboxOption value="Seattle">
+ *     🌧 <ComboboxOptionText />
+ *   </ComboboxOption>
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoptiontext
+ */
 export function ComboboxOptionText() {
   const value = useContext(OptionContext);
   const {
@@ -772,8 +831,10 @@ export function ComboboxOptionText() {
 ComboboxOptionText.displayName = "ComboboxOptionText";
 
 ////////////////////////////////////////////////////////////////////////////////
-// ComboboxButton
 
+/**
+ * ComboboxButton
+ */
 export const ComboboxButton = forwardRefWithAs<"button", {}>(
   function ComboboxButton(
     { as: Comp = "button", onClick, onKeyDown, ...props },
@@ -812,17 +873,23 @@ export const ComboboxButton = forwardRefWithAs<"button", {}>(
 ComboboxButton.displayName = "ComboboxButton";
 
 ////////////////////////////////////////////////////////////////////////////////
-// The rest is all implementation details
 
-// Move focus back to the input if we start navigating w/ the
-// keyboard after focus has moved to any focusable content in
-// the popup.
+/**
+ * Move focus back to the input if we start navigating w/ the
+ * keyboard after focus has moved to any focusable content in
+ * the popup.
+ *
+ * @param lastEventType
+ * @param inputRef
+ */
 function useFocusManagement(
   lastEventType: MachineEventType | undefined,
   inputRef: React.MutableRefObject<any>
 ) {
-  // useLayoutEffect so that the cursor goes to the end of the input instead
-  // of awkwardly at the beginning, unclear to my why ...
+  /*
+   * useLayoutEffect so that the cursor goes to the end of the input instead
+   * of awkwardly at the beginning, unclear to me why 🤷‍♂️
+   */
   useLayoutEffect(() => {
     if (
       lastEventType === NAVIGATE ||
@@ -836,8 +903,10 @@ function useFocusManagement(
   }, [lastEventType]);
 }
 
-// We want the same events when the input or the popup have focus (HOW COOL ARE
-// HOOKS BTW?) This is probably the hairiest piece but it's not bad.
+/**
+ * We want the same events when the input or the popup have focus (HOW COOL ARE
+ * HOOKS BTW?) This is probably the hairiest piece but it's not bad.
+ */
 function useKeyDown() {
   const {
     data: { navigationValue },
@@ -856,9 +925,11 @@ function useKeyDown() {
         // Don't scroll the page
         event.preventDefault();
 
-        // If the developer didn't render any options, there's no point in
-        // trying to navigate--but seriously what the heck? Give us some
-        // options fam.
+        /*
+         * If the developer didn't render any options, there's no point in
+         * trying to navigate--but seriously what the heck? Give us some
+         * options fam.
+         */
         if (!options || options.length === 0) {
           return;
         }
@@ -873,9 +944,11 @@ function useKeyDown() {
           const atBottom = index === options.length - 1;
           if (atBottom) {
             if (autocompletePropRef.current) {
-              // Go back to the value the user has typed because we are
-              // autocompleting and they need to be able to get back to what
-              // they had typed w/o having to backspace out.
+              /*
+               * Go back to the value the user has typed because we are
+               * autocompleting and they need to be able to get back to what
+               * they had typed w/o having to backspace out.
+               */
               transition(NAVIGATE, { value: null });
             } else {
               // cycle through
@@ -895,9 +968,11 @@ function useKeyDown() {
         // Don't scroll the page
         event.preventDefault();
 
-        // If the developer didn't render any options, there's no point in
-        // trying to navigate--but seriously what the heck? Give us some
-        // options fam.
+        /*
+         * If the developer didn't render any options, there's no point in
+         * trying to navigate--but seriously what the heck? Give us some
+         * options fam.
+         */
         if (!options || options.length === 0) {
           return;
         }
@@ -908,9 +983,11 @@ function useKeyDown() {
           const index = options.indexOf(navigationValue);
           if (index === 0) {
             if (autocompletePropRef.current) {
-              // Go back to the value the user has typed because we are
-              // autocompleting and they need to be able to get back to what
-              // they had typed w/o having to backspace out.
+              /*
+               * Go back to the value the user has typed because we are
+               * autocompleting and they need to be able to get back to what
+               * they had typed w/o having to backspace out.
+               */
               transition(NAVIGATE, { value: null });
             } else {
               // cycle through
@@ -976,8 +1053,14 @@ function useBlur() {
   };
 }
 
-// This manages transitions between states with a built in reducer to manage
-// the data that goes with those transitions.
+/**
+ * This manages transitions between states with a built in reducer to manage
+ * the data that goes with those transitions.
+ *
+ * @param chart
+ * @param reducer
+ * @param initialData
+ */
 function useReducerMachine(
   chart: StateChart,
   reducer: Reducer,
@@ -999,13 +1082,17 @@ function useReducerMachine(
   return [state, data, transition];
 }
 
-// We don't want to track the active descendant with indexes because nothing is
-// more annoying in a combobox than having it change values RIGHT AS YOU HIT
-// ENTER. That only happens if you use the index as your data, rather than
-// *your data as your data*. We use this to generate a unique ID based on the
-// value of each item.  This function is short, sweet, and good enough™ (I also
-// don't know how it works, tbqh)
-// https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+/**
+ * We don't want to track the active descendant with indexes because nothing is
+ * more annoying in a combobox than having it change values RIGHT AS YOU HIT
+ * ENTER. That only happens if you use the index as your data, rather than
+ * *your data as your data*. We use this to generate a unique ID based on the
+ * value of each item.  This function is short, sweet, and good enough™ (I also
+ * don't know how it works, tbqh)
+ *
+ * @see https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+ * @param str
+ */
 const makeHash = (str: string) => {
   let hash = 0;
   if (str.length === 0) {
@@ -1020,7 +1107,7 @@ const makeHash = (str: string) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// Well alright, you made it all the way here to like 1000 lines of code (geez,
+// Well alright, you made it all the way here to like 1100 lines of code (geez,
 // what the heck?). Have a great day :D
 
 ////////////////////////////////////////////////////////////////////////////////
