@@ -23,7 +23,7 @@
     "@reach/portal": "^0.7.0",
     "@reach/rect": "^0.7.0",
     "@reach/utils": "^0.7.1",
-    "@reach/visually-hidden": "^0.7.0",
+    "@reach/visually-hidden": "^0.7.1",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {

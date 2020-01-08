@@ -127,12 +127,12 @@ export function useForkedRef<T = any>(...refs: AssignableRef<T>[]) {
  *
  * @param value
  */
-export function usePrevious(value: any) {
-  const ref = useRef();
+export function usePrevious<T = any>(value: T) {
+  const ref = useRef<T | null>(null);
   useEffect(() => {
     ref.current = value;
   }, [value]);
-  return ref.current as any;
+  return ref.current;
 }
 
 /**

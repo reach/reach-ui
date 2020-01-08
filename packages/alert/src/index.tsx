@@ -19,27 +19,35 @@ import PropTypes from "prop-types";
 
 // singleton state is fine because you don't server render
 // an alert (SRs don't read them on first load anyway)
-let keys = {
+let keys: RegionKeys = {
   polite: -1,
   assertive: -1
 };
 
-let elements = {
+let elements: ElementTypes = {
   polite: {},
   assertive: {}
 };
 
-let liveRegions = {
+let liveRegions: RegionElements = {
   polite: null,
   assertive: null
 };
 
-let renderTimer = null;
+let renderTimer: number | null;
 
 ////////////////////////////////////////////////////////////////////////////////
-// Alert
 
-export const Alert = forwardRef(function Alert(
+/**
+ * Alert
+ *
+ * Screen-reader-friendly alert messages. In many apps developers add "alert"
+ * messages when network events or other things happen. Users with assistive
+ * technologies may not know about the message unless you develop for it.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/alert
+ */
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   { children, type = "polite", ...props },
   forwardedRef
 ) {
@@ -59,11 +67,25 @@ export const Alert = forwardRef(function Alert(
   return child;
 });
 
+/**
+ * @see Docs https://reacttraining.com/reach-ui/alert#alert-props
+ */
+export type AlertProps = {
+  /**
+   * Controls whether the assistive technology should read immediately
+   * ("assertive") or wait until the user is idle ("polite").
+   *
+   * @see Docs https://reacttraining.com/reach-ui/alert#alert-type
+   */
+  type?: "assertive" | "polite";
+  children: React.ReactNode;
+};
+
 Alert.displayName = "Alert";
 if (__DEV__) {
   Alert.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.string
+    type: PropTypes.oneOf(["assertive", "polite"])
   };
 }
 
@@ -71,10 +93,10 @@ export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function createMirror(type, doc = document) {
+function createMirror(type: "polite" | "assertive", doc = document): Mirror {
   let key = ++keys[type];
 
-  let mount = element => {
+  let mount = (element: JSX.Element) => {
     if (liveRegions[type]) {
       elements[type][key] = element;
       renderAlerts();
@@ -82,12 +104,12 @@ function createMirror(type, doc = document) {
       let node = doc.createElement("div");
       node.setAttribute(`data-reach-live-${type}`, "true");
       liveRegions[type] = node;
-      doc.body.appendChild(liveRegions[type]);
+      doc.body.appendChild(liveRegions[type]!);
       mount(element);
     }
   };
 
-  let update = element => {
+  let update = (element: JSX.Element) => {
     elements[type][key] = element;
     renderAlerts();
   };
@@ -101,10 +123,13 @@ function createMirror(type, doc = document) {
 }
 
 function renderAlerts() {
-  clearTimeout(renderTimer);
+  if (renderTimer != null) {
+    clearTimeout(renderTimer);
+  }
   renderTimer = setTimeout(() => {
-    Object.keys(elements).forEach(type => {
-      let container = liveRegions[type];
+    Object.keys(elements).forEach(elementType => {
+      let type: RegionTypes = elementType as RegionTypes;
+      let container = liveRegions[type]!;
       if (container) {
         render(
           <VisuallyHidden>
@@ -113,7 +138,7 @@ function renderAlerts() {
               aria-live={type}
             >
               {Object.keys(elements[type]).map(key =>
-                React.cloneElement(elements[type][key], {
+                React.cloneElement(elements[type][key as any], {
                   key,
                   ref: null
                 })
@@ -127,9 +152,13 @@ function renderAlerts() {
   }, 500);
 }
 
-function useMirrorEffects(type, element, ref) {
-  const prevType = usePrevious(type);
-  const mirror = useRef(null);
+function useMirrorEffects(
+  type: RegionTypes,
+  element: JSX.Element,
+  ref: React.RefObject<any>
+) {
+  const prevType = usePrevious<RegionTypes>(type);
+  const mirror = useRef<Mirror | null>(null);
   const mounted = useRef(false);
   useEffect(() => {
     const { ownerDocument } = ref.current || {};
@@ -137,12 +166,12 @@ function useMirrorEffects(type, element, ref) {
       mounted.current = true;
       mirror.current = createMirror(type, ownerDocument);
       mirror.current.mount(element);
-    } else if (!prevType !== type) {
-      mirror.current.unmount();
+    } else if (prevType !== type) {
+      mirror.current && mirror.current.unmount();
       mirror.current = createMirror(type, ownerDocument);
       mirror.current.mount(element);
     } else {
-      mirror.current.update(element, prevType, type);
+      mirror.current && mirror.current.update(element);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element, type, prevType]);
@@ -153,3 +182,28 @@ function useMirrorEffects(type, element, ref) {
     };
   }, []);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+type Mirror = {
+  mount: (element: JSX.Element) => void;
+  update: (element: JSX.Element) => void;
+  unmount: () => void;
+};
+
+type RegionTypes = "polite" | "assertive";
+
+type ElementTypes = {
+  [key in RegionTypes]: {
+    [key: number]: JSX.Element;
+  };
+};
+
+type RegionElements<T extends HTMLElement = HTMLDivElement> = {
+  [key in RegionTypes]: T | null;
+};
+
+type RegionKeys = {
+  [key in RegionTypes]: number;
+};
