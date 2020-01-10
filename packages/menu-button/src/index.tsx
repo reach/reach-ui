@@ -21,7 +21,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import Popover from "@reach/popover";
+import Popover, { Position } from "@reach/popover";
 import {
   checkStyles,
   forwardRefWithAs,
@@ -852,6 +852,7 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-children
    */
   children: React.ReactNode;
+  position?: Position;
 };
 
 MenuPopover.displayName = "MenuPopover";
