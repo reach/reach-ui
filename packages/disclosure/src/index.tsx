@@ -9,7 +9,12 @@ import React, {
   useRef,
   useState
 } from "react";
-import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
+import {
+  forwardRefWithAs,
+  makeId,
+  wrapEvent,
+  useForkedRef
+} from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -19,30 +24,46 @@ import warning from "warning";
 
 // TODO: Screen reader testing
 
-const DisclosureContext = createContext({});
+const DisclosureContext = createContext<IDisclosureContext>(
+  {} as IDisclosureContext
+);
 const useDisclosureContext = () => useContext(DisclosureContext);
 
 ////////////////////////////////////////////////////////////////////////////////
-// Disclosure
 
-export function Disclosure({
+/**
+ * Disclosure
+ *
+ * @param props
+ */
+type DisclosureProps = {
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+  onChange?(): void;
+  open?: boolean;
+  id?: React.ReactText;
+};
+export const Disclosure: React.FC<DisclosureProps> = ({
   children,
-  defaultOpen,
+  defaultOpen = false,
   onChange,
   open: openProp,
   ...props
-}) {
+}) => {
   /*
    * You shouldn't switch between controlled/uncontrolled. We'll check for a
    * controlled component and track any changes in a ref to show a warning.
    */
-  const wasControlled = typeof openProp !== "undefined";
+  const wasControlled = openProp != null;
   const { current: isControlled } = useRef(wasControlled);
 
-  const id = useId(props.id);
+  const id =
+    useId(props.id != null ? String(props.id) : undefined) || "disclosure";
   const panelId = makeId("panel", id);
 
-  const [open, setOpen] = useState(isControlled ? openProp : !!defaultOpen);
+  const [open, setOpen] = useState(
+    isControlled ? (openProp as boolean) : defaultOpen
+  );
 
   if (__DEV__) {
     warning(
@@ -58,7 +79,7 @@ export function Disclosure({
     }
   }
 
-  const context = {
+  const context: IDisclosureContext = {
     disclosureId: id,
     onSelect,
     open,
@@ -70,7 +91,7 @@ export function Disclosure({
      * If the component is controlled, we'll sync internal state with the
      * controlled state
      */
-    setOpen(openProp);
+    setOpen(openProp as boolean);
   }
 
   return (
@@ -78,7 +99,7 @@ export function Disclosure({
       {children}
     </DisclosureContext.Provider>
   );
-}
+};
 
 Disclosure.displayName = "Disclosure";
 if (__DEV__) {
@@ -90,9 +111,14 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// DisclosureTrigger
 
-export const DisclosureTrigger = forwardRef(function DisclosureTrigger(
+/**
+ * DisclosureTrigger
+ */
+export const DisclosureTrigger = forwardRefWithAs<
+  "button",
+  DisclosureTriggerProps
+>(function DisclosureTrigger(
   {
     as: Comp = "button",
     children,
@@ -112,7 +138,7 @@ export const DisclosureTrigger = forwardRef(function DisclosureTrigger(
    * attributes.
    */
   const [isButtonElement, setIsButtonElement] = useState(Comp === "button");
-  const ownRef = useRef(null);
+  const ownRef = useRef<HTMLElement | null>(null);
   const setButtonRef = useCallback(
     node => {
       ownRef.current = node;
@@ -131,17 +157,17 @@ export const DisclosureTrigger = forwardRef(function DisclosureTrigger(
 
   const ref = useForkedRef(forwardedRef, setButtonRef);
 
-  function handleClick(event) {
+  function handleClick(event: React.MouseEvent) {
     event.preventDefault();
-    ownRef.current.focus();
+    ownRef.current && ownRef.current.focus();
     onSelect();
   }
 
-  function handleKeyDown(event) {
+  function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
     if (!isButtonElement && (key === " " || key === "Enter")) {
       event.preventDefault();
-      ownRef.current.click();
+      ownRef.current && ownRef.current.click();
     }
   }
 
@@ -162,6 +188,8 @@ export const DisclosureTrigger = forwardRef(function DisclosureTrigger(
   );
 });
 
+type DisclosureTriggerProps = {};
+
 DisclosureTrigger.displayName = "DisclosureTrigger";
 if (__DEV__) {
   DisclosureTrigger.propTypes = {
@@ -171,32 +199,43 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// DisclosurePanel
 
-export const DisclosurePanel = forwardRef(function DisclosurePanel(
-  { children, ...props },
-  forwardedRef
-) {
-  const { panelId, open } = useDisclosureContext();
+/**
+ * DisclosurePanel
+ */
+export const DisclosurePanel = forwardRef<HTMLDivElement>(
+  function DisclosurePanel({ children, ...props }, forwardedRef) {
+    const { panelId, open } = useDisclosureContext();
 
-  return (
-    <div
-      ref={forwardedRef}
-      data-reach-disclosure-panel=""
-      data-open={open ? "" : undefined}
-      hidden={!open}
-      id={panelId}
-      tabIndex={-1}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-});
+    return (
+      <div
+        ref={forwardedRef}
+        data-reach-disclosure-panel=""
+        data-open={open ? "" : undefined}
+        hidden={!open}
+        id={panelId}
+        tabIndex={-1}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
 DisclosurePanel.displayName = "DisclosurePanel";
 if (__DEV__) {
-  DisclosurePanel.propTypes = {
-    children: PropTypes.node
-  };
+  DisclosurePanel.propTypes = {};
+}
+
+type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {};
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+interface IDisclosureContext {
+  disclosureId: string;
+  onSelect(): void;
+  open: boolean;
+  panelId: string;
 }
