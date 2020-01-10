@@ -1,6 +1,4 @@
 import React from "react";
-// import renderer from "react-test-renderer";
-// import { act } from "react-dom/test-utils";
 import { render, fireEvent } from "@testing-library/react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@testing-library/jest-dom/extend-expect";
