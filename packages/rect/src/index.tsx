@@ -53,7 +53,7 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  onChange?: (rect: PartialRect) => void;
+  onChange?: (rect: TRect) => void;
   /**
    * A function that calls back to you with a `ref` to place on an element and
    * the `rect` measurements of the dom node.
@@ -89,9 +89,9 @@ if (__DEV__) {
 export function useRect<T extends HTMLElement = HTMLElement>(
   nodeRef: React.RefObject<T>,
   observe: boolean = true,
-  onChange?: (rect: Partial<TRect>) => void
-) {
-  let [rect, setRect] = useState<TRect | null>(null);
+  onChange?: (rect: TRect) => void
+): TRect {
+  let [rect, setRect] = useState<TRect>({} as TRect);
   let observerRef = useRef<any>(null);
   useLayoutEffect(() => {
     const cleanup = () => {
@@ -114,7 +114,7 @@ export function useRect<T extends HTMLElement = HTMLElement>(
     return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [observe, onChange]);
-  return rect;
+  return rect as TRect;
 }
 
 export default Rect;

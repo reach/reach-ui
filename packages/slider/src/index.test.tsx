@@ -16,7 +16,8 @@ import {
 } from "./index";
 import "@testing-library/jest-dom/extend-expect";
 
-const getCurrentValue = el => Number(el.getAttribute("aria-valuenow"));
+const getCurrentValue = (el: HTMLElement) =>
+  Number(el.getAttribute("aria-valuenow"));
 
 describe("rendering", () => {
   it("should match the snapshot", () => {
