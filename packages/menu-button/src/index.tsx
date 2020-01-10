@@ -214,7 +214,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
 /**
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton-props
  */
-export type MenuButtonProps = React.HTMLAttributes<HTMLButtonElement> & {
+export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   /**
    * Accepts any renderable content.
    *
