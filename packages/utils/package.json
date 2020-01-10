@@ -2,17 +2,13 @@
   "name": "@reach/utils",
   "version": "0.7.1",
   "description": "Internal, shared utilities for Reach UI.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/utils"
   },
-  "main": "dist/index.js",
-  "module": "dist/utils.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
     "clean": "rm -rf ./dist",
@@ -22,6 +18,10 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT"
+  "main": "dist/index.js",
+  "module": "dist/utils.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
 }

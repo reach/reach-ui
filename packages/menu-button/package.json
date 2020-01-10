@@ -2,20 +2,13 @@
   "name": "@reach/menu-button",
   "version": "0.7.1",
   "description": "Accessible React button dropdown menu.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/menu-button"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/menu-button.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "styles.css"
-  ],
   "scripts": {
     "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
     "clean": "rm -rf ./dist",
@@ -31,5 +24,12 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  }
+  },
+  "main": "dist/index.js",
+  "module": "dist/menu-button.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "styles.css"
+  ]
 }

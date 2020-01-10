@@ -2,17 +2,13 @@
   "name": "@reach/alert",
   "version": "0.7.1",
   "description": "Screen-reader-friendly alert messages.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/alert"
   },
-  "main": "dist/index.js",
-  "module": "dist/alert.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
     "clean": "rm -rf ./dist",
@@ -27,6 +23,10 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT"
+  "main": "dist/index.js",
+  "module": "dist/alert.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
 }
