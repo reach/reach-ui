@@ -305,7 +305,7 @@ export const Combobox = forwardRefWithAs<"div", ComboboxProps>(
     useFocusManagement(data.lastEventType, inputRef);
 
     const id = useId(rest.id);
-    const listboxId = makeId("listbox", id);
+    const listboxId = id ? makeId("listbox", id) : "listbox";
 
     const context: IComboboxContext = {
       autocompletePropRef,

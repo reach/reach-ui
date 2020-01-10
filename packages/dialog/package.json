@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Accessible React Modal Dialog.",
   "repository": {
     "type": "git",
@@ -9,14 +9,21 @@
   },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
+  "module": "dist/dialog.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "styles.css"
+  ],
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/portal": "^0.7.0",
-    "@reach/utils": "^0.7.0",
+    "@reach/portal": "^0.7.1",
+    "@reach/utils": "^0.7.1",
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.2.1",
     "react-remove-scroll": "^2.2.0"
@@ -24,13 +31,5 @@
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
-  },
-  "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
-    "styles.css"
-  ]
+  }
 }

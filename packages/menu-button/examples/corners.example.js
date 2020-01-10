@@ -4,6 +4,15 @@ import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { createGlobalStyle } from "styled-components";
 import "@reach/menu-button/styles.css";
 
+/*
+ * Noticed a funny bug in this example where the immediate placement of the
+ * popup isn't quite right in the first frame, leading to a flash of jank.
+ * This appears to happen with other examples that have multiple buttons in
+ * the same component, but I'm not 100% sure what's going on just yet.
+ *
+ * TODO: Fix the jank!
+ */
+
 const GlobalStyle = createGlobalStyle`
   html,
   body {

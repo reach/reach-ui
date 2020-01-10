@@ -1,16 +1,22 @@
 {
   "name": "@reach/window-size",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Measure the window size in React",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/window-size"
   },
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
+  "module": "dist/window-size.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
     "prop-types": "^15.7.2"
@@ -20,13 +26,5 @@
     "react-dom": "^16.8.0"
   },
   "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
-    "styles.css"
-  ]
+  "license": "MIT"
 }

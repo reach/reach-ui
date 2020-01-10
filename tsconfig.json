@@ -1,30 +1,16 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true,
-    "baseUrl": "./",
-    "declaration": true,
-    "emitDecoratorMetadata": false,
-    "esModuleInterop": true,
-    "experimentalDecorators": false,
-    "importHelpers": true,
-    "jsx": "react",
-    "lib": ["dom", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "baseUrl": ".",
     "paths": {
+      "@reach/accordion": ["packages/accordion/src"],
       "@reach/alert": ["packages/alert/src"],
       "@reach/alert-dialog": ["packages/alert-dialog/src"],
       "@reach/auto-id": ["packages/auto-id/src"],
       "@reach/combobox": ["packages/combobox/src"],
       "@reach/component-component": ["packages/component-component/src"],
       "@reach/dialog": ["packages/dialog/src"],
+      "@reach/disclosure": ["packages/disclosure/src"],
       "@reach/menu-button": ["packages/menu-button/src"],
       "@reach/popover": ["packages/popover/src"],
       "@reach/portal": ["packages/portal/src"],
@@ -36,26 +22,6 @@
       "@reach/utils": ["packages/utils/src"],
       "@reach/visually-hidden": ["packages/visually-hidden/src"],
       "@reach/window-size": ["packages/window-size/src"]
-    },
-    "pretty": true,
-    "removeComments": true,
-    "rootDir": "./",
-    "sourceMap": true,
-    "strict": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "stripInternal": true,
-    "target": "es5",
-    "types": ["react", "jest"]
-  },
-  "include": ["packages"],
-  "exclude": [
-    "node_modules",
-    "packages/*/es",
-    "packages/*/umd",
-    "packages/*/index.js",
-    "shared",
-    "website"
-  ]
+    }
+  }
 }

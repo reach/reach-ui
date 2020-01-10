@@ -20,6 +20,7 @@
     "@reach/portal": "latest",
     "@reach/rect": "latest",
     "@reach/skip-nav": "latest",
+    "@reach/slider": "latest",
     "@reach/tabs": "latest",
     "@reach/tooltip": "latest",
     "@reach/utils": "latest",

@@ -1,4 +1,5 @@
 node_modules/
 
+/packages/*/dist
 /packages/*/index.js
 /packages/*/es/

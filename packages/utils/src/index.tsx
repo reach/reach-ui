@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 
-import { useRef, useMemo, useEffect } from "react";
+import {
+  useRef,
+  useMemo,
+  useEffect,
+  isValidElement,
+  cloneElement
+} from "react";
 import {
   As,
   AssignableRef,
@@ -24,6 +30,8 @@ let checkStyles = (packageName: string): void => {};
 
 if (__DEV__) {
   checkStyles = (pkg: string) => {
+    console.warn({ env: process.env.NODE_ENV });
+
     // only check once per package
     if (checkedPkgs[pkg]) return;
     checkedPkgs[pkg] = true;
@@ -73,6 +81,17 @@ export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
       throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
     }
   }
+}
+
+export function cloneValidElement<P>(
+  element: React.ReactElement<P> | React.ReactNode,
+  props?: Partial<P> & React.Attributes,
+  ...children: React.ReactNode[]
+): React.ReactElement<P> | React.ReactNode {
+  if (!isValidElement(element)) {
+    return element;
+  }
+  return cloneElement(element, props, ...children);
 }
 
 /**
@@ -127,12 +146,12 @@ export function useForkedRef<T = any>(...refs: AssignableRef<T>[]) {
  *
  * @param value
  */
-export function usePrevious(value: any) {
-  const ref = useRef();
+export function usePrevious<T = any>(value: T) {
+  const ref = useRef<T | null>(null);
   useEffect(() => {
     ref.current = value;
   }, [value]);
-  return ref.current as any;
+  return ref.current;
 }
 
 /**
@@ -161,9 +180,7 @@ export function useUpdateEffect(effect: () => any, deps?: any[]) {
  * @param theirHandler User-supplied event handler
  * @param ourHandler Library-supplied event handler
  */
-export function wrapEvent<
-  E extends React.SyntheticEvent = React.SyntheticEvent
->(
+export function wrapEvent<E extends React.SyntheticEvent | Event>(
   theirHandler: ((event: E) => any) | undefined,
   ourHandler: (event: E) => any
 ): (event: E) => any {
