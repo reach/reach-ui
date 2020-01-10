@@ -10,7 +10,7 @@
 
 import React, { useRef, useState, useLayoutEffect } from "react";
 import PropTypes from "prop-types";
-import observeRect, { Rect as TRect, PartialRect } from "@reach/observe-rect";
+import observeRect from "@reach/observe-rect";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,7 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  onChange?: (rect: TRect) => void;
+  onChange?: (rect: PRect) => void;
   /**
    * A function that calls back to you with a `ref` to place on an element and
    * the `rect` measurements of the dom node.
@@ -64,7 +64,7 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  children(args: { rect: TRect | null; ref: React.Ref<any> }): JSX.Element;
+  children(args: { rect: PRect | null; ref: React.Ref<any> }): JSX.Element;
 };
 
 Rect.displayName = "Rect";
@@ -89,9 +89,10 @@ if (__DEV__) {
 export function useRect<T extends HTMLElement = HTMLElement>(
   nodeRef: React.RefObject<T>,
   observe: boolean = true,
-  onChange?: (rect: TRect) => void
-): TRect {
-  let [rect, setRect] = useState<TRect>({} as TRect);
+  onChange?: (rect: DOMRect) => void
+): null | DOMRect {
+  let initialRectSet = useRef(false);
+  let [rect, setRect] = useState<DOMRect | null>(null);
   let observerRef = useRef<any>(null);
   useLayoutEffect(() => {
     const cleanup = () => {
@@ -104,19 +105,34 @@ export function useRect<T extends HTMLElement = HTMLElement>(
     }
 
     if (!observerRef.current && nodeRef.current) {
-      observerRef.current = observeRect(nodeRef.current, (rect: TRect) => {
+      observerRef.current = observeRect(nodeRef.current, (rect: DOMRect) => {
         onChange && onChange(rect);
         setRect(rect);
       });
+    }
+
+    if (!initialRectSet.current) {
+      initialRectSet.current = true;
+      setRect(nodeRef.current.getBoundingClientRect());
     }
 
     observe && observerRef.current.observe();
     return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [observe, onChange]);
-  return rect as TRect;
+
+  return rect;
 }
 
 export default Rect;
 
-export { TRect, PartialRect };
+export type PartialRect = Partial<PRect>;
+
+export type PRect = Partial<DOMRect> & {
+  readonly bottom: number;
+  readonly height: number;
+  readonly left: number;
+  readonly right: number;
+  readonly top: number;
+  readonly width: number;
+};

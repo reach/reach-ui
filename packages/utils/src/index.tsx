@@ -30,8 +30,6 @@ let checkStyles = (packageName: string): void => {};
 
 if (__DEV__) {
   checkStyles = (pkg: string) => {
-    console.warn({ env: process.env.NODE_ENV });
-
     // only check once per package
     if (checkedPkgs[pkg]) return;
     checkedPkgs[pkg] = true;

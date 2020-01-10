@@ -15,7 +15,7 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/observe-rect": "^1.0.4",
+    "@reach/observe-rect": "^1.0.5",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
