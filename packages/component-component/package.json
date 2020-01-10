@@ -13,7 +13,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./build-package"
+    "build": "yarn clean && node ./build-package",
+    "clean": "rm -rf ./dist",
+    "compile": "node ./build-package"
   },
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",

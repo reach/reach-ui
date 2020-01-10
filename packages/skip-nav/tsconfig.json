@@ -1,11 +1,5 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src", "types", "../../types"],
-  "compilerOptions": {
-    "baseUrl": "./",
-    "rootDir": "./",
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
-    }
-  }
+  "compilerOptions": {}
 }
