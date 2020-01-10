@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Accessible React Modal Dialog.",
   "repository": {
     "type": "git",
@@ -10,7 +10,6 @@
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "dist/index.js",
-  "umd:main": "dist/dialog.umd.production.js",
   "module": "dist/dialog.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -18,10 +17,10 @@
     "styles.css"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
-    "@reach/portal": "^0.7.0",
+    "@reach/portal": "^0.7.1",
     "@reach/utils": "^0.7.1",
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.2.1",

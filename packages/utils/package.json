@@ -8,14 +8,13 @@
     "directory": "packages/utils"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/utils.umd.production.js",
   "module": "dist/utils.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "peerDependencies": {
     "react": "^16.8.0",

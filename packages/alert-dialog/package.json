@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Accessible React Alert Dialog.",
   "repository": {
     "type": "git",
@@ -10,18 +10,17 @@
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "main": "dist/index.js",
-  "umd:main": "dist/alert-dialog.umd.production.js",
   "module": "dist/alert-dialog.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.0",
-    "@reach/dialog": "^0.7.0",
+    "@reach/auto-id": "^0.7.1",
+    "@reach/dialog": "^0.7.1",
     "@reach/utils": "^0.7.1",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2"

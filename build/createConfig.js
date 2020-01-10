@@ -1,8 +1,14 @@
 // https://github.com/jaredpalmer/tsdx#customization
 let globals = {
+  invariant: "Invariant",
   tslib: "TSLib",
   "prop-types": "PropTypes",
   "react-dom": "ReactDOM",
+  "@reach/auto-id": "ReachAutoID",
+  "@reach/dialog": "ReachDialog",
+  "@reach/popover": "ReachPopover",
+  "@reach/portal": "ReachPortal",
+  "@reach/rect": "ReactRect",
   "@reach/visually-hidden": "ReachVisuallyHidden",
   "@reach/utils": "ReachUtils"
 };

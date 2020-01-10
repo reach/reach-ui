@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
-    "baseUrl": ".",
     "declaration": true,
     "emitDecoratorMetadata": false,
     "esModuleInterop": true,
@@ -25,25 +24,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "es5",
-    "paths": {
-      "@reach/alert": ["./packages/alert/src"],
-      "@reach/alert-dialog": ["./packages/alert-dialog/src"],
-      "@reach/auto-id": ["./packages/auto-id/src"],
-      "@reach/combobox": ["./packages/combobox/src"],
-      "@reach/component-component": ["./packages/component-component/src"],
-      "@reach/dialog": ["./packages/dialog/src"],
-      "@reach/menu-button": ["./packages/menu-button/src"],
-      "@reach/popover": ["./packages/popover/src"],
-      "@reach/portal": ["./packages/portal/src"],
-      "@reach/rect": ["./packages/rect/src"],
-      "@reach/skip-nav": ["./packages/skip-nav/src"],
-      "@reach/slider": ["./packages/slider/src"],
-      "@reach/tabs": ["./packages/tabs/src"],
-      "@reach/tooltip": ["./packages/tooltip/src"],
-      "@reach/utils": ["./packages/utils/src"],
-      "@reach/visually-hidden": ["./packages/visually-hidden/src"],
-      "@reach/window-size": ["./packages/window-size/src"]
-    }
+    "target": "es5"
   }
 }

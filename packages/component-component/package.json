@@ -1,6 +1,6 @@
 {
   "name": "@reach/component-component",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Declarative React Component Definitions",
   "repository": {
     "type": "git",

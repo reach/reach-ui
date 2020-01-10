@@ -1,6 +1,6 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Skip navigation links for screen reader and keyboard users.",
   "repository": {
     "type": "git",
@@ -8,7 +8,6 @@
     "directory": "packages/skip-nav"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/skip-nav.umd.production.js",
   "module": "dist/skip-nav.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -16,7 +15,7 @@
     "styles.css"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
     "@reach/utils": "^0.7.1"

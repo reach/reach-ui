@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Measure the window size in React",
   "repository": {
     "type": "git",
@@ -8,14 +8,13 @@
     "directory": "packages/window-size"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/window-size.umd.production.js",
   "module": "dist/window-size.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
     "prop-types": "^15.7.2"

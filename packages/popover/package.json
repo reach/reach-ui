@@ -1,6 +1,6 @@
 {
   "name": "@reach/popover",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Render a portal positioned relative to another element.",
   "repository": {
     "type": "git",
@@ -8,18 +8,17 @@
     "directory": "packages/popover"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/popover.umd.production.js",
   "module": "dist/popover.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
-    "@reach/portal": "^0.7.0",
-    "@reach/rect": "^0.7.0",
+    "@reach/portal": "^0.7.1",
+    "@reach/rect": "^0.7.1",
     "@reach/utils": "^0.7.1",
     "tabbable": "^4.0.0"
   },

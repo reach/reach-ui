@@ -1,6 +1,6 @@
 {
   "name": "@reach/rect",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Measure React elements position in the DOM",
   "repository": {
     "type": "git",
@@ -8,14 +8,13 @@
     "directory": "packages/rect"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/rect.umd.production.js",
   "module": "dist/rect.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "dependencies": {
     "@reach/observe-rect": "^1.0.4",

@@ -1,6 +1,6 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
   "repository": {
     "type": "git",
@@ -8,14 +8,13 @@
     "directory": "packages/auto-id"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/auto-id.umd.production.js",
   "module": "dist/auto-id.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "peerDependencies": {
     "react": "^16.8.0",

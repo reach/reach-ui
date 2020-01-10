@@ -8,14 +8,13 @@
     "directory": "packages/visually-hidden"
   },
   "main": "dist/index.js",
-  "umd:main": "dist/visually-hidden.umd.production.js",
   "module": "dist/visually-hidden.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm,umd"
+    "build": "cross-env NODE_ENV=production tsdx build --format=cjs,esm"
   },
   "peerDependencies": {
     "react": "^16.8.0",
