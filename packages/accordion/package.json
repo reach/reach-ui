@@ -10,25 +10,24 @@
     "directory": "packages/accordion"
   },
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "0.7.0",
-    "@reach/utils": "0.7.0",
+    "@reach/auto-id": "0.7.1",
+    "@reach/utils": "0.7.1",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "main": "index.js",
-  "module": "es/index.js",
+  "main": "dist/index.js",
+  "module": "dist/accordion.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
+    "dist",
     "styles.css"
   ]
 }
