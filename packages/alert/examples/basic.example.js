@@ -102,14 +102,14 @@ function useMessageTimeout(messages, callback, time = 5000) {
   const lastMessageCount = usePrevious(messages.length);
   React.useEffect(() => {
     if (messages.length && lastMessageCount < messages.length) {
-      timeouts.current.push(setTimeout(callback, time));
+      timeouts.current.push(window.setTimeout(callback, time));
     }
   }, [messages, lastMessageCount, callback, time]);
 
   React.useEffect(() => {
     const allTimeouts = timeouts.current;
     return () => {
-      allTimeouts.forEach(clearTimeout);
+      allTimeouts.forEach(window.clearTimeout);
     };
   }, []);
 }

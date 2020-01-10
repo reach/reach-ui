@@ -124,9 +124,9 @@ function createMirror(type: "polite" | "assertive", doc = document): Mirror {
 
 function renderAlerts() {
   if (renderTimer != null) {
-    clearTimeout(renderTimer);
+    window.clearTimeout(renderTimer);
   }
-  renderTimer = setTimeout(() => {
+  renderTimer = window.setTimeout(() => {
     Object.keys(elements).forEach(elementType => {
       let type: RegionTypes = elementType as RegionTypes;
       let container = liveRegions[type]!;
