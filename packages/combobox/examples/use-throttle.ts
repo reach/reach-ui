@@ -5,14 +5,14 @@ export function useThrottle(value: any, limit: number) {
   const lastRan = useRef(Date.now());
 
   useEffect(() => {
-    const handler = setTimeout(() => {
+    const handler = window.setTimeout(() => {
       if (Date.now() - lastRan.current >= limit) {
         setThrottledValue(value);
         lastRan.current = Date.now();
       }
     }, limit - (Date.now() - lastRan.current));
 
-    return () => clearTimeout(handler);
+    return () => window.clearTimeout(handler);
   }, [value, limit]);
 
   return throttledValue;
