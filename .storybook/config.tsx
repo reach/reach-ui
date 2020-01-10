@@ -1,24 +1,17 @@
-import "./styles.css";
 import React from "react";
 import path from "path";
 import { configure } from "@storybook/react";
 import { getStorybook, storiesOf } from "@storybook/react";
+import "./styles.css";
 import "pepjs";
 
-let getPackageName = filePath =>
+let getPackageName = (filePath: string) =>
   path
     .dirname(filePath)
     .split(path.sep)
     .reverse()[1];
 
 configure(() => {
-  // Story book is SUPER SLOW so I tend to do just one example at a time.
-  // const {
-  //   name,
-  //   Example
-  // } = require("../packages/combobox/examples/no-popover.example.js");
-  // storiesOf("Combobox", module).add(name, () => <Example />);
-
   // Automatically import all examples
   const req = require.context(
     "../packages",
