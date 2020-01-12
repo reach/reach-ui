@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/skip-nav.svg)](https://npm.im/@reach/skip-nav) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/skip-nav) | [Source](https://github.com/reach/reach-ui/tree/master/packages/skip-nav) | [WAI ARIA](https://webaim.org/techniques/skipnav/)
+[Docs](https://reacttraining.com/reach-ui/skip-nav) | [Source](https://github.com/reach/reach-ui/tree/master/packages/skip-nav) | [WAI-ARIA](https://webaim.org/techniques/skipnav/)
 
 Skip navigation link for screen reader and keyboard users. Because the main content is not usually the first thing in the document, it's valuable to provide a shortcut for keyboard and screen reader users to skip to the content.
 
