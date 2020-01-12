@@ -23,7 +23,7 @@ yarn test         # runs tests in all packages
 yarn release      # publishes changed packages
 ```
 
-## `www` directory scripts
+## `website` directory scripts
 
 The website uses [Gatsby](https://gatsbyjs.org) v2 with [Gatsby MDX](https://github.com/ChristopherBiscardi/gatsby-mdx) powering most of the pages. It is deployed with [now](https://now.sh)
 
