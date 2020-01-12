@@ -26,6 +26,7 @@
   "module": "dist/rect.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist"
   ]
 }

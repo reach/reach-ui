@@ -33,6 +33,7 @@
   "main": "dist/index.js",
   "module": "dist/component-component.esm.js",
   "files": [
+    "README.md",
     "dist"
   ]
 }

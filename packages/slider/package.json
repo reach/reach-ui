@@ -28,6 +28,7 @@
   "module": "dist/slider.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist",
     "styles.css"
   ]

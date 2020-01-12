@@ -67,9 +67,11 @@ yarn add @reach/slider
 ```js
 import {
   Slider,
+  SliderInput,
   SliderTrack,
   SliderTrackHighlight,
-  SliderHandle
+  SliderHandle,
+  SliderMarker
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 ```
@@ -79,13 +81,17 @@ import "@reach/slider/styles.css";
 ```jsx
 // jsx-demo
 function Example() {
+  return <Slider min={0} max={200} step={10} />;
+}
+
+function ExampleComposed() {
   return (
-    <Slider>
+    <SliderInput min={0} max={200} step={10}>
       <SliderTrack>
         <SliderTrackHighlight />
         <SliderHandle />
       </SliderTrack>
-    </Slider>
+    </SliderInput>
   );
 }
 ```

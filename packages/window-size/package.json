@@ -25,6 +25,7 @@
   "module": "dist/window-size.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist"
   ]
 }
