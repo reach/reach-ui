@@ -104,7 +104,7 @@ export function useRect<T extends HTMLElement = HTMLElement>(
       return cleanup;
     }
 
-    if (!observerRef.current && nodeRef.current) {
+    if (!observerRef.current) {
       observerRef.current = observeRect(nodeRef.current, (rect: DOMRect) => {
         onChange && onChange(rect);
         setRect(rect);

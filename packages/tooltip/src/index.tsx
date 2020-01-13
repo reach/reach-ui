@@ -43,13 +43,13 @@
  */
 
 import React, {
-  Fragment,
-  cloneElement,
   Children,
-  useState,
-  useRef,
+  cloneElement,
   forwardRef,
-  useEffect
+  Fragment,
+  useEffect,
+  useRef,
+  useState
 } from "react";
 import { useId } from "@reach/auto-id";
 import { checkStyles, makeId, useForkedRef, wrapEvent } from "@reach/utils";

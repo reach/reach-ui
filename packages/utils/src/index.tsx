@@ -277,7 +277,8 @@ interface IDescendantContext<T> {
   unregisterDescendant(element: Descendant<T>["element"]): void;
 }
 
-const DescendantContext = createContext<IDescendantContext<any>>(
+const DescendantContext = createNamedContext<IDescendantContext<any>>(
+  "DescendantContext",
   {} as IDescendantContext<any>
 );
 

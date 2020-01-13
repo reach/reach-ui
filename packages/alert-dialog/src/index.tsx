@@ -30,7 +30,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog
  */
 
-import React, { createContext } from "react";
+import React from "react";
 import {
   DialogOverlay,
   DialogContent,
@@ -38,11 +38,12 @@ import {
   DialogContentProps
 } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
-import { makeId } from "@reach/utils";
+import { createNamedContext, makeId } from "@reach/utils";
 import invariant from "invariant";
 import PropTypes from "prop-types";
 
-let AlertDialogContext = createContext<IAlertDialogContext>(
+let AlertDialogContext = createNamedContext<IAlertDialogContext>(
+  "AlertDialogContext",
   {} as IAlertDialogContext
 );
 
