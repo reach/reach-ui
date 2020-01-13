@@ -114,6 +114,25 @@ export function createNamedContext<T>(
   return Ctx;
 }
 
+export function findLastIndex<T = any>(
+  array: T[],
+  predicate: (element: T, index?: number, arr?: T[]) => boolean
+): number {
+  let length = array.length >>> 0;
+  if (!length) {
+    return -1;
+  }
+  let n = length - 1;
+  while (n >= 0) {
+    let value = array[n];
+    if (predicate(value, n, array)) {
+      return n;
+    }
+    --n;
+  }
+  return -1;
+}
+
 /**
  * Get the scrollbar offset distance.
  */
@@ -282,8 +301,10 @@ const DescendantContext = createNamedContext<IDescendantContext<any>>(
   {} as IDescendantContext<any>
 );
 
-export function useDescendantContext<T>() {
-  return useContext(DescendantContext as React.Context<IDescendantContext<T>>);
+export function useDescendantContext<T>(
+  context: React.Context<IDescendantContext<T>> = DescendantContext
+) {
+  return useContext(context as React.Context<IDescendantContext<T>>);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +334,12 @@ export function useDescendantContext<T>() {
  * this is not the case, we can require an explicit index from the app.
  */
 export function useDescendant<T>(
-  { element, key, disabled }: Descendant<T>,
+  {
+    context = DescendantContext,
+    element,
+    key,
+    disabled
+  }: Descendant<T> & { context?: React.Context<IDescendantContext<T>> },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
@@ -321,7 +347,7 @@ export function useDescendant<T>(
     registerDescendant,
     unregisterDescendant,
     descendants
-  } = useDescendantContext<T>();
+  } = useDescendantContext<T>(context);
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
@@ -340,10 +366,12 @@ export function useDescendants<T>() {
 }
 
 export function DescendantProvider<T>({
+  context: Ctx = DescendantContext,
   children,
   descendants,
   setDescendants
 }: {
+  context?: React.Context<IDescendantContext<any>>;
   children: React.ReactNode;
   descendants: Descendant<T>[];
   setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
@@ -440,9 +468,5 @@ export function DescendantProvider<T>({
     };
   }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
 
-  return (
-    <DescendantContext.Provider value={value}>
-      {children}
-    </DescendantContext.Provider>
-  );
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
