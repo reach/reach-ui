@@ -1,5 +1,13 @@
-////////////////////////////////////////////////////////////////////////////////
-// Welcome to @reach/accordion!
+/**
+ * Welcome to @reach/accordion!
+ *
+ * TODO: Screen reader testing
+ * TODO: Animation examples
+ *
+ * @see Docs     https://reacttraining.com/reach-ui/accordion
+ * @see Source   https://github.com/reach/reach-ui/tree/master/packages/accordion
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+ */
 
 import React, {
   createContext,
@@ -23,13 +31,6 @@ import {
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
-
-// A11y reference:
-//   - https://www.w3.org/TR/wai-aria-practices/examples/accordion/accordion.html
-//   - https://inclusive-components.design/collapsible-sections/
-
-// TODO: Screen reader testing
-// TODO: Animation examples
 
 const AccordionContext = createContext<IAccordionContext>(
   {} as IAccordionContext
