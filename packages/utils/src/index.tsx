@@ -282,7 +282,7 @@ const DescendantContext = createNamedContext<IDescendantContext<any>>(
   {} as IDescendantContext<any>
 );
 
-function useDescendantContext<T>() {
+export function useDescendantContext<T>() {
   return useContext(DescendantContext as React.Context<IDescendantContext<T>>);
 }
 
