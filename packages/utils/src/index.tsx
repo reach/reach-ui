@@ -260,17 +260,17 @@ export {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-type DescendantElement<T = HTMLElement> = T extends HTMLElement
+export type DescendantElement<T = HTMLElement> = T extends HTMLElement
   ? T
   : HTMLElement;
 
-type Descendant<T> = {
+export type Descendant<T> = {
   element: DescendantElement<T>;
   key?: string | number | null;
   disabled?: boolean;
 };
 
-interface IDescendantContext<T> {
+export interface IDescendantContext<T> {
   descendants: Descendant<T>[];
   focusNodes: DescendantElement<T>[];
   registerDescendant(descendant: Descendant<T>): void;
