@@ -105,6 +105,15 @@ export function cloneValidElement<P>(
   return cloneElement(element, props, ...children);
 }
 
+export function createNamedContext<T>(
+  name: string,
+  defaultValue: T
+): React.Context<T> {
+  const Ctx = createContext<T>(defaultValue);
+  Ctx.displayName = name;
+  return Ctx;
+}
+
 /**
  * Get the scrollbar offset distance.
  */
