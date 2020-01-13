@@ -20,7 +20,6 @@
 
 import React, {
   forwardRef,
-  createContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -32,11 +31,12 @@ import React, {
 import PropTypes from "prop-types";
 import {
   checkStyles,
+  ComponentWithForwardedRef,
+  createNamedContext,
   forwardRefWithAs,
   makeId,
-  wrapEvent,
   useForkedRef,
-  ComponentWithForwardedRef
+  wrapEvent
 } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
@@ -236,14 +236,20 @@ interface IComboboxContext {
   openOnFocus: boolean;
 }
 
-const ComboboxContext = createContext({} as IComboboxContext);
+const ComboboxContext = createNamedContext(
+  "ComboboxContext",
+  {} as IComboboxContext
+);
 
 /*
  * Allows us to put the option's value on context so that ComboboxOptionText
  * can work it's highlight text magic no matter what else is rendered around
  * it.
  */
-const OptionContext = createContext((null as unknown) as ComboboxValue);
+const OptionContext = createNamedContext(
+  "OptionContext",
+  (null as unknown) as ComboboxValue
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 

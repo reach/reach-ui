@@ -21,7 +21,6 @@
  */
 
 import React, {
-  createContext,
   forwardRef,
   useCallback,
   useContext,
@@ -33,7 +32,13 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import { useId } from "@reach/auto-id";
-import { checkStyles, wrapEvent, useForkedRef, makeId } from "@reach/utils";
+import {
+  checkStyles,
+  createNamedContext,
+  makeId,
+  useForkedRef,
+  wrapEvent
+} from "@reach/utils";
 
 export type SliderAlignment = "center" | "contain";
 export type SliderOrientation = "horizontal" | "vertical";
@@ -49,7 +54,10 @@ export const SLIDER_HANDLE_ALIGN_CENTER: SliderAlignment = "center";
 // value's center mark to accommodate
 export const SLIDER_HANDLE_ALIGN_CONTAIN: SliderAlignment = "contain";
 
-const SliderContext = createContext<ISliderContext>({} as ISliderContext);
+const SliderContext = createNamedContext<ISliderContext>(
+  "SliderContext",
+  {} as ISliderContext
+);
 const useSliderContext = () => useContext(SliderContext);
 
 // These proptypes are shared between the composed SliderInput component and the

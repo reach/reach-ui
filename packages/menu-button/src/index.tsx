@@ -10,7 +10,6 @@
  */
 
 import React, {
-  createContext,
   forwardRef,
   useCallback,
   useContext,
@@ -24,6 +23,7 @@ import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
   checkStyles,
+  createNamedContext,
   forwardRefWithAs,
   makeId,
   noop,
@@ -43,10 +43,14 @@ const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
 
-const DescendantContext = createContext<IDescendantContext>(
+const DescendantContext = createNamedContext<IDescendantContext>(
+  "DescendantContext",
   {} as IDescendantContext
 );
-const MenuContext = createContext<IMenuContext>({} as IMenuContext);
+const MenuContext = createNamedContext<IMenuContext>(
+  "MenuContext",
+  {} as IMenuContext
+);
 const useDescendantContext = () => useContext(DescendantContext);
 const useMenuContext = () => useContext(MenuContext);
 
