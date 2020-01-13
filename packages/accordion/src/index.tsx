@@ -14,7 +14,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -22,11 +21,15 @@ import React, {
 import {
   checkStyles,
   createNamedContext,
+  DescendantProvider,
   forwardRefWithAs,
   makeId,
   noop,
-  wrapEvent,
-  useForkedRef
+  useDescendant,
+  useDescendantContext,
+  useDescendants,
+  useForkedRef,
+  wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -537,218 +540,4 @@ interface IAccordionItemContext {
   itemId: string;
   triggerRef: TriggerRef;
   panelId: string;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-type DescendantElement<T = HTMLElement> = T extends HTMLElement
-  ? T
-  : HTMLElement;
-
-type Descendant<T> = {
-  element: DescendantElement<T>;
-  key?: string | number | null;
-  disabled?: boolean;
-};
-
-interface IDescendantContext<T> {
-  descendants: Descendant<T>[];
-  focusNodes: DescendantElement<T>[];
-  registerDescendant(descendant: Descendant<T>): void;
-  unregisterDescendant(element: Descendant<T>["element"]): void;
-}
-
-const DescendantContext = createNamedContext<IDescendantContext<any>>(
-  "DescendantContext",
-  {} as IDescendantContext<any>
-);
-
-function useDescendantContext<T>() {
-  return useContext(DescendantContext as React.Context<IDescendantContext<T>>);
-}
-
-/**
- * This hook registers our descendant by passing it into an array. We can then
- * search that array by to find its index when registering it in the component.
- * We use this for focus management, keyboard navigation, and typeahead
- * functionality for some components.
- *
- * The hook accepts the element node and (optionally) a key. The key is useful
- * if multiple descendants have identical text values and we need to
- * differentiate siblings for some reason.
- *
- * Our main goals with this are:
- *   1) maximum composability,
- *   2) minimal API friction
- *   3) SSR compatibility*
- *   4) concurrent safe
- *   5) index always up-to-date with the tree despite changes
- *   6) works with memoization of any component in the tree (hopefully)
- *
- * * As for SSR, the good news is that we don't actually need the index on the
- * server for most use-cases, as we are only using it to determine the order of
- * composed descendants for keyboard navigation. However, in the few cases where
- * this is not the case, we can require an explicit index from the app.
- */
-function useDescendant<T>(
-  { element, key, disabled }: Descendant<T>,
-  indexProp?: number
-) {
-  let [, forceUpdate] = useState();
-  let {
-    registerDescendant,
-    unregisterDescendant,
-    descendants
-  } = useDescendantContext<T>();
-
-  // Prevent any flashing
-  useIsomorphicLayoutEffect(() => {
-    if (!element) forceUpdate({});
-    registerDescendant({ element, key, disabled });
-    return () => unregisterDescendant(element);
-  }, [element, key, disabled]);
-
-  return (
-    indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
-  );
-}
-
-function useDescendants<T>() {
-  return useState<Descendant<T>[]>([]);
-}
-
-function DescendantProvider<T>({
-  children,
-  descendants,
-  setDescendants
-}: {
-  children: React.ReactNode;
-  descendants: Descendant<T>[];
-  setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
-}) {
-  let registerDescendant = React.useCallback(
-    ({ disabled, element, key: providedKey }: Descendant<T>) => {
-      if (!element) {
-        return;
-      }
-
-      setDescendants(items => {
-        if (items.find(({ element: _el }) => _el === element) == null) {
-          let key = providedKey ?? element.textContent;
-
-          /*
-           * When registering a descendant, we need to make sure we insert in
-           * into the array in the same order that it appears in the DOM. So as
-           * new descendants are added or maybe some are removed, we always know
-           * that the array is up-to-date and correct.
-           *
-           * So here we look at our registered descendants and see if the new
-           * element we are adding appears earlier than an existing descendant's
-           * DOM node via `node.compareDocumentPosition`. If it does, we insert
-           * the new element at this index. Because `registerDescendant` will be
-           * called in an effect every time the descendants state value changes,
-           * we should be sure that this index is accurate when descendent
-           * elements come or go from our component.
-           */
-          let index = items.findIndex(({ element: existingElement }) => {
-            if (!existingElement || !element) {
-              return false;
-            }
-            /*
-             * Does this element's DOM node appear before another item in the
-             * array in our DOM tree? If so, return true to grab the index at
-             * this point in the array so we know where to insert the new
-             * element.
-             */
-            return Boolean(
-              existingElement.compareDocumentPosition(element) &
-                Node.DOCUMENT_POSITION_PRECEDING
-            );
-          });
-
-          let newItem = { disabled, element, key };
-
-          // If an index is not found we will push the element to the end.
-          if (index === -1) {
-            return [...items, newItem];
-          }
-          return [...items.slice(0, index), newItem, ...items.slice(index)];
-        }
-        return items;
-      });
-    },
-    /*
-     * setDescendants is a state setter initialized by the useDescendants hook.
-     * We can safely ignore the lint warning here because it will not change
-     * between renders.
-     */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  let unregisterDescendant = useCallback(
-    (element: Descendant<T>["element"]) => {
-      if (!element) {
-        return;
-      }
-
-      setDescendants(items =>
-        items.filter(({ element: _el }) => element !== _el)
-      );
-    },
-    /*
-     * setDescendants is a state setter initialized by the useDescendants hook.
-     * We can safely ignore the lint warning here because it will not change
-     * between renders.
-     */
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  let focusNodes = descendants
-    .filter(({ disabled }) => !disabled)
-    .map(({ element }) => element);
-
-  const value: IDescendantContext<T> = useMemo(() => {
-    return {
-      descendants,
-      focusNodes,
-      registerDescendant,
-      unregisterDescendant
-    };
-  }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
-
-  return (
-    <DescendantContext.Provider value={value}>
-      {children}
-    </DescendantContext.Provider>
-  );
-}
-
-/*
- * React currently throws a warning when using useLayoutEffect on the server.
- * To get around it, we can conditionally useEffect on the server (no-op) and
- * useLayoutEffect in the browser. We occasionally need useLayoutEffect to ensure
- * we don't get a render flash for certain operations, but we may also need
- * affected components to render on the server. One example is when setting a
- * component's descendants to retrieve their index values. The index value may be
- * needed to determine whether a descendant is active, but with useEffect in the
- * browser there will be an initial frame where the active descendant is not set.
- *
- * Important to note that using this hook as an escape hatch will break the
- * eslint dependency warnings, so use sparingly only when needed and pay close
- * attention to the dependency array!
- *
- * TODO: Move to `utils`
- *
- * https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.js
- */
-const useIsomorphicLayoutEffect = canUseDOM() ? useLayoutEffect : useEffect;
-
-function canUseDOM() {
-  return (
-    typeof window !== "undefined" &&
-    typeof window.document !== "undefined" &&
-    typeof window.document.createElement !== "undefined"
-  );
 }
