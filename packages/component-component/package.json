@@ -1,6 +1,6 @@
 {
   "name": "@reach/component-component",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Declarative React Component Definitions",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -33,6 +33,7 @@
   "main": "dist/index.js",
   "module": "dist/component-component.esm.js",
   "files": [
+    "README.md",
     "dist"
   ]
 }

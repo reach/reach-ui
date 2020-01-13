@@ -55,7 +55,7 @@ import { useId } from "@reach/auto-id";
 import { checkStyles, makeId, useForkedRef, wrapEvent } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
-import { useRect, TRect } from "@reach/rect";
+import { useRect } from "@reach/rect";
 import PropTypes from "prop-types";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -247,7 +247,7 @@ export function useTooltip<T extends HTMLElement>({
   const ownRef = useRef<HTMLDivElement | null>(null);
 
   const ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
-  const triggerRect = useRect(ownRef, isVisible) as TRect;
+  const triggerRect = useRect(ownRef, isVisible);
 
   useEffect(() => {
     return subscribe(() => {
@@ -474,7 +474,7 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     const useAriaLabel = ariaLabel != null;
     const ownRef = useRef(null);
     const ref = useForkedRef(forwardedRef, ownRef);
-    const tooltipRect = useRect(ownRef, isVisible) as TRect;
+    const tooltipRect = useRect(ownRef, isVisible);
     return (
       <Fragment>
         <div
@@ -484,7 +484,7 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           children={label}
           style={{
             ...style,
-            ...getStyles(position, triggerRect, tooltipRect)
+            ...getStyles(position, triggerRect as PRect, tooltipRect as PRect)
           }}
           ref={ref}
           {...rest}
@@ -501,10 +501,10 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
 
 export type TooltipContentProps = {
   ariaLabel?: string;
-  position?: (position1: TRect, position2: TRect) => Partial<TRect>;
+  position?: Position;
   label: React.ReactNode;
   isVisible?: boolean;
-  triggerRect: TRect;
+  triggerRect: DOMRect | null;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "label">;
 
 TooltipContent.displayName = "TooltipContent";
@@ -518,9 +518,9 @@ if (__DEV__) {
 const OFFSET = 8;
 
 function getStyles(
-  position: (triggerRect: TRect, tooltipRect: TRect) => React.CSSProperties,
-  triggerRect: TRect,
-  tooltipRect: TRect
+  position: Position,
+  triggerRect: PRect,
+  tooltipRect: PRect
 ): React.CSSProperties {
   const haventMeasuredTooltipYet = !tooltipRect;
   if (haventMeasuredTooltipYet) {
@@ -529,10 +529,11 @@ function getStyles(
   return position(triggerRect, tooltipRect);
 }
 
-function positionDefault(
-  triggerRect: TRect,
-  tooltipRect: TRect
-): React.CSSProperties {
+const positionDefault: Position = (triggerRect, tooltipRect) => {
+  if (!triggerRect || !tooltipRect) {
+    return {};
+  }
+
   const collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
@@ -558,7 +559,7 @@ function positionDefault(
           triggerRect.height +
           window.pageYOffset}px`
   };
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -619,7 +620,7 @@ export interface TriggerParams {
 
 export interface TooltipParams {
   id: string;
-  triggerRect: TRect;
+  triggerRect: DOMRect | null;
   isVisible: boolean;
 }
 
@@ -654,4 +655,18 @@ interface StateChart {
 
 type StateContext = {
   id?: string | null;
+};
+
+export type Position = (
+  targetRect?: PRect | null,
+  popoverRect?: PRect | null
+) => React.CSSProperties;
+
+type PRect = Partial<DOMRect> & {
+  readonly bottom: number;
+  readonly height: number;
+  readonly left: number;
+  readonly right: number;
+  readonly top: number;
+  readonly width: number;
 };

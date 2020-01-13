@@ -103,6 +103,40 @@
       "housekeeping": "🏡 Housekeeping"
     }
   },
+  "eslintConfig": {
+    "extends": "react-app",
+    "globals": {
+      "__DEV__": "readonly"
+    },
+    "rules": {
+      "no-unused-vars": [
+        1,
+        {
+          "args": "after-used",
+          "ignoreRestSiblings": true,
+          "argsIgnorePattern": "^(event|_)$"
+        }
+      ],
+      "import/first": 0,
+      "jsx-a11y/no-static-element-interactions": [
+        1,
+        {
+          "handlers": [
+            "onClick",
+            "onMouseDown",
+            "onMouseUp",
+            "onKeyPress",
+            "onKeyDown",
+            "onKeyUp"
+          ]
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "packages/*/dist"
+  ],
   "jest": {
     "globals": {
       "__DEV__": "boolean"
@@ -113,5 +147,8 @@
     "setupFilesAfterEnv": [
       "<rootDir>/test/setupTests.ts"
     ]
+  },
+  "prettier": {
+    "singleQuote": false
   }
 }

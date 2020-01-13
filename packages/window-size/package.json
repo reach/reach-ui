@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Measure the window size in React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -25,6 +25,7 @@
   "module": "dist/window-size.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist"
   ]
 }

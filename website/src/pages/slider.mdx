@@ -20,7 +20,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/slider
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#slider
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#slider
 
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
@@ -67,9 +67,11 @@ yarn add @reach/slider
 ```js
 import {
   Slider,
+  SliderInput,
   SliderTrack,
   SliderTrackHighlight,
-  SliderHandle
+  SliderHandle,
+  SliderMarker
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 ```
@@ -79,13 +81,17 @@ import "@reach/slider/styles.css";
 ```jsx
 // jsx-demo
 function Example() {
+  return <Slider min={0} max={200} step={10} />;
+}
+
+function ExampleComposed() {
   return (
-    <Slider>
+    <SliderInput min={0} max={200} step={10}>
       <SliderTrack>
         <SliderTrackHighlight />
         <SliderHandle />
       </SliderTrack>
-    </Slider>
+    </SliderInput>
   );
 }
 ```

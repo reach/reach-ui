@@ -4,7 +4,7 @@
 
 import React, { useRef, forwardRef, useEffect } from "react";
 import Portal from "@reach/portal";
-import { useRect, TRect } from "@reach/rect";
+import { useRect, PRect } from "@reach/rect";
 import { useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
@@ -61,7 +61,7 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
         style={{
           ...style,
           position: "absolute",
-          ...getStyles(position, targetRect!, popoverRect!)
+          ...getStyles(position, targetRect, popoverRect)
         }}
         {...rest}
       />
@@ -75,8 +75,8 @@ PopoverImpl.displayName = "PopoverImpl";
 
 function getStyles(
   position: Position,
-  targetRect?: TRect,
-  popoverRect?: TRect
+  targetRect: PRect | null,
+  popoverRect: PRect | null
 ): React.CSSProperties {
   const needToMeasurePopup = !popoverRect;
   if (needToMeasurePopup) {
@@ -139,8 +139,8 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
 // }
 
 function getCollisions(
-  targetRect: TRect,
-  popoverRect: TRect,
+  targetRect: PRect,
+  popoverRect: PRect,
   offsetLeft: number = 0,
   offsetBottom: number = 0
 ) {
@@ -318,6 +318,6 @@ function useSimulateTabNavigationForReactTree<
 // Types
 
 export type Position = (
-  targetRect?: TRect,
-  popoverRect?: TRect
+  targetRect?: PRect | null,
+  popoverRect?: PRect | null
 ) => React.CSSProperties;

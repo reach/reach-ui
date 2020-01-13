@@ -1,6 +1,6 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -22,6 +22,7 @@
   "module": "dist/auto-id.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist"
   ]
 }
