@@ -260,9 +260,9 @@ export {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export type DescendantElement<T = HTMLElement> = T extends HTMLElement
-  ? T
-  : HTMLElement;
+export type DescendantElement<T = HTMLElement> =
+  | (T extends HTMLElement ? T : HTMLElement)
+  | null;
 
 export type Descendant<T> = {
   element: DescendantElement<T>;
