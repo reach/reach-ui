@@ -1,8 +1,14 @@
-////////////////////////////////////////////////////////////////////////////////
-// Welcome to @reach/disclosure!
+/**
+ * Welcome to @reach/disclosure!
+ *
+ * TODO: Screen reader testing
+ *
+ * @see Docs     https://reacttraining.com/reach-ui/disclosure
+ * @see Source   https://github.com/reach/reach-ui/tree/master/packages/disclosure
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#disclosure
+ */
 
 import React, {
-  createContext,
   forwardRef,
   useCallback,
   useContext,
@@ -10,21 +16,18 @@ import React, {
   useState
 } from "react";
 import {
+  createNamedContext,
   forwardRefWithAs,
   makeId,
-  wrapEvent,
-  useForkedRef
+  useForkedRef,
+  wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
 
-// A11y reference:
-//   - https://www.w3.org/TR/wai-aria-practices/examples/disclosure/disclosure-faq.html
-
-// TODO: Screen reader testing
-
-const DisclosureContext = createContext<IDisclosureContext>(
+const DisclosureContext = createNamedContext<IDisclosureContext>(
+  "DisclosureContext",
   {} as IDisclosureContext
 );
 const useDisclosureContext = () => useContext(DisclosureContext);

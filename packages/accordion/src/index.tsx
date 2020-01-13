@@ -10,7 +10,6 @@
  */
 
 import React, {
-  createContext,
   forwardRef,
   useCallback,
   useContext,
@@ -22,6 +21,7 @@ import React, {
 } from "react";
 import {
   checkStyles,
+  createNamedContext,
   forwardRefWithAs,
   makeId,
   noop,
@@ -32,10 +32,12 @@ import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
 
-const AccordionContext = createContext<IAccordionContext>(
+const AccordionContext = createNamedContext<IAccordionContext>(
+  "AccordionContext",
   {} as IAccordionContext
 );
-const AccordionItemContext = createContext<IAccordionItemContext>(
+const AccordionItemContext = createNamedContext<IAccordionItemContext>(
+  "AccordionItemContext",
   {} as IAccordionItemContext
 );
 const useAccordionContext = () => useContext(AccordionContext);
@@ -556,7 +558,8 @@ interface IDescendantContext<T> {
   unregisterDescendant(element: Descendant<T>["element"]): void;
 }
 
-const DescendantContext = createContext<IDescendantContext<any>>(
+const DescendantContext = createNamedContext<IDescendantContext<any>>(
+  "DescendantContext",
   {} as IDescendantContext<any>
 );
 
