@@ -1,24 +1,33 @@
-// The approach here is to allow developers to render a visual <Alert> and then
-// we mirror that to a couple of aria live regions behind the scenes. This way,
-// most of the time, developers don't have to think about visual vs. aria
-// alerts.
-//
-// Limitations: Developers can't read from context inside of an Alert because
-// we aren't using ReactDOM.createPortal(), we're actually creating a couple of
-// brand new React roots. We could use createPortal but then apps would need to
-// render the entire app tree in an <AlertProvider>, or maybe there's a way
-// with default context to do it, but we haven't explored that yet. So, we'll
-// see how this goes, and if it becomes a problem, we can introduce a portal
-// later.
-
+/**
+ * Welcome to @reach/alert!
+ *
+ * The approach here is to allow developers to render a visual <Alert> and then
+ * we mirror that to a couple of aria live regions behind the scenes. This way,
+ * most of the time, developers don't have to think about visual vs. aria
+ * alerts.
+ *
+ * Limitations: Developers can't read from context inside of an Alert because
+ * we aren't using ReactDOM.createPortal(), we're actually creating a couple of
+ * brand new React roots. We could use createPortal but then apps would need to
+ * render the entire app tree in an <AlertProvider>, or maybe there's a way
+ * with default context to do it, but we haven't explored that yet. So, we'll
+ * see how this goes, and if it becomes a problem, we can introduce a portal
+ * later.
+ *
+ * @see Docs     https://reacttraining.com/reach-ui/alert
+ * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alert
+ */
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
 import { usePrevious, useForkedRef } from "@reach/utils";
 import PropTypes from "prop-types";
 
-// singleton state is fine because you don't server render
-// an alert (SRs don't read them on first load anyway)
+/*
+ * Singleton state is fine because you don't server render
+ * an alert (SRs don't read them on first load anyway)
+ */
 let keys: RegionKeys = {
   polite: -1,
   assertive: -1
