@@ -240,7 +240,7 @@ if (__DEV__) {
  */
 export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
-  ref
+  forwardedRef
 ) {
   const {
     isControlled,
@@ -250,10 +250,10 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     selectedIndex
   } = useTabsContext();
 
-  const { descendants } = useDescendantContext<HTMLElement>(
+  let { descendants } = useDescendantContext<HTMLElement>(
     TabsDescendantsContext
   );
-  const focusableTabs = useMemo(() => {
+  let focusableTabs = useMemo(() => {
     let nodes: HTMLElement[] = [];
     for (let i = 0; i < descendants.length; i++) {
       let element = descendants[i].element;
@@ -264,7 +264,27 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     return nodes;
   }, [descendants]);
 
+  let ownRef = useRef<HTMLElement | null>(null);
+  let ref = useForkedRef(forwardedRef, ownRef);
+  let isRTL = useRef(false);
+
   const getFocusIndices = useCallback(() => {
+    /*
+     * To detect RTL mode, we'll look first for <html dir="rtl">, as it is the
+     * generally preferred method for handling RTL writing modes and is more
+     * performant than checking computed styles (event though the computed
+     * styles should take the dir attribute into account).
+     */
+    isRTL.current = false;
+    if (
+      ownRef.current &&
+      ((ownRef.current.ownerDocument &&
+        ownRef.current.ownerDocument.dir === "rtl") ||
+        getStyle(ownRef.current, "direction") === "rtl")
+    ) {
+      isRTL.current = true;
+    }
+
     /*
      * We could be clever and ~~functional~~ here but we really shouldn't need
      * to loop through these arrays more than once.
@@ -303,6 +323,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
+  // TODO: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
@@ -323,10 +344,10 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
 
     switch (key) {
       case "ArrowRight":
-        onSelectTab(next);
+        onSelectTab(isRTL.current ? prev : next);
         break;
       case "ArrowLeft":
-        onSelectTab(prev);
+        onSelectTab(isRTL.current ? next : prev);
         break;
       case "ArrowDown":
         // don't scroll down
@@ -597,4 +618,25 @@ if (__DEV__) {
     as: PropTypes.elementType,
     children: PropTypes.node
   };
+}
+
+/**
+ * Get a computed style value by property, backwards compatible with IE
+ * @param element
+ * @param styleProp
+ */
+function getStyle(element: HTMLElement, styleProp: string) {
+  let y: string | null = null;
+  if ((element as any).currentStyle) {
+    y = (element as any).currentStyle[styleProp] as string;
+  } else if (
+    element.ownerDocument &&
+    element.ownerDocument.defaultView &&
+    typeof element.ownerDocument.defaultView.getComputedStyle === "function"
+  ) {
+    y = element.ownerDocument.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(styleProp);
+  }
+  return y;
 }
