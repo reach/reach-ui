@@ -19,14 +19,13 @@ export function Example() {
       </TabList>
       <TabPanels style={{ padding: 10 }}>
         <TabPanel>
+          <p>This shouldn't ever render</p>
+        </TabPanel>
+        <TabPanel>
           <p>This tab is fine</p>
         </TabPanel>
-
         <TabPanel>
           <p>This one is good too</p>
-        </TabPanel>
-        <TabPanel>
-          <p>This shouldn't ever render</p>
         </TabPanel>
       </TabPanels>
     </Tabs>

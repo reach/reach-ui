@@ -19,10 +19,12 @@
 import React, {
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
-  Children
+  Children,
+  useCallback
 } from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -39,18 +41,21 @@ import {
   useDescendantContext,
   useDescendants,
   useForkedRef,
+  useIsomorphicLayoutEffect,
   useUpdateEffect,
   wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
 interface ITabsContext {
+  isControlled: boolean;
   selectedIndex: number;
   id: string;
   userInteractedRef: React.MutableRefObject<boolean>;
   selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
   onFocusPanel: () => void;
   onSelectTab: (index: number) => void;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const TabsDescendantsContext = createNamedContext(
@@ -112,10 +117,12 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
 
   const context: ITabsContext = useMemo(() => {
     return {
+      isControlled,
       selectedIndex: isControlled ? (controlledIndex as number) : selectedIndex,
       id: props.id ?? (id ? makeId("tabs", id) : "tabs"),
       userInteractedRef,
       selectedPanelRef,
+      setSelectedIndex: isControlled ? noop : setSelectedIndex,
       onFocusPanel: () => {
         selectedPanelRef.current?.focus();
       },
@@ -239,15 +246,45 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
   ref
 ) {
   const {
-    // id: tabsId,
+    isControlled,
     onSelectTab,
     onFocusPanel,
+    setSelectedIndex,
     selectedIndex
   } = useTabsContext();
 
   const { focusNodes, descendants } = useDescendantContext<HTMLElement>(
     TabsDescendantsContext
   );
+
+  const getSelectedFocusIndex = useCallback(() => {
+    let selectedFocusIndex = -1;
+    for (let i = 0; i < focusNodes.length; i++) {
+      let element = focusNodes[i];
+      if (
+        descendants[selectedIndex] &&
+        element === descendants[selectedIndex].element
+      ) {
+        selectedFocusIndex = i;
+      }
+    }
+    return selectedFocusIndex;
+  }, [descendants, focusNodes, selectedIndex]);
+
+  const getFirstAndLastFocusIndices = useCallback(() => {
+    let firstIndex = -1;
+    let lastIndex = -1;
+    for (let n = 0; n < descendants.length; n++) {
+      let element = descendants[n].element;
+      if (element === focusNodes[0]) {
+        firstIndex = n;
+      }
+      if (element === focusNodes[focusNodes.length - 1]) {
+        lastIndex = n;
+      }
+    }
+    return { firstIndex, lastIndex };
+  }, [descendants, focusNodes]);
 
   const handleKeyDown = wrapEvent(onKeyDown, event => {
     const { key } = event;
@@ -265,15 +302,18 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       return;
     }
 
-    let selectedFocusIndex = focusNodes.findIndex(
-      element => element === descendants[selectedIndex].element
-    );
-    let firstIndex = descendants.findIndex(
-      ({ element }) => element === focusNodes[0]
-    );
-    let lastIndex = descendants.findIndex(
-      ({ element }) => element === focusNodes[focusNodes.length - 1]
-    );
+    let selectedFocusIndex = getSelectedFocusIndex();
+    let { firstIndex, lastIndex } = getFirstAndLastFocusIndices();
+
+    for (let n = 0; n < descendants.length; n++) {
+      let element = descendants[n].element;
+      if (element === focusNodes[0]) {
+        firstIndex = n;
+      }
+      if (element === focusNodes[focusNodes.length - 1]) {
+        lastIndex = n;
+      }
+    }
 
     switch (key) {
       case "ArrowRight":
@@ -303,6 +343,35 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
         return;
     }
   });
+
+  useIsomorphicLayoutEffect(() => {
+    /*
+     * In the event an uncontrolled component's selected index is disabled,
+     * (this should only happen if the first tab is disabled and no default
+     * index is set), we need to override the selection to the next selectable
+     * index value.
+     */
+    if (
+      !isControlled &&
+      descendants[selectedIndex] &&
+      descendants[selectedIndex].disabled
+    ) {
+      let selectedFocusIndex = getSelectedFocusIndex();
+      let nextIndex = descendants.findIndex(
+        ({ element }) => element === focusNodes[selectedFocusIndex + 1]
+      );
+      let { firstIndex } = getFirstAndLastFocusIndices();
+      setSelectedIndex(nextIndex > 0 ? nextIndex : firstIndex);
+    }
+  }, [
+    descendants,
+    focusNodes,
+    getFirstAndLastFocusIndices,
+    getSelectedFocusIndex,
+    isControlled,
+    selectedIndex,
+    setSelectedIndex
+  ]);
 
   return (
     <Comp
