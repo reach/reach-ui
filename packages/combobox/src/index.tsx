@@ -816,20 +816,24 @@ export function ComboboxOptionText() {
     [contextValue, value]
   );
 
-  return results.length
-    ? results.map((result, index) => {
-        const str = value.slice(result.start, result.end);
-        return (
-          <span
-            key={index}
-            data-user-value={result.highlight ? true : undefined}
-            data-suggested-value={result.highlight ? undefined : true}
-          >
-            {str}
-          </span>
-        );
-      })
-    : value;
+  return (
+    <>
+      {results.length
+        ? results.map((result, index) => {
+            const str = value.slice(result.start, result.end);
+            return (
+              <span
+                key={index}
+                data-user-value={result.highlight ? true : undefined}
+                data-suggested-value={result.highlight ? undefined : true}
+              >
+                {str}
+              </span>
+            );
+          })
+        : value}
+    </>
+  );
 }
 
 ComboboxOptionText.displayName = "ComboboxOptionText";

@@ -73,12 +73,13 @@ High-level component to render a modal dialog window over the top of the page (o
 
 #### Dialog Props
 
-| Prop                                   | Type   |
-| -------------------------------------- | ------ |
-| [element props](#dialog-element-props) | spread |
-| [isOpen](#dialog-isopen)               | bool   |
-| [onDismiss](#dialog-ondismiss)         | func   |
-| [children](#dialog-element-props)      | node   |
+| Prop                                     | Type   |
+| ---------------------------------------- | ------ |
+| [element props](#dialog-element-props)   | spread |
+| [isOpen](#dialog-isopen)                 | bool   |
+| [allowPinchZoom](#dialog-allowpinchzoom) | bool   |
+| [onDismiss](#dialog-ondismiss)           | func   |
+| [children](#dialog-element-props)        | node   |
 
 ##### Dialog element props
 
@@ -149,6 +150,18 @@ function Example(props) {
     </div>
   );
 }
+```
+
+##### Dialog allowPinchZoom
+
+_Type_: `bool`
+
+Handle zoom/pinch gestures on iOS devices.
+
+```jsx
+<Dialog allowPinchZoom={true}>
+  <p>I will handle zoom/pinch gestures on iOS devices</p>
+</Dialog>
 ```
 
 ##### Dialog onDismiss
@@ -277,6 +290,7 @@ Use the following CSS to target the overlay:
 | ------------------------------------------------- | ------ |
 | [element props](#dialogoverlay-element-props)     | spread |
 | [isOpen](#dialogoverlay-isopen)                   | bool   |
+| [allowPinchZoom](#dialogoverlay-allowpinchzoom)   | bool   |
 | [onDismiss](#dialogoverlay-ondismiss)             | func   |
 | [initialFocusRef](#dialogoverlay-initialfocusref) | ref    |
 | [children](#dialogoverlay-element-props)          | node   |
@@ -298,6 +312,12 @@ Any props not listed above will be spread onto the underlying `div`.
 _Type_: `bool`
 
 Same as [Dialog `isOpen`](#dialog-isopen)
+
+##### DialogOverlay allowPinchZoom
+
+_Type_: `bool`
+
+Same as [Dialog `allowPinchZoom`](#dialog-allowpinchzoom)
 
 ##### DialogOverlay onDismiss
 
