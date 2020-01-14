@@ -28,6 +28,7 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
+  BoolOrBoolString,
   checkStyles,
   cloneValidElement,
   createNamedContext,
@@ -249,9 +250,19 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     selectedIndex
   } = useTabsContext();
 
-  const { focusNodes, descendants } = useDescendantContext<HTMLElement>(
+  const { descendants } = useDescendantContext<HTMLElement>(
     TabsDescendantsContext
   );
+  const focusableTabs = useMemo(() => {
+    let nodes: HTMLElement[] = [];
+    for (let i = 0; i < descendants.length; i++) {
+      let element = descendants[i].element;
+      if (element && !BoolOrBoolString(element.dataset.disabled)) {
+        nodes.push(element);
+      }
+    }
+    return nodes;
+  }, [descendants]);
 
   const getFocusIndices = useCallback(() => {
     /*
@@ -260,9 +271,9 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
      *
      * TODO: We may want to check the document's active element here instead
      *       instead of the selectedIndex, even though you *shouldn't* be able
-     *       to to focus an inactive tab
+     *       to to focus a tab unless it's selected.
      */
-    let selectedFocusIndex = focusNodes.findIndex(
+    let selectedFocusIndex = focusableTabs.findIndex(
       element => element === descendants[selectedIndex].element
     );
     let first = -1;
@@ -271,16 +282,16 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     let next = -1;
     for (let n = 0; n < descendants.length; n++) {
       let element = descendants[n].element;
-      if (element === focusNodes[0]) {
+      if (element === focusableTabs[0]) {
         first = n;
       }
-      if (element === focusNodes[focusNodes.length - 1]) {
+      if (element === focusableTabs[focusableTabs.length - 1]) {
         last = n;
       }
-      if (element === focusNodes[selectedFocusIndex - 1]) {
+      if (element === focusableTabs[selectedFocusIndex - 1]) {
         prev = n;
       }
-      if (element === focusNodes[selectedFocusIndex + 1]) {
+      if (element === focusableTabs[selectedFocusIndex + 1]) {
         next = n;
       }
     }
@@ -290,7 +301,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       prev: prev === -1 ? last : prev,
       next: next === -1 ? first : next
     };
-  }, [descendants, focusNodes, selectedIndex]);
+  }, [descendants, focusableTabs, selectedIndex]);
 
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
@@ -342,15 +353,13 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
      */
     if (
       !isControlled &&
-      descendants[selectedIndex] &&
-      descendants[selectedIndex].disabled
+      BoolOrBoolString(descendants[selectedIndex]?.element?.dataset.disabled)
     ) {
       let { next } = getFocusIndices();
       setSelectedIndex(next);
     }
   }, [
     descendants,
-    focusNodes,
     getFocusIndices,
     isControlled,
     selectedIndex,
@@ -430,8 +439,7 @@ export const Tab = forwardRefWithAs<
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
     element: ownRef.current,
-    context: TabsDescendantsContext,
-    disabled
+    context: TabsDescendantsContext
   });
 
   const isSelected = index === selectedIndex;
@@ -454,6 +462,7 @@ export const Tab = forwardRefWithAs<
       {...props}
       ref={ref}
       data-reach-tab=""
+      data-disabled={disabled}
       aria-controls={makeId(tabsId, "panel", index)}
       aria-disabled={Comp !== "button" ? disabled : undefined}
       aria-selected={isSelected}

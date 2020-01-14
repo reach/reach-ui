@@ -86,6 +86,10 @@ export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
   }
 }
 
+export function BoolOrBoolString(value: any) {
+  return value === "false" ? false : Boolean(value);
+}
+
 export function canUseDOM() {
   return (
     typeof window !== "undefined" &&
@@ -287,12 +291,10 @@ export type DescendantElement<T = HTMLElement> =
 export type Descendant<T> = {
   element: DescendantElement<T>;
   key?: string | number | null;
-  disabled?: boolean;
 };
 
 export interface IDescendantContext<T> {
   descendants: Descendant<T>[];
-  focusNodes: DescendantElement<T>[];
   registerDescendant(descendant: Descendant<T>): void;
   unregisterDescendant(element: Descendant<T>["element"]): void;
 }
@@ -342,8 +344,7 @@ export function useDescendant<T>(
   {
     context = DescendantContext,
     element,
-    key,
-    disabled
+    key
   }: Descendant<T> & { context?: React.Context<IDescendantContext<T>> },
   indexProp?: number
 ) {
@@ -357,9 +358,9 @@ export function useDescendant<T>(
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
     if (!element) forceUpdate({});
-    registerDescendant({ element, key, disabled });
+    registerDescendant({ element, key });
     return () => unregisterDescendant(element);
-  }, [element, key, disabled]);
+  }, [element, key]);
 
   return (
     indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
@@ -382,7 +383,7 @@ export function DescendantProvider<T>({
   setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
 }) {
   let registerDescendant = React.useCallback(
-    ({ disabled, element, key: providedKey }: Descendant<T>) => {
+    ({ element, key: providedKey }: Descendant<T>) => {
       if (!element) {
         return;
       }
@@ -421,7 +422,7 @@ export function DescendantProvider<T>({
             );
           });
 
-          let newItem = { disabled, element, key };
+          let newItem = { element, key };
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -460,19 +461,13 @@ export function DescendantProvider<T>({
     []
   );
 
-  // Not sure about this just yet, may bail on this and let components deal
-  let focusNodes = descendants
-    .filter(({ disabled }) => !disabled)
-    .map(({ element }) => element);
-
   const value: IDescendantContext<T> = useMemo(() => {
     return {
       descendants,
-      focusNodes,
       registerDescendant,
       unregisterDescendant
     };
-  }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
+  }, [descendants, registerDescendant, unregisterDescendant]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
