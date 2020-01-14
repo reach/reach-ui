@@ -1,4 +1,3 @@
 *.yml
-packages/*/index.js
-packages/*/es/**/*
-vendor
+node_modules
+packages/*/dist

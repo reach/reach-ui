@@ -1,27 +1,26 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
-<Helmet
-  title="Reach UI - Combobox"
-  meta={[
-    {
-      name: "description",
-      content:
-        "Accessible combobox (autocomplete or autosuggest) component for React"
-    }
-  ]}
+<SEO
+  title="Combobox"
+  description="Accessible combobox (autocomplete or autosuggest) component for React"
 />
 
 # Combobox
 
-[Combobox](#combobox) -
-[ComboboxInput](#comboboxinput) -
-[ComboboxPopover](#comboboxpopover) -
-[ComboboxList](#comboboxpopup) -
-[ComboboxOption](#comboboxpopup) -
-[ComboboxOptionText](#comboboxpopup)
+<TOC>
+  <TOCList>
+    <TOCLink href="#combobox-1">Combobox</TOCLink>
+    <TOCLink href="#comboboxinput">ComboboxInput</TOCLink>
+    <TOCLink href="#comboboxpopover">ComboboxPopover</TOCLink>
+    <TOCLink href="#comboboxlist">ComboboxList</TOCLink>
+    <TOCLink href="#comboboxoption">ComboboxOption</TOCLink>
+    <TOCLink href="#comboboxoptiontext">ComboboxOptionText</TOCLink>
+  </TOCList>
+</TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/combobox
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#combobox
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#combobox
 
 Accessible combobox (autocomplete or autosuggest) component for React.
 
@@ -29,13 +28,13 @@ A combobox is the combination of an `<input type="text"/>` and a list. The list 
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/combobox` or `yarn add @reach/combobox`. Then import the components and styles that you need:
+
 ```bash
 npm install @reach/combobox
 # or
 yarn add @reach/combobox
 ```
-
-And then import the components:
 
 ```js
 import {
@@ -46,6 +45,7 @@ import {
   ComboboxOption,
   ComboboxOptionText
 } from "@reach/combobox";
+import "@reach/combobox/styles.css";
 ```
 
 ## Examples
@@ -56,7 +56,8 @@ To get you started, let's take a look at a few examples that grow from simple to
 
 Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple components. This example demonstrates all of the pieces you need in the simplest form possible.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <div>
@@ -82,7 +83,8 @@ function Example() {
 
 Sometimes your items need to be more than just text, in these cases you can pass children to `ComboboxOption`, and then render a `<ComboboxOptionText/>` to keep the built-in text highlighting. Only the `value` is used to match, not the children.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Combobox>
@@ -125,7 +127,8 @@ This demo searches a client-side list of all US Cities. Combobox does not implem
 
 There is nothing special about managing state for a combobox, it's like managing state for any other list in your app. As the input changes, you figure out what state you need, then render as many ComboboxOption elements as you want.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [term, setTerm] = useState("");
@@ -179,7 +182,8 @@ There is nothing special about managing state for a combobox, it's like managing
 
 This is the same demo as above, except this time we're going to a server to get the match. This is recommended as the previous example had to download 350kb of city text! Again, there is nothing special about a ComboboxList as any other list in React. As the input changes, fetch data, set state, render options.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -248,7 +252,8 @@ Sometimes your list is a bit more complicated, like categories of results, and l
 
 You can even have other interactive elements inside the popover, it won't close when the user interacts with them.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     const [term, setTerm] = useState("");
@@ -333,7 +338,8 @@ You can even have other interactive elements inside the popover, it won't close 
 
 This demo shows how you can control a lot about the styling. It uses `portal={false}` on the ComboboxPopover which allows us to create a continuous outline around the entire thing.
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   function Example() {
     let [term, setTerm] = useState("");
@@ -418,11 +424,20 @@ Please see the [styling guide](/styling).
 }
 ```
 
-## Combobox
+## Component API
+
+### Combobox
 
 Parent component that sets up the proper aria roles and context for the rest of the components.
 
-### Combobox openOnFocus
+#### Combobox Props
+
+| Prop                                 | Type |
+| ------------------------------------ | ---- |
+| [openOnFocus](#combobox-openonfocus) | bool |
+| [onSelect](#combobox-onselect)       | func |
+
+##### Combobox openOnFocus
 
 ```jsx
 <Combobox openOnFocus />
@@ -432,7 +447,7 @@ Defaults to false.
 
 If true, the popover opens when focus is on the text box.
 
-### Combobox onSelect
+##### Combobox onSelect
 
 Called with the selection value when the user makes a selection from the list.
 
@@ -440,11 +455,18 @@ Called with the selection value when the user makes a selection from the list.
 <Combobox onSelect={item => {}} />
 ```
 
-## ComboboxInput
+### ComboboxInput
 
 Wraps an `<input/>` with a couple extra props that work with the combobox.
 
-### ComboboxInput selectOnClick
+#### ComboboxInput Props
+
+| Prop                                          | Type | Default |
+| --------------------------------------------- | ---- | ------- |
+| [selectOnClick](#comboboxinput-selectonclick) | bool |         |
+| [autocomplete](#comboboxinput-autocomplete)   | bool | true    |
+
+##### ComboboxInput selectOnClick
 
 ```jsx
 <ComboboxInput selectOnClick />
@@ -456,7 +478,7 @@ If true, when the user clicks inside the text box the current value will be sele
 
 However, if the user is likely to want to tweak the value, leave this false, like a google search--the user is likely wanting to edit their search, not replace it completely.
 
-### ComboboxInput autocomplete
+##### ComboboxInput autocomplete
 
 Defaults to true.
 
@@ -468,19 +490,31 @@ Set this to false when you don't really need the value from the input but want t
 <ComboboxInput autocomplete={false} />
 ```
 
-## ComboboxPopover
+### ComboboxPopover
 
 Contains the popup that renders the list. Because some UI needs to render more than the list in the popup, you need to render one of these around the list. For example, maybe you want to render the number of results suggested.
 
-### ComboboxPopover portal
+#### ComboboxPopover Props
+
+| Prop                              | Type | Default |
+| --------------------------------- | ---- | ------- |
+| [portal](#comboboxpopover-portal) | bool | true    |
+
+##### ComboboxPopover portal
 
 If you pass `<ComboboxPopover portal={false} />` the popover will not render inside of a portal, but in the same order as the React tree. This is mostly useful for styling the entire component together, like the pink focus outline in the example earlier in this page.
 
-## ComboboxList
+### ComboboxList
 
 Contains the `ComboboxOption` elements and sets up the proper aria attributes for the list.
 
-## ComboboxList persistSelectionRef
+#### ComboboxList Props
+
+| Prop                                               | Type |
+| -------------------------------------------------- | ---- |
+| [persistSelection](#comboboxlist-persistselection) | bool |
+
+##### ComboboxList persistSelection
 
 ```jsx
 <ComboboxList persistSelection />
@@ -490,11 +524,18 @@ Defaults to false. When true and the list is opened, if an option's value matche
 
 This allows you to treat a Combobox more like a `<select>` than an `<input/>`, but be mindful that the user is still able to put any arbitrary value into the input, so if the only valid values for the input are from the list, your app will need to do that validation on blur or submit of the form.
 
-## ComboboxOption
+### ComboboxOption
 
 An option that is suggested to the user as they interact with the combobox.
 
-### ComboboxOption value
+#### ComboboxOption Props
+
+| Prop                                 | Type   |
+| ------------------------------------ | ------ |
+| [value](#comboboxoption-value)       | string |
+| [children](#comboboxoption-children) | node   |
+
+##### ComboboxOption value
 
 The value to match against when suggesting.
 
@@ -502,7 +543,7 @@ The value to match against when suggesting.
 <ComboboxOption value="Salt Lake City, Utah" />
 ```
 
-### ComboboxOption children
+##### ComboboxOption children
 
 Optional. If omitted, the `value` will be used as the children like this:
 
@@ -518,7 +559,7 @@ But if you need to control a bit more, you can put whatever children you want, b
 </ComboboxOption>
 ```
 
-## ComboboxOptionText
+### ComboboxOptionText
 
 Renders the value of a `ComboboxOption` as text but with spans wrapping the matching and non-matching segments of text.
 
@@ -536,7 +577,7 @@ And the user typed `Sea`, the out would be:
 <span data-user-value>Sea</span><span data-suggested-value>ttle</span>
 ```
 
-### ComboboxOptionText CSS Selectors
+#### ComboboxOptionText CSS Selectors
 
 ```css
 /* the matching segments of text */

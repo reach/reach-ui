@@ -1,23 +1,25 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
+import { TOC, TOCList, TOCLink } from "../components/TOC";
 
-<Helmet
-  title="Reach UI - useWindowSize, WindowSize"
-  meta={[
-    {
-      name: "description",
-      content: "Measure the current window dimensions"
-    }
-  ]}
+<SEO
+  title="Window Size"
+  description="Measure the current window dimensions in React"
 />
 
-# @reach/window-size
+# Window Size
 
-[useWindowSize](#usewindowsize) -
-[WindowSize](#windowsize)
+<TOC>
+  <TOCList>
+    <TOCLink href="#usewindowsize">useWindowSize</TOCLink>
+    <TOCLink href="#windowsize">WindowSize</TOCLink>
+  </TOCList>
+</TOC>
 
 Measure the current window dimensions.
 
 ## Installation
+
+From the command line in your project directory, run `npm install @reach/window-size` or `yarn add @reach/window-size`. Then import the component or hook that you need:
 
 ```bash
 npm install @reach/window-size
@@ -25,31 +27,16 @@ npm install @reach/window-size
 yarn add @reach/window-size
 ```
 
-And then import it:
-
 ```js
 import WindowSize, { useWindowSize } from "@reach/window-size";
 ```
 
-# useWindowSize
+## Component API
 
-```jsx-live
-function Example() {
-  const { width, height } = useWindowSize();
-  return (
-    <div>
-      <p>Resize your window.</p>
-      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
-    </div>
-  );
-}
-```
+### WindowSize
 
-Hook that observes and returns the measurements of the browser window.
-
-# WindowSize
-
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <WindowSize>
@@ -64,14 +51,31 @@ function Example() {
 }
 ```
 
-## WindowSize Props
+#### WindowSize Props
 
 | Prop                  | Type | Required |
 | --------------------- | ---- | -------- |
 | [children](#children) | func | true     |
 
-### WindowSize children
+##### WindowSize children
 
 _Type_: `func: (({ width, height })) => node`
 
 A function that calls back to you with the window size.
+
+### useWindowSize
+
+A hook that observes and returns the measurements of the browser window.
+
+```jsx
+// jsx-demo
+function Example() {
+  const { width, height } = useWindowSize();
+  return (
+    <div>
+      <p>Resize your window.</p>
+      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
+    </div>
+  );
+}
+```

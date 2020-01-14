@@ -1,16 +1,15 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useState } from "react";
 import { useTransition, animated, config } from "react-spring/web.cjs";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "Change Styles";
 
 let AnimatedDialogOverlay = animated(DialogOverlay);
 let AnimatedDialogContent = animated(DialogContent);
 
-export const Example = () => {
-  const [showDialog, setShowDialog] = React.useState(false);
+export function Example() {
+  const [showDialog, setShowDialog] = useState(false);
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
@@ -53,4 +52,4 @@ export const Example = () => {
       )}
     </div>
   );
-};
+}

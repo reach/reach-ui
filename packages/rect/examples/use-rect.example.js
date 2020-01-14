@@ -3,7 +3,7 @@ import { useRect } from "@reach/rect";
 
 export const name = "useRect";
 
-export const Example = () => {
+export function Example() {
   const ref = useRef();
   const rect = useRect(ref);
   return (
@@ -26,4 +26,4 @@ export const Example = () => {
       />
     </div>
   );
-};
+}

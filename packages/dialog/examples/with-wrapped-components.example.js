@@ -1,30 +1,13 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { forwardRef, useRef, useState } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "With Wrapped Components";
 
-const FilteredDialogContent = React.forwardRef(({ fakeProp, ...rest }, ref) => (
-  <DialogContent
-    {...rest}
-    ref={ref}
-    style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
-  />
-));
-
-const FilteredDialogOverlay = React.forwardRef(({ fakeProp, ...rest }, ref) => (
-  <DialogOverlay
-    {...rest}
-    ref={ref}
-    style={{ background: "rgba(0, 50, 150, 0.9)" }}
-  />
-));
-
-export let Example = () => {
-  const overlayRef = React.useRef(null);
-  const contentRef = React.useRef(null);
-  const [showDialog, setShowDialog] = React.useState(false);
+export function Example() {
+  const overlayRef = useRef(null);
+  const contentRef = useRef(null);
+  const [showDialog, setShowDialog] = useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
 
@@ -49,4 +32,24 @@ export let Example = () => {
       </FilteredDialogOverlay>
     </div>
   );
-};
+}
+
+const FilteredDialogOverlay = forwardRef(function({ fakeProp, ...rest }, ref) {
+  return (
+    <DialogOverlay
+      {...rest}
+      ref={ref}
+      style={{ background: "rgba(0, 50, 150, 0.9)" }}
+    />
+  );
+});
+
+const FilteredDialogContent = forwardRef(function({ fakeProp, ...rest }, ref) {
+  return (
+    <DialogContent
+      {...rest}
+      ref={ref}
+      style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
+    />
+  );
+});

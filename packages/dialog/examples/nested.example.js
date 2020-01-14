@@ -1,13 +1,12 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "Nested";
 
-export let Example = () => {
-  const [showDialog1, setShowDialog1] = React.useState(false);
-  const [showDialog2, setShowDialog2] = React.useState(false);
+export function Example() {
+  const [showDialog1, setShowDialog1] = useState(false);
+  const [showDialog2, setShowDialog2] = useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog1(true)}>Show Dialog</button>
@@ -35,4 +34,4 @@ export let Example = () => {
       </Dialog>
     </div>
   );
-};
+}
