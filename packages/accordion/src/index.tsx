@@ -19,6 +19,7 @@ import React, {
   useState
 } from "react";
 import {
+  BoolOrBoolString,
   checkStyles,
   createNamedContext,
   DescendantProvider,
@@ -145,7 +146,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         setDescendants={setDescendants}
       >
         <AccordionContext.Provider value={context}>
-          <div data-reach-accordion="" ref={forwardedRef} {...props}>
+          <div {...props} ref={forwardedRef} data-reach-accordion="">
             {children}
           </div>
         </AccordionContext.Provider>
@@ -265,7 +266,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     const { accordionId, activeIndex, readOnly } = useAccordionContext();
     const triggerRef: TriggerRef = useRef(null);
     const index = useDescendant(
-      { disabled, element: triggerRef.current, key },
+      { element: triggerRef.current, key },
       indexProp
     );
 
@@ -294,9 +295,9 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
           {...props}
           ref={forwardedRef}
           data-reach-accordion-item=""
-          data-active={active ? "" : undefined}
-          data-disabled={disabled ? "" : undefined}
-          data-read-only={readOnly ? "" : undefined}
+          data-active={active ? "true" : undefined}
+          data-disabled={disabled ? "true" : undefined}
+          data-read-only={readOnly ? "true" : undefined}
         >
           {children}
         </div>
@@ -369,7 +370,17 @@ export const AccordionTrigger = forwardRefWithAs<
     panelId
   } = useAccordionItemContext();
 
-  let { focusNodes } = useDescendantContext();
+  let { descendants } = useDescendantContext();
+  let focusableTriggers = useMemo(() => {
+    let nodes: HTMLElement[] = [];
+    for (let i = 0; i < descendants.length; i++) {
+      let element = descendants[i].element;
+      if (element && !BoolOrBoolString(element.dataset.disabled)) {
+        nodes.push(element);
+      }
+    }
+    return nodes;
+  }, [descendants]);
 
   const ref = useForkedRef(forwardedRef, ownRef);
 
@@ -384,12 +395,12 @@ export const AccordionTrigger = forwardRefWithAs<
 
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key, ctrlKey } = event;
-    const focusIndex = focusNodes.findIndex(el => el === ownRef.current);
+    const focusIndex = focusableTriggers.findIndex(el => el === ownRef.current);
 
-    const firstItem = focusNodes[0];
-    const lastItem = focusNodes[focusNodes.length - 1];
-    const nextItem = focusNodes[focusIndex + 1];
-    const prevItem = focusNodes[focusIndex - 1];
+    const firstItem = focusableTriggers[0];
+    const lastItem = focusableTriggers[focusableTriggers.length - 1];
+    const nextItem = focusableTriggers[focusIndex + 1];
+    const prevItem = focusableTriggers[focusIndex - 1];
 
     // Bail if we aren't moving focus
     if (
@@ -422,12 +433,12 @@ export const AccordionTrigger = forwardRefWithAs<
     <Comp
       {...props}
       ref={ref}
+      data-reach-accordion-trigger=""
       aria-controls={panelId}
       aria-expanded={active}
-      data-active={active ? "" : undefined}
-      data-disabled={disabled ? "" : undefined}
-      data-reach-accordion-trigger=""
-      data-read-only={readOnly ? "" : undefined}
+      data-active={active ? "true" : undefined}
+      data-disabled={disabled ? "true" : undefined}
+      data-read-only={readOnly ? "true" : undefined}
       disabled={disabled || undefined}
       id={triggerId}
       onClick={wrapEvent(onClick, handleClick)}
@@ -483,11 +494,11 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
       <div
         {...props}
         ref={forwardedRef}
-        aria-labelledby={triggerId}
-        data-active={active ? "" : undefined}
-        data-disabled={disabled ? "" : undefined}
         data-reach-accordion-panel=""
-        data-read-only={readOnly ? "" : undefined}
+        aria-labelledby={triggerId}
+        data-active={active ? "true" : undefined}
+        data-disabled={disabled ? "true" : undefined}
+        data-read-only={readOnly ? "true" : undefined}
         hidden={!active}
         id={panelId}
         role="region"

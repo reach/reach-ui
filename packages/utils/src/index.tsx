@@ -86,6 +86,10 @@ export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
   }
 }
 
+export function BoolOrBoolString(value: any) {
+  return value === "false" ? false : Boolean(value);
+}
+
 export function canUseDOM() {
   return (
     typeof window !== "undefined" &&
@@ -114,6 +118,25 @@ export function createNamedContext<T>(
   return Ctx;
 }
 
+export function findLastIndex<T = any>(
+  array: T[],
+  predicate: (element: T, index?: number, arr?: T[]) => boolean
+): number {
+  let length = array.length >>> 0;
+  if (!length) {
+    return -1;
+  }
+  let n = length - 1;
+  while (n >= 0) {
+    let value = array[n];
+    if (predicate(value, n, array)) {
+      return n;
+    }
+    --n;
+  }
+  return -1;
+}
+
 /**
  * Get the scrollbar offset distance.
  */
@@ -131,8 +154,8 @@ export function getScrollbarOffset() {
  *
  * @param args
  */
-export function makeId(...args: (string | number)[]) {
-  return args.join("--");
+export function makeId(...args: (string | number | null | undefined)[]) {
+  return args.filter(val => val != null).join("--");
 }
 
 /**
@@ -236,16 +259,23 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
 }
 
 /**
- * This is a hack to stop TS errors from dynamic components with an `as` prop
+ * This is a hack for sure. The thing is, getting a component to intelligently
+ * infer props based on a component or JSX string passed into an `as` prop is
+ * kind of a huge pain. Getting it to work and satisfy the contraints of
+ * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
+ * type song-and-dance every time we want to forward a ref into a component
+ * that accepts an `as` prop, we abstract all of that mess to this function for
+ * the time time being.
+ *
  * TODO: Eventually we should probably just try to get the type defs above
  * working across the board, but ain't nobody got time for that mess!
  *
  * @param Comp
  */
 export function forwardRefWithAs<T extends As, P>(
-  Comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
+  comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
 ) {
-  return React.forwardRef(Comp as any) as ComponentWithAs<T, P>;
+  return React.forwardRef(comp as any) as ComponentWithAs<T, P>;
 }
 
 // Export types
@@ -259,20 +289,19 @@ export {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// TODO: Move to @reach/descendants once fully tested and implemented
 
-export type DescendantElement<T = HTMLElement> = T extends HTMLElement
-  ? T
-  : HTMLElement;
+export type DescendantElement<T = HTMLElement> =
+  | (T extends HTMLElement ? T : HTMLElement)
+  | null;
 
 export type Descendant<T> = {
   element: DescendantElement<T>;
   key?: string | number | null;
-  disabled?: boolean;
 };
 
 export interface IDescendantContext<T> {
   descendants: Descendant<T>[];
-  focusNodes: DescendantElement<T>[];
   registerDescendant(descendant: Descendant<T>): void;
   unregisterDescendant(element: Descendant<T>["element"]): void;
 }
@@ -282,12 +311,18 @@ const DescendantContext = createNamedContext<IDescendantContext<any>>(
   {} as IDescendantContext<any>
 );
 
-export function useDescendantContext<T>() {
-  return useContext(DescendantContext as React.Context<IDescendantContext<T>>);
+export function useDescendantContext<T>(
+  /*
+   * A component may create and use multiple Descendant contexts, i.e.: Tabs,
+   * where both TabList and TabPanels needs separate contexts to know the
+   * indices of their respective descendants.
+   * We create one here by default but provide an argument for components
+   * to pass when needed.
+   */
+  context: React.Context<IDescendantContext<T>> = DescendantContext
+) {
+  return useContext(context as React.Context<IDescendantContext<T>>);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO: Move to @reach/descendants once fully tested and implemented
 
 /**
  * This hook registers our descendant by passing it into an array. We can then
@@ -313,7 +348,11 @@ export function useDescendantContext<T>() {
  * this is not the case, we can require an explicit index from the app.
  */
 export function useDescendant<T>(
-  { element, key, disabled }: Descendant<T>,
+  {
+    context = DescendantContext,
+    element,
+    key
+  }: Descendant<T> & { context?: React.Context<IDescendantContext<T>> },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
@@ -321,14 +360,14 @@ export function useDescendant<T>(
     registerDescendant,
     unregisterDescendant,
     descendants
-  } = useDescendantContext<T>();
+  } = useDescendantContext<T>(context);
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
     if (!element) forceUpdate({});
-    registerDescendant({ element, key, disabled });
+    registerDescendant({ element, key });
     return () => unregisterDescendant(element);
-  }, [element, key, disabled]);
+  }, [element, key]);
 
   return (
     indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
@@ -340,16 +379,18 @@ export function useDescendants<T>() {
 }
 
 export function DescendantProvider<T>({
+  context: Ctx = DescendantContext,
   children,
   descendants,
   setDescendants
 }: {
+  context?: React.Context<IDescendantContext<any>>;
   children: React.ReactNode;
   descendants: Descendant<T>[];
   setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
 }) {
   let registerDescendant = React.useCallback(
-    ({ disabled, element, key: providedKey }: Descendant<T>) => {
+    ({ element, key: providedKey }: Descendant<T>) => {
       if (!element) {
         return;
       }
@@ -388,7 +429,7 @@ export function DescendantProvider<T>({
             );
           });
 
-          let newItem = { disabled, element, key };
+          let newItem = { element, key };
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -427,22 +468,13 @@ export function DescendantProvider<T>({
     []
   );
 
-  let focusNodes = descendants
-    .filter(({ disabled }) => !disabled)
-    .map(({ element }) => element);
-
   const value: IDescendantContext<T> = useMemo(() => {
     return {
       descendants,
-      focusNodes,
       registerDescendant,
       unregisterDescendant
     };
-  }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
+  }, [descendants, registerDescendant, unregisterDescendant]);
 
-  return (
-    <DescendantContext.Provider value={value}>
-      {children}
-    </DescendantContext.Provider>
-  );
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

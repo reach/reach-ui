@@ -13,16 +13,16 @@ export function Example() {
   return (
     <Tabs style={tabsStyle}>
       <TabList>
-        <Tab>One</Tab>
-        <Tab disabled>Two</Tab>
+        <Tab disabled>One</Tab>
+        <Tab>Two</Tab>
         <Tab>Three</Tab>
       </TabList>
       <TabPanels style={{ padding: 10 }}>
         <TabPanel>
-          <p>This tab is fine</p>
+          <p>This shouldn't ever render</p>
         </TabPanel>
         <TabPanel>
-          <p>This shouldn't ever render</p>
+          <p>This tab is fine</p>
         </TabPanel>
         <TabPanel>
           <p>This one is good too</p>
