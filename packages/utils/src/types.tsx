@@ -30,7 +30,7 @@ export type ComponentWithForwardedRef<
 >;
 
 export interface ComponentWithAs<T extends As, P> {
-  <TT extends As>(props: PropsWithAs<TT, P> & { as: TT }): JSX.Element;
+  <TT extends As>(props: PropsWithAs<TT, P>): JSX.Element;
   (props: PropsWithAs<T, P>): JSX.Element;
   displayName?: string;
   propTypes?: {
