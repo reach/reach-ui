@@ -16,11 +16,19 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
  */
 
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  Children
+} from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
   checkStyles,
+  cloneValidElement,
   createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
@@ -304,7 +312,18 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       onKeyDown={handleKeyDown}
       {...props}
     >
-      {children}
+      {Children.map(children, (child, index) => {
+        /*
+         * TODO: Since refactoring to use context rather than depending on
+         * parent/child relationships, we need to update our recommendations for
+         * animations that break when we don't forward the `isSelected` prop
+         * to our tabs. We will remove this in 1.0 and update our docs
+         * accordingly.
+         */
+        return cloneValidElement(child, {
+          isSelected: index === selectedIndex
+        });
+      })}
     </Comp>
   );
 });
