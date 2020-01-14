@@ -15,10 +15,10 @@ describe("rendering", () => {
     const firstTab = getByText("Tab One");
     const tabList = getByRole("tablist");
 
-    function getTabPanelByButtonID(buttonId: string) {
+    function getTabPanelByButtonClass(buttonId: string) {
       return container.querySelector(
         `#${container
-          .querySelector(`#${buttonId}`)!
+          .querySelector(`.${buttonId}`)!
           .getAttribute("aria-controls")}`
       );
     }
@@ -26,31 +26,31 @@ describe("rendering", () => {
     fireEvent.click(firstTab);
 
     fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-2"));
-    expect(getTabPanelByButtonID("tab-2")).toBeVisible();
-    expect(getTabPanelByButtonID("tab-1")).not.toBeVisible();
+    expect(document.activeElement).toBe(container.querySelector(".tab-2"));
+    expect(getTabPanelByButtonClass("tab-2")).toBeVisible();
+    expect(getTabPanelByButtonClass("tab-1")).not.toBeVisible();
     expect(asFragment()).toMatchSnapshot();
 
     fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-3"));
-    expect(getTabPanelByButtonID("tab-3")).toBeVisible();
-    expect(getTabPanelByButtonID("tab-2")).not.toBeVisible();
+    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
+    expect(getTabPanelByButtonClass("tab-3")).toBeVisible();
+    expect(getTabPanelByButtonClass("tab-2")).not.toBeVisible();
 
     fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-1"));
+    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
 
     fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-3"));
+    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
 
     fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
     fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-1"));
+    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
 
     fireEvent.keyDown(tabList, { key: "End", code: 35 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-3"));
+    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
 
     fireEvent.keyDown(tabList, { key: "Home", code: 36 });
-    expect(document.activeElement).toBe(container.querySelector("#tab-1"));
+    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
   });
 });
 
@@ -60,9 +60,9 @@ function BasicTabs() {
     <div>
       <Tabs>
         <TabList>
-          <Tab id="tab-1">Tab One</Tab>
-          <Tab id="tab-2">Tab Two</Tab>
-          <Tab id="tab-3">Tab Three</Tab>
+          <Tab className="tab-1">Tab One</Tab>
+          <Tab className="tab-2">Tab Two</Tab>
+          <Tab className="tab-3">Tab Three</Tab>
         </TabList>
 
         <TabPanels>

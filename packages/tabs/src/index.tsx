@@ -428,8 +428,12 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab
  */
-export const Tab = forwardRefWithAs<"button", TabProps>(function Tab(
-  { children, as: Comp = "button", disabled, ...props },
+export const Tab = forwardRefWithAs<
+  "button",
+  // TODO: Remove this when cloneElement is removed
+  TabProps & { isSelected?: boolean }
+>(function Tab(
+  { children, isSelected: _, as: Comp = "button", disabled, ...props },
   forwardedRef
 ) {
   const {
