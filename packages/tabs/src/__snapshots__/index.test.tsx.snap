@@ -11,11 +11,11 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="panel--tabs--4--0"
+          aria-controls="tabs--4--panel--0"
           aria-selected="false"
           class="tab-1"
           data-reach-tab=""
-          id="tab--tabs--4--0"
+          id="tabs--4--tab--0"
           role="tab"
           tabindex="-1"
           type="button"
@@ -23,12 +23,12 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           Tab One
         </button>
         <button
-          aria-controls="panel--tabs--4--1"
+          aria-controls="tabs--4--panel--1"
           aria-selected="true"
           class="tab-2"
           data-reach-tab=""
           data-selected=""
-          id="tab--tabs--4--1"
+          id="tabs--4--tab--1"
           role="tab"
           tabindex="0"
           type="button"
@@ -36,11 +36,11 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           Tab Two
         </button>
         <button
-          aria-controls="panel--tabs--4--2"
+          aria-controls="tabs--4--panel--2"
           aria-selected="false"
           class="tab-3"
           data-reach-tab=""
-          id="tab--tabs--4--2"
+          id="tabs--4--tab--2"
           role="tab"
           tabindex="-1"
           type="button"
@@ -52,10 +52,10 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tab--tabs--4--0"
+          aria-labelledby="tabs--4--tab--0"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--tabs--4--0"
+          id="tabs--4--panel--0"
           role="tabpanel"
           tabindex="-1"
         >
@@ -67,9 +67,9 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="tab--tabs--4--1"
+          aria-labelledby="tabs--4--tab--1"
           data-reach-tab-panel=""
-          id="panel--tabs--4--1"
+          id="tabs--4--panel--1"
           role="tabpanel"
           tabindex="-1"
         >
@@ -78,10 +78,10 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
           </h1>
         </div>
         <div
-          aria-labelledby="tab--tabs--4--2"
+          aria-labelledby="tabs--4--tab--2"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--tabs--4--2"
+          id="tabs--4--panel--2"
           role="tabpanel"
           tabindex="-1"
         >
@@ -106,12 +106,12 @@ exports[`rendering should match the snapshot 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="panel--tabs--1--0"
+          aria-controls="tabs--1--panel--0"
           aria-selected="true"
           class="tab-1"
           data-reach-tab=""
           data-selected=""
-          id="tab--tabs--1--0"
+          id="tabs--1--tab--0"
           role="tab"
           tabindex="0"
           type="button"
@@ -119,11 +119,11 @@ exports[`rendering should match the snapshot 1`] = `
           Tab One
         </button>
         <button
-          aria-controls="panel--tabs--1--1"
+          aria-controls="tabs--1--panel--1"
           aria-selected="false"
           class="tab-2"
           data-reach-tab=""
-          id="tab--tabs--1--1"
+          id="tabs--1--tab--1"
           role="tab"
           tabindex="-1"
           type="button"
@@ -131,11 +131,11 @@ exports[`rendering should match the snapshot 1`] = `
           Tab Two
         </button>
         <button
-          aria-controls="panel--tabs--1--2"
+          aria-controls="tabs--1--panel--2"
           aria-selected="false"
           class="tab-3"
           data-reach-tab=""
-          id="tab--tabs--1--2"
+          id="tabs--1--tab--2"
           role="tab"
           tabindex="-1"
           type="button"
@@ -147,9 +147,9 @@ exports[`rendering should match the snapshot 1`] = `
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tab--tabs--1--0"
+          aria-labelledby="tabs--1--tab--0"
           data-reach-tab-panel=""
-          id="panel--tabs--1--0"
+          id="tabs--1--panel--0"
           role="tabpanel"
           tabindex="-1"
         >
@@ -161,10 +161,10 @@ exports[`rendering should match the snapshot 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="tab--tabs--1--1"
+          aria-labelledby="tabs--1--tab--1"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--tabs--1--1"
+          id="tabs--1--panel--1"
           role="tabpanel"
           tabindex="-1"
         >
@@ -173,10 +173,10 @@ exports[`rendering should match the snapshot 1`] = `
           </h1>
         </div>
         <div
-          aria-labelledby="tab--tabs--1--2"
+          aria-labelledby="tabs--1--tab--2"
           data-reach-tab-panel=""
           hidden=""
-          id="panel--tabs--1--2"
+          id="tabs--1--panel--2"
           role="tabpanel"
           tabindex="-1"
         >

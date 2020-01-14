@@ -150,8 +150,8 @@ export function getScrollbarOffset() {
  *
  * @param args
  */
-export function makeId(...args: (string | number)[]) {
-  return args.join("--");
+export function makeId(...args: (string | number | null | undefined)[]) {
+  return args.filter(val => val != null).join("--");
 }
 
 /**
@@ -278,6 +278,7 @@ export {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+// TODO: Move to @reach/descendants once fully tested and implemented
 
 export type DescendantElement<T = HTMLElement> =
   | (T extends HTMLElement ? T : HTMLElement)
@@ -302,13 +303,17 @@ const DescendantContext = createNamedContext<IDescendantContext<any>>(
 );
 
 export function useDescendantContext<T>(
+  /*
+   * A component may create and use multiple Descendant contexts, i.e.: Tabs,
+   * where both TabList and TabPanels needs separate contexts to know the
+   * indices of their respective descendants.
+   * We create one here by default but provide an argument for components
+   * to pass when needed.
+   */
   context: React.Context<IDescendantContext<T>> = DescendantContext
 ) {
   return useContext(context as React.Context<IDescendantContext<T>>);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO: Move to @reach/descendants once fully tested and implemented
 
 /**
  * This hook registers our descendant by passing it into an array. We can then
@@ -455,6 +460,7 @@ export function DescendantProvider<T>({
     []
   );
 
+  // Not sure about this just yet, may bail on this and let components deal
   let focusNodes = descendants
     .filter(({ disabled }) => !disabled)
     .map(({ element }) => element);

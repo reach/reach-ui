@@ -19,7 +19,6 @@
 import React, {
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -48,14 +47,14 @@ import {
 import { useId } from "@reach/auto-id";
 
 interface ITabsContext {
-  isControlled: boolean;
-  selectedIndex: number;
   id: string;
-  userInteractedRef: React.MutableRefObject<boolean>;
-  selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
+  isControlled: boolean;
   onFocusPanel: () => void;
   onSelectTab: (index: number) => void;
+  selectedIndex: number;
+  selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+  userInteractedRef: React.MutableRefObject<boolean>;
 }
 
 const TabsDescendantsContext = createNamedContext(
@@ -81,48 +80,53 @@ const useTabsContext = () => useContext(TabsContext);
  */
 export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
   {
-    children,
     as: Comp = "div",
-    onChange,
-    index: controlledIndex = undefined,
-    readOnly = false,
+    children,
     defaultIndex,
+    index: controlledIndex = undefined,
+    onChange,
+    readOnly = false,
     ...props
   },
   ref
 ) {
-  // useRef because you shouldn't switch between controlled/uncontrolled
-  const { current: isControlled } = useRef(controlledIndex != null);
+  let isControlled = useRef(controlledIndex != null);
+  useEffect(() => {
+    if (__DEV__) {
+      warning(
+        !(isControlled.current && controlledIndex == null),
+        "Tabs is changing from controlled to uncontrolled. Tabs should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
+      );
+      warning(
+        !(!isControlled.current && controlledIndex != null),
+        "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
+      );
+    }
+  }, [controlledIndex]);
 
-  warning(
-    !(isControlled && controlledIndex == null),
-    "Tabs is changing from controlled to uncontrolled. Tabs should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
-  );
+  let _id = useId(props.id);
+  let id = props.id ?? makeId("tabs", _id);
 
-  warning(
-    !(!isControlled && controlledIndex != null),
-    "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
-  );
-
-  let id = useId(props.id);
-
-  // we only manage focus if the user caused the update vs.
-  // a new controlled index coming in
+  /*
+   * We only manage focus if the user caused the update vs. a new controlled
+   * index coming in.
+   */
   let userInteractedRef = useRef(false);
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
-
   let [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
   let [tabs, setTabs] = useDescendants();
 
   const context: ITabsContext = useMemo(() => {
     return {
-      isControlled,
-      selectedIndex: isControlled ? (controlledIndex as number) : selectedIndex,
-      id: props.id ?? (id ? makeId("tabs", id) : "tabs"),
+      isControlled: isControlled.current,
+      selectedIndex: isControlled.current
+        ? (controlledIndex as number)
+        : selectedIndex,
+      id,
       userInteractedRef,
       selectedPanelRef,
-      setSelectedIndex: isControlled ? noop : setSelectedIndex,
+      setSelectedIndex: isControlled.current ? noop : setSelectedIndex,
       onFocusPanel: () => {
         selectedPanelRef.current?.focus();
       },
@@ -131,20 +135,12 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
         : (index: number) => {
             userInteractedRef.current = true;
             onChange && onChange(index);
-            if (!isControlled) {
+            if (!isControlled.current) {
               setSelectedIndex(index);
             }
           }
     };
-  }, [
-    controlledIndex,
-    id,
-    isControlled,
-    onChange,
-    props.id,
-    readOnly,
-    selectedIndex
-  ]);
+  }, [controlledIndex, id, onChange, readOnly, selectedIndex]);
 
   useEffect(() => checkStyles("tabs"), []);
 
@@ -155,7 +151,7 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
       setDescendants={setTabs}
     >
       <TabsContext.Provider value={context}>
-        <Comp data-reach-tabs="" ref={ref} {...props}>
+        <Comp {...props} ref={ref} data-reach-tabs="" id={props.id}>
           {children}
         </Comp>
       </TabsContext.Provider>
@@ -257,39 +253,49 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     TabsDescendantsContext
   );
 
-  const getSelectedFocusIndex = useCallback(() => {
-    let selectedFocusIndex = -1;
-    for (let i = 0; i < focusNodes.length; i++) {
-      let element = focusNodes[i];
-      if (
-        descendants[selectedIndex] &&
-        element === descendants[selectedIndex].element
-      ) {
-        selectedFocusIndex = i;
-      }
-    }
-    return selectedFocusIndex;
-  }, [descendants, focusNodes, selectedIndex]);
-
-  const getFirstAndLastFocusIndices = useCallback(() => {
-    let firstIndex = -1;
-    let lastIndex = -1;
+  const getFocusIndices = useCallback(() => {
+    /*
+     * We could be clever and ~~functional~~ here but we really shouldn't need
+     * to loop through these arrays more than once.
+     *
+     * TODO: We may want to check the document's active element here instead
+     *       instead of the selectedIndex, even though you *shouldn't* be able
+     *       to to focus an inactive tab
+     */
+    let selectedFocusIndex = focusNodes.findIndex(
+      element => element === descendants[selectedIndex].element
+    );
+    let first = -1;
+    let last = -1;
+    let prev = -1;
+    let next = -1;
     for (let n = 0; n < descendants.length; n++) {
       let element = descendants[n].element;
       if (element === focusNodes[0]) {
-        firstIndex = n;
+        first = n;
       }
       if (element === focusNodes[focusNodes.length - 1]) {
-        lastIndex = n;
+        last = n;
+      }
+      if (element === focusNodes[selectedFocusIndex - 1]) {
+        prev = n;
+      }
+      if (element === focusNodes[selectedFocusIndex + 1]) {
+        next = n;
       }
     }
-    return { firstIndex, lastIndex };
-  }, [descendants, focusNodes]);
+    return {
+      first,
+      last,
+      prev: prev === -1 ? last : prev,
+      next: next === -1 ? first : next
+    };
+  }, [descendants, focusNodes, selectedIndex]);
 
-  const handleKeyDown = wrapEvent(onKeyDown, event => {
+  function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
-    // Bail if we aren't moving focus
+    // Bail if we aren't navigating
     if (
       !(
         key === "ArrowLeft" ||
@@ -302,31 +308,14 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       return;
     }
 
-    let selectedFocusIndex = getSelectedFocusIndex();
-    let { firstIndex, lastIndex } = getFirstAndLastFocusIndices();
-
-    for (let n = 0; n < descendants.length; n++) {
-      let element = descendants[n].element;
-      if (element === focusNodes[0]) {
-        firstIndex = n;
-      }
-      if (element === focusNodes[focusNodes.length - 1]) {
-        lastIndex = n;
-      }
-    }
+    let { first, last, prev, next } = getFocusIndices();
 
     switch (key) {
       case "ArrowRight":
-        let nextIndex = descendants.findIndex(
-          ({ element }) => element === focusNodes[selectedFocusIndex + 1]
-        );
-        onSelectTab(nextIndex >= 0 ? nextIndex : firstIndex);
+        onSelectTab(next);
         break;
       case "ArrowLeft":
-        let prevIndex = descendants.findIndex(
-          ({ element }) => element === focusNodes[selectedFocusIndex - 1]
-        );
-        onSelectTab(prevIndex >= 0 ? prevIndex : lastIndex);
+        onSelectTab(prev);
         break;
       case "ArrowDown":
         // don't scroll down
@@ -334,15 +323,15 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
         onFocusPanel();
         break;
       case "Home":
-        onSelectTab(firstIndex);
+        onSelectTab(first);
         break;
       case "End":
-        onSelectTab(lastIndex);
+        onSelectTab(last);
         break;
       default:
         return;
     }
-  });
+  }
 
   useIsomorphicLayoutEffect(() => {
     /*
@@ -356,18 +345,13 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       descendants[selectedIndex] &&
       descendants[selectedIndex].disabled
     ) {
-      let selectedFocusIndex = getSelectedFocusIndex();
-      let nextIndex = descendants.findIndex(
-        ({ element }) => element === focusNodes[selectedFocusIndex + 1]
-      );
-      let { firstIndex } = getFirstAndLastFocusIndices();
-      setSelectedIndex(nextIndex > 0 ? nextIndex : firstIndex);
+      let { next } = getFocusIndices();
+      setSelectedIndex(next);
     }
   }, [
     descendants,
     focusNodes,
-    getFirstAndLastFocusIndices,
-    getSelectedFocusIndex,
+    getFocusIndices,
     isControlled,
     selectedIndex,
     setSelectedIndex
@@ -375,11 +359,11 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
 
   return (
     <Comp
+      {...props}
       data-reach-tab-list=""
       ref={ref}
       role="tablist"
-      onKeyDown={handleKeyDown}
-      {...props}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
     >
       {Children.map(children, (child, index) => {
         /*
@@ -451,12 +435,12 @@ export const Tab = forwardRefWithAs<
   });
 
   const isSelected = index === selectedIndex;
+  const htmlType =
+    Comp === "button" && props.type == null ? "button" : props.type;
+
   function onSelect() {
     onSelectTab(index);
   }
-
-  const htmlType =
-    Comp === "button" && props.type == null ? "button" : props.type;
 
   useUpdateEffect(() => {
     if (isSelected && ownRef.current && userInteractedRef.current) {
@@ -468,14 +452,14 @@ export const Tab = forwardRefWithAs<
   return (
     <Comp
       {...props}
-      data-reach-tab=""
       ref={ref}
-      aria-controls={makeId("panel", tabsId, index)}
+      data-reach-tab=""
+      aria-controls={makeId(tabsId, "panel", index)}
       aria-disabled={Comp !== "button" ? disabled : undefined}
       aria-selected={isSelected}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
-      id={makeId("tab", tabsId, index)}
+      id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
       role="tab"
       tabIndex={isSelected ? 0 : -1}
@@ -519,7 +503,7 @@ export const TabPanels = forwardRefWithAs<"div", TabPanelsProps>(
         descendants={tabPanels}
         setDescendants={setTabPanels}
       >
-        <Comp data-reach-tab-panels="" ref={forwardedRef} {...props}>
+        <Comp {...props} ref={forwardedRef} data-reach-tab-panels="">
           {children}
         </Comp>
       </DescendantProvider>
@@ -552,18 +536,18 @@ if (__DEV__) {
  */
 export const TabPanel = forwardRefWithAs<"div", TabPanelProps>(
   function TabPanel({ children, as: Comp = "div", ...props }, forwardedRef) {
-    const { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
+    let { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
     let ownRef = useRef<HTMLElement | null>(null);
 
-    const index = useDescendant({
+    let index = useDescendant({
       element: ownRef.current,
       context: TabPanelDescendantsContext
     });
     let isSelected = index === selectedIndex;
 
-    let id = makeId("panel", tabsId, index);
+    let id = makeId(tabsId, "panel", index);
 
-    const ref = useForkedRef(
+    let ref = useForkedRef(
       forwardedRef,
       ownRef,
       isSelected ? selectedPanelRef : null
@@ -571,16 +555,17 @@ export const TabPanel = forwardRefWithAs<"div", TabPanelProps>(
 
     return (
       <Comp
-        data-reach-tab-panel=""
+        {...props}
         ref={ref}
-        role="tabpanel"
-        tabIndex={-1}
-        aria-labelledby={makeId("tab", tabsId, index)}
+        data-reach-tab-panel=""
+        aria-labelledby={makeId(tabsId, "tab", index)}
         hidden={!isSelected}
         id={id}
-        children={children}
-        {...props}
-      />
+        role="tabpanel"
+        tabIndex={-1}
+      >
+        {children}
+      </Comp>
     );
   }
 );
