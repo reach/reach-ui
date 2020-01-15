@@ -402,6 +402,7 @@ export const ComboboxInput = forwardRefWithAs<"div", ComboboxInputProps>(
       onBlur,
       onFocus,
       value: controlledValue,
+      name,
       ...props
     },
     forwardedRef
@@ -489,6 +490,7 @@ export const ComboboxInput = forwardRefWithAs<"div", ComboboxInputProps>(
         {...props}
         data-reach-combobox-input=""
         ref={ref}
+        name={name}
         value={inputValue || ""}
         onClick={wrapEvent(onClick, handleClick)}
         onBlur={wrapEvent(onBlur, handleBlur)}
@@ -538,6 +540,10 @@ export type ComboboxInputProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-value
    */
   value?: ComboboxValue;
+  /**
+   * The name attribute of the internal <input /> element.
+   */
+  name?: string;
 };
 
 ComboboxInput.displayName = "ComboboxInput";
