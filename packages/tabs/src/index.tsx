@@ -28,6 +28,7 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
+  boolOrBoolString,
   checkStyles,
   cloneValidElement,
   createDescendantContext,
@@ -41,8 +42,7 @@ import {
   useForkedRef,
   useIsomorphicLayoutEffect,
   useUpdateEffect,
-  wrapEvent,
-  boolOrBoolString
+  wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
@@ -237,7 +237,7 @@ if (__DEV__) {
  */
 export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
-  ref
+  forwardedRef
 ) {
   const {
     isControlled,
@@ -248,27 +248,48 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
   } = useTabsContext();
 
   const { descendants } = useContext(TabsDescendantsContext);
-  let focusNodes = useMemo(
-    () =>
-      descendants
-        .filter(
-          ({ element }) =>
-            element && !boolOrBoolString(element.dataset.disabled)
-        )
-        .map(({ element }) => element),
-    [descendants]
-  );
+
+  let focusableTabs = useMemo(() => {
+    let nodes: HTMLElement[] = [];
+    for (let i = 0; i < descendants.length; i++) {
+      let element = descendants[i].element;
+      if (element && !boolOrBoolString(element.dataset.disabled)) {
+        nodes.push(element);
+      }
+    }
+    return nodes;
+  }, [descendants]);
+
+  let ownRef = useRef<HTMLElement | null>(null);
+  let ref = useForkedRef(forwardedRef, ownRef);
+  let isRTL = useRef(false);
 
   const getFocusIndices = useCallback(() => {
+    /*
+     * To detect RTL mode, we'll look first for <html dir="rtl">, as it is the
+     * generally preferred method for handling RTL writing modes and is more
+     * performant than checking computed styles (event though the computed
+     * styles should take the dir attribute into account).
+     */
+    isRTL.current = false;
+    if (
+      ownRef.current &&
+      ((ownRef.current.ownerDocument &&
+        ownRef.current.ownerDocument.dir === "rtl") ||
+        getStyle(ownRef.current, "direction") === "rtl")
+    ) {
+      isRTL.current = true;
+    }
+
     /*
      * We could be clever and ~~functional~~ here but we really shouldn't need
      * to loop through these arrays more than once.
      *
-     * TODO: We may want to check the document's active element here instead
+     * TODOZ: We may want to check the document's active element here instead
      *       instead of the selectedIndex, even though you *shouldn't* be able
-     *       to to focus an inactive tab
+     *       to to focus a tab unless it's selected.
      */
-    let selectedFocusIndex = focusNodes.findIndex(
+    let selectedFocusIndex = focusableTabs.findIndex(
       element => element === descendants[selectedIndex].element
     );
     let first = -1;
@@ -277,16 +298,16 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     let next = -1;
     for (let n = 0; n < descendants.length; n++) {
       let element = descendants[n].element;
-      if (element === focusNodes[0]) {
+      if (element === focusableTabs[0]) {
         first = n;
       }
-      if (element === focusNodes[focusNodes.length - 1]) {
+      if (element === focusableTabs[focusableTabs.length - 1]) {
         last = n;
       }
-      if (element === focusNodes[selectedFocusIndex - 1]) {
+      if (element === focusableTabs[selectedFocusIndex - 1]) {
         prev = n;
       }
-      if (element === focusNodes[selectedFocusIndex + 1]) {
+      if (element === focusableTabs[selectedFocusIndex + 1]) {
         next = n;
       }
     }
@@ -296,8 +317,9 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
       prev: prev === -1 ? last : prev,
       next: next === -1 ? first : next
     };
-  }, [descendants, focusNodes, selectedIndex]);
+  }, [descendants, focusableTabs, selectedIndex]);
 
+  // TODOZ: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
@@ -318,10 +340,10 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
 
     switch (key) {
       case "ArrowRight":
-        onSelectTab(next);
+        onSelectTab(isRTL.current ? prev : next);
         break;
       case "ArrowLeft":
-        onSelectTab(prev);
+        onSelectTab(isRTL.current ? next : prev);
         break;
       case "ArrowDown":
         // don't scroll down
@@ -355,7 +377,6 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     }
   }, [
     descendants,
-    focusNodes,
     getFocusIndices,
     isControlled,
     selectedIndex,
@@ -372,7 +393,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     >
       {Children.map(children, (child, index) => {
         /*
-         * TODO: Since refactoring to use context rather than depending on
+         * TODOZ: Since refactoring to use context rather than depending on
          * parent/child relationships, we need to update our recommendations for
          * animations that break when we don't forward the `isSelected` prop
          * to our tabs. We will remove this in 1.0 and update our docs
@@ -419,7 +440,7 @@ if (__DEV__) {
  */
 export const Tab = forwardRefWithAs<
   "button",
-  // TODO: Remove this when cloneElement is removed
+  // TODOZ: Remove this when cloneElement is removed
   TabProps & { isSelected?: boolean }
 >(function Tab(
   { children, isSelected: _, as: Comp = "button", disabled, ...props },
@@ -456,10 +477,10 @@ export const Tab = forwardRefWithAs<
       {...props}
       ref={ref}
       data-reach-tab=""
+      data-disabled={disabled}
       aria-controls={makeId(tabsId, "panel", index)}
       aria-disabled={disabled}
       aria-selected={isSelected}
-      data-disabled={disabled ? true : undefined}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
@@ -590,4 +611,25 @@ if (__DEV__) {
     as: PropTypes.elementType,
     children: PropTypes.node
   };
+}
+
+/**
+ * Get a computed style value by property, backwards compatible with IE
+ * @param element
+ * @param styleProp
+ */
+function getStyle(element: HTMLElement, styleProp: string) {
+  let y: string | null = null;
+  if ((element as any).currentStyle) {
+    y = (element as any).currentStyle[styleProp] as string;
+  } else if (
+    element.ownerDocument &&
+    element.ownerDocument.defaultView &&
+    typeof element.ownerDocument.defaultView.getComputedStyle === "function"
+  ) {
+    y = element.ownerDocument.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(styleProp);
+  }
+  return y;
 }
