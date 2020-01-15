@@ -9,17 +9,28 @@
 import React, {
   forwardRef,
   Children,
-  createContext,
   useEffect,
   useLayoutEffect,
   useRef,
   useContext,
   useReducer,
-  useState,
-  cloneElement
+  useState
 } from "react";
 import PropTypes from "prop-types";
-import { makeId, wrapEvent, useForkedRef } from "@reach/utils";
+// import { useMachine } from "@xstate/react/lib/fsm";
+// import { createMachine } from "@xstate/fsm";
+import {
+  createDescendantContext,
+  createNamedContext,
+  forwardRefWithAs,
+  makeId,
+  wrapEvent,
+  useDescendants,
+  // useDescendant,
+  useForkedRef,
+  DescendantProvider,
+  cloneValidElement
+} from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
 import warning from "warning";
@@ -150,59 +161,77 @@ const stateChart = {
 };
 
 const expandedStates = [NAVIGATING, NAVIGATING_WITH_KEYS, INTERACTING];
-const isExpanded = state => expandedStates.includes(state);
+const isExpanded = (state: any) => expandedStates.includes(state); // TODO: types
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext
 
-const ListboxContext = createContext({});
-const ListboxGroupContext = createContext({});
+const ListboxDescendantContext = createDescendantContext(
+  "ListboxDescendantContext",
+  {}
+);
+const ListboxContext = createNamedContext(
+  "ListboxContext",
+  {} as IListboxContext
+);
+const ListboxGroupContext = createNamedContext(
+  "ListboxGroupContext",
+  {} as IListboxGroupContext
+);
 const useListboxContext = () => useContext(ListboxContext);
 const useListboxGroupContext = () => useContext(ListboxGroupContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxGroup
 
-export const ListboxGroup = forwardRef(function ListboxGroup(
-  { children, label, ...props },
-  forwardedRef
-) {
-  const { listboxId } = useListboxContext();
-  const labelId = makeId(
-    "label",
-    useId(typeof label === "string" ? kebabCase(label) : null),
-    listboxId
-  );
+type ListboxGroupProps = React.HTMLAttributes<HTMLDivElement> & {
+  label: React.ReactNode;
+};
 
-  return (
-    <ListboxGroupContext.Provider value={{ label, labelId }}>
-      <div
-        {...props}
-        ref={forwardedRef}
-        data-reach-listbox-group=""
-        aria-labelledby={labelId}
-        role="group"
-      >
-        {typeof label === "string" ? (
-          <span
-            id={labelId}
-            role="presentation"
-            data-reach-listbox-group-label=""
-          >
-            {label}
-          </span>
-        ) : label ? (
-          cloneElement(label, {
-            id: labelId,
-            "data-reach-listbox-group-label": "",
-            role: "presentation"
-          })
-        ) : null}
-        {children}
-      </div>
-    </ListboxGroupContext.Provider>
-  );
-});
+export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
+  function ListboxGroup({ children, label, ...props }, forwardedRef) {
+    const { listboxId } = useListboxContext();
+    const labelId = makeId(
+      "label",
+      useId(typeof label === "string" ? kebabCase(label) : null),
+      listboxId
+    );
+
+    let context: IListboxGroupContext = {
+      label,
+      labelId
+    };
+
+    return (
+      <ListboxGroupContext.Provider value={context}>
+        <div
+          {...props}
+          ref={forwardedRef}
+          data-reach-listbox-group=""
+          aria-labelledby={labelId}
+          role="group"
+        >
+          {typeof label === "string" ? (
+            <span
+              id={labelId}
+              role="presentation"
+              data-reach-listbox-group-label=""
+            >
+              {label}
+            </span>
+          ) : label ? (
+            cloneValidElement(label, {
+              id: labelId,
+              "data-reach-listbox-group-label": "",
+              role: "presentation"
+            })
+          ) : null}
+          {children}
+        </div>
+      </ListboxGroupContext.Provider>
+    );
+  }
+);
 
 ListboxGroup.displayName = "ListboxGroup";
 if (__DEV__) {
@@ -214,10 +243,12 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxGroupLabel
 
-export const ListboxGroupLabel = forwardRef(function ListboxGroupLabel(
-  { children, ...props },
-  forwardedRef
-) {
+type ListboxGroupLabelProps = React.HTMLAttributes<HTMLSpanElement> & {};
+
+export const ListboxGroupLabel = forwardRef<
+  HTMLSpanElement,
+  ListboxGroupLabelProps
+>(function ListboxGroupLabel({ children, ...props }, forwardedRef) {
   const { label, labelId } = useListboxGroupContext();
 
   if (__DEV__) {
@@ -231,9 +262,9 @@ export const ListboxGroupLabel = forwardRef(function ListboxGroupLabel(
     <span
       {...props}
       ref={forwardedRef}
+      data-reach-listbox-group-label=""
       id={labelId}
       role="presentation"
-      data-reach-listbox-group-label=""
     >
       {children}
     </span>
@@ -248,73 +279,88 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxInput
 
-export const ListboxInput = forwardRef(function ListboxInput(
-  { as: Comp = "div", children, name, onChange, value, ...props },
-  forwardedRef
-) {
-  const initialData = {
-    onChange,
-    /*
-     * The value the user has selected.
-     */
-    selection: value,
-    /*
-     * The value the user has navigated to when the list is expanded.
-     */
-    navigationSelection: null
-  };
+type ListboxInputProps = {
+  name?: string;
+  value: ListboxValue;
+};
 
-  const [
-    state,
-    data,
-    transition,
-    { buttonRef, inputRef, listRef, mouseMovedRef, optionsRef, popoverRef }
-  ] = useReducerMachine(stateChart, reducer, initialData);
+export const ListboxInput = forwardRefWithAs<"div", ListboxInputProps>(
+  function ListboxInput(
+    { as: Comp = "div", children, name, onChange, value, ...props },
+    forwardedRef
+  ) {
+    const initialData = {
+      onChange,
+      /*
+       * The value the user has selected.
+       */
+      selection: value,
+      /*
+       * The value the user has navigated to when the list is expanded.
+       */
+      navigationSelection: null
+    };
 
-  const id = useId(props.id);
+    const [
+      state,
+      data,
+      transition,
+      { buttonRef, inputRef, listRef, mouseMovedRef, optionsRef, popoverRef }
+    ] = useReducerMachine(stateChart, reducer, initialData);
 
-  const listboxId = makeId("listbox", id);
+    const id = useId(props.id);
 
-  const buttonId = makeId("button", id);
+    const listboxId = makeId("listbox", id);
 
-  const ref = useForkedRef(inputRef, forwardedRef);
+    const buttonId = makeId("button", id);
 
-  // Parses our children to find the selected option.
-  // See docblock on the function for more deets.
-  const selectedNode = recursivelyFindChildByValue(children, value);
+    const ref = useForkedRef(inputRef, forwardedRef);
 
-  const context = {
-    buttonId,
-    buttonRef,
-    data,
-    inputRef,
-    instanceId: id,
-    isExpanded: isExpanded(state),
-    listboxId,
-    listRef,
-    mouseMovedRef,
-    optionsRef,
-    popoverRef,
-    selectedNode,
-    state,
-    transition
-  };
+    // Parses our children to find the selected option.
+    // See docblock on the function for more deets.
+    const selectedNode = recursivelyFindChildByValue(children, value);
 
-  return (
-    <ListboxContext.Provider value={context}>
-      <Comp
-        {...props}
-        ref={ref}
-        data-reach-listbox=""
-        data-expanded={context.isExpanded}
-        data-value={value}
+    let [options, setOptions] = useDescendants();
+
+    const context: IListboxContext = {
+      buttonId,
+      buttonRef,
+      data,
+      inputRef,
+      instanceId: id,
+      isExpanded: isExpanded(state),
+      listboxId,
+      listRef,
+      mouseMovedRef,
+      optionsRef,
+      popoverRef,
+      selectedNode,
+      state,
+      transition
+    };
+
+    return (
+      <DescendantProvider
+        context={ListboxDescendantContext}
+        items={options}
+        set={setOptions}
       >
-        {children}
-      </Comp>
-      {name && <input type="hidden" name={name} value={value} />}
-    </ListboxContext.Provider>
-  );
-});
+        <ListboxContext.Provider value={context}>
+          <Comp
+            {...props}
+            ref={ref}
+            data-reach-listbox=""
+            data-expanded={context.isExpanded}
+            data-value={value}
+          >
+            {children}
+          </Comp>
+          {name && <input type="hidden" name={name} value={value} />}
+        </ListboxContext.Provider>
+      </DescendantProvider>
+    );
+  }
+);
 
 ListboxInput.displayName = "ListboxInput";
 if (__DEV__) {
@@ -324,38 +370,52 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxPopover
 
-export const ListboxPopover = forwardRef(function ListboxPopover(
-  { portal = true, onKeyDown, onBlur, ...props },
-  forwardedRef
-) {
-  const { popoverRef, buttonRef, isExpanded } = useListboxContext();
-  const ref = useForkedRef(popoverRef, forwardedRef);
-  const handleKeyDown = useKeyDown();
-  const handleBlur = useBlur();
-  const hidden = !isExpanded;
+type ListboxPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
+  portal?: boolean;
+};
 
-  const Container = portal ? Popover : "div";
+export const ListboxPopover = forwardRef<HTMLDivElement, ListboxPopoverProps>(
+  function ListboxPopover(
+    { portal = true, onKeyDown, onBlur, ...props },
+    forwardedRef
+  ) {
+    const { popoverRef, buttonRef, isExpanded } = useListboxContext();
+    const ref = useForkedRef(popoverRef, forwardedRef);
+    const handleKeyDown = useKeyDown();
+    const handleBlur = useBlur();
+    const hidden = !isExpanded;
 
-  const popupProps = portal
-    ? {
-        targetRef: buttonRef,
-        position: positionMatchWidth
-      }
-    : {};
+    const Container = portal ? Popover : "div";
 
-  return (
-    <Container
-      {...props}
-      ref={ref}
-      data-reach-listbox-popover=""
-      hidden={hidden}
-      onBlur={wrapEvent(onBlur, handleBlur)}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      tabIndex={-1}
-      {...popupProps}
-    />
-  );
-});
+    const popupProps = portal
+      ? {
+          targetRef: buttonRef,
+          position: positionMatchWidth
+        }
+      : {};
+
+    const commonProps = {
+      ...props,
+      "data-reach-listbox-popover": "",
+      hidden,
+      onBlur: wrapEvent(onBlur, handleBlur),
+      onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
+      tabIndex: -1
+    };
+
+    return portal ? (
+      <Popover
+        {...commonProps}
+        ref={ref}
+        // @ts-ignore TODO: Fix types in @reach/popover
+        targetRef={buttonRef!}
+        position={positionMatchWidth}
+      />
+    ) : (
+      <div {...commonProps} ref={ref} />
+    );
+  }
+);
 
 ListboxPopover.displayName = "ListboxPopover";
 if (__DEV__) {
@@ -365,38 +425,41 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxList
 
-export const ListboxList = forwardRef(function ListboxList(
-  { as: Comp = "div", children, ...props },
-  forwardedRef
-) {
-  const {
-    data: { selection: value },
-    listboxId,
-    listRef,
-    optionsRef
-  } = useListboxContext();
+type ListboxListProps = {};
 
-  const ref = useForkedRef(listRef, forwardedRef);
+export const ListboxList = forwardRefWithAs<"div", ListboxListProps>(
+  function ListboxList({ as: Comp = "div", children, ...props }, forwardedRef) {
+    const {
+      data: { selection: value },
+      listboxId,
+      listRef,
+      optionsRef
+    } = useListboxContext();
 
-  useLayoutEffect(() => {
-    optionsRef.current = [];
-    return () => (optionsRef.current = []);
-  });
+    const ref = useForkedRef(listRef, forwardedRef);
 
-  return (
-    <Comp
-      {...props}
-      ref={ref}
-      data-reach-listbox-list=""
-      aria-activedescendant={useOptionId(value)}
-      id={listboxId}
-      role="listbox"
-      tabIndex={-1}
-    >
-      {children}
-    </Comp>
-  );
-});
+    useLayoutEffect(() => {
+      optionsRef.current = [];
+      return () => {
+        optionsRef.current = [];
+      };
+    });
+
+    return (
+      <Comp
+        {...props}
+        ref={ref}
+        data-reach-listbox-list=""
+        aria-activedescendant={useOptionId(value)}
+        id={listboxId}
+        role="listbox"
+        tabIndex={-1}
+      >
+        {children}
+      </Comp>
+    );
+  }
+);
 
 ListboxList.displayName = "ListboxList";
 if (__DEV__) {
@@ -406,115 +469,124 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxOption
 
-export const ListboxOption = forwardRef(function ListboxOption(
-  {
-    as: Comp = "div",
-    children,
-    onClick,
-    onMouseDown,
-    onMouseEnter,
-    onMouseLeave,
-    onMouseMove,
-    onMouseUp,
-    value,
-    valueText: valueTextProp,
-    ...props
-  },
-  forwardedRef
-) {
-  if (!value) {
-    throw Error(`A ListboxOption must have a value prop.`);
-  }
+// TODO: Support disabled option
 
-  const {
-    data: { selection: inputValue, navigationSelection },
-    mouseMovedRef,
-    optionsRef,
-    state,
-    transition
-  } = useListboxContext();
+type ListboxOptionProps = {
+  value: ListboxValue;
+  valueText?: string;
+};
 
-  const ownRef = useRef(null);
-  const ref = useForkedRef(ownRef, forwardedRef);
-
-  let valueText = value;
-  if (valueTextProp) {
-    valueText = valueTextProp;
-  } else if (typeof children === "string") {
-    valueText = children;
-  } else if (ownRef.current && ownRef.current.innerText) {
-    valueText = ownRef.current.innerText;
-  }
-
-  const isHighlighted = navigationSelection
-    ? navigationSelection === value
-    : false;
-  const isActive = inputValue === value;
-
-  function handleMouseEnter() {
-    transition(MOUSE_ENTER, { navigationSelection: value });
-  }
-
-  function handleMouseLeave() {
-    transition(MOUSE_LEAVE);
-  }
-
-  function handleMouseDown(event) {
-    event.persist();
-    transition(MOUSE_DOWN, { reactEvent: event });
-  }
-
-  function handleMouseMove() {
-    mouseMovedRef.current = true;
-
-    /*
-     * We don't really *need* this guard if we put this in the state machine,
-     * but in this case it seems wise not to needlessly run our transitions
-     * every time the user's mouse moves. Seems like a lot.
-     */
-    if (state === NAVIGATING_WITH_KEYS) {
-      transition(NAVIGATE, { navigationSelection: value });
+export const ListboxOption = forwardRefWithAs<"div", ListboxOptionProps>(
+  function ListboxOption(
+    {
+      as: Comp = "div",
+      children,
+      onClick,
+      onMouseDown,
+      onMouseEnter,
+      onMouseLeave,
+      onMouseMove,
+      onMouseUp,
+      value,
+      valueText: valueTextProp,
+      ...props
+    },
+    forwardedRef
+  ) {
+    if (!value) {
+      throw Error(`A ListboxOption must have a value prop.`);
     }
-  }
 
-  function handleMouseUp(event) {
-    event.persist();
-    transition(MOUSE_SELECT, {
-      selection: value,
-      reactEvent: event
+    const {
+      data: { selection: inputValue, navigationSelection },
+      mouseMovedRef,
+      optionsRef,
+      state,
+      transition
+    } = useListboxContext();
+
+    const ownRef = useRef<HTMLElement | null>(null);
+    const ref = useForkedRef(ownRef, forwardedRef);
+
+    let valueText = value;
+    if (valueTextProp) {
+      valueText = valueTextProp;
+    } else if (typeof children === "string") {
+      valueText = children;
+    } else if (ownRef.current && ownRef.current.innerText) {
+      valueText = ownRef.current.innerText;
+    }
+
+    const isHighlighted = navigationSelection
+      ? navigationSelection === value
+      : false;
+    const isActive = inputValue === value;
+
+    function handleMouseEnter() {
+      transition(MOUSE_ENTER, { navigationSelection: value });
+    }
+
+    function handleMouseLeave() {
+      transition(MOUSE_LEAVE);
+    }
+
+    function handleMouseDown(event: React.MouseEvent) {
+      event.persist();
+      transition(MOUSE_DOWN, { reactEvent: event });
+    }
+
+    function handleMouseMove() {
+      mouseMovedRef.current = true;
+
+      /*
+       * We don't really *need* this guard if we put this in the state machine,
+       * but in this case it seems wise not to needlessly run our transitions
+       * every time the user's mouse moves. Seems like a lot.
+       */
+      if (state === NAVIGATING_WITH_KEYS) {
+        transition(NAVIGATE, { navigationSelection: value });
+      }
+    }
+
+    function handleMouseUp(event: React.MouseEvent) {
+      event.persist();
+      transition(MOUSE_SELECT, {
+        selection: value,
+        reactEvent: event
+      });
+    }
+
+    useEffect(() => {
+      optionsRef.current.push({ value, valueText });
     });
+
+    return (
+      <Comp
+        {...props}
+        data-reach-listbox-option=""
+        ref={ref}
+        id={useOptionId(value)}
+        role="option"
+        aria-selected={isActive}
+        data-value={value}
+        data-valuetext={valueText}
+        data-highlighted={isHighlighted ? "" : undefined}
+        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+        onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
+        onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
+        onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
+        tabIndex={-1}
+      >
+        <span data-reach-listbox-option-text="">
+          {typeof children === "function"
+            ? children({ value, valueText })
+            : children || valueText}
+        </span>
+      </Comp>
+    );
   }
-
-  useEffect(() => {
-    optionsRef.current.push({ value, valueText });
-  });
-
-  return (
-    <Comp
-      {...props}
-      data-reach-listbox-option=""
-      ref={ref}
-      id={useOptionId(value)}
-      role="option"
-      aria-selected={isActive}
-      data-value={value}
-      data-valuetext={valueText}
-      data-highlighted={isHighlighted ? "" : undefined}
-      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-      onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-      onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
-      onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
-      onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
-      tabIndex={-1}
-    >
-      <span data-reach-listbox-option-text="">
-        {typeof children === "function"
-          ? children({ value, valueText })
-          : children || valueText}
-      </span>
-    </Comp>
-  );
-});
+);
 
 ListboxOption.displayName = "ListboxOption";
 if (__DEV__) {
@@ -525,70 +597,77 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxButton
-export const ListboxButton = forwardRef(function ListboxButton(
-  {
-    as: Comp = "button",
-    children,
-    onMouseDown,
-    // onTouchStart,
-    onKeyDown,
-    arrow,
-    ...props
-  },
-  forwardedRef
-) {
-  const {
-    transition,
-    buttonRef,
-    buttonId,
-    listboxId,
-    selectedNode,
-    isExpanded
-  } = useListboxContext();
 
-  const ref = useForkedRef(buttonRef, forwardedRef);
+type ListboxButtonProps = {
+  arrow?: React.ReactNode;
+};
 
-  const handleKeyDown = useKeyDown();
+export const ListboxButton = forwardRefWithAs<"button", ListboxButtonProps>(
+  function ListboxButton(
+    {
+      as: Comp = "button",
+      children,
+      onMouseDown,
+      // onTouchStart,
+      onKeyDown,
+      arrow,
+      ...props
+    },
+    forwardedRef
+  ) {
+    const {
+      transition,
+      buttonRef,
+      buttonId,
+      listboxId,
+      selectedNode,
+      isExpanded
+    } = useListboxContext();
 
-  function handleMouseDown(event) {
-    event.persist();
-    transition(BUTTON_CLICK, { reactEvent: event });
-  }
+    const ref = useForkedRef(buttonRef, forwardedRef);
 
-  let inner = null;
-  if (children) {
-    inner = children;
-  } else if (selectedNode) {
-    if (selectedNode.props && selectedNode.props.children) {
-      inner = selectedNode.props.children;
-    } else if (selectedNode.props && selectedNode.props.valueText) {
-      inner = selectedNode.props.valueText;
-    } else if (selectedNode.props && selectedNode.props.value) {
-      inner = selectedNode.props.value;
+    const handleKeyDown = useKeyDown();
+
+    function handleMouseDown(event: React.MouseEvent) {
+      event.persist();
+      transition(BUTTON_CLICK, { reactEvent: event });
     }
-  }
 
-  return (
-    <Comp
-      {...props}
-      ref={ref}
-      data-reach-listbox-button=""
-      aria-controls={listboxId} // TODO: verify that this is needed
-      aria-expanded={isExpanded}
-      aria-haspopup="listbox"
-      aria-labelledby={`${buttonId} ${listboxId}`}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-    >
-      <span data-reach-listbox-button-inner="">{inner}</span>
-      {arrow && (
-        <span data-reach-listbox-button-arrow="" aria-hidden>
-          {arrow}
-        </span>
-      )}
-    </Comp>
-  );
-});
+    let inner = null;
+    if (children) {
+      inner = children;
+    } else if (selectedNode) {
+      if (selectedNode.props && selectedNode.props.children) {
+        inner = selectedNode.props.children;
+      } else if (selectedNode.props && selectedNode.props.valueText) {
+        inner = selectedNode.props.valueText;
+      } else if (selectedNode.props && selectedNode.props.value) {
+        inner = selectedNode.props.value;
+      }
+    }
+
+    return (
+      <Comp
+        {...props}
+        ref={ref}
+        data-reach-listbox-button=""
+        aria-controls={listboxId} // TODO: verify that this is needed
+        aria-expanded={isExpanded}
+        aria-haspopup="listbox"
+        aria-labelledby={`${buttonId} ${listboxId}`}
+        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+      >
+        <span data-reach-listbox-button-inner="">{inner}</span>
+        {arrow && (
+          <span data-reach-listbox-button-arrow="" aria-hidden>
+            {arrow}
+          </span>
+        )}
+      </Comp>
+    );
+  }
+);
 
 ListboxButton.displayName = "ListboxButton";
 if (__DEV__) {
@@ -600,7 +679,11 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // Listbox
 
-export const Listbox = forwardRef(function Listbox(
+type ListboxProps = ListboxInputProps & {
+  arrow?: React.ReactNode;
+};
+
+export const Listbox = forwardRefWithAs<"div", ListboxProps>(function Listbox(
   { arrow = "▼", children, ...props },
   forwardedRef
 ) {
@@ -620,10 +703,12 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-function findOptionValueFromSearch(opts, string = "") {
+// TODO: Needs an update
+function findOptionValueFromSearch(opts: any, string = "") {
   if (!string) return;
   const found = opts.find(
-    ({ valueText }) => valueText && valueText.toLowerCase().startsWith(string)
+    ({ valueText }: any) =>
+      valueText && valueText.toLowerCase().startsWith(string)
   );
   return found ? found.value : null;
 }
@@ -642,8 +727,10 @@ function findOptionValueFromSearch(opts, string = "") {
  * need to use the lower level API and explicitly render the ListboxButton.
  *
  * This limits composition, but the tradeoff
+ *
+ * TODO: Probably gonna just get rid of this altogether TBH
  */
-function recursivelyFindChildByValue(children, value) {
+function recursivelyFindChildByValue(children: any, value: any): any {
   const childrenArray = Children.toArray(children);
   for (let i = 0; i <= childrenArray.length; i++) {
     let child = childrenArray[i];
@@ -667,7 +754,8 @@ function recursivelyFindChildByValue(children, value) {
   return false;
 }
 
-function reducer(data, action) {
+// TODO: Replace once we're using xstate's machine
+function reducer(data: any, action: any): any {
   const { refs = {}, state, type: actionType, reactEvent } = action;
   const {
     buttonRef,
@@ -680,7 +768,7 @@ function reducer(data, action) {
   const { onChange } = data;
   const nextState = { ...data, lastActionType: actionType };
   const hasOptions = Array.isArray(options) && !!options.length;
-  const optionValues = options.map(({ value }) => value);
+  const optionValues = options.map(({ value }: any) => value);
   const searchValue = action.query
     ? findOptionValueFromSearch(options, action.query)
     : null;
@@ -694,7 +782,7 @@ function reducer(data, action) {
     (state === NAVIGATING || state === NAVIGATING_WITH_KEYS) &&
     data.navigationSelection !== null;
 
-  function select(selection) {
+  function select(selection: any) {
     requestAnimationFrame(() => {
       if (buttonRef.current && userInteractedRef.current) {
         userInteractedRef.current = false;
@@ -938,7 +1026,7 @@ function useBlur() {
     };
   }, []); */
 
-  return function handleBlur(event) {
+  return function handleBlur(event: React.FocusEvent) {
     requestAnimationFrame(() => {
       // We on want to close only if focus rests outside the listbox
       if (
@@ -972,7 +1060,7 @@ function useKeyDown() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  return function handleKeyDown(event) {
+  return function handleKeyDown(event: React.KeyboardEvent) {
     event.persist();
 
     switch (event.key) {
@@ -1025,16 +1113,18 @@ function useKeyDown() {
   };
 }
 
-function useOptionId(value) {
+function useOptionId(value: any) {
   const { instanceId } = useListboxContext();
-  return makeId(`option-${value}`, instanceId);
+  return makeId(instanceId, "option", value);
 }
 
 /**
  * This manages transitions between states with a built in reducer to manage the
  * data that goes with those transitions.
+ *
+ * TODO: Remove and replace with xstate
  */
-function useReducerMachine(chart, reducer, initialData) {
+function useReducerMachine(chart: any, reducer: any, initialData: any): any {
   const [state, setState] = useState(chart.initial);
   const [data, dispatch] = useReducer(reducer, {
     ...initialData,
@@ -1053,7 +1143,7 @@ function useReducerMachine(chart, reducer, initialData) {
 
   const popoverRef = useRef(null);
 
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLElement | null>(null);
 
   const inputRef = useRef(null);
 
@@ -1077,7 +1167,7 @@ function useReducerMachine(chart, reducer, initialData) {
     userInteractedRef
   };
 
-  const transition = (action, payload = {}) => {
+  const transition = (action: any, payload = {}) => {
     const currentState = chart.states[state];
     const nextState = currentState.on[action];
     if (!nextState) {
@@ -1090,10 +1180,45 @@ function useReducerMachine(chart, reducer, initialData) {
   return [state, data, transition, refs];
 }
 
-function kebabCase(str) {
-  return str
-    .match(/[A-Z]{2,}(?=[A-Z][a-z0-9]*|\b)|[A-Z]?[a-z0-9]*|[A-Z]|[0-9]+/g)
-    .filter(Boolean)
-    .join("-")
-    .toLowerCase();
+function kebabCase(str: string) {
+  let match = str.match(
+    /[A-Z]{2,}(?=[A-Z][a-z0-9]*|\b)|[A-Z]?[a-z0-9]*|[A-Z]|[0-9]+/g
+  );
+  return match
+    ? match
+        .filter(Boolean)
+        .join("-")
+        .toLowerCase()
+    : str;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+type ButtonRef = React.RefObject<HTMLElement | null>;
+type InputRef = React.RefObject<HTMLElement | null>;
+type ListRef = React.RefObject<HTMLElement | null>;
+type PopoverRef = React.RefObject<any | null>;
+type ListboxValue = React.ReactText;
+
+interface IListboxContext {
+  buttonId: string;
+  buttonRef: ButtonRef;
+  data: any; // TODO: types
+  inputRef: InputRef;
+  instanceId: string | undefined;
+  isExpanded: boolean;
+  listboxId: string;
+  listRef: ListRef;
+  mouseMovedRef: React.MutableRefObject<boolean>;
+  optionsRef: any;
+  popoverRef: PopoverRef;
+  selectedNode: any; // TODO: types
+  state: any; // TODO: types
+  transition: any; // TODO: types
+}
+
+interface IListboxGroupContext {
+  label: React.ReactNode;
+  labelId: string;
 }
