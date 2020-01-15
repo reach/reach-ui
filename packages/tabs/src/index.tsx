@@ -113,7 +113,7 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
   let [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
-  let [tabs, setTabs] = useDescendants();
+  let [tabs, setTabs] = useDescendants<HTMLElement>();
 
   const context: ITabsContext = useMemo(() => {
     return {
@@ -145,8 +145,8 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
   return (
     <DescendantProvider
       context={TabsDescendantsContext}
-      descendants={tabs}
-      setDescendants={setTabs}
+      items={tabs}
+      set={setTabs}
     >
       <TabsContext.Provider value={context}>
         <Comp {...props} ref={ref} data-reach-tabs="" id={props.id}>
@@ -498,12 +498,12 @@ if (__DEV__) {
  */
 export const TabPanels = forwardRefWithAs<"div", TabPanelsProps>(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
-    let [tabPanels, setTabPanels] = useDescendants();
+    let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
     return (
       <DescendantProvider
         context={TabPanelDescendantsContext}
-        descendants={tabPanels}
-        setDescendants={setTabPanels}
+        items={tabPanels}
+        set={setTabPanels}
       >
         <Comp {...props} ref={forwardedRef} data-reach-tab-panels="">
           {children}

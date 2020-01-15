@@ -52,7 +52,7 @@ const SET_BUTTON_ID = "SET_BUTTON_ID";
 
 const MenuDescendantContext = createDescendantContext<
   HTMLElement,
-  { key: string }
+  DescendantProps
 >("MenuDescendantContext");
 const MenuContext = createNamedContext<IMenuContext>(
   "MenuContext",
@@ -100,7 +100,10 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants();
+  let [descendants, setDescendants] = useDescendants<
+    HTMLElement,
+    DescendantProps
+  >();
   let [state, dispatch] = useReducer(reducer, initialState);
   let menuId = useId(id);
 
@@ -118,8 +121,8 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   return (
     <DescendantProvider
       context={MenuDescendantContext}
-      descendants={descendants}
-      setDescendants={setDescendants}
+      items={descendants}
+      set={setDescendants}
     >
       <MenuContext.Provider value={context}>
         {typeof children === "function"
@@ -997,6 +1000,7 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
+type DescendantProps = { key: string };
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;

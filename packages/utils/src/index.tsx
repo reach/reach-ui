@@ -357,20 +357,20 @@ export function useDescendant<T, P>(
   );
 }
 
-export function useDescendants<T, P>() {
+export function useDescendants<T, P = {}>() {
   return useState<Descendant<T, P>[]>([]);
 }
 
 export function DescendantProvider<T, P>({
   context: Ctx,
   children,
-  descendants,
-  setDescendants
+  items,
+  set
 }: {
   context: React.Context<IDescendantContext<T, P>>;
   children: React.ReactNode;
-  descendants: Descendant<T>[];
-  setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
+  items: Descendant<T, P>[];
+  set: React.Dispatch<React.SetStateAction<Descendant<T, P>[]>>;
 }) {
   let registerDescendant = React.useCallback(
     ({ element, ...rest }: Descendant<T, P>) => {
@@ -378,7 +378,7 @@ export function DescendantProvider<T, P>({
         return;
       }
 
-      setDescendants(items => {
+      set(items => {
         if (items.find(({ element: _el }) => _el === element) == null) {
           /*
            * When registering a descendant, we need to make sure we insert in
@@ -436,9 +436,7 @@ export function DescendantProvider<T, P>({
         return;
       }
 
-      setDescendants(items =>
-        items.filter(({ element: _el }) => element !== _el)
-      );
+      set(items => items.filter(({ element: _el }) => element !== _el));
     },
     /*
      * setDescendants is a state setter initialized by the useDescendants hook.
@@ -457,11 +455,11 @@ export function DescendantProvider<T, P>({
   // @ts-ignore
   const value: IDescendantContext<T, P> = useMemo(() => {
     return {
-      descendants,
+      descendants: items,
       registerDescendant,
       unregisterDescendant
     };
-  }, [descendants, registerDescendant, unregisterDescendant]);
+  }, [items, registerDescendant, unregisterDescendant]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
