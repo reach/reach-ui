@@ -29,12 +29,12 @@ about: Create a report to help make Reach UI better
 
 <!-- PLEASE FILL THIS OUT -->
 
-| Software                 | Name/Version(s) |
-| ------------------------ | --------------- |
-| **[REACH_PACKAGE_NAME]** |
-| React                    |
-| Browser                  |
-| Assistive tech           |
-| Node                     |
-| npm/yarn                 |
-| Operating System         |
+| Software         | Name(s) | Version |
+| ---------------- | ------- | ------- |
+| Reach Package    |         |         |
+| React            |         |         |
+| Browser          |         |         |
+| Assistive tech   |         |         |
+| Node             |         |         |
+| npm/yarn         |         |         |
+| Operating System |         |         |

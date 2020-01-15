@@ -1,0 +1,48 @@
+{
+  "name": "reach-ui-template",
+  "version": "1.0.0",
+  "description": "Use this template to explore or recreate bugs for Reach UI",
+  "keywords": [
+    "reach ui",
+    "react",
+    "accessibility"
+  ],
+  "main": "src/index.js",
+  "dependencies": {
+    "@reach/alert": "latest",
+    "@reach/alert-dialog": "latest",
+    "@reach/auto-id": "latest",
+    "@reach/combobox": "latest",
+    "@reach/component-component": "latest",
+    "@reach/dialog": "latest",
+    "@reach/menu-button": "latest",
+    "@reach/popover": "latest",
+    "@reach/portal": "latest",
+    "@reach/rect": "latest",
+    "@reach/skip-nav": "latest",
+    "@reach/slider": "latest",
+    "@reach/tabs": "latest",
+    "@reach/tooltip": "latest",
+    "@reach/utils": "latest",
+    "@reach/visually-hidden": "latest",
+    "@reach/window-size": "latest",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "react-scripts": "3.3.0"
+  },
+  "devDependencies": {
+    "typescript": "3.7.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

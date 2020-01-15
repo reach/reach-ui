@@ -1,31 +1,24 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dialog } from "@reach/dialog";
-import { usePrevious } from "@reach/utils";
+import "@reach/dialog/styles.css";
 
 export let name = "Destroy Trigger";
 
-export let Example = () => {
-  const openButton = React.useRef(null);
-  const startOverButton = React.useRef(null);
-  const closeButton = React.useRef(null);
-  const [phase, setPhase] = React.useState(1);
-  const prevPhase = usePrevious(phase);
-  React.useEffect(() => {
-    if (phase !== prevPhase) {
-      switch (phase) {
-        case 1:
-          openButton.current.focus();
-          break;
-        case 3:
-          startOverButton.current.focus();
-          break;
-        default:
-          break;
-      }
+export function Example() {
+  const openButton = useRef(null);
+  const startOverButton = useRef(null);
+  const closeButton = useRef(null);
+  const [phase, setPhase] = useState(1);
+
+  useEffect(() => {
+    if (phase === 1) {
+      openButton.current.focus();
     }
-  }, [phase, prevPhase]);
+    if (phase === 3) {
+      startOverButton.current.focus();
+    }
+  }, [phase]);
+
   return (
     <div>
       {phase === 1 ? (
@@ -50,4 +43,4 @@ export let Example = () => {
       </Dialog>
     </div>
   );
-};
+}

@@ -1,29 +1,32 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.6.2",
+  "version": "0.7.2",
   "description": "Skip navigation links for screen reader and keyboard users.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/skip-nav"
   },
-  "main": "index.js",
-  "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+  },
+  "dependencies": {
+    "@reach/utils": "^0.7.2"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/skip-nav.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
+    "README.md",
+    "dist",
     "styles.css"
   ]
 }

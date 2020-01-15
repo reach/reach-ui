@@ -1,28 +1,28 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Auto ID"
-  meta={[
-    {
-      name: "description",
-      content:
-        "Autogenerate IDs to facilitate WAI-ARIA and server rendering in React"
-    }
-  ]}
+<SEO
+  title="Auto ID"
+  description="Autogenerate IDs to facilitate WAI-ARIA and server rendering in React"
 />
 
 # Auto ID
 
 Autogenerate IDs to facilitate WAI-ARIA and server rendering.
 
-A string can be supplied as an argument to be used in lieu of the auto-generated ID. This is handy for accepting user-provided prop IDs that need to be deterministic.
+A string can be supplied as an argument to be `useId` in lieu of the auto-generated ID. This is handy for accepting user-provided prop IDs that need to be deterministic.
 
 ## Installation
+
+From the command line in your project directory, run `npm install @reach/auto-id` or `yarn add @reach/auto-id`. Then import the `useId` hook:
 
 ```bash
 npm install @reach/auto-id
 # or
 yarn add @reach/auto-id
+```
+
+```js
+import { useId } from "@reach/auto-id";
 ```
 
 ## Usage

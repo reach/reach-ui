@@ -1,5 +1,3 @@
-import "@reach/combobox/styles.css";
-
 import React from "react";
 import {
   Combobox,
@@ -8,6 +6,7 @@ import {
   ComboboxOption,
   ComboboxPopover
 } from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
 export let name = "Overflow";
 

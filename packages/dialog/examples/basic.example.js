@@ -1,12 +1,11 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "Basic";
 
-export let Example = () => {
-  const [showDialog, setShowDialog] = React.useState(false);
+export function Example() {
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
@@ -24,4 +23,4 @@ export let Example = () => {
       </Dialog>
     </div>
   );
-};
+}

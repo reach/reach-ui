@@ -1,7 +1,4 @@
-import "@reach/tooltip/styles.css";
-import "@reach/slider/styles.css";
-
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { wrapEvent } from "@reach/utils";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import {
@@ -10,11 +7,13 @@ import {
   SliderTrack,
   SliderTrackHighlight
 } from "@reach/slider";
+import "@reach/tooltip/styles.css";
+import "@reach/slider/styles.css";
 
 export const name = "With Tooltip";
 
-export const Example = () => {
-  const handleRef = React.useRef();
+export function Example() {
+  const handleRef = useRef();
   const [trigger, tooltip] = useTooltip();
   const centered = (triggerRect, tooltipRect) => {
     const triggerCenter = triggerRect.left + triggerRect.width / 2;
@@ -28,7 +27,7 @@ export const Example = () => {
 
   // We want to show the tooltip whenever the handle is focused, regardless
   // of what happens with mouse events.
-  const preventDefaultWhenFocused = React.useCallback(event => {
+  const preventDefaultWhenFocused = useCallback(event => {
     if (document.activeElement === event.currentTarget) {
       event.preventDefault();
     }
@@ -59,4 +58,4 @@ export const Example = () => {
       )}
     </SliderInput>
   );
-};
+}

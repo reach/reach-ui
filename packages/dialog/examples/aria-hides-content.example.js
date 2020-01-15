@@ -1,14 +1,13 @@
-import "@reach/dialog/styles.css";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { action } from "@storybook/addon-actions";
 import { Dialog } from "@reach/dialog";
+import "@reach/dialog/styles.css";
 
 export let name = "Aria Hides Content";
 
-export let Example = () => {
-  const [showDialog, setShowDialog] = React.useState(false);
-  React.useEffect(() => {
+export function Example() {
+  const [showDialog, setShowDialog] = useState(false);
+  useEffect(() => {
     let logMutation = action("Root Node Attribute Mutated");
     let observer = new MutationObserver(mutationsList => {
       for (var mutation of mutationsList) {
@@ -39,4 +38,4 @@ export let Example = () => {
       </Dialog>
     </div>
   );
-};
+}

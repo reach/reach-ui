@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Rect from "@reach/rect";
 
 export let name = "Pin element to another";
 
-export let Example = () => {
-  const [pin, setPin] = React.useState(true);
+export function Example() {
+  const [pin, setPin] = useState(true);
   return (
     <div>
       <p>
@@ -54,4 +54,4 @@ export let Example = () => {
       </Rect>
     </div>
   );
-};
+}

@@ -1,21 +1,16 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Portal"
-  meta={[
-    {
-      name: "description",
-      content:
-        "Creates and appends a DOM node to the end of `document.body` and renders a React tree into it. Useful for rendering a natural React element hierarchy with a different DOM hierarchy to prevent parent styles from clipping or hiding content (for popovers, dropdowns, and modals)."
-    }
-  ]}
+<SEO
+  title="Portal"
+  description="Create and append a DOM node to the end of an HTML document and render a React tree into it"
 />
 
 # Portal
 
 Creates and appends a DOM node to the end of `document.body` and renders a React tree into it. Useful for rendering a natural React element hierarchy with a different DOM hierarchy to prevent parent styles from clipping or hiding content (for popovers, dropdowns, and modals).
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <div style={{ height: 50, overflow: "auto" }}>
@@ -47,25 +42,31 @@ function Example() {
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/portal` or `yarn add @reach/portal`. Then import the component:
+
 ```bash
 npm install @reach/portal
 # or
 yarn add @reach/portal
 ```
 
-And then import it:
-
 ```js
 import Portal from "@reach/portal";
 ```
 
-## Portal Props
+## Component API
+
+### Portal
+
+Renders content inside of a portal at the end of the DOM tree.
+
+#### Portal Props
 
 | Prop                  | Type |
 | --------------------- | ---- |
 | [children](#children) | node |
 
-### Portal children
+##### Portal children
 
 _Type_: `node`
 
@@ -77,7 +78,7 @@ Regular React children.
 </Portal>
 ```
 
-### Portal type
+##### Portal type
 
 _Type_: `string` default: `reach-portal`
 

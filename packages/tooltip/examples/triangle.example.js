@@ -1,11 +1,37 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import "@reach/tooltip/styles.css";
-
 import React, { Fragment, cloneElement } from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { getScrollbarOffset } from "@reach/utils";
+import "@reach/tooltip/styles.css";
 
 export const name = "Triangle";
+
+export function Example() {
+  return (
+    <div>
+      <ExampleTriangle label="Notifications">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>🔔</span>
+        </button>
+      </ExampleTriangle>
+      <ExampleTriangle label="Settings">
+        <button style={{ fontSize: 25 }}>
+          <span aria-hidden>⚙️</span>
+        </button>
+      </ExampleTriangle>
+
+      <div style={{ float: "right" }}>
+        <ExampleTriangle label="Notifications" ariaLabel="3 Notifications">
+          <button style={{ fontSize: 25 }}>
+            <span>🔔</span>
+            <span>3</span>
+          </button>
+        </ExampleTriangle>
+      </div>
+      <div style={{ marginTop: 600 }}>Hi</div>
+    </div>
+  );
+}
 
 // Center the tooltip, but collisions will win
 const centered = (triggerRect, tooltipRect) => {
@@ -58,32 +84,5 @@ function ExampleTriangle({ children, ...rest }) {
         position={centered}
       />
     </Fragment>
-  );
-}
-
-export function Example() {
-  return (
-    <div>
-      <ExampleTriangle label="Notifications">
-        <button style={{ fontSize: 25 }}>
-          <span aria-hidden>🔔</span>
-        </button>
-      </ExampleTriangle>
-      <ExampleTriangle label="Settings">
-        <button style={{ fontSize: 25 }}>
-          <span aria-hidden>⚙️</span>
-        </button>
-      </ExampleTriangle>
-
-      <div style={{ float: "right" }}>
-        <ExampleTriangle label="Notifications" ariaLabel="3 Notifications">
-          <button style={{ fontSize: 25 }}>
-            <span>🔔</span>
-            <span>3</span>
-          </button>
-        </ExampleTriangle>
-      </div>
-      <div style={{ marginTop: 600 }}>Hi</div>
-    </div>
   );
 }

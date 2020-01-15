@@ -1,38 +1,38 @@
 {
   "name": "@reach/combobox",
-  "version": "0.6.4",
+  "version": "0.7.2",
   "description": "Accessible React Combobox (Autocomplete).",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/combobox"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "main": "index.js",
-  "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.1",
-    "@reach/popover": "^0.6.4",
-    "@reach/portal": "^0.6.2",
-    "@reach/utils": "^0.6.4",
+    "@reach/auto-id": "^0.7.2",
+    "@reach/popover": "^0.7.2",
+    "@reach/portal": "^0.7.2",
+    "@reach/utils": "^0.7.2",
     "escape-regexp": "0.0.1",
-    "highlight-words-core": "1.2.0",
+    "highlight-words-core": "1.2.2",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
+  "main": "dist/index.js",
+  "module": "dist/combobox.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
+    "README.md",
+    "dist",
     "styles.css"
   ]
 }

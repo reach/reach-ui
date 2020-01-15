@@ -1,31 +1,39 @@
 {
   "name": "@reach/component-component",
-  "version": "0.6.2",
+  "version": "0.7.2",
   "description": "Declarative React Component Definitions",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/component-component"
   },
-  "main": "index.js",
-  "module": "es/index.js",
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && node ./build-package",
+    "clean": "rm -rf ./dist",
+    "compile": "node ./build-package"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
   "dependencies": {
     "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4"
   },
   "peerDependencies": {
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
+  "main": "dist/index.js",
+  "module": "dist/component-component.esm.js",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "styles.css"
+    "README.md",
+    "dist"
   ]
 }

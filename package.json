@@ -2,13 +2,19 @@
   "name": "reach-ui",
   "description": "The accessible foundation of your React apps and design systems",
   "private": true,
-  "repository": "https://github.com/reach/reach-ui",
   "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git"
+  },
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
-    "test": "MODULE_FORMAT=cjs jest packages",
-    "build:changed": "lerna run build --parallel --since origin/master",
-    "build": "lerna run build --parallel",
+    "test": "cross-env NODE_ENV=test CI=true tsdx test packages",
+    "test:watch": "cross-env NODE_ENV=test tsdx test packages",
+    "test:coverage": "cross-env NODE_ENV=test CI=true tsdx test packages --coverage",
+    "build:changed": "lerna run build --since origin/master",
+    "build": "lerna run build",
     "ver": "lerna version --no-push",
     "changes": "dotenv lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
@@ -16,38 +22,45 @@
     "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
   },
   "dependencies": {
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-proposal-class-properties": "^7.7.0",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/preset-react": "^7.7.0",
-    "@storybook/addon-actions": "^5.2.6",
-    "@storybook/react": "^5.2.6",
+    "@babel/core": "^7.7.7",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/addon-links": "^5.2.8",
+    "@storybook/addons": "^5.2.8",
+    "@storybook/react": "^5.2.8",
     "@reach/router": "^1.2.1",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@types/react": "^16.9.11",
+    "@testing-library/react": "^9.4.0",
+    "@types/escape-regexp": "^0.0.0",
+    "@types/highlight-words-core": "^1.2.0",
+    "@types/invariant": "^2.2.31",
+    "@types/jest": "^24.0.25",
+    "@types/match-sorter": "^2.3.0",
+    "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",
-    "@types/styled-components": "^4.4.0",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/react-test-renderer": "^16.9.1",
+    "@types/styled-components": "^4.4.1",
+    "@types/tabbable": "^3.1.0",
+    "@types/warning": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "2.x",
     "@typescript-eslint/parser": "2.x",
     "awesome-typescript-loader": "^5.2.1",
-    "autoprefixer": "^9.7.1",
+    "autoprefixer": "^9.7.3",
     "babel-eslint": "10.x",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-dev-expression": "^0.2.2",
-    "dotenv-cli": "^3.0.0",
+    "dotenv-cli": "^3.1.0",
     "eslint": "6.x",
-    "eslint-config-react-app": "^5.0.2",
+    "eslint-config-react-app": "^5.1.0",
     "eslint-plugin-flowtype": "3.x",
     "eslint-plugin-import": "2.x",
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "1.x",
-    "husky": "^3.0.9",
+    "husky": "^4.0.1",
     "jest": "^24.9.0",
-    "lerna": "^3.18.4",
+    "lerna": "^3.19.0",
     "lerna-changelog": "^0.8.3",
     "match-sorter": "^4.0.2",
     "pepjs": "0.5.2",
@@ -56,14 +69,19 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
     "react-spring": "^8.0.27",
     "react-test-renderer": "^16.12.0",
     "styled-components": "^4.4.1",
-    "typescript": "^3.7.2",
+    "ts-loader": "^6.2.1",
+    "tsdx": "^0.12.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.3",
     "use-throttle": "^0.0.3"
   },
   "resolutions": {
-    "@types/react": "16.9.11",
+    "@types/react": "16.9.16",
     "@types/react-dom": "16.9.4"
   },
   "workspaces": [
@@ -84,5 +102,53 @@
       "enhancement": "✨ Enhancements",
       "housekeeping": "🏡 Housekeeping"
     }
+  },
+  "eslintConfig": {
+    "extends": "react-app",
+    "globals": {
+      "__DEV__": "readonly"
+    },
+    "rules": {
+      "no-unused-vars": [
+        1,
+        {
+          "args": "after-used",
+          "ignoreRestSiblings": true,
+          "argsIgnorePattern": "^(event|_)$"
+        }
+      ],
+      "import/first": 0,
+      "jsx-a11y/no-static-element-interactions": [
+        1,
+        {
+          "handlers": [
+            "onClick",
+            "onMouseDown",
+            "onMouseUp",
+            "onKeyPress",
+            "onKeyDown",
+            "onKeyUp"
+          ]
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "packages/*/dist"
+  ],
+  "jest": {
+    "globals": {
+      "__DEV__": "boolean"
+    },
+    "collectCoverageFrom": [
+      "packages/**/src/**/*.{js,ts,tsx}"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.ts"
+    ]
+  },
+  "prettier": {
+    "singleQuote": false
   }
 }
