@@ -7,6 +7,8 @@
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+ *
+ * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
 
 import React, {
@@ -23,6 +25,7 @@ import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
   checkStyles,
+  createDescendantContext,
   createNamedContext,
   Descendant,
   DescendantProvider,
@@ -30,7 +33,6 @@ import {
   makeId,
   noop,
   useDescendant,
-  useDescendantContext,
   useDescendants,
   useForkedRef,
   usePrevious,
@@ -48,6 +50,10 @@ const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
 
+const MenuDescendantContext = createDescendantContext<
+  HTMLElement,
+  { key: string }
+>("MenuDescendantContext");
 const MenuContext = createNamedContext<IMenuContext>(
   "MenuContext",
   {} as IMenuContext
@@ -111,6 +117,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
 
   return (
     <DescendantProvider
+      context={MenuDescendantContext}
       descendants={descendants}
       setDescendants={setDescendants}
     >
@@ -299,7 +306,11 @@ const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
     let mouseEventStarted = useRef(false);
 
     const index = useDescendant(
-      { element: ownRef.current, key: valueText },
+      {
+        context: MenuDescendantContext,
+        element: ownRef.current,
+        key: valueText
+      },
       indexProp
     );
     let isSelected = index === selectionIndex;
@@ -530,7 +541,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       menuRef,
       state: { isOpen, buttonId, selectionIndex, typeaheadQuery }
     } = useMenuContext();
-    const { descendants: menuItems } = useDescendantContext<HTMLElement>();
+    const { descendants: menuItems } = useContext(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
     useEffect(() => {

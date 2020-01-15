@@ -86,6 +86,10 @@ export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
   }
 }
 
+export function boolOrBoolString(value: any) {
+  return value === "false" ? false : Boolean(value);
+}
+
 export function canUseDOM() {
   return (
     typeof window !== "undefined" &&
@@ -280,39 +284,28 @@ export {
 ////////////////////////////////////////////////////////////////////////////////
 // TODO: Move to @reach/descendants once fully tested and implemented
 
-export type DescendantElement<T = HTMLElement> =
-  | (T extends HTMLElement ? T : HTMLElement)
-  | null;
-
-export type Descendant<T> = {
-  element: DescendantElement<T>;
-  key?: string | number | null;
-  disabled?: boolean;
+export type Descendant<T, P = {}> = P & {
+  element: (T extends HTMLElement ? T : HTMLElement) | null;
 };
 
-export interface IDescendantContext<T> {
-  descendants: Descendant<T>[];
-  focusNodes: DescendantElement<T>[];
-  registerDescendant(descendant: Descendant<T>): void;
-  unregisterDescendant(element: Descendant<T>["element"]): void;
+export interface IDescendantContext<T, P> {
+  descendants: Descendant<T, P>[];
+  registerDescendant(descendant: Descendant<T, P>): void;
+  unregisterDescendant(
+    element: (T extends HTMLElement ? T : HTMLElement) | null
+  ): void;
 }
 
-const DescendantContext = createNamedContext<IDescendantContext<any>>(
-  "DescendantContext",
-  {} as IDescendantContext<any>
-);
-
-export function useDescendantContext<T>(
-  /*
-   * A component may create and use multiple Descendant contexts, i.e.: Tabs,
-   * where both TabList and TabPanels needs separate contexts to know the
-   * indices of their respective descendants.
-   * We create one here by default but provide an argument for components
-   * to pass when needed.
-   */
-  context: React.Context<IDescendantContext<T>> = DescendantContext
+export function createDescendantContext<T, P = {}>(
+  name: string,
+  initialValue = {}
 ) {
-  return useContext(context as React.Context<IDescendantContext<T>>);
+  return createNamedContext(name, {
+    descendants: [],
+    registerDescendant: noop,
+    unregisterDescendant: noop,
+    ...initialValue
+  } as IDescendantContext<T, P>);
 }
 
 /**
@@ -338,59 +331,55 @@ export function useDescendantContext<T>(
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
  */
-export function useDescendant<T>(
+export function useDescendant<T, P>(
   {
-    context = DescendantContext,
+    context,
     element,
-    key,
-    disabled
-  }: Descendant<T> & { context?: React.Context<IDescendantContext<T>> },
+    ...rest
+  }: Descendant<T, P> & { context: React.Context<IDescendantContext<T, P>> },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
-  let {
-    registerDescendant,
-    unregisterDescendant,
-    descendants
-  } = useDescendantContext<T>(context);
+  let { registerDescendant, unregisterDescendant, descendants } = useContext(
+    context
+  );
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
     if (!element) forceUpdate({});
-    registerDescendant({ element, key, disabled });
+    // @ts-ignore
+    registerDescendant({ element, ...rest });
     return () => unregisterDescendant(element);
-  }, [element, key, disabled]);
+  }, [element, ...Object.values(rest)]);
 
   return (
     indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
   );
 }
 
-export function useDescendants<T>() {
-  return useState<Descendant<T>[]>([]);
+export function useDescendants<T, P>() {
+  return useState<Descendant<T, P>[]>([]);
 }
 
-export function DescendantProvider<T>({
-  context: Ctx = DescendantContext,
+export function DescendantProvider<T, P>({
+  context: Ctx,
   children,
   descendants,
   setDescendants
 }: {
-  context?: React.Context<IDescendantContext<any>>;
+  context: React.Context<IDescendantContext<T, P>>;
   children: React.ReactNode;
   descendants: Descendant<T>[];
   setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
 }) {
   let registerDescendant = React.useCallback(
-    ({ disabled, element, key: providedKey }: Descendant<T>) => {
+    ({ element, ...rest }: Descendant<T, P>) => {
       if (!element) {
         return;
       }
 
       setDescendants(items => {
         if (items.find(({ element: _el }) => _el === element) == null) {
-          let key = providedKey ?? element.textContent;
-
           /*
            * When registering a descendant, we need to make sure we insert in
            * into the array in the same order that it appears in the DOM. So as
@@ -421,7 +410,7 @@ export function DescendantProvider<T>({
             );
           });
 
-          let newItem = { disabled, element, key };
+          let newItem = { element, ...rest } as Descendant<T, P>;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -461,18 +450,18 @@ export function DescendantProvider<T>({
   );
 
   // Not sure about this just yet, may bail on this and let components deal
-  let focusNodes = descendants
+  /* let focusNodes = descendants
     .filter(({ disabled }) => !disabled)
-    .map(({ element }) => element);
+    .map(({ element }) => element); */
 
-  const value: IDescendantContext<T> = useMemo(() => {
+  // @ts-ignore
+  const value: IDescendantContext<T, P> = useMemo(() => {
     return {
       descendants,
-      focusNodes,
       registerDescendant,
       unregisterDescendant
     };
-  }, [descendants, focusNodes, registerDescendant, unregisterDescendant]);
+  }, [descendants, registerDescendant, unregisterDescendant]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

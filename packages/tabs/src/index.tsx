@@ -30,19 +30,19 @@ import warning from "warning";
 import {
   checkStyles,
   cloneValidElement,
+  createDescendantContext,
   createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
-  IDescendantContext,
   makeId,
   noop,
   useDescendant,
-  useDescendantContext,
   useDescendants,
   useForkedRef,
   useIsomorphicLayoutEffect,
   useUpdateEffect,
-  wrapEvent
+  wrapEvent,
+  boolOrBoolString
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
@@ -57,14 +57,12 @@ interface ITabsContext {
   userInteractedRef: React.MutableRefObject<boolean>;
 }
 
-const TabsDescendantsContext = createNamedContext(
-  "TabsDescendantsContext",
-  {} as IDescendantContext<any>
+const TabsDescendantsContext = createDescendantContext<HTMLElement>(
+  "TabsDescendantsContext"
 );
 
-const TabPanelDescendantsContext = createNamedContext(
-  "TabPanelDescendantsContext",
-  {} as IDescendantContext<any>
+const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
+  "TabPanelDescendantsContext"
 );
 const TabsContext = createNamedContext("TabsContext", {} as ITabsContext);
 const useTabsContext = () => useContext(TabsContext);
@@ -249,8 +247,16 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     selectedIndex
   } = useTabsContext();
 
-  const { focusNodes, descendants } = useDescendantContext<HTMLElement>(
-    TabsDescendantsContext
+  const { descendants } = useContext(TabsDescendantsContext);
+  let focusNodes = useMemo(
+    () =>
+      descendants
+        .filter(
+          ({ element }) =>
+            element && !boolOrBoolString(element.dataset.disabled)
+        )
+        .map(({ element }) => element),
+    [descendants]
   );
 
   const getFocusIndices = useCallback(() => {
@@ -342,8 +348,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
      */
     if (
       !isControlled &&
-      descendants[selectedIndex] &&
-      descendants[selectedIndex].disabled
+      boolOrBoolString(descendants[selectedIndex]?.element?.dataset.disabled)
     ) {
       let { next } = getFocusIndices();
       setSelectedIndex(next);
@@ -430,13 +435,10 @@ export const Tab = forwardRefWithAs<
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
     element: ownRef.current,
-    context: TabsDescendantsContext,
-    disabled
+    context: TabsDescendantsContext
   });
 
   const isSelected = index === selectedIndex;
-  const htmlType =
-    Comp === "button" && props.type == null ? "button" : props.type;
 
   function onSelect() {
     onSelectTab(index);
@@ -455,15 +457,15 @@ export const Tab = forwardRefWithAs<
       ref={ref}
       data-reach-tab=""
       aria-controls={makeId(tabsId, "panel", index)}
-      aria-disabled={Comp !== "button" ? disabled : undefined}
+      aria-disabled={disabled}
       aria-selected={isSelected}
+      data-disabled={disabled ? true : undefined}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
       role="tab"
       tabIndex={isSelected ? 0 : -1}
-      type={htmlType}
     >
       {children}
     </Comp>
