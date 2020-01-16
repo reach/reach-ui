@@ -56,14 +56,6 @@ import {
 } from "@reach/utils";
 import PropTypes from "prop-types";
 
-type InputRef = React.RefObject<HTMLElement | null>;
-
-interface ICustomCheckboxContext {
-  inputRef: InputRef;
-  containerState: any; // TODO: type
-  setContainerState: any; // TODO: type
-}
-
 const CustomCheckboxContext = createNamedContext(
   "CustomCheckboxContext",
   {} as ICustomCheckboxContext
@@ -176,9 +168,9 @@ export const CustomCheckboxInput = forwardRef<
   // useLayoutEffect to prevent any flashing on the initial render sync
   useIsomorphicLayoutEffect(() => {
     setContainerState({
-      checked,
-      disabled,
-      readOnly,
+      checked: checked == null ? false : checked,
+      disabled: Boolean(disabled),
+      readOnly: Boolean(readOnly),
       focused
     });
   }, [setContainerState, checked, readOnly, focused, disabled]);
@@ -342,3 +334,13 @@ export function useMixedCheckbox(
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+type InputRef = React.RefObject<HTMLElement | null>;
+
+interface ICustomCheckboxContext {
+  inputRef: InputRef;
+  containerState: CustomCheckboxContainerState;
+  setContainerState: React.Dispatch<
+    React.SetStateAction<CustomCheckboxContainerState>
+  >;
+}
