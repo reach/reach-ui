@@ -1,29 +1,34 @@
 {
   "name": "@reach/checkbox",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Accessible React Checkbox Component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
-  "main": "index.js",
-  "module": "es/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/checkbox"
+  },
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.6.1",
-    "@reach/utils": "^0.6.1",
+    "@reach/auto-id": "^0.7.2",
+    "@reach/utils": "^0.7.2",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
+  "main": "dist/index.js",
+  "module": "dist/checkbox.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts",
+    "README.md",
+    "dist",
     "styles.css"
   ]
 }
