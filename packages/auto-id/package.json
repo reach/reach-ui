@@ -1,23 +1,28 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.6.1",
+  "version": "0.7.2",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
-  "main": "index.js",
-  "module": "es/index.js",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/auto-id"
+  },
   "scripts": {
-    "build": "node ../../shared/build-package"
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "peerDependencies": {
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/auto-id.esm.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "es",
-    "src",
-    "lib",
-    "index.js",
-    "index.d.ts"
+    "README.md",
+    "dist"
   ]
 }

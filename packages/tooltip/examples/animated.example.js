@@ -1,44 +1,13 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import "@reach/tooltip/styles.css";
-
 import React, { Fragment, cloneElement } from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
-// https://github.com/react-spring/react-spring/issues/552#issuecomment-464680114
 import { useTransition, animated } from "react-spring/web.cjs";
+import "@reach/tooltip/styles.css";
 
 export const name = "Animated";
 
 animated.TooltipPopup = animated(TooltipPopup);
 animated.TooltipContent = animated(TooltipPopup);
-
-function ExampleAnimatedTooltip({ children, ...rest }) {
-  const [trigger, tooltip, isVisible] = useTooltip();
-
-  const transitions = useTransition(isVisible ? tooltip : false, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-    config: { mass: 1, tension: 500, friction: 40 }
-  });
-
-  return (
-    <Fragment>
-      {cloneElement(children, trigger)}
-
-      {transitions.map(
-        ({ item: tooltip, props: styles, key }) =>
-          tooltip && (
-            <animated.TooltipContent
-              key={key}
-              {...tooltip}
-              {...rest}
-              style={styles}
-            />
-          )
-      )}
-    </Fragment>
-  );
-}
 
 export function Example() {
   return (
@@ -66,5 +35,34 @@ export function Example() {
         </ExampleAnimatedTooltip>
       </div>
     </div>
+  );
+}
+
+function ExampleAnimatedTooltip({ children, ...rest }) {
+  const [trigger, tooltip, isVisible] = useTooltip();
+
+  const transitions = useTransition(isVisible ? tooltip : false, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { mass: 1, tension: 500, friction: 40 }
+  });
+
+  return (
+    <Fragment>
+      {cloneElement(children, trigger)}
+
+      {transitions.map(
+        ({ item: tooltip, props: styles, key }) =>
+          tooltip && (
+            <animated.TooltipContent
+              key={key}
+              {...tooltip}
+              {...rest}
+              style={styles}
+            />
+          )
+      )}
+    </Fragment>
   );
 }

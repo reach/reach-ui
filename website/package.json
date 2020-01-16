@@ -14,8 +14,9 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@mdx-js/mdx": "^1.5.1",
-    "@mdx-js/react": "^1.5.1",
+    "@mdx-js/mdx": "^1.5.2",
+    "@mdx-js/react": "^1.5.2",
+    "@philpl/buble": "^0.19.7",
     "@reach/alert": "file:../packages/alert",
     "@reach/alert-dialog": "file:../packages/alert-dialog",
     "@reach/auto-id": "file:../packages/auto-id",
@@ -27,46 +28,75 @@
     "@reach/portal": "file:../packages/portal",
     "@reach/rect": "file:../packages/rect",
     "@reach/skip-nav": "file:../packages/skip-nav",
+    "@reach/slider": "file:../packages/slider",
     "@reach/tabs": "file:../packages/tabs",
     "@reach/tooltip": "file:../packages/tooltip",
     "@reach/utils": "file:../packages/utils",
     "@reach/visually-hidden": "file:../packages/visually-hidden",
     "@reach/window-size": "file:../packages/window-size",
-    "@reach/slider": "file:../packages/slider",
-    "gatsby": "^2.17.15",
-    "gatsby-image": "^2.2.33",
-    "gatsby-plugin-google-analytics": "^2.1.27",
-    "gatsby-plugin-manifest": "^2.2.28",
-    "gatsby-plugin-mdx": "^1.0.56",
-    "gatsby-plugin-react-helmet": "^3.1.15",
-    "gatsby-plugin-sass": "^2.1.23",
-    "gatsby-plugin-sharp": "^2.3.0",
-    "gatsby-remark-autolink-headers": "^2.1.18",
+    "core-js": "^3.6.0",
+    "gatsby": "^2.18.15",
+    "gatsby-image": "^2.2.37",
+    "gatsby-plugin-google-analytics": "^2.1.31",
+    "gatsby-plugin-manifest": "^2.2.33",
+    "gatsby-plugin-mdx": "^1.0.63",
+    "gatsby-plugin-react-helmet": "^3.1.18",
+    "gatsby-plugin-sass": "^2.1.26",
+    "gatsby-plugin-sharp": "^2.3.9",
+    "gatsby-remark-autolink-headers": "^2.1.21",
     "gatsby-remark-emoji": "^0.0.3",
-    "gatsby-remark-images": "^3.1.31",
+    "gatsby-remark-images": "^3.1.38",
     "gatsby-remark-slug": "^0.1.0",
-    "gatsby-source-filesystem": "^2.1.37",
-    "gatsby-transformer-react-docgen": "^5.0.21",
-    "gatsby-transformer-sharp": "^2.3.5",
+    "gatsby-source-filesystem": "^2.1.42",
+    "gatsby-transformer-react-docgen": "^5.0.25",
+    "gatsby-transformer-sharp": "^2.3.9",
     "match-sorter": "^4.0.2",
     "node-sass": "^4.13.0",
     "postcss-preset-env": "^6.7.0",
+    "prism-react-renderer": "^1.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
-    "react-live": "^2.2.1",
+    "react-live": "^2.2.2",
     "react-spring": "^8.0.27",
     "recondition": "^1.2.4",
     "use-throttle": "^0.0.3"
-  },
-  "devDependencies": {
-    "prettier": "^1.19.1"
   },
   "browserslist": [
     "last 2 versions",
     "> 2%",
     "maintained node versions",
     "IE 11"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": "react-app",
+    "globals": {
+      "__DEV__": "readonly"
+    },
+    "rules": {
+      "no-unused-vars": [
+        1,
+        {
+          "args": "after-used",
+          "ignoreRestSiblings": true,
+          "argsIgnorePattern": "^(event|_)$"
+        }
+      ],
+      "import/first": 0,
+      "jsx-a11y/no-static-element-interactions": [
+        1,
+        {
+          "handlers": [
+            "onClick",
+            "onMouseDown",
+            "onMouseUp",
+            "onKeyPress",
+            "onKeyDown",
+            "onKeyUp"
+          ]
+        }
+      ]
+    }
+  }
 }

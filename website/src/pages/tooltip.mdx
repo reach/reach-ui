@@ -1,19 +1,11 @@
-import Helmet from "../components/DefaultHelmet";
+import SEO from "../components/SEO";
 
-<Helmet
-  title="Reach UI - Tooltip"
-  meta={[
-    {
-      name: "description",
-      content: "Accessible Tooltips for React.js"
-    }
-  ]}
-/>
+<SEO title="Tooltip" description="Accessible tooltips component for React" />
 
 # Tooltip
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/tooltip
-- WAI ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
 
 When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
 
@@ -25,7 +17,8 @@ A couple notes on using tooltips:
 
 _Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <div>
@@ -55,21 +48,23 @@ function Example() {
 
 ## Installation
 
+From the command line in your project directory, run `npm install @reach/tooltip` or `yarn add @reach/tooltip`. Then import the components and styles that you need:
+
 ```bash
 npm install @reach/tooltip
 # or
 yarn add @reach/tooltip
 ```
 
-And then import the components you need:
-
 ```js
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
+import "@reach/tooltip/styles.css";
 ```
 
 ## Usage
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip label="Save">
@@ -79,15 +74,16 @@ function Example() {
 }
 ```
 
-Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screenreader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
+Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screen reader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip
       // What the tooltip renders
       label="Notifications"
-      // What the screenreader announces
+      // What the screen reader announces
       ariaLabel="3 Notifications"
     >
       <button style={{ fontSize: 25 }}>🔔 3</button>
@@ -98,7 +94,8 @@ function Example() {
 
 All props passed to `Tooltip` will go to the popover.
 
-```jsx-live
+```jsx
+// jsx-demo
 function Example() {
   return (
     <Tooltip
@@ -117,7 +114,13 @@ function Example() {
 }
 ```
 
-## Tooltip CSS Selectors
+## Component API
+
+### Tooltip
+
+Renders … you guessed it: a tooltip!
+
+#### Tooltip CSS Selectors
 
 Please see the [styling guide](/styling).
 
@@ -126,15 +129,18 @@ Please see the [styling guide](/styling).
 }
 ```
 
-## useTooltip, TooltipPopup
+### useTooltip, TooltipPopup
 
 `Tooltip` is built on top of the `useTooltip` hook and `TooltipPopup`.
 
-You may want to drop down to this lower level API if you need animation or you want to add the triangles to the tooltip. We've provided code for both of these use-cases below:
+You may want to drop down to this lower level API if you need animation or you want to add the triangles to the tooltip. [Check out the demos below for examples.](#demos)
+
+## Demos
 
 ### Triangle pointers and custom styles
 
-```jsx-live
+```jsx
+// jsx-demo
 (() => {
   // Center the tooltip, but collisions will win
   const centered = (triggerRect, tooltipRect) => {
