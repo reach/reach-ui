@@ -1,6 +1,6 @@
 {
   "name": "@reach/visually-hidden",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Render text that is announced to screen readers but visually hidden.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
