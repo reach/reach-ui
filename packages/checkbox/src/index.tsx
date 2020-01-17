@@ -46,15 +46,169 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
+  useCallback
 } from "react";
 import {
   createNamedContext,
   wrapEvent,
   useForkedRef,
-  useIsomorphicLayoutEffect
+  useIsomorphicLayoutEffect,
+  useConstant
 } from "@reach/utils";
+import {
+  Typestate,
+  createMachine as _createMachine,
+  interpret,
+  assign,
+  StateMachine,
+  EventObject as MachineEvent
+} from "@xstate/fsm";
 import PropTypes from "prop-types";
+import warning from "warning";
+
+/*
+ * TODO: Revisit types and remove this
+ * This is a hacky workaround to make the TS compiler happy and still get smart
+ * type benefits when creating and using state machine events with our custom
+ * useMahchine hook
+ * https://stackoverflow.com/questions/59794474/omitting-a-shared-property-from-a-union-type-of-objects-results-in-error-when-us
+ */
+function createMachine<
+  TC extends object,
+  TE extends MachineEvent = MachineEvent,
+  TR extends MachineEventWithRefs = MachineEventWithRefs,
+  TS extends Typestate<TC> = any
+>(cfg: StateMachine.Config<TC, TE & TR>) {
+  return _createMachine<TC, TE & TR, TS>(cfg);
+}
+
+interface MachineEventWithRefs {
+  refs: {
+    [key: string]: any;
+  };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// States
+
+enum CheckboxMachineStates {
+  Unchecked = "UNCHECKED",
+  Checked = "CHECKED",
+  Mixed = "MIXED"
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Events
+
+enum CheckboxMachineEvents {
+  Mount = "MOUNT",
+  Toggle = "TOGGLE",
+  Set = "SET",
+  GetDerivedContext = "GET_DERIVED_STATE",
+  Unmount = "UNMOUNT"
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// State machine
+
+const checkToggleAllowed = (context: CheckboxMachineContext) =>
+  !context.isControlled || !context.disabled;
+
+const getCheckSetCondition = (state: string) => (
+  context: CheckboxMachineContext,
+  event: any
+) => context.isControlled && !context.disabled && event.state === state;
+
+const commonEvents = {
+  [CheckboxMachineEvents.Mount]: {
+    actions: assign(
+      (
+        context: CheckboxMachineContext,
+        event: CheckboxMachineEvent & CheckboxRefsHack
+      ) => {
+        return {
+          ...context,
+          refs: event.refs
+        };
+      }
+    )
+  },
+  [CheckboxMachineEvents.GetDerivedContext]: {
+    target: CheckboxMachineStates.Checked,
+    actions: assign((context: CheckboxMachineContext, event: any) => {
+      return {
+        ...context,
+        ...event.context,
+        refs: event.refs
+      };
+    })
+  },
+  [CheckboxMachineEvents.Set]: [
+    {
+      target: CheckboxMachineStates.Checked,
+      cond: getCheckSetCondition(CheckboxMachineStates.Checked)
+    },
+    {
+      target: CheckboxMachineStates.Unchecked,
+      cond: getCheckSetCondition(CheckboxMachineStates.Unchecked)
+    },
+    {
+      target: CheckboxMachineStates.Mixed,
+      cond: getCheckSetCondition(CheckboxMachineStates.Mixed)
+    }
+  ]
+};
+
+export const checkboxMachine = createMachine<
+  CheckboxMachineContext,
+  CheckboxMachineEvent,
+  CheckboxRefsHack,
+  CheckboxMachineState
+>({
+  id: "checkbox",
+  initial: [
+    { target: CheckboxMachineStates.Checked, cond: ctx => !!ctx },
+    { target: CheckboxMachineStates.Unchecked }
+  ],
+  states: {
+    [CheckboxMachineStates.Unchecked]: {
+      entry: assign((context, event) => {
+        return {
+          ...context
+          //refs: event.refs
+        };
+      }),
+      on: {
+        [CheckboxMachineEvents.Toggle]: {
+          target: CheckboxMachineStates.Checked,
+          cond: checkToggleAllowed
+        },
+        ...commonEvents
+      }
+    },
+    [CheckboxMachineStates.Checked]: {
+      on: {
+        [CheckboxMachineEvents.Toggle]: {
+          target: CheckboxMachineStates.Unchecked,
+          cond: checkToggleAllowed
+        },
+        ...commonEvents
+      }
+    },
+    [CheckboxMachineStates.Mixed]: {
+      on: {
+        [CheckboxMachineEvents.Toggle]: {
+          target: CheckboxMachineStates.Checked,
+          cond: checkToggleAllowed
+        },
+        ...commonEvents
+      }
+    }
+  }
+});
+
+////////////////////////////////////////////////////////////////////////////////
 
 const CustomCheckboxContext = createNamedContext(
   "CustomCheckboxContext",
@@ -63,18 +217,12 @@ const CustomCheckboxContext = createNamedContext(
 const useCustomCheckboxContext = () => useContext(CustomCheckboxContext);
 
 const mixedCheckboxPropTypes = {
-  /*
-   * For some reason, the `checked` prop type causes TS to error because it
-   * interprets "mixed" as type `string` rather than assuming this is a valid
-   * union type. Both of the below fail.
-   *
-   * Type 'string' is not assignable to type 'boolean | "mixed" | null | undefined
-   */
-  // checked: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(["mixed"])]),
-  // checked: PropTypes.oneOf([true, false, "mixed"]),
+  checked: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.oneOf(["mixed" as const])
+  ]),
   name: PropTypes.string,
-  onChange: PropTypes.func,
-  readOnly: PropTypes.bool
+  onChange: PropTypes.func
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,13 +236,11 @@ export const CustomCheckboxContainer = forwardRef<
   forwardedRef
 ) {
   const inputRef: InputRef = useRef(null);
-  const [
-    { checked, disabled, readOnly, focused },
-    setContainerState
-  ] = useState<CustomCheckboxContainerState>({
+  const [{ checked, disabled, focused }, setContainerState] = useState<
+    CustomCheckboxContainerState
+  >({
     checked: false,
     disabled: false,
-    readOnly: false,
     focused: false
   });
 
@@ -107,7 +253,7 @@ export const CustomCheckboxContainer = forwardRef<
 
   let context: ICustomCheckboxContext = {
     inputRef,
-    containerState: { checked, disabled, readOnly, focused },
+    containerState: { checked, disabled, focused },
     setContainerState
   };
 
@@ -121,7 +267,6 @@ export const CustomCheckboxContainer = forwardRef<
         data-focus={focused ? "" : undefined}
         data-mixed={checked === "mixed" ? "" : undefined}
         data-disabled={disabled ? "" : undefined}
-        data-read-only={readOnly ? "" : undefined}
         onClick={wrapEvent(onClick, handleClick)}
       >
         {children}
@@ -133,7 +278,6 @@ export const CustomCheckboxContainer = forwardRef<
 type CustomCheckboxContainerState = {
   checked: boolean | "mixed";
   disabled: boolean;
-  readOnly: boolean;
   focused: boolean;
 };
 
@@ -151,29 +295,40 @@ type CustomCheckboxInputProps = MixedCheckboxProps & {};
 
 export const CustomCheckboxInput = forwardRef<
   HTMLInputElement,
-  CustomCheckboxInputProps
+  CustomCheckboxInputProps & { _componentName?: string }
 >(function CustomCheckboxInput(
-  { checked, disabled, onBlur, onChange, onFocus, readOnly, ...props },
+  {
+    _componentName = "CustomCheckboxInput",
+    checked,
+    disabled,
+    onBlur,
+    onChange,
+    onFocus,
+    ...props
+  },
   forwardedRef
 ) {
   const { setContainerState, inputRef } = useCustomCheckboxContext();
   const [focused, setFocused] = useState(false);
   const ref = useForkedRef(forwardedRef, inputRef);
-  const [inputProps] = useMixedCheckbox(inputRef, {
-    checked,
-    onChange,
-    readOnly
-  });
+  const [inputProps] = useMixedCheckbox(
+    inputRef,
+    {
+      checked,
+      disabled,
+      onChange
+    },
+    _componentName
+  );
 
   // useLayoutEffect to prevent any flashing on the initial render sync
   useIsomorphicLayoutEffect(() => {
     setContainerState({
       checked: checked == null ? false : checked,
       disabled: Boolean(disabled),
-      readOnly: Boolean(readOnly),
       focused
     });
-  }, [setContainerState, checked, readOnly, focused, disabled]);
+  }, [setContainerState, checked, focused, disabled]);
 
   return (
     <input
@@ -206,17 +361,7 @@ type CustomCheckboxProps = MixedCheckboxProps & {};
 
 export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
   function CustomCheckbox(
-    {
-      checked,
-      disabled,
-      children,
-      id,
-      name,
-      onChange,
-      readOnly,
-      value,
-      ...props
-    },
+    { checked, disabled, children, id, name, onChange, value, ...props },
     forwardedRef
   ) {
     const inputProps = {
@@ -225,13 +370,16 @@ export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
       id,
       name,
       onChange,
-      readOnly,
       value
     };
 
     return (
       <CustomCheckboxContainer data-reach-custom-checkbox="" {...props}>
-        <CustomCheckboxInput ref={forwardedRef} {...inputProps} />
+        <CustomCheckboxInput
+          _componentName="CustomCheckbox"
+          {...inputProps}
+          ref={forwardedRef}
+        />
         {children}
       </CustomCheckboxContainer>
     );
@@ -248,30 +396,34 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // MixedCheckbox
 
-export const MixedCheckbox = forwardRef<HTMLInputElement, MixedCheckboxProps>(
-  function MixedCheckbox(
-    { checked, onChange, readOnly, ...props },
-    forwardedRef
-  ) {
-    const ownRef = useRef(null);
-    const ref = useForkedRef(forwardedRef, ownRef);
+export const MixedCheckbox = forwardRef<
+  HTMLInputElement,
+  MixedCheckboxProps & { _componentName?: string }
+>(function MixedCheckbox(
+  { _componentName = "MixedCheckbox", checked, disabled, onChange, ...props },
+  forwardedRef
+) {
+  const ownRef = useRef(null);
+  const ref = useForkedRef(forwardedRef, ownRef);
 
-    const [inputProps] = useMixedCheckbox(ownRef, {
+  const [inputProps] = useMixedCheckbox(
+    ownRef,
+    {
       checked,
-      onChange,
-      readOnly
-    });
+      disabled,
+      onChange
+    },
+    _componentName
+  );
 
-    return <input {...props} {...inputProps} ref={ref} />;
-  }
-);
+  return <input {...props} {...inputProps} ref={ref} />;
+});
 
 type MixedCheckboxProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "checked"
 > & {
   checked?: boolean | "mixed";
-  readOnly?: boolean;
 };
 
 MixedCheckbox.displayName = "MixedCheckbox";
@@ -287,15 +439,50 @@ if (__DEV__) {
 export function useMixedCheckbox(
   ref: React.RefObject<any>,
   {
-    checked,
-    onChange,
-    readOnly
+    checked: controlledChecked,
+    defaultChecked,
+    disabled,
+    onChange
   }: {
     checked?: boolean | "mixed";
+    defaultChecked?: boolean;
+    disabled?: boolean;
     onChange?(event: React.FormEvent): void;
-    readOnly?: boolean;
-  }
-) {
+  },
+  componentName = "MixedCheckbox"
+): [React.InputHTMLAttributes<HTMLInputElement>, CheckboxReactRefs] {
+  const isControlled = controlledChecked != null;
+  const { current: wasControlled } = useRef(isControlled);
+  useEffect(() => {
+    if (__DEV__) {
+      warning(
+        !(!isControlled && wasControlled),
+        `${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`checked\` prop being passed in.`
+      );
+      warning(
+        !(isControlled && !wasControlled),
+        `${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`checked\` prop being passed in.`
+      );
+    }
+  }, [componentName, isControlled, wasControlled]);
+
+  let initialState = useConstant(
+    isControlled ? controlledChecked : Boolean(defaultChecked)
+  );
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // TODO: Remove the type params when the ref hack problem is solved
+  // These types should be inferred by the machine obj. once the ref hack thing
+  // is fixed.
+  const [current, send] = useMachine<
+    CheckboxMachineContext,
+    CheckboxMachineEvent,
+    CheckboxRefsHack
+  >(checkboxMachine, {
+    input: inputRef
+  });
+
   const mixed = checked === "mixed";
   const props = {
     "aria-checked": String(checked) as
@@ -306,15 +493,13 @@ export function useMixedCheckbox(
       | undefined,
     "data-reach-mixed-checkbox": "",
     checked: checked === true,
-    readOnly,
+    disabled,
     onChange: handleChange,
     type: "checkbox"
   };
 
   function handleChange(event: React.FormEvent) {
-    if (readOnly) {
-      event.preventDefault();
-    } else {
+    if (!disabled) {
       onChange && onChange(event);
     }
   }
@@ -325,11 +510,75 @@ export function useMixedCheckbox(
       return;
     }
     ref.current.indeterminate = mixed;
-    // We know ref is, indeed, a ref, so we can ignore the warning here
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mixed, checked]);
+  }, [mixed, ref]);
 
-  return [props];
+  useEffect(() => {
+    send({
+      type: CheckboxMachineEvents.GetDerivedContext,
+      context: {
+        disabled,
+        isControlled
+      }
+    });
+  }, [disabled, isControlled, send]);
+
+  return [props, { input: inputRef }];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// useMachine
+
+function useMachine<
+  TC,
+  TE extends MachineEvent = MachineEvent,
+  TR extends MachineEventWithRefs = MachineEventWithRefs
+>(
+  stateMachine: StateMachine.Machine<TC, TE & TR, any>,
+  refs: {
+    [K in keyof TR["refs"]]: React.RefObject<TR["refs"][K]>;
+  }
+): [
+  StateMachine.State<TC, TE & TR, any>,
+  StateMachine.Service<TC, TE>["send"],
+  StateMachine.Service<TC, TE & TR>
+] {
+  const { current: initialMachine } = useRef(stateMachine);
+  if (__DEV__) {
+    if (stateMachine !== initialMachine) {
+      throw new Error(
+        "Machine given to `useMachine` has changed between renders. This is not supported and might lead to unexpected results.\n" +
+          "Please make sure that you pass the same Machine each time."
+      );
+    }
+  }
+
+  const service = useConstant(() => interpret(stateMachine).start());
+  const [current, setCurrent] = useState(stateMachine.initialState);
+
+  // Add refs to every event so we can use them to perform actions.
+  const send = useCallback(
+    (rawEvent: TE["type"] | TE) => {
+      const event =
+        typeof rawEvent === "string" ? ({ type: rawEvent } as TE) : rawEvent;
+      const unwrapped = Object.keys(refs).reduce((unwrapped, name) => {
+        (unwrapped as any)[name] = refs[name].current;
+        return unwrapped;
+      }, {});
+      service.send({ ...event, refs: unwrapped } as TE & TR);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  useEffect(() => {
+    service.subscribe(setCurrent);
+    return () => {
+      service.stop();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return [current, send, service];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -344,3 +593,46 @@ interface ICustomCheckboxContext {
     React.SetStateAction<CustomCheckboxContainerState>
   >;
 }
+
+interface CheckboxMachineContext {
+  disabled: boolean;
+  isControlled: boolean;
+  refs: CheckboxNodeRefs;
+}
+
+interface CheckboxRefsHack extends MachineEventWithRefs {
+  refs: CheckboxNodeRefs;
+}
+
+type CheckboxNodeRefs = {
+  input: HTMLInputElement | null;
+};
+
+type CheckboxReactRefs = {
+  [K in keyof CheckboxNodeRefs]: React.RefObject<CheckboxNodeRefs[K]>;
+};
+
+type CheckboxMachineEvent =
+  | { type: CheckboxMachineEvents.Toggle }
+  | {
+      type: CheckboxMachineEvents.Set;
+      state: CheckboxMachineStates;
+    }
+  | {
+      type: CheckboxMachineEvents.GetDerivedContext;
+      context: Partial<CheckboxMachineContext>;
+    };
+
+type CheckboxMachineState =
+  | {
+      value: CheckboxMachineStates.Checked;
+      context: CheckboxMachineContext;
+    }
+  | {
+      value: CheckboxMachineStates.Unchecked;
+      context: CheckboxMachineContext;
+    }
+  | {
+      value: CheckboxMachineStates.Mixed;
+      context: CheckboxMachineContext;
+    };

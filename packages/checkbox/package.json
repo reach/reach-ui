@@ -17,6 +17,7 @@
   "dependencies": {
     "@reach/auto-id": "^0.7.2",
     "@reach/utils": "^0.7.2",
+    "@xstate/fsm": "^1.2.0",
     "warning": "^4.0.3"
   },
   "peerDependencies": {
