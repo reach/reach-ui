@@ -18,7 +18,8 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   PropsFromAs,
-  PropsWithAs
+  PropsWithAs,
+  SingleOrArray
 } from "./types";
 import React from "react";
 
@@ -149,6 +150,10 @@ export function getScrollbarOffset() {
   return 0;
 }
 
+export function isUndefined(value: any) {
+  return typeof value === "undefined";
+}
+
 /**
  * Joins strings to format IDs for compound components.
  *
@@ -162,6 +167,18 @@ export function makeId(...args: (string | number | null | undefined)[]) {
  * No-op function.
  */
 export function noop(): void {}
+
+// React hook for creating a value exactly once.
+// https://github.com/Andarist/use-constant
+export function useConstant<T>(fn: () => T): T {
+  const ref = React.useRef<{ v: T }>();
+
+  if (!ref.current) {
+    ref.current = { v: fn() };
+  }
+
+  return ref.current.v;
+}
 
 /**
  * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
@@ -285,7 +302,8 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   PropsFromAs,
-  PropsWithAs
+  PropsWithAs,
+  SingleOrArray
 };
 
 ////////////////////////////////////////////////////////////////////////////////

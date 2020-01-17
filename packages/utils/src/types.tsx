@@ -4,6 +4,8 @@ import { Validator } from "prop-types";
 
 export type AssignableRef<T = any> = React.Ref<T | null>;
 
+export type SingleOrArray<T> = T[] | T;
+
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.
 // I kind of hacked around until I got this to work using some other projects,
