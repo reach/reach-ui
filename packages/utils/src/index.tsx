@@ -18,8 +18,7 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   PropsFromAs,
-  PropsWithAs,
-  SingleOrArray
+  PropsWithAs
 } from "./types";
 import React from "react";
 
@@ -302,8 +301,7 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   PropsFromAs,
-  PropsWithAs,
-  SingleOrArray
+  PropsWithAs
 };
 
 ////////////////////////////////////////////////////////////////////////////////
