@@ -5,7 +5,6 @@ import {
   AlertDialogLabel,
   AlertDialogDescription
 } from "@reach/alert-dialog";
-import "@testing-library/jest-dom/extend-expect";
 
 describe("rendering", () => {
   it("should open the dialog", () => {

@@ -1,7 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
-import "@testing-library/jest-dom/extend-expect";
 
 describe("rendering", () => {
   it("should match the snapshot", () => {
