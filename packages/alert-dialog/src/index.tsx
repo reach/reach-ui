@@ -30,7 +30,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog
  */
 
-import React from "react";
+import React, { forwardRef, useContext, useEffect } from "react";
 import {
   DialogOverlay,
   DialogContent,
@@ -60,31 +60,32 @@ let AlertDialogContext = createNamedContext<IAlertDialogContext>(
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogoverlay
  */
-export const AlertDialogOverlay = React.forwardRef<
-  HTMLDivElement,
-  AlertDialogProps
->(function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardRef) {
-  const id = useId(props.id);
-  const labelId = id ? makeId("alert-dialog", id) : undefined;
-  const descriptionId = id ? makeId("alert-dialog-description", id) : undefined;
+export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
+  function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardRef) {
+    const id = useId(props.id);
+    const labelId = id ? makeId("alert-dialog", id) : undefined;
+    const descriptionId = id
+      ? makeId("alert-dialog-description", id)
+      : undefined;
 
-  return (
-    <AlertDialogContext.Provider
-      value={{
-        labelId,
-        descriptionId,
-        leastDestructiveRef
-      }}
-    >
-      <DialogOverlay
-        ref={forwardRef as any}
-        data-reach-alert-dialog-overlay
-        initialFocusRef={leastDestructiveRef}
-        {...props}
-      />
-    </AlertDialogContext.Provider>
-  );
-});
+    return (
+      <AlertDialogContext.Provider
+        value={{
+          labelId,
+          descriptionId,
+          leastDestructiveRef
+        }}
+      >
+        <DialogOverlay
+          {...props}
+          ref={forwardRef as any}
+          data-reach-alert-dialog-overlay
+          initialFocusRef={leastDestructiveRef}
+        />
+      </AlertDialogContext.Provider>
+    );
+  }
+);
 
 AlertDialogOverlay.displayName = "AlertDialogOverlay";
 if (__DEV__) {
@@ -112,12 +113,12 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent
  */
-export const AlertDialogContent = React.forwardRef<
+export const AlertDialogContent = forwardRef<
   HTMLDivElement,
   AlertDialogContentProps
 >(function AlertDialogContent({ children, ...props }, forwardRef) {
-  const { labelId, leastDestructiveRef } = React.useContext(AlertDialogContext);
-  React.useEffect(() => {
+  const { labelId, leastDestructiveRef } = useContext(AlertDialogContext);
+  useEffect(() => {
     if (labelId) {
       invariant(
         document.getElementById(labelId),
@@ -134,13 +135,13 @@ export const AlertDialogContent = React.forwardRef<
   }, [labelId, leastDestructiveRef]);
   return (
     <DialogContent
+      role="alertdialog"
+      aria-labelledby={labelId}
+      {...props}
       ref={forwardRef as any}
       // lol: remove in 1.0
       data-reach-alert-dialong-content
       data-reach-alert-dialog-content
-      role="alertdialog"
-      aria-labelledby={labelId}
-      {...props}
     >
       {children}
     </DialogContent>
@@ -181,11 +182,11 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialoglabel
  */
-export const AlertDialogLabel: React.FunctionComponent<React.HTMLAttributes<
+export const AlertDialogLabel: React.FC<React.HTMLAttributes<
   HTMLDivElement
 >> = props => {
-  const { labelId } = React.useContext(AlertDialogContext);
-  return <div id={labelId} data-reach-alert-dialog-label {...props} />;
+  const { labelId } = useContext(AlertDialogContext);
+  return <div {...props} id={labelId} data-reach-alert-dialog-label />;
 };
 
 AlertDialogLabel.displayName = "AlertDialogLabel";
@@ -202,12 +203,12 @@ AlertDialogLabel.displayName = "AlertDialogLabel";
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogdescription
  * @param props
  */
-export const AlertDialogDescription: React.FunctionComponent<React.HTMLAttributes<
+export const AlertDialogDescription: React.FC<React.HTMLAttributes<
   HTMLDivElement
 >> = props => {
-  const { descriptionId } = React.useContext(AlertDialogContext);
+  const { descriptionId } = useContext(AlertDialogContext);
   return (
-    <div id={descriptionId} data-reach-alert-dialog-description {...props} />
+    <div {...props} id={descriptionId} data-reach-alert-dialog-description />
   );
 };
 
