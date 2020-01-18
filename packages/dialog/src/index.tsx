@@ -156,15 +156,15 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent({ onClick, onKeyDown, ...props }, forwardedRef) {
     return (
       <div
+        aria-modal="true"
+        role="dialog"
+        tabIndex={-1}
         {...props}
         ref={forwardedRef}
         data-reach-dialog-content=""
-        aria-modal="true"
         onClick={wrapEvent(onClick, event => {
           event.stopPropagation();
         })}
-        role="dialog"
-        tabIndex={-1}
       />
     );
   }

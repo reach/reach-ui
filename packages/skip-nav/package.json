@@ -1,6 +1,6 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Skip navigation links for screen reader and keyboard users.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/utils": "^0.7.2"
+    "@reach/utils": "^0.7.3"
   },
   "peerDependencies": {
     "react": "^16.8.0",
