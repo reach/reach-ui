@@ -258,7 +258,7 @@ const OptionContext = createNamedContext(
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#combobox
  */
-export const Combobox = forwardRefWithAs<"div", ComboboxProps>(
+export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   function Combobox(
     { onSelect, openOnFocus = false, children, as: Comp = "div", ...rest },
     forwardedRef
@@ -390,7 +390,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput
  */
-export const ComboboxInput = forwardRefWithAs<"div", ComboboxInputProps>(
+export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
   function ComboboxInput(
     {
       as: Comp = "input",
@@ -633,7 +633,7 @@ export type ComboboxPopoverProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist
  */
-export const ComboboxList = forwardRefWithAs<"ul", ComboboxListProps>(
+export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   function ComboboxList(
     {
       // when true, and the list opens again, the option with a matching value will be
@@ -843,7 +843,7 @@ ComboboxOptionText.displayName = "ComboboxOptionText";
 /**
  * ComboboxButton
  */
-export const ComboboxButton = forwardRefWithAs<"button", {}>(
+export const ComboboxButton = forwardRefWithAs<{}, "button">(
   function ComboboxButton(
     { as: Comp = "button", onClick, onKeyDown, ...props },
     forwardedRef

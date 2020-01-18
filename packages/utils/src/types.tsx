@@ -47,7 +47,7 @@ type PopupProps = {
   children?: React.ReactNode | ((value?: number) => JSX.Element);
 };
 
-export const Popup = forwardRefWithAs<PopupProps, "input">(
+export const Popup = forwardRefWithAs<"input", PopupProps>(
   ({ as: Comp = "input", lol, className, children, ...props }, ref) => {
     return (
       <Comp ref={ref} {...props}>

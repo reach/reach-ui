@@ -149,6 +149,10 @@ export function getScrollbarOffset() {
   return 0;
 }
 
+export function isUndefined(value: any) {
+  return typeof value === "undefined";
+}
+
 /**
  * Joins strings to format IDs for compound components.
  *
@@ -272,7 +276,7 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
  *
  * @param Comp
  */
-export function forwardRefWithAs<T extends As, P>(
+export function forwardRefWithAs<P, T extends As>(
   comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
 ) {
   return React.forwardRef(comp as any) as ComponentWithAs<T, P>;
