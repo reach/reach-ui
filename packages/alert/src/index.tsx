@@ -146,12 +146,12 @@ function renderAlerts() {
               role={type === "assertive" ? "alert" : "status"}
               aria-live={type}
             >
-              {Object.keys(elements[type]).map(key =>
-                React.cloneElement(elements[type][key as any], {
+              {Object.keys(elements[type]).map(key => {
+                React.cloneElement(elements[type][key], {
                   key,
                   ref: null
-                })
-              )}
+                });
+              })}
             </div>
           </VisuallyHidden>,
           liveRegions[type]
@@ -205,7 +205,7 @@ type RegionTypes = "polite" | "assertive";
 
 type ElementTypes = {
   [key in RegionTypes]: {
-    [key: number]: JSX.Element;
+    [key: string]: JSX.Element;
   };
 };
 
