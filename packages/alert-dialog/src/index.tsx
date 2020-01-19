@@ -92,7 +92,7 @@ if (__DEV__) {
   AlertDialogOverlay.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
-    leastDestructiveRef: (() => {}) as any,
+    leastDestructiveRef: () => null,
     children: PropTypes.node
   };
 }
@@ -278,7 +278,7 @@ if (__DEV__) {
   AlertDialog.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
-    leastDestructiveRef: (() => {}) as any,
+    leastDestructiveRef: () => null,
     children: PropTypes.node
   };
 }
