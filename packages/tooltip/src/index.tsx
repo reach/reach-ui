@@ -246,7 +246,7 @@ export function useTooltip<T extends HTMLElement>({
   // hopefully they always pass a ref if they ever pass one
   const ownRef = useRef<HTMLDivElement | null>(null);
 
-  const ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
+  const ref = useForkedRef(forwardedRef, ownRef);
   const triggerRect = useRect(ownRef, isVisible);
 
   useEffect(() => {
