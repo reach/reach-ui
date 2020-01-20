@@ -14,7 +14,6 @@ import {
   // SLIDER_ORIENTATION_HORIZONTAL,
   // SLIDER_ORIENTATION_VERTICAL
 } from "./index";
-import "@testing-library/jest-dom/extend-expect";
 
 const getCurrentValue = (el: HTMLElement) =>
   Number(el.getAttribute("aria-valuenow"));

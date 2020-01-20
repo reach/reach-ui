@@ -76,7 +76,7 @@ const useTabsContext = () => useContext(TabsContext);
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabs
  */
-export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
+export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   {
     as: Comp = "div",
     children,
@@ -235,7 +235,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist
  */
-export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
+export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
   forwardedRef
 ) {
@@ -439,9 +439,9 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab
  */
 export const Tab = forwardRefWithAs<
-  "button",
-  // TODOZ: Remove this when cloneElement is removed
-  TabProps & { isSelected?: boolean }
+  // TODO: Remove this when cloneElement is removed
+  TabProps & { isSelected?: boolean },
+  "button"
 >(function Tab(
   { children, isSelected: _, as: Comp = "button", disabled, ...props },
   forwardedRef
@@ -517,7 +517,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels
  */
-export const TabPanels = forwardRefWithAs<"div", TabPanelsProps>(
+export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
     return (
@@ -557,7 +557,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel
  */
-export const TabPanel = forwardRefWithAs<"div", TabPanelProps>(
+export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
   function TabPanel({ children, as: Comp = "div", ...props }, forwardedRef) {
     let { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
     let ownRef = useRef<HTMLElement | null>(null);

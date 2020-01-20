@@ -4,4 +4,4 @@
 
 Shared utilities for various `@reach` packages.
 
-**Warning:** This package is intended for internal use in Reach UI, is not part of our public API, and should not be used directly in production projects. Definitions in this package may change without warning, and versioning will not follow semver. Don't say we didn't warn you!
+**Important:** This package is intended for internal use by the Reach UI library. You should not use it directly in your production projects, as the APIs can and will change often without regard to sem-ver. You have been warned!

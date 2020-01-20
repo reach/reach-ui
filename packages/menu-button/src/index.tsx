@@ -254,7 +254,7 @@ if (__DEV__) {
  *
  * MenuItem and MenuLink share most of the same functionality captured here.
  */
-const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
+const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
   function MenuItemImpl(
     {
       as: Comp,
@@ -506,7 +506,7 @@ export type MenuItemImplProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
  */
-export const MenuItem = forwardRefWithAs<"div", MenuItemProps>(
+export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
   function MenuItem({ as = "div", ...props }, forwardedRef) {
     return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
   }
@@ -721,8 +721,8 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink
  */
 export const MenuLink = forwardRefWithAs<
-  "a",
-  MenuLinkProps & { component?: any }
+  MenuLinkProps & { component?: any },
+  "a"
 >(function MenuLink({ as = "a", component, onSelect, ...props }, forwardedRef) {
   if (component) {
     console.warn(
