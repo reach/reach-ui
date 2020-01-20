@@ -5,6 +5,11 @@ import { Validator } from "prop-types";
 export type AssignableRef<T = any> = React.Ref<T | null>;
 
 /**
+ * Type can be either a single `T` or an array of `T`
+ */
+export type SingleOrArray<T> = T[] | T;
+
+/**
  * The built-in utility type `Omit` does not distribute over unions. So if you
  * have:
  *
