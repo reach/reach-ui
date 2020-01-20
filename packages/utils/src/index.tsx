@@ -17,6 +17,7 @@ import {
   AssignableRef,
   ComponentWithAs,
   ComponentWithForwardedRef,
+  DistributiveOmit,
   PropsFromAs,
   PropsWithAs
 } from "./types";
@@ -300,6 +301,7 @@ export {
   AssignableRef,
   ComponentWithAs,
   ComponentWithForwardedRef,
+  DistributiveOmit,
   PropsFromAs,
   PropsWithAs
 };
