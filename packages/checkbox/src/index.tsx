@@ -58,7 +58,7 @@ import {
 } from "@reach/utils";
 import {
   Typestate,
-  createMachine as _createMachine,
+  createMachine,
   interpret,
   assign,
   StateMachine,
@@ -66,28 +66,6 @@ import {
 } from "@xstate/fsm";
 import PropTypes from "prop-types";
 import warning from "warning";
-
-/*
- * TODO: Revisit types and remove this
- * This is a hacky workaround to make the TS compiler happy and still get smart
- * type benefits when creating and using state machine events with our custom
- * useMahchine hook
- * https://stackoverflow.com/questions/59794474/omitting-a-shared-property-from-a-union-type-of-objects-results-in-error-when-us
- */
-function createMachine<
-  TC extends object,
-  TE extends MachineEvent = MachineEvent,
-  TR extends MachineEventWithRefs = MachineEventWithRefs,
-  TS extends Typestate<TC> = any
->(cfg: StateMachine.Config<TC, TE & TR>) {
-  return _createMachine<TC, TE & TR, TS>(cfg);
-}
-
-interface MachineEventWithRefs {
-  refs: {
-    [key: string]: any;
-  };
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -125,7 +103,7 @@ const commonEvents = {
     actions: assign(
       (
         context: CheckboxMachineContext,
-        event: CheckboxMachineEvent & CheckboxRefsHack
+        event: CheckboxMachineEvent & CheckboxEventBase
       ) => {
         return {
           ...context,
@@ -163,14 +141,14 @@ const commonEvents = {
 export const checkboxMachine = createMachine<
   CheckboxMachineContext,
   CheckboxMachineEvent,
-  CheckboxRefsHack,
   CheckboxMachineState
 >({
   id: "checkbox",
-  initial: [
-    { target: CheckboxMachineStates.Checked, cond: ctx => !!ctx },
-    { target: CheckboxMachineStates.Unchecked }
-  ],
+  // TODO: Initial state needs to be dynamic based on the component props.
+  // Probably not advisable and maybe even error prone, but we could have a
+  // `machineCreator` function instead and initialize the machine object in the
+  // component with a ref.
+  initial: CheckboxMachineStates.Unchecked,
   states: {
     [CheckboxMachineStates.Unchecked]: {
       entry: assign((context, event) => {
@@ -475,11 +453,7 @@ export function useMixedCheckbox(
   // TODO: Remove the type params when the ref hack problem is solved
   // These types should be inferred by the machine obj. once the ref hack thing
   // is fixed.
-  const [current, send] = useMachine<
-    CheckboxMachineContext,
-    CheckboxMachineEvent,
-    CheckboxRefsHack
-  >(checkboxMachine, {
+  const [current, send] = useMachine(checkboxMachine, {
     input: inputRef
   });
 
@@ -528,19 +502,19 @@ export function useMixedCheckbox(
 ////////////////////////////////////////////////////////////////////////////////
 // useMachine
 
-function useMachine<
-  TC,
-  TE extends MachineEvent = MachineEvent,
-  TR extends MachineEventWithRefs = MachineEventWithRefs
->(
-  stateMachine: StateMachine.Machine<TC, TE & TR, any>,
+type DistributiveOmit<T, K extends PropertyKey> = T extends any
+  ? Omit<T, K>
+  : never;
+
+function useMachine<TC, TE extends MachineEventWithRefs = MachineEventWithRefs>(
+  stateMachine: StateMachine.Machine<TC, TE, any>,
   refs: {
-    [K in keyof TR["refs"]]: React.RefObject<TR["refs"][K]>;
+    [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
   }
 ): [
-  StateMachine.State<TC, TE & TR, any>,
-  StateMachine.Service<TC, TE>["send"],
-  StateMachine.Service<TC, TE & TR>
+  StateMachine.State<TC, TE, any>,
+  StateMachine.Service<TC, DistributiveOmit<TE, "refs">>["send"],
+  StateMachine.Service<TC, TE>
 ] {
   const { current: initialMachine } = useRef(stateMachine);
   if (__DEV__) {
@@ -557,14 +531,14 @@ function useMachine<
 
   // Add refs to every event so we can use them to perform actions.
   const send = useCallback(
-    (rawEvent: TE["type"] | TE) => {
+    (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
       const event =
         typeof rawEvent === "string" ? ({ type: rawEvent } as TE) : rawEvent;
       const unwrapped = Object.keys(refs).reduce((unwrapped, name) => {
         (unwrapped as any)[name] = refs[name].current;
         return unwrapped;
       }, {});
-      service.send({ ...event, refs: unwrapped } as TE & TR);
+      service.send({ ...event, refs: unwrapped } as TE);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -594,13 +568,19 @@ interface ICustomCheckboxContext {
   >;
 }
 
+interface MachineEventWithRefs extends MachineEvent {
+  refs: {
+    [key: string]: any;
+  };
+}
+
 interface CheckboxMachineContext {
   disabled: boolean;
   isControlled: boolean;
   refs: CheckboxNodeRefs;
 }
 
-interface CheckboxRefsHack extends MachineEventWithRefs {
+interface CheckboxEventBase extends MachineEventWithRefs {
   refs: CheckboxNodeRefs;
 }
 
@@ -612,16 +592,18 @@ type CheckboxReactRefs = {
   [K in keyof CheckboxNodeRefs]: React.RefObject<CheckboxNodeRefs[K]>;
 };
 
-type CheckboxMachineEvent =
-  | { type: CheckboxMachineEvents.Toggle }
-  | {
-      type: CheckboxMachineEvents.Set;
-      state: CheckboxMachineStates;
-    }
-  | {
-      type: CheckboxMachineEvents.GetDerivedContext;
-      context: Partial<CheckboxMachineContext>;
-    };
+type CheckboxMachineEvent = CheckboxEventBase &
+  (
+    | { type: CheckboxMachineEvents.Toggle }
+    | {
+        type: CheckboxMachineEvents.Set;
+        state: CheckboxMachineStates;
+      }
+    | {
+        type: CheckboxMachineEvents.GetDerivedContext;
+        context: Partial<CheckboxMachineContext>;
+      }
+  );
 
 type CheckboxMachineState =
   | {
