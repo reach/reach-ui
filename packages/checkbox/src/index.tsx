@@ -86,7 +86,7 @@ enum CheckboxStates {
 enum CheckboxEvents {
   Blur = "BLUR",
   Focus = "FOCUS",
-  GetDerivedContext = "GET_DERIVED_STATE",
+  GetDerivedData = "GET_DERIVED_DATA",
   Mount = "MOUNT",
   Set = "SET",
   Toggle = "TOGGLE",
@@ -141,7 +141,7 @@ const commonEvents = {
   [CheckboxEvents.Mount]: {
     actions: assignRefs
   },
-  [CheckboxEvents.GetDerivedContext]: {
+  [CheckboxEvents.GetDerivedData]: {
     actions: [
       assignRefs,
       assign((data: CheckboxData, event: any) => {
@@ -633,7 +633,7 @@ export function useMixedCheckbox(
 
   useEffect(() => {
     send({
-      type: CheckboxEvents.GetDerivedContext,
+      type: CheckboxEvents.GetDerivedData,
       data: {
         disabled,
         isControlled
@@ -815,7 +815,7 @@ type CheckboxEvent = CheckboxEventBase &
         state: CheckboxStates;
       }
     | {
-        type: CheckboxEvents.GetDerivedContext;
+        type: CheckboxEvents.GetDerivedData;
         data: Partial<CheckboxData>;
       }
   );
