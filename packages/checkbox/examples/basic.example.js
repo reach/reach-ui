@@ -6,7 +6,8 @@ import "@reach/checkbox/styles.css";
 export const name = "Basic Mixed";
 
 export function Example() {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState(true);
+  console.log({ checked });
   return (
     <div>
       <MixedCheckbox
@@ -14,6 +15,7 @@ export function Example() {
         value="whatever"
         checked={checked}
         onChange={event => {
+          console.log(event.target, event.target.checked);
           setChecked(event.target.checked);
         }}
       />

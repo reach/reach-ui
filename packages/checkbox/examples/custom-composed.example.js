@@ -6,10 +6,12 @@ import "@reach/checkbox/styles.css";
 export const name = "Custom Composed";
 
 const MyCheckbox = props => {
-  const [checked, setChecked] = useState(props.checked || false);
+  const [checkedState, setChecked] = useState(props.checked || false);
+  const checked = props.checked != null ? props.checked : checkedState;
   const showCheckMark = !!checked;
   return (
     <CustomCheckboxContainer
+      checked={props.checked != null ? props.checked : checked}
       style={{
         background: "rgba(240, 240, 250, 0.8)",
         border: "2px solid rgba(0, 0, 0, 0.8)",
@@ -19,7 +21,6 @@ const MyCheckbox = props => {
       }}
     >
       <CustomCheckboxInput
-        checked={checked}
         onChange={event => setChecked(event.target.checked)}
         {...props}
       />
@@ -58,7 +59,7 @@ export function Example() {
       </label>
       <br />
       <label>
-        <MyCheckbox readOnly checked="mixed" value="something-else" />
+        <MyCheckbox checked="mixed" value="something-else" />
         I'm of mixed mind. It's not gonna change, no matter how hard you try!
       </label>
     </div>
