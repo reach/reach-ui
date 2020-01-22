@@ -21,7 +21,6 @@
 import React, {
   forwardRef,
   useEffect,
-  useLayoutEffect,
   useRef,
   useContext,
   useMemo,
@@ -36,6 +35,7 @@ import {
   forwardRefWithAs,
   makeId,
   useForkedRef,
+  useIsomorphicLayoutEffect,
   wrapEvent
 } from "@reach/utils";
 import { findAll } from "highlight-words-core";
@@ -428,7 +428,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     const isControlled = controlledValue != null;
 
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       autocompletePropRef.current = autocomplete;
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autocomplete]);
@@ -656,7 +656,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
      * effect to schedule this effect before the ComboboxOptions push into
      * the array
      */
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       optionsRef.current = [];
       return () => {
         optionsRef.current = [];
@@ -898,7 +898,7 @@ function useFocusManagement(
    * useLayoutEffect so that the cursor goes to the end of the input instead
    * of awkwardly at the beginning, unclear to me why 🤷‍♂️
    */
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (
       lastEventType === NAVIGATE ||
       lastEventType === ESCAPE ||
