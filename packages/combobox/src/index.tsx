@@ -408,8 +408,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     const ref = useForkedRef(inputRef, forwardedRef);
 
-    // Because we close the List on blur, we need to track if the blur is
-    // caused by clicking inside the list, and if so, don't close the List.
+    /*
+     * Because we close the List on blur, we need to track if the blur is
+     * caused by clicking inside the list, and if so, don't close the List.
+     */
     const selectOnClickRef = useRef(false);
 
     const handleKeyDown = useKeyDown();
@@ -430,16 +432,20 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       }
     };
 
-    // If they are controlling the value we still need to do our transitions, so
-    // we have this derived state to emulate onChange of the input as we receive
-    // new `value`s ...[*]
+    /*
+     * If they are controlling the value we still need to do our transitions, so
+     * we have this derived state to emulate onChange of the input as we receive
+     * new `value`s ...[*]
+     */
     if (isControlled && controlledValue !== value) {
       handleValueChange(controlledValue!);
     }
 
-    // [*]... and when controlled, we don't trigger handleValueChange as the user
-    // types, instead the developer controls it with the normal input onChange
-    // prop
+    /*
+     * [*]... and when controlled, we don't trigger handleValueChange as the user
+     * types, instead the developer controls it with the normal input onChange
+     * prop
+     */
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       const { value } = event.target;
       if (!isControlled) {
@@ -452,9 +458,11 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         selectOnClickRef.current = true;
       }
 
-      // If we select an option with click, useFocusManagement will focus the
-      // input, in those cases we don't want to cause the menu to open back up,
-      // so we guard behind these states
+      /*
+       * If we select an option with click, useFocusManagement will focus the
+       * input, in those cases we don't want to cause the menu to open back up,
+       * so we guard behind these states.
+       */
       if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
         transition(FOCUS);
       }
@@ -1098,6 +1106,7 @@ const makeHash = (str: string) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+
 // Well alright, you made it all the way here to like 1100 lines of code (geez,
 // what the heck?). Have a great day :D
 
