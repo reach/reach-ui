@@ -812,7 +812,7 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
  */
 export const MenuPopover = forwardRef<any, MenuPopoverProps>(
-  function MenuPopover({ children, onBlur, style, ...props }, forwardedRef) {
+  function MenuPopover({ children, onBlur, ...props }, forwardedRef) {
     const {
       buttonRef,
       dispatch,
