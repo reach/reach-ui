@@ -19,15 +19,15 @@ import React, {
   useState
 } from "react";
 import {
-  BoolOrBoolString,
+  boolOrBoolString,
   checkStyles,
   createNamedContext,
+  createDescendantContext,
   DescendantProvider,
   forwardRefWithAs,
   makeId,
   noop,
   useDescendant,
-  useDescendantContext,
   useDescendants,
   useForkedRef,
   wrapEvent
@@ -36,6 +36,9 @@ import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
 
+const AccordionDescendantContext = createDescendantContext(
+  "AccordionDescendantContext"
+);
 const AccordionContext = createNamedContext<IAccordionContext>(
   "AccordionContext",
   {} as IAccordionContext
@@ -103,8 +106,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         /*
          * Before updating the active item internally, check that:
          *   - Component is uncontrolled
-         *   - If toggle is not allowed, check that the change isn't coming from an
-         *     item that is already active.
+         *   - If toggle is not allowed, check that the change isn't coming from
+         *     an item that is already active.
          */
         if (!isControlled && !(activeIndex === index && !toggle)) {
           setActiveIndex(activeIndex === index && toggle ? -1 : index);
@@ -116,34 +119,20 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const context: IAccordionContext = useMemo(
       () => ({
         accordionId: id,
-        activeIndex,
+        activeIndex: isControlled ? controlledIndex! : activeIndex,
         onSelectPanel: readOnly ? noop : onSelectPanel,
         readOnly
       }),
-      [activeIndex, id, onSelectPanel, readOnly]
+      [activeIndex, controlledIndex, id, isControlled, onSelectPanel, readOnly]
     );
-
-    if (
-      isControlled &&
-      /*
-       * A controlled index may be a number or an array of numbers.
-       * Quickly compare array or numeric indices without type checking
-       */
-      JSON.stringify(activeIndex) !== JSON.stringify(controlledIndex)
-    ) {
-      /*
-       * If the component is controlled, we'll sync internal state with the
-       * controlled state
-       */
-      setActiveIndex(controlledIndex as AccordionIndex);
-    }
 
     useEffect(() => checkStyles("accordion"), []);
 
     return (
       <DescendantProvider
-        descendants={descendants}
-        setDescendants={setDescendants}
+        context={AccordionDescendantContext}
+        items={descendants}
+        set={setDescendants}
       >
         <AccordionContext.Provider value={context}>
           <div {...props} ref={forwardedRef} data-reach-accordion="">
@@ -260,15 +249,15 @@ if (__DEV__) {
  */
 export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   function AccordionItem(
-    { children, disabled = false, index: indexProp, key, ...props },
+    { children, disabled = false, key, ...props },
     forwardedRef
   ) {
     const { accordionId, activeIndex, readOnly } = useAccordionContext();
     const triggerRef: TriggerRef = useRef(null);
-    const index = useDescendant(
-      { element: triggerRef.current, key },
-      indexProp
-    );
+    const index = useDescendant({
+      context: AccordionDescendantContext,
+      element: triggerRef.current
+    });
 
     // We need unique IDs for the panel and trigger to point to one another
     const itemId = makeId(accordionId, index);
@@ -344,8 +333,8 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordiontrigger
  */
 export const AccordionTrigger = forwardRefWithAs<
-  "button",
-  AccordionTriggerProps
+  AccordionTriggerProps,
+  "button"
 >(function AccordionTrigger(
   {
     as: Comp = "button",
@@ -370,12 +359,12 @@ export const AccordionTrigger = forwardRefWithAs<
     panelId
   } = useAccordionItemContext();
 
-  let { descendants } = useDescendantContext();
+  let { descendants } = useContext(AccordionDescendantContext);
   let focusableTriggers = useMemo(() => {
     let nodes: HTMLElement[] = [];
     for (let i = 0; i < descendants.length; i++) {
       let element = descendants[i].element;
-      if (element && !BoolOrBoolString(element.dataset.disabled)) {
+      if (element && !boolOrBoolString(element.dataset.disabled)) {
         nodes.push(element);
       }
     }

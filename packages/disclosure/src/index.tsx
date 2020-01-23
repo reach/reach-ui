@@ -119,8 +119,8 @@ if (__DEV__) {
  * DisclosureTrigger
  */
 export const DisclosureTrigger = forwardRefWithAs<
-  "button",
-  DisclosureTriggerProps
+  DisclosureTriggerProps,
+  "button"
 >(function DisclosureTrigger(
   {
     as: Comp = "button",
