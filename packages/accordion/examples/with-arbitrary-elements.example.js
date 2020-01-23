@@ -28,42 +28,42 @@ export function Example() {
   return (
     <Accordion>
       <AccordionItem>
-        <AccordionHeader>Option 1</AccordionHeader>
-        <AccordionBody>
+        <ExampleAccordionHeader>Option 1</ExampleAccordionHeader>
+        <ExampleAccordionBody>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionBody>
+        </ExampleAccordionBody>
       </AccordionItem>
       <AccordionItem>
-        <AccordionHeader>Option 2</AccordionHeader>
+        <ExampleAccordionHeader>Option 2</ExampleAccordionHeader>
         <div style={{ padding: 16 }}>
           This content is not collapsable and not inside the panel. Might be a
           good place for a teaser!
         </div>
-        <AccordionBody>
+        <ExampleAccordionBody>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionBody>
+        </ExampleAccordionBody>
       </AccordionItem>
       <AccordionItem>
-        <AccordionHeader>Option 3</AccordionHeader>
-        <AccordionBody>
+        <ExampleAccordionHeader>Option 3</ExampleAccordionHeader>
+        <ExampleAccordionBody>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
           congue gravida malesuada proin scelerisque luctus est convallis.
-        </AccordionBody>
+        </ExampleAccordionBody>
       </AccordionItem>
     </Accordion>
   );
 }
 
-function AccordionBody({ children }) {
+function ExampleAccordionBody({ children }) {
   return <AccordionPanel style={{ padding: 16 }}>{children}</AccordionPanel>;
 }
 
-function AccordionHeader({ children }) {
+function ExampleAccordionHeader({ children }) {
   return (
     <div
       style={{
