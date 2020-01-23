@@ -343,14 +343,15 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {
-      if (event.key === "Enter" || event.key === " ") {
+      let { key } = event;
+      if (key === "Enter" || key === " ") {
         /*
          * For links, the Enter key will trigger a click by default, but for
          * consistent behavior across menu items we'll trigger a click when the
          * spacebar is pressed.
          */
         if (isLink) {
-          if (event.key === " " && ownRef.current) {
+          if (key === " " && ownRef.current) {
             ownRef.current.click();
           }
         } else {
@@ -396,9 +397,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
       if (isLink) {
         /*
-         * If a mousedown event was initiated on a menu link followed be a mouseup
-         * event on the same link, we do nothing; a click event will come next and
-         * handle selection. Otherwise, we trigger a click event imperatively.
+         * If a mousedown event was initiated on a menu link followed by a
+         * mouseup event on the same link, we do nothing; a click event will
+         * come next and handle selection. Otherwise, we trigger a click event.
          */
         if (mouseEventStarted.current) {
           mouseEventStarted.current = false;
