@@ -17,7 +17,7 @@ const initialState: ExState = {
   bestFriendIsOnline: false
 };
 
-export let Example = () => {
+export function Example() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
   const interval = React.useRef<any>(null);
@@ -74,7 +74,7 @@ export let Example = () => {
       </div>
     </div>
   );
-};
+}
 
 function reducer(state: ExState, action: any): ExState {
   switch (action.type) {
