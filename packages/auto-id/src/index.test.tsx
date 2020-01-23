@@ -1,7 +1,6 @@
 import React from "react";
 import { useId } from "./index";
 import { render } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
 
 describe("rendering", () => {
   it("should generate an incremented ID value", () => {

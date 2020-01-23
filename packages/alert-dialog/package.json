@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Accessible React Alert Dialog.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,9 +15,9 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.2",
-    "@reach/dialog": "^0.7.2",
-    "@reach/utils": "^0.7.2",
+    "@reach/auto-id": "^0.7.3",
+    "@reach/dialog": "^0.7.3",
+    "@reach/utils": "^0.7.3",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@reach/portal",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Declarative portals for React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",

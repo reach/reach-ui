@@ -7,7 +7,7 @@ import {
 
 export let name = "Basic (TS)";
 
-export let Example = () => {
+export function Basic() {
   const close = useRef(null);
   const [showDialog, setShowDialog] = useState(false);
   return (
@@ -29,4 +29,4 @@ export let Example = () => {
       )}
     </div>
   );
-};
+}

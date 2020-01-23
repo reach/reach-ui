@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Measure the window size in React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",

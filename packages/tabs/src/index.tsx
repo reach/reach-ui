@@ -28,17 +28,16 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
-  BoolOrBoolString,
+  boolOrBoolString,
   checkStyles,
   cloneValidElement,
+  createDescendantContext,
   createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
-  IDescendantContext,
   makeId,
   noop,
   useDescendant,
-  useDescendantContext,
   useDescendants,
   useForkedRef,
   useIsomorphicLayoutEffect,
@@ -58,14 +57,12 @@ interface ITabsContext {
   userInteractedRef: React.MutableRefObject<boolean>;
 }
 
-const TabsDescendantsContext = createNamedContext(
-  "TabsDescendantsContext",
-  {} as IDescendantContext<any>
+const TabsDescendantsContext = createDescendantContext<HTMLElement>(
+  "TabsDescendantsContext"
 );
 
-const TabPanelDescendantsContext = createNamedContext(
-  "TabPanelDescendantsContext",
-  {} as IDescendantContext<any>
+const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
+  "TabPanelDescendantsContext"
 );
 const TabsContext = createNamedContext("TabsContext", {} as ITabsContext);
 const useTabsContext = () => useContext(TabsContext);
@@ -79,7 +76,7 @@ const useTabsContext = () => useContext(TabsContext);
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabs
  */
-export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
+export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   {
     as: Comp = "div",
     children,
@@ -116,7 +113,7 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
   let [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
-  let [tabs, setTabs] = useDescendants();
+  let [tabs, setTabs] = useDescendants<HTMLElement>();
 
   const context: ITabsContext = useMemo(() => {
     return {
@@ -148,8 +145,8 @@ export const Tabs = forwardRefWithAs<"div", TabsProps>(function Tabs(
   return (
     <DescendantProvider
       context={TabsDescendantsContext}
-      descendants={tabs}
-      setDescendants={setTabs}
+      items={tabs}
+      set={setTabs}
     >
       <TabsContext.Provider value={context}>
         <Comp {...props} ref={ref} data-reach-tabs="" id={props.id}>
@@ -238,7 +235,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist
  */
-export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
+export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
   forwardedRef
 ) {
@@ -250,14 +247,13 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     selectedIndex
   } = useTabsContext();
 
-  let { descendants } = useDescendantContext<HTMLElement>(
-    TabsDescendantsContext
-  );
+  const { descendants } = useContext(TabsDescendantsContext);
+
   let focusableTabs = useMemo(() => {
     let nodes: HTMLElement[] = [];
     for (let i = 0; i < descendants.length; i++) {
       let element = descendants[i].element;
-      if (element && !BoolOrBoolString(element.dataset.disabled)) {
+      if (element && !boolOrBoolString(element.dataset.disabled)) {
         nodes.push(element);
       }
     }
@@ -289,7 +285,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
      * We could be clever and ~~functional~~ here but we really shouldn't need
      * to loop through these arrays more than once.
      *
-     * TODO: We may want to check the document's active element here instead
+     * TODOZ: We may want to check the document's active element here instead
      *       instead of the selectedIndex, even though you *shouldn't* be able
      *       to to focus a tab unless it's selected.
      */
@@ -323,7 +319,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
-  // TODO: Determine proper behavior for Home/End key in RTL mode.
+  // TODOZ: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
@@ -374,7 +370,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
      */
     if (
       !isControlled &&
-      BoolOrBoolString(descendants[selectedIndex]?.element?.dataset.disabled)
+      boolOrBoolString(descendants[selectedIndex]?.element?.dataset.disabled)
     ) {
       let { next } = getFocusIndices();
       setSelectedIndex(next);
@@ -397,7 +393,7 @@ export const TabList = forwardRefWithAs<"div", TabListProps>(function TabList(
     >
       {Children.map(children, (child, index) => {
         /*
-         * TODO: Since refactoring to use context rather than depending on
+         * TODOZ: Since refactoring to use context rather than depending on
          * parent/child relationships, we need to update our recommendations for
          * animations that break when we don't forward the `isSelected` prop
          * to our tabs. We will remove this in 1.0 and update our docs
@@ -443,9 +439,9 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab
  */
 export const Tab = forwardRefWithAs<
-  "button",
   // TODO: Remove this when cloneElement is removed
-  TabProps & { isSelected?: boolean }
+  TabProps & { isSelected?: boolean },
+  "button"
 >(function Tab(
   { children, isSelected: _, as: Comp = "button", disabled, ...props },
   forwardedRef
@@ -464,8 +460,6 @@ export const Tab = forwardRefWithAs<
   });
 
   const isSelected = index === selectedIndex;
-  const htmlType =
-    Comp === "button" && props.type == null ? "button" : props.type;
 
   function onSelect() {
     onSelectTab(index);
@@ -485,7 +479,7 @@ export const Tab = forwardRefWithAs<
       data-reach-tab=""
       data-disabled={disabled}
       aria-controls={makeId(tabsId, "panel", index)}
-      aria-disabled={Comp !== "button" ? disabled : undefined}
+      aria-disabled={disabled}
       aria-selected={isSelected}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
@@ -493,7 +487,6 @@ export const Tab = forwardRefWithAs<
       onClick={onSelect}
       role="tab"
       tabIndex={isSelected ? 0 : -1}
-      type={htmlType}
     >
       {children}
     </Comp>
@@ -524,14 +517,14 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels
  */
-export const TabPanels = forwardRefWithAs<"div", TabPanelsProps>(
+export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
-    let [tabPanels, setTabPanels] = useDescendants();
+    let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
     return (
       <DescendantProvider
         context={TabPanelDescendantsContext}
-        descendants={tabPanels}
-        setDescendants={setTabPanels}
+        items={tabPanels}
+        set={setTabPanels}
       >
         <Comp {...props} ref={forwardedRef} data-reach-tab-panels="">
           {children}
@@ -564,7 +557,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel
  */
-export const TabPanel = forwardRefWithAs<"div", TabPanelProps>(
+export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
   function TabPanel({ children, as: Comp = "div", ...props }, forwardedRef) {
     let { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
     let ownRef = useRef<HTMLElement | null>(null);

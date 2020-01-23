@@ -25,7 +25,11 @@ export function Example() {
     <div>
       <h2>Clientside Search</h2>
       <Combobox id="holy-smokes">
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+        <ComboboxInput
+          name="awesome"
+          onChange={handleChange}
+          style={inputStyle}
+        />
         {results && (
           <ComboboxPopover style={popupStyle}>
             <p>

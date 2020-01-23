@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Screen-reader-friendly alert messages.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/utils": "^0.7.2",
-    "@reach/visually-hidden": "^0.7.2",
+    "@reach/utils": "^0.7.3",
+    "@reach/visually-hidden": "^0.7.3",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {

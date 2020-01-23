@@ -1,6 +1,6 @@
 {
   "name": "@reach/tabs",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Accessible React Tabs Component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.2",
-    "@reach/utils": "^0.7.2",
+    "@reach/auto-id": "^0.7.3",
+    "@reach/utils": "^0.7.3",
     "prop-types": "^15.7.2",
     "warning": "^4.0.3"
   },
