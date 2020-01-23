@@ -25,9 +25,7 @@ export function Example() {
 
   const handleAll = event => {
     const { checked, value } = event.target;
-    const allTypesChecked = Object.keys(
-      toppings[Object.keys(toppings).find(key => key === value)]
-    ).reduce(
+    const allTypesChecked = Object.keys(toppings[value]).reduce(
       (state, topping) => ({
         ...state,
         [topping]: checked
