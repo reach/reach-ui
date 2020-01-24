@@ -7,16 +7,16 @@ import {
 } from "@reach/accordion";
 import "@reach/accordion/styles.css";
 
-let name = "Collapsible";
+let name = "Allow multiple panels";
 
 /*
- * In this example, you should be able to collapse all of the accordion panels
- * at any given time.
+ * In this example, you should be able to open at many panels as you'd like at
+ * once, but all panels cannot be collapsed.
  */
 
 function Example() {
   return (
-    <Accordion defaultIndex={1} collapsible>
+    <Accordion multiple>
       <AccordionItem>
         <AccordionTrigger>Here's some important context</AccordionTrigger>
         <AccordionPanel>

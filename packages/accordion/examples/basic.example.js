@@ -5,13 +5,14 @@ import {
   AccordionTrigger,
   AccordionPanel
 } from "@reach/accordion";
+import { action } from "@storybook/addon-actions";
 import "@reach/accordion/styles.css";
 
 let name = "Basic";
 
 function Example() {
   return (
-    <Accordion defaultIndex={2}>
+    <Accordion defaultIndex={2} onChange={action(`Selecting panel`)}>
       <AccordionItem>
         <AccordionTrigger>You can activate me</AccordionTrigger>
         <AccordionPanel>

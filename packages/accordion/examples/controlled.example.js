@@ -24,7 +24,7 @@ function Example() {
       <button onClick={() => toggleItem(0)}>
         {activeItems.includes(0) ? "Close" : "Open"} Numero Uno
       </button>
-      <Accordion toggle={true} index={activeItems} onChange={toggleItem}>
+      <Accordion index={activeItems} onChange={toggleItem}>
         <AccordionItem>
           <AccordionTrigger>You can toggle me</AccordionTrigger>
           <AccordionPanel>

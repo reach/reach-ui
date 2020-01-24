@@ -68,6 +68,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       onChange,
       readOnly = false,
       collapsible = false,
+      multiple = false,
       ...props
     },
     forwardedRef
@@ -83,20 +84,58 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 
     const id = useId(props.id) || "accordion";
 
-    const [activeIndex, setActiveIndex] = useState<AccordionIndex>(
-      isControlled
-        ? (controlledIndex as AccordionIndex)
-        : defaultIndex != null
-        ? defaultIndex
-        : collapsible
-        ? -1
-        : 0
-    );
+    /*
+     * Define our default starting index. No reason to do this song and dance
+     * more than once.
+     */
+    const [activeIndex, setActiveIndex] = useState<AccordionIndex>(() => {
+      switch (true) {
+        case isControlled:
+          return controlledIndex!;
+
+        // If we have a defaultIndex, we need to do a few checks
+        case defaultIndex != null:
+          /*
+           * If multiple is set to true, we need to make sure the `defaultIndex`
+           * is an array (and vice versa). We'll handle console warnings in
+           * our propTypes, but this will at least keep the component from
+           * blowing up.
+           */
+          if (multiple) {
+            return Array.isArray(defaultIndex) ? defaultIndex : [defaultIndex!];
+          } else {
+            return Array.isArray(defaultIndex)
+              ? defaultIndex[0] ?? 0
+              : defaultIndex!;
+          }
+
+        /*
+         * Collapsible accordions with no defaultIndex will start with all
+         * panels collapsed. Otherwise the first panel will be our default.
+         */
+        case collapsible:
+          return multiple ? [-1] : -1;
+        default:
+          return multiple ? [0] : 0;
+      }
+    });
 
     if (__DEV__) {
       warning(
-        !((isControlled && !wasControlled) || (!isControlled && wasControlled)),
+        !(!isControlled && wasControlled),
         "Accordion is changing from controlled to uncontrolled. Accordion should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
+      );
+      warning(
+        !(isControlled && !wasControlled),
+        "Accordion is changing from uncontrolled to controlled. Accordion should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
+      );
+      warning(
+        !(isControlled && collapsible),
+        "The `collapsible` prop on Accordion has no effect when the state of the component is controlled."
+      );
+      warning(
+        !(isControlled && multiple),
+        "The `multiple` prop on Accordion has no effect when the state of the component is controlled."
       );
     }
 
@@ -109,11 +148,39 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
          *   - If toggle is not allowed, check that the change isn't coming from
          *     an item that is already active.
          */
-        if (!isControlled && !(activeIndex === index && !collapsible)) {
-          setActiveIndex(activeIndex === index && collapsible ? -1 : index);
+        if (!isControlled) {
+          setActiveIndex(prevActiveIndex => {
+            /*
+             * If we're dealing with an uncontrolled component, the index arg
+             * in selectChange will always be a number rather than an array.
+             */
+            index = index as number;
+            // multiple allowed
+            if (multiple) {
+              // state will always be an array here
+              prevActiveIndex = prevActiveIndex as number[];
+              if (
+                // User is clicking on an already-open trigger
+                prevActiveIndex.includes(index as number)
+              ) {
+                // Other panels are open OR accordion is allowed to collapse
+                if (prevActiveIndex.length > 1 || collapsible) {
+                  // Close the panel by filtering it from the array
+                  return prevActiveIndex.filter(i => i !== index);
+                }
+              } else {
+                // Open the panel by adding it to the array.
+                return [...prevActiveIndex, index].sort();
+              }
+            } else {
+              prevActiveIndex = prevActiveIndex as number;
+              return prevActiveIndex === index && collapsible ? -1 : index;
+            }
+            return prevActiveIndex;
+          });
         }
       },
-      [activeIndex, collapsible, isControlled, onChange]
+      [collapsible, isControlled, multiple, onChange]
     );
 
     const context: IAccordionContext = useMemo(
@@ -197,23 +264,37 @@ export type AccordionProps = Omit<
    * to a closed state. By default, an uncontrolled accordion will have an open
    * panel at all times, meaning a panel can only be closed if the user opens
    * another panel. This prop allows the user to collapse all open panels.
+   *
    * It's important to note that this prop has no impact on controlled
    * components, since the state of any given accordion panel is managed solely
    * by the index prop.
    */
   collapsible?: boolean;
+  /**
+   * Whether or not multiple panels in an uncontrolled accordion can be opened
+   * at the same time. By default, when a user opens a new panel, the previously
+   * opened panel will close. This prop prevents that behavior.
+   *
+   * It's important to note that this prop has no impact on controlled
+   * components, since the state of any given accordion panel is managed solely
+   * by the index prop.
+   */
+  multiple?: boolean;
 };
 
 Accordion.displayName = "Accordion";
 if (__DEV__) {
   Accordion.propTypes = {
     children: PropTypes.node.isRequired,
-    defaultIndex: PropTypes.number,
+    defaultIndex: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.arrayOf(PropTypes.number)
+    ]) as any,
     index: (props, name, compName, location, propName) => {
       let val = props[name];
-      if (props[name] != null && props.onChange == null) {
+      if (props[name] != null && props.onChange == null && !props.readOnly) {
         return new Error(
-          "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be functional, remove the `index` value to render an uncontrolled accordion or set an `onChange` handler to set an index when a change occurs."
+          "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be functional, remove the `index` value to render an uncontrolled accordion or set an `onChange` handler to set an index when a change occurs. If the accordion is intended to have a fixed state, use the `readOnly` prop with a `defaultIndex` instead of an `index`."
         );
       }
       if (props[name] != null && props.defaultIndex != null) {
@@ -229,9 +310,23 @@ if (__DEV__) {
             );
       } else if (props[name] != null && typeof props[name] !== "number") {
         return new Error(
-          `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
+          `Invalid prop "${propName}" supplied to "${compName}". Expected "number", received "${
             Array.isArray(val) ? "array" : typeof val
-          }\`.`
+          }".`
+        );
+      }
+      return null;
+    },
+    multiple: (props, name, compName, location, propName) => {
+      if (!props[name] && Array.isArray(props.defaultIndex)) {
+        return new Error(
+          `The "${propName}" prop supplied to "${compName}" is not set or set to "false", but an array of indices was provided to the "defaultIndex" prop. "${compName}" can only have more than one default index if the "${propName}" prop is set to "true".`
+        );
+      } else if (props[name] != null && typeof props[name] !== "boolean") {
+        return new Error(
+          `Invalid prop "${propName}" supplied to "${compName}". Expected "boolean", received "${
+            Array.isArray(props[name]) ? "array" : typeof props[name]
+          }".`
         );
       }
       return null;
@@ -522,6 +617,8 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+type ResultBox<T> = { v: T };
 
 type TriggerRef = React.MutableRefObject<any>;
 

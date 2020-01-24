@@ -26,7 +26,7 @@ let name = "With Arbitrary Elements";
 
 function Example() {
   return (
-    <Accordion>
+    <Accordion defaultIndex={1}>
       <AccordionItem>
         <ExampleAccordionHeader>Option 1</ExampleAccordionHeader>
         <ExampleAccordionBody>
