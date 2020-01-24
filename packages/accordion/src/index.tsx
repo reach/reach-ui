@@ -67,7 +67,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       index: controlledIndex,
       onChange,
       readOnly = false,
-      toggle = false,
+      collapsible = false,
       ...props
     },
     forwardedRef
@@ -88,7 +88,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         ? (controlledIndex as AccordionIndex)
         : defaultIndex != null
         ? defaultIndex
-        : toggle
+        : collapsible
         ? -1
         : 0
     );
@@ -109,11 +109,11 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
          *   - If toggle is not allowed, check that the change isn't coming from
          *     an item that is already active.
          */
-        if (!isControlled && !(activeIndex === index && !toggle)) {
-          setActiveIndex(activeIndex === index && toggle ? -1 : index);
+        if (!isControlled && !(activeIndex === index && !collapsible)) {
+          setActiveIndex(activeIndex === index && collapsible ? -1 : index);
         }
       },
-      [activeIndex, isControlled, onChange, toggle]
+      [activeIndex, collapsible, isControlled, onChange]
     );
 
     const context: IAccordionContext = useMemo(
@@ -196,10 +196,12 @@ export type AccordionProps = Omit<
    * Whether or not all panels of an uncontrolled accordion can be toggled
    * to a closed state. By default, an uncontrolled accordion will have an open
    * panel at all times, meaning a panel can only be closed if the user opens
-   * another panel. This prop allows the user to close an open panel by clicking
-   * its trigger while it is open.
+   * another panel. This prop allows the user to collapse all open panels.
+   * It's important to note that this prop has no impact on controlled
+   * components, since the state of any given accordion panel is managed solely
+   * by the index prop.
    */
-  toggle?: boolean;
+  collapsible?: boolean;
 };
 
 Accordion.displayName = "Accordion";
@@ -236,7 +238,7 @@ if (__DEV__) {
     },
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
-    toggle: PropTypes.bool
+    collapsible: PropTypes.bool
   };
 }
 
