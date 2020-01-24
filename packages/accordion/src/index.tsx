@@ -52,6 +52,13 @@ const useAccordionItemContext = () => useContext(AccordionItemContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 
+export enum AccordionStates {
+  Open = "open",
+  Collapsed = "collapsed"
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Accordion
  *
@@ -84,11 +91,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 
     const id = useId(props.id) || "accordion";
 
-    /*
-     * Define our default starting index. No reason to do this song and dance
-     * more than once.
-     */
-    const [activeIndex, setActiveIndex] = useState<AccordionIndex>(() => {
+    // Define our default starting index
+    const [openPanels, setOpenPanels] = useState<AccordionIndex>(() => {
       switch (true) {
         case isControlled:
           return controlledIndex!;
@@ -142,14 +146,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const onSelectPanel = useCallback(
       (index: AccordionIndex) => {
         onChange && onChange(index);
-        /*
-         * Before updating the active item internally, check that:
-         *   - Component is uncontrolled
-         *   - If toggle is not allowed, check that the change isn't coming from
-         *     an item that is already active.
-         */
+
         if (!isControlled) {
-          setActiveIndex(prevActiveIndex => {
+          setOpenPanels(prevOpenPanels => {
             /*
              * If we're dealing with an uncontrolled component, the index arg
              * in selectChange will always be a number rather than an array.
@@ -158,25 +157,25 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
             // multiple allowed
             if (multiple) {
               // state will always be an array here
-              prevActiveIndex = prevActiveIndex as number[];
+              prevOpenPanels = prevOpenPanels as number[];
               if (
-                // User is clicking on an already-open trigger
-                prevActiveIndex.includes(index as number)
+                // User is clicking on an already-open button
+                prevOpenPanels.includes(index as number)
               ) {
                 // Other panels are open OR accordion is allowed to collapse
-                if (prevActiveIndex.length > 1 || collapsible) {
+                if (prevOpenPanels.length > 1 || collapsible) {
                   // Close the panel by filtering it from the array
-                  return prevActiveIndex.filter(i => i !== index);
+                  return prevOpenPanels.filter(i => i !== index);
                 }
               } else {
                 // Open the panel by adding it to the array.
-                return [...prevActiveIndex, index].sort();
+                return [...prevOpenPanels, index].sort();
               }
             } else {
-              prevActiveIndex = prevActiveIndex as number;
-              return prevActiveIndex === index && collapsible ? -1 : index;
+              prevOpenPanels = prevOpenPanels as number;
+              return prevOpenPanels === index && collapsible ? -1 : index;
             }
-            return prevActiveIndex;
+            return prevOpenPanels;
           });
         }
       },
@@ -186,11 +185,11 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const context: IAccordionContext = useMemo(
       () => ({
         accordionId: id,
-        activeIndex: isControlled ? controlledIndex! : activeIndex,
+        openPanels: isControlled ? controlledIndex! : openPanels,
         onSelectPanel: readOnly ? noop : onSelectPanel,
         readOnly
       }),
-      [activeIndex, controlledIndex, id, isControlled, onSelectPanel, readOnly]
+      [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
     );
 
     useEffect(() => checkStyles("accordion"), []);
@@ -225,13 +224,14 @@ export type AccordionProps = Omit<
    */
   children: React.ReactNode;
   /**
-   * A default value for the active index in an uncontrolled component.
+   * A default value for the open panel's index or indices in an uncontrolled
+   * component.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-defaultindex
    */
   defaultIndex?: AccordionIndex;
   /**
-   * The index or array of indices for active accordion items. Used along with
+   * The index or array of indices for open accordion panels. Used along with
    * `onChange` to create controlled accordion components.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-index
@@ -282,8 +282,8 @@ export type AccordionProps = Omit<
   multiple?: boolean;
 };
 
-Accordion.displayName = "Accordion";
 if (__DEV__) {
+  Accordion.displayName = "Accordion";
   Accordion.propTypes = {
     children: PropTypes.node.isRequired,
     defaultIndex: PropTypes.oneOfType([
@@ -340,7 +340,7 @@ if (__DEV__) {
 /**
  * AccordionItem
  *
- * Wraps a DOM `button` an accordion's trigger and panel components.
+ * Wraps a DOM `button` an accordion's button and panel components.
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem
  */
@@ -349,30 +349,37 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     { children, disabled = false, key, ...props },
     forwardedRef
   ) {
-    const { accordionId, activeIndex, readOnly } = useAccordionContext();
-    const triggerRef: TriggerRef = useRef(null);
+    const { accordionId, openPanels, readOnly } = useAccordionContext();
+    const buttonRef: ButtonRef = useRef(null);
     const index = useDescendant({
       context: AccordionDescendantContext,
-      element: triggerRef.current
+      element: buttonRef.current
     });
 
-    // We need unique IDs for the panel and trigger to point to one another
+    // We need unique IDs for the panel and button to point to one another
     const itemId = makeId(accordionId, index);
     const panelId = makeId("panel", itemId);
-    const triggerId = makeId("trigger", itemId);
+    const buttonId = makeId("button", itemId);
 
-    const active = Array.isArray(activeIndex)
-      ? activeIndex.includes(index)
-      : activeIndex === index;
+    const open = Array.isArray(openPanels)
+      ? openPanels.includes(index)
+      : openPanels === index;
+
+    const dataAttributes = {
+      "data-state": open ? AccordionStates.Open : AccordionStates.Collapsed,
+      "data-disabled": disabled ? "true" : undefined,
+      "data-read-only": readOnly ? "true" : undefined
+    };
 
     const context: IAccordionItemContext = {
-      active,
+      open,
       disabled,
-      triggerId,
+      buttonId,
       index,
       itemId,
-      triggerRef,
-      panelId
+      buttonRef,
+      panelId,
+      dataAttributes
     };
 
     return (
@@ -381,9 +388,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
           {...props}
           ref={forwardedRef}
           data-reach-accordion-item=""
-          data-active={active ? "true" : undefined}
-          data-disabled={disabled ? "true" : undefined}
-          data-read-only={readOnly ? "true" : undefined}
+          {...dataAttributes}
         >
           {children}
         </div>
@@ -397,7 +402,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
  */
 export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
   /**
-   * Requires AccordionTrigger and AccordionPanel components as direct children.
+   * Requires AccordionButton and AccordionPanel components as direct children.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-children
    */
@@ -411,8 +416,8 @@ export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
   index?: number;
 };
 
-AccordionItem.displayName = "AccordionItem";
 if (__DEV__) {
+  AccordionItem.displayName = "AccordionItem";
   AccordionItem.propTypes = {
     disabled: PropTypes.bool
   };
@@ -421,139 +426,139 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * AccordionTrigger
+ * AccordionButton
  *
  * The trigger button a user clicks to interact with an accordion.
  *
  * Must be a direct child of a `AccordionItem`.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordiontrigger
+ * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton
  */
-export const AccordionTrigger = forwardRefWithAs<
-  AccordionTriggerProps,
-  "button"
->(function AccordionTrigger(
-  {
-    as: Comp = "button",
-    children,
-    onClick,
-    onKeyDown,
-    onMouseDown,
-    onPointerDown,
-    tabIndex,
-    ...props
-  },
-  forwardedRef
-) {
-  const { onSelectPanel, readOnly } = useAccordionContext();
+export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
+  function AccordionButton(
+    {
+      as: Comp = "button",
+      children,
+      onClick,
+      onKeyDown,
+      onMouseDown,
+      onPointerDown,
+      tabIndex,
+      ...props
+    },
+    forwardedRef
+  ) {
+    const { onSelectPanel } = useAccordionContext();
 
-  const {
-    active,
-    disabled,
-    triggerId,
-    triggerRef: ownRef,
-    index,
-    panelId
-  } = useAccordionItemContext();
+    const {
+      open,
+      dataAttributes,
+      disabled,
+      buttonId,
+      buttonRef: ownRef,
+      index,
+      panelId
+    } = useAccordionItemContext();
 
-  let { descendants } = useContext(AccordionDescendantContext);
-  let focusableTriggers = useMemo(() => {
-    let nodes: HTMLElement[] = [];
-    for (let i = 0; i < descendants.length; i++) {
-      let element = descendants[i].element;
-      if (element && !boolOrBoolString(element.dataset.disabled)) {
-        nodes.push(element);
+    let { descendants } = useContext(AccordionDescendantContext);
+    let focusableButtons = useMemo(() => {
+      let nodes: HTMLElement[] = [];
+      for (let i = 0; i < descendants.length; i++) {
+        let element = descendants[i].element;
+        if (element && !boolOrBoolString(element.dataset.disabled)) {
+          nodes.push(element);
+        }
+      }
+      return nodes;
+    }, [descendants]);
+
+    const ref = useForkedRef(forwardedRef, ownRef);
+
+    function handleClick(event: React.MouseEvent) {
+      event.preventDefault();
+      if (disabled) {
+        return;
+      }
+      ownRef.current.focus();
+      onSelectPanel(index);
+    }
+
+    function handleKeyDown(event: React.KeyboardEvent) {
+      const { key, ctrlKey } = event;
+      const focusIndex = focusableButtons.findIndex(
+        el => el === ownRef.current
+      );
+
+      const firstItem = focusableButtons[0];
+      const lastItem = focusableButtons[focusableButtons.length - 1];
+      const nextItem = focusableButtons[focusIndex + 1];
+      const prevItem = focusableButtons[focusIndex - 1];
+
+      // Bail if we aren't moving focus
+      if (
+        !(
+          key === "ArrowDown" ||
+          key === "ArrowUp" ||
+          (ctrlKey && key === "PageDown") ||
+          (ctrlKey && key === "PageUp") ||
+          key === "Home" ||
+          key === "End"
+        )
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (key === "ArrowDown" || (ctrlKey && key === "PageDown")) {
+        nextItem ? nextItem.focus() : firstItem && firstItem.focus();
+      } else if (key === "ArrowUp" || (ctrlKey && key === "PageUp")) {
+        prevItem ? prevItem.focus() : lastItem && lastItem.focus();
+      } else if (key === "Home") {
+        firstItem && firstItem.focus();
+      } else if (key === "End") {
+        lastItem && lastItem.focus();
       }
     }
-    return nodes;
-  }, [descendants]);
 
-  const ref = useForkedRef(forwardedRef, ownRef);
-
-  function handleClick(event: React.MouseEvent) {
-    event.preventDefault();
-    if (disabled) {
-      return;
-    }
-    ownRef.current.focus();
-    onSelectPanel(index);
+    return (
+      <Comp
+        {...props}
+        ref={ref}
+        data-reach-accordion-button=""
+        {...dataAttributes}
+        aria-controls={panelId}
+        aria-expanded={open}
+        disabled={disabled || undefined}
+        id={buttonId}
+        onClick={wrapEvent(onClick, handleClick)}
+        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        tabIndex={disabled ? -1 : tabIndex}
+      >
+        {children}
+      </Comp>
+    );
   }
-
-  function handleKeyDown(event: React.KeyboardEvent) {
-    const { key, ctrlKey } = event;
-    const focusIndex = focusableTriggers.findIndex(el => el === ownRef.current);
-
-    const firstItem = focusableTriggers[0];
-    const lastItem = focusableTriggers[focusableTriggers.length - 1];
-    const nextItem = focusableTriggers[focusIndex + 1];
-    const prevItem = focusableTriggers[focusIndex - 1];
-
-    // Bail if we aren't moving focus
-    if (
-      !(
-        key === "ArrowDown" ||
-        key === "ArrowUp" ||
-        (ctrlKey && key === "PageDown") ||
-        (ctrlKey && key === "PageUp") ||
-        key === "Home" ||
-        key === "End"
-      )
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-
-    if (key === "ArrowDown" || (ctrlKey && key === "PageDown")) {
-      nextItem ? nextItem.focus() : firstItem && firstItem.focus();
-    } else if (key === "ArrowUp" || (ctrlKey && key === "PageUp")) {
-      prevItem ? prevItem.focus() : lastItem && lastItem.focus();
-    } else if (key === "Home") {
-      firstItem && firstItem.focus();
-    } else if (key === "End") {
-      lastItem && lastItem.focus();
-    }
-  }
-
-  return (
-    <Comp
-      {...props}
-      ref={ref}
-      data-reach-accordion-trigger=""
-      aria-controls={panelId}
-      aria-expanded={active}
-      data-active={active ? "true" : undefined}
-      data-disabled={disabled ? "true" : undefined}
-      data-read-only={readOnly ? "true" : undefined}
-      disabled={disabled || undefined}
-      id={triggerId}
-      onClick={wrapEvent(onClick, handleClick)}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      tabIndex={disabled ? -1 : tabIndex}
-    >
-      {children}
-    </Comp>
-  );
-});
+);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordiontrigger-props
+ * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton-props
  */
-export type AccordionTriggerProps = {
+export type AccordionButtonProps = {
   /**
    * Typically a text string that serves as a label for the accordion, though
    * nested DOM nodes can be passed as well so long as they are valid children
    * of interactive elements.
    *
    * @see https://github.com/w3c/html-aria/issues/54
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordiontrigger-children
+   * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton-children
    */
   children: React.ReactNode;
 };
 
-AccordionTrigger.displayName = "AccordionTrigger";
 if (__DEV__) {
-  AccordionTrigger.propTypes = {
+  AccordionButton.displayName = "AccordionButton";
+  AccordionButton.propTypes = {
     as: PropTypes.any,
     children: PropTypes.node
   };
@@ -572,22 +577,23 @@ if (__DEV__) {
  */
 export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
   function AccordionPanel({ children, ...props }, forwardedRef) {
-    const { readOnly } = useAccordionContext();
-
-    const { disabled, panelId, triggerId, active } = useAccordionItemContext();
+    const {
+      dataAttributes,
+      panelId,
+      buttonId,
+      open
+    } = useAccordionItemContext();
 
     return (
       <div
+        hidden={!open}
+        role="region"
         {...props}
         ref={forwardedRef}
         data-reach-accordion-panel=""
-        aria-labelledby={triggerId}
-        data-active={active ? "true" : undefined}
-        data-disabled={disabled ? "true" : undefined}
-        data-read-only={readOnly ? "true" : undefined}
-        hidden={!active}
+        {...dataAttributes}
+        aria-labelledby={buttonId}
         id={panelId}
-        role="region"
         tabIndex={-1}
       >
         {children}
@@ -608,8 +614,8 @@ export type AccordionPanelProps = {
   children: React.ReactNode;
 };
 
-AccordionPanel.displayName = "AccordionPanel";
 if (__DEV__) {
+  AccordionPanel.displayName = "AccordionPanel";
   AccordionPanel.propTypes = {
     children: PropTypes.node
   };
@@ -620,23 +626,28 @@ if (__DEV__) {
 
 type ResultBox<T> = { v: T };
 
-type TriggerRef = React.MutableRefObject<any>;
+type ButtonRef = React.MutableRefObject<any>;
 
 type AccordionIndex = number | number[];
 
 interface IAccordionContext {
   accordionId: string;
-  activeIndex: AccordionIndex;
+  openPanels: AccordionIndex;
   onSelectPanel(index: AccordionIndex): void;
   readOnly: boolean;
 }
 
 interface IAccordionItemContext {
-  active: boolean;
+  open: boolean;
   disabled: boolean;
-  triggerId: string;
+  buttonId: string;
   index: number;
   itemId: string;
-  triggerRef: TriggerRef;
+  buttonRef: ButtonRef;
   panelId: string;
+  dataAttributes: {
+    "data-state": AccordionStates;
+    "data-disabled": string | undefined;
+    "data-read-only": string | undefined;
+  };
 }

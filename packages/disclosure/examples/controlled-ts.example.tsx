@@ -5,7 +5,7 @@ import {
   DisclosurePanel
 } from "@reach/disclosure";
 
-let name = "Controlled";
+let name = "Controlled (TS)";
 
 function Example() {
   const [value, setValue] = useState("");

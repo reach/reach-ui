@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 import styled from "styled-components";
@@ -18,7 +18,7 @@ function Example() {
       onChange={index => setActiveItem(index)}
     >
       <StyledItem>
-        <ArrowTrigger active={activeItem === 0}>ABCs</ArrowTrigger>
+        <ArrowButton active={activeItem === 0}>ABCs</ArrowButton>
         <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -26,7 +26,7 @@ function Example() {
         </StyledPanel>
       </StyledItem>
       <StyledItem>
-        <ArrowTrigger active={activeItem === 1}>Easy As</ArrowTrigger>
+        <ArrowButton active={activeItem === 1}>Easy As</ArrowButton>
         <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -34,7 +34,7 @@ function Example() {
         </StyledPanel>
       </StyledItem>
       <StyledItem>
-        <ArrowTrigger active={activeItem === 2}>123s</ArrowTrigger>
+        <ArrowButton active={activeItem === 2}>123s</ArrowButton>
         <StyledPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -49,9 +49,9 @@ Example.story = { name };
 export const Comp = Example;
 export default { title: "Accordion" };
 
-function ArrowTrigger({ children, active, ...props }) {
+function ArrowButton({ children, active, ...props }) {
   return (
-    <StyledTrigger {...props}>
+    <StyledButton {...props}>
       <span
         style={{
           display: "flex",
@@ -62,7 +62,7 @@ function ArrowTrigger({ children, active, ...props }) {
         <span>{children}</span>
         <StyledIcon active={active} aria-hidden />
       </span>
-    </StyledTrigger>
+    </StyledButton>
   );
 }
 
@@ -82,12 +82,14 @@ function ArrowIcon(props) {
   );
 }
 
-const StyledTrigger = styled(AccordionTrigger)`
+const StyledButton = styled(AccordionButton)`
   display: block;
   width: 100%;
   appearance: none;
   background: linear-gradient(to bottom, darkslategray, slategray);
   border: 0;
+  text-align: inherit;
+  font: inherit;
   font-size: 16px;
   font-weight: bolder;
   color: white;

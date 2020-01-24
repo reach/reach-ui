@@ -6,11 +6,6 @@
   outline: none;
 }
 
-[data-reach-accordion-trigger] {
-  text-align: inherit;
-  font: inherit;
-}
-
-[data-reach-accordion-trigger][data-disabled] {
+[data-reach-accordion-button][data-disabled] {
   cursor: not-allowed;
 }

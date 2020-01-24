@@ -5,7 +5,7 @@ import {
   DisclosurePanel
 } from "@reach/disclosure";
 
-let name = "Basic";
+let name = "Basic (TS)";
 
 function Example() {
   return (

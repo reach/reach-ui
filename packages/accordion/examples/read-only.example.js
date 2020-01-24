@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 
@@ -13,7 +13,7 @@ function Example() {
   return (
     <Accordion readOnly defaultIndex={1}>
       <AccordionItem>
-        <AccordionTrigger>Good Luck!</AccordionTrigger>
+        <AccordionButton>Good Luck!</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -21,7 +21,7 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionTrigger>NOPE!</AccordionTrigger>
+        <AccordionButton>NOPE!</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -29,7 +29,7 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionTrigger>Sorry, Charlie</AccordionTrigger>
+        <AccordionButton>Sorry, Charlie</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,

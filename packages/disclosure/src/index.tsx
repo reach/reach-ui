@@ -8,13 +8,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#disclosure
  */
 
-import React, {
-  forwardRef,
-  useCallback,
-  useContext,
-  useRef,
-  useState
-} from "react";
+import React, { forwardRef, useContext, useRef, useState } from "react";
 import {
   createNamedContext,
   forwardRefWithAs,
@@ -31,6 +25,13 @@ const DisclosureContext = createNamedContext<IDisclosureContext>(
   {} as IDisclosureContext
 );
 const useDisclosureContext = () => useContext(DisclosureContext);
+
+////////////////////////////////////////////////////////////////////////////////
+
+export enum DisclosureStates {
+  Open = "open",
+  Collapsed = "collapsed"
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -104,8 +105,8 @@ export const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-Disclosure.displayName = "Disclosure";
 if (__DEV__) {
+  Disclosure.displayName = "Disclosure";
   Disclosure.propTypes = {
     children: PropTypes.node.isRequired,
     onChange: PropTypes.func,
@@ -116,17 +117,16 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * DisclosureTrigger
+ * DisclosureButton
  */
-export const DisclosureTrigger = forwardRefWithAs<
-  DisclosureTriggerProps,
+export const DisclosureButton = forwardRefWithAs<
+  DisclosureButtonProps,
   "button"
->(function DisclosureTrigger(
+>(function DisclosureButton(
   {
     as: Comp = "button",
     children,
     onClick,
-    onKeyDown,
     onMouseDown,
     onPointerDown,
     ...props
@@ -134,31 +134,9 @@ export const DisclosureTrigger = forwardRefWithAs<
   forwardedRef
 ) {
   const { onSelect, open, panelId } = useDisclosureContext();
-
-  /*
-   * If the user decides to use a div instead of a native button, we check the
-   * ref's node type after it mounts to the DOM in order to shim the necessary
-   * attributes.
-   */
-  const [isButtonElement, setIsButtonElement] = useState(Comp === "button");
   const ownRef = useRef<HTMLElement | null>(null);
-  const setButtonRef = useCallback(
-    node => {
-      ownRef.current = node;
-      if (node && Comp !== "button") {
-        setIsButtonElement(node.nodeName === "BUTTON");
-      }
-    },
-    [Comp]
-  );
-  const buttonAttributeProps = isButtonElement
-    ? {}
-    : {
-        role: "button",
-        tabIndex: 0
-      };
 
-  const ref = useForkedRef(forwardedRef, setButtonRef);
+  const ref = useForkedRef(forwardedRef, ownRef);
 
   function handleClick(event: React.MouseEvent) {
     event.preventDefault();
@@ -166,36 +144,26 @@ export const DisclosureTrigger = forwardRefWithAs<
     onSelect();
   }
 
-  function handleKeyDown(event: React.KeyboardEvent) {
-    const { key } = event;
-    if (!isButtonElement && (key === " " || key === "Enter")) {
-      event.preventDefault();
-      ownRef.current && ownRef.current.click();
-    }
-  }
-
   return (
     <Comp
       ref={ref}
+      {...props}
+      onClick={wrapEvent(onClick, handleClick)}
       aria-controls={panelId}
       aria-expanded={open}
       data-reach-disclosure-trigger=""
-      data-open={open ? "" : undefined}
-      onClick={wrapEvent(onClick, handleClick)}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      {...buttonAttributeProps}
-      {...props}
+      data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
     >
       {children}
     </Comp>
   );
 });
 
-type DisclosureTriggerProps = {};
+type DisclosureButtonProps = {};
 
-DisclosureTrigger.displayName = "DisclosureTrigger";
 if (__DEV__) {
-  DisclosureTrigger.propTypes = {
+  DisclosureButton.displayName = "DisclosureButton";
+  DisclosureButton.propTypes = {
     as: PropTypes.any,
     children: PropTypes.node
   };
@@ -206,19 +174,19 @@ if (__DEV__) {
 /**
  * DisclosurePanel
  */
-export const DisclosurePanel = forwardRef<HTMLDivElement>(
+export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
   function DisclosurePanel({ children, ...props }, forwardedRef) {
     const { panelId, open } = useDisclosureContext();
 
     return (
       <div
         ref={forwardedRef}
-        data-reach-disclosure-panel=""
-        data-open={open ? "" : undefined}
         hidden={!open}
+        {...props}
+        data-reach-disclosure-panel=""
+        data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
         id={panelId}
         tabIndex={-1}
-        {...props}
       >
         {children}
       </div>
@@ -226,8 +194,8 @@ export const DisclosurePanel = forwardRef<HTMLDivElement>(
   }
 );
 
-DisclosurePanel.displayName = "DisclosurePanel";
 if (__DEV__) {
+  DisclosurePanel.displayName = "DisclosurePanel";
   DisclosurePanel.propTypes = {};
 }
 

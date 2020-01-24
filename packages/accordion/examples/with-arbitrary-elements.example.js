@@ -2,7 +2,7 @@ import React from "react";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -80,7 +80,7 @@ function ExampleAccordionHeader({ children }) {
         padding: "4px 10px"
       }}
     >
-      <AccordionTrigger
+      <AccordionButton
         style={{
           appearance: "none",
           background: 0,
@@ -88,14 +88,16 @@ function ExampleAccordionHeader({ children }) {
           boxShadow: "none",
           color: "inherit",
           display: "block",
+          textAlign: "inherit",
           flexGrow: 1,
           flexShrink: 0,
+          font: "inherit",
           fontWeight: "bolder",
           padding: "10px 0"
         }}
       >
         {children}
-      </AccordionTrigger>
+      </AccordionButton>
       <MyMenuButton style={{ marginLeft: 10 }} />
     </div>
   );

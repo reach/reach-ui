@@ -2,7 +2,7 @@ import React from "react";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 import "@reach/accordion/styles.css";
@@ -18,7 +18,7 @@ function Example() {
   return (
     <Accordion multiple>
       <AccordionItem>
-        <AccordionTrigger>Here's some important context</AccordionTrigger>
+        <AccordionButton>Here's some important context</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -26,7 +26,7 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionTrigger>You don't want to miss this</AccordionTrigger>
+        <AccordionButton>You don't want to miss this</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -34,7 +34,7 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionTrigger>Really cool teaser here!</AccordionTrigger>
+        <AccordionButton>Really cool teaser here!</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -42,7 +42,7 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionTrigger>Don't forget me!</AccordionTrigger>
+        <AccordionButton>Don't forget me!</AccordionButton>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,

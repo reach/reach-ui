@@ -3,7 +3,7 @@ import "@reach/accordion/styles.css";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 
@@ -26,7 +26,7 @@ function Example() {
       </button>
       <Accordion index={activeItems} onChange={toggleItem}>
         <AccordionItem>
-          <AccordionTrigger>You can toggle me</AccordionTrigger>
+          <AccordionButton>You can toggle me</AccordionButton>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -35,7 +35,7 @@ function Example() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem disabled>
-          <AccordionTrigger>You can't toggle me</AccordionTrigger>
+          <AccordionButton>You can't toggle me</AccordionButton>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -44,7 +44,7 @@ function Example() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionTrigger>You can also toggle me</AccordionTrigger>
+          <AccordionButton>You can also toggle me</AccordionButton>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import {
   Accordion,
   AccordionItem,
-  AccordionTrigger,
+  AccordionButton,
   AccordionPanel
 } from "@reach/accordion";
 import styled from "styled-components";
@@ -15,7 +15,7 @@ function Example() {
     <Fragment>
       <StyledAccordion>
         <StyledItem>
-          <StyledTrigger>You can activate me</StyledTrigger>
+          <StyledButton>You can activate me</StyledButton>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -24,7 +24,7 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem disabled>
-          <StyledTrigger>You can't touch me</StyledTrigger>
+          <StyledButton>You can't touch me</StyledButton>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -33,7 +33,7 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem>
-          <StyledTrigger>You can definitely activate me</StyledTrigger>
+          <StyledButton>You can definitely activate me</StyledButton>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -42,7 +42,7 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem>
-          <StyledTrigger>Read me now plz!</StyledTrigger>
+          <StyledButton>Read me now plz!</StyledButton>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -61,12 +61,14 @@ export default { title: "Accordion" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const StyledTrigger = styled(AccordionTrigger)`
+const StyledButton = styled(AccordionButton)`
   display: block;
   width: 100%;
   appearance: none;
   background: linear-gradient(to right, #040a84, #0c7ecc);
   border: 0;
+  text-align: inherit;
+  font: inherit;
   font-size: 16px;
   font-weight: bolder;
   color: white;
