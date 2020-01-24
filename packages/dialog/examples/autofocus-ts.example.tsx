@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Autofocus (TS)";
+let name = "Autofocus (TS)";
 
-export function Example() {
+function Example() {
   const [showDialog, setShowDialog] = useState(false);
   const button = useRef(null);
   return (
@@ -21,3 +21,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

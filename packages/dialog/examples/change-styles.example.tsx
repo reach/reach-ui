@@ -3,12 +3,12 @@ import { useTransition, animated, config } from "react-spring/web.cjs";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Change Styles (TS)";
+let name = "Change Styles (TS)";
 
 let AnimatedDialogOverlay = animated(DialogOverlay);
 let AnimatedDialogContent = animated(DialogContent);
 
-export function Example() {
+function Example() {
   const [showDialog, setShowDialog] = useState(false);
   const transitions = useTransition<any, any>(showDialog, null, {
     from: { opacity: 0, y: -10 },
@@ -52,3 +52,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

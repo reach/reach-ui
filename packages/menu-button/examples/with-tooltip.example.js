@@ -7,9 +7,9 @@ import Tooltip from "@reach/tooltip";
 import "@reach/menu-button/styles.css";
 import "@reach/tooltip/styles.css";
 
-export let name = "With Tooltip";
+let name = "With Tooltip";
 
-export function Example() {
+function Example() {
   return (
     <Menu>
       <Tooltip label="Hamburger">
@@ -26,3 +26,7 @@ export function Example() {
     </Menu>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };

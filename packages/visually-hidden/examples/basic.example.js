@@ -1,9 +1,9 @@
 import React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 
-export let name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   return (
     <button>
       <VisuallyHidden>Save</VisuallyHidden>
@@ -13,3 +13,7 @@ export function Example() {
     </button>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Visually Hidden" };

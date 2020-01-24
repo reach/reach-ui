@@ -4,9 +4,9 @@ import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { getScrollbarOffset } from "@reach/utils";
 import "@reach/tooltip/styles.css";
 
-export const name = "Triangle";
+let name = "Triangle";
 
-export function Example() {
+function Example() {
   return (
     <div>
       <ExampleTriangle label="Notifications">
@@ -32,6 +32,10 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tooltip" };
 
 // Center the tooltip, but collisions will win
 const centered = (triggerRect, tooltipRect) => {

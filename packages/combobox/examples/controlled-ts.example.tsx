@@ -11,9 +11,9 @@ import { useThrottle } from "./use-throttle";
 import cities from "./cities";
 import "@reach/combobox/styles.css";
 
-export let name = "Controlled (TS)";
+let name = "Controlled (TS)";
 
-export function Example() {
+function Example() {
   let [term, setTerm] = useState("");
   let [selection, setSelection] = useState("");
   let results = useCityMatch(term);
@@ -75,6 +75,12 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Combobox" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 function useCityMatch(term: string) {
   let throttledTerm = useThrottle(term, 100);

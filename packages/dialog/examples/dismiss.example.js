@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Dismiss";
+let name = "Dismiss";
 
-export function Example() {
+function Example() {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
@@ -24,3 +24,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

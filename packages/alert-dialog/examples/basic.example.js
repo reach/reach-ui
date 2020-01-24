@@ -5,9 +5,9 @@ import {
   AlertDialogDescription
 } from "@reach/alert-dialog";
 
-export let name = "Basic";
+let name = "Example";
 
-export function Basic() {
+function Example() {
   const close = useRef(null);
   const [showDialog, setShowDialog] = useState(false);
   return (
@@ -30,3 +30,7 @@ export function Basic() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Alert Dialog" };

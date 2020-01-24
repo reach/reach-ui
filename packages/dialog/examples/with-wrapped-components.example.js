@@ -2,9 +2,9 @@ import React, { forwardRef, useRef, useState } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "With Wrapped Components";
+let name = "With Wrapped Components";
 
-export function Example() {
+function Example() {
   const overlayRef = useRef(null);
   const contentRef = useRef(null);
   const [showDialog, setShowDialog] = useState(false);
@@ -33,6 +33,12 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const FilteredDialogOverlay = forwardRef(function({ fakeProp, ...rest }, ref) {
   return (

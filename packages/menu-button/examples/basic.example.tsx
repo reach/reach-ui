@@ -3,9 +3,9 @@ import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "Basic (TS)";
+let name = "Basic (TS)";
 
-export function Example() {
+function Example() {
   return (
     <Menu>
       <MenuButton id="example-button">
@@ -20,3 +20,7 @@ export function Example() {
     </Menu>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };
