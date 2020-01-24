@@ -9,7 +9,7 @@ let name = "Custom with Pseudo Element Styles";
 function Example() {
   const [checked, setChecked] = React.useState(false);
   return (
-    <div className="pseudo-container">
+    <div className="example">
       <label>
         <CustomCheckbox
           value="whatever"
