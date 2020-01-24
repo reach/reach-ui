@@ -2,9 +2,9 @@ import React from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-export const name = "Checklist";
+let name = "Checklist";
 
-export function Example() {
+function Example() {
   const [toppings, setToppings] = React.useState({
     condiments: {
       mayo: true,
@@ -111,3 +111,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };

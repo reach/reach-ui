@@ -2,9 +2,9 @@ import React, { useRef } from "react";
 import { useMixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-export const name = "With useMixedCheckbox hook";
+let name = "With useMixedCheckbox hook";
 
-export function Example() {
+function Example() {
   const [checked, setChecked] = React.useState<boolean | "mixed">(true);
   let inputRef1 = useRef(null);
   let inputRef2 = useRef(null);
@@ -30,3 +30,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };

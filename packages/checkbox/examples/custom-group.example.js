@@ -8,7 +8,33 @@ import React, {
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-export const name = "Custom Group";
+let name = "Custom Group";
+
+function Example() {
+  return (
+    <CheckboxGroup
+      name="feels"
+      label="Toggle all my friends"
+      legend="How are my friends feeling?"
+    >
+      <CheckboxLegend>My Friends</CheckboxLegend>
+      <FriendCheckbox name="sharon">Sharon</FriendCheckbox>
+      <FriendCheckbox name="javier" defaultChecked>
+        Javier
+      </FriendCheckbox>
+      <FriendCheckbox name="mike">Mike</FriendCheckbox>
+      <FriendCheckbox name="jessie" defaultChecked>
+        Jessie
+      </FriendCheckbox>
+    </CheckboxGroup>
+  );
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const GroupContext = createContext({});
 
@@ -150,26 +176,6 @@ function CheckboxLegend({ children }) {
     >
       {children}
     </legend>
-  );
-}
-
-export function Example() {
-  return (
-    <CheckboxGroup
-      name="feels"
-      label="Toggle all my friends"
-      legend="How are my friends feeling?"
-    >
-      <CheckboxLegend>My Friends</CheckboxLegend>
-      <FriendCheckbox name="sharon">Sharon</FriendCheckbox>
-      <FriendCheckbox name="javier" defaultChecked>
-        Javier
-      </FriendCheckbox>
-      <FriendCheckbox name="mike">Mike</FriendCheckbox>
-      <FriendCheckbox name="jessie" defaultChecked>
-        Jessie
-      </FriendCheckbox>
-    </CheckboxGroup>
   );
 }
 

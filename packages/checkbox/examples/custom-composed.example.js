@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { CustomCheckboxContainer, CustomCheckboxInput } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-export const name = "Custom Composed";
+let name = "Custom Composed";
 
-const MyCheckbox = props => {
+function MyCheckbox(props) {
   const [checkedState, setChecked] = useState(props.checked || false);
   const checked = props.checked != null ? props.checked : checkedState;
   const showCheckMark = !!checked;
@@ -48,7 +48,7 @@ const MyCheckbox = props => {
       />
     </CustomCheckboxContainer>
   );
-};
+}
 
 export function Example() {
   return (
@@ -65,3 +65,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };

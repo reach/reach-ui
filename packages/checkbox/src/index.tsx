@@ -56,7 +56,6 @@ import React, {
 import {
   createNamedContext,
   DistributiveOmit,
-  useConstant,
   useForkedRef,
   useIsomorphicLayoutEffect,
   wrapEvent
@@ -737,6 +736,16 @@ function stateValueToChecked(state: string) {
   return state === CheckboxStates.Checked ? true : false;
 }
 
+function useConstant<T>(fn: () => T): T {
+  const ref = React.useRef<ResultBox<T>>();
+
+  if (!ref.current) {
+    ref.current = { v: fn() };
+  }
+
+  return ref.current.v;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -836,3 +845,5 @@ type CheckboxState =
       value: CheckboxStates.Mixed;
       context: CheckboxData;
     };
+
+type ResultBox<T> = { v: T };

@@ -3,9 +3,9 @@ import React from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-export const name = "Disabled";
+const name = "Disabled";
 
-export function Example() {
+function Example() {
   const [checked, setChecked] = React.useState(true);
   return (
     <div>
@@ -50,3 +50,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };

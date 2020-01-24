@@ -4,9 +4,9 @@ import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 import "./custom-pseduo.css";
 
-export const name = "Custom with Pseudo Element Styles";
+let name = "Custom with Pseudo Element Styles";
 
-export function Example() {
+function Example() {
   const [checked, setChecked] = React.useState(false);
   return (
     <div className="pseudo-container">
@@ -28,3 +28,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Checkbox" };
