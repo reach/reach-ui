@@ -7,9 +7,9 @@ import {
   AccordionPanel
 } from "@reach/accordion";
 
-export const name = "Controlled";
+let name = "Controlled";
 
-export const Example = () => {
+function Example() {
   const [activeItems, setActiveItems] = React.useState([0]);
   function toggleItem(index) {
     if (activeItems.includes(index)) {
@@ -55,4 +55,8 @@ export const Example = () => {
       </Accordion>
     </>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Accordion" };

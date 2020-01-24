@@ -10,7 +10,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/accordion/styles.css";
 import "@reach/menu-button/styles.css";
 
-export const name = "With Arbitrary Elements";
+let name = "With Arbitrary Elements";
 
 /*
  * Per https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
@@ -24,7 +24,7 @@ export const name = "With Arbitrary Elements";
  * TODO: Screen reader testing + verify we aren't violating any aria rules
  */
 
-export function Example() {
+function Example() {
   return (
     <Accordion>
       <AccordionItem>
@@ -58,6 +58,10 @@ export function Example() {
     </Accordion>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Accordion" };
 
 function ExampleAccordionBody({ children }) {
   return <AccordionPanel style={{ padding: 16 }}>{children}</AccordionPanel>;

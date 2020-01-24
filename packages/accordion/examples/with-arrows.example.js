@@ -8,9 +8,9 @@ import {
 } from "@reach/accordion";
 import styled from "styled-components";
 
-export const name = "With Arrows";
+let name = "With Arrows";
 
-export const Example = () => {
+function Example() {
   const [activeItem, setActiveItem] = React.useState(null);
   return (
     <StyledAccordion
@@ -43,7 +43,11 @@ export const Example = () => {
       </StyledItem>
     </StyledAccordion>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Accordion" };
 
 function ArrowTrigger({ children, active, ...props }) {
   return (

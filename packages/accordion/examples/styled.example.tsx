@@ -8,9 +8,9 @@ import {
 import styled from "styled-components";
 import "@reach/accordion/styles.css";
 
-export const name = "With Styled Components (TS)";
+let name = "With Styled Components (TS)";
 
-export function Example() {
+function Example() {
   return (
     <Fragment>
       <StyledAccordion>
@@ -54,6 +54,12 @@ export function Example() {
     </Fragment>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Accordion" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const StyledTrigger = styled(AccordionTrigger)`
   display: block;

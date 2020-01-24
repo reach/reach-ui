@@ -5,9 +5,9 @@ import {
   DisclosurePanel
 } from "@reach/disclosure";
 
-export const name = "Controlled";
+let name = "Controlled";
 
-export const Example = () => {
+function Example() {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -39,4 +39,8 @@ export const Example = () => {
       </Disclosure>
     </div>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Disclosure" };

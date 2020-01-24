@@ -8,9 +8,9 @@ import {
 import ExampleForm from "./ExampleForm";
 import "@reach/accordion/styles.css";
 
-export const name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   return (
     <Accordion defaultIndex={2}>
       <AccordionItem>
@@ -41,3 +41,7 @@ export function Example() {
     </Accordion>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Accordion" };
