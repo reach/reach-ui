@@ -19,7 +19,8 @@
     "changes": "dotenv lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
     "lint": "eslint .",
-    "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty"
+    "doc": "react-docgen packages/*/src/* --out www/docs/source.json --resolver findAllComponentDefinitions --pretty",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@babel/core": "^7.8.3",
@@ -63,7 +64,9 @@
     "lerna": "^3.20.2",
     "lerna-changelog": "^1.0.0",
     "match-sorter": "^4.0.2",
+    "patch-package": "^6.2.0",
     "pepjs": "0.5.2",
+    "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.19.1",
     "pretty-quick": "2.0.1",
     "prop-types": "^15.7.2",
