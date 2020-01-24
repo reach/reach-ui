@@ -73,10 +73,10 @@ import warning from "warning";
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
-enum CheckboxStates {
-  Checked = "checked",
+export enum CheckboxStates {
+  Checked = "true",
   Mixed = "mixed",
-  Unchecked = "unchecked"
+  Unchecked = "false"
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -312,7 +312,7 @@ export const CustomCheckboxContainer = forwardRef<
 });
 
 type CustomCheckboxContainerProps = React.HTMLAttributes<HTMLSpanElement> & {
-  checked?: CheckState;
+  checked?: CheckboxStates;
   defaultChecked?: boolean;
   disabled?: boolean;
 };
@@ -320,10 +320,7 @@ type CustomCheckboxContainerProps = React.HTMLAttributes<HTMLSpanElement> & {
 if (__DEV__) {
   CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
   CustomCheckboxContainer.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
-    ]),
+    checked: PropTypes.oneOf([...Object.values(CheckboxStates)]),
     defaultChecked: PropTypes.bool,
     disabled: PropTypes.bool
   };
@@ -420,7 +417,7 @@ type CustomCheckboxProps = Omit<
   React.HTMLAttributes<HTMLSpanElement>,
   "onChange"
 > & {
-  checked?: CheckState;
+  checked?: CheckboxStates;
   defaultChecked?: boolean;
   disabled?: boolean;
   name?: React.InputHTMLAttributes<HTMLInputElement>["name"];
@@ -431,10 +428,7 @@ type CustomCheckboxProps = Omit<
 if (__DEV__) {
   CustomCheckbox.displayName = "CustomCheckbox";
   CustomCheckbox.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
-    ]),
+    checked: PropTypes.oneOf([...Object.values(CheckboxStates)]),
     disabled: PropTypes.bool,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -483,16 +477,13 @@ type MixedCheckboxProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "checked"
 > & {
-  checked?: CheckState;
+  checked?: CheckboxStates;
 };
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
   MixedCheckbox.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
-    ]),
+    checked: PropTypes.oneOf([...Object.values(CheckboxStates)]),
     name: PropTypes.string,
     onChange: PropTypes.func
   };
@@ -501,14 +492,14 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 type MixedCheckboxArgs = {
-  checked?: CheckState;
+  checked?: CheckboxStates;
   defaultChecked?: boolean;
   disabled?: boolean;
   componentName?: string;
 };
 
 type MixedCheckboxData = {
-  checked: CheckState;
+  checked: CheckboxStates;
   focused: boolean;
 };
 
@@ -587,7 +578,7 @@ export function useMixedCheckbox(
   const props = {
     "aria-checked": stateValueToAriaChecked(current.value),
     "data-reach-mixed-checkbox": "",
-    checked: stateValueToChecked(current.value),
+    checked: stateValueToInputCheckedProp(current.value),
     disabled,
     onBlur: handleBlur,
     onChange: handleChange,
@@ -595,9 +586,9 @@ export function useMixedCheckbox(
     type: "checkbox"
   };
 
-  const contextData = {
+  const contextData: MixedCheckboxData = {
     focused: current.context.focused,
-    checked: stateValueToAriaChecked(current.value)
+    checked: current.value as CheckboxStates
   };
 
   let mergedRef: React.Ref<any> = useForkedRef(ref, inputRef);
@@ -666,7 +657,10 @@ export function useMixedCheckbox(
  * @param initialMachine
  * @param refs
  */
-function useMachine<TC, TE extends MachineEventWithRefs = MachineEventWithRefs>(
+function useMachine<
+  TC extends object,
+  TE extends MachineEventWithRefs = MachineEventWithRefs
+>(
   initialMachine: StateMachine.Machine<TC, TE, any>,
   refs: ReactRefs<TE>
 ): [
@@ -714,17 +708,19 @@ function useMachine<TC, TE extends MachineEventWithRefs = MachineEventWithRefs>(
 /*
  * We want the API to be similar to the native DOM input API, so we opt for a
  * checked prop with a value of `true`, `false` or `"mixed"`.
+ * We'll issue a warning if the user passes a boolean, but we'll still coerce
+ * the type for them because we're nice people like that.
  */
 
-function checkedPropToStateValue(checked?: CheckState) {
+function checkedPropToStateValue(checked?: boolean | CheckboxStates) {
   return checked === true
     ? CheckboxStates.Checked
-    : checked === "mixed"
+    : checked === CheckboxStates.Mixed
     ? CheckboxStates.Mixed
     : CheckboxStates.Unchecked;
 }
 
-function stateValueToAriaChecked(state: string): CheckState {
+function stateValueToAriaChecked(state: string): "mixed" | boolean {
   return state === CheckboxStates.Checked
     ? true
     : state === CheckboxStates.Mixed
@@ -732,17 +728,15 @@ function stateValueToAriaChecked(state: string): CheckState {
     : false;
 }
 
-function stateValueToChecked(state: string) {
+function stateValueToInputCheckedProp(state: string) {
   return state === CheckboxStates.Checked ? true : false;
 }
 
 function useConstant<T>(fn: () => T): T {
   const ref = React.useRef<ResultBox<T>>();
-
   if (!ref.current) {
     ref.current = { v: fn() };
   }
-
   return ref.current.v;
 }
 
@@ -753,7 +747,7 @@ function useConstant<T>(fn: () => T): T {
  * Context object for our custom checkbox wrapper.
  */
 interface ICustomCheckboxContext {
-  checked: CheckState;
+  checked: CheckboxStates;
   focused: boolean;
   inputRef: InputRef;
   inputProps: React.InputHTMLAttributes<HTMLInputElement>;
@@ -773,8 +767,6 @@ interface MachineEventWithRefs extends MachineEvent {
 type ReactRefs<TE extends MachineEventWithRefs> = {
   [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
 };
-
-type CheckState = boolean | "mixed";
 
 /**
  * Context data object for the checkbox state machine.
