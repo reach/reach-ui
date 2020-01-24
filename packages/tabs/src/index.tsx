@@ -385,10 +385,10 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   return (
     <Comp
+      role="tablist"
       {...props}
       data-reach-tab-list=""
       ref={ref}
-      role="tablist"
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
     >
       {Children.map(children, (child, index) => {
@@ -474,6 +474,7 @@ export const Tab = forwardRefWithAs<
 
   return (
     <Comp
+      role="tab"
       {...props}
       ref={ref}
       data-reach-tab=""
@@ -485,7 +486,6 @@ export const Tab = forwardRefWithAs<
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
-      role="tab"
       tabIndex={isSelected ? 0 : -1}
     >
       {children}
@@ -578,13 +578,13 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
 
     return (
       <Comp
+        hidden={!isSelected}
+        role="tabpanel"
         {...props}
         ref={ref}
         data-reach-tab-panel=""
         aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={!isSelected}
         id={id}
-        role="tabpanel"
         tabIndex={-1}
       >
         {children}
