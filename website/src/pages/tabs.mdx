@@ -372,7 +372,7 @@ Please see the [styling guide](/styling).
 But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via React context`).
 
 ```jsx
-const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />;
+const BoldPanel = props => <TabPanel {...props} style={{ fontWeight: "bold" }} />;
 
 const TabPage = () => (
   <Tabs>
