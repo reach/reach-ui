@@ -420,6 +420,11 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     const isControlled = controlledValue != null;
 
+    /*
+     * Layout effect should be SSR-safe here because we don't actually do
+     * anything with this ref that involves rendering until after we've
+     * let the client hydrate in nested components.
+     */
     useLayoutEffect(() => {
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
@@ -883,6 +888,8 @@ function useFocusManagement(
   /*
    * useLayoutEffect so that the cursor goes to the end of the input instead
    * of awkwardly at the beginning, unclear to me why 🤷‍♂️
+   *
+   * Should be safe to use here since we're just focusing an input.
    */
   useLayoutEffect(() => {
     if (
