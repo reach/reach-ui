@@ -3,9 +3,9 @@ import React, { useRef } from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
-export const name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   const coolRef = useRef();
   return (
     <div>
@@ -36,3 +36,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tooltip" };

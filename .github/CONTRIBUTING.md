@@ -50,11 +50,20 @@ Next, put a file in `packages/<component-dir>/examples/<name>.example.js` and ma
 ```jsx
 import React from "react";
 
-// The name of the example, you must export it as `name`
-export let name = "Basic";
+// The name of the example (always name the variable `name`)
+let name = "Basic";
 
-// The example to render, you must name it `Example`
-export let Example = () => <div>Cool cool cool</div>;
+// The example to render (always name the function `Example`)
+function Example() {
+  return <div>Cool cool cool</div>;
+}
+
+// Assign the name to the example and then export it as a named constant
+Example.story = { name };
+export const Comp = Example;
+
+// Default export an object with the title matching the name of the Reach package
+export default { title: "Dialog" };
 ```
 
 Now you can edit the files in `packages/*` and storybook will automatically reload your changes.

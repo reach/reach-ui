@@ -10,9 +10,9 @@ import {
 import { positionMatchWidth } from "@reach/popover";
 import "@reach/menu-button/styles.css";
 
-export let name = "With Custom Wrapper";
+let name = "With Custom Wrapper";
 
-export const Example: React.FC = () => {
+function Example() {
   return (
     <Menu>
       <MenuButton id="example-button">
@@ -32,4 +32,8 @@ export const Example: React.FC = () => {
       </MenuPopover>
     </Menu>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };

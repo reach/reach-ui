@@ -4,9 +4,9 @@ import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
 import LoremIpsum from "./LoremIpsum.js";
 
-export let name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
   const interval = useRef(null);
@@ -65,6 +65,10 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Alert" };
 
 ////////////////////////////////////////////////////////////////////////////////
 

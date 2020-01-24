@@ -12,9 +12,9 @@ import { useThrottle } from "use-throttle";
 import cities from "./cities";
 import "@reach/combobox/styles.css";
 
-export let name = "With Button";
+let name = "With Button";
 
-export function Example() {
+function Example() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
@@ -44,6 +44,12 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Combobox" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);

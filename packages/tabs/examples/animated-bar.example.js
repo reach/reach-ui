@@ -9,7 +9,38 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { useRect } from "@reach/rect";
 import "@reach/tabs/styles.css";
 
-export const name = "Animated Bar";
+let name = "Animated Bar";
+
+function Example() {
+  return (
+    <ExampleAnimatedTabs color="red" style={{ width: 400 }}>
+      <TabList style={{ justifyContent: "space-around" }}>
+        <ExampleAnimatedTab style={{ flex: 1 }}>The First</ExampleAnimatedTab>
+        <ExampleAnimatedTab style={{ flex: 2 }}>
+          This has longer text
+        </ExampleAnimatedTab>
+        <ExampleAnimatedTab style={{ flex: 1 }}>Three</ExampleAnimatedTab>
+      </TabList>
+      <TabPanels style={{ padding: 10 }}>
+        <TabPanel>
+          <p>Check it out! It's ~animated~</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Yeah yeah. What's up?</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Oh, hello there.</p>
+        </TabPanel>
+      </TabPanels>
+    </ExampleAnimatedTabs>
+  );
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const AnimatedContext = createContext();
 
@@ -57,30 +88,5 @@ function ExampleAnimatedTab(props) {
 
   return (
     <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
-  );
-}
-
-export function Example() {
-  return (
-    <ExampleAnimatedTabs color="red" style={{ width: 400 }}>
-      <TabList style={{ justifyContent: "space-around" }}>
-        <ExampleAnimatedTab style={{ flex: 1 }}>The First</ExampleAnimatedTab>
-        <ExampleAnimatedTab style={{ flex: 2 }}>
-          This has longer text
-        </ExampleAnimatedTab>
-        <ExampleAnimatedTab style={{ flex: 1 }}>Three</ExampleAnimatedTab>
-      </TabList>
-      <TabPanels style={{ padding: 10 }}>
-        <TabPanel>
-          <p>Check it out! It's ~animated~</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Yeah yeah. What's up?</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Oh, hello there.</p>
-        </TabPanel>
-      </TabPanels>
-    </ExampleAnimatedTabs>
   );
 }

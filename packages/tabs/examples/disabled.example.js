@@ -2,14 +2,14 @@ import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-export const name = "Disabled Tabs";
+let name = "Disabled Tabs";
 
-const tabsStyle = {
+let tabsStyle = {
   width: 400,
   boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)"
 };
 
-export function Example() {
+function Example() {
   return (
     <Tabs style={tabsStyle}>
       <TabList>
@@ -31,3 +31,7 @@ export function Example() {
     </Tabs>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };

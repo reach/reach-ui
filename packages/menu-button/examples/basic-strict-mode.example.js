@@ -3,9 +3,9 @@ import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { action } from "@storybook/addon-actions";
 import "@reach/menu-button/styles.css";
 
-export let name = "Basic (strict mode)";
+let name = "Basic (strict mode)";
 
-export function Example() {
+function Example() {
   return (
     <StrictMode>
       <Menu>
@@ -22,3 +22,7 @@ export function Example() {
     </StrictMode>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };

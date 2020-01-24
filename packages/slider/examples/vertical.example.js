@@ -6,9 +6,9 @@ import {
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 
-export const name = "Vertical";
+let name = "Vertical";
 
-export function Example() {
+function Example() {
   return (
     <Slider orientation={SLIDER_ORIENTATION_VERTICAL}>
       <SliderMarker value={10}>
@@ -20,3 +20,7 @@ export function Example() {
     </Slider>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Slider" };

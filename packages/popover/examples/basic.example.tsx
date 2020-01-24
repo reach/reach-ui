@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import Popover, { positionDefault, positionMatchWidth } from "@reach/popover";
 
-export let name = "Basic (TS)";
+let name = "Basic (TS)";
 
-export function Example() {
+function Example() {
   const ref = useRef<any>(null);
   const [value, setValue] = useState("");
   return (
@@ -43,3 +43,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Popover" };

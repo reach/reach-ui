@@ -2,9 +2,9 @@ import React from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
-export const name = "With Disabled Button";
+let name = "With Disabled Button";
 
-export function Example() {
+function Example() {
   return (
     <div>
       <Tooltip label="Oh oh oh, oh oh">
@@ -15,3 +15,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tooltip" };

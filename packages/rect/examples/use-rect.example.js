@@ -1,9 +1,9 @@
 import React, { useRef } from "react";
 import { useRect } from "@reach/rect";
 
-export const name = "useRect";
+let name = "useRect";
 
-export function Example() {
+function Example() {
   const ref = useRef();
   const rect = useRect(ref);
   return (
@@ -27,3 +27,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Rect" };

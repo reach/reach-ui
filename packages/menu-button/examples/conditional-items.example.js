@@ -3,9 +3,9 @@ import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "Conditional Items";
+let name = "Conditional Items";
 
-export function Example() {
+function Example() {
   const [activeItem, setActiveItem] = useState(false);
 
   /*
@@ -50,3 +50,7 @@ export function Example() {
     </>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };

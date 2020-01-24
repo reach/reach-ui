@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import Component from "@reach/component-component";
 
-export let name = "Kitchen Sink Todo List";
+let name = "Kitchen Sink Todo List";
 
-export function Example() {
+function Example() {
   return (
     <Component
       getRefs={() => ({
@@ -77,3 +77,7 @@ export function Example() {
     </Component>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Component Component" };

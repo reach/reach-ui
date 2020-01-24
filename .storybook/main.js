@@ -1,14 +1,7 @@
-import React from "react";
-//import path from "path";
-//import { configure } from "@storybook/react";
-//import { getStorybook, storiesOf } from "@storybook/react";
-//import "./styles.css";
-//import "pepjs";
 const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
-
 const packagesDir = path.resolve(__dirname, "../packages");
 const packages = fs.readdirSync(packagesDir);
 
@@ -22,7 +15,7 @@ const alias = packages.reduce((memo, pkg) => {
 }, {});
 
 module.exports = {
-  stories: ["../packages/**/examples/*.examples.[tj](s|sx)"],
+  // stories: ["../packages/**/examples/*.example.(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
     "@storybook/addon-links/register"

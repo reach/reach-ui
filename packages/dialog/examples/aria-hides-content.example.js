@@ -3,9 +3,9 @@ import { action } from "@storybook/addon-actions";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Aria Hides Content";
+let name = "Aria Hides Content";
 
-export function Example() {
+function Example() {
   const [showDialog, setShowDialog] = useState(false);
   useEffect(() => {
     let logMutation = action("Root Node Attribute Mutated");
@@ -39,3 +39,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

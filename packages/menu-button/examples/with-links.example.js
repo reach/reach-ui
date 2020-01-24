@@ -16,13 +16,9 @@ import {
 } from "@reach/router";
 import "@reach/menu-button/styles.css";
 
-export let name = "With Links";
+let name = "With Links";
 
-// this is because we're in an iframe and not a
-// pushState server inside of storybook
-let memoryHistory = createHistory(createMemorySource("/"));
-
-export function Example() {
+function Example() {
   return (
     <LocationProvider history={memoryHistory}>
       <Router>
@@ -32,6 +28,16 @@ export function Example() {
     </LocationProvider>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };
+
+////////////////////////////////////////////////////////////////////////////////
+
+// this is because we're in an iframe and not a
+// pushState server inside of storybook
+let memoryHistory = createHistory(createMemorySource("/"));
 
 function Home() {
   return (
