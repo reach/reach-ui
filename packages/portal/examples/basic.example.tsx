@@ -1,9 +1,9 @@
 import React from "react";
 import Portal from "@reach/portal";
 
-export let name = "Basic (TS)";
+let name = "Basic (TS)";
 
-export function Example() {
+function Example() {
   return (
     <div
       style={{
@@ -35,3 +35,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Portal" };

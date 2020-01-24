@@ -2,9 +2,9 @@ import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-export const name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   return (
     <Tabs id="awesome">
       <TabList>
@@ -28,3 +28,7 @@ export function Example() {
     </Tabs>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };

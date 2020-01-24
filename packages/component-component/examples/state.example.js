@@ -1,9 +1,9 @@
 import React from "react";
 import Component from "@reach/component-component";
 
-export let name = "Basic State";
+let name = "Basic State";
 
-export function Example() {
+function Example() {
   return (
     <Component initialState={{ hue: 0 }}>
       {({ setState, state }) => (
@@ -22,3 +22,7 @@ export function Example() {
     </Component>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Component Component" };

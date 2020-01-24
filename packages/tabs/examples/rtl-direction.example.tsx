@@ -2,15 +2,19 @@ import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-export const name = "RTL with direction style (TS)";
+let name = "RTL with direction style (TS)";
 
-export function Example() {
+function Example() {
   return (
     <div style={{ direction: "rtl" }}>
       <MyTabs />
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };
 
 function MyTabs() {
   return (

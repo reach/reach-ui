@@ -1,9 +1,9 @@
 import React from "react";
 import Rect from "@reach/rect";
 
-export let name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   return (
     <Rect>
       {({ ref, rect }) => (
@@ -29,3 +29,7 @@ export function Example() {
     </Rect>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Rect" };

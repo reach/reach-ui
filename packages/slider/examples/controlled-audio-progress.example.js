@@ -3,9 +3,9 @@ import { Slider } from "@reach/slider";
 import { useAudio, timeToMs, msToTime } from "./utils.js";
 import "@reach/slider/styles.css";
 
-export const name = "Audio Progress";
+let name = "Audio Progress";
 
-export function Example() {
+function Example() {
   const [value, setValue] = useState(0);
   const [max, setMax] = useState(1000);
   const [audio, audioState, audioControls, audioRef] = useAudio({
@@ -44,3 +44,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Slider" };

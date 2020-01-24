@@ -9,9 +9,9 @@ import {
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "With Custom Wrapper";
+let name = "With Custom Wrapper";
 
-export function Example() {
+function Example() {
   return (
     <Menu>
       <MenuButton id="example-button">
@@ -32,3 +32,7 @@ export function Example() {
     </Menu>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Menu Button" };

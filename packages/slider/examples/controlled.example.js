@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Slider, SliderMarker } from "@reach/slider";
 import "@reach/slider/styles.css";
 
-export const name = "Controlled";
+let name = "Controlled";
 
 const MIN = 0;
 const MAX = 120;
 
-export const Example = () => {
+function Example() {
   const [value, setValue] = useState(0);
   const [status, setStatus] = useState("Give us some happiness!");
   const markers = [
@@ -63,4 +63,8 @@ export const Example = () => {
       </p>
     </div>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Slider" };

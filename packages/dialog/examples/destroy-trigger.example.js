@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Destroy Trigger";
+let name = "Destroy Trigger";
 
-export function Example() {
+function Example() {
   const openButton = useRef(null);
   const startOverButton = useRef(null);
   const closeButton = useRef(null);
@@ -40,3 +40,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };
