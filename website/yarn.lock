@@ -1207,126 +1207,117 @@
     strip-ansi "^3"
 
 "@reach/alert-dialog@file:../packages/alert-dialog":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/dialog" "^0.6.4"
-    "@reach/utils" "^0.6.4"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/dialog" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
 "@reach/alert@file:../packages/alert":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/utils" "^0.6.4"
-    "@reach/visually-hidden" "^0.6.2"
+    "@reach/utils" "^0.7.4"
+    "@reach/visually-hidden" "^0.7.4"
     prop-types "^15.7.2"
 
-"@reach/auto-id@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.6.1.tgz#af30c153787a335cfb258289537d5ea355688821"
-  integrity sha512-t3uhdZwalO3Mph+CUdFIvMcYsMtRZoBHE5rw/+3UvQxV+AeQGNqmtlOix9mq3rOpxi0KEaf1q4CjWx4myFXkRQ==
+"@reach/auto-id@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.7.4.tgz#c20bf6db87ef2f34b1bfb4bf450d675524a368c1"
+  integrity sha512-Om3A3FSyQW2nfkskgNLhItdoCOPCRCsmzlwu26qemu6DwiJLNVUBWlBuXhWgMmys/q3hRx3eRYFrzSLl8uheTA==
 
 "@reach/auto-id@file:../packages/auto-id":
-  version "0.6.1"
+  version "0.7.4"
 
 "@reach/combobox@file:../packages/combobox":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/popover" "^0.6.4"
-    "@reach/portal" "^0.6.2"
-    "@reach/utils" "^0.6.4"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/popover" "^0.7.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     escape-regexp "0.0.1"
-    highlight-words-core "1.2.0"
-    prop-types "^15.7.2"
-
-"@reach/component-component@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@reach/component-component/-/component-component-0.6.2.tgz#83b367b6476ef928f101319d37416bc15bd01e2f"
-  integrity sha512-Sb0p8qgzaAzFLNeOXGMz24LLmZuLzzNA5w04FfZJ+2BsMOHv/yw6P+orzeVYSclTriLurWJjb8gbdvxho+2usw==
-  dependencies:
+    highlight-words-core "1.2.2"
     prop-types "^15.7.2"
 
 "@reach/component-component@file:../packages/component-component":
-  version "0.6.2"
+  version "0.7.4"
   dependencies:
     prop-types "^15.7.2"
 
-"@reach/dialog@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@reach/dialog/-/dialog-0.6.4.tgz#a02b6343d036be7b06c091cabfa139e8550e927b"
-  integrity sha512-w0879aEclyvTyF8dSUOE/jAzZjKutpOqr0owhEkt8HwVtYzk7Bukm+AKQfc2/7wZQ31GMp0P85FRsdxr5t9xcQ==
+"@reach/dialog@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/dialog/-/dialog-0.7.4.tgz#60927fbe4e65fe0e7684f8fa1f1b155385cfb5ce"
+  integrity sha512-KKvInRkRSj6TALsKlEVHhWwT6CZAmtGDNG606COMwveEAqXXolQm3dWgIz5H7atUR6rj++f/wOYBAQYZyEfelQ==
   dependencies:
-    "@reach/portal" "^0.6.2"
-    "@reach/utils" "^0.6.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     prop-types "^15.7.2"
     react-focus-lock "^2.2.1"
     react-remove-scroll "^2.2.0"
 
 "@reach/dialog@file:../packages/dialog":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/portal" "^0.6.2"
-    "@reach/utils" "^0.6.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     prop-types "^15.7.2"
     react-focus-lock "^2.2.1"
     react-remove-scroll "^2.2.0"
 
 "@reach/menu-button@file:../packages/menu-button":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/popover" "^0.6.4"
-    "@reach/utils" "^0.6.4"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/popover" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     prop-types "^15.7.2"
     warning "^4.0.3"
 
-"@reach/observe-rect@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.3.tgz#2ea3dcc369ab22bd9f050a92ea319321356a61e8"
-  integrity sha1-LqPcw2mrIr2fBQqS6jGTITVqYeg=
+"@reach/observe-rect@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.5.tgz#28bf3c5c35da7fef72cd124af4ac32308d0c3f15"
+  integrity sha512-EQLHhquzwAh2TFtMJU0PXJRmhpOrAhzApgoI4Lwn72J7ygrMk3Ys3a3i8KDnV0TetbwAxn4XSHi4pE8sPWUYLg==
 
-"@reach/popover@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.6.4.tgz#f123ed0d822f8c450c912d12c65f53a0b670a7d4"
-  integrity sha512-wQAIp6eprJQ2zuc9NcdfxVdVVuy1aS9ai6VwOumQkoem78BTjcIPe8sPIU/s3hKJu5ugIcDtbBqakMmyfxcOMQ==
+"@reach/popover@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.7.4.tgz#def055c588a76ef4a48ac81f0b4e7373e2781b28"
+  integrity sha512-fNODnIqXOJ+Co43E5c1mEvR/ubF7S26ZvDcNHBAVJ0mlJBdO77AdI0ar/nE5fb3qCHBhbOcmOu8OpqsLP4hv1g==
   dependencies:
-    "@reach/portal" "^0.6.2"
-    "@reach/rect" "^0.6.2"
-    "@reach/utils" "^0.6.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/rect" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     tabbable "^4.0.0"
 
 "@reach/popover@file:../packages/popover":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/portal" "^0.6.2"
-    "@reach/rect" "^0.6.2"
-    "@reach/utils" "^0.6.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/rect" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     tabbable "^4.0.0"
 
-"@reach/portal@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.6.2.tgz#5d57d092c204e69630313152c8f0507a9ca81229"
-  integrity sha512-dJAKnsMEbmL0fmShJd1jm4y1RpNP5cpIMpmyK1+2MfBpKoXxYvf3eauf2+vTgM7/JlVM2eDEfYnFdyw/7aIsyw==
-  dependencies:
-    "@reach/component-component" "^0.6.2"
+"@reach/portal@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.7.4.tgz#6e182f9061ba52dc6a5e460516b4aedf8623103f"
+  integrity sha512-yI/UUtErNfb3RbWRMfJW1BTJGjE07/OjVONU8qJ65E28rsnLlwk5UDnWeDPvwIpOixXhUaUI5Bk1HEHDqAOa1w==
 
 "@reach/portal@file:../packages/portal":
-  version "0.6.2"
+  version "0.7.4"
 
-"@reach/rect@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.6.2.tgz#b2d43da207d48b84583d915059500f1b2deec3d6"
-  integrity sha512-2jCG6NNeLjQIsxxSmxxkJNM7zhfzWyl2jX78QAoHYYmolQfliUg5e0DIFN2QRUXVtMP3pu8SUVri+hdOnx+fiw==
+"@reach/rect@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.7.4.tgz#98fa7a42e7ff7e74ba501d38a1b8797fa87b6bb3"
+  integrity sha512-5AhFGxgMHRkrY9gB9tV+juX7FgH/sXcZAvwzspO+nCjnMOa9PK+YA2kZHrRfSRy5WPGiYq0ezmaxjHsl0aHpCQ==
   dependencies:
-    "@reach/observe-rect" "^1.0.3"
+    "@reach/observe-rect" "^1.0.5"
     prop-types "^15.7.2"
 
 "@reach/rect@file:../packages/rect":
-  version "0.6.2"
+  version "0.7.4"
   dependencies:
-    "@reach/observe-rect" "^1.0.3"
+    "@reach/observe-rect" "^1.0.5"
     prop-types "^15.7.2"
 
 "@reach/router@^1.2.1":
@@ -1341,51 +1332,54 @@
     warning "^3.0.0"
 
 "@reach/skip-nav@file:../packages/skip-nav":
-  version "0.6.2"
+  version "0.7.4"
+  dependencies:
+    "@reach/utils" "^0.7.4"
 
 "@reach/slider@file:../packages/slider":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/utils" "^0.6.4"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/utils" "^0.7.4"
+    prop-types "^15.7.2"
     warning "^4.0.3"
 
 "@reach/tabs@file:../packages/tabs":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/utils" "^0.6.4"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/utils" "^0.7.4"
     prop-types "^15.7.2"
     warning "^4.0.3"
 
 "@reach/tooltip@file:../packages/tooltip":
-  version "0.6.4"
+  version "0.7.4"
   dependencies:
-    "@reach/auto-id" "^0.6.1"
-    "@reach/portal" "^0.6.2"
-    "@reach/rect" "^0.6.2"
-    "@reach/utils" "^0.6.4"
-    "@reach/visually-hidden" "^0.6.2"
+    "@reach/auto-id" "^0.7.4"
+    "@reach/portal" "^0.7.4"
+    "@reach/rect" "^0.7.4"
+    "@reach/utils" "^0.7.4"
+    "@reach/visually-hidden" "^0.7.4"
     prop-types "^15.7.2"
 
-"@reach/utils@^0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.6.4.tgz#be268e1a7d04f921596b3672888a932c1832074a"
-  integrity sha512-jUWNb1STgR69WGkV4O/N4XOcUvM0u5LP1b9SR6VZsPRazpmzM8HUl3WsBVgMOnSCefZtk+wM4ig2/iYgdElwPw==
+"@reach/utils@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.4.tgz#cdd0cff8c57445ce9c2b11204e6a62868f1093a1"
+  integrity sha512-RFhWmeaEfcu+xATfGPH4yjTlgD01ek0D8bVhtP4CgCqV2gnyS0KLAlWshzlAlSrBvr7zmpkA5QZJ1g43vFBSww==
 
 "@reach/utils@file:../packages/utils":
-  version "0.6.4"
+  version "0.7.4"
 
-"@reach/visually-hidden@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.6.2.tgz#36744201d0464bcaedc6163b379844612341a1dc"
-  integrity sha512-YI2IMink8kn3vcugOKjFcQgF+GUd1p3kMWtLVxvEr1oj8iOyNASBP4j9ouYR9ZqIEO8SZhk9O+IHdXQhs0csxg==
+"@reach/visually-hidden@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@reach/visually-hidden/-/visually-hidden-0.7.4.tgz#5d2b142529e5ed64df35ed31e95dfff1cf22b2fb"
+  integrity sha512-34jDe/Pv/kIfgyDZcuxB2gmovU11eMsKZn80ByrwLL0Bc5dTfmfS5hifLvBcsfwznwLKui1qbbsJ+E2OqvDxnw==
 
 "@reach/visually-hidden@file:../packages/visually-hidden":
-  version "0.6.2"
+  version "0.7.4"
 
 "@reach/window-size@file:../packages/window-size":
-  version "0.6.2"
+  version "0.7.4"
   dependencies:
     prop-types "^15.7.2"
 
@@ -6745,10 +6739,10 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
-highlight-words-core@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.0.tgz#232bec301cbf2a4943d335dc748ce70e9024f3b1"
-  integrity sha512-nu5bMsWIgpsrlXEMNKSvbJMeUPhFxCOVT28DnI8UCVfhm3e98LC8oeyMNrc7E18+QQ4l/PvbeN7ojyN4XsmBdA==
+highlight-words-core@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.2.tgz#1eff6d7d9f0a22f155042a00791237791b1eeaaa"
+  integrity sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
