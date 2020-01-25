@@ -285,7 +285,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
      * We could be clever and ~~functional~~ here but we really shouldn't need
      * to loop through these arrays more than once.
      *
-     * TODOZ: We may want to check the document's active element here instead
+     * TODO: We may want to check the document's active element here instead
      *       instead of the selectedIndex, even though you *shouldn't* be able
      *       to to focus a tab unless it's selected.
      */
@@ -319,7 +319,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
-  // TODOZ: Determine proper behavior for Home/End key in RTL mode.
+  // TODO: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
@@ -393,7 +393,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     >
       {Children.map(children, (child, index) => {
         /*
-         * TODOZ: Since refactoring to use context rather than depending on
+         * TODO: Since refactoring to use context rather than depending on
          * parent/child relationships, we need to update our recommendations for
          * animations that break when we don't forward the `isSelected` prop
          * to our tabs. We will remove this in 1.0 and update our docs
@@ -613,10 +613,6 @@ if (__DEV__) {
   };
 }
 
-type HTMLElementWithCurrentStyle = HTMLElement & {
-  currentStyle?: Record<string, string>;
-};
-
 /**
  * Get a computed style value by property, backwards compatible with IE
  * @param element
@@ -637,3 +633,10 @@ function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   }
   return y;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+type HTMLElementWithCurrentStyle = HTMLElement & {
+  currentStyle?: Record<string, string>;
+};
