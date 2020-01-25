@@ -18,6 +18,8 @@ module.exports = {
   // stories: ["../packages/**/examples/*.example.(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
+    "@storybook/addon-docs/register",
+    "@storybook/addon-info/register",
     "@storybook/addon-links/register"
   ],
   webpackFinal: async config => {
