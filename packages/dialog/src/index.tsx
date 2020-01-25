@@ -18,7 +18,7 @@ import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
 
 const overlayPropTypes = {
-  initialFocusRef: (() => {}) as any,
+  initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
   onDismiss: PropTypes.func
 };

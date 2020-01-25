@@ -147,7 +147,7 @@ function renderAlerts() {
               aria-live={type}
             >
               {Object.keys(elements[type]).map(key =>
-                React.cloneElement(elements[type][key as any], {
+                React.cloneElement(elements[type][key], {
                   key,
                   ref: null
                 })
@@ -205,7 +205,7 @@ type RegionTypes = "polite" | "assertive";
 
 type ElementTypes = {
   [key in RegionTypes]: {
-    [key: number]: JSX.Element;
+    [key: string]: JSX.Element;
   };
 };
 

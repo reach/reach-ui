@@ -319,7 +319,7 @@ export function useTooltip<T extends HTMLElement>({
     "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
     "data-reach-tooltip-trigger": "",
     ref,
-    onMouseEnter: wrapEvent(onMouseEnter as any, handleMouseEnter),
+    onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
     onBlur: wrapEvent(onBlur, handleBlur),

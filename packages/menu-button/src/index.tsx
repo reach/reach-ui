@@ -924,12 +924,7 @@ type MenuButtonAction =
   | { type: "SEARCH_FOR_ITEM"; payload: string };
 
 function isRightClick(nativeEvent: MouseEvent) {
-  if ("which" in nativeEvent) {
-    return nativeEvent.which === 3;
-  } else if ("button" in nativeEvent) {
-    return (nativeEvent as any).button === 2;
-  }
-  return false;
+  return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
 function reducer(
