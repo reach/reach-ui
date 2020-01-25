@@ -246,7 +246,7 @@ export function useTooltip<T extends HTMLElement>({
   // hopefully they always pass a ref if they ever pass one
   const ownRef = useRef<HTMLDivElement | null>(null);
 
-  const ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
+  const ref = useForkedRef(forwardedRef, ownRef);
   const triggerRect = useRect(ownRef, isVisible);
 
   useEffect(() => {
@@ -319,7 +319,7 @@ export function useTooltip<T extends HTMLElement>({
     "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
     "data-reach-tooltip-trigger": "",
     ref,
-    onMouseEnter: wrapEvent(onMouseEnter as any, handleMouseEnter),
+    onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
     onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
     onFocus: wrapEvent(onFocus, handleFocus),
     onBlur: wrapEvent(onBlur, handleBlur),

@@ -613,15 +613,19 @@ if (__DEV__) {
   };
 }
 
+type HTMLElementWithCurrentStyle = HTMLElement & {
+  currentStyle?: Record<string, string>;
+};
+
 /**
  * Get a computed style value by property, backwards compatible with IE
  * @param element
  * @param styleProp
  */
-function getStyle(element: HTMLElement, styleProp: string) {
+function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   let y: string | null = null;
-  if ((element as any).currentStyle) {
-    y = (element as any).currentStyle[styleProp] as string;
+  if (element.currentStyle) {
+    y = element.currentStyle[styleProp];
   } else if (
     element.ownerDocument &&
     element.ownerDocument.defaultView &&

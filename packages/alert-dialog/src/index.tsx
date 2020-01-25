@@ -78,7 +78,7 @@ export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
       >
         <DialogOverlay
           {...props}
-          ref={forwardRef as any}
+          ref={forwardRef}
           data-reach-alert-dialog-overlay
           initialFocusRef={leastDestructiveRef}
         />
@@ -92,7 +92,7 @@ if (__DEV__) {
   AlertDialogOverlay.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
-    leastDestructiveRef: (() => {}) as any,
+    leastDestructiveRef: () => null,
     children: PropTypes.node
   };
 }
@@ -138,7 +138,7 @@ export const AlertDialogContent = forwardRef<
       role="alertdialog"
       aria-labelledby={labelId}
       {...props}
-      ref={forwardRef as any}
+      ref={forwardRef}
       // lol: remove in 1.0
       data-reach-alert-dialong-content
       data-reach-alert-dialog-content
@@ -278,7 +278,7 @@ if (__DEV__) {
   AlertDialog.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
-    leastDestructiveRef: (() => {}) as any,
+    leastDestructiveRef: () => null,
     children: PropTypes.node
   };
 }
