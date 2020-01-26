@@ -146,14 +146,20 @@ There is nothing special about managing state for a combobox, it's like managing
           />
           {results && (
             <ComboboxPopover className="shadow-popup">
-              <ComboboxList aria-label="Cities">
-                {results.slice(0, 10).map((result, index) => (
-                  <ComboboxOption
-                    key={index}
-                    value={`${result.city}, ${result.state}`}
-                  />
-                ))}
-              </ComboboxList>
+              {results.length > 0 ? (
+                <ComboboxList aria-label="Cities">
+                  {results.slice(0, 10).map((result, index) => (
+                    <ComboboxOption
+                      key={index}
+                      value={`${result.city}, ${result.state}`}
+                    />
+                  ))}
+                </ComboboxList>
+              ) : (
+                <span style={{ display: "block", margin: 8 }}>
+                  No results found
+                </span>
+              )}
             </ComboboxPopover>
           )}
         </Combobox>
@@ -199,14 +205,20 @@ This is the same demo as above, except this time we're going to a server to get 
           onChange={handleSearchTermChange}
           aria-label="Cities"
         />
-        {cities.length > 0 && (
+        {cities && (
           <ComboboxPopover className="shadow-popup">
-            <ComboboxList>
-              {cities.map(city => {
-                const str = `${city.city}, ${city.state}`;
-                return <ComboboxOption key={str} value={str} />;
-              })}
-            </ComboboxList>
+            {cities.length > 0 ? (
+              <ComboboxList>
+                {cities.map(city => {
+                  const str = `${city.city}, ${city.state}`;
+                  return <ComboboxOption key={str} value={str} />;
+                })}
+              </ComboboxList>
+            ) : (
+              <span style={{ display: "block", margin: 8 }}>
+                No results found
+              </span>
+            )}
           </ComboboxPopover>
         )}
       </Combobox>
