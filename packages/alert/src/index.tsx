@@ -88,7 +88,7 @@ export type AlertProps = {
    */
   type?: "assertive" | "polite";
   children: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 Alert.displayName = "Alert";
 if (__DEV__) {
