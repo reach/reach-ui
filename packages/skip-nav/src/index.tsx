@@ -36,7 +36,9 @@ export type SkipNavLinkProps = {
   children?: string | JSX.Element;
 } & Omit<React.HTMLAttributes<HTMLAnchorElement>, "href">;
 
-SkipNavLink.displayName = "SkipNavLink";
+if (__DEV__) {
+  SkipNavLink.displayName = "SkipNavLink";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -75,4 +77,6 @@ export type SkipNavContentProps = {
   children?: React.ReactNode;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "id">;
 
-SkipNavContent.displayName = "SkipNavContent";
+if (__DEV__) {
+  SkipNavContent.displayName = "SkipNavContent";
+}

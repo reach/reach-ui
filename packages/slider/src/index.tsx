@@ -204,8 +204,8 @@ export type SliderProps = Omit<
   step?: number;
 };
 
-Slider.displayName = "Slider";
 if (__DEV__) {
+  Slider.displayName = "Slider";
   Slider.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.node
@@ -529,8 +529,8 @@ export type SliderInputProps = Omit<SliderProps, "children"> & {
   children: React.ReactNode | SliderChildrenRender;
 };
 
-SliderInput.displayName = "SliderInput";
 if (__DEV__) {
+  SliderInput.displayName = "SliderInput";
   SliderInput.propTypes = {
     ...sliderPropTypes,
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
@@ -581,8 +581,8 @@ export type SliderTrackProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
 };
 
-SliderTrack.displayName = "SliderTrack";
 if (__DEV__) {
+  SliderTrack.displayName = "SliderTrack";
   SliderTrack.propTypes = {
     children: PropTypes.node.isRequired
   };
@@ -628,8 +628,8 @@ export const SliderTrackHighlight = forwardRef<
  */
 export type SliderTrackHighlightProps = React.HTMLAttributes<HTMLDivElement>;
 
-SliderTrackHighlight.displayName = "SliderTrackHighlight";
 if (__DEV__) {
+  SliderTrackHighlight.displayName = "SliderTrackHighlight";
   SliderTrackHighlight.propTypes = {};
 }
 
@@ -716,8 +716,8 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
  */
 export type SliderHandleProps = React.HTMLAttributes<HTMLDivElement>;
 
-SliderHandle.displayName = "SliderHandle";
 if (__DEV__) {
+  SliderHandle.displayName = "SliderHandle";
   SliderHandle.propTypes = {};
 }
 
@@ -789,8 +789,8 @@ export type SliderMarkerProps = React.HTMLAttributes<HTMLDivElement> & {
   value: number;
 };
 
-SliderMarker.displayName = "SliderMarker";
 if (__DEV__) {
+  SliderMarker.displayName = "SliderMarker";
   SliderMarker.propTypes = {
     value: PropTypes.number.isRequired
   };

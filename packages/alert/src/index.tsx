@@ -90,8 +90,8 @@ export type AlertProps = {
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-Alert.displayName = "Alert";
 if (__DEV__) {
+  Alert.displayName = "Alert";
   Alert.propTypes = {
     children: PropTypes.node,
     type: PropTypes.oneOf(["assertive", "polite"])

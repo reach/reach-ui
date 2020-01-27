@@ -205,8 +205,8 @@ export type TabsProps = {
   onChange?: (index: number) => void;
 };
 
-Tabs.displayName = "Tabs";
 if (__DEV__) {
+  Tabs.displayName = "Tabs";
   Tabs.propTypes = {
     children: PropTypes.node.isRequired,
     onChange: PropTypes.func,
@@ -430,8 +430,8 @@ export type TabListProps = {
   children?: React.ReactNode;
 };
 
-TabList.displayName = "TabList";
 if (__DEV__) {
+  TabList.displayName = "TabList";
   TabList.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node
@@ -509,8 +509,8 @@ export type TabProps = {
   disabled?: boolean;
 } & TabPanelProps;
 
-Tab.displayName = "Tab";
 if (__DEV__) {
+  Tab.displayName = "Tab";
   Tab.propTypes = {
     children: PropTypes.node,
     disabled: PropTypes.bool
@@ -548,8 +548,8 @@ export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
  */
 export type TabPanelsProps = TabListProps & {};
 
-TabPanels.displayName = "TabPanels";
 if (__DEV__) {
+  TabPanels.displayName = "TabPanels";
   TabPanels.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node,
@@ -614,8 +614,8 @@ export type TabPanelProps = {
   children?: React.ReactNode;
 };
 
-TabPanel.displayName = "TabPanel";
 if (__DEV__) {
+  TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node

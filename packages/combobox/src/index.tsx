@@ -362,8 +362,8 @@ export type ComboboxProps = {
   openOnFocus?: boolean;
 };
 
-Combobox.displayName = "Combobox";
 if (__DEV__) {
+  Combobox.displayName = "Combobox";
   Combobox.propTypes = {
     as: PropTypes.elementType,
     onSelect: PropTypes.func,
@@ -542,7 +542,9 @@ export type ComboboxInputProps = {
   value?: ComboboxValue;
 };
 
-ComboboxInput.displayName = "ComboboxInput";
+if (__DEV__) {
+  ComboboxInput.displayName = "ComboboxInput";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -597,7 +599,9 @@ export const ComboboxPopover: ComponentWithForwardedRef<
   );
 });
 
-ComboboxPopover.displayName = "ComboboxPopover";
+if (__DEV__) {
+  ComboboxPopover.displayName = "ComboboxPopover";
+}
 
 export type __ComboboxPopoverProps = {
   targetRef?: any;
@@ -681,7 +685,9 @@ export type ComboboxListProps = {
   persistSelection?: boolean;
 };
 
-ComboboxList.displayName = "ComboboxList";
+if (__DEV__) {
+  ComboboxList.displayName = "ComboboxList";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -772,7 +778,9 @@ export type ComboboxOptionProps = {
   value: string;
 };
 
-ComboboxOption.displayName = "ComboboxOption";
+if (__DEV__) {
+  ComboboxOption.displayName = "ComboboxOption";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -827,7 +835,9 @@ export function ComboboxOptionText() {
   );
 }
 
-ComboboxOptionText.displayName = "ComboboxOptionText";
+if (__DEV__) {
+  ComboboxOptionText.displayName = "ComboboxOptionText";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -869,7 +879,9 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
   }
 );
 
-ComboboxButton.displayName = "ComboboxButton";
+if (__DEV__) {
+  ComboboxButton.displayName = "ComboboxButton";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

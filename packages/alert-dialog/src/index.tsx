@@ -87,8 +87,8 @@ export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
   }
 );
 
-AlertDialogOverlay.displayName = "AlertDialogOverlay";
 if (__DEV__) {
+  AlertDialogOverlay.displayName = "AlertDialogOverlay";
   AlertDialogOverlay.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
@@ -162,8 +162,8 @@ export type AlertDialogContentProps = {
   children: React.ReactNode;
 } & DialogContentProps;
 
-AlertDialogContent.displayName = "AlertDialogContent";
 if (__DEV__) {
+  AlertDialogContent.displayName = "AlertDialogContent";
   AlertDialogContent.propTypes = {
     children: PropTypes.node
   };
@@ -189,7 +189,9 @@ export const AlertDialogLabel: React.FC<React.HTMLAttributes<
   return <div {...props} id={labelId} data-reach-alert-dialog-label />;
 };
 
-AlertDialogLabel.displayName = "AlertDialogLabel";
+if (__DEV__) {
+  AlertDialogLabel.displayName = "AlertDialogLabel";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -212,7 +214,9 @@ export const AlertDialogDescription: React.FC<React.HTMLAttributes<
   );
 };
 
-AlertDialogDescription.displayName = "AlertDialogDescription";
+if (__DEV__) {
+  AlertDialogDescription.displayName = "AlertDialogDescription";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -273,8 +277,8 @@ export type AlertDialogProps = {
   children: React.ReactNode;
 } & DialogProps;
 
-AlertDialog.displayName = "AlertDialog";
 if (__DEV__) {
+  AlertDialog.displayName = "AlertDialog";
   AlertDialog.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,

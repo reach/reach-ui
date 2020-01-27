@@ -386,8 +386,8 @@ export type TooltipProps = {
   DEBUG_STYLE?: boolean;
 } & Omit<TooltipContentProps, "triggerRect" | "isVisible">;
 
-Tooltip.displayName = "Tooltip";
 if (__DEV__) {
+  Tooltip.displayName = "Tooltip";
   Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
@@ -441,8 +441,8 @@ export type TooltipPopupProps = {
   children?: React.ReactNode;
 } & TooltipContentProps;
 
-TooltipPopup.displayName = "TooltipPopup";
 if (__DEV__) {
+  TooltipPopup.displayName = "TooltipPopup";
   TooltipPopup.propTypes = {
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string,
@@ -507,8 +507,8 @@ export type TooltipContentProps = {
   triggerRect: DOMRect | null;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "label">;
 
-TooltipContent.displayName = "TooltipContent";
 if (__DEV__) {
+  TooltipContent.displayName = "TooltipContent";
   TooltipContent.propTypes = {};
 }
 
