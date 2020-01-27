@@ -1090,11 +1090,15 @@ function useReducerMachine(
   const transition: Transition = (event, payload = {}) => {
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
-    if (!nextState) {
+    if (nextState) {
+      dispatch({ type: event, state, nextState: state, ...payload });
+      setState(nextState);
+      return;
+    }
+
+    if (__DEV__) {
       throw new Error(`Unknown event "${event}" for state "${state}"`);
     }
-    dispatch({ type: event, state, nextState: state, ...payload });
-    setState(nextState);
   };
 
   return [state, data, transition];
