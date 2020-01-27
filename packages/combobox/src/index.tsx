@@ -33,7 +33,6 @@ import {
   ComponentWithForwardedRef,
   createDescendantContext,
   createNamedContext,
-  // Descendant,
   DescendantProvider,
   forwardRefWithAs,
   makeId,
@@ -41,7 +40,8 @@ import {
   useDescendants,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
+  noop
 } from "@reach/utils";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
@@ -129,6 +129,7 @@ const stateChart: StateChart = {
         [BLUR]: IDLE,
         [ESCAPE]: IDLE,
         [NAVIGATE]: NAVIGATING,
+        [SELECT_WITH_CLICK]: IDLE,
         [SELECT_WITH_KEYBOARD]: IDLE,
         [CLOSE_WITH_BUTTON]: IDLE,
         [INTERACT]: INTERACTING
@@ -176,12 +177,14 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         navigationValue: null
       };
     case SELECT_WITH_CLICK:
+      event.callback(event.value);
       return {
         ...nextState,
         value: event.value,
         navigationValue: null
       };
     case SELECT_WITH_KEYBOARD:
+      event.callback(data.navigationValue || null);
       return {
         ...nextState,
         value: data.navigationValue,
@@ -305,7 +308,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       inputRef,
       isVisible: isVisible(state),
       listboxId,
-      onSelect,
+      onSelect: onSelect || noop,
       openOnFocus,
       persistSelectionRef,
       popoverRef,
@@ -723,8 +726,7 @@ export const ComboboxOption: ComponentWithForwardedRef<
   const isActive = navigationValue === value;
 
   const handleClick = () => {
-    onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { value });
+    transition(SELECT_WITH_CLICK, { value, callback: onSelect });
   };
 
   return (
@@ -1035,8 +1037,7 @@ function useKeyDown() {
         if (state === NAVIGATING && navigationValue !== null) {
           // don't want to submit forms
           event.preventDefault();
-          onSelect && onSelect(navigationValue);
-          transition(SELECT_WITH_KEYBOARD);
+          transition(SELECT_WITH_KEYBOARD, { callback: onSelect });
         }
         break;
       }
@@ -1150,7 +1151,7 @@ interface IComboboxContext {
   inputRef: React.MutableRefObject<any>;
   popoverRef: React.MutableRefObject<any>;
   buttonRef: React.MutableRefObject<any>;
-  onSelect?(value?: ComboboxValue): any;
+  onSelect(value?: ComboboxValue): any;
   state: State;
   transition: Transition;
   listboxId: string;
@@ -1192,7 +1193,7 @@ interface StateChart {
 
 type StateData = {
   lastEventType?: MachineEventType;
-  navigationValue?: string | null;
+  navigationValue?: ComboboxValue | null;
   value?: ComboboxValue | null;
 };
 
@@ -1210,7 +1211,14 @@ type MachineEvent =
       value: ComboboxValue;
     }
   | { type: "OPEN_WITH_BUTTON" }
-  | { type: "SELECT_WITH_CLICK"; value: ComboboxValue }
-  | { type: "SELECT_WITH_KEYBOARD" };
+  | {
+      type: "SELECT_WITH_CLICK";
+      value: ComboboxValue;
+      callback(value: ComboboxValue | null): void;
+    }
+  | {
+      type: "SELECT_WITH_KEYBOARD";
+      callback(value: ComboboxValue | null): void;
+    };
 
 type Reducer = (data: StateData, event: MachineEvent) => StateData;
