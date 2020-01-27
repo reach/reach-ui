@@ -146,8 +146,8 @@ export interface MenuProps {
   id?: string;
 }
 
-Menu.displayName = "Menu";
 if (__DEV__) {
+  Menu.displayName = "Menu";
   Menu.propTypes = {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
@@ -240,8 +240,8 @@ export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
 };
 
-MenuButton.displayName = "MenuButton";
 if (__DEV__) {
+  MenuButton.displayName = "MenuButton";
   MenuButton.propTypes = {
     children: PropTypes.node
   };
@@ -518,8 +518,8 @@ export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
  */
 export type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
 
-MenuItem.displayName = "MenuItem";
 if (__DEV__) {
+  MenuItem.displayName = "MenuItem";
   MenuItem.propTypes = {
     as: PropTypes.any,
     onSelect: PropTypes.func.isRequired
@@ -701,8 +701,8 @@ export type MenuItemsProps = {
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-MenuItems.displayName = "MenuItems";
 if (__DEV__) {
+  MenuItems.displayName = "MenuItems";
   MenuItems.propTypes = {
     children: PropTypes.node
   };
@@ -753,8 +753,8 @@ export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?: () => any;
 };
 
-MenuLink.displayName = "MenuLink";
 if (__DEV__) {
+  MenuLink.displayName = "MenuLink";
   MenuLink.propTypes = {
     as: PropTypes.any,
     component: PropTypes.any
@@ -793,8 +793,8 @@ export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
 };
 
-MenuList.displayName = "MenuList";
 if (__DEV__) {
+  MenuList.displayName = "MenuList";
   MenuList.propTypes = {
     children: PropTypes.node.isRequired
   };
@@ -873,8 +873,8 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
   position?: Position;
 };
 
-MenuPopover.displayName = "MenuPopover";
 if (__DEV__) {
+  MenuPopover.displayName = "MenuPopover";
   MenuPopover.propTypes = {
     children: PropTypes.node
   };
@@ -924,12 +924,7 @@ type MenuButtonAction =
   | { type: "SEARCH_FOR_ITEM"; payload: string };
 
 function isRightClick(nativeEvent: MouseEvent) {
-  if ("which" in nativeEvent) {
-    return nativeEvent.which === 3;
-  } else if ("button" in nativeEvent) {
-    return (nativeEvent as any).button === 2;
-  }
-  return false;
+  return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
 function reducer(

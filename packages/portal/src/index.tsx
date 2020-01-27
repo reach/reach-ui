@@ -63,6 +63,8 @@ export type PortalProps = {
   type?: string;
 };
 
-Portal.displayName = "Portal";
+if (__DEV__) {
+  Portal.displayName = "Portal";
+}
 
 export default Portal;

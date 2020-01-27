@@ -57,4 +57,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Component Component" };
+export default { title: "ComponentComponent" };

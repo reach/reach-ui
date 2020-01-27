@@ -18,6 +18,7 @@ module.exports = {
   // stories: ["../packages/**/examples/*.example.(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
+    "@storybook/addon-docs/register",
     "@storybook/addon-links/register"
   ],
   webpackFinal: async config => {
@@ -25,7 +26,18 @@ module.exports = {
       ...config.module.rules,
       {
         test: /\.(ts|tsx)?$/,
-        loader: "awesome-typescript-loader"
+        use: [
+          {
+            loader: "awesome-typescript-loader",
+            options: {
+              transpileOnly: true
+            }
+          },
+          {
+            loader: "react-docgen-typescript-loader",
+            options: {}
+          }
+        ]
       }
     ];
     config.resolve = {
@@ -34,7 +46,7 @@ module.exports = {
         ...(config.resolve.alias || {}),
         ...alias
       },
-      extensions: [".ts", ".tsx", ".js"],
+      extensions: [...(config.resolve.extensions || []), ".ts", ".tsx"],
       plugins: [new TsConfigPathsPlugin({})]
     };
     config.plugins = [

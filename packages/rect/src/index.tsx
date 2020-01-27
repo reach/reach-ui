@@ -67,9 +67,8 @@ export type RectProps = {
   children(args: { rect: PRect | null; ref: React.Ref<any> }): JSX.Element;
 };
 
-Rect.displayName = "Rect";
-
 if (__DEV__) {
+  Rect.displayName = "Rect";
   Rect.propTypes = {
     children: PropTypes.func.isRequired,
     observe: PropTypes.bool,

@@ -16,4 +16,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Visually Hidden" };
+export default { title: "VisuallyHidden" };
