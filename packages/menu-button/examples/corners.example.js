@@ -32,7 +32,7 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Menu Button" };
+export default { title: "MenuButton" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
