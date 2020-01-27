@@ -1,7 +1,6 @@
 /**
  * Welcome to @reach/accordion!
  *
- * TODO: Screen reader testing
  * TODO: Animation examples
  *
  * @see Docs     https://reacttraining.com/reach-ui/accordion
@@ -62,7 +61,9 @@ export enum AccordionStates {
 /**
  * Accordion
  *
- * The wrapper component for the other components.
+ * The wrapper component for all other accordion components. Each accordion
+ * component will consist of accordion items whose buttons are keyboard
+ * navigable using arrow keys.
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-1
  */
@@ -218,47 +219,11 @@ export type AccordionProps = Omit<
   "onChange"
 > & {
   /**
-   * Requires AccordionItem components as direct children.
+   * `Accordion` can accept `AccordionItem` components as children.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-children
    */
   children: React.ReactNode;
-  /**
-   * A default value for the open panel's index or indices in an uncontrolled
-   * component.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-defaultindex
-   */
-  defaultIndex?: AccordionIndex;
-  /**
-   * The index or array of indices for open accordion panels. Used along with
-   * `onChange` to create controlled accordion components.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-index
-   */
-  index?: AccordionIndex;
-  /**
-   * Callback that is fired when an accordion item's open state is changed.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
-   */
-  onChange?(index?: AccordionIndex): void;
-  /**
-   * Whether or not an uncontrolled accordion is read-only or controllable by a
-   * user interaction.
-   *
-   * Generally speaking you probably want to avoid this, as
-   * is can be confusing especially when navigating by keyboard. However, this
-   * may be useful if you want to lock an accordion under certain conditions
-   * (perhaps user authentication is required to access the content). In these
-   * instances, you may want to include an alert when a user tries to activate
-   * a read-only accordion panel to let them know why it does not toggle.
-   *
-   * TODO: Create example with @reach/alert.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
-   */
-  readOnly?: boolean;
   /**
    * Whether or not all panels of an uncontrolled accordion can be toggled
    * to a closed state. By default, an uncontrolled accordion will have an open
@@ -270,6 +235,44 @@ export type AccordionProps = Omit<
    * by the index prop.
    */
   collapsible?: boolean;
+  /**
+   * A default value for the open panel's index or indices in an uncontrolled
+   * accordion component when it is initially rendered.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-defaultindex
+   */
+  defaultIndex?: AccordionIndex;
+  /**
+   * The index or array of indices for open accordion panels. The `index` props
+   * should be used along with `onChange` to create controlled accordion
+   * components.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-index
+   */
+  index?: AccordionIndex;
+  /**
+   * The callback that is fired when an accordion item's open state is changed.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
+   */
+  onChange?(index?: AccordionIndex): void;
+  /**
+   * Whether or not an uncontrolled accordion is read-only or controllable by a
+   * user interaction.
+   *
+   * Generally speaking you probably want to avoid this, as
+   * it can be confusing especially when navigating by keyboard. However, this
+   * may be useful if you want to lock an accordion under certain conditions
+   * (perhaps user authentication is required to access the content). In these
+   * instances, you may want to include an alert when a user tries to activate
+   * a read-only accordion panel to let them know why it does not toggle as may
+   * be expected.
+   *
+   * TODO: Create example with @reach/alert.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
+   */
+  readOnly?: boolean;
   /**
    * Whether or not multiple panels in an uncontrolled accordion can be opened
    * at the same time. By default, when a user opens a new panel, the previously
@@ -340,13 +343,13 @@ if (__DEV__) {
 /**
  * AccordionItem
  *
- * Wraps a DOM `button` an accordion's button and panel components.
+ * A group that wraps a an accordion's button and panel components.
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem
  */
 export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   function AccordionItem(
-    { children, disabled = false, key, ...props },
+    { children, disabled = false, ...props },
     forwardedRef
   ) {
     const { accordionId, openPanels, readOnly } = useAccordionContext();
@@ -402,7 +405,11 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
  */
 export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
   /**
-   * Requires AccordionButton and AccordionPanel components as direct children.
+   * An `AccordionItem` expects to receive an `AccordionButton` and
+   * `AccordionPanel` components as its children, though you can also nest other
+   * components within an `AccordionItem` if you want some persistant content
+   * that is relevant to the section but not collapsible when the
+   * `AccordionButton` is toggled.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-children
    */
@@ -413,7 +420,6 @@ export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-disabled
    */
   disabled?: boolean;
-  index?: number;
 };
 
 if (__DEV__) {
@@ -569,9 +575,8 @@ if (__DEV__) {
 /**
  * AccordionPanel
  *
- * The panel in which inner content for an accordion item is rendered.
- *
- * Must be a direct child of a `AccordionItem`.
+ * The collapsible panel in which inner content for an accordion item is
+ * rendered.
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel
  */
@@ -607,7 +612,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
  */
 export type AccordionPanelProps = {
   /**
-   * Inner content for the accordion item.
+   * Inner collapsible content for the accordion item.
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel-children
    */

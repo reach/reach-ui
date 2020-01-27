@@ -19,6 +19,8 @@ import "@reach/menu-button/styles.css";
 import "@reach/tabs/styles.css";
 import "@reach/tooltip/styles.css";
 import "@reach/combobox/styles.css";
+import "@reach/slider/styles.css";
+import "@reach/accordion/styles.css";
 import "../styles/app.scss";
 
 const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
