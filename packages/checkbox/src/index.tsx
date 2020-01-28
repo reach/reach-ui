@@ -10,7 +10,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
  */
 
-export {
+import {
   CustomCheckbox,
   CustomCheckboxContainer,
   CustomCheckboxInput,
@@ -19,7 +19,7 @@ export {
   CustomCheckboxProps
 } from "./custom";
 
-export {
+import {
   MixedCheckbox,
   MixedCheckboxData,
   MixedCheckboxEvent,
@@ -30,3 +30,21 @@ export {
   MixedCheckboxProps,
   useMixedCheckbox
 } from "./mixed";
+
+export {
+  CustomCheckbox,
+  CustomCheckboxContainer,
+  CustomCheckboxInput,
+  CustomCheckboxContainerProps,
+  CustomCheckboxInputProps,
+  CustomCheckboxProps,
+  MixedCheckbox,
+  MixedCheckboxData,
+  MixedCheckboxEvent,
+  MixedCheckboxEvents,
+  MixedCheckboxNodeRefs,
+  MixedCheckboxState,
+  MixedCheckboxStates,
+  MixedCheckboxProps,
+  useMixedCheckbox
+};

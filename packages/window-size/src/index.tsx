@@ -35,8 +35,8 @@ export type WindowSizeProps = {
   children: (size: TWindowSize) => React.ReactElement<any>;
 };
 
-WindowSize.displayName = "WindowSize";
 if (__DEV__) {
+  WindowSize.displayName = "WindowSize";
   WindowSize.propTypes = {
     children: PropTypes.func.isRequired
   };

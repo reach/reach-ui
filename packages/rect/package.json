@@ -1,6 +1,6 @@
 {
   "name": "@reach/rect",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Measure React elements position in the DOM",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",

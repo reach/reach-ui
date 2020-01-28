@@ -30,7 +30,9 @@ export type PopoverProps = {
   position?: Position;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-Popover.displayName = "Popover";
+if (__DEV__) {
+  Popover.displayName = "Popover";
+}
 
 export default Popover;
 
@@ -69,7 +71,9 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
   }
 );
 
-PopoverImpl.displayName = "PopoverImpl";
+if (__DEV__) {
+  PopoverImpl.displayName = "PopoverImpl";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

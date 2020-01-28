@@ -7,6 +7,7 @@ import {
   MenuButton,
   MenuItem
 } from "@reach/menu-button";
+import { positionMatchWidth } from "@reach/popover";
 import "@reach/menu-button/styles.css";
 
 let name = "With Custom Wrapper";
@@ -17,7 +18,7 @@ function Example() {
       <MenuButton id="example-button">
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
-      <MenuPopover>
+      <MenuPopover position={positionMatchWidth}>
         <div>
           <MenuItems>
             <MenuItem onSelect={action("Download")}>Download</MenuItem>
@@ -35,4 +36,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Menu Button" };
+export default { title: "MenuButton" };

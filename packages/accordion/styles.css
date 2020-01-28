@@ -1,0 +1,11 @@
+:root {
+  --reach-accordion: 1;
+}
+
+[data-reach-accordion-panel] {
+  outline: none;
+}
+
+[data-reach-accordion-button][data-disabled] {
+  cursor: not-allowed;
+}

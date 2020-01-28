@@ -105,7 +105,10 @@ export { checkStyles };
  * @param ref
  * @param value
  */
-export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
+export function assignRef<T = any>(
+  ref: AssignableRef<T> | undefined,
+  value: any
+) {
   if (ref == null) return;
   if (typeof ref === "function") {
     ref(value);
@@ -219,7 +222,9 @@ export function useConstant<T>(fn: () => T): T {
  *
  * @param refs Refs to fork
  */
-export function useForkedRef<T = any>(...refs: AssignableRef<T>[]) {
+export function useForkedRef<T = any>(
+  ...refs: (AssignableRef<T> | undefined)[]
+) {
   return useMemo(() => {
     if (refs.every(ref => ref == null)) {
       return null;
@@ -287,7 +292,7 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
 /**
  * This is a hack for sure. The thing is, getting a component to intelligently
  * infer props based on a component or JSX string passed into an `as` prop is
- * kind of a huge pain. Getting it to work and satisfy the contraints of
+ * kind of a huge pain. Getting it to work and satisfy the constraints of
  * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
  * type song-and-dance every time we want to forward a ref into a component
  * that accepts an `as` prop, we abstract all of that mess to this function for

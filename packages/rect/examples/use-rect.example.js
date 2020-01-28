@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useRect } from "@reach/rect";
 
-let name = "useRect";
+let name = "Basic";
 
 function Example() {
   const ref = useRef();
@@ -30,4 +30,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Rect" };
+export default { title: "useRect" };

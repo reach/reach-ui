@@ -11,6 +11,15 @@
  * should only render `Tab` elements, and `TabPanels` should only render
  * `TabPanel` elements.
  *
+ * TODO: Consider manual tab activation
+ * https://www.w3.org/TR/wai-aria-practices-1.1/examples/tabs/tabs-2/tabs.html
+ *
+ * TODO: Consider `orientation` prop to account for keyboard behavior
+ *       - horizontal-top
+ *       - horizontal-bottm
+ *       - vertical-left
+ *       - vertical-right
+ *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
@@ -196,8 +205,8 @@ export type TabsProps = {
   onChange?: (index: number) => void;
 };
 
-Tabs.displayName = "Tabs";
 if (__DEV__) {
+  Tabs.displayName = "Tabs";
   Tabs.propTypes = {
     children: PropTypes.node.isRequired,
     onChange: PropTypes.func,
@@ -285,7 +294,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
      * We could be clever and ~~functional~~ here but we really shouldn't need
      * to loop through these arrays more than once.
      *
-     * TODOZ: We may want to check the document's active element here instead
+     * TODO: We may want to check the document's active element here instead
      *       instead of the selectedIndex, even though you *shouldn't* be able
      *       to to focus a tab unless it's selected.
      */
@@ -319,7 +328,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
-  // TODOZ: Determine proper behavior for Home/End key in RTL mode.
+  // TODO: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
     const { key } = event;
 
@@ -385,15 +394,15 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   return (
     <Comp
+      role="tablist"
       {...props}
       data-reach-tab-list=""
       ref={ref}
-      role="tablist"
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
     >
       {Children.map(children, (child, index) => {
         /*
-         * TODOZ: Since refactoring to use context rather than depending on
+         * TODO: Since refactoring to use context rather than depending on
          * parent/child relationships, we need to update our recommendations for
          * animations that break when we don't forward the `isSelected` prop
          * to our tabs. We will remove this in 1.0 and update our docs
@@ -421,8 +430,8 @@ export type TabListProps = {
   children?: React.ReactNode;
 };
 
-TabList.displayName = "TabList";
 if (__DEV__) {
+  TabList.displayName = "TabList";
   TabList.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node
@@ -474,6 +483,7 @@ export const Tab = forwardRefWithAs<
 
   return (
     <Comp
+      role="tab"
       {...props}
       ref={ref}
       data-reach-tab=""
@@ -485,7 +495,6 @@ export const Tab = forwardRefWithAs<
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
-      role="tab"
       tabIndex={isSelected ? 0 : -1}
     >
       {children}
@@ -500,8 +509,8 @@ export type TabProps = {
   disabled?: boolean;
 } & TabPanelProps;
 
-Tab.displayName = "Tab";
 if (__DEV__) {
+  Tab.displayName = "Tab";
   Tab.propTypes = {
     children: PropTypes.node,
     disabled: PropTypes.bool
@@ -539,8 +548,8 @@ export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
  */
 export type TabPanelsProps = TabListProps & {};
 
-TabPanels.displayName = "TabPanels";
 if (__DEV__) {
+  TabPanels.displayName = "TabPanels";
   TabPanels.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node,
@@ -578,13 +587,13 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
 
     return (
       <Comp
+        hidden={!isSelected}
+        role="tabpanel"
         {...props}
         ref={ref}
         data-reach-tab-panel=""
         aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={!isSelected}
         id={id}
-        role="tabpanel"
         tabIndex={-1}
       >
         {children}
@@ -605,8 +614,8 @@ export type TabPanelProps = {
   children?: React.ReactNode;
 };
 
-TabPanel.displayName = "TabPanel";
 if (__DEV__) {
+  TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node
@@ -618,10 +627,10 @@ if (__DEV__) {
  * @param element
  * @param styleProp
  */
-function getStyle(element: HTMLElement, styleProp: string) {
+function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   let y: string | null = null;
-  if ((element as any).currentStyle) {
-    y = (element as any).currentStyle[styleProp] as string;
+  if (element.currentStyle) {
+    y = element.currentStyle[styleProp];
   } else if (
     element.ownerDocument &&
     element.ownerDocument.defaultView &&
@@ -633,3 +642,10 @@ function getStyle(element: HTMLElement, styleProp: string) {
   }
   return y;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+type HTMLElementWithCurrentStyle = HTMLElement & {
+  currentStyle?: Record<string, string>;
+};

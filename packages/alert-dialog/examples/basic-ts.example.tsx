@@ -33,4 +33,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Alert Dialog" };
+export default { title: "AlertDialog" };

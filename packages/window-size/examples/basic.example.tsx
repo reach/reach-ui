@@ -13,4 +13,4 @@ function Example() {
 
 Example.story = { name };
 export const Comp = Example;
-export default { title: "Window Size" };
+export default { title: "WindowSize" };

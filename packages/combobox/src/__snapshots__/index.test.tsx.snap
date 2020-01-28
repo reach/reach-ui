@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rendering should match the snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    <h2>
+      Clientside Search
+    </h2>
+    <div
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-owns="listbox--holy-smokes"
+      data-reach-combobox=""
+      id="holy-smokes"
+      role="combobox"
+    >
+      <input
+        aria-autocomplete="both"
+        data-reach-combobox-input=""
+        data-testid="input"
+        id="listbox--holy-smokes"
+        name="awesome"
+        value=""
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`rendering should match the snapshot 2`] = `
+<DocumentFragment>
+  <div>
+    <h2>
+      Clientside Search
+    </h2>
+    <div
+      aria-expanded="true"
+      aria-haspopup="listbox"
+      aria-owns="listbox--holy-smokes"
+      data-reach-combobox=""
+      id="holy-smokes"
+      role="combobox"
+    >
+      <input
+        aria-autocomplete="both"
+        data-reach-combobox-input=""
+        data-testid="input"
+        id="listbox--holy-smokes"
+        name="awesome"
+        value="e"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

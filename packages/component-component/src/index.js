@@ -105,6 +105,7 @@ class Component extends React.Component {
 }
 
 if (__DEV__) {
+  Component.displayName = "ComponentComponent";
   Component.propTypes = {
     initialState: PropTypes.object,
     getInitialState: PropTypes.func,
