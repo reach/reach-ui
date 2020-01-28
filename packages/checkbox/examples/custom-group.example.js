@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, {
   createContext,
   useContext,
@@ -8,7 +7,13 @@ import React, {
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-let name = "Custom Group";
+let name = "CustomCheckbox Group";
+
+let checkSmileys = {
+  true: "😃",
+  mixed: "😐",
+  false: "🙁"
+};
 
 function Example() {
   return (
@@ -121,7 +126,7 @@ function SmileyCheckbox({ checked, children, id, ...props }) {
             pointerEvents: "none"
           }}
         >
-          {checked === true ? "😃" : checked === "mixed" ? "😐" : "🙁"}
+          {checkSmileys[String(checked)]}
         </span>
       </CustomCheckbox>
       <label htmlFor={id}>{children}</label>

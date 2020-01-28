@@ -15,8 +15,8 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.3",
-    "@reach/utils": "^0.7.3",
+    "@reach/auto-id": "^0.7.4",
+    "@reach/utils": "^0.7.4",
     "@xstate/fsm": "^1.3.0",
     "warning": "^4.0.3"
   },

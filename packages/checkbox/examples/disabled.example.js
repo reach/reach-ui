@@ -1,12 +1,11 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React from "react";
+import React, { useState } from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-const name = "Disabled";
+const name = "Disabled MixedCheckbox";
 
 function Example() {
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
   return (
     <div>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -19,7 +18,8 @@ function Example() {
               setChecked(event.target.checked);
             }}
           />
-          Plain ol' checkbox
+          Plain ol' checkbox, controlled (should update only by clicking the
+          button below)
         </label>
         <label>
           <MixedCheckbox
@@ -30,19 +30,19 @@ function Example() {
               setChecked(event.target.checked);
             }}
           />
-          Controlled but disabled
+          Controlled mixed (should update only by clicking the button below)
         </label>
         <label>
           <MixedCheckbox disabled value="ok" checked="mixed" />
-          Just a mixed box
+          Just a static mixed box
         </label>
         <label>
           <MixedCheckbox disabled />
-          Uncontrolled
+          Uncontrolled mixed box
         </label>
         <label>
           <MixedCheckbox disabled defaultChecked />
-          Uncontrolled, defaultChecked
+          Uncontrolled, defaultChecked mixed box
         </label>
       </div>
       <button onClick={() => setChecked(!checked)}>Checkbox don't care</button>

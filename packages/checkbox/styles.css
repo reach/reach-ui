@@ -1,5 +1,5 @@
 :root {
-  --reach-checkbox: 1;
+  --reach-custom-checkbox: 1;
 }
 
 [data-reach-custom-checkbox-container] {
@@ -7,13 +7,13 @@
   position: relative;
   margin-right: 0.75ex;
   cursor: default;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 [data-reach-custom-checkbox-container]:focus-within,
 [data-reach-custom-checkbox-container][data-focus] {
-  box-shadow: 0 0 4px Highlight;
+  box-shadow: 0 0 4px 1px Highlight;
   outline: -webkit-focus-ring-color auto 4px;
 }
 

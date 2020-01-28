@@ -1,13 +1,12 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React from "react";
+import React, { useState } from "react";
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 import "./custom-pseduo.css";
 
-let name = "Custom with Pseudo Element Styles";
+let name = "CustomCheckbox with Pseudo Element Styles";
 
 function Example() {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
   return (
     <div className="example">
       <label>

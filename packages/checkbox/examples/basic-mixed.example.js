@@ -1,12 +1,11 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
-import React from "react";
+import React, { useState } from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
-let name = "Basic Mixed";
+let name = "Basic MixedCheckbox";
 
 function Example() {
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
   console.log({ checked });
   return (
     <div>
@@ -15,7 +14,6 @@ function Example() {
         value="whatever"
         checked={checked}
         onChange={event => {
-          console.log(event.target, event.target.checked);
           setChecked(event.target.checked);
         }}
       />
