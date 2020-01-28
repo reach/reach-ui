@@ -98,7 +98,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ❓     | Breadcrumb           |
 | ❓     | Button               |
 | 🛠      | Carousel             |
-| 🛠      | Checkbox             |
+| ✅     | Checkbox             |
 | ✅     | Combo Box            |
 | ✅     | Dialog (Modal)       |
 | ✅     | Disclosure           |

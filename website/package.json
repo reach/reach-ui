@@ -21,6 +21,7 @@
     "@reach/alert": "file:../packages/alert",
     "@reach/alert-dialog": "file:../packages/alert-dialog",
     "@reach/auto-id": "file:../packages/auto-id",
+    "@reach/checkbox": "file:../packages/checkbox",
     "@reach/combobox": "file:../packages/combobox",
     "@reach/component-component": "file:../packages/component-component",
     "@reach/dialog": "file:../packages/dialog",

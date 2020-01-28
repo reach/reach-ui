@@ -1,0 +1,52 @@
+/* storybook loads CSS for all examples even though we're only importing it in
+   one, so we next each selector in an arbitrary wrapper 🤷‍♂️ */
+
+.example [data-reach-custom-checkbox-container]::before,
+.example [data-reach-custom-checkbox-container]::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: "";
+}
+
+.example [data-reach-custom-checkbox-container]::before {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
+  background-color: #edeced;
+  background-image: linear-gradient(to bottom, #edeced, #fff 30%);
+}
+
+.example [data-reach-custom-checkbox-container][data-focus]::before {
+  box-shadow: 0 0 0 2px #3f94bf;
+}
+
+.example [data-reach-custom-checkbox-container][data-state="checked"]::before,
+.example [data-reach-custom-checkbox-container][data-state="mixed"]::before {
+  border-color: #1159a6;
+  background-color: #3f94bf;
+  background-image: linear-gradient(to bottom, #3f94bf, #007bff);
+}
+
+.example [data-reach-custom-checkbox-container][data-state="checked"]::after {
+  display: block;
+  width: calc(45% - 2px);
+  height: calc(90% - 4px);
+  border: medium solid #fff;
+  border-width: 0 0.125em 0.125em 0;
+  transform: translateY(-65%) translateX(-50%) rotate(45deg);
+}
+
+.example [data-reach-custom-checkbox-container][data-state="mixed"]::after {
+  display: block;
+  width: calc(100% - 6px);
+  border-bottom: 0.125em solid #fff;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.example [data-reach-custom-checkbox][data-custom-checkmarks]::after {
+  display: none;
+}

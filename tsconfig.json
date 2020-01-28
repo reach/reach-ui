@@ -7,6 +7,7 @@
       "@reach/alert": ["packages/alert/src"],
       "@reach/alert-dialog": ["packages/alert-dialog/src"],
       "@reach/auto-id": ["packages/auto-id/src"],
+      "@reach/checkbox": ["packages/checkbox/src"],
       "@reach/combobox": ["packages/combobox/src"],
       "@reach/component-component": ["packages/component-component/src"],
       "@reach/dialog": ["packages/dialog/src"],
