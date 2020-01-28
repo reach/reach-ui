@@ -217,10 +217,12 @@ function Nav({ media }) {
               <hr aria-hidden />
 
               <NavList>
+                <NavLink to="/accordion">Accordion</NavLink>
                 <NavLink to="/alert">Alert</NavLink>
                 <NavLink to="/alert-dialog">Alert Dialog</NavLink>
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
+                <NavLink to="/disclosure">Disclosure</NavLink>
                 <NavLink to="/menu-button">Menu Button</NavLink>
                 <NavLink to="/portal">Portal</NavLink>
                 <NavLink to="/skip-nav">Skip Nav</NavLink>

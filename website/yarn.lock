@@ -1334,6 +1334,13 @@
     string-width "^2.0.0"
     strip-ansi "^3"
 
+"@reach/accordion@file:../packages/accordion":
+  version "0.1.0"
+  dependencies:
+    "@reach/auto-id" "0.7.4"
+    "@reach/utils" "0.7.4"
+    warning "^4.0.3"
+
 "@reach/alert-dialog@file:../packages/alert-dialog":
   version "0.7.4"
   dependencies:
@@ -1350,7 +1357,7 @@
     "@reach/visually-hidden" "^0.7.4"
     prop-types "^15.7.2"
 
-"@reach/auto-id@^0.7.4":
+"@reach/auto-id@0.7.4", "@reach/auto-id@^0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.7.4.tgz#c20bf6db87ef2f34b1bfb4bf450d675524a368c1"
   integrity sha512-Om3A3FSyQW2nfkskgNLhItdoCOPCRCsmzlwu26qemu6DwiJLNVUBWlBuXhWgMmys/q3hRx3eRYFrzSLl8uheTA==
@@ -1393,6 +1400,13 @@
     prop-types "^15.7.2"
     react-focus-lock "^2.2.1"
     react-remove-scroll "^2.2.0"
+
+"@reach/disclosure@file:../packages/disclosure":
+  version "0.1.0"
+  dependencies:
+    "@reach/auto-id" "0.7.4"
+    "@reach/utils" "0.7.4"
+    warning "^4.0.3"
 
 "@reach/menu-button@file:../packages/menu-button":
   version "0.7.4"
@@ -1490,7 +1504,7 @@
     "@reach/visually-hidden" "^0.7.4"
     prop-types "^15.7.2"
 
-"@reach/utils@^0.7.4":
+"@reach/utils@0.7.4", "@reach/utils@^0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.4.tgz#cdd0cff8c57445ce9c2b11204e6a62868f1093a1"
   integrity sha512-RFhWmeaEfcu+xATfGPH4yjTlgD01ek0D8bVhtP4CgCqV2gnyS0KLAlWshzlAlSrBvr7zmpkA5QZJ1g43vFBSww==
