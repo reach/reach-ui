@@ -92,7 +92,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 
 | Status | Name                 |
 | ------ | -------------------- |
-| 🛠      | Accordion            |
+| ✅     | Accordion            |
 | ✅     | Alert                |
 | ✅     | Alert Dialog         |
 | ❓     | Breadcrumb           |
@@ -101,7 +101,7 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | 🛠      | Checkbox             |
 | ✅     | Combo Box            |
 | ✅     | Dialog (Modal)       |
-| 🛠      | Disclosure           |
+| ✅     | Disclosure           |
 | ❓     | Feed                 |
 | ❓     | Grids                |
 | ❓     | Link                 |
