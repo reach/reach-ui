@@ -243,6 +243,10 @@ export type MixedCheckboxProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "checked"
 > & {
+  /**
+   * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
+   * state.
+   */
   checked?: MixedOrBool;
 };
 
@@ -253,7 +257,6 @@ if (__DEV__) {
       PropTypes.bool,
       PropTypes.oneOf(["mixed" as const])
     ]),
-    name: PropTypes.string,
     onChange: PropTypes.func
   };
 }
@@ -270,9 +273,9 @@ type MixedCheckboxArgs = {
 export type UseMixedCheckboxProps = Required<
   Pick<
     React.InputHTMLAttributes<HTMLInputElement>,
-    "aria-checked" | "checked" | "disabled" | "onChange" | "type"
+    "checked" | "disabled" | "onChange" | "type"
   >
->;
+> & { "aria-checked": MixedOrBool };
 
 /**
  * useMixedCheckbox

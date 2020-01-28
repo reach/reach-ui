@@ -1,7 +1,7 @@
 {
   "name": "@reach/checkbox",
   "version": "0.0.1",
-  "description": "Accessible React Checkbox Component",
+  "description": "Accessible components to build custom, tri-state checkboxes in React.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "source": "",

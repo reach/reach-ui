@@ -6,7 +6,6 @@ let name = "Basic MixedCheckbox";
 
 function Example() {
   const [checked, setChecked] = useState(true);
-  console.log({ checked });
   return (
     <div>
       <MixedCheckbox

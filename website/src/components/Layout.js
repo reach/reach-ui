@@ -220,6 +220,7 @@ function Nav({ media }) {
                 <NavLink to="/accordion">Accordion</NavLink>
                 <NavLink to="/alert">Alert</NavLink>
                 <NavLink to="/alert-dialog">Alert Dialog</NavLink>
+                <NavLink to="/checkbox">Checkbox</NavLink>
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
                 <NavLink to="/disclosure">Disclosure</NavLink>

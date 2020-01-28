@@ -1,5 +1,5 @@
 :root {
-  --reach-custom-checkbox: 1;
+  --reach-checkbox: 1;
 }
 
 [data-reach-custom-checkbox-container] {

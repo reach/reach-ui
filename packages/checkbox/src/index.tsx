@@ -1,6 +1,8 @@
 /**
  * Welcome to @reach/checkbox!
  *
+ * Accessible components to build custom, tri-state checkboxes in React.
+ *
  * This package provides two top-level components:
  *   - MixedCheckbox
  *   - CustomCheckbox

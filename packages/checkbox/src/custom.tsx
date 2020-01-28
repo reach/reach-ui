@@ -101,7 +101,7 @@ export const CustomCheckboxContainer = forwardRef<
   };
 
   useControlledSwitchWarning(controlledChecked, "checked", _componentName);
-  useEffect(() => checkStyles("custom-checkbox"), []);
+  useEffect(() => checkStyles("checkbox"), []);
 
   return (
     <CustomCheckboxContext.Provider value={context}>
@@ -154,7 +154,9 @@ if (__DEV__) {
 /**
  * CustomCheckboxInput
  *
- * Component to render the HTML input element for our custom checkbox.
+ * Component to render the HTML input element for our custom checkbox. The
+ * rendered element should be visually hidden and exists only to manage its
+ * state and hold a form name and value.
  *
  * @see Docs https://reacttraining.com/reach-ui/checkbox#customcheckboxinput
  */
@@ -214,9 +216,9 @@ if (__DEV__) {
 /**
  * CustomCheckbox
  *
- * Custom checkbox component.
+ * A checkbox component with a wrapper element for custom styling.
  *
- * @see Docs https://reacttraining.com/reach-ui/checkbox#customcheckbox
+ * @see Docs https://reacttraining.com/reach-ui/checkbox#customcheckbox-1
  */
 export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
   function CustomCheckbox(
