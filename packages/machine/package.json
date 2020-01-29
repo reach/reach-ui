@@ -1,0 +1,26 @@
+{
+  "name": "@reach/machine",
+  "version": "0.1.0",
+  "description": "Finite state machines for Reach UI components.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/machine"
+  },
+  "scripts": {
+    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "clean": "rm -rf ./dist",
+    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+  },
+  "dependencies": {},
+  "peerDependencies": {},
+  "main": "dist/index.js",
+  "module": "dist/machine.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ]
+}
