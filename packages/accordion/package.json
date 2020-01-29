@@ -27,6 +27,7 @@
   "module": "dist/accordion.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
+    "README.md",
     "dist",
     "styles.css"
   ]
