@@ -113,9 +113,8 @@ export const CustomCheckboxContainer = forwardRef<
         data-state={checkedPropToStateValue(stateData.checked)}
         onClick={wrapEvent(onClick, handleClick)}
       >
-        {/* TODO: Typing for children func */}
         {typeof children === "function"
-          ? children({
+          ? (children as CustomCheckboxContainerChildRender)({
               checked: inputProps["aria-checked"],
               inputRef,
               focused
@@ -126,13 +125,64 @@ export const CustomCheckboxContainer = forwardRef<
   );
 });
 
+/**
+ * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkboxcontainer-props
+ */
 export type CustomCheckboxContainerProps = Omit<
   React.HTMLAttributes<HTMLSpanElement>,
   "onChange"
 > & {
+  /**
+   * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
+   * state.
+   *
+   * This prop is assigned to the `CustomCheckboxContainer` and passed to
+   * the `CustomCheckboxInput` via the React Context API.
+   *
+   * @see https://reactjs.org/docs/context.html
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkboxcontainer-checked
+   *
+   */
   checked?: MixedOrBool;
+  /**
+   * A `CustomCheckboxContainer` can accept a React node or render prop function
+   * as its child. It should always have one `CustomCheckboxInput` component as
+   * a descendant.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkboxcontainer-children
+   */
+  children: React.ReactNode | CustomCheckboxContainerChildRender;
+  /**
+   * For uncontrolled checkbox components, `defaultChecked` dictates whether or
+   * not the default initial state for a checkbox is `checked`.
+   *
+   * Because any checkbox with a `mixed` state must be controlled by the app,
+   * `defaultChecked` only accepts `true` or `false` values.
+   *
+   * This prop is assigned to the `CustomCheckboxContainer` and passed to
+   * the `CustomCheckboxInput` via the React Context API.
+   *
+   * @see https://reactjs.org/docs/context.html
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-defaultchecked
+   */
   defaultChecked?: boolean;
+  /**
+   * Whether or not the checkbox form input is disabled.
+   *
+   * This prop is assigned to the `CustomCheckboxContainer` and passed to
+   * the `CustomCheckboxInput` via the React Context API.
+   *
+   * @see https://reactjs.org/docs/context.html
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-disabled
+   */
   disabled?: boolean;
+  /**
+   * The callback that is fired when the checkbox value is changed.
+   *
+   * @param event
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-onchange
+   *
+   */
   onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
 };
 
@@ -243,15 +293,62 @@ export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
   }
 );
 
+/**
+ * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-props
+ */
 export type CustomCheckboxProps = Omit<
   React.HTMLAttributes<HTMLSpanElement>,
   "onChange"
 > & {
+  /**
+   * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
+   * state.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-checked
+   */
   checked?: MixedOrBool;
+  /**
+   * A `CustomCheckbox` can accept any React node as children so long as the
+   * rendered content is valid HTML. It is best to avoid adding interactive
+   * elements inside of a `CustomCheckbox`
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-children
+   */
+  children?: React.ReactNode;
+  /**
+   * For uncontrolled checkbox components, `defaultChecked` dictates whether or
+   * not the default initial state for a checkbox is `checked`.
+   *
+   * Because any checkbox with a `mixed` state must be controlled by the app,
+   * `defaultChecked` only accepts `true` or `false` values.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-defaultchecked
+   */
   defaultChecked?: boolean;
+  /**
+   * Whether or not the checkbox form input is disabled.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-disabled
+   */
   disabled?: boolean;
+  /**
+   * The `name` attribute passed to the checkbox form input.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-name
+   */
   name?: React.InputHTMLAttributes<HTMLInputElement>["name"];
+  /**
+   * The callback that is fired when the checkbox value is changed.
+   *
+   * @param event
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-onchange
+   */
   onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
+  /**
+   * The `value` attribute passed to the checkbox form input.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/checkbox#custom-checkbox-value
+   */
   value?: React.InputHTMLAttributes<HTMLInputElement>["value"];
 };
 
@@ -287,3 +384,9 @@ interface ICustomCheckboxContext {
 }
 
 type CustomCheckboxInputRef = React.RefObject<HTMLInputElement | null>;
+
+type CustomCheckboxContainerChildRender = (args: {
+  checked: boolean | "mixed";
+  inputRef: CustomCheckboxInputRef;
+  focused: boolean;
+}) => React.ReactElement<any>;

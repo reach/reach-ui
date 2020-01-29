@@ -259,14 +259,14 @@ export type AlertDialogProps = {
    *
    * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-ondismiss
    */
-  onDismiss?: () => void;
+  onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
    * To prevent accidental data loss, an alert dialog should focus the least
    * destructive action button when it opens.
    *
    * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-leastdestructiveref
    */
-  leastDestructiveRef: React.RefObject<HTMLElement>;
+  leastDestructiveRef?: React.RefObject<HTMLElement>;
   /**
    * Accepts any renderable content but should generally be restricted to
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other

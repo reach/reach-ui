@@ -37,17 +37,17 @@ A MixedCheckbox simply renders an HTML input element where the `type` attribute 
 -- [x] Orange
 ```
 
-In this example, the `All fruits` checkbox is in an indeterminate state because some (but not all) fruits in the list are checked. While this effect is possible with plain input components, the `MixedCheckbox` component makes managing/syncing its state with the correct DOM attributes much simpler. All you have to do is pass the `checked` state, and @reach/checkbox handles the necessary aria attributes and related node data!
+In this example, the `All fruits` checkbox is in an `indeterminate` state because some (but not all) fruits in the list are checked. While this effect is possible with plain input components, the `MixedCheckbox` component makes managing/syncing its state with the correct DOM attributes much simpler. All you have to do is pass the `checked` state, and `@reach/checkbox` handles the necessary aria attributes and related node data!
 
 A mixed checkbox is not something you can naturally toggle by simply clicking the box itself. As such, you should manage its state in your app by passing a `checked` prop and an `onChange` handler. A mixed checkbox is necessarily controlled. If you use a `MixedCheckbox` component without controlling its state, it will behave exactly the same way a native HTML input element behaves.
 
-If you don't need an indeterminate state, you should probably just use a native HTML input for your checkboxes. But of course, sometimes designers have some other ideas that call for a custom solution. In that case, the `CustomCheckbox` component provides a customizable wrapper element that can be styled to fit your needs.
+If you don't need `indeterminate` state, you should probably just use a native HTML input for your checkboxes. But of course, sometimes designers have some other ideas that call for a custom solution. In that case, the `CustomCheckbox` component provides a customizable wrapper element that can be styled to fit your needs.
 
 ## CustomCheckbox
 
 A `CustomCheckbox` is useful because full control of a native HTML input's design is not always possible. You may want to provide custom check graphics or change the shape of the check or its color. This component provides a handy wrapper around a visually hidden native checkbox so that we avoid re-creating all of its native event behavior.
 
-CustomCheckbox uses our MixedCheckbox so you get the same benefits for dealing with indeterminate state when you use either!
+`CustomCheckbox` uses our `MixedCheckbox` so you get the same benefits for dealing with `indeterminate` state when you use either!
 
 > Accessibility Note: If you use our `CustomCheckbox` component, you will still need to ensure that your styles follow the guidelines outlined in the [WAI-ARIA specifications for checkboxes](https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox). Pay special attention to focus styles for keyboard navigation. Our default styles provide focus styles by default.
 
@@ -250,28 +250,28 @@ function Example() {
 
 [Check out the React documentation for additional information about form inputs in React.](https://reactjs.org/docs/forms.html)
 
-| Prop                                | Type                   | Required | Default |
-| ----------------------------------- | ---------------------- | -------- | ------- |
-| [checked](#mixedcheckbox-checked)   | `boolean` \| `"mixed"` | false    |         |
-| [onChange](#mixedcheckbox-onchange) | `func`                 | false    |         |
+| Prop                                  | Type                   | Required |
+| ------------------------------------- | ---------------------- | -------- |
+| [`checked`](#mixedcheckbox-checked)   | `boolean` \| `"mixed"` | false    |
+| [`onChange`](#mixedcheckbox-onchange) | `func`                 | false    |
 
-##### MixedCheckbox checked
+##### MixedCheckbox `checked`
 
-_Type_: `boolean` | `"mixed"`
+`checked?: boolean | "mixed`
 
 Whether or not the checkbox is checked or in a `mixed` (indeterminate) state.
 
-##### MixedCheckbox onChange
+##### MixedCheckbox `onChange`
 
-_Type_: `func: (event: React.ChangeEvent<HTMLInputElement>) => void`
+`onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;`
 
 The callback that is fired when the checkbox value is changed.
 
-### useMixedCheckbox
+### `useMixedCheckbox`
 
-_Type_: `func: (ref: React.RefObject<HTMLInputElement>, args) => [inputProps, stateData]`
+A hook that can be used to turn any HTML input component into a tri-state checkbox.
 
-A hook that can be used to turn any HTML input component into a tri-state checkbox. You must create a ref and pass it along with additional arguments to return a props object and state-related data.
+You must create a ref and pass it along with additional arguments to return a props object and state-related data.
 
 ```jsx
 // jsx-demo
@@ -304,15 +304,28 @@ function Example({ disabled = false }) {
 }
 ```
 
-#### useMixedCheckbox args
+#### `useMixedCheckbox` Signature
 
 ```ts
-type MixedCheckboxArgs = {
-  checked?: boolean | "mixed";
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+function useMixedCheckbox(
+  ref: React.RefObject<HTMLInputElement | null>,
+  args?: {
+    checked?: boolean | "mixed";
+    defaultChecked?: boolean;
+    disabled?: boolean;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  },
+  functionOrComponentName: string = "useMixedCheckbox"
+): [
+  {
+    "aria-checked": boolean | "mixed";
+    checked: boolean;
+    disabled: boolean;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    type: "checkbox";
+  },
+  { checked: boolean | "mixed" }
+];
 ```
 
 ### CustomCheckbox
@@ -338,31 +351,34 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckbox Props
 
-A `CustomCheckbox` inherits its props from the `React.InputHTMLAttributes<HTMLInputElement>` interface, with additional context documented below.
+| Prop                                               | Type                  | Required |
+| -------------------------------------------------- | --------------------- | -------- |
+| [`span` props](#customcheckbox-span-props)         |                       |          |
+| [`checked`](#customcheckbox-checked)               | `boolean` \| `"mixed` | false    |
+| [`children`](#customcheckbox-children)             | `node` \| `func`      | false    |
+| [`defaultChecked`](#customcheckbox-defaultchecked) | `boolean`             | false    |
+| [`disabled`](#customcheckbox-disabled)             | `boolean`             | false    |
+| [`name`](#customcheckbox-name)                     | `string`              | false    |
+| [`onChange`](#customcheckbox-onchange)             | `func`                | false    |
+| [`value`](#customcheckbox-value)                   | `string | number`     | false    |
 
-[Check out the React documentation for additional information about form inputs in React.](https://reactjs.org/docs/forms.html)
+##### CustomCheckbox `span` props
 
-| Prop                                 | Type                  | Required | Default |
-| ------------------------------------ | --------------------- | -------- | ------- |
-| [checked](#customcheckbox-checked)   | `boolean` \| `"mixed` | false    |         |
-| [children](#customcheckbox-children) | `node` \| `func`      | false    |         |
-| [onChange](#customcheckbox-onchange) | `func`                | false    |         |
+All props are spread to an underlying `span` element.
 
-##### CustomCheckbox checked
+```jsx
+<CustomCheckbox className="cool-checkbox" />
+```
 
-_Type_: `boolean` | `"mixed"`
+##### CustomCheckbox `checked`
+
+`checked?: boolean | "mixed"`
 
 Whether or not the checkbox is checked or in a `mixed` (indeterminate) state.
 
-##### CustomCheckbox onChange
+##### CustomCheckbox `children`
 
-The callback that is fired when the checkbox value is changed.
-
-_Type_: `func: (event: React.ChangeEvent<HTMLInputElement>) => void`
-
-##### CustomCheckbox children
-
-_Type_: `node`
+`children?: React.ReactNode;`
 
 A `CustomCheckbox` can accept any React node as children so long as the rendered content is valid HTML. It is best to avoid adding interactive elements inside of a `CustomCheckbox`
 
@@ -379,6 +395,38 @@ function Example({ innerStyle, ...props }) {
   );
 }
 ```
+
+##### CustomCheckbox `defaultChecked`
+
+`defaultChecked?: boolean`
+
+For uncontrolled checkbox components, `defaultChecked` dictates whether or not the default initial state for a checkbox is `checked`.
+
+Because any checkbox with a `mixed` state must be controlled by the app, `defaultChecked` only accepts `true` or `false` values.
+
+##### CustomCheckbox `disabled`
+
+`disabled?: boolean`
+
+Whether or not the checkbox form input is disabled.
+
+##### CustomCheckbox `name`
+
+`name?: string`
+
+The `name` attribute passed to the checkbox form input.
+
+##### CustomCheckbox `onChange`
+
+`onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;`
+
+The callback that is fired when the checkbox value is changed.
+
+##### CustomCheckbox `value`
+
+`value?: string | number`
+
+The `value` attribute passed to the checkbox form input.
 
 ### CustomCheckboxContainer
 
@@ -403,21 +451,36 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckboxContainer Props
 
-| Prop                                                      | Type                   | Required | Default |
-| --------------------------------------------------------- | ---------------------- | -------- | ------- |
-| [checked](#customcheckboxcontainer-checked)               | `boolean` \| `"mixed"` | false    |         |
-| [children](#customcheckboxcontainer-children)             | `node` \| `func`       | true     |         |
-| [defaultChecked](#customcheckboxcontainer-defaultchecked) | `boolean`              | false    |         |
-| [disabled](#customcheckboxcontainer-disabled)             | `boolean`              | false    | `false` |
-| [onChange](#customcheckboxcontainer-onchange)             | `func`                 | false    |         |
+| Prop                                                        | Type                   | Required |
+| ----------------------------------------------------------- | ---------------------- | -------- |
+| [`span` props](#customcheckboxcontainer-span-props)         |                        |          |
+| [`checked`](#customcheckboxcontainer-checked)               | `boolean` \| `"mixed"` | false    |
+| [`children`](#customcheckboxcontainer-children)             | `node` \| `func`       | true     |
+| [`defaultChecked`](#customcheckboxcontainer-defaultchecked) | `boolean`              | false    |
+| [`disabled`](#customcheckboxcontainer-disabled)             | `boolean`              | false    |
+| [`onChange`](#customcheckboxcontainer-onchange)             | `func`                 | false    |
 
-##### CustomCheckboxContainer checked
+##### CustomCheckboxContainer `span` props
 
-Whether or not the checkbox is checked or in a `mixed` (indeterminate) state. This prop is assigend to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
+All props are spread to an underlying `span` element.
 
-##### CustomCheckboxContainer children
+```jsx
+<CustomCheckboxContainer className="cool-checkbox">
+  <CustomCheckboxInput />
+</CustomCheckboxContainer>
+```
 
-_Type_: `node` | `func: ({ checked: boolean | "mixed", inputRef: React.RefObject, focused: boolean }) => JSX.Element`
+##### CustomCheckboxContainer `checked`
+
+`checked?: boolean | "mixed"`
+
+Same as [`CustomCheckbox` `checked`](#customcheckbox-checked).
+
+This prop is assigned to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
+
+##### CustomCheckboxContainer `children`
+
+`children: React.ReactNode | ((args: { checked: boolean | "mixed", inputRef: React.RefObject, focused: boolean }) => JSX.Element)`
 
 A `CustomCheckboxContainer` can accept a React node or render prop function as its child. It should always have one `CustomCheckboxInput` component as a descendant.
 
@@ -445,24 +508,29 @@ function Example({ children, name, value, id, label, ...props }) {
 }
 ```
 
-##### CustomCheckboxContainer defaultChecked
+##### CustomCheckboxContainer `defaultChecked`
 
-_Type_: `boolean`
+`defaultChecked?: boolean`
 
-In uncontrolled components, `defaultChecked` represents the initial checked state for a `CustomCheckbox`. This prop is assigend to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
+Same as [`CustomCheckbox` `defaultChecked`](#customcheckbox-defaultchecked).
+
+This prop is assigned to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
 
 ##### CustomCheckboxContainer disabled
 
-_Type_: `boolean`
-_Default_: `false`
+`disabled?: boolean`
 
-Whether or not the custom checkbox's input element is disabled. This prop is assigend to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
+Same as [`CustomCheckbox` `disabled`](#customcheckbox-disabled).
+
+This prop is assigned to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
 
 ##### CustomCheckboxContainer onChange
 
-_Type_: `func: (event: React.ChangeEvent<HTMLInputElement>) => void`
+`onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;`
 
-The callback that is fired when the checkbox value is changed. This prop is assigend to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
+Same as [`CustomCheckbox` `onChange`](#customcheckbox-onchange).
+
+This prop is assigned to the `CustomCheckboxContainer` and passed to the `CustomCheckboxInput` via the [React Context API](https://reactjs.org/docs/context.html).
 
 ### CustomCheckboxInput
 
@@ -487,7 +555,7 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckboxInput Props
 
-`MixedCheckbox` inherits its props from the `React.InputHTMLAttributes<HTMLInputElement>` interface, excluding:
+`CustomCheckboxInput` inherits its props from the `React.InputHTMLAttributes<HTMLInputElement>` interface, excluding:
 
 - [`checked`](#customcheckboxcontainer-checked)
 - [`defaultChecked`](#customcheckboxcontainer-defaultchecked)

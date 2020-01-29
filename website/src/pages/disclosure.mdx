@@ -19,7 +19,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 - Source: https://github.com/reach/reach-ui/tree/master/packages/disclosure
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#disclosure
 
-A disclosure is a button that controls visibility of a panel of content. When the content inside the panel is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
+A disclosure is a button that controls the visibility of a panel of content. When the content inside the panel is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
 
 If you have a group of disclosures that stack vertically and exist within the same logical context, you may want to use [`@reach/accordion`](/accordion) instead.
 
@@ -59,7 +59,7 @@ function Example() {
 
 ### Disclosure
 
-The wrapper component and context provider for a disclosure's button and panel components. A disclosure should only have one button and one panel descendant.
+The wrapper component and context provider for a disclosure's button and panel components. A disclosure should never have more than one button or panel descendants.
 
 ```jsx
 <Disclosure>

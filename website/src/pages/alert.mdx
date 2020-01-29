@@ -62,15 +62,13 @@ import Alert from "@reach/alert";
 
 #### Alert Props
 
-| Prop                                  | Type                         | Required |
-| ------------------------------------- | ---------------------------- | -------- |
-| [element props](#alert-element-props) | spread                       | n/a      |
-| [type](#alert-type)                   | enum "assertive" or "polite" | false    |
-| [children](#alert-children)           | node                         | false    |
+| Prop                            | Required | Type   |
+| ------------------------------- | -------- | ------ |
+| [`div` props](#alert-div-props) |          |        |
+| [`type`](#alert-type)           | false    | `enum` |
+| [`children`](#alert-children)   | true     | `node` |
 
-##### Alert element props
-
-_Type_: `spread`
+##### Alert `div` props
 
 Any props not listed above will be spread onto the underlying `div` element.
 
@@ -90,9 +88,9 @@ function Example() {
 }
 ```
 
-##### Alert type
+##### Alert `type`
 
-_Type_: `enum` `"assertive" | "polite"` default: `"polite"`
+`type?: "assertive" | "polite"`
 
 Controls whether the assistive technology should read immediately ("assertive") or wait until the user is idle ("polite").
 
@@ -112,7 +110,7 @@ You should probably stick with polite most of the time.
 
 ##### Alert children
 
-_Type_: `node`
+`children: React.ReactNode;`
 
 Regular React children.
 

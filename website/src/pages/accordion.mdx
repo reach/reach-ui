@@ -19,9 +19,9 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 An accordion is a vertically stacked group of collapsible sections. An accordion is composed of grouped buttons and panels. When a user selects an accordion button, its corresponding panel should switch between 'open' and 'collapsed' states.
 
-Accordions follow many consistent patterns but do allow for some variability in behavior. For example, some accordions only allow one panel to be open at a time, where others may allow multiple or all panels to be open simulateneously. Similarly, many accordions will allow all panels to be simulateneously collapsed, while others may require one panel to be open at all times.
+Accordions follow many consistent patterns but do allow for some variability in behavior. For example, some accordions only allow one panel to be open at a time, where others may allow multiple or all panels to be open simultaneously. Similarly, many accordions will allow all panels to be simultaneously collapsed, while others may require one panel to be open at all times.
 
-If you are familiar with the disclosure pattern, an accordion will feel very similar. The key distinction is that a disclosure is a standalone component that consists of a single button and panel group. Because of this, you cannot navigate between different disclosures with a keyboard the same way you can with an accordion. To provide users with a predicatable behavior between components, it is important to keep disclosures and accordions visually distinct across your app.
+If you are familiar with the disclosure pattern, an accordion will feel very similar. The key distinction is that a disclosure is a standalone component that consists of a single button-panel-group. Because of this, you cannot navigate between different disclosures with a keyboard the same way you can with an accordion. To provide users with a predictable behavior between components, it is important to keep disclosures and accordions visually distinct across your app.
 
 ## Installation
 
@@ -102,7 +102,7 @@ Please see the [styling guide](/styling).
 
 #### `collapsible` and `multiple` props
 
-You can use the `collapsible` prop to dictate that an accordion should allow all panels to be collapsed simulateneously. By default, one panel must be in an `open` state at all times.
+You can use the `collapsible` prop to dictate that an accordion should allow all panels to be collapsed simultaneously. By default, one panel must be in an `open` state at all times.
 
 ```jsx
 // jsx-demo
@@ -158,7 +158,7 @@ function Example() {
 }
 ```
 
-Using both props together dictates that any number of panels in an accordion can be `open` or `collapsed` at any time without regard to the state of other accordion items. These props are only relevant for uncontrolled accordion components, as the state of controlled accordions items is determined only by the `index` prop.
+Using both props together dictates that any number of panels in an accordion can be `open` or `collapsed` at any time without regard to the state of other accordion items. These props are only relevant for uncontrolled accordion components, as the state of controlled accordion items is determined only by the `index` prop.
 
 ```jsx
 // jsx-demo
@@ -234,9 +234,9 @@ return (
 | [onChange](#accordion-onchange)         | `func`                 | false    |         |
 | [readOnly](#accordion-readonly)         | `boolean`              | false    |         |
 
-##### Accordion children
+##### Accordion `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 `Accordion` can accept `AccordionItem` components as children.
 
@@ -253,16 +253,15 @@ _Type_: `node`
 </Accordion>
 ```
 
-##### Accordion collapsible
+##### Accordion `collapsible`
 
-_Type_: `boolean`
-_Default_: `false`
+`collapsible?: boolean`
 
-Whether or not all panels of an uncontrolled accordion can be toggled to a closed state. See the [`collapsible` and `multiple` props](#collapsible-and-multiple-props) section for details.
+Whether or not all panels of an uncontrolled accordion can be toggled to a closed state. See the [`collapsible` and `multiple` props](#collapsible-and-multiple-props) section for details. Defaults to `false`.
 
-##### Accordion defaultIndex
+##### Accordion `defaultIndex`
 
-_Type_: `number | number[]`
+`defaultIndex?: number | number[]`
 
 A default value for the open panel's index or indices in an uncontrolled accordion component when it is initially rendered.
 
@@ -298,9 +297,9 @@ You can only pass an array of indices to `defaultIndex` if you also set `multipl
 </Accordion>
 ```
 
-##### Accordion index
+##### Accordion `index`
 
-_Type_: `number | number[]`
+`index?: number | number[]`
 
 The index or array of indices for open accordion panels. The `index` prop should be used along with `onChange` to create controlled accordion components.
 
@@ -323,30 +322,29 @@ return (
 );
 ```
 
-##### Accordion multiple
+##### Accordion `multiple`
 
-_Type_: `boolean`
-_Default_: `false`
+`multiple?: boolean`
 
-Whether or not multiple panels in an uncontrolled accordion can be opened at the same time. See the [`collapsible` and `multiple` props](#collapsible-and-multiple-props) section for details.
+Whether or not multiple panels in an uncontrolled accordion can be opened at the same time. See the [`collapsible` and `multiple` props](#collapsible-and-multiple-props) section for details. Defaults to `false`.
 
-##### Accordion onChange
+##### Accordion `onChange`
 
-_Type_: `func: (value: number | number[]) => void`
+`onChange?: (value: number | number[]) => void`
 
 The callback that is fired when an accordion item's open state is changed.
 
-##### Accordion readOnly
+##### Accordion `readOnly`
 
-_Type_: `boolean`
+`readOnly?: boolean`
 
-Whether or not an uncontrolled accordion is read-only or controllable by a user interaction.
+Whether or not an uncontrolled accordion is read-only (meaning that the user cannot toggle its state with a normal interaction). Defaults to `false`.
 
-Generally speaking you probably want to avoid this, as it can be confusing especially when navigating by keyboard. However, this may be useful if you want to lock an accordion under certain conditions (perhaps user authentication is required to access the content). In these instances, you may want to include an alert when a user tries to activate a read-only accordion panel to let them know why it does not toggle as may be expected.
+Generally speaking, you probably want to avoid this, as it can be confusing especially when navigating by keyboard. However, this may be useful if you want to lock an accordion under certain conditions (perhaps user authentication is required to access the content). In these instances, you may want to include an alert when a user tries to activate a read-only accordion panel to let them know why it does not toggle as may be expected.
 
 ### AccordionItem
 
-A group that wraps a an accordion's button and panel components.
+A group that wraps an accordion's button and panel components.
 
 #### AccordionItem CSS Selectors
 
@@ -372,9 +370,9 @@ Please see the [styling guide](/styling).
 | [children](#accordionitem-children) | `node`    | true     |         |
 | [disabled](#accordionitem-disabled) | `boolean` | false    | `false` |
 
-##### AccordionItem children
+##### AccordionItem `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 An `AccordionItem` expects to receive an `AccordionButton` and `AccordionPanel` components as its children, though you can also nest other components within an `AccordionItem` if you want some persistant content that is relevant to the section but not collapsible when the `AccordionButton` is toggled.
 
@@ -395,12 +393,11 @@ An `AccordionItem` expects to receive an `AccordionButton` and `AccordionPanel` 
 </Accordion>
 ```
 
-##### AccordionItem disabled
+##### AccordionItem `disabled`
 
-_Type_: `boolean`
-_Default_: `false`
+`disabled?: boolean`
 
-Whether or not an accordion panel is disabled from user interaction.
+Whether or not an accordion panel is disabled from user interaction. Defaults to `false`.
 
 ### AccordionButton
 
@@ -429,7 +426,9 @@ Please see the [styling guide](/styling).
 | ------------------------------------- | ------ | -------- | ------- |
 | [children](#accordionbutton-children) | `node` | true     |         |
 
-##### AccordionButton children
+##### AccordionButton `children`
+
+`children: React.ReactNode`
 
 Typically a text string that serves as a label for the accordion, though nested DOM nodes can be passed as well so long as they are valid children of interactive elements.
 
@@ -552,8 +551,8 @@ Please see the [styling guide](/styling).
 | ------------------------------------ | ------ | -------- | ------- |
 | [children](#accordionpanel-children) | `node` | true     |         |
 
-##### AccordionPanel children
+##### AccordionPanel `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Inner collapsible content for the accordion item.
