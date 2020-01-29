@@ -215,7 +215,20 @@ export const DisclosureButton = forwardRefWithAs<
   );
 });
 
-export type DisclosureButtonProps = {};
+/**
+ * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurebutton-props
+ */
+export type DisclosureButtonProps = {
+  /**
+   * Typically a text string that serves as a label for the disclosure button,
+   * though nested DOM nodes can be passed as well so long as they are valid
+   * children of interactive elements.
+   *
+   * @see https://adrianroselli.com/2016/12/be-wary-of-nesting-roles.html
+   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurebutton-children
+   */
+  children: React.ReactNode;
+};
 
 if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
@@ -260,7 +273,17 @@ if (__DEV__) {
   DisclosurePanel.propTypes = {};
 }
 
-type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {};
+/**
+ * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurepanel-props
+ */
+type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
+  /**
+   * Inner collapsible content for the disclosure item.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurepanel-children
+   */
+  children: React.ReactNode;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types

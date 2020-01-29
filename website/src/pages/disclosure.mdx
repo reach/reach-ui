@@ -95,17 +95,17 @@ return (
 
 #### Disclosure Props
 
-| Prop                                   | Type                 | Required | Default |
-| -------------------------------------- | -------------------- | -------- | ------- |
-| [children](#disclosure-children)       | `node`               | true     |         |
-| [defaultOpen](#disclosure-defaultopen) | `boolean`            | false    | `false` |
-| [id](#disclosure-id)                   | `string` \| `number` | false    |         |
-| [onChange](#disclosure-onchange)       | `func`               | false    |         |
-| [open](#disclosure-open)               | `boolean`            | false    | `false` |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [`children`](#disclosure-children)       | `node`               | true     |
+| [`defaultOpen`](#disclosure-defaultopen) | `boolean`            | false    |
+| [`id`](#disclosure-id)                   | `string` \| `number` | false    |
+| [`onChange`](#disclosure-onchange)       | `func`               | false    |
+| [`open`](#disclosure-open)               | `boolean`            | false    |
 
-##### Disclosure children
+##### Disclosure `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 `Disclosure` expects to receive accept `DisclosureButton` and `DisclosurePanel` components as either direct children or descendants. It can also accept wrapper elements if desired, though it is not recommended to pass other arbitrary components within a disclosure in most cases.
 
@@ -135,16 +135,15 @@ _Type_: `node`
 </div>
 ```
 
-##### Disclosure defaultOpen
+##### Disclosure `defaultOpen`
 
-_Type_: `boolean`
-_Default_: `false`
+`defaultOpen?: boolean`
 
-Whether or not an uncontrolled disclosure component should default to its `open` state on the initial render.
+Whether or not an uncontrolled disclosure component should default to its `open` state on the initial render. Defaults to `false`.
 
-##### Disclosure id
+##### Disclosure `id`
 
-_Type_: `string | number`
+`id?: string | number`
 
 An id used to assign aria and id attributes to nested `DisclosureButton` and `DisclosurePanel` components.
 
@@ -161,15 +160,15 @@ Since the Disclosure component itself does not render a DOM element, an `id` pro
 </Disclosure>
 ```
 
-##### Disclosure onChange
+##### Disclosure `onChange`
 
-_Type_: `func: () => void`
+`onChange?: () => void`
 
 The callback that is fired when a disclosure's open state is changed.
 
-##### Disclosure open
+##### Disclosure `open`
 
-_Type_: `func: () => void`
+`open?: boolean`
 
 The controlled open state of the disclosure. The `open` prop should be used along with `onChange` to create controlled disclosure components.
 
@@ -193,11 +192,13 @@ The trigger button a user clicks to interact with a disclosure.
 
 #### DisclosureButton Props
 
-| Prop                                   | Type   | Required | Default |
-| -------------------------------------- | ------ | -------- | ------- |
-| [children](#disclosurebutton-children) | `node` | true     |         |
+| Prop                                     | Type   | Required |
+| ---------------------------------------- | ------ | -------- |
+| [`children`](#disclosurebutton-children) | `node` | true     |
 
-##### DisclosureButton children
+##### DisclosureButton `children`
+
+`children: React.ReactNode`
 
 Typically a text string that serves as a label for the disclosure button, though nested DOM nodes can be passed as well so long as they are valid children of interactive elements.
 
@@ -209,12 +210,12 @@ The collapsible panel in which inner content for a disclosure item is rendered.
 
 #### DisclosurePanel Props
 
-| Prop                                  | Type   | Required | Default |
-| ------------------------------------- | ------ | -------- | ------- |
-| [children](#disclosurepanel-children) | `node` | true     |         |
+| Prop                                    | Type   | Required |
+| --------------------------------------- | ------ | -------- |
+| [`children`](#disclosurepanel-children) | `node` | true     |
 
-##### DisclosurePanel children
+##### DisclosurePanel `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Inner collapsible content for the disclosure item.

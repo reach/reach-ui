@@ -60,21 +60,21 @@ import Component from "@reach/component-component";
 
 | Prop                                                  | Type   |
 | ----------------------------------------------------- | ------ |
-| [ initialState ](#initialstate)                       | object |
-| [ getInitialState ](#getinitialstate)                 | func   |
-| [ refs ](#refs)                                       | object |
-| [ getRefs ](#getrefs)                                 | func   |
-| [ didMount ](#didmount)                               | func   |
-| [ didUpdate ](#didupdate)                             | func   |
-| [ willUnmount ](willunmount)                          | func   |
-| [ getSnapshotBeforeUpdate ](#getsnapshotbeforeupdate) | func   |
-| [ shouldUpdate ](#shouldupdate)                       | func   |
-| [ children ](#children)                               | func   |
-| [ render ](#render)                                   | func   |
+| [`initialState`](#initialstate)                       | object |
+| [`getInitialState`](#getinitialstate)                 | func   |
+| [`refs`](#refs)                                       | object |
+| [`getRefs`](#getrefs)                                 | func   |
+| [`didMount`](#didmount)                               | func   |
+| [`didUpdate`](#didupdate)                             | func   |
+| [`willUnmount`](willunmount)                          | func   |
+| [`getSnapshotBeforeUpdate`](#getsnapshotbeforeupdate) | func   |
+| [`shouldUpdate`](#shouldupdate)                       | func   |
+| [`children`](#children)                               | func   |
+| [`render`](#render)                                   | func   |
 
-#### initialState
+#### `initialState`
 
-_Type_: `object`
+`initialState?: object`
 
 An object of initial state.
 
@@ -89,9 +89,9 @@ function Example() {
 }
 ```
 
-#### getInitialState
+#### `getInitialState`
 
-_Type_: `func: () => object`
+`getInitialState?: () => object`
 
 A function to return intitial state. Use this when initial state is computed.
 
@@ -110,9 +110,9 @@ However, in the next example, `Date.now()` would be called with every re-render,
 <Component initialState={{ now: Date.now() }} />
 ```
 
-#### refs
+#### `refs`
 
-_Type_: `object`
+`refs?: object`
 
 Put any refs you need to keep track of here, stuff like DOM nodes, timers, and subcriptions.
 
@@ -137,9 +137,9 @@ function Example() {
 }
 ```
 
-#### getRefs
+#### `getRefs`
 
-_Type_: `func: () => object`
+`getRefs?: () => object`
 
 Use this when any of your refs are computed.
 
@@ -154,9 +154,9 @@ Use this when any of your refs are computed.
 />
 ```
 
-#### didMount
+#### `didMount`
 
-_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => undefined`
+`didMount?: (args: { state: object, props: object, refs: object, setState: Function, forceUpdate: Function }) => void`
 
 Called when the component mounts.
 
@@ -189,27 +189,27 @@ Perhaps you want some async data but don't want to make an entirely new componen
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#componentdidmount).
 
-#### didUpdate
+#### `didUpdate`
 
-_Type_: `func: ({ state, props, refs, setState, forceUpdate, prevProps, prevState }) => undefined`
+`didMount?: (args: { state: object, props: object, refs: object, setState: Function, forceUpdate: Function, prevProps?: object, prevState?: object }) => void`
 
 Called when the component updates. See [React Docs](https://reactjs.org/docs/react-component.html#componentdidupdate).
 
-#### willUnmount
+#### `willUnmount`
 
-_Type_: `func: ({ state, props, refs }) => undefined`
+`willUnmount?: (args: { state: object, props: object, refs: object }) => void`
 
 Called when the component will be removed from the page. See [React Docs](https://reactjs.org/docs/react-component.html#componentwillunmount).
 
-#### getSnapshotBeforeUpdate
+#### `getSnapshotBeforeUpdate`
 
-_Type_: `func: ({ state, props, refs, prevProps, prevState }) => any`
+`getSnapshotBeforeUpdate?: (args: { state: object, props: object, refs: object, prevProps: object, prevState: object }) => any`
 
 See [React Docs](https://reactjs.org/docs/react-component.html#getsnapshotbeforeupdate).
 
-### shouldUpdate
+### `shouldUpdate`
 
-_Type_: `func: ({ state, props, nextProps, nextState }) => bool`
+`shouldUpdate?: (args: { state: object, props: object, nextProps: object, nextState: object }) => boolean`
 
 Return `true` to signify the component needs an update, `false` if it does not. Useful for wrapping up expensive parts of your app without having to refactor to new components.
 
@@ -256,11 +256,11 @@ function Example() {
 
 See also [React Docs](https://reactjs.org/docs/react-component.html#shouldcomponentupdate).
 
-#### children
+#### `children`
 
-_Type_: `node`
+`children?: React.ReactNode | ((args: { state: object, props: object, refs: object, setState: Function, forceUpdate: Function }) => React.ReactNode)`
 
-Usual React children prop.
+Usual React children prop or render prop callback to provide the stateful parts of your component at render time..
 
 ```jsx
 // jsx-demo
@@ -272,10 +272,6 @@ function Example() {
   );
 }
 ```
-
-_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
-
-A render prop callback to provide the stateful parts of your component at render time.
 
 ```jsx
 // jsx-demo
@@ -303,9 +299,9 @@ function Example() {
 }
 ```
 
-#### render
+#### `render`
 
-_Type_: `func: ({ state, props, refs, setState, forceUpdate }) => node`
+`render?: (args: { state: object, props: object, refs: object, setState: Function, forceUpdate: Function }) => React.ReactNode`
 
 ```jsx
 // jsx-demo
