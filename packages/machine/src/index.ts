@@ -37,7 +37,7 @@
  * from props without needing to send any immediate transitions in an effect.
  */
 
-import { SingleOrArray, DistributiveOmit } from "@reach/utils";
+import { SingleOrArray, DistributiveOmit, noop } from "@reach/utils";
 import { useRef, useState, useCallback, useEffect } from "react";
 
 export enum InterpreterStatus {
@@ -72,6 +72,7 @@ export function createMachine<
     initialState: {
       value: fsmConfig.initial,
       actions: fsmConfig.states[fsmConfig.initial].entry || [],
+      after: fsmConfig.states[fsmConfig.initial].after || [],
       context: fsmConfig.context!,
       matches: createMatcher(fsmConfig.initial)
     },
@@ -108,6 +109,7 @@ export function createMachine<
       let unchangedState: StateMachine.State<TContext, TEvent, TState> = {
         value: currentStateValue,
         context,
+        after: [],
         actions: [],
         changed: false,
         matches: createMatcher(currentStateValue)
@@ -168,6 +170,7 @@ export function createMachine<
           value: target,
           context: nextContext,
           actions: allActions,
+          after: stateConfig.after || [],
           changed:
             target !== currentStateValue || allActions.length > 0 || assigned,
           matches: createMatcher(target)
@@ -192,6 +195,45 @@ export function interpret<
   let status = InterpreterStatus.NotStarted;
   let listeners = new Set<StateMachine.StateListener<typeof state>>();
 
+  let delayedTransitions = new Set<{
+    id: ReturnType<typeof global.setTimeout>;
+  }>();
+
+  function cleanupDelayedTransitions() {
+    delayedTransitions.forEach(transition => {
+      global.clearTimeout.call(null, transition.id);
+      delayedTransitions.delete(transition);
+    });
+  }
+
+  function setTimeoutForDelayedTransitions(
+    state: StateMachine.State<TContext, TEvent, TState>,
+    event: TEvent
+  ) {
+    for (let delayedTransition of state.after) {
+      let { delay, cond = () => true } = delayedTransition;
+      // TODO: Does condition check should check the context on the passed state
+      // or machine.initialState at the time when the event actually fires.
+      if (cond(state.context, event)) {
+        let ms =
+          typeof delay === "function" ? delay(state.context, event) : delay;
+        let id = global.setTimeout.call(
+          null,
+          () => {
+            let currentState = machine.initialState;
+            machine.transition(
+              currentState,
+              delayedTransition.target || currentState.value
+            );
+            // TODO: delayed actions
+          },
+          ms
+        );
+        delayedTransitions.add({ id });
+      }
+    }
+  }
+
   let service = {
     _machine: machine,
     send(event: TEvent | TEvent["type"]) {
@@ -200,7 +242,14 @@ export function interpret<
       }
       let eventObject = toEventObject(event);
       state = machine.transition(state, event);
+
+      // 1. Clean up delayed transitions lingering from the last state (maybe?)
+      // 2. Execute actions
+      // 3. Set timeout for new delayed transitions
+      cleanupDelayedTransitions();
       executeStateActions(state, eventObject);
+      setTimeoutForDelayedTransitions(state, eventObject);
+
       listeners.forEach(listener => listener(state));
     },
     subscribe(listener: StateMachine.StateListener<typeof state>) {
@@ -220,6 +269,7 @@ export function interpret<
     },
     stop() {
       status = InterpreterStatus.Stopped;
+      cleanupDelayedTransitions();
       listeners.forEach(listener => listeners.delete(listener));
       return service;
     },
@@ -421,11 +471,26 @@ export namespace StateMachine {
     value: string;
     context: TContext;
     actions: ActionObject<TContext, TEvent>[];
+    after: DelayedTransition<TContext, TEvent>[];
     changed?: boolean | undefined;
     matches: <TSV extends TState["value"]>(
       value: TSV
     ) => this is TState extends { value: TSV } ? TState : never;
   }
+
+  export type DelayedTransition<
+    TContext extends object,
+    TEvent extends EventObject
+  > = {
+    delay: number | DelayExpression<TContext, TEvent>;
+    target?: string;
+    cond?: (context: TContext, event: TEvent) => boolean;
+  };
+
+  export type DelayExpression<
+    TContext extends object,
+    TEvent extends EventObject
+  > = (context: TContext, event: TEvent) => number;
 
   export interface Config<TContext extends object, TEvent extends EventObject> {
     id?: string;
@@ -440,6 +505,7 @@ export namespace StateMachine {
         };
         exit?: Action<TContext, TEvent>[];
         entry?: Action<TContext, TEvent>[];
+        after?: StateMachine.DelayedTransition<TContext, TEvent>[];
       };
     };
   }
