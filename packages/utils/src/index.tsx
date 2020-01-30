@@ -325,6 +325,7 @@ export {
 
 export type Descendant<T, P = {}> = P & {
   element: (T extends HTMLElement ? T : HTMLElement) | null;
+  index: number;
 };
 
 export interface IDescendantContext<T, P> {
@@ -375,7 +376,9 @@ export function useDescendant<T, P>(
     context,
     element,
     ...rest
-  }: Descendant<T, P> & { context: React.Context<IDescendantContext<T, P>> },
+  }: Omit<Descendant<T, P>, "index"> & {
+    context: React.Context<IDescendantContext<T, P>>;
+  },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
@@ -450,7 +453,7 @@ export function DescendantProvider<T, P>({
             );
           });
 
-          let newItem = { element, ...rest } as Descendant<T, P>;
+          let newItem = { element, index, ...rest } as Descendant<T, P>;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {

@@ -311,7 +311,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     const index = useDescendant(
       {
         context: MenuDescendantContext,
-        element: ownRef.current,
+        element: ownRef.current!,
         key: valueText
       },
       indexProp
