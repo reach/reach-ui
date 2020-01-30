@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 
-import {
+import React, {
   cloneElement,
   createContext,
   isValidElement,
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -17,10 +16,44 @@ import {
   AssignableRef,
   ComponentWithAs,
   ComponentWithForwardedRef,
+  DistributiveOmit,
   PropsFromAs,
   PropsWithAs
 } from "./types";
-import React from "react";
+
+/**
+ * React currently throws a warning when using useLayoutEffect on the server.
+ * To get around it, we can conditionally useEffect on the server (no-op) and
+ * useLayoutEffect in the browser. We occasionally need useLayoutEffect to
+ * ensure we don't get a render flash for certain operations, but we may also
+ * need affected components to render on the server. One example is when setting
+ * a component's descendants to retrieve their index values.
+ *
+ * Important to note that using this hook as an escape hatch will break the
+ * eslint dependency warnings unless you rename the import to `useLayoutEffect`.
+ * Use sparingly only when the effect won't effect the rendered HTML to avoid
+ * any server/client mismatch.
+ *
+ * If a useLayoutEffect is needed and the result would create a mismatch, it's
+ * likely that the component in question shouldn't be rendered on the server at
+ * all, so a better approach would be to lazily render those in a parent
+ * component after client-side hydration.
+ *
+ * TODO: We are calling useLayoutEffect in a couple of places that will likely
+ * cause some issues for SSR users, whether the warning shows or not. Audit and
+ * fix these.
+ *
+ * https://gist.github.com/gaearon/e7d97cdf38a2907924ea12e4ebdf3c85
+ * https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.js
+ *
+ * @param effect
+ * @param deps
+ */
+export const useIsomorphicLayoutEffect = canUseDOM()
+  ? React.useLayoutEffect
+  : React.useEffect;
+
+const useLayoutEffect = useIsomorphicLayoutEffect;
 
 let checkedPkgs: { [key: string]: boolean } = {};
 
@@ -72,7 +105,10 @@ export { checkStyles };
  * @param ref
  * @param value
  */
-export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
+export function assignRef<T = any>(
+  ref: AssignableRef<T> | undefined,
+  value: any
+) {
   if (ref == null) return;
   if (typeof ref === "function") {
     ref(value);
@@ -86,7 +122,7 @@ export function assignRef<T = any>(ref: AssignableRef<T>, value: any) {
   }
 }
 
-export function BoolOrBoolString(value: any) {
+export function boolOrBoolString(value: any) {
   return value === "false" ? false : Boolean(value);
 }
 
@@ -149,6 +185,10 @@ export function getScrollbarOffset() {
   return 0;
 }
 
+export function isUndefined(value: any) {
+  return typeof value === "undefined";
+}
+
 /**
  * Joins strings to format IDs for compound components.
  *
@@ -163,6 +203,18 @@ export function makeId(...args: (string | number | null | undefined)[]) {
  */
 export function noop(): void {}
 
+// React hook for creating a value exactly once.
+// https://github.com/Andarist/use-constant
+export function useConstant<T>(fn: () => T): T {
+  const ref = React.useRef<{ v: T }>();
+
+  if (!ref.current) {
+    ref.current = { v: fn() };
+  }
+
+  return ref.current.v;
+}
+
 /**
  * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
  * dealing with components that need an explicit ref for DOM calculations but
@@ -170,7 +222,9 @@ export function noop(): void {}
  *
  * @param refs Refs to fork
  */
-export function useForkedRef<T = any>(...refs: AssignableRef<T>[]) {
+export function useForkedRef<T = any>(
+  ...refs: (AssignableRef<T> | undefined)[]
+) {
   return useMemo(() => {
     if (refs.every(ref => ref == null)) {
       return null;
@@ -183,29 +237,6 @@ export function useForkedRef<T = any>(...refs: AssignableRef<T>[]) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
 }
-
-/**
- * React currently throws a warning when using useLayoutEffect on the server.
- * To get around it, we can conditionally useEffect on the server (no-op) and
- * useLayoutEffect in the browser. We occasionally need useLayoutEffect to ensure
- * we don't get a render flash for certain operations, but we may also need
- * affected components to render on the server. One example is when setting a
- * component's descendants to retrieve their index values. The index value may be
- * needed to determine whether a descendant is active, but with useEffect in the
- * browser there will be an initial frame where the active descendant is not set.
- *
- * Important to note that using this hook as an escape hatch will break the
- * eslint dependency warnings, so use sparingly only when needed and pay close
- * attention to the dependency array!
- *
- * https://github.com/reduxjs/react-redux/blob/master/src/utils/useIsomorphicLayoutEffect.js
- *
- * @param effect
- * @param deps
- */
-export const useIsomorphicLayoutEffect = canUseDOM()
-  ? useLayoutEffect
-  : useEffect;
 
 /**
  * Returns the previous value of a reference after a component update.
@@ -261,7 +292,7 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
 /**
  * This is a hack for sure. The thing is, getting a component to intelligently
  * infer props based on a component or JSX string passed into an `as` prop is
- * kind of a huge pain. Getting it to work and satisfy the contraints of
+ * kind of a huge pain. Getting it to work and satisfy the constraints of
  * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
  * type song-and-dance every time we want to forward a ref into a component
  * that accepts an `as` prop, we abstract all of that mess to this function for
@@ -272,7 +303,7 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
  *
  * @param Comp
  */
-export function forwardRefWithAs<T extends As, P>(
+export function forwardRefWithAs<P, T extends As>(
   comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
 ) {
   return React.forwardRef(comp as any) as ComponentWithAs<T, P>;
@@ -284,6 +315,7 @@ export {
   AssignableRef,
   ComponentWithAs,
   ComponentWithForwardedRef,
+  DistributiveOmit,
   PropsFromAs,
   PropsWithAs
 };
@@ -291,37 +323,28 @@ export {
 ////////////////////////////////////////////////////////////////////////////////
 // TODO: Move to @reach/descendants once fully tested and implemented
 
-export type DescendantElement<T = HTMLElement> =
-  | (T extends HTMLElement ? T : HTMLElement)
-  | null;
-
-export type Descendant<T> = {
-  element: DescendantElement<T>;
-  key?: string | number | null;
+export type Descendant<T, P = {}> = P & {
+  element: (T extends HTMLElement ? T : HTMLElement) | null;
 };
 
-export interface IDescendantContext<T> {
-  descendants: Descendant<T>[];
-  registerDescendant(descendant: Descendant<T>): void;
-  unregisterDescendant(element: Descendant<T>["element"]): void;
+export interface IDescendantContext<T, P> {
+  descendants: Descendant<T, P>[];
+  registerDescendant(descendant: Descendant<T, P>): void;
+  unregisterDescendant(
+    element: (T extends HTMLElement ? T : HTMLElement) | null
+  ): void;
 }
 
-const DescendantContext = createNamedContext<IDescendantContext<any>>(
-  "DescendantContext",
-  {} as IDescendantContext<any>
-);
-
-export function useDescendantContext<T>(
-  /*
-   * A component may create and use multiple Descendant contexts, i.e.: Tabs,
-   * where both TabList and TabPanels needs separate contexts to know the
-   * indices of their respective descendants.
-   * We create one here by default but provide an argument for components
-   * to pass when needed.
-   */
-  context: React.Context<IDescendantContext<T>> = DescendantContext
+export function createDescendantContext<T, P = {}>(
+  name: string,
+  initialValue = {}
 ) {
-  return useContext(context as React.Context<IDescendantContext<T>>);
+  return createNamedContext(name, {
+    descendants: [],
+    registerDescendant: noop,
+    unregisterDescendant: noop,
+    ...initialValue
+  } as IDescendantContext<T, P>);
 }
 
 /**
@@ -347,58 +370,56 @@ export function useDescendantContext<T>(
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
  */
-export function useDescendant<T>(
+export function useDescendant<T, P>(
   {
-    context = DescendantContext,
+    context,
     element,
-    key
-  }: Descendant<T> & { context?: React.Context<IDescendantContext<T>> },
+    ...rest
+  }: Descendant<T, P> & { context: React.Context<IDescendantContext<T, P>> },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
-  let {
-    registerDescendant,
-    unregisterDescendant,
-    descendants
-  } = useDescendantContext<T>(context);
+  let { registerDescendant, unregisterDescendant, descendants } = useContext(
+    context
+  );
 
   // Prevent any flashing
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!element) forceUpdate({});
-    registerDescendant({ element, key });
+    // @ts-ignore
+    registerDescendant({ element, ...rest });
     return () => unregisterDescendant(element);
-  }, [element, key]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [element, ...Object.values(rest)]);
 
   return (
     indexProp ?? descendants.findIndex(({ element: _el }) => _el === element)
   );
 }
 
-export function useDescendants<T>() {
-  return useState<Descendant<T>[]>([]);
+export function useDescendants<T, P = {}>() {
+  return useState<Descendant<T, P>[]>([]);
 }
 
-export function DescendantProvider<T>({
-  context: Ctx = DescendantContext,
+export function DescendantProvider<T, P>({
+  context: Ctx,
   children,
-  descendants,
-  setDescendants
+  items,
+  set
 }: {
-  context?: React.Context<IDescendantContext<any>>;
+  context: React.Context<IDescendantContext<T, P>>;
   children: React.ReactNode;
-  descendants: Descendant<T>[];
-  setDescendants: React.Dispatch<React.SetStateAction<Descendant<T>[]>>;
+  items: Descendant<T, P>[];
+  set: React.Dispatch<React.SetStateAction<Descendant<T, P>[]>>;
 }) {
   let registerDescendant = React.useCallback(
-    ({ element, key: providedKey }: Descendant<T>) => {
+    ({ element, ...rest }: Descendant<T, P>) => {
       if (!element) {
         return;
       }
 
-      setDescendants(items => {
+      set(items => {
         if (items.find(({ element: _el }) => _el === element) == null) {
-          let key = providedKey ?? element.textContent;
-
           /*
            * When registering a descendant, we need to make sure we insert in
            * into the array in the same order that it appears in the DOM. So as
@@ -429,7 +450,7 @@ export function DescendantProvider<T>({
             );
           });
 
-          let newItem = { element, key };
+          let newItem = { element, ...rest } as Descendant<T, P>;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -455,9 +476,7 @@ export function DescendantProvider<T>({
         return;
       }
 
-      setDescendants(items =>
-        items.filter(({ element: _el }) => element !== _el)
-      );
+      set(items => items.filter(({ element: _el }) => element !== _el));
     },
     /*
      * setDescendants is a state setter initialized by the useDescendants hook.
@@ -468,13 +487,19 @@ export function DescendantProvider<T>({
     []
   );
 
-  const value: IDescendantContext<T> = useMemo(() => {
+  // Not sure about this just yet, may bail on this and let components deal
+  /* let focusNodes = descendants
+    .filter(({ disabled }) => !disabled)
+    .map(({ element }) => element); */
+
+  // @ts-ignore
+  const value: IDescendantContext<T, P> = useMemo(() => {
     return {
-      descendants,
+      descendants: items,
       registerDescendant,
       unregisterDescendant
     };
-  }, [descendants, registerDescendant, unregisterDescendant]);
+  }, [items, registerDescendant, unregisterDescendant]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

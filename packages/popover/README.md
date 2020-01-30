@@ -6,7 +6,7 @@
 import React, { useRef, useState } from "react";
 import Popover, { positionDefault } from "@reach/popover";
 
-export function Example() {
+function Example() {
   const ref = useRef(null);
   const [value, setValue] = useState("");
   return (

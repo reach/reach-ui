@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-export const name = "Controlled (TS)";
+let name = "Controlled (TS)";
 
-const tabsStyle = {
+let tabsStyle = {
   width: 400,
   boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)",
   borderRadius: "0.8rem",
   overflow: "hidden"
 };
 
-export function Example() {
+function Example() {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -58,3 +58,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };

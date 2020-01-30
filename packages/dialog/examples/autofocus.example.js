@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Autofocus";
+let name = "Autofocus";
 
-export function Example() {
+function Example() {
   // This is to force an update. Verifying that updates don't mess around with
   // react focus lock.
   // https://github.com/reach/reach-ui/issues/396
@@ -39,3 +39,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

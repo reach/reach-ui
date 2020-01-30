@@ -9,9 +9,9 @@ import {
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "Long Text";
+let name = "Long Text";
 
-export function Example() {
+function Example() {
   return (
     <>
       <Menu>
@@ -52,3 +52,7 @@ export function Example() {
     </>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };

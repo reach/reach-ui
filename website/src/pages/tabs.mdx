@@ -295,7 +295,7 @@ Please see the [styling guide](/styling).
 </TabList>
 ```
 
-But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via `cloneElement`).
+But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via React context).
 
 ```jsx
 const RedTab = props => <Tab {...props} style={{ color: "red" }} />;
@@ -369,10 +369,12 @@ Please see the [styling guide](/styling).
 </TabPanels>
 ```
 
-But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via `cloneElement`).
+But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via React context`).
 
 ```jsx
-const BoldPanel = props => <Tab {...props} style={{ fontWeight: "bold" }} />;
+const BoldPanel = props => (
+  <TabPanel {...props} style={{ fontWeight: "bold" }} />
+);
 
 const TabPage = () => (
   <Tabs>
@@ -479,7 +481,9 @@ All other props are passed to the underlying `button` (or component passed to `a
 
 _Type_: `number` - cloned
 
-Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in. Note that any props that start with `_` are not public API, so don't use them :)
+Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in.
+
+> NOTE: We may deprecate this behavior in the future. We now prefer to use context to pass data down to descendants for `Tabs` for better composability. If you'd like your Tabs to be a bit more future proof, we suggest using a controlled `Tabs` component so that your app knows the state of your tabs.
 
 ```jsx
 // jsx-demo
@@ -646,7 +650,7 @@ With a little composition we can animate the selected tab bar.
             style={{
               position: "absolute",
               height: 2,
-              background: "red",
+              background: props.color,
               marginTop: -2,
 
               // Here is the actual animation part, we use the

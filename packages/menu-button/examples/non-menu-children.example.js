@@ -3,9 +3,9 @@ import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "Non Menu Children";
+let name = "Non Menu Children";
 
-export function Example() {
+function Example() {
   return (
     <Menu>
       <MenuButton>
@@ -28,6 +28,12 @@ export function Example() {
     </Menu>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 function ExampleLabel(props) {
   return (

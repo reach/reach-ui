@@ -10,9 +10,9 @@ import {
 import styled from "styled-components";
 import "@reach/menu-button/styles.css";
 
-export let name = "With Styled Components (TS)";
+let name = "With Styled Components (TS)";
 
-export function Example() {
+function Example() {
   return (
     <Menu>
       <StyledButton id="example-button">
@@ -35,6 +35,12 @@ export function Example() {
     </Menu>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const StyledButton = styled(MenuButton)`
   background: 0;

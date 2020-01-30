@@ -3,9 +3,9 @@ import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
-export let name = "Move Focus on Item Select";
+let name = "Move Focus on Item Select";
 
-export function Example() {
+function Example() {
   const [buttonText, setButtonText] = useState(null);
   const [linkText, setLinkText] = useState(null);
   const linkRef = useRef(null);
@@ -57,3 +57,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };

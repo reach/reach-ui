@@ -4,32 +4,9 @@ import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { createGlobalStyle } from "styled-components";
 import "@reach/menu-button/styles.css";
 
-/*
- * Noticed a funny bug in this example where the immediate placement of the
- * popup isn't quite right in the first frame, leading to a flash of jank.
- * This appears to happen with other examples that have multiple buttons in
- * the same component, but I'm not 100% sure what's going on just yet.
- *
- * TODO: Fix the jank!
- */
+let name = "At the Corners";
 
-const GlobalStyle = createGlobalStyle`
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-
-  #root {
-    position: relative;
-    height: 100%;
-  }
-`;
-
-export let name = "At the Corners";
-
-export function Example() {
+function Example() {
   return (
     <Fragment>
       <GlobalStyle />
@@ -52,6 +29,26 @@ export function Example() {
     </Fragment>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };
+
+////////////////////////////////////////////////////////////////////////////////
+
+const GlobalStyle = createGlobalStyle`
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  #root {
+    position: relative;
+    height: 100%;
+  }
+`;
 
 function MyMenuButton({ ...props }) {
   return (

@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from "react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import {
   Combobox,
   ComboboxInput,
@@ -7,13 +9,22 @@ import {
   ComboboxPopover
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
-import { useThrottle } from "./use-throttle";
-import cities from "./cities";
-import "@reach/combobox/styles.css";
+import { useThrottle } from "../examples/use-throttle";
+import cities from "../examples/cities";
 
-export let name = "Basic (TS)";
+describe("rendering", () => {
+  it("should match the snapshot", () => {
+    let { asFragment, getByTestId, getByRole } = render(<BasicCombobox />);
+    let input = getByTestId("input");
+    expect(asFragment()).toMatchSnapshot();
+    userEvent.type(input, "e");
+    expect(asFragment()).toMatchSnapshot();
+    expect(getByRole("combobox")).toHaveAttribute("aria-expanded", "true");
+  });
+});
 
-export function Example() {
+////////////////////////////////////////////////////////////////////////////////
+function BasicCombobox() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
@@ -25,11 +36,15 @@ export function Example() {
     <div>
       <h2>Clientside Search</h2>
       <Combobox id="holy-smokes">
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+        <ComboboxInput
+          data-testid="input"
+          name="awesome"
+          onChange={handleChange}
+        />
         {results && (
-          <ComboboxPopover style={popupStyle}>
+          <ComboboxPopover portal={false}>
             <p>
-              <button>Hi</button>
+              <button>Test focus</button>
             </p>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
@@ -59,14 +74,3 @@ function useCityMatch(term: string) {
     [throttledTerm]
   );
 }
-
-const inputStyle = {
-  width: 400,
-  fontSize: "100%",
-  padding: "0.33rem"
-};
-
-const popupStyle = {
-  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none"
-};

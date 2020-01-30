@@ -1,25 +1,17 @@
-import React from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
-
 import LoremIpsum from "./LoremIpsum.js";
 
-export let name = "Basic";
+let name = "Basic";
 
-const lipsum = new LoremIpsum();
-const initialState = {
-  messages: [],
-  messageCount: 0,
-  bestFriendIsOnline: false
-};
-
-export let Example = () => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+function Example() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
-  const interval = React.useRef(null);
+  const interval = useRef(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     interval.current = setInterval(() => {
       dispatch({ type: "TOGGLE_BEST_FRIEND" });
     }, getRandomInt(6000, 10000));
@@ -72,6 +64,19 @@ export let Example = () => {
       </div>
     </div>
   );
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Alert" };
+
+////////////////////////////////////////////////////////////////////////////////
+
+const lipsum = new LoremIpsum();
+const initialState = {
+  messages: [],
+  messageCount: 0,
+  bestFriendIsOnline: false
 };
 
 function reducer(state = {}, action) {
@@ -98,15 +103,15 @@ function reducer(state = {}, action) {
 }
 
 function useMessageTimeout(messages, callback, time = 5000) {
-  const timeouts = React.useRef([]);
+  const timeouts = useRef([]);
   const lastMessageCount = usePrevious(messages.length);
-  React.useEffect(() => {
+  useEffect(() => {
     if (messages.length && lastMessageCount < messages.length) {
       timeouts.current.push(window.setTimeout(callback, time));
     }
   }, [messages, lastMessageCount, callback, time]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const allTimeouts = timeouts.current;
     return () => {
       allTimeouts.forEach(window.clearTimeout);

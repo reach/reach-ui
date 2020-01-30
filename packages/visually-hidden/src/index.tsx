@@ -44,6 +44,8 @@ const VisuallyHidden = forwardRef<
   );
 });
 
-VisuallyHidden.displayName = "VisuallyHidden";
+if (__DEV__) {
+  VisuallyHidden.displayName = "VisuallyHidden";
+}
 
 export default VisuallyHidden;

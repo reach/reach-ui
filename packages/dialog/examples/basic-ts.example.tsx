@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
-export let name = "Basic (TS)";
+let name = "Basic (TS)";
 
-export let Example = () => {
+function Example() {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
@@ -19,4 +19,8 @@ export let Example = () => {
       </Dialog>
     </div>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Dialog" };

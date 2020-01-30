@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Rect from "@reach/rect";
 
-export let name = "Pin element to another";
+let name = "Pin element to another";
 
-export function Example() {
+function Example() {
   const [pin, setPin] = useState(true);
   return (
     <div>
@@ -55,3 +55,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Rect" };

@@ -3,12 +3,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@reach/accordion": ["packages/accordion/src"],
       "@reach/alert": ["packages/alert/src"],
       "@reach/alert-dialog": ["packages/alert-dialog/src"],
       "@reach/auto-id": ["packages/auto-id/src"],
+      "@reach/checkbox": ["packages/checkbox/src"],
       "@reach/combobox": ["packages/combobox/src"],
       "@reach/component-component": ["packages/component-component/src"],
       "@reach/dialog": ["packages/dialog/src"],
+      "@reach/disclosure": ["packages/disclosure/src"],
       "@reach/menu-button": ["packages/menu-button/src"],
       "@reach/popover": ["packages/popover/src"],
       "@reach/portal": ["packages/portal/src"],

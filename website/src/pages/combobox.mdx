@@ -146,14 +146,20 @@ There is nothing special about managing state for a combobox, it's like managing
           />
           {results && (
             <ComboboxPopover className="shadow-popup">
-              <ComboboxList aria-label="Cities">
-                {results.slice(0, 10).map((result, index) => (
-                  <ComboboxOption
-                    key={index}
-                    value={`${result.city}, ${result.state}`}
-                  />
-                ))}
-              </ComboboxList>
+              {results.length > 0 ? (
+                <ComboboxList aria-label="Cities">
+                  {results.slice(0, 10).map((result, index) => (
+                    <ComboboxOption
+                      key={index}
+                      value={`${result.city}, ${result.state}`}
+                    />
+                  ))}
+                </ComboboxList>
+              ) : (
+                <span style={{ display: "block", margin: 8 }}>
+                  No results found
+                </span>
+              )}
             </ComboboxPopover>
           )}
         </Combobox>
@@ -199,14 +205,20 @@ This is the same demo as above, except this time we're going to a server to get 
           onChange={handleSearchTermChange}
           aria-label="Cities"
         />
-        {cities.length > 0 && (
+        {cities && (
           <ComboboxPopover className="shadow-popup">
-            <ComboboxList>
-              {cities.map(city => {
-                const str = `${city.city}, ${city.state}`;
-                return <ComboboxOption key={str} value={str} />;
-              })}
-            </ComboboxList>
+            {cities.length > 0 ? (
+              <ComboboxList>
+                {cities.map(city => {
+                  const str = `${city.city}, ${city.state}`;
+                  return <ComboboxOption key={str} value={str} />;
+                })}
+              </ComboboxList>
+            ) : (
+              <span style={{ display: "block", margin: 8 }}>
+                No results found
+              </span>
+            )}
           </ComboboxPopover>
         )}
       </Combobox>
@@ -432,22 +444,22 @@ Parent component that sets up the proper aria roles and context for the rest of 
 
 #### Combobox Props
 
-| Prop                                 | Type |
-| ------------------------------------ | ---- |
-| [openOnFocus](#combobox-openonfocus) | bool |
-| [onSelect](#combobox-onselect)       | func |
+| Prop                                   | Type      | Required |
+| -------------------------------------- | --------- | -------- |
+| [`openOnFocus`](#combobox-openonfocus) | `boolean` | false    |
+| [`onSelect`](#combobox-onselect)       | `func`    | false    |
 
-##### Combobox openOnFocus
+##### Combobox `openOnFocus`
 
 ```jsx
 <Combobox openOnFocus />
 ```
 
-Defaults to false.
+Defaults to `false`.
 
 If true, the popover opens when focus is on the text box.
 
-##### Combobox onSelect
+##### Combobox `onSelect`
 
 Called with the selection value when the user makes a selection from the list.
 
@@ -461,28 +473,28 @@ Wraps an `<input/>` with a couple extra props that work with the combobox.
 
 #### ComboboxInput Props
 
-| Prop                                          | Type | Default |
-| --------------------------------------------- | ---- | ------- |
-| [selectOnClick](#comboboxinput-selectonclick) | bool |         |
-| [autocomplete](#comboboxinput-autocomplete)   | bool | true    |
+| Prop                                          | Type      | Required |
+| --------------------------------------------- | --------- | -------- |
+| [selectOnClick](#comboboxinput-selectonclick) | `boolean` | false    |
+| [autocomplete](#comboboxinput-autocomplete)   | `boolean` | false    |
 
-##### ComboboxInput selectOnClick
+##### ComboboxInput `selectOnClick`
 
 ```jsx
 <ComboboxInput selectOnClick />
 ```
 
-Defaults to false.
+Defaults to `false`.
 
 If true, when the user clicks inside the text box the current value will be selected. Use this if the user is likely to delete all the text anyway (like the URL bar in browsers).
 
-However, if the user is likely to want to tweak the value, leave this false, like a google search--the user is likely wanting to edit their search, not replace it completely.
+However, if the user is likely to want to tweak the value, leave this `false`, like a google search--the user is likely wanting to edit their search, not replace it completely.
 
-##### ComboboxInput autocomplete
+##### ComboboxInput `autocomplete`
 
-Defaults to true.
+Defaults to `true`.
 
-Determines if the value in the input changes or not as the user navigates with the keyboard. If true, the value changes, if false the value doesn't change.
+Determines if the value in the input changes or not as the user navigates with the keyboard. If `true`, the value changes, if `false` the value doesn't change.
 
 Set this to false when you don't really need the value from the input but want to populate some other state (like the recipient selector in Gmail). But if your input is more like a normal `<input type="text"/>`, then leave the `true` default.
 
@@ -496,13 +508,15 @@ Contains the popup that renders the list. Because some UI needs to render more t
 
 #### ComboboxPopover Props
 
-| Prop                              | Type | Default |
-| --------------------------------- | ---- | ------- |
-| [portal](#comboboxpopover-portal) | bool | true    |
+| Prop                                | Type      | Required |
+| ----------------------------------- | --------- | -------- |
+| [`portal`](#comboboxpopover-portal) | `boolean` | false    |
 
-##### ComboboxPopover portal
+##### ComboboxPopover `portal`
 
 If you pass `<ComboboxPopover portal={false} />` the popover will not render inside of a portal, but in the same order as the React tree. This is mostly useful for styling the entire component together, like the pink focus outline in the example earlier in this page.
+
+Defaults to `true`.
 
 ### ComboboxList
 
@@ -510,17 +524,17 @@ Contains the `ComboboxOption` elements and sets up the proper aria attributes fo
 
 #### ComboboxList Props
 
-| Prop                                               | Type |
-| -------------------------------------------------- | ---- |
-| [persistSelection](#comboboxlist-persistselection) | bool |
+| Prop                                                 | Type      |
+| ---------------------------------------------------- | --------- |
+| [`persistSelection`](#comboboxlist-persistselection) | `boolean` |
 
-##### ComboboxList persistSelection
+##### ComboboxList `persistSelection`
 
 ```jsx
 <ComboboxList persistSelection />
 ```
 
-Defaults to false. When true and the list is opened, if an option's value matches the value in the input, it will automatically be highlighted and be the starting point for any keyboard navigation of the list.
+Defaults to `false`. When `true` and the list is opened, if an option's value matches the value in the input, it will automatically be highlighted and be the starting point for any keyboard navigation of the list.
 
 This allows you to treat a Combobox more like a `<select>` than an `<input/>`, but be mindful that the user is still able to put any arbitrary value into the input, so if the only valid values for the input are from the list, your app will need to do that validation on blur or submit of the form.
 
@@ -530,12 +544,12 @@ An option that is suggested to the user as they interact with the combobox.
 
 #### ComboboxOption Props
 
-| Prop                                 | Type   |
-| ------------------------------------ | ------ |
-| [value](#comboboxoption-value)       | string |
-| [children](#comboboxoption-children) | node   |
+| Prop                                   | Type   |
+| -------------------------------------- | ------ |
+| [`value`](#comboboxoption-value)       | string |
+| [`children`](#comboboxoption-children) | node   |
 
-##### ComboboxOption value
+##### ComboboxOption `value`
 
 The value to match against when suggesting.
 
@@ -543,7 +557,7 @@ The value to match against when suggesting.
 <ComboboxOption value="Salt Lake City, Utah" />
 ```
 
-##### ComboboxOption children
+##### ComboboxOption `children`
 
 Optional. If omitted, the `value` will be used as the children like this:
 

@@ -3,21 +3,9 @@ import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
 
-export let name = "Basic (TS)";
+let name = "Basic (TS)";
 
-type ExState = {
-  messages: string[];
-  messageCount: number;
-  bestFriendIsOnline: boolean;
-};
-
-const initialState: ExState = {
-  messages: [],
-  messageCount: 0,
-  bestFriendIsOnline: false
-};
-
-export let Example = () => {
+function Example() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
   const interval = React.useRef<any>(null);
@@ -74,6 +62,24 @@ export let Example = () => {
       </div>
     </div>
   );
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Alert" };
+
+////////////////////////////////////////////////////////////////////////////////
+
+type ExState = {
+  messages: string[];
+  messageCount: number;
+  bestFriendIsOnline: boolean;
+};
+
+const initialState: ExState = {
+  messages: [],
+  messageCount: 0,
+  bestFriendIsOnline: false
 };
 
 function reducer(state: ExState, action: any): ExState {

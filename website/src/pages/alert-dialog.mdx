@@ -101,19 +101,19 @@ High-level component to render an alert dialog.
 
 #### AlertDialog Props
 
-| Prop                                                    | Type   |
-| ------------------------------------------------------- | ------ |
-| [Dialog props](#alertdialog-dialog-props)               | spread |
-| [isOpen](#alertdialog-isopen)                           | bool   |
-| [onDismiss](#alertdialog-ondismiss)                     | func   |
-| [leastDestructiveRef](#alertdialog-leastdestructiveref) | func   |
-| [children](#dialog-element-props)                       | node   |
+| Prop                                                      | Required | Type   |
+| --------------------------------------------------------- | -------- | ------ |
+| [`Dialog` props](#alertdialog-dialog-props)               |          |        |
+| [`isOpen`](#alertdialog-isopen)                           | false    | `bool` |
+| [`onDismiss`](#alertdialog-ondismiss)                     | false    | `func` |
+| [`leastDestructiveRef`](#alertdialog-leastdestructiveref) | false    | `func` |
+| [`children`](#dialog-element-props)                       | true     | `node` |
 
 ##### AlertDialog Dialog props
 
-_Type_: `spread`
-
 Any props not listed above will be spread onto the underlying `Dialog` element, which in turn is spread onto the underlying `div[data-reach-dialog-content]`.
+
+See [documentation for `Dialog` props](/dialog#dialog-props) for more information.
 
 ```jsx
 <AlertDialog style={{ color: "red" }}>
@@ -123,11 +123,11 @@ Any props not listed above will be spread onto the underlying `Dialog` element, 
 </AlertDialog>
 ```
 
-##### AlertDialog isOpen
+##### AlertDialog `isOpen`
 
-_Type_: `bool` default: `true`
+`isOpen?: boolean`
 
-Controls whether the dialog is open or not.
+Controls whether the dialog is open or not. Defaults to `true`.
 
 ```jsx
 <AlertDialog isOpen={true}>
@@ -153,9 +153,9 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
 
 You should probably do this when your dialog contains a lot of elements. It's also useful for transition animations.
 
-##### AlertDialog onDismiss
+##### AlertDialog `onDismiss`
 
-_Type_: `func: (event) => void`
+`onDismiss?: (event?: React.SyntheticEvent) => void;`
 
 When the user clicks outside the modal or hits the escape key, this function will be called. If you want the modal to close, you’ll need to set state.
 
@@ -204,9 +204,9 @@ function Example(props) {
 }
 ```
 
-##### AlertDialog leastDestructiveRef
+##### AlertDialog `leastDestructiveRef`
 
-_Type_: `node`
+`leastDestructiveRef?: React.RefObject<HTMLElement>;`
 
 To prevent accidental data loss, an alert dialog should focus the least destructive action button when it opens.
 
@@ -247,9 +247,9 @@ function Example(props) {
 }
 ```
 
-##### AlertDialog children
+##### AlertDialog `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Accepts any renderable content but should generally be restricted to `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other content might not be announced to the user by the screen reader.
 
@@ -285,15 +285,13 @@ Use the following CSS to target the label:
 
 #### AlertDialogLabel Props
 
-| Prop                                             | Type   |
-| ------------------------------------------------ | ------ |
-| [element props](#alertdialoglabel-element-props) | spread |
+| Prop                                       |
+| ------------------------------------------ |
+| [`div` props](#alertdialoglabel-div-props) |
 
-##### AlertDialogLabel element props
+##### AlertDialogLabel `div` props
 
-_Type_: `spread`
-
-All props are spread to an underlying `div`.
+All props are spread to an underlying `div` element.
 
 ```jsx
 <AlertDialogLabel className="alert-label" />
@@ -316,15 +314,13 @@ Use the following CSS to target the description:
 
 #### AlertDialogDescription Props
 
-| Prop                                                   | Type   |
-| ------------------------------------------------------ | ------ |
-| [element props](#alertdialogdescription-element-props) | spread |
+| Prop                                             |
+| ------------------------------------------------ |
+| [`div` props](#alertdialogdescription-div-props) |
 
-##### AlertDialogDescription element props
+##### AlertDialogDescription `div` props
 
-_Type_: `spread`
-
-All props are spread to an underlying `div`.
+All props are spread to an underlying `div` element.
 
 ```jsx
 <AlertDialogDescription className="alert-description" />
@@ -390,45 +386,45 @@ Use the following CSS to target the overlay:
 
 #### AlertDialogOverlay Props
 
-| Prop                                                           | Type   |
-| -------------------------------------------------------------- | ------ |
-| [DialogOverlay props](#alertdialogoverlay-dialogoverlay-props) | spread |
-| [isOpen](#alertdialogoverlay-isopen)                           | bool   |
-| [onDismiss](#alertdialogoverlay-ondismiss)                     | func   |
-| [leastDestructiveRef](#alertdialogoverlay-leastdestructiveref) | ref    |
-| [children](#alertdialogoverlay-children)                       | node   |
+| Prop                                                             | Required | Type |
+| ---------------------------------------------------------------- | -------- | ---- |
+| [`DialogOverlay` props](#alertdialogoverlay-dialogoverlay-props) |          |      |
+| [`isOpen`](#alertdialogoverlay-isopen)                           | false    | bool |
+| [`onDismiss`](#alertdialogoverlay-ondismiss)                     | false    | func |
+| [`leastDestructiveRef`](#alertdialogoverlay-leastdestructiveref) | false    | ref  |
+| [`children`](#alertdialogoverlay-children)                       | true     | node |
 
-##### AlertDialogOverlay element props
+##### AlertDialogOverlay `DialogOverlay` props
 
-_Type_: `spread`
+Any props not listed above will be spread onto the underlying `DialogOverlay`, and in turn spread onto the underlying `div` element.
 
-Any props not listed above will be spread onto the underlying `DialogOverlay`, and in turn spread onto the underlying `div`.
+See [documentation for `DialogOverlay` props](/dialog#dialogoverlay-props) for more information.
 
 ```jsx
 <AlertDialogOverlay className="light-modal" />
 ```
 
-##### AlertDialogOverlay isOpen
+##### AlertDialogOverlay `isOpen`
 
-_Type_: `bool`
+`isOpen?: boolean`
 
-Same as [AlertDialog `isOpen`](#alertdialog-isopen)
+Same as [`AlertDialog` `isOpen`](#alertdialog-isopen). Defaults to `true`.
 
-##### AlertDialogOverlay onDismiss
+##### AlertDialogOverlay `onDismiss`
 
-_Type_: `func`: (event) => void
+`onDismiss?: (event?: React.SyntheticEvent) => void`
 
-Same as [AlertDialog `onDismiss`](#alertdialog-ondismiss)
+Same as [`AlertDialog` `onDismiss`](#alertdialog-ondismiss)
 
-##### AlertDialogOverlay leastDestructiveRef
+##### AlertDialogOverlay `leastDestructiveRef`
 
-_Type_: `ref`
+`leastDestructiveRef?: React.RefObject<HTMLElement>`
 
-Same as [AlertDialog `leastDestructiveRef`](#alertdialog-leastdestructiveref)
+Same as [`AlertDialog` `leastDestructiveRef`](#alertdialog-leastdestructiveref)
 
-##### AlertDialogOverlay children
+##### AlertDialogOverlay `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Should be an `AlertDialogContent`.
 
@@ -465,23 +461,23 @@ Use the following CSS to target the content:
 
 #### AlertDialogContent Props
 
-| Prop                                                           | Type   |
-| -------------------------------------------------------------- | ------ |
-| [DialogContent props](#alertdialogcontent-dialogcontent-props) | spread |
-| [children](#alertdialogcontent-element-props)                  | node   |
+| Prop                                                             | Type |
+| ---------------------------------------------------------------- | ---- |
+| [`DialogContent` props](#alertdialogcontent-dialogcontent-props) |      |
+| [`children`](#alertdialogcontent-element-props)                  | node |
 
-##### AlertDialogContent DialogContent props
-
-_Type_: `spread`
+##### AlertDialogContent `DialogContent` props
 
 Any props not listed above will be spread onto the underlying `DialogContent` element, and then again onto the underlying `div`.
+
+See [documentation for `DialogContent` props](/dialog#dialogcontent-props) for more information.
 
 ```jsx
 <AlertDialogContent className="nice-border" />
 ```
 
-##### AlertDialogContent children
+##### AlertDialogContent `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
-Same as [AlertDialog `children`](#alertdialog-children)
+Same as [`AlertDialog` `children`](#alertdialog-children)

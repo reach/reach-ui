@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from "react";
-// import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
 import { MDXProvider } from "@mdx-js/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel
+} from "@reach/accordion";
 import Alert from "@reach/alert";
 import {
   AlertDialog,
@@ -9,7 +14,19 @@ import {
   AlertDialogOverlay,
   AlertDialogContent
 } from "@reach/alert-dialog";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel
+} from "@reach/disclosure";
 import { useId } from "@reach/auto-id";
+import {
+  CustomCheckbox,
+  CustomCheckboxContainer,
+  CustomCheckboxInput,
+  MixedCheckbox,
+  useMixedCheckbox
+} from "@reach/checkbox";
 import {
   Combobox,
   ComboboxInput,
@@ -77,6 +94,7 @@ function MyPageLayout({ children }) {
       focusNode.focus();
     }
     // I dunno, I just made it global on window, whatever...
+    // eslint-disable-next-line no-unused-expressions
     import("./cities.js");
   }, []);
 
@@ -91,56 +109,68 @@ function MyPageLayout({ children }) {
                 theme={{ plain: {}, styles: [] }}
                 scope={{
                   ...React,
-                  animated,
-                  GatsbyLink,
-                  Component,
-                  Rect,
-                  useRect,
-                  WindowSize,
-                  useWindowSize,
-                  Portal,
-                  Menu,
-                  MenuList,
-                  MenuButton,
-                  MenuItem,
-                  MenuItems,
-                  MenuPopover,
-                  MenuLink,
-                  VisuallyHidden,
-                  Dialog,
-                  DialogOverlay,
-                  DialogContent,
-                  useTransition,
-                  Phased,
+                  Accordion,
+                  AccordionButton,
+                  AccordionItem,
+                  AccordionPanel,
                   Alert,
                   AlertDialog,
+                  AlertDialogContent,
                   AlertDialogDescription,
                   AlertDialogLabel,
                   AlertDialogOverlay,
-                  AlertDialogContent,
-                  Tabs,
-                  TabList,
-                  Tab,
-                  TabPanels,
-                  TabPanel,
-                  Slider,
-                  SliderInput,
-                  SliderTrack,
-                  SliderTrackHighlight,
-                  SliderHandle,
-                  SliderMarker,
-                  useId,
-                  Tooltip,
-                  TooltipPopup,
-                  useTooltip,
+                  animated,
                   Combobox,
                   ComboboxInput,
-                  ComboboxPopover,
                   ComboboxList,
                   ComboboxOption,
                   ComboboxOptionText,
+                  ComboboxPopover,
+                  Component,
+                  CustomCheckbox,
+                  CustomCheckboxContainer,
+                  CustomCheckboxInput,
+                  Dialog,
+                  DialogContent,
+                  DialogOverlay,
+                  Disclosure,
+                  DisclosureButton,
+                  DisclosurePanel,
+                  GatsbyLink,
+                  matchSorter,
+                  Menu,
+                  MenuButton,
+                  MenuItem,
+                  MenuItems,
+                  MenuLink,
+                  MenuList,
+                  MenuPopover,
+                  MixedCheckbox,
+                  Phased,
+                  Portal,
+                  Rect,
+                  Slider,
+                  SliderHandle,
+                  SliderInput,
+                  SliderMarker,
+                  SliderTrack,
+                  SliderTrackHighlight,
+                  Tab,
+                  TabList,
+                  TabPanel,
+                  TabPanels,
+                  Tabs,
+                  Tooltip,
+                  TooltipPopup,
+                  useId,
+                  useMixedCheckbox,
+                  useRect,
                   useThrottle,
-                  matchSorter
+                  useTooltip,
+                  useTransition,
+                  useWindowSize,
+                  VisuallyHidden,
+                  WindowSize
                 }}
               />
             );

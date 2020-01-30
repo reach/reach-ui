@@ -16,9 +16,3 @@ describe("rendering", () => {
     expect(wrapper.toJSON()).toMatchSnapshot();
   });
 });
-
-describe.skip("refs", () => {});
-
-describe.skip("didMount", () => {});
-
-describe.skip("willUnmount", () => {});

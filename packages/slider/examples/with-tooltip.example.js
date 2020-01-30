@@ -10,9 +10,9 @@ import {
 import "@reach/tooltip/styles.css";
 import "@reach/slider/styles.css";
 
-export const name = "With Tooltip";
+let name = "With Tooltip";
 
-export function Example() {
+function Example() {
   const handleRef = useRef();
   const [trigger, tooltip] = useTooltip();
   const centered = (triggerRect, tooltipRect) => {
@@ -59,3 +59,7 @@ export function Example() {
     </SliderInput>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Slider" };

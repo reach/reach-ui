@@ -4,12 +4,12 @@ import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { useTransition, animated } from "react-spring/web.cjs";
 import "@reach/tooltip/styles.css";
 
-export const name = "Animated";
+let name = "Animated";
 
 animated.TooltipPopup = animated(TooltipPopup);
 animated.TooltipContent = animated(TooltipPopup);
 
-export function Example() {
+function Example() {
   return (
     <div>
       <ExampleAnimatedTooltip label="Notifications">
@@ -37,6 +37,10 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tooltip" };
 
 function ExampleAnimatedTooltip({ children, ...rest }) {
   const [trigger, tooltip, isVisible] = useTooltip();

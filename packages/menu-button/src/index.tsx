@@ -7,6 +7,8 @@
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+ *
+ * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
 
 import React, {
@@ -23,6 +25,7 @@ import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
   checkStyles,
+  createDescendantContext,
   createNamedContext,
   Descendant,
   DescendantProvider,
@@ -30,7 +33,6 @@ import {
   makeId,
   noop,
   useDescendant,
-  useDescendantContext,
   useDescendants,
   useForkedRef,
   usePrevious,
@@ -48,6 +50,10 @@ const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
 
+const MenuDescendantContext = createDescendantContext<
+  HTMLElement,
+  DescendantProps
+>("MenuDescendantContext");
 const MenuContext = createNamedContext<IMenuContext>(
   "MenuContext",
   {} as IMenuContext
@@ -94,7 +100,10 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants();
+  let [descendants, setDescendants] = useDescendants<
+    HTMLElement,
+    DescendantProps
+  >();
   let [state, dispatch] = useReducer(reducer, initialState);
   let menuId = useId(id);
 
@@ -111,8 +120,9 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
 
   return (
     <DescendantProvider
-      descendants={descendants}
-      setDescendants={setDescendants}
+      context={MenuDescendantContext}
+      items={descendants}
+      set={setDescendants}
     >
       <MenuContext.Provider value={context}>
         {typeof children === "function"
@@ -136,8 +146,8 @@ export interface MenuProps {
   id?: string;
 }
 
-Menu.displayName = "Menu";
 if (__DEV__) {
+  Menu.displayName = "Menu";
   Menu.propTypes = {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
   };
@@ -230,8 +240,8 @@ export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
 };
 
-MenuButton.displayName = "MenuButton";
 if (__DEV__) {
+  MenuButton.displayName = "MenuButton";
   MenuButton.propTypes = {
     children: PropTypes.node
   };
@@ -244,7 +254,7 @@ if (__DEV__) {
  *
  * MenuItem and MenuLink share most of the same functionality captured here.
  */
-const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
+const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
   function MenuItemImpl(
     {
       as: Comp,
@@ -299,7 +309,11 @@ const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
     let mouseEventStarted = useRef(false);
 
     const index = useDescendant(
-      { element: ownRef.current, key: valueText },
+      {
+        context: MenuDescendantContext,
+        element: ownRef.current,
+        key: valueText
+      },
       indexProp
     );
     let isSelected = index === selectionIndex;
@@ -329,14 +343,15 @@ const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {
-      if (event.key === "Enter" || event.key === " ") {
+      let { key } = event;
+      if (key === "Enter" || key === " ") {
         /*
          * For links, the Enter key will trigger a click by default, but for
          * consistent behavior across menu items we'll trigger a click when the
          * spacebar is pressed.
          */
         if (isLink) {
-          if (event.key === " " && ownRef.current) {
+          if (key === " " && ownRef.current) {
             ownRef.current.click();
           }
         } else {
@@ -382,9 +397,9 @@ const MenuItemImpl = forwardRefWithAs<"div", MenuItemImplProps>(
 
       if (isLink) {
         /*
-         * If a mousedown event was initiated on a menu link followed be a mouseup
-         * event on the same link, we do nothing; a click event will come next and
-         * handle selection. Otherwise, we trigger a click event imperatively.
+         * If a mousedown event was initiated on a menu link followed by a
+         * mouseup event on the same link, we do nothing; a click event will
+         * come next and handle selection. Otherwise, we trigger a click event.
          */
         if (mouseEventStarted.current) {
           mouseEventStarted.current = false;
@@ -492,7 +507,7 @@ export type MenuItemImplProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
  */
-export const MenuItem = forwardRefWithAs<"div", MenuItemProps>(
+export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
   function MenuItem({ as = "div", ...props }, forwardedRef) {
     return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
   }
@@ -503,8 +518,8 @@ export const MenuItem = forwardRefWithAs<"div", MenuItemProps>(
  */
 export type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
 
-MenuItem.displayName = "MenuItem";
 if (__DEV__) {
+  MenuItem.displayName = "MenuItem";
   MenuItem.propTypes = {
     as: PropTypes.any,
     onSelect: PropTypes.func.isRequired
@@ -530,7 +545,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       menuRef,
       state: { isOpen, buttonId, selectionIndex, typeaheadQuery }
     } = useMenuContext();
-    const { descendants: menuItems } = useDescendantContext<HTMLElement>();
+    const { descendants: menuItems } = useContext(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
     useEffect(() => {
@@ -686,8 +701,8 @@ export type MenuItemsProps = {
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-MenuItems.displayName = "MenuItems";
 if (__DEV__) {
+  MenuItems.displayName = "MenuItems";
   MenuItems.propTypes = {
     children: PropTypes.node
   };
@@ -707,8 +722,8 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink
  */
 export const MenuLink = forwardRefWithAs<
-  "a",
-  MenuLinkProps & { component?: any }
+  MenuLinkProps & { component?: any },
+  "a"
 >(function MenuLink({ as = "a", component, onSelect, ...props }, forwardedRef) {
   if (component) {
     console.warn(
@@ -738,8 +753,8 @@ export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?: () => any;
 };
 
-MenuLink.displayName = "MenuLink";
 if (__DEV__) {
+  MenuLink.displayName = "MenuLink";
   MenuLink.propTypes = {
     as: PropTypes.any,
     component: PropTypes.any
@@ -778,8 +793,8 @@ export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
 };
 
-MenuList.displayName = "MenuList";
 if (__DEV__) {
+  MenuList.displayName = "MenuList";
   MenuList.propTypes = {
     children: PropTypes.node.isRequired
   };
@@ -798,7 +813,7 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
  */
 export const MenuPopover = forwardRef<any, MenuPopoverProps>(
-  function MenuPopover({ children, onBlur, style, ...props }, forwardedRef) {
+  function MenuPopover({ children, onBlur, ...props }, forwardedRef) {
     const {
       buttonRef,
       dispatch,
@@ -858,8 +873,8 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
   position?: Position;
 };
 
-MenuPopover.displayName = "MenuPopover";
 if (__DEV__) {
+  MenuPopover.displayName = "MenuPopover";
   MenuPopover.propTypes = {
     children: PropTypes.node
   };
@@ -909,12 +924,7 @@ type MenuButtonAction =
   | { type: "SEARCH_FOR_ITEM"; payload: string };
 
 function isRightClick(nativeEvent: MouseEvent) {
-  if ("which" in nativeEvent) {
-    return nativeEvent.which === 3;
-  } else if ("button" in nativeEvent) {
-    return (nativeEvent as any).button === 2;
-  }
-  return false;
+  return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
 function reducer(
@@ -986,6 +996,7 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
+type DescendantProps = { key: string };
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;

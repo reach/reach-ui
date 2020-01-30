@@ -19,6 +19,8 @@ import "@reach/menu-button/styles.css";
 import "@reach/tabs/styles.css";
 import "@reach/tooltip/styles.css";
 import "@reach/combobox/styles.css";
+import "@reach/slider/styles.css";
+import "@reach/accordion/styles.css";
 import "../styles/app.scss";
 
 const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
@@ -215,10 +217,13 @@ function Nav({ media }) {
               <hr aria-hidden />
 
               <NavList>
+                <NavLink to="/accordion">Accordion</NavLink>
                 <NavLink to="/alert">Alert</NavLink>
                 <NavLink to="/alert-dialog">Alert Dialog</NavLink>
+                <NavLink to="/checkbox">Checkbox</NavLink>
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
+                <NavLink to="/disclosure">Disclosure</NavLink>
                 <NavLink to="/menu-button">Menu Button</NavLink>
                 <NavLink to="/portal">Portal</NavLink>
                 <NavLink to="/skip-nav">Skip Nav</NavLink>

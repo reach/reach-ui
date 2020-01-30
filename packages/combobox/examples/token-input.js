@@ -20,80 +20,11 @@ import { useThrottle } from "use-throttle";
 import cities from "./cities";
 import "@reach/combobox/styles.css";
 
-export let name = "Controlled";
+let name = "Controlled";
 
 const Context = createContext();
 
-function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
-  const selectionsRef = useRef([]);
-  const [selectionNavIndex, setSelectionNavIndex] = useState(-1);
-
-  useLayoutEffect(() => {
-    selectionsRef.current = [];
-    return () => (selectionsRef.current = []);
-  });
-
-  const handleKeyDown = event => {
-    if (event.key === "ArrowLeft") {
-      if (selectionNavIndex > 0) {
-        setSelectionNavIndex(selectionNavIndex - 1);
-      } else if (selectionsRef.current.length > 0) {
-        setSelectionNavIndex(selectionsRef.current.length - 1);
-      }
-    }
-  };
-
-  const context = {
-    onRemove,
-    selectionsRef,
-    selectionNavIndex
-  };
-
-  return (
-    <Context.Provider value={context}>
-      <label onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
-    </Context.Provider>
-  );
-}
-
-function ExampleToken({ value, ...props }) {
-  const { selectionsRef } = useContext(Context);
-  // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
-
-  useEffect(() => {
-    selectionsRef.current.push(value);
-  });
-
-  return (
-    <span style={selectionStyle} {...props}>
-      {value}
-    </span>
-  );
-}
-
-function ExampleTokenbox({ onSelect, ...props }) {
-  const handleSelect = () => {};
-  return <Combobox onSelect={wrapEvent(onSelect, handleSelect)} {...props} />;
-}
-
-function ExampleTokenInput({ onKeyDown, ...props }) {
-  const { onRemove, selectionsRef } = useContext(Context);
-  const handleKeyDown = event => {
-    const { value } = event.target;
-    if (
-      event.key === "Backspace" &&
-      value === "" &&
-      selectionsRef.current.length > 0
-    ) {
-      onRemove(selectionsRef.current[selectionsRef.current.length - 1]);
-    }
-  };
-  return (
-    <ComboboxInput onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
-  );
-}
-
-export function Example() {
+function Example() {
   let [term, setTerm] = useState("");
   let [selections, setSelections] = useState([]);
   let results = useCityMatch(term);
@@ -164,6 +95,81 @@ export function Example() {
         )}
       </ExampleTokenbox>
     </div>
+  );
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Combobox" };
+
+////////////////////////////////////////////////////////////////////////////////
+
+function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
+  const selectionsRef = useRef([]);
+  const [selectionNavIndex, setSelectionNavIndex] = useState(-1);
+
+  useLayoutEffect(() => {
+    selectionsRef.current = [];
+    return () => (selectionsRef.current = []);
+  });
+
+  const handleKeyDown = event => {
+    if (event.key === "ArrowLeft") {
+      if (selectionNavIndex > 0) {
+        setSelectionNavIndex(selectionNavIndex - 1);
+      } else if (selectionsRef.current.length > 0) {
+        setSelectionNavIndex(selectionsRef.current.length - 1);
+      }
+    }
+  };
+
+  const context = {
+    onRemove,
+    selectionsRef,
+    selectionNavIndex
+  };
+
+  return (
+    <Context.Provider value={context}>
+      <label onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
+    </Context.Provider>
+  );
+}
+
+function ExampleToken({ value, ...props }) {
+  const { selectionsRef } = useContext(Context);
+  // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
+
+  useEffect(() => {
+    selectionsRef.current.push(value);
+  });
+
+  return (
+    <span style={selectionStyle} {...props}>
+      {value}
+    </span>
+  );
+}
+
+function ExampleTokenbox({ onSelect, ...props }) {
+  const handleSelect = () => {};
+  return <Combobox onSelect={wrapEvent(onSelect, handleSelect)} {...props} />;
+}
+
+function ExampleTokenInput({ onKeyDown, ...props }) {
+  const { onRemove, selectionsRef } = useContext(Context);
+  const handleKeyDown = event => {
+    const { value } = event.target;
+    if (
+      event.key === "Backspace" &&
+      value === "" &&
+      selectionsRef.current.length > 0
+    ) {
+      onRemove(selectionsRef.current[selectionsRef.current.length - 1]);
+    }
+  };
+  return (
+    <ComboboxInput onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
   );
 }
 

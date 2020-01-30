@@ -11,7 +11,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import "@reach/menu-button/styles.css";
 
-export let name = "With React Router Links + Styled Components";
+let name = "With React Router Links + Styled Components";
 
 /*
  * When combining StyledComponents with a Router's Link component, users will
@@ -21,7 +21,7 @@ export let name = "With React Router Links + Styled Components";
  * `styled(MenuLink)` disregards the MenuLink argument.
  */
 
-export function Example() {
+function Example() {
   return (
     <Router>
       <Switch>
@@ -38,6 +38,12 @@ export function Example() {
     </Router>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "MenuButton" };
+
+////////////////////////////////////////////////////////////////////////////////
 
 const StyledItem = styled(MenuItem)`
   &[data-selected] {

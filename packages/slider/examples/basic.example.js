@@ -2,9 +2,9 @@ import React from "react";
 import { Slider, SliderMarker } from "@reach/slider";
 import "@reach/slider/styles.css";
 
-export const name = "Basic";
+let name = "Basic";
 
-export function Example() {
+function Example() {
   return (
     <Slider id="gee-whiz">
       <SliderMarker value={10}>
@@ -16,3 +16,7 @@ export function Example() {
     </Slider>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Slider" };

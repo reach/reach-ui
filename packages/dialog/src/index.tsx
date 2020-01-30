@@ -18,7 +18,7 @@ import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
 
 const overlayPropTypes = {
-  initialFocusRef: (() => {}) as any,
+  initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
   onDismiss: PropTypes.func
 };
@@ -46,8 +46,8 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogProps>(
   }
 );
 
-DialogOverlay.displayName = "DialogOverlay";
 if (__DEV__) {
+  DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
     ...overlayPropTypes,
     isOpen: PropTypes.bool
@@ -128,8 +128,8 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
   }
 );
 
-DialogOverlay.displayName = "DialogOverlay";
 if (__DEV__) {
+  DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
     ...overlayPropTypes
   };
@@ -156,15 +156,15 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent({ onClick, onKeyDown, ...props }, forwardedRef) {
     return (
       <div
+        aria-modal="true"
+        role="dialog"
+        tabIndex={-1}
         {...props}
         ref={forwardedRef}
         data-reach-dialog-content=""
-        aria-modal="true"
         onClick={wrapEvent(onClick, event => {
           event.stopPropagation();
         })}
-        role="dialog"
-        tabIndex={-1}
       />
     );
   }
@@ -182,8 +182,8 @@ export type DialogContentProps = {
   children?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-DialogContent.displayName = "DialogContent";
 if (__DEV__) {
+  DialogContent.displayName = "DialogContent";
   DialogContent.propTypes = {
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType
@@ -255,8 +255,8 @@ export type DialogProps = {
   initialFocusRef?: React.RefObject<any>;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-Dialog.displayName = "Dialog";
 if (__DEV__) {
+  Dialog.displayName = "Dialog";
   Dialog.propTypes = {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,

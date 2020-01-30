@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Component from "@reach/component-component";
 
-export let name = "Lifecycles and Refs";
+let name = "Lifecycles and Refs";
 
-export function Example() {
+function Example() {
   const [position, setPosition] = useState(900);
   return (
     <div>
@@ -54,3 +54,7 @@ export function Example() {
     </div>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "ComponentComponent" };

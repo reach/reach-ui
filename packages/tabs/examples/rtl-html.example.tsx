@@ -2,9 +2,9 @@ import React, { useLayoutEffect, useRef } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-export const name = "RTL with HTML dir attribute (TS)";
+let name = "RTL with HTML dir attribute (TS)";
 
-export function Example() {
+function Example() {
   let ref = useRef<HTMLDivElement | null>(null);
   let rootDir = useRef<any>();
   useLayoutEffect(() => {
@@ -41,3 +41,7 @@ export function Example() {
     </Tabs>
   );
 }
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Tabs" };
