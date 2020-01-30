@@ -18,7 +18,8 @@ import {
   ComponentWithForwardedRef,
   DistributiveOmit,
   PropsFromAs,
-  PropsWithAs
+  PropsWithAs,
+  SingleOrArray
 } from "./types";
 
 /**
@@ -317,7 +318,8 @@ export {
   ComponentWithForwardedRef,
   DistributiveOmit,
   PropsFromAs,
-  PropsWithAs
+  PropsWithAs,
+  SingleOrArray
 };
 
 ////////////////////////////////////////////////////////////////////////////////

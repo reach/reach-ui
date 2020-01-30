@@ -144,7 +144,8 @@
             "onKeyUp"
           ]
         }
-      ]
+      ],
+      "@typescript-eslint/no-namespace": 0
     }
   },
   "eslintIgnore": [
