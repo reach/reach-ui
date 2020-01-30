@@ -719,7 +719,7 @@ export const ComboboxOption: ComponentWithForwardedRef<
 
   let index = useDescendant({
     context: ComboboxDescendantContext,
-    element: ownRef.current,
+    element: ownRef.current!,
     value
   });
 

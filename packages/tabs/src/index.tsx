@@ -464,7 +464,7 @@ export const Tab = forwardRefWithAs<
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
-    element: ownRef.current,
+    element: ownRef.current!,
     context: TabsDescendantsContext
   });
 
@@ -572,7 +572,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     let ownRef = useRef<HTMLElement | null>(null);
 
     let index = useDescendant({
-      element: ownRef.current,
+      element: ownRef.current!,
       context: TabPanelDescendantsContext
     });
     let isSelected = index === selectedIndex;
