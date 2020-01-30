@@ -8,7 +8,7 @@ import {
 } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-export let name = "Grouped with Composed Label";
+let name = "Grouped with Composed Label";
 
 function GroupLabel({ icon, children, ...props }) {
   return (
@@ -18,7 +18,7 @@ function GroupLabel({ icon, children, ...props }) {
   );
 }
 
-export let Example = () => {
+function Example() {
   let [value, setValue] = useState("default");
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
@@ -53,4 +53,8 @@ export let Example = () => {
       </ListboxGroup>
     </Listbox>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Listbox" };

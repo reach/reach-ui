@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { Listbox, ListboxGroup, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-export let name = "Grouped";
+let name = "Grouped";
 
-export let Example = () => {
+function Example() {
   let [value, setValue] = useState("default");
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
@@ -38,4 +38,8 @@ export let Example = () => {
       </ListboxGroup>
     </Listbox>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Listbox" };

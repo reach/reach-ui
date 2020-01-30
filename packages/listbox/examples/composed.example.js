@@ -9,9 +9,9 @@ import {
 } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-export let name = "Composed";
+let name = "Composed";
 
-export let Example = () => {
+function Example() {
   let [value, setValue] = useState("pollo");
   return (
     <ListboxInput value={value} onChange={value => setValue(value)}>
@@ -46,4 +46,8 @@ export let Example = () => {
       </ListboxPopover>
     </ListboxInput>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Listbox" };

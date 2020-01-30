@@ -11,22 +11,29 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox
  */
 import React, {
-  forwardRef,
   Children,
-  useEffect,
-  useLayoutEffect,
-  useRef,
+  forwardRef,
+  useCallback,
   useContext,
+  useEffect,
   useReducer,
-  useState
+  useRef,
+  useState,
+  useMemo
 } from "react";
 import PropTypes from "prop-types";
 import {
-  makeId,
-  wrapEvent,
-  useForkedRef,
+  checkStyles,
+  cloneValidElement,
+  createDescendantContext,
   createNamedContext,
-  cloneValidElement
+  Descendant,
+  DescendantProvider,
+  makeId,
+  useDescendant,
+  useDescendants,
+  useForkedRef,
+  wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
@@ -164,6 +171,9 @@ const isExpanded = (state: State) => expandedStates.includes(state);
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext
 
+const DescendantContext = createDescendantContext<HTMLElement, DescendantProps>(
+  "DescendantContext"
+);
 const ListboxContext = createNamedContext(
   "ListboxContext",
   {} as IListboxContext
@@ -172,6 +182,7 @@ const ListboxGroupContext = createNamedContext(
   "ListboxGroupContext",
   {} as IListboxGroupContext
 );
+const useDescendantContext = () => useContext(DescendantContext);
 const useListboxContext = () => useContext(ListboxContext);
 const useListboxGroupContext = () => useContext(ListboxGroupContext);
 
@@ -199,18 +210,14 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
           role="group"
         >
           {typeof label === "string" ? (
-            <span
-              id={labelId}
-              role="presentation"
-              data-reach-listbox-group-label=""
-            >
+            <span id={labelId} data-reach-listbox-group-label="">
               {label}
             </span>
           ) : label ? (
             cloneValidElement(label, {
               id: labelId,
               "data-reach-listbox-group-label": "",
-              role: "presentation"
+              role: "none"
             })
           ) : null}
           {children}
@@ -269,11 +276,16 @@ type ListboxInputProps = {
   onChange(newValue: ListboxValue): void;
 };
 
-export const ListboxInput = forwardRefWithAs<"div", ListboxInputProps>(
+export const ListboxInput = forwardRefWithAs<ListboxInputProps, "div">(
   function ListboxInput(
     { as: Comp = "div", children, name, onChange, value, ...props },
     forwardedRef
   ) {
+    let [descendants, setDescendants] = useDescendants<
+      HTMLElement,
+      DescendantProps
+    >();
+
     const initialData: Partial<StateData> = {
       onChange,
       /*
@@ -283,14 +295,15 @@ export const ListboxInput = forwardRefWithAs<"div", ListboxInputProps>(
       /*
        * The value the user has navigated to when the list is expanded.
        */
-      navigationSelection: null
+      navigationSelection: null,
+      options: descendants
     };
 
     const [
       state,
       data,
       transition,
-      { buttonRef, inputRef, listRef, mouseMovedRef, optionsRef, popoverRef }
+      { buttonRef, inputRef, listRef, mouseMovedRef, popoverRef }
     ] = useReducerMachine(stateChart, reducer, initialData);
 
     const _id = useId(props.id);
@@ -304,7 +317,10 @@ export const ListboxInput = forwardRefWithAs<"div", ListboxInputProps>(
 
     // Parses our children to find the selected option.
     // See docblock on the function for more deets.
-    const selectedNode = recursivelyFindChildByValue(children, value);
+    const selectedDescendant = useMemo(
+      () => data.options.find(({ value }) => value === data.selection),
+      [data.options, data.selection]
+    );
 
     const context: IListboxContext = {
       buttonId,
@@ -316,26 +332,33 @@ export const ListboxInput = forwardRefWithAs<"div", ListboxInputProps>(
       listboxId,
       listRef,
       mouseMovedRef,
-      optionsRef,
       popoverRef,
-      selectedNode,
+      selectedDescendant,
       state,
       transition
     };
 
+    useEffect(() => checkStyles("listbox"), []);
+
     return (
-      <ListboxContext.Provider value={context}>
-        <Comp
-          ref={ref}
-          {...props}
-          data-reach-listbox=""
-          data-expanded={context.isExpanded}
-          data-value={value}
-        >
-          {children}
-        </Comp>
-        {name && <input type="hidden" name={name} value={value} />}
-      </ListboxContext.Provider>
+      <DescendantProvider
+        context={DescendantContext}
+        items={descendants}
+        set={setDescendants}
+      >
+        <ListboxContext.Provider value={context}>
+          <Comp
+            ref={ref}
+            {...props}
+            data-reach-listbox=""
+            data-expanded={context.isExpanded}
+            data-value={value}
+          >
+            {children}
+          </Comp>
+          {name && <input type="hidden" name={name} value={value} />}
+        </ListboxContext.Provider>
+      </DescendantProvider>
     );
   }
 );
@@ -396,23 +419,15 @@ if (__DEV__) {
 
 type ListboxListProps = {};
 
-export const ListboxList = forwardRefWithAs<"div", ListboxListProps>(
+export const ListboxList = forwardRefWithAs<ListboxListProps, "div">(
   function ListboxList({ as: Comp = "div", children, ...props }, forwardedRef) {
     const {
       data: { selection: value },
       listboxId,
-      listRef,
-      optionsRef
+      listRef
     } = useListboxContext();
 
     const ref = useForkedRef(listRef, forwardedRef);
-
-    useLayoutEffect(() => {
-      optionsRef.current = [];
-      return () => {
-        optionsRef.current = [];
-      };
-    });
 
     return (
       <Comp
@@ -443,7 +458,7 @@ type ListboxOptionProps = {
   valueText?: string;
 };
 
-export const ListboxOption = forwardRefWithAs<"div", ListboxOptionProps>(
+export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "div">(
   function ListboxOption(
     {
       as: Comp = "div",
@@ -467,27 +482,40 @@ export const ListboxOption = forwardRefWithAs<"div", ListboxOptionProps>(
     const {
       data: { selection: inputValue, navigationSelection },
       mouseMovedRef,
-      optionsRef,
       state,
       transition
     } = useListboxContext();
 
     const ownRef = useRef<HTMLElement | null>(null);
-    const ref = useForkedRef(ownRef, forwardedRef);
+    /*
+     * After the ref is mounted to the DOM node, we check to see if we have an
+     * explicit valueText prop before looking for the node's textContent for
+     * typeahead functionality.
+     */
+    let [valueText, setValueText] = useState(valueTextProp || String(value));
+    let setValueTextFromDom = useCallback(
+      node => {
+        if (node) {
+          setValueText(prevState => {
+            if (
+              !valueTextProp &&
+              node.textContent &&
+              prevState !== node.textContent
+            ) {
+              return node.textContent;
+            }
+            return prevState;
+          });
+        }
+      },
+      [valueTextProp]
+    );
+    let ref = useForkedRef(setValueTextFromDom, ownRef, forwardedRef);
 
-    let valueText = value;
-    if (valueTextProp) {
-      valueText = valueTextProp;
-    } else if (typeof children === "string") {
-      valueText = children;
-    } else if (ownRef.current && ownRef.current.innerText) {
-      valueText = ownRef.current.innerText;
-    }
-
-    const isHighlighted = navigationSelection
+    let isHighlighted = navigationSelection
       ? navigationSelection === value
       : false;
-    const isActive = inputValue === value;
+    let isActive = inputValue === value;
 
     function handleMouseEnter() {
       transition(MOUSE_ENTER, { navigationSelection: value });
@@ -523,8 +551,11 @@ export const ListboxOption = forwardRefWithAs<"div", ListboxOptionProps>(
       });
     }
 
-    useEffect(() => {
-      optionsRef.current.push({ value, valueText });
+    useDescendant({
+      context: DescendantContext,
+      element: ownRef.current!,
+      valueText,
+      value
     });
 
     return (
@@ -569,7 +600,7 @@ type ListboxButtonProps = {
   arrow?: string | React.ReactNode;
 };
 
-export const ListboxButton = forwardRefWithAs<"button", ListboxButtonProps>(
+export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
   function ListboxButton(
     {
       as: Comp = "button",
@@ -587,7 +618,7 @@ export const ListboxButton = forwardRefWithAs<"button", ListboxButtonProps>(
       buttonRef,
       buttonId,
       listboxId,
-      selectedNode,
+      selectedDescendant,
       isExpanded
     } = useListboxContext();
 
@@ -603,13 +634,13 @@ export const ListboxButton = forwardRefWithAs<"button", ListboxButtonProps>(
     let inner = null;
     if (children) {
       inner = children;
-    } else if (selectedNode) {
-      if (selectedNode.props && selectedNode.props.children) {
-        inner = selectedNode.props.children;
-      } else if (selectedNode.props && selectedNode.props.valueText) {
-        inner = selectedNode.props.valueText;
-      } else if (selectedNode.props && selectedNode.props.value) {
-        inner = selectedNode.props.value;
+    } else if (selectedDescendant && selectedDescendant.element) {
+      if (selectedDescendant.element.innerHTML) {
+        inner = selectedDescendant.element.innerHTML;
+      } else if (selectedDescendant.element.innerText) {
+        inner = selectedDescendant.element.innerText;
+      } else if (selectedDescendant.valueText) {
+        inner = selectedDescendant.valueText;
       }
     }
 
@@ -650,7 +681,7 @@ type ListboxProps = ListboxInputProps & {
   arrow?: string | React.ReactNode;
 };
 
-export const Listbox = forwardRefWithAs<"div", ListboxProps>(function Listbox(
+export const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
   { arrow = "▼", children, ...props },
   forwardedRef
 ) {
@@ -678,67 +709,18 @@ function findOptionValueFromSearch(opts: any[], string = "") {
   return found ? found.value : null;
 }
 
-/**
- * Parses through all children at the top level to find our active child node
- * based on the given value. We can then stick this node in context without
- * needing to re-render anything. This needs to be recursive because
- * ListboxOption is always nested inside a ListboxList, which is nested inside
- * a ListboxPopover.
- *
- * This works ONLY if no children other than ListboxOption elements have a
- * `value` prop that happens to equal the value of the Listbox (that seems super
- * unlikely and confusing TBH). It will also break if they wrap the option's
- * child node in an abstracted component. If a developer needs either they will
- * need to use the lower level API and explicitly render the ListboxButton.
- *
- * This limits composition, but the tradeoff
- *
- * TODO: Getting rid of this ... hang tight...
- */
-function recursivelyFindChildByValue(children: any, value: any) {
-  const childrenArray = Children.toArray(children);
-  for (let i = 0; i <= childrenArray.length; i++) {
-    let child = childrenArray[i];
-
-    // Optional chaining lol
-    if (child && child.props) {
-      if (child.props.value && child.props.value === value) {
-        return child;
-      }
-      if (child.props.children) {
-        let grandChild: any = recursivelyFindChildByValue(
-          child.props.children,
-          value
-        );
-        if (grandChild) {
-          return grandChild;
-        }
-      }
-    }
-  }
-  return false;
-}
-
 const reducer: Reducer = (data, event) => {
-  const { state } = data;
-  const {
-    buttonRef,
-    listRef,
-    optionsRef: { current: options },
-    mouseMovedRef,
-    userInteractedRef
-  } = event.refs;
+  const { state, options } = data;
+  const { buttonRef, listRef, mouseMovedRef, userInteractedRef } = event.refs;
 
   const { onChange } = data;
   const nextStateData: StateData = { ...data, lastEventType: event.type };
   const hasOptions = Array.isArray(options) && !!options.length;
-  const optionValues = options.map(({ value }) => value);
-
   const index =
     hasOptions && data.navigationSelection
-      ? optionValues.indexOf(data.navigationSelection)
+      ? options.findIndex(({ value }) => value === data.navigationSelection)
       : -1;
-  const atBottom = index === optionValues.length - 1;
+  const atBottom = index === options.length - 1;
   const atTop = index === 0;
   const isNavigating =
     (state === NAVIGATING || state === NAVIGATING_WITH_KEYS) &&
@@ -824,7 +806,7 @@ const reducer: Reducer = (data, event) => {
             ? nextStateData.selection
             : atBottom
             ? nextStateData.navigationSelection
-            : optionValues[(index + 1) % optionValues.length]
+            : options[(index + 1) % options.length].value
       };
     case KEY_DOWN_ARROW_UP:
       userInteractedRef.current = true;
@@ -839,9 +821,7 @@ const reducer: Reducer = (data, event) => {
             ? nextStateData.selection
             : atTop
             ? nextStateData.navigationSelection
-            : optionValues[
-                (index - 1 + optionValues.length) % optionValues.length
-              ]
+            : options[(index - 1 + options.length) % options.length].value
       };
     case KEY_DOWN_HOME:
       userInteractedRef.current = true;
@@ -852,7 +832,7 @@ const reducer: Reducer = (data, event) => {
       return {
         ...nextStateData,
         navigationSelection:
-          state === IDLE ? nextStateData.selection : optionValues[0]
+          state === IDLE ? nextStateData.selection : options[0].value
       };
     case KEY_DOWN_END:
       userInteractedRef.current = true;
@@ -865,7 +845,7 @@ const reducer: Reducer = (data, event) => {
         navigationSelection:
           state === IDLE
             ? nextStateData.selection
-            : optionValues[optionValues.length - 1]
+            : options[options.length - 1].value
       };
     case KEY_DOWN_ENTER:
       userInteractedRef.current = true;
@@ -1119,18 +1099,11 @@ function useReducerMachine(
 
   const userInteractedRef = useRef(false);
 
-  /*
-   * Options ref will be used to store all of the listbox's options as they are
-   * rendered. We initialize options as an empty array to avoid type errors.
-   */
-  const optionsRef = useRef<any[]>([]);
-
   const refs: MachineRefs = {
     buttonRef,
     inputRef,
     listRef,
     mouseMovedRef,
-    optionsRef,
     popoverRef,
     userInteractedRef
   };
@@ -1164,6 +1137,10 @@ function kebabCase(str: string) {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
+type DescendantProps = { valueText: string; value: React.ReactText };
+
+type OptionDescendant = Descendant<HTMLElement, DescendantProps>;
+
 interface IListboxGroupContext {
   label: string | React.ReactNode;
   labelId: string;
@@ -1179,9 +1156,8 @@ interface IListboxContext {
   listboxId: string;
   listRef: ListRef;
   mouseMovedRef: React.MutableRefObject<boolean>;
-  optionsRef: React.MutableRefObject<any[]>;
   popoverRef: PopoverRef;
-  selectedNode: any; // TODO:
+  selectedDescendant: OptionDescendant | undefined;
   state: State;
   transition: Transition;
 }
@@ -1227,6 +1203,7 @@ type StateData = {
   onChange(newValue: ListboxValue): void;
   selection: ListboxValue;
   navigationSelection: ListboxValue | null;
+  options: OptionDescendant[];
   state: State;
   refs?: MachineRefs;
   lastEventType?: MachineEventType;
@@ -1260,7 +1237,6 @@ interface MachineRefs {
   buttonRef: ButtonRef;
   listRef: ListRef;
   inputRef: InputRef;
-  optionsRef: React.MutableRefObject<any[]>;
   popoverRef: PopoverRef;
   mouseMovedRef: React.MutableRefObject<boolean>;
   userInteractedRef: React.MutableRefObject<boolean>;

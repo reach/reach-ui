@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-export let name = "Basic";
+let name = "Basic";
 
-export let Example = () => {
+function Example() {
   let [value, setValue] = useState("default");
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
@@ -25,4 +25,8 @@ export let Example = () => {
       </ListboxOption>
     </Listbox>
   );
-};
+}
+
+Example.story = { name };
+export const Comp = Example;
+export default { title: "Listbox" };
