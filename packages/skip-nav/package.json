@@ -15,7 +15,8 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/utils": "^0.8.0"
+    "@reach/utils": "^0.8.0",
+    "tslib": "1.10.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",
