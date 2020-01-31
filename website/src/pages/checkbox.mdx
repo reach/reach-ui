@@ -329,6 +329,7 @@ function useMixedCheckbox(
     defaultChecked?: boolean;
     disabled?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
   },
   functionOrComponentName: string = "useMixedCheckbox"
 ): [
@@ -336,7 +337,8 @@ function useMixedCheckbox(
     "aria-checked": boolean | "mixed";
     checked: boolean;
     disabled: boolean;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
     type: "checkbox";
   },
   { checked: boolean | "mixed" }
