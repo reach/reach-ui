@@ -268,6 +268,9 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
    */
   initialFocusRef?: React.RefObject<any>;
+  /**
+   * This ref can help you to override the returnFocus of the FocusLock component
+   */
   returnFocusRef?: React.RefObject<any>;
 } & React.HTMLAttributes<HTMLDivElement>;
 
