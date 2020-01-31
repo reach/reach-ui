@@ -10,7 +10,7 @@
     "directory": "packages/accordion"
   },
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist",
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
