@@ -14,7 +14,7 @@
     "test:watch": "cross-env NODE_ENV=test tsdx test packages",
     "test:coverage": "cross-env NODE_ENV=test CI=true tsdx test packages --coverage",
     "build:changed": "lerna run build --since origin/master",
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "ver": "lerna version --no-push",
     "changes": "dotenv lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
@@ -83,7 +83,6 @@
     "styled-components": "^5.0.0",
     "ts-loader": "^6.2.1",
     "tsdx": "^0.12.3",
-    "tslib": "^1.10.0",
     "typescript": "^3.7.5",
     "use-throttle": "^0.0.3"
   },

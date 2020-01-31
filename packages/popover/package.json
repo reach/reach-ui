@@ -18,7 +18,8 @@
     "@reach/portal": "^0.8.0",
     "@reach/rect": "^0.8.0",
     "@reach/utils": "^0.8.0",
-    "tabbable": "^4.0.0"
+    "tabbable": "^4.0.0",
+    "tslib": "1.10.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

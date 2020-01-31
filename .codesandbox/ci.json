@@ -1,5 +1,4 @@
 {
-  "packages": ["packages/*"],
   "buildCommand": "build",
   "sandboxes": ["/.codesandbox/templates/reach-ui"]
 }
