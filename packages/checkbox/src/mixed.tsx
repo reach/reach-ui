@@ -84,7 +84,7 @@ export enum MixedCheckboxEvents {
  * @param context
  */
 function checkToggleAllowed(data: MixedCheckboxData) {
-  return data ? !data.isControlled || !data.disabled : false;
+  return !!(data && !data.isControlled && !data.disabled);
 }
 
 /**
@@ -268,12 +268,13 @@ type MixedCheckboxArgs = {
   defaultChecked?: boolean;
   disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 export type UseMixedCheckboxProps = Required<
   Pick<
     React.InputHTMLAttributes<HTMLInputElement>,
-    "checked" | "disabled" | "onChange" | "type"
+    "checked" | "disabled" | "onChange" | "onClick" | "type"
   >
 > & { "aria-checked": MixedOrBool };
 
@@ -293,8 +294,13 @@ export function useMixedCheckbox(
   args?: MixedCheckboxArgs,
   functionOrComponentName: string = "useMixedCheckbox"
 ): [UseMixedCheckboxProps, { checked: MixedOrBool }] {
-  let { checked: controlledChecked, defaultChecked, disabled, onChange } =
-    args || {};
+  let {
+    checked: controlledChecked,
+    defaultChecked,
+    disabled,
+    onChange,
+    onClick
+  } = args || {};
 
   let isControlled = controlledChecked != null;
 
@@ -319,6 +325,7 @@ export function useMixedCheckbox(
     checked: stateValueToChecked(current.value),
     disabled: !!disabled,
     onChange: wrapEvent(onChange, handleChange),
+    onClick: wrapEvent(onClick, handleClick),
     type: "checkbox"
   };
 
@@ -335,6 +342,25 @@ export function useMixedCheckbox(
      */
     if (!isControlled) {
       send(MixedCheckboxEvents.Toggle);
+    }
+  }
+
+  function handleClick() {
+    /*
+     * A controlled checkbox will have a checked="mixed" prop, but the
+     * underlying input element will receive checked="false" and
+     * aria-checked="mixed". A user click will change the underlying
+     * element's indeterminate property back to false even if the state
+     * doesn't change. This does not trigger a re-render, so our check won't
+     * work in a normal effect. We'll check again on every user click and
+     * update the node imperatively if the state doesn't change.
+     */
+    syncDomNodeWithState();
+  }
+
+  function syncDomNodeWithState() {
+    if (ref.current) {
+      ref.current.indeterminate = current.value === MixedCheckboxStates.Mixed;
     }
   }
 
@@ -355,12 +381,8 @@ export function useMixedCheckbox(
     }
   }, [isControlled, controlledChecked, send]);
 
-  // Prevent flashing before mixed marker is displayed
-  useIsomorphicLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.indeterminate = current.value === MixedCheckboxStates.Mixed;
-    }
-  }, [current.value]);
+  // Prevent flashing before mixed marker is displayed and check on every render
+  useIsomorphicLayoutEffect(syncDomNodeWithState);
 
   useEffect(() => {
     send({
