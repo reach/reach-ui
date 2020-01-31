@@ -64,6 +64,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
     {
       allowPinchZoom,
       initialFocusRef,
+      returnFocusRef,
       onClick,
       onDismiss = noop,
       onMouseDown,
@@ -75,12 +76,20 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
     const mouseDownTarget = useRef<EventTarget | null>(null);
     const overlayNode = useRef<HTMLDivElement | null>(null);
     const ref = useForkedRef(overlayNode, forwardedRef);
+    const willReturnFocus =
+      returnFocusRef && returnFocusRef.current ? false : true;
 
     const activateFocusLock = useCallback(() => {
       if (initialFocusRef && initialFocusRef.current) {
         initialFocusRef.current.focus();
       }
     }, [initialFocusRef]);
+
+    const deactivateFocusLock = useCallback(() => {
+      if (returnFocusRef && returnFocusRef.current) {
+        setTimeout(() => returnFocusRef.current.focus(), 0);
+      }
+    }, [returnFocusRef]);
 
     function handleClick(event: React.MouseEvent) {
       if (mouseDownTarget.current === event.target) {
@@ -107,7 +116,12 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
     );
 
     return (
-      <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
+      <FocusLock
+        autoFocus
+        returnFocus={willReturnFocus}
+        onActivation={activateFocusLock}
+        onDeactivation={deactivateFocusLock}
+      >
         <RemoveScroll allowPinchZoom={allowPinchZoom}>
           <div
             {...props}
@@ -201,12 +215,13 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { isOpen, onDismiss = noop, initialFocusRef, ...props },
+  { isOpen, onDismiss = noop, initialFocusRef, returnFocusRef, ...props },
   forwardedRef
 ) {
   return (
     <DialogOverlay
       initialFocusRef={initialFocusRef}
+      returnFocusRef={returnFocusRef}
       isOpen={isOpen}
       onDismiss={onDismiss}
     >
@@ -253,6 +268,7 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
    */
   initialFocusRef?: React.RefObject<any>;
+  returnFocusRef?: React.RefObject<any>;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 if (__DEV__) {
