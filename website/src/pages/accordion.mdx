@@ -442,33 +442,37 @@ If you need to group interactive elements within an accordion's button, we recom
       <Accordion>
         <AccordionItem>
           <GroupedAccordionHeader>Option 1</GroupedAccordionHeader>
-          <AccordionPanel>
+          <StyledAccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
             eleifend, congue gravida malesuada proin scelerisque luctus est
             convallis.
-          </AccordionPanel>
+          </StyledAccordionPanel>
         </AccordionItem>
         <AccordionItem>
           <GroupedAccordionHeader>Option 2</GroupedAccordionHeader>
-          <AccordionPanel>
+          <StyledAccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
             eleifend, congue gravida malesuada proin scelerisque luctus est
             convallis.
-          </AccordionPanel>
+          </StyledAccordionPanel>
         </AccordionItem>
         <AccordionItem>
           <GroupedAccordionHeader>Option 3</GroupedAccordionHeader>
-          <AccordionPanel>
+          <StyledAccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
             eleifend, congue gravida malesuada proin scelerisque luctus est
             convallis.
-          </AccordionPanel>
+          </StyledAccordionPanel>
         </AccordionItem>
       </Accordion>
     );
+  }
+
+  function StyledAccordionPanel(props) {
+    return <AccordionPanel style={{ padding: 10 }} {...props} />;
   }
 
   function GroupedAccordionHeader({ children }) {
@@ -476,9 +480,10 @@ If you need to group interactive elements within an accordion's button, we recom
       <div
         style={{
           alignItems: "center",
-          background: "darkslategray",
-          border: "4px solid #fff",
-          color: "#fff",
+          background: "#eee",
+          border: "1px solid #888",
+          borderRadius: 3,
+          margin: "9px 0",
           display: "flex",
           justifyContent: "space-between",
           padding: "4px 10px"
@@ -497,13 +502,14 @@ If you need to group interactive elements within an accordion's button, we recom
             flexShrink: 0,
             font: "inherit",
             fontWeight: "bolder",
+            margin: 0,
             padding: "10px 0"
           }}
         >
           {children}
         </AccordionButton>
         <Menu>
-          <MenuButton>
+          <MenuButton style={{ margin: 0 }}>
             <span>Actions</span>
           </MenuButton>
           <MenuList>
