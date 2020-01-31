@@ -202,11 +202,11 @@ export const DisclosureButton = forwardRefWithAs<
 
   return (
     <Comp
-      ref={ref}
-      {...props}
-      onClick={wrapEvent(onClick, handleClick)}
       aria-controls={panelId}
       aria-expanded={open}
+      {...props}
+      ref={ref}
+      onClick={wrapEvent(onClick, handleClick)}
       data-reach-disclosure-trigger=""
       data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
     >

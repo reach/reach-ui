@@ -478,13 +478,13 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
     return (
       <SliderContext.Provider value={ctx}>
         <div
+          aria-disabled={disabled}
+          {...rest}
+          {...dataAttributes}
           ref={ref}
           tabIndex={-1}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
-          aria-disabled={disabled}
-          {...dataAttributes}
-          {...rest}
         >
           {typeof children === "function"
             ? (children as SliderChildrenRender)({
@@ -651,6 +651,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
       onFocus,
       style = {},
       onKeyDown,
+      tabIndex = 0,
       ...props
     },
     forwardedRef
@@ -678,9 +679,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
 
     return (
       <div
-        ref={ref}
         role="slider"
-        tabIndex={disabled ? undefined : 0}
         aria-disabled={disabled}
         aria-valuemin={sliderMin}
         aria-valuetext={valueText}
@@ -688,6 +687,9 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
         aria-valuenow={value}
         aria-valuemax={sliderMax}
         aria-labelledby={ariaLabelledBy}
+        {...props}
+        {...dataAttributes}
+        ref={ref}
         onBlur={wrapEvent(onBlur, () => {
           setHasFocus(false);
         })}
@@ -702,8 +704,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
             : { left: handlePosition }),
           ...style
         }}
-        {...dataAttributes}
-        {...props}
+        tabIndex={disabled ? undefined : tabIndex}
       />
     );
   }

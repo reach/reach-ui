@@ -214,11 +214,11 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
 
     return (
       <button
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
         {...props}
         ref={ref}
         data-reach-menu-button=""
-        aria-expanded={isOpen}
-        aria-haspopup="menu"
         id={buttonId || undefined}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
@@ -460,6 +460,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     return (
       <Comp
+        role="menuitem"
         {...props}
         ref={ref}
         data-reach-menu-item=""
@@ -473,7 +474,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        role="menuitem"
         tabIndex={-1}
       />
     );
@@ -675,12 +675,12 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
 
     return (
       <div
+        aria-labelledby={buttonId || undefined}
+        role="menu"
         {...props}
         ref={ref}
         data-reach-menu-items=""
-        aria-labelledby={buttonId || undefined}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        role="menu"
         tabIndex={-1}
       >
         {children}

@@ -529,12 +529,12 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
 
     return (
       <Comp
+        aria-controls={panelId}
+        aria-expanded={open}
         {...props}
         ref={ref}
         data-reach-accordion-button=""
         {...dataAttributes}
-        aria-controls={panelId}
-        aria-expanded={open}
         disabled={disabled || undefined}
         id={buttonId}
         onClick={wrapEvent(onClick, handleClick)}
@@ -593,11 +593,11 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
       <div
         hidden={!open}
         role="region"
+        aria-labelledby={buttonId}
         {...props}
         ref={forwardedRef}
         data-reach-accordion-panel=""
         {...dataAttributes}
-        aria-labelledby={buttonId}
         id={panelId}
         tabIndex={-1}
       >

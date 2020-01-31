@@ -484,13 +484,13 @@ export const Tab = forwardRefWithAs<
   return (
     <Comp
       role="tab"
+      aria-controls={makeId(tabsId, "panel", index)}
+      aria-disabled={disabled}
+      aria-selected={isSelected}
       {...props}
       ref={ref}
       data-reach-tab=""
       data-disabled={disabled}
-      aria-controls={makeId(tabsId, "panel", index)}
-      aria-disabled={disabled}
-      aria-selected={isSelected}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
@@ -589,10 +589,10 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       <Comp
         hidden={!isSelected}
         role="tabpanel"
+        aria-labelledby={makeId(tabsId, "tab", index)}
         {...props}
         ref={ref}
         data-reach-tab-panel=""
-        aria-labelledby={makeId(tabsId, "tab", index)}
         id={id}
         tabIndex={-1}
       >

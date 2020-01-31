@@ -326,13 +326,13 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       >
         <ComboboxContext.Provider value={context}>
           <Comp
+            aria-haspopup="listbox"
+            aria-owns={listboxId}
+            aria-expanded={context.isVisible}
             {...rest}
             data-reach-combobox=""
             ref={forwardedRef}
             role="combobox"
-            aria-haspopup="listbox"
-            aria-owns={listboxId}
-            aria-expanded={context.isVisible}
           >
             {children}
           </Comp>
@@ -491,6 +491,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     return (
       <Comp
+        aria-autocomplete="both"
+        aria-activedescendant={
+          navigationValue ? String(makeHash(navigationValue)) : undefined
+        }
         {...props}
         data-reach-combobox-input=""
         ref={ref}
@@ -501,10 +505,6 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         onChange={wrapEvent(onChange, handleChange)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         id={listboxId}
-        aria-autocomplete="both"
-        aria-activedescendant={
-          navigationValue ? String(makeHash(navigationValue)) : undefined
-        }
       />
     );
   }
@@ -732,12 +732,12 @@ export const ComboboxOption: ComponentWithForwardedRef<
   return (
     <OptionContext.Provider value={{ value, index }}>
       <li
+        aria-selected={isActive}
         {...props}
         data-reach-combobox-option=""
         ref={ref}
         id={String(makeHash(value))}
         role="option"
-        aria-selected={isActive}
         data-highlighted={isActive ? "" : undefined}
         /*
          * without this the menu will close from `onBlur`, but with it the
@@ -868,14 +868,14 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
 
     return (
       <Comp
-        data-reach-combobox-button=""
         aria-controls={listboxId}
         aria-haspopup="listbox"
         aria-expanded={isVisible}
+        {...props}
+        data-reach-combobox-button=""
         ref={ref}
         onClick={wrapEvent(onClick, handleClick)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        {...props}
       />
     );
   }
