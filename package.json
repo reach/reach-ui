@@ -83,7 +83,6 @@
     "styled-components": "^5.0.0",
     "ts-loader": "^6.2.1",
     "tsdx": "^0.12.3",
-    "tslib": "^1.10.0",
     "typescript": "^3.7.5",
     "use-throttle": "^0.0.3"
   },
