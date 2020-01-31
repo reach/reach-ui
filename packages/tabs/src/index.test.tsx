@@ -1,8 +1,8 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "$test/utils";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
-describe("rendering", () => {
+describe("<Tabs />", () => {
   it("should match the snapshot", () => {
     const { asFragment } = render(<BasicTabs />);
     expect(asFragment()).toMatchSnapshot();

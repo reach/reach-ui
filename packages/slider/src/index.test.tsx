@@ -1,14 +1,14 @@
 import React from "react";
 // import renderer from "react-test-renderer";
 // import { act } from "react-dom/test-utils";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "$test/utils";
 import {
   Slider,
   SliderHandle,
   SliderInput,
   SliderMarker,
   SliderTrack,
-  SliderTrackHighlight
+  SliderTrackHighlight,
   // SLIDER_HANDLE_ALIGN_CENTER,
   // SLIDER_HANDLE_ALIGN_CONTAIN,
   // SLIDER_ORIENTATION_HORIZONTAL,
@@ -18,7 +18,7 @@ import {
 const getCurrentValue = (el: HTMLElement) =>
   Number(el.getAttribute("aria-valuenow"));
 
-describe("rendering", () => {
+describe("<Slider />", () => {
   it("should match the snapshot", () => {
     const { asFragment } = render(<Slider />);
     expect(asFragment()).toMatchSnapshot();

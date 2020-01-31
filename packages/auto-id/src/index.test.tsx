@@ -1,8 +1,8 @@
 import React from "react";
 import { useId } from "./index";
-import { render } from "@testing-library/react";
+import { render } from "$test/utils";
 
-describe("rendering", () => {
+describe("useId()", () => {
   it("should generate an incremented ID value", () => {
     function Comp() {
       const justNull = null;
