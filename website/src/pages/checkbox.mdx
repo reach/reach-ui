@@ -96,6 +96,10 @@ function Example() {
         />
         I am feeling good today
       </label>
+      <label>
+        <MixedCheckbox checked="mixed" />
+        Perma-mixed
+      </label>
       <div style={{ marginTop: 10 }}>
         <button onClick={() => setChecked("mixed")}>
           I'm not sure how I feel!
@@ -191,9 +195,14 @@ function Example() {
   let allCondimentsChecked = Object.keys(favoriteCondiments).every(
     condiment => favoriteCondiments[condiment] === true
   );
+  let someCondimentsChecked = allCondimentsChecked
+    ? false
+    : Object.keys(favoriteCondiments).some(
+        condiment => favoriteCondiments[condiment] === true
+      );
 
   function handleAllCondimentsChange(event) {
-    setToppings(
+    setFavoriteCondiments(
       Object.keys(favoriteCondiments).reduce(
         (state, condiment) => ({
           ...state,
@@ -209,7 +218,13 @@ function Example() {
       <label>
         <MixedCheckbox
           value="condiments"
-          checked={allCondimentsChecked}
+          checked={
+            allCondimentsChecked
+              ? true
+              : someCondimentsChecked
+              ? "mixed"
+              : false
+          }
           onChange={handleAllCondimentsChange}
         />
         {allCondimentsChecked ? "Unselect" : "Select"} all condiments
@@ -227,7 +242,7 @@ function Example() {
                   checked={state}
                   onChange={event => {
                     let { checked, value } = event.target;
-                    setToppings({
+                    setFavoriteCondiments({
                       ...favoriteCondiments,
                       [value]: checked
                     });
@@ -298,7 +313,7 @@ function Example({ disabled = false }) {
       </label>
       <button onClick={() => setChecked("mixed")}>Mix it up</button>
       <hr />
-      Current state is: <pre>{stateData.checked}</pre>
+      Current state is: <pre>{String(stateData.checked)}</pre>
     </div>
   );
 }
