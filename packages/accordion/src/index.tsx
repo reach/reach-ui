@@ -15,7 +15,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import {
   boolOrBoolString,
@@ -29,7 +29,7 @@ import {
   useDescendant,
   useDescendants,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -53,7 +53,7 @@ const useAccordionItemContext = () => useContext(AccordionItemContext);
 
 export enum AccordionStates {
   Open = "open",
-  Collapsed = "collapsed"
+  Collapsed = "collapsed",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         accordionId: id,
         openPanels: isControlled ? controlledIndex! : openPanels,
         onSelectPanel: readOnly ? noop : onSelectPanel,
-        readOnly
+        readOnly,
       }),
       [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
     );
@@ -291,7 +291,7 @@ if (__DEV__) {
     children: PropTypes.node.isRequired,
     defaultIndex: PropTypes.oneOfType([
       PropTypes.number,
-      PropTypes.arrayOf(PropTypes.number)
+      PropTypes.arrayOf(PropTypes.number),
     ]) as any,
     index: (props, name, compName, location, propName) => {
       let val = props[name];
@@ -336,7 +336,7 @@ if (__DEV__) {
     },
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
-    collapsible: PropTypes.bool
+    collapsible: PropTypes.bool,
   };
 }
 
@@ -356,7 +356,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     const buttonRef: ButtonRef = useRef(null);
     const index = useDescendant({
       context: AccordionDescendantContext,
-      element: buttonRef.current
+      element: buttonRef.current,
     });
 
     // We need unique IDs for the panel and button to point to one another
@@ -371,7 +371,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     const dataAttributes = {
       "data-state": open ? AccordionStates.Open : AccordionStates.Collapsed,
       "data-disabled": disabled ? "true" : undefined,
-      "data-read-only": readOnly ? "true" : undefined
+      "data-read-only": readOnly ? "true" : undefined,
     };
 
     const context: IAccordionItemContext = {
@@ -382,7 +382,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       itemId,
       buttonRef,
       panelId,
-      dataAttributes
+      dataAttributes,
     };
 
     return (
@@ -425,7 +425,7 @@ export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
   AccordionItem.propTypes = {
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 }
 
@@ -463,7 +463,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       buttonId,
       buttonRef: ownRef,
       index,
-      panelId
+      panelId,
     } = useAccordionItemContext();
 
     let { descendants } = useContext(AccordionDescendantContext);
@@ -529,12 +529,12 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
 
     return (
       <Comp
+        aria-controls={panelId}
+        aria-expanded={open}
         {...props}
         ref={ref}
         data-reach-accordion-button=""
         {...dataAttributes}
-        aria-controls={panelId}
-        aria-expanded={open}
         disabled={disabled || undefined}
         id={buttonId}
         onClick={wrapEvent(onClick, handleClick)}
@@ -566,7 +566,7 @@ if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
   AccordionButton.propTypes = {
     as: PropTypes.any,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -586,18 +586,18 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
       dataAttributes,
       panelId,
       buttonId,
-      open
+      open,
     } = useAccordionItemContext();
 
     return (
       <div
         hidden={!open}
         role="region"
+        aria-labelledby={buttonId}
         {...props}
         ref={forwardedRef}
         data-reach-accordion-panel=""
         {...dataAttributes}
-        aria-labelledby={buttonId}
         id={panelId}
         tabIndex={-1}
       >
@@ -622,7 +622,7 @@ export type AccordionPanelProps = {
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";
   AccordionPanel.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 

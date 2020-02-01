@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-restricted-globals, eqeqeq,  */
 
 import React, {
   cloneElement,
@@ -9,7 +9,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import {
   As,
@@ -19,7 +19,7 @@ import {
   DistributiveOmit,
   PropsFromAs,
   PropsWithAs,
-  SingleOrArray
+  SingleOrArray,
 } from "./types";
 
 /**
@@ -65,31 +65,31 @@ let checkedPkgs: { [key: string]: boolean } = {};
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
 // @ts-ignore
-let checkStyles = (packageName: string): void => {};
+let checkStyles = (packageName: string): void => void packageName;
 
 if (__DEV__) {
-  checkStyles = (pkg: string) => {
+  checkStyles = (packageName: string) => {
     // only check once per package
-    if (checkedPkgs[pkg]) return;
-    checkedPkgs[pkg] = true;
+    if (checkedPkgs[packageName]) return;
+    checkedPkgs[packageName] = true;
 
     if (
       process.env.NODE_ENV !== "test" &&
       parseInt(
         window
           .getComputedStyle(document.body)
-          .getPropertyValue(`--reach-${pkg}`),
+          .getPropertyValue(`--reach-${packageName}`),
         10
       ) !== 1
     ) {
       console.warn(
-        `@reach/${pkg} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
+        `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
 
-    import "@reach/${pkg}/styles.css";
+    import "@reach/${packageName}/styles.css";
 
   Otherwise you'll need to include them some other way:
 
-    <link rel="stylesheet" type="text/css" href="node_modules/@reach/${pkg}/styles.css" />
+    <link rel="stylesheet" type="text/css" href="node_modules/@reach/${packageName}/styles.css" />
 
   For more information visit https://ui.reach.tech/styling.
   `
@@ -310,6 +310,15 @@ export function forwardRefWithAs<P, T extends As>(
   return React.forwardRef(comp as any) as ComponentWithAs<T, P>;
 }
 
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+export let ponyfillGlobal =
+  typeof window != "undefined" && window.Math == Math
+    ? window
+    : typeof self != "undefined" && self.Math == Math
+    ? self
+    : // eslint-disable-next-line no-new-func
+      Function("return this")();
+
 // Export types
 export {
   As,
@@ -319,7 +328,7 @@ export {
   DistributiveOmit,
   PropsFromAs,
   PropsWithAs,
-  SingleOrArray
+  SingleOrArray,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,6 +336,7 @@ export {
 
 export type Descendant<T, P = {}> = P & {
   element: (T extends HTMLElement ? T : HTMLElement) | null;
+  index: number;
 };
 
 export interface IDescendantContext<T, P> {
@@ -345,7 +355,7 @@ export function createDescendantContext<T, P = {}>(
     descendants: [],
     registerDescendant: noop,
     unregisterDescendant: noop,
-    ...initialValue
+    ...initialValue,
   } as IDescendantContext<T, P>);
 }
 
@@ -377,7 +387,9 @@ export function useDescendant<T, P>(
     context,
     element,
     ...rest
-  }: Descendant<T, P> & { context: React.Context<IDescendantContext<T, P>> },
+  }: Omit<Descendant<T, P>, "index"> & {
+    context: React.Context<IDescendantContext<T, P>>;
+  },
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
@@ -407,7 +419,7 @@ export function DescendantProvider<T, P>({
   context: Ctx,
   children,
   items,
-  set
+  set,
 }: {
   context: React.Context<IDescendantContext<T, P>>;
   children: React.ReactNode;
@@ -422,37 +434,33 @@ export function DescendantProvider<T, P>({
 
       set(items => {
         if (items.find(({ element: _el }) => _el === element) == null) {
-          /*
-           * When registering a descendant, we need to make sure we insert in
-           * into the array in the same order that it appears in the DOM. So as
-           * new descendants are added or maybe some are removed, we always know
-           * that the array is up-to-date and correct.
-           *
-           * So here we look at our registered descendants and see if the new
-           * element we are adding appears earlier than an existing descendant's
-           * DOM node via `node.compareDocumentPosition`. If it does, we insert
-           * the new element at this index. Because `registerDescendant` will be
-           * called in an effect every time the descendants state value changes,
-           * we should be sure that this index is accurate when descendent
-           * elements come or go from our component.
-           */
+          // When registering a descendant, we need to make sure we insert in
+          // into the array in the same order that it appears in the DOM. So as
+          // new descendants are added or maybe some are removed, we always know
+          // that the array is up-to-date and correct.
+          //
+          // So here we look at our registered descendants and see if the new
+          // element we are adding appears earlier than an existing descendant's
+          // DOM node via `node.compareDocumentPosition`. If it does, we insert
+          // the new element at this index. Because `registerDescendant` will be
+          // called in an effect every time the descendants state value changes,
+          // we should be sure that this index is accurate when descendent
+          // elements come or go from our component.
           let index = items.findIndex(({ element: existingElement }) => {
             if (!existingElement || !element) {
               return false;
             }
-            /*
-             * Does this element's DOM node appear before another item in the
-             * array in our DOM tree? If so, return true to grab the index at
-             * this point in the array so we know where to insert the new
-             * element.
-             */
+            // Does this element's DOM node appear before another item in the
+            // array in our DOM tree? If so, return true to grab the index at
+            // this point in the array so we know where to insert the new
+            // element.
             return Boolean(
               existingElement.compareDocumentPosition(element) &
                 Node.DOCUMENT_POSITION_PRECEDING
             );
           });
 
-          let newItem = { element, ...rest } as Descendant<T, P>;
+          let newItem = { element, index, ...rest } as Descendant<T, P>;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -463,11 +471,9 @@ export function DescendantProvider<T, P>({
         return items;
       });
     },
-    /*
-     * setDescendants is a state setter initialized by the useDescendants hook.
-     * We can safely ignore the lint warning here because it will not change
-     * between renders.
-     */
+    // setDescendants is a state setter initialized by the useDescendants hook.
+    // We can safely ignore the lint warning here because it will not change
+    // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -480,26 +486,18 @@ export function DescendantProvider<T, P>({
 
       set(items => items.filter(({ element: _el }) => element !== _el));
     },
-    /*
-     * setDescendants is a state setter initialized by the useDescendants hook.
-     * We can safely ignore the lint warning here because it will not change
-     * between renders.
-     */
+    // setDescendants is a state setter initialized by the useDescendants hook.
+    // We can safely ignore the lint warning here because it will not change
+    // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  // Not sure about this just yet, may bail on this and let components deal
-  /* let focusNodes = descendants
-    .filter(({ disabled }) => !disabled)
-    .map(({ element }) => element); */
-
-  // @ts-ignore
   const value: IDescendantContext<T, P> = useMemo(() => {
     return {
       descendants: items,
       registerDescendant,
-      unregisterDescendant
+      unregisterDescendant,
     };
   }, [items, registerDescendant, unregisterDescendant]);
 

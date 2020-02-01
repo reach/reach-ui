@@ -13,6 +13,7 @@
     "@reach/alert": "latest",
     "@reach/alert-dialog": "latest",
     "@reach/auto-id": "latest",
+    "@reach/checkbox": "latest",
     "@reach/combobox": "latest",
     "@reach/component-component": "latest",
     "@reach/dialog": "latest",

@@ -32,7 +32,7 @@ import React, {
   useRef,
   useState,
   Children,
-  useCallback
+  useCallback,
 } from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -51,7 +51,7 @@ import {
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useUpdateEffect,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
@@ -145,7 +145,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
             if (!isControlled.current) {
               setSelectedIndex(index);
             }
-          }
+          },
     };
   }, [controlledIndex, id, onChange, readOnly, selectedIndex]);
 
@@ -231,7 +231,7 @@ if (__DEV__) {
       }
       return null;
     },
-    defaultIndex: PropTypes.number
+    defaultIndex: PropTypes.number,
   };
 }
 
@@ -253,7 +253,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     onSelectTab,
     onFocusPanel,
     setSelectedIndex,
-    selectedIndex
+    selectedIndex,
   } = useTabsContext();
 
   const { descendants } = useContext(TabsDescendantsContext);
@@ -324,7 +324,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
       first,
       last,
       prev: prev === -1 ? last : prev,
-      next: next === -1 ? first : next
+      next: next === -1 ? first : next,
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
@@ -389,7 +389,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     getFocusIndices,
     isControlled,
     selectedIndex,
-    setSelectedIndex
+    setSelectedIndex,
   ]);
 
   return (
@@ -409,7 +409,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
          * accordingly.
          */
         return cloneValidElement(child, {
-          isSelected: index === selectedIndex
+          isSelected: index === selectedIndex,
         });
       })}
     </Comp>
@@ -434,7 +434,7 @@ if (__DEV__) {
   TabList.displayName = "TabList";
   TabList.propTypes = {
     as: PropTypes.elementType,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -459,13 +459,13 @@ export const Tab = forwardRefWithAs<
     id: tabsId,
     onSelectTab,
     selectedIndex,
-    userInteractedRef
+    userInteractedRef,
   } = useTabsContext();
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
-    element: ownRef.current,
-    context: TabsDescendantsContext
+    element: ownRef.current!,
+    context: TabsDescendantsContext,
   });
 
   const isSelected = index === selectedIndex;
@@ -484,13 +484,13 @@ export const Tab = forwardRefWithAs<
   return (
     <Comp
       role="tab"
+      aria-controls={makeId(tabsId, "panel", index)}
+      aria-disabled={disabled}
+      aria-selected={isSelected}
       {...props}
       ref={ref}
       data-reach-tab=""
       data-disabled={disabled}
-      aria-controls={makeId(tabsId, "panel", index)}
-      aria-disabled={disabled}
-      aria-selected={isSelected}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
@@ -513,7 +513,7 @@ if (__DEV__) {
   Tab.displayName = "Tab";
   Tab.propTypes = {
     children: PropTypes.node,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 }
 
@@ -553,7 +553,7 @@ if (__DEV__) {
   TabPanels.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node,
-    selectedIndex: PropTypes.number
+    selectedIndex: PropTypes.number,
   };
 }
 
@@ -572,8 +572,8 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     let ownRef = useRef<HTMLElement | null>(null);
 
     let index = useDescendant({
-      element: ownRef.current,
-      context: TabPanelDescendantsContext
+      element: ownRef.current!,
+      context: TabPanelDescendantsContext,
     });
     let isSelected = index === selectedIndex;
 
@@ -589,10 +589,10 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       <Comp
         hidden={!isSelected}
         role="tabpanel"
+        aria-labelledby={makeId(tabsId, "tab", index)}
         {...props}
         ref={ref}
         data-reach-tab-panel=""
-        aria-labelledby={makeId(tabsId, "tab", index)}
         id={id}
         tabIndex={-1}
       >
@@ -618,7 +618,7 @@ if (__DEV__) {
   TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
     as: PropTypes.elementType,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 

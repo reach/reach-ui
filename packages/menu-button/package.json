@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "Accessible React button dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,15 +10,16 @@
     "directory": "packages/menu-button"
   },
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist",
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.4",
-    "@reach/popover": "^0.7.4",
-    "@reach/utils": "^0.7.4",
+    "@reach/auto-id": "^0.8.0",
+    "@reach/popover": "^0.8.0",
+    "@reach/utils": "^0.8.0",
     "prop-types": "^15.7.2",
+    "tslib": "1.10.0",
     "warning": "^4.0.3"
   },
   "peerDependencies": {

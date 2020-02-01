@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rendering should open the dialog 1`] = `
+exports[`<AlertDialog /> should open the dialog 1`] = `
 <DocumentFragment>
   <div>
     <button>
@@ -10,7 +10,7 @@ exports[`rendering should open the dialog 1`] = `
 </DocumentFragment>
 `;
 
-exports[`rendering should open the dialog 2`] = `
+exports[`<AlertDialog /> should open the dialog 2`] = `
 <body>
   <div
     aria-hidden="true"
