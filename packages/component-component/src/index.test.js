@@ -7,7 +7,7 @@ const COMPONENT_ARGS = {
   props: {},
   refs: {},
   setState: expect.any(Function),
-  forceUpdate: expect.any(Function)
+  forceUpdate: expect.any(Function),
 };
 
 let snapshot = element => {
@@ -17,7 +17,7 @@ let snapshot = element => {
   return tree;
 };
 
-describe("rendering", () => {
+describe("<Component />", () => {
   it("renders without figuritively exploding", () => {
     snapshot(
       <Component>
@@ -65,11 +65,11 @@ describe("rendering", () => {
     );
   });
 });
-describe("refs", () => {
+describe("<Component /> ref handling", () => {
   it("maintains refs from render to render", () => {
     const MOCK_REFS = {
       firstDummyRef: { current: "FIRST_MOCK_NODE" },
-      secondDummyRef: { current: "SECOND_MOCK_NODE" }
+      secondDummyRef: { current: "SECOND_MOCK_NODE" },
     };
     const testComponent = renderer.create(<Component refs={MOCK_REFS} />);
     // assert refs match expected on mount
@@ -79,14 +79,14 @@ describe("refs", () => {
     expect(testComponent.getInstance()._refs).toEqual(MOCK_REFS);
   });
 });
-describe("state", () => {
+describe("<Component /> state", () => {
   it("receives initialState", () => {
     snapshot(
       <Component
         initialState={{
           favoriteColor: "purple",
           favoriteFood: "cheeseburgers",
-          displayName: "Henry Winkler"
+          displayName: "Henry Winkler",
         }}
       >
         {({ state }) => (
@@ -143,7 +143,7 @@ describe("state", () => {
       </Component>
     );
     const buttonElement = testComponent.root.findByProps({
-      className: "test-button"
+      className: "test-button",
     });
     // assert state value to match initialState
     expect(testComponent.getInstance().state.goodAtTesting).toBe(false);
@@ -154,8 +154,8 @@ describe("state", () => {
     expect(testComponent.getInstance().state.goodAtTesting).toBe(true);
   });
 });
-describe("didMount", () => {
-  it("does not require it", () => {
+describe("<Component /> didMount", () => {
+  it("is not required", () => {
     snapshot(
       <Component>
         <h1>No need for didMount prop for rendering!</h1>
@@ -174,8 +174,8 @@ describe("didMount", () => {
     expect(didMountFunction).toHaveBeenCalledWith(COMPONENT_ARGS);
   });
 });
-describe("willUnmount", () => {
-  it("does not require it", () => {
+describe("<Component /> willUnmount", () => {
+  it("is not required", () => {
     snapshot(
       <Component>
         <h1>Don't need willUnmount prop in order to render!</h1>
@@ -186,7 +186,7 @@ describe("willUnmount", () => {
     const COMPONENT_ARGS = {
       state: null,
       props: {},
-      refs: {}
+      refs: {},
     };
 
     const willUnmountFunction = jest.fn();
@@ -205,9 +205,8 @@ describe("willUnmount", () => {
     expect(willUnmountFunction).toHaveBeenCalledWith(COMPONENT_ARGS);
   });
 });
-
-describe("didUpdate", () => {
-  it("does not require it", () => {
+describe("<Component /> didUpdate", () => {
+  it("is not required", () => {
     snapshot(
       <Component>
         <h1>Can render without didUpdate prop!</h1>
@@ -222,7 +221,7 @@ describe("didUpdate", () => {
       setState: expect.any(Function),
       forceUpdate: expect.any(Function),
       prevProps: {},
-      prevState: null
+      prevState: null,
     };
 
     const didUpdateFunction = jest.fn();
@@ -241,8 +240,7 @@ describe("didUpdate", () => {
     expect(didUpdateFunction).toHaveBeenCalledWith(COMPONENT_ARGS, null);
   });
 });
-
-describe("getSnapshotBeforeUpdate", () => {
+describe("<Component /> getSnapshotBeforeUpdate", () => {
   const COMPONENT_ARGS = {
     state: null,
     props: {},
@@ -250,10 +248,10 @@ describe("getSnapshotBeforeUpdate", () => {
     setState: expect.any(Function),
     forceUpdate: expect.any(Function),
     prevProps: {},
-    prevState: null
+    prevState: null,
   };
 
-  it("does not require it", () => {
+  it("is not required", () => {
     snapshot(
       <Component>
         <h1>getSnapshotBeforeUpdate prop is not necessary for render!</h1>
@@ -314,20 +312,19 @@ describe("getSnapshotBeforeUpdate", () => {
     );
   });
 });
-
-describe("shouldUpdate", () => {
+describe("<Component /> shouldUpdate", () => {
   const SHOULD_UPDATE_ARGS = {
     state: null,
     props: {
       getInitialState: expect.any(Function),
       getRefs: expect.any(Function),
-      shouldUpdate: expect.any(Function)
+      shouldUpdate: expect.any(Function),
     },
     nextProps: {},
-    nextState: null
+    nextState: null,
   };
 
-  it("does not require it", () => {
+  it("is not required", () => {
     snapshot(
       <Component>
         <h1>Can render without shouldUpdate prop.</h1>

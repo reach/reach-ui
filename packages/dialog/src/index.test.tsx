@@ -1,8 +1,11 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
-import { fireEvent, render } from "$test/utils";
+import { axe, toHaveNoViolations } from "jest-axe";
+import { fireEvent, render, cleanup } from "$test/utils";
 import { Dialog } from "./index";
+
+expect.extend(toHaveNoViolations);
 
 function getOverlay(container: Element) {
   return container.querySelector("[data-reach-dialog-overlay]");
@@ -37,12 +40,40 @@ describe("<Dialog />", () => {
     expect(baseElement).toMatchSnapshot();
     expect(queryByTestId("inner")).toBeTruthy();
     fireEvent.click(getByText("Close Dialog"));
+
+    // TODO: Test overlay click, it should close the dialog
     // Not sure why clicking the overlay doesn't work in test env, works IRL 🤷‍♂️
     // fireEvent.click(getOverlay(baseElement)!)
+
     clock.tick(10);
     expect(baseElement).toMatchSnapshot();
     expect(queryByTestId("inner")).toBeNull();
   });
+
+  it("can be labelled by another element", () => {
+    const { getByRole } = render(
+      <Dialog isOpen aria-labelledby="dialog-title">
+        <h1 id="dialog-title">I am the title now</h1>
+      </Dialog>
+    );
+
+    const dialog = getByRole("dialog");
+    expect(dialog).toHaveAttribute("aria-labelledby", "dialog-title");
+    const label = document.getElementById(
+      dialog.getAttribute("aria-labelledby")!
+    );
+    expect(label).toHaveTextContent("I am the title now");
+  });
+
+  /* it("has no detected a11y violations", async () => {
+    // This test is erroring right now, experimenting with axe-core + jest-axe
+    // Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Error:
+    // TODO: Fix this and figure out how this thing is supposed to work bc it would be super useful!
+    const { container } = render(<BasicOpenDialog />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+    cleanup();
+  }); */
 });
 
 function BasicOpenDialog() {

@@ -2,7 +2,7 @@ import React from "react";
 import { useId } from "./index";
 import { render } from "$test/utils";
 
-describe("useId()", () => {
+describe("useId", () => {
   it("should generate an incremented ID value", () => {
     function Comp() {
       const justNull = null;
@@ -20,7 +20,7 @@ describe("useId()", () => {
     const id2 = Number(getByText("Ok").id);
     expect(id2).not.toEqual(id1);
   });
-  it("uses fallback ID", () => {
+  it("uses a fallback ID", () => {
     function Comp() {
       const newId = useId("awesome");
       return <div id={newId}>Ok</div>;
