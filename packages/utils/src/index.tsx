@@ -19,6 +19,7 @@ import {
   DistributiveOmit,
   PropsFromAs,
   PropsWithAs,
+  SingleOrArray,
 } from "./types";
 
 /**
@@ -327,6 +328,7 @@ export {
   DistributiveOmit,
   PropsFromAs,
   PropsWithAs,
+  SingleOrArray,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
