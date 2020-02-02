@@ -71,7 +71,7 @@ import {
   SliderTrack,
   SliderTrackHighlight,
   SliderHandle,
-  SliderMarker
+  SliderMarker,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 ```
@@ -79,11 +79,12 @@ import "@reach/slider/styles.css";
 ## Usage
 
 ```jsx
-// jsx-demo
+// Basic slider
 function Example() {
   return <Slider min={0} max={200} step={10} />;
 }
 
+// Composed slider components
 function ExampleComposed() {
   return (
     <SliderInput min={0} max={200} step={10}>
