@@ -170,12 +170,8 @@ fieldset {
 }
 input[type="checkbox"],
 input[type="radio"] {
-  display: inline;
-}
-label > .label-body {
   display: inline-block;
-  margin-left: 0.5rem;
-  font-weight: normal;
+  margin: 3px 0.5ex;
 }
 
 /* Lists
@@ -206,10 +202,8 @@ li {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 code {
   padding: 0.2rem 0.5rem;
-  margin: 0 0.2rem;
+  margin: 0;
   font-size: 90%;
-  white-space: nowrap;
-  background: white;
   border-radius: 4px;
 }
 

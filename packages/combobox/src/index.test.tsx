@@ -1,18 +1,18 @@
 import React, { useState, useMemo } from "react";
-import { render } from "@testing-library/react";
+import { render } from "$test/utils";
 import userEvent from "@testing-library/user-event";
 import {
   Combobox,
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "../examples/use-throttle";
 import cities from "../examples/cities";
 
-describe("rendering", () => {
+describe("<Combobox />", () => {
   it("should match the snapshot", () => {
     let { asFragment, getByTestId, getByRole } = render(<BasicCombobox />);
     let input = getByTestId("input");
@@ -68,7 +68,7 @@ function useCityMatch(term: string) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [item => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

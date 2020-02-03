@@ -86,39 +86,24 @@ yarn test --watch
 The components to be built come from the the [Aria Practices Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices-1.1). Here is a table of the components and their status.
 
 ✅ - Released<br/>
-🧪 - Beta Released<br/>
-🛠 - Planning to Build<br/>
-❓ - Might Build?
+🛠 - Building<br/>
 
-| Status | Name                 |
-| ------ | -------------------- |
-| ✅     | Accordion            |
-| ✅     | Alert                |
-| ✅     | Alert Dialog         |
-| ❓     | Breadcrumb           |
-| ❓     | Button               |
-| 🛠      | Carousel             |
-| ✅     | Checkbox             |
-| ✅     | Combo Box            |
-| ✅     | Dialog (Modal)       |
-| ✅     | Disclosure           |
-| ❓     | Feed                 |
-| ❓     | Grids                |
-| ❓     | Link                 |
-| 🛠      | Listbox              |
-| ❓     | Menu or Menu bar     |
-| ✅     | Menu Button          |
-| 🛠      | Radio Group          |
-| ✅     | Slider               |
-| 🛠      | Slider (Multi-Thumb) |
-| ❓     | Spinbutton           |
-| ❓     | Table                |
-| ✅     | Tabs                 |
-| ❓     | Toolbar              |
-| ✅     | Tooltip              |
-| 🛠      | Tree View            |
-| ❓     | Treegrid             |
-| ❓     | Window Splitter      |
+| Status | Name           |
+| ------ | -------------- |
+| ✅     | Accordion      |
+| ✅     | Alert          |
+| ✅     | Alert Dialog   |
+| ✅     | Checkbox       |
+| ✅     | Combo Box      |
+| ✅     | Dialog (Modal) |
+| ✅     | Disclosure     |
+| 🛠      | Listbox        |
+| ✅     | Menu Button    |
+| 🛠      | Radio Group    |
+| ✅     | Slider         |
+| ✅     | Tabs           |
+| 🛠      | Toggletip      |
+| ✅     | Tooltip        |
 
 ## Releases
 

@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "$test/utils";
 import {
   AlertDialog,
   AlertDialogLabel,
-  AlertDialogDescription
+  AlertDialogDescription,
 } from "@reach/alert-dialog";
 
-describe("rendering", () => {
+describe("<AlertDialog />", () => {
   it("should open the dialog", () => {
     const { baseElement, asFragment, getByText } = render(<BasicAlertDialog />);
     expect(asFragment()).toMatchSnapshot();

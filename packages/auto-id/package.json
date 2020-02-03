@@ -1,6 +1,6 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "directory": "packages/auto-id"
   },
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist",
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
@@ -24,5 +24,8 @@
   "files": [
     "README.md",
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "tslib": "1.10.0"
+  }
 }

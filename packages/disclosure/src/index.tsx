@@ -21,7 +21,7 @@ import {
   forwardRefWithAs,
   makeId,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -37,7 +37,7 @@ const useDisclosureContext = () => useContext(DisclosureContext);
 
 export enum DisclosureStates {
   Open = "open",
-  Collapsed = "collapsed"
+  Collapsed = "collapsed",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     disclosureId: id,
     onSelect,
     open,
-    panelId
+    panelId,
   };
 
   if (isControlled && openProp !== open) {
@@ -162,7 +162,7 @@ if (__DEV__) {
     children: PropTypes.node.isRequired,
     defaultOpen: PropTypes.bool,
     onChange: PropTypes.func,
-    open: PropTypes.bool
+    open: PropTypes.bool,
   };
 }
 
@@ -202,11 +202,11 @@ export const DisclosureButton = forwardRefWithAs<
 
   return (
     <Comp
-      ref={ref}
-      {...props}
-      onClick={wrapEvent(onClick, handleClick)}
       aria-controls={panelId}
       aria-expanded={open}
+      {...props}
+      ref={ref}
+      onClick={wrapEvent(onClick, handleClick)}
       data-reach-disclosure-trigger=""
       data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
     >
@@ -234,7 +234,7 @@ if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
   DisclosureButton.propTypes = {
     as: PropTypes.any,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 

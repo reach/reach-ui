@@ -1,6 +1,5 @@
 {
-  "version": "0.7.4",
-  "packages": ["packages/*"],
+  "version": "0.8.1",
   "registry": "https://registry.npmjs.org/",
   "publishConfig": {
     "access": "public"

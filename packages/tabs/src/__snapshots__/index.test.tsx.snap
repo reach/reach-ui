@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
+exports[`<Tabs /> focuses the correct tab with keyboard navigation 1`] = `
 <DocumentFragment>
   <div>
     <div
@@ -92,7 +92,7 @@ exports[`rendering focuses the correct tab with keyboard navigation 1`] = `
 </DocumentFragment>
 `;
 
-exports[`rendering should match the snapshot 1`] = `
+exports[`<Tabs /> should match the snapshot 1`] = `
 <DocumentFragment>
   <div>
     <div

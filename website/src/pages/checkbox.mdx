@@ -65,7 +65,7 @@ yarn add @reach/checkbox
 import {
   CustomCheckbox,
   CustomCheckboxContainer,
-  CustomCheckboxInput
+  CustomCheckboxInput,
 } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 ```
@@ -95,6 +95,10 @@ function Example() {
           }}
         />
         I am feeling good today
+      </label>
+      <label>
+        <MixedCheckbox checked="mixed" />
+        Perma-mixed
       </label>
       <div style={{ marginTop: 10 }}>
         <button onClick={() => setChecked("mixed")}>
@@ -130,44 +134,49 @@ function Example() {
   function MyCheckbox(props) {
     const [checkedState, setChecked] = useState(props.checked || false);
     const checked = props.checked != null ? props.checked : checkedState;
-    const showCheckMark = !!checked;
+
     return (
       <CustomCheckboxContainer
         checked={props.checked != null ? props.checked : checked}
         onChange={event => setChecked(event.target.checked)}
-        style={{
-          background: "rgba(240, 240, 250, 0.8)",
-          border: "2px solid rgba(0, 0, 0, 0.8)",
-          borderRadius: "3px",
-          height: 26,
-          width: 26
-        }}
+        style={getContainerStyle()}
       >
         <CustomCheckboxInput {...props} />
-        <span
-          aria-hidden
-          style={{
-            display: "block",
-            position: "absolute",
-            width: "60%",
-            height: "60%",
-            top: "50%",
-            left: "50%",
-            transform: showCheckMark
-              ? "translate(-50%, -50%) scale(1)"
-              : "translate(-50%, -50%) scale(0)",
-            transition: "transform 200ms ease-out, background 200ms ease-out",
-            zIndex: 1,
-            background:
-              checked === true
-                ? "green"
-                : checked === "mixed"
-                ? "goldenrod"
-                : "transparent"
-          }}
-        />
+        <span aria-hidden style={getCheckStyle(checked)} />
       </CustomCheckboxContainer>
     );
+  }
+
+  function getContainerStyle() {
+    return {
+      background: "rgba(240, 240, 250, 0.8)",
+      border: "2px solid rgba(0, 0, 0, 0.8)",
+      borderRadius: "3px",
+      height: 26,
+      width: 26,
+    };
+  }
+
+  function getCheckStyle(checked) {
+    return {
+      display: "block",
+      position: "absolute",
+      width: "60%",
+      height: "60%",
+      top: "50%",
+      left: "50%",
+      transform: `translate(-50%, -50%) scaleX(${!!checked ? 1 : 0}) scaleY(${
+        checked === true ? 1 : checked === "mixed" ? 0.4 : 0
+      })`,
+      transition: "transform 200ms ease-out, background 200ms ease-out",
+      zIndex: 1,
+      background:
+        checked === true
+          ? "green"
+          : checked === "mixed"
+          ? "goldenrod"
+          : "transparent",
+    };
   }
 
   return <Example />;
@@ -186,22 +195,46 @@ function Example() {
   let [favoriteCondiments, setFavoriteCondiments] = useState({
     mayo: true,
     mustard: true,
-    ketchup: false
+    ketchup: false,
   });
+
+  // We can determine if all or some of the nested checkboxes are selected and
+  // use that to determine the state of our parent checkbox.
   let allCondimentsChecked = Object.keys(favoriteCondiments).every(
     condiment => favoriteCondiments[condiment] === true
   );
+  let someCondimentsChecked = allCondimentsChecked
+    ? false
+    : Object.keys(favoriteCondiments).some(
+        condiment => favoriteCondiments[condiment] === true
+      );
 
-  function handleAllCondimentsChange(event) {
-    setToppings(
+  let parentIsChecked = allCondimentsChecked
+    ? true
+    : someCondimentsChecked
+    ? "mixed"
+    : false;
+
+  // When we toggle a parent checkbox, we expect all of the nested checkboxes
+  // to toggle with it.
+  function handleParentChange(event) {
+    setFavoriteCondiments(
       Object.keys(favoriteCondiments).reduce(
         (state, condiment) => ({
           ...state,
-          [condiment]: !allCondimentsChecked
+          [condiment]: !allCondimentsChecked,
         }),
         {}
       )
     );
+  }
+
+  function handleChildChange(event) {
+    let { checked, value } = event.target;
+    setFavoriteCondiments({
+      ...favoriteCondiments,
+      [value]: checked,
+    });
   }
 
   return (
@@ -209,8 +242,8 @@ function Example() {
       <label>
         <MixedCheckbox
           value="condiments"
-          checked={allCondimentsChecked}
-          onChange={handleAllCondimentsChange}
+          checked={parentIsChecked}
+          onChange={handleParentChange}
         />
         {allCondimentsChecked ? "Unselect" : "Select"} all condiments
       </label>
@@ -225,13 +258,7 @@ function Example() {
                   name="condiment"
                   value={value}
                   checked={state}
-                  onChange={event => {
-                    let { checked, value } = event.target;
-                    setToppings({
-                      ...favoriteCondiments,
-                      [value]: checked
-                    });
-                  }}
+                  onChange={handleChildChange}
                 />
                 {value}
               </label>
@@ -288,7 +315,7 @@ function Example({ disabled = false }) {
     // (event: React.ChangeEvent<HTMLInputElement>) => void
     onChange: event => setChecked(event.target.checked),
     // boolean
-    disabled
+    disabled,
   });
   return (
     <div>
@@ -298,7 +325,7 @@ function Example({ disabled = false }) {
       </label>
       <button onClick={() => setChecked("mixed")}>Mix it up</button>
       <hr />
-      Current state is: <pre>{stateData.checked}</pre>
+      Current state is: <pre>{String(stateData.checked)}</pre>
     </div>
   );
 }
@@ -314,6 +341,7 @@ function useMixedCheckbox(
     defaultChecked?: boolean;
     disabled?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
   },
   functionOrComponentName: string = "useMixedCheckbox"
 ): [
@@ -321,7 +349,8 @@ function useMixedCheckbox(
     "aria-checked": boolean | "mixed";
     checked: boolean;
     disabled: boolean;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
     type: "checkbox";
   },
   { checked: boolean | "mixed" }
@@ -494,7 +523,7 @@ function Example({ children, name, value, id, label, ...props }) {
             aria-hidden
             style={{
               display: "block",
-              outline: focused ? "2px solid aqua" : undefined
+              outline: focused ? "2px solid aqua" : undefined,
             }}
           >
             {checked === "mixed" ? "⛔" : checked ? "✅" : "❌"}

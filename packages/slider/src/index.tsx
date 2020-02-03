@@ -27,7 +27,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -37,7 +37,7 @@ import {
   createNamedContext,
   makeId,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 
 export type SliderAlignment = "center" | "contain";
@@ -68,18 +68,18 @@ const sliderPropTypes = {
   getValueText: PropTypes.func,
   handleAlignment: PropTypes.oneOf([
     SLIDER_HANDLE_ALIGN_CENTER,
-    SLIDER_HANDLE_ALIGN_CONTAIN
+    SLIDER_HANDLE_ALIGN_CONTAIN,
   ]),
   min: PropTypes.number,
   max: PropTypes.number,
   name: PropTypes.string,
   orientation: PropTypes.oneOf([
     SLIDER_ORIENTATION_HORIZONTAL,
-    SLIDER_ORIENTATION_VERTICAL
+    SLIDER_ORIENTATION_VERTICAL,
   ]),
   onChange: PropTypes.func,
   step: PropTypes.number,
-  value: PropTypes.number
+  value: PropTypes.number,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ if (__DEV__) {
   Slider.displayName = "Slider";
   Slider.propTypes = {
     ...sliderPropTypes,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -313,7 +313,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
             left,
             width,
             bottom,
-            height
+            height,
           } = trackRef.current.getBoundingClientRect();
           const { clientX, clientY } = event;
           let diff = isVertical ? bottom - clientY : clientX - left;
@@ -410,12 +410,12 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       ? {
           width: `100%`,
           height: `${trackPercent}%`,
-          bottom: 0
+          bottom: 0,
         }
       : {
           width: `${trackPercent}%`,
           height: `100%`,
-          left: 0
+          left: 0,
         };
 
     const ctx: ISliderContext = {
@@ -442,12 +442,12 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       trackPercent,
       trackRef,
       trackHighlightStyle,
-      updateValue
+      updateValue,
     };
 
     const dataAttributes = makeDataAttributes("slider", {
       disabled,
-      orientation
+      orientation,
     });
 
     useEffect(() => {
@@ -470,7 +470,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       getNewValueFromPointer,
       updateValue,
       isPointerDown,
-      value
+      value,
     ]);
 
     useEffect(() => checkStyles("slider"), []);
@@ -478,13 +478,13 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
     return (
       <SliderContext.Provider value={ctx}>
         <div
+          aria-disabled={disabled}
+          {...rest}
+          {...dataAttributes}
           ref={ref}
           tabIndex={-1}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
-          aria-disabled={disabled}
-          {...dataAttributes}
-          {...rest}
         >
           {typeof children === "function"
             ? (children as SliderChildrenRender)({
@@ -493,7 +493,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
                 max,
                 min,
                 value,
-                valueText
+                valueText,
               })
             : children}
           {name && (
@@ -533,7 +533,7 @@ if (__DEV__) {
   SliderInput.displayName = "SliderInput";
   SliderInput.propTypes = {
     ...sliderPropTypes,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   };
 }
 
@@ -551,7 +551,7 @@ export const SliderTrack = forwardRef<HTMLDivElement, SliderTrackProps>(
 
     const dataAttributes = makeDataAttributes("slider-track", {
       orientation,
-      disabled
+      disabled,
     });
 
     return (
@@ -584,7 +584,7 @@ export type SliderTrackProps = React.HTMLAttributes<HTMLDivElement> & {
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
   SliderTrack.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
   };
 }
 
@@ -608,7 +608,7 @@ export const SliderTrackHighlight = forwardRef<
   const { disabled, orientation, trackHighlightStyle } = useSliderContext();
   const dataAttributes = makeDataAttributes("slider-track-highlight", {
     orientation,
-    disabled
+    disabled,
   });
   return (
     <div
@@ -651,6 +651,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
       onFocus,
       style = {},
       onKeyDown,
+      tabIndex = 0,
       ...props
     },
     forwardedRef
@@ -667,20 +668,18 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
       sliderMin,
       sliderMax,
       value,
-      valueText
+      valueText,
     } = useSliderContext();
 
     const ref = useForkedRef(handleRef, forwardedRef);
     const dataAttributes = makeDataAttributes("slider-handle", {
       orientation,
-      disabled
+      disabled,
     });
 
     return (
       <div
-        ref={ref}
         role="slider"
-        tabIndex={disabled ? undefined : 0}
         aria-disabled={disabled}
         aria-valuemin={sliderMin}
         aria-valuetext={valueText}
@@ -688,6 +687,9 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
         aria-valuenow={value}
         aria-valuemax={sliderMax}
         aria-labelledby={ariaLabelledBy}
+        {...props}
+        {...dataAttributes}
+        ref={ref}
         onBlur={wrapEvent(onBlur, () => {
           setHasFocus(false);
         })}
@@ -700,10 +702,9 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
           ...(isVertical
             ? { bottom: handlePosition }
             : { left: handlePosition }),
-          ...style
+          ...style,
         }}
-        {...dataAttributes}
-        {...props}
+        tabIndex={disabled ? undefined : tabIndex}
       />
     );
   }
@@ -742,7 +743,7 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
       orientation,
       sliderMin,
       sliderMax,
-      value: sliderValue
+      value: sliderValue,
     } = useSliderContext();
 
     const inRange = !(value < sliderMin || value > sliderMax);
@@ -750,7 +751,7 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
     const dataAttributes = makeDataAttributes("slider-marker", {
       orientation,
       disabled,
-      highlight
+      highlight,
     });
 
     const absoluteStartPosition = `${valueToPercent(
@@ -767,7 +768,7 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
           ...(isVertical
             ? { bottom: absoluteStartPosition }
             : { left: absoluteStartPosition }),
-          ...style
+          ...style,
         }}
         {...dataAttributes}
         {...props}
@@ -792,7 +793,7 @@ export type SliderMarkerProps = React.HTMLAttributes<HTMLDivElement> & {
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
   SliderMarker.propTypes = {
-    value: PropTypes.number.isRequired
+    value: PropTypes.number.isRequired,
   };
 }
 
@@ -806,14 +807,14 @@ function makeDataAttributes(
   {
     orientation,
     highlight,
-    disabled
+    disabled,
   }: { orientation: SliderOrientation; highlight?: boolean; disabled?: boolean }
 ) {
   return {
     [`data-reach-${component}`]: "",
     [`data-reach-${component}-disabled`]: disabled ? "" : undefined,
     [`data-reach-${component}-orientation`]: orientation,
-    [`data-reach-${component}-highlight`]: highlight ? orientation : undefined
+    [`data-reach-${component}-highlight`]: highlight ? orientation : undefined,
   };
 }
 

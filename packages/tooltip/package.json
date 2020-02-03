@@ -1,6 +1,6 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "Accessible tooltips",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,17 +10,18 @@
     "directory": "packages/tooltip"
   },
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json",
+    "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist",
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.7.4",
-    "@reach/portal": "^0.7.4",
-    "@reach/rect": "^0.7.4",
-    "@reach/utils": "^0.7.4",
-    "@reach/visually-hidden": "^0.7.4",
-    "prop-types": "^15.7.2"
+    "@reach/auto-id": "^0.8.0",
+    "@reach/portal": "^0.8.0",
+    "@reach/rect": "^0.8.0",
+    "@reach/utils": "^0.8.0",
+    "@reach/visually-hidden": "^0.8.0",
+    "prop-types": "^15.7.2",
+    "tslib": "1.10.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

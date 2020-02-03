@@ -1,8 +1,8 @@
 import React from "react";
 import { useId } from "./index";
-import { render } from "@testing-library/react";
+import { render } from "$test/utils";
 
-describe("rendering", () => {
+describe("useId", () => {
   it("should generate an incremented ID value", () => {
     function Comp() {
       const justNull = null;
@@ -20,7 +20,7 @@ describe("rendering", () => {
     const id2 = Number(getByText("Ok").id);
     expect(id2).not.toEqual(id1);
   });
-  it("uses fallback ID", () => {
+  it("uses a fallback ID", () => {
     function Comp() {
       const newId = useId("awesome");
       return <div id={newId}>Ok</div>;

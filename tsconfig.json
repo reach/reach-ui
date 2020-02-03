@@ -23,7 +23,8 @@
       "@reach/tooltip": ["packages/tooltip/src"],
       "@reach/utils": ["packages/utils/src"],
       "@reach/visually-hidden": ["packages/visually-hidden/src"],
-      "@reach/window-size": ["packages/window-size/src"]
+      "@reach/window-size": ["packages/window-size/src"],
+      "$test/*": ["test/*"]
     }
   }
 }
