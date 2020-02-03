@@ -8,7 +8,6 @@ let name = "CustomCheckbox Composed";
 function MyCheckbox(props) {
   const [checkedState, setChecked] = useState(props.checked || false);
   const checked = props.checked != null ? props.checked : checkedState;
-  const showCheckMark = !!checked;
   return (
     <CustomCheckboxContainer
       checked={props.checked != null ? props.checked : checked}
@@ -18,7 +17,7 @@ function MyCheckbox(props) {
         border: "2px solid rgba(0, 0, 0, 0.8)",
         borderRadius: "3px",
         height: 26,
-        width: 26
+        width: 26,
       }}
     >
       <CustomCheckboxInput {...props} />
@@ -31,9 +30,9 @@ function MyCheckbox(props) {
           height: "60%",
           top: "50%",
           left: "50%",
-          transform: showCheckMark
-            ? "translate(-50%, -50%) scale(1)"
-            : "translate(-50%, -50%) scale(0)",
+          transform: `translate(-50%, -50%) scaleX(${
+            !!checked ? 1 : 0
+          }) scaleY(${checked === true ? 1 : checked === "mixed" ? 0.4 : 0})`,
           transition: "transform 200ms ease-out, background 200ms ease-out",
           zIndex: 1,
           background:
@@ -41,7 +40,7 @@ function MyCheckbox(props) {
               ? "green"
               : checked === "mixed"
               ? "goldenrod"
-              : "transparent"
+              : "transparent",
         }}
       />
     </CustomCheckboxContainer>
