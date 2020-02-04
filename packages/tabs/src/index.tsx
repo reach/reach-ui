@@ -435,7 +435,7 @@ export type TabListProps = {
 if (__DEV__) {
   TabList.displayName = "TabList";
   TabList.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
   };
 }
@@ -553,9 +553,8 @@ export type TabPanelsProps = TabListProps & {};
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
   TabPanels.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
-    selectedIndex: PropTypes.number,
   };
 }
 
@@ -619,7 +618,7 @@ export type TabPanelProps = {
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
   };
 }

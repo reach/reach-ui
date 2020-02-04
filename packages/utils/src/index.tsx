@@ -106,8 +106,8 @@ export { checkStyles };
  * @param ref
  * @param value
  */
-export function assignRef<T = any>(
-  ref: AssignableRef<T> | undefined,
+export function assignRef<RefValueType = any>(
+  ref: AssignableRef<RefValueType> | undefined,
   value: any
 ) {
   if (ref == null) return;
@@ -115,7 +115,6 @@ export function assignRef<T = any>(
     ref(value);
   } else {
     try {
-      // @ts-ignore
       ref.current = value;
     } catch (error) {
       throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
@@ -123,8 +122,8 @@ export function assignRef<T = any>(
   }
 }
 
-export function boolOrBoolString(value: any) {
-  return value === "false" ? false : Boolean(value);
+export function boolOrBoolString(value: any): value is "true" | true {
+  return value === "true" ? true : isBoolean(value) ? value : false;
 }
 
 export function canUseDOM() {
@@ -135,21 +134,21 @@ export function canUseDOM() {
   );
 }
 
-export function cloneValidElement<P>(
-  element: React.ReactElement<P> | React.ReactNode,
-  props?: Partial<P> & React.Attributes,
+export function cloneValidElement<Props>(
+  element: React.ReactElement<Props> | React.ReactNode,
+  props?: Partial<Props> & React.Attributes,
   ...children: React.ReactNode[]
-): React.ReactElement<P> | React.ReactNode {
+): React.ReactElement<Props> | React.ReactNode {
   return isValidElement(element)
     ? cloneElement(element, props, ...children)
     : element;
 }
 
-export function createNamedContext<T>(
+export function createNamedContext<ContextValueType>(
   name: string,
-  defaultValue: T
-): React.Context<T> {
-  const Ctx = createContext<T>(defaultValue);
+  defaultValue: ContextValueType
+): React.Context<ContextValueType> {
+  const Ctx = createContext<ContextValueType>(defaultValue);
   Ctx.displayName = name;
   return Ctx;
 }
@@ -180,15 +179,15 @@ export function makeId(...args: (string | number | null | undefined)[]) {
  */
 export function noop(): void {}
 
-// React hook for creating a value exactly once.
-// https://github.com/Andarist/use-constant
-export function useConstant<T>(fn: () => T): T {
-  const ref = React.useRef<{ v: T }>();
-
+/**
+ * React hook for creating a value exactly once.
+ * @see https://github.com/Andarist/use-constant
+ */
+export function useConstant<ValueType>(fn: () => ValueType): ValueType {
+  const ref = React.useRef<{ v: ValueType }>();
   if (!ref.current) {
     ref.current = { v: fn() };
   }
-
   return ref.current.v;
 }
 
@@ -199,8 +198,8 @@ export function useConstant<T>(fn: () => T): T {
  *
  * @param refs Refs to fork
  */
-export function useForkedRef<T = any>(
-  ...refs: (AssignableRef<T> | undefined)[]
+export function useForkedRef<RefValueType = any>(
+  ...refs: (AssignableRef<RefValueType> | undefined)[]
 ) {
   return useMemo(() => {
     if (refs.every(ref => ref == null)) {
@@ -220,8 +219,8 @@ export function useForkedRef<T = any>(
  *
  * @param value
  */
-export function usePrevious<T = any>(value: T) {
-  const ref = useRef<T | null>(null);
+export function usePrevious<ValueType = any>(value: ValueType) {
+  const ref = useRef<ValueType | null>(null);
   useEffect(() => {
     ref.current = value;
   }, [value]);
@@ -234,7 +233,10 @@ export function usePrevious<T = any>(value: T) {
  * @param effect Effect to call
  * @param deps Effect dependency list
  */
-export function useUpdateEffect(effect: () => any, deps?: any[]) {
+export function useUpdateEffect(
+  effect: React.EffectCallback,
+  deps?: React.DependencyList
+) {
   const mounted = useRef(false);
   useEffect(() => {
     if (mounted.current) {
@@ -254,10 +256,10 @@ export function useUpdateEffect(effect: () => any, deps?: any[]) {
  * @param theirHandler User-supplied event handler
  * @param ourHandler Library-supplied event handler
  */
-export function wrapEvent<E extends React.SyntheticEvent | Event>(
-  theirHandler: ((event: E) => any) | undefined,
-  ourHandler: (event: E) => any
-): (event: E) => any {
+export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
+  theirHandler: ((event: EventType) => any) | undefined,
+  ourHandler: (event: EventType) => any
+): (event: EventType) => any {
   return event => {
     theirHandler && theirHandler(event);
     if (!event.defaultPrevented) {
@@ -280,10 +282,16 @@ export function wrapEvent<E extends React.SyntheticEvent | Event>(
  *
  * @param Comp
  */
-export function forwardRefWithAs<P, T extends As>(
-  comp: (props: PropsFromAs<T, P>, ref: React.RefObject<any>) => JSX.Element
+export function forwardRefWithAs<Props, ComponentType extends As>(
+  comp: (
+    props: PropsFromAs<ComponentType, Props>,
+    ref: React.RefObject<any>
+  ) => React.ReactElement | null
 ) {
-  return React.forwardRef(comp as any) as ComponentWithAs<T, P>;
+  return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
+    ComponentType,
+    Props
+  >;
 }
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028

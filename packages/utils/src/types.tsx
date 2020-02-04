@@ -1,13 +1,26 @@
 import * as React from "react";
-import { Validator } from "prop-types";
+// import { forwardRefWithAs } from './index';
 // import styled from 'styled-components';
 
-export type AssignableRef<T = any> = React.Ref<T | null>;
+type ReactElement = React.ReactElement;
 
 /**
- * Type can be either a single `T` or an array of `T`
+ * React.Ref uses the readonly type `React.RefObject` instead of
+ * `React.MutableRefObject`, We pretty much always assume ref objects are
+ * mutable (at least when we create them), so this type is a workaround so some
+ * of the weird mechanics of using refs with TS.
  */
-export type SingleOrArray<T> = T[] | T;
+export type AssignableRef<ValueType> =
+  | {
+      bivarianceHack(instance: ValueType | null): void;
+    }["bivarianceHack"]
+  | React.MutableRefObject<ValueType | null>
+  | null;
+
+/**
+ * Type can be either a single `ValueType` or an array of `ValueType`
+ */
+export type SingleOrArray<ValueType> = ValueType[] | ValueType;
 
 /**
  * The built-in utility type `Omit` does not distribute over unions. So if you
@@ -32,9 +45,10 @@ export type SingleOrArray<T> = T[] | T;
  * @link https://stackoverflow.com/a/59796484/1792019
  * @link http://www.typescriptlang.org/docs/handbook/advanced-types.html#distributive-conditional-types
  */
-export type DistributiveOmit<T, K extends PropertyKey> = T extends any
-  ? Omit<T, K>
-  : never;
+export type DistributiveOmit<
+  BaseType,
+  Key extends PropertyKey
+> = BaseType extends any ? Omit<BaseType, Key> : never;
 
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.
@@ -43,31 +57,46 @@ export type DistributiveOmit<T, K extends PropertyKey> = T extends any
 // P = additional props
 // T = type of component to render
 
-export type As<P = any> = React.ElementType<P>;
+export type As<BaseProps = any> = React.ElementType<BaseProps>;
 
-export type PropsWithAs<T extends As, P> = P &
-  Omit<React.ComponentPropsWithRef<T>, "as" | keyof P> & {
-    as?: T;
+export type PropsWithAs<
+  ComponentType extends As,
+  ComponentProps
+> = ComponentProps &
+  Omit<
+    React.ComponentPropsWithRef<ComponentType>,
+    "as" | keyof ComponentProps
+  > & {
+    as?: ComponentType;
   };
 
-export type PropsFromAs<T extends As, P> = (PropsWithAs<T, P> & { as: T }) &
-  PropsWithAs<T, P>;
+export type PropsFromAs<
+  ComponentType extends As,
+  ComponentProps
+> = (PropsWithAs<ComponentType, ComponentProps> & { as: ComponentType }) &
+  PropsWithAs<ComponentType, ComponentProps>;
 
 export type ComponentWithForwardedRef<
-  T extends React.ElementType,
-  P
+  ElementType extends React.ElementType,
+  ComponentProps
 > = React.ForwardRefExoticComponent<
-  P & React.HTMLProps<React.ElementType<T>> & React.ComponentPropsWithRef<T>
-  // React.RefAttributes<React.ElementType<T>>
+  ComponentProps &
+    React.HTMLProps<React.ElementType<ElementType>> &
+    React.ComponentPropsWithRef<ElementType>
 >;
 
-export interface ComponentWithAs<T extends As, P> {
-  <TT extends As>(props: PropsWithAs<TT, P>): JSX.Element;
-  (props: PropsWithAs<T, P>): JSX.Element;
+export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
+  // These types are a bit of a hack, but cover us in cases where the `as` prop
+  // is not a JSX string type. Makes the compiler happy so 🤷‍♂️
+  <TT extends As>(props: PropsWithAs<TT, ComponentProps>): ReactElement | null;
+  (props: PropsWithAs<ComponentType, ComponentProps>): ReactElement | null;
+
   displayName?: string;
-  propTypes?: {
-    [key: string]: Validator<any>;
-  };
+  propTypes?: React.WeakValidationMap<
+    PropsWithAs<ComponentType, ComponentProps>
+  >;
+  contextTypes?: React.ValidationMap<any>;
+  defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
 }
 
 /*
@@ -79,7 +108,7 @@ type PopupProps = {
   children?: React.ReactNode | ((value?: number) => JSX.Element);
 };
 
-export const Popup = forwardRefWithAs<"input", PopupProps>(
+export const Popup = forwardRefWithAs<PopupProps, "input">(
   ({ as: Comp = "input", lol, className, children, ...props }, ref) => {
     return (
       <Comp ref={ref} {...props}>
