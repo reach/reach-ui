@@ -595,7 +595,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
         ref={ref}
         data-reach-tab-panel=""
         id={id}
-        tabIndex={-1}
+        tabIndex={isSelected ? 0 : -1}
       >
         {children}
       </Comp>
