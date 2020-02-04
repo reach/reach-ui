@@ -32,7 +32,7 @@ import React, {
   useRef,
   useState,
   Children,
-  useCallback
+  useCallback,
 } from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -44,6 +44,8 @@ import {
   createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
+  isFunction,
+  isNumber,
   makeId,
   noop,
   useDescendant,
@@ -51,7 +53,7 @@ import {
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useUpdateEffect,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
@@ -145,7 +147,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
             if (!isControlled.current) {
               setSelectedIndex(index);
             }
-          }
+          },
     };
   }, [controlledIndex, id, onChange, readOnly, selectedIndex]);
 
@@ -222,7 +224,7 @@ if (__DEV__) {
             compName +
             "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
-      } else if (props[name] != null && typeof props[name] !== "number") {
+      } else if (props[name] != null && !isNumber(props[name])) {
         return new Error(
           `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
             Array.isArray(val) ? "array" : typeof val
@@ -231,7 +233,7 @@ if (__DEV__) {
       }
       return null;
     },
-    defaultIndex: PropTypes.number
+    defaultIndex: PropTypes.number,
   };
 }
 
@@ -253,7 +255,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     onSelectTab,
     onFocusPanel,
     setSelectedIndex,
-    selectedIndex
+    selectedIndex,
   } = useTabsContext();
 
   const { descendants } = useContext(TabsDescendantsContext);
@@ -324,7 +326,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
       first,
       last,
       prev: prev === -1 ? last : prev,
-      next: next === -1 ? first : next
+      next: next === -1 ? first : next,
     };
   }, [descendants, focusableTabs, selectedIndex]);
 
@@ -389,7 +391,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     getFocusIndices,
     isControlled,
     selectedIndex,
-    setSelectedIndex
+    setSelectedIndex,
   ]);
 
   return (
@@ -409,7 +411,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
          * accordingly.
          */
         return cloneValidElement(child, {
-          isSelected: index === selectedIndex
+          isSelected: index === selectedIndex,
         });
       })}
     </Comp>
@@ -434,7 +436,7 @@ if (__DEV__) {
   TabList.displayName = "TabList";
   TabList.propTypes = {
     as: PropTypes.elementType,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -459,13 +461,13 @@ export const Tab = forwardRefWithAs<
     id: tabsId,
     onSelectTab,
     selectedIndex,
-    userInteractedRef
+    userInteractedRef,
   } = useTabsContext();
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
     element: ownRef.current!,
-    context: TabsDescendantsContext
+    context: TabsDescendantsContext,
   });
 
   const isSelected = index === selectedIndex;
@@ -513,7 +515,7 @@ if (__DEV__) {
   Tab.displayName = "Tab";
   Tab.propTypes = {
     children: PropTypes.node,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 }
 
@@ -553,7 +555,7 @@ if (__DEV__) {
   TabPanels.propTypes = {
     as: PropTypes.elementType,
     children: PropTypes.node,
-    selectedIndex: PropTypes.number
+    selectedIndex: PropTypes.number,
   };
 }
 
@@ -573,7 +575,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
 
     let index = useDescendant({
       element: ownRef.current!,
-      context: TabPanelDescendantsContext
+      context: TabPanelDescendantsContext,
     });
     let isSelected = index === selectedIndex;
 
@@ -618,7 +620,7 @@ if (__DEV__) {
   TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
     as: PropTypes.elementType,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -634,7 +636,7 @@ function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   } else if (
     element.ownerDocument &&
     element.ownerDocument.defaultView &&
-    typeof element.ownerDocument.defaultView.getComputedStyle === "function"
+    isFunction(element.ownerDocument.defaultView.getComputedStyle)
   ) {
     y = element.ownerDocument.defaultView
       .getComputedStyle(element, null)

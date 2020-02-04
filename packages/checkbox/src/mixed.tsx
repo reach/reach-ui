@@ -36,20 +36,21 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import {
   DistributiveOmit,
+  isString,
   useForkedRef,
   useIsomorphicLayoutEffect,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import {
   assign,
   createMachine,
   EventObject as MachineEvent,
   interpret,
-  StateMachine
+  StateMachine,
 } from "@xstate/fsm";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -60,7 +61,7 @@ import warning from "warning";
 export enum MixedCheckboxStates {
   Checked = "checked",
   Mixed = "mixed",
-  Unchecked = "unchecked"
+  Unchecked = "unchecked",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,7 @@ export enum MixedCheckboxEvents {
   Mount = "MOUNT",
   Set = "SET",
   Toggle = "TOGGLE",
-  Unmount = "UNMOUNT"
+  Unmount = "UNMOUNT",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +107,7 @@ const assignRefs = assign(
   (data: MixedCheckboxData, event: MixedCheckboxEvent) => {
     return {
       ...data,
-      refs: event.refs
+      refs: event.refs,
     };
   }
 );
@@ -116,7 +117,7 @@ const assignRefs = assign(
 
 const commonEvents = {
   [MixedCheckboxEvents.Mount]: {
-    actions: assignRefs
+    actions: assignRefs,
   },
   [MixedCheckboxEvents.GetDerivedData]: {
     actions: [
@@ -124,25 +125,25 @@ const commonEvents = {
       assign((data: MixedCheckboxData, event: any) => {
         return {
           ...data,
-          ...event.data
+          ...event.data,
         };
-      })
-    ]
+      }),
+    ],
   },
   [MixedCheckboxEvents.Set]: [
     {
       target: MixedCheckboxStates.Checked,
-      cond: getCheckSetCondition(MixedCheckboxStates.Checked)
+      cond: getCheckSetCondition(MixedCheckboxStates.Checked),
     },
     {
       target: MixedCheckboxStates.Unchecked,
-      cond: getCheckSetCondition(MixedCheckboxStates.Unchecked)
+      cond: getCheckSetCondition(MixedCheckboxStates.Unchecked),
     },
     {
       target: MixedCheckboxStates.Mixed,
-      cond: getCheckSetCondition(MixedCheckboxStates.Mixed)
-    }
-  ]
+      cond: getCheckSetCondition(MixedCheckboxStates.Mixed),
+    },
+  ],
 };
 
 /**
@@ -165,8 +166,8 @@ export const createMixedCheckboxMachine = (
       disabled: props.disabled,
       isControlled: props.isControlled,
       refs: {
-        input: null
-      }
+        input: null,
+      },
     },
     states: {
       [MixedCheckboxStates.Unchecked]: {
@@ -174,32 +175,32 @@ export const createMixedCheckboxMachine = (
         on: {
           [MixedCheckboxEvents.Toggle]: {
             target: MixedCheckboxStates.Checked,
-            cond: checkToggleAllowed
+            cond: checkToggleAllowed,
           },
-          ...commonEvents
-        }
+          ...commonEvents,
+        },
       },
       [MixedCheckboxStates.Checked]: {
         entry: assignRefs,
         on: {
           [MixedCheckboxEvents.Toggle]: {
             target: MixedCheckboxStates.Unchecked,
-            cond: checkToggleAllowed
+            cond: checkToggleAllowed,
           },
-          ...commonEvents
-        }
+          ...commonEvents,
+        },
       },
       [MixedCheckboxStates.Mixed]: {
         entry: assignRefs,
         on: {
           [MixedCheckboxEvents.Toggle]: {
             target: MixedCheckboxStates.Checked,
-            cond: checkToggleAllowed
+            cond: checkToggleAllowed,
           },
-          ...commonEvents
-        }
-      }
-    }
+          ...commonEvents,
+        },
+      },
+    },
   });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +228,7 @@ export const MixedCheckbox = forwardRef<
       onChange,
       checked,
       defaultChecked,
-      disabled
+      disabled,
     },
     "MixedCheckbox"
   );
@@ -255,9 +256,9 @@ if (__DEV__) {
   MixedCheckbox.propTypes = {
     checked: PropTypes.oneOfType([
       PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
+      PropTypes.oneOf(["mixed" as const]),
     ]),
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
   };
 }
 
@@ -299,7 +300,7 @@ export function useMixedCheckbox(
     defaultChecked,
     disabled,
     onChange,
-    onClick
+    onClick,
   } = args || {};
 
   let isControlled = controlledChecked != null;
@@ -312,12 +313,12 @@ export function useMixedCheckbox(
       ),
       {
         disabled: !!disabled,
-        isControlled
+        isControlled,
       }
     )
   );
   let [current, send] = useMachine(machine, {
-    input: ref
+    input: ref,
   });
 
   let props: UseMixedCheckboxProps = {
@@ -326,11 +327,11 @@ export function useMixedCheckbox(
     disabled: !!disabled,
     onChange: wrapEvent(onChange, handleChange),
     onClick: wrapEvent(onClick, handleClick),
-    type: "checkbox"
+    type: "checkbox",
   };
 
   let contextData = {
-    checked: stateValueToAriaChecked(current.value)
+    checked: stateValueToAriaChecked(current.value),
   };
 
   function handleChange() {
@@ -376,7 +377,7 @@ export function useMixedCheckbox(
     if (isControlled) {
       send({
         type: MixedCheckboxEvents.Set,
-        state: checkedPropToStateValue(controlledChecked)
+        state: checkedPropToStateValue(controlledChecked),
       });
     }
   }, [isControlled, controlledChecked, send]);
@@ -389,8 +390,8 @@ export function useMixedCheckbox(
       type: MixedCheckboxEvents.GetDerivedData,
       data: {
         disabled,
-        isControlled
-      }
+        isControlled,
+      },
     });
   }, [disabled, isControlled, send]);
 
@@ -562,7 +563,7 @@ function useMachine<
   // Add refs to every event so we can use them to perform actions.
   let send = useCallback(
     (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
-      let event = typeof rawEvent === "string" ? { type: rawEvent } : rawEvent;
+      let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
       let refValues = Object.keys(refs).reduce((value, name) => {
         (value as any)[name] = refs[name].current;
         return value;

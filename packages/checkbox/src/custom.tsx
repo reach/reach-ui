@@ -23,20 +23,21 @@ import React, {
   useContext,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import {
   checkStyles,
   createNamedContext,
+  isFunction,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import {
   checkedPropToStateValue,
   MixedOrBool,
   useControlledSwitchWarning,
   useMixedCheckbox,
-  UseMixedCheckboxProps
+  UseMixedCheckboxProps,
 } from "./mixed";
 import PropTypes from "prop-types";
 
@@ -80,7 +81,7 @@ export const CustomCheckboxContainer = forwardRef<
     defaultChecked,
     checked: controlledChecked,
     disabled,
-    onChange
+    onChange,
   });
   let [focused, setFocused] = useState(false);
 
@@ -97,7 +98,7 @@ export const CustomCheckboxContainer = forwardRef<
     focused,
     inputProps,
     inputRef,
-    setFocused
+    setFocused,
   };
 
   useControlledSwitchWarning(controlledChecked, "checked", _componentName);
@@ -113,11 +114,11 @@ export const CustomCheckboxContainer = forwardRef<
         data-state={checkedPropToStateValue(stateData.checked)}
         onClick={wrapEvent(onClick, handleClick)}
       >
-        {typeof children === "function"
-          ? (children as CustomCheckboxContainerChildRender)({
+        {isFunction(children)
+          ? children({
               checked: inputProps["aria-checked"],
               inputRef,
-              focused
+              focused,
             })
           : children}
       </span>
@@ -191,11 +192,11 @@ if (__DEV__) {
   CustomCheckboxContainer.propTypes = {
     checked: PropTypes.oneOfType([
       PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
+      PropTypes.oneOf(["mixed" as const]),
     ]),
     defaultChecked: PropTypes.bool,
     disabled: PropTypes.bool,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
   };
 }
 
@@ -218,7 +219,7 @@ export const CustomCheckboxInput = forwardRef<
     focused,
     inputProps,
     inputRef,
-    setFocused
+    setFocused,
   } = useCustomCheckboxContext();
 
   let ref = useForkedRef(forwardedRef, inputRef);
@@ -357,12 +358,12 @@ if (__DEV__) {
   CustomCheckbox.propTypes = {
     checked: PropTypes.oneOfType([
       PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const])
+      PropTypes.oneOf(["mixed" as const]),
     ]),
     disabled: PropTypes.bool,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    value: PropTypes.string
+    value: PropTypes.string,
   };
 }
 

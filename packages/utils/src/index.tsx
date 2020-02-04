@@ -111,7 +111,7 @@ export function assignRef<T = any>(
   value: any
 ) {
   if (ref == null) return;
-  if (typeof ref === "function") {
+  if (isFunction(ref)) {
     ref(value);
   } else {
     try {
@@ -140,10 +140,9 @@ export function cloneValidElement<P>(
   props?: Partial<P> & React.Attributes,
   ...children: React.ReactNode[]
 ): React.ReactElement<P> | React.ReactNode {
-  if (!isValidElement(element)) {
-    return element;
-  }
-  return cloneElement(element, props, ...children);
+  return isValidElement(element)
+    ? cloneElement(element, props, ...children)
+    : element;
 }
 
 export function createNamedContext<T>(
@@ -153,25 +152,6 @@ export function createNamedContext<T>(
   const Ctx = createContext<T>(defaultValue);
   Ctx.displayName = name;
   return Ctx;
-}
-
-export function findLastIndex<T = any>(
-  array: T[],
-  predicate: (element: T, index?: number, arr?: T[]) => boolean
-): number {
-  let length = array.length >>> 0;
-  if (!length) {
-    return -1;
-  }
-  let n = length - 1;
-  while (n >= 0) {
-    let value = array[n];
-    if (predicate(value, n, array)) {
-      return n;
-    }
-    --n;
-  }
-  return -1;
 }
 
 /**
@@ -184,10 +164,6 @@ export function getScrollbarOffset() {
     }
   } catch (err) {}
   return 0;
-}
-
-export function isUndefined(value: any) {
-  return typeof value === "undefined";
 }
 
 /**
@@ -318,6 +294,22 @@ export let ponyfillGlobal =
     ? self
     : // eslint-disable-next-line no-new-func
       Function("return this")();
+
+export function isBoolean(value: any): value is boolean {
+  return typeof value === "boolean";
+}
+
+export function isFunction(value: any): value is Function {
+  return !!(value && {}.toString.call(value) == "[object Function]");
+}
+
+export function isNumber(value: any): value is number {
+  return typeof value === "number";
+}
+
+export function isString(value: any): value is string {
+  return typeof value === "string";
+}
 
 // Export types
 export {

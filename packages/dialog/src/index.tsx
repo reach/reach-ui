@@ -12,7 +12,13 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
-import { checkStyles, noop, useForkedRef, wrapEvent } from "@reach/utils";
+import {
+  checkStyles,
+  isString,
+  noop,
+  useForkedRef,
+  wrapEvent,
+} from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
@@ -20,7 +26,7 @@ import PropTypes from "prop-types";
 const overlayPropTypes = {
   initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
-  onDismiss: PropTypes.func
+  onDismiss: PropTypes.func,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +56,7 @@ if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
     ...overlayPropTypes,
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
   };
 }
 
@@ -131,7 +137,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
 if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
-    ...overlayPropTypes
+    ...overlayPropTypes,
   };
 }
 
@@ -186,7 +192,7 @@ if (__DEV__) {
   DialogContent.displayName = "DialogContent";
   DialogContent.propTypes = {
     "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType
+    "aria-labelledby": ariaLabelType,
   };
 }
 
@@ -261,7 +267,7 @@ if (__DEV__) {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType
+    "aria-labelledby": ariaLabelType,
   };
 }
 
@@ -332,7 +338,7 @@ function ariaLabelType(
         ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
         details
     );
-  } else if (props[propName] != null && typeof props[propName] !== "string") {
+  } else if (props[propName] != null && !isString(props[propName])) {
     return new Error(
       `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`string\`, received \`${
         Array.isArray(propFullName) ? "array" : typeof propFullName

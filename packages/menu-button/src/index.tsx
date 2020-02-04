@@ -18,7 +18,7 @@ import React, {
   useEffect,
   useReducer,
   useRef,
-  useState
+  useState,
 } from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
@@ -30,13 +30,15 @@ import {
   Descendant,
   DescendantProvider,
   forwardRefWithAs,
+  isFunction,
+  isString,
   makeId,
   noop,
   useDescendant,
   useDescendants,
   useForkedRef,
   usePrevious,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +86,7 @@ const initialState: MenuButtonState = {
    * The index of the current selected item. When the selection is cleared a
    * value of -1 is used.
    */
-  selectionIndex: -1
+  selectionIndex: -1,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +115,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     menuId,
     menuRef,
     popoverRef,
-    state
+    state,
   };
 
   useEffect(() => checkStyles("menu-button"), []);
@@ -125,9 +127,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       set={setDescendants}
     >
       <MenuContext.Provider value={context}>
-        {typeof children === "function"
-          ? children({ isOpen: state.isOpen })
-          : children}
+        {isFunction(children) ? children({ isOpen: state.isOpen }) : children}
       </MenuContext.Provider>
     </DescendantProvider>
   );
@@ -142,14 +142,14 @@ export interface MenuProps {
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menu-children
    */
-  children: React.ReactNode;
+  children: React.ReactNode | ((props: { isOpen: boolean }) => React.ReactNode);
   id?: string;
 }
 
 if (__DEV__) {
   Menu.displayName = "Menu";
   Menu.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   };
 }
 
@@ -169,7 +169,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       buttonRef,
       menuId,
       state: { buttonId, isOpen },
-      dispatch
+      dispatch,
     } = useMenuContext();
     let ref = useForkedRef(buttonRef, forwardedRef);
 
@@ -183,7 +183,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       if (buttonId !== newButtonId) {
         dispatch({
           type: SET_BUTTON_ID,
-          payload: newButtonId
+          payload: newButtonId,
         });
       }
     }, [buttonId, dispatch, id, menuId]);
@@ -204,8 +204,10 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       }
     }
 
-    function handleMouseDown() {
-      if (isOpen) {
+    function handleMouseDown(event: React.MouseEvent) {
+      if (isRightClick(event.nativeEvent)) {
+        return;
+      } else if (isOpen) {
         dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
       } else {
         dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
@@ -243,7 +245,7 @@ export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 if (__DEV__) {
   MenuButton.displayName = "MenuButton";
   MenuButton.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -278,7 +280,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       buttonRef,
       dispatch,
       menuRef,
-      state: { isOpen, selectionIndex }
+      state: { isOpen, selectionIndex },
     } = useMenuContext();
 
     let ownRef = useRef<HTMLElement | null>(null);
@@ -312,7 +314,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       {
         context: MenuDescendantContext,
         element: ownRef.current!,
-        key: valueText
+        key: valueText,
       },
       indexProp
     );
@@ -321,7 +323,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     function select() {
       dispatch({
         type: CLICK_MENU_ITEM,
-        payload: { buttonRef, callback: onSelect }
+        payload: { buttonRef, callback: onSelect },
       });
     }
 
@@ -430,23 +432,22 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isOpen) {
         // @ts-ignore
         window.__REACH_DISABLE_TOOLTIPS = true;
-        window.requestAnimationFrame(() => {
-          if (selectionIndex !== -1) {
-            /*
-             * We haven't measured the popover yet, so give it a frame otherwise
-             * we'll scroll to the bottom of the page >.<
-             */
-            if (ownRef.current && index === selectionIndex) {
-              ownRef.current.focus();
-            }
-          } else {
-            /*
-             * Clear highlight when mousing over non-menu items, but focus the
-             * menu so the the keyboard will work after a mouseover.
-             */
-            menuRef.current && menuRef.current.focus();
+
+        if (selectionIndex !== -1) {
+          /*
+           * We haven't measured the popover yet, so give it a frame otherwise
+           * we'll scroll to the bottom of the page >.<
+           */
+          if (index === selectionIndex) {
+            focus(ownRef.current);
           }
-        });
+        } else {
+          /*
+           * Clear highlight when mousing over non-menu items, but focus the
+           * menu so the the keyboard will work after a mouseover.
+           */
+          focus(menuRef.current);
+        }
       } else {
         /*
          * We want to ignore the immediate focus of a tooltip so it doesn't pop
@@ -522,7 +523,7 @@ if (__DEV__) {
   MenuItem.displayName = "MenuItem";
   MenuItem.propTypes = {
     as: PropTypes.any,
-    onSelect: PropTypes.func.isRequired
+    onSelect: PropTypes.func.isRequired,
   };
 }
 
@@ -543,7 +544,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       dispatch,
       buttonRef,
       menuRef,
-      state: { isOpen, buttonId, selectionIndex, typeaheadQuery }
+      state: { isOpen, buttonId, selectionIndex, typeaheadQuery },
     } = useMenuContext();
     const { descendants: menuItems } = useContext(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
@@ -554,7 +555,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       if (typeaheadQuery && match != null) {
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
-          payload: { index: match }
+          payload: { index: match },
         });
       }
       let timeout = window.setTimeout(
@@ -578,7 +579,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
          */
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
-          payload: { index: menuItems.length - 1 }
+          payload: { index: menuItems.length - 1 },
         });
       } else if (
         /*
@@ -598,8 +599,8 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
           payload: {
-            index: menuItems.findIndex(i => i.key === prevSelected.key)
-          }
+            index: menuItems.findIndex(i => i.key === prevSelected.key),
+          },
         });
       }
     }, [
@@ -608,7 +609,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       prevMenuItemsLength,
       prevSelected,
       prevSelectionIndex,
-      selectionIndex
+      selectionIndex,
     ]);
 
     function handleKeyDown(event: React.KeyboardEvent) {
@@ -632,7 +633,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
           event.preventDefault();
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
-            payload: { index: menuItems.length - 1 }
+            payload: { index: menuItems.length - 1 },
           });
           break;
         case "ArrowDown":
@@ -641,7 +642,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
           const nextIndex = Math.min(selectionIndex + 1, menuItems.length - 1);
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
-            payload: { index: nextIndex }
+            payload: { index: nextIndex },
           });
           break;
         case "ArrowUp":
@@ -650,7 +651,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
           const prevIndex = Math.max(selectionIndex - 1, 0);
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
-            payload: { index: prevIndex }
+            payload: { index: prevIndex },
           });
           break;
         case "Tab":
@@ -662,11 +663,11 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
            * Check if a user is typing some char keys and respond by setting the
            * query state.
            */
-          if (typeof key === "string" && key.length === 1) {
+          if (isString(key) && key.length === 1) {
             const query = typeaheadQuery + key.toLowerCase();
             dispatch({
               type: SEARCH_FOR_ITEM,
-              payload: query
+              payload: query,
             });
           }
           break;
@@ -704,7 +705,7 @@ export type MenuItemsProps = {
 if (__DEV__) {
   MenuItems.displayName = "MenuItems";
   MenuItems.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -757,7 +758,7 @@ if (__DEV__) {
   MenuLink.displayName = "MenuLink";
   MenuLink.propTypes = {
     as: PropTypes.any,
-    component: PropTypes.any
+    component: PropTypes.any,
   };
 }
 
@@ -796,7 +797,7 @@ export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
 if (__DEV__) {
   MenuList.displayName = "MenuList";
   MenuList.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
   };
 }
 
@@ -819,7 +820,7 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       dispatch,
       menuRef,
       popoverRef,
-      state: { isOpen }
+      state: { isOpen },
     } = useMenuContext();
 
     const ref = useForkedRef(popoverRef, forwardedRef);
@@ -876,7 +877,7 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
 if (__DEV__) {
   MenuPopover.displayName = "MenuPopover";
   MenuPopover.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -927,6 +928,14 @@ function isRightClick(nativeEvent: MouseEvent) {
   return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
+function focus<T extends HTMLElement = HTMLElement>(
+  element: T | undefined | null
+) {
+  window.requestAnimationFrame(() => {
+    element && element.focus();
+  });
+}
+
 function reducer(
   state: MenuButtonState,
   action: MenuButtonAction = {} as MenuButtonAction
@@ -937,27 +946,25 @@ function reducer(
        * Focus the button first by default when an item is selected. We fire the
        * onSelect callback next so the app can manage focus if needed.
        */
-      if (action.payload.buttonRef.current) {
-        action.payload.buttonRef.current.focus();
-      }
+      focus(action.payload.buttonRef.current);
       action.payload.callback && action.payload.callback();
       return {
         ...state,
         isOpen: false,
-        selectionIndex: -1
+        selectionIndex: -1,
       };
     case CLOSE_MENU:
-      action.payload.buttonRef.current?.focus();
+      focus(action.payload.buttonRef.current);
       return {
         ...state,
         isOpen: false,
-        selectionIndex: -1
+        selectionIndex: -1,
       };
     case OPEN_MENU_AT_FIRST_ITEM:
       return {
         ...state,
         isOpen: true,
-        selectionIndex: 0
+        selectionIndex: 0,
       };
     case SELECT_ITEM_AT_INDEX:
       if (action.payload.index >= 0) {
@@ -966,25 +973,25 @@ function reducer(
           selectionIndex:
             action.payload.max != null
               ? Math.min(Math.max(action.payload.index, 0), action.payload.max)
-              : Math.max(action.payload.index, 0)
+              : Math.max(action.payload.index, 0),
         };
       }
       return state;
     case CLEAR_SELECTION_INDEX:
       return {
         ...state,
-        selectionIndex: -1
+        selectionIndex: -1,
       };
     case SET_BUTTON_ID:
       return {
         ...state,
-        buttonId: action.payload
+        buttonId: action.payload,
       };
     case SEARCH_FOR_ITEM:
       if (typeof action.payload !== "undefined") {
         return {
           ...state,
-          typeaheadQuery: action.payload
+          typeaheadQuery: action.payload,
         };
       }
       return state;

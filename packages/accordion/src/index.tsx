@@ -15,21 +15,23 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import {
   boolOrBoolString,
   checkStyles,
-  createNamedContext,
   createDescendantContext,
+  createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
+  isBoolean,
+  isNumber,
   makeId,
   noop,
   useDescendant,
   useDescendants,
   useForkedRef,
-  wrapEvent
+  wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -53,7 +55,7 @@ const useAccordionItemContext = () => useContext(AccordionItemContext);
 
 export enum AccordionStates {
   Open = "open",
-  Collapsed = "collapsed"
+  Collapsed = "collapsed",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +190,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         accordionId: id,
         openPanels: isControlled ? controlledIndex! : openPanels,
         onSelectPanel: readOnly ? noop : onSelectPanel,
-        readOnly
+        readOnly,
       }),
       [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
     );
@@ -291,7 +293,7 @@ if (__DEV__) {
     children: PropTypes.node.isRequired,
     defaultIndex: PropTypes.oneOfType([
       PropTypes.number,
-      PropTypes.arrayOf(PropTypes.number)
+      PropTypes.arrayOf(PropTypes.number),
     ]) as any,
     index: (props, name, compName, location, propName) => {
       let val = props[name];
@@ -306,12 +308,12 @@ if (__DEV__) {
         );
       }
       if (Array.isArray(props[name])) {
-        return props[name].every((i: any) => typeof i === "number")
-          ? null
-          : new Error(
+        return props[name].some((i: any) => !isNumber(i))
+          ? new Error(
               "You provided an array as an index in `Accordion` but one or more of the values are not numeric. Please check to make sure all indices are valid numbers."
-            );
-      } else if (props[name] != null && typeof props[name] !== "number") {
+            )
+          : null;
+      } else if (props[name] != null && !isNumber(props[name])) {
         return new Error(
           `Invalid prop "${propName}" supplied to "${compName}". Expected "number", received "${
             Array.isArray(val) ? "array" : typeof val
@@ -325,7 +327,7 @@ if (__DEV__) {
         return new Error(
           `The "${propName}" prop supplied to "${compName}" is not set or set to "false", but an array of indices was provided to the "defaultIndex" prop. "${compName}" can only have more than one default index if the "${propName}" prop is set to "true".`
         );
-      } else if (props[name] != null && typeof props[name] !== "boolean") {
+      } else if (props[name] != null && !isBoolean(props[name])) {
         return new Error(
           `Invalid prop "${propName}" supplied to "${compName}". Expected "boolean", received "${
             Array.isArray(props[name]) ? "array" : typeof props[name]
@@ -336,7 +338,7 @@ if (__DEV__) {
     },
     onChange: PropTypes.func,
     readOnly: PropTypes.bool,
-    collapsible: PropTypes.bool
+    collapsible: PropTypes.bool,
   };
 }
 
@@ -356,7 +358,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     const buttonRef: ButtonRef = useRef(null);
     const index = useDescendant({
       context: AccordionDescendantContext,
-      element: buttonRef.current
+      element: buttonRef.current,
     });
 
     // We need unique IDs for the panel and button to point to one another
@@ -371,7 +373,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     const dataAttributes = {
       "data-state": open ? AccordionStates.Open : AccordionStates.Collapsed,
       "data-disabled": disabled ? "true" : undefined,
-      "data-read-only": readOnly ? "true" : undefined
+      "data-read-only": readOnly ? "true" : undefined,
     };
 
     const context: IAccordionItemContext = {
@@ -382,7 +384,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       itemId,
       buttonRef,
       panelId,
-      dataAttributes
+      dataAttributes,
     };
 
     return (
@@ -425,7 +427,7 @@ export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
   AccordionItem.propTypes = {
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 }
 
@@ -463,7 +465,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       buttonId,
       buttonRef: ownRef,
       index,
-      panelId
+      panelId,
     } = useAccordionItemContext();
 
     let { descendants } = useContext(AccordionDescendantContext);
@@ -566,7 +568,7 @@ if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
   AccordionButton.propTypes = {
     as: PropTypes.any,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -586,7 +588,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
       dataAttributes,
       panelId,
       buttonId,
-      open
+      open,
     } = useAccordionItemContext();
 
     return (
@@ -622,7 +624,7 @@ export type AccordionPanelProps = {
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";
   AccordionPanel.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
