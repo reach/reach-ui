@@ -14,6 +14,7 @@ import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
 import {
   checkStyles,
+  getOwnerDocument,
   isString,
   noop,
   useForkedRef,
@@ -277,6 +278,7 @@ export default Dialog;
 function createAriaHider(dialogNode: HTMLElement) {
   let originalValues: any[] = [];
   let rootNodes: HTMLElement[] = [];
+  let ownerDocument = getOwnerDocument(dialogNode) || document;
 
   if (!dialogNode) {
     if (__DEV__) {
@@ -287,20 +289,23 @@ function createAriaHider(dialogNode: HTMLElement) {
     return noop;
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
-    const portalNode = dialogNode.parentNode?.parentNode?.parentNode;
-    if (node === portalNode) {
-      return;
+  Array.prototype.forEach.call(
+    ownerDocument.querySelectorAll("body > *"),
+    node => {
+      const portalNode = dialogNode.parentNode?.parentNode?.parentNode;
+      if (node === portalNode) {
+        return;
+      }
+      let attr = node.getAttribute("aria-hidden");
+      let alreadyHidden = attr !== null && attr !== "false";
+      if (alreadyHidden) {
+        return;
+      }
+      originalValues.push(attr);
+      rootNodes.push(node);
+      node.setAttribute("aria-hidden", "true");
     }
-    let attr = node.getAttribute("aria-hidden");
-    let alreadyHidden = attr !== null && attr !== "false";
-    if (alreadyHidden) {
-      return;
-    }
-    originalValues.push(attr);
-    rootNodes.push(node);
-    node.setAttribute("aria-hidden", "true");
-  });
+  );
 
   return () => {
     rootNodes.forEach((node, index) => {

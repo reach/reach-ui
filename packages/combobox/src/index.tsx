@@ -35,6 +35,7 @@ import {
   createNamedContext,
   DescendantProvider,
   forwardRefWithAs,
+  getOwnerDocument,
   makeId,
   useDescendant,
   useDescendants,
@@ -739,11 +740,9 @@ export const ComboboxOption: ComponentWithForwardedRef<
         id={String(makeHash(value))}
         role="option"
         data-highlighted={isActive ? "" : undefined}
-        /*
-         * without this the menu will close from `onBlur`, but with it the
-         * element can be `document.activeElement` and then our focus checks in
-         * onBlur will work as intended
-         */
+        // Without this the menu will close from `onBlur`, but with it the
+        // element can be `document.activeElement` and then our focus checks in
+        // onBlur will work as intended
         tabIndex={-1}
         onClick={wrapEvent(onClick, handleClick)}
         // @ts-ignore
@@ -1051,14 +1050,15 @@ function useBlur() {
   );
 
   return function handleBlur() {
+    let ownerDocument = getOwnerDocument(inputRef.current) || document;
     requestAnimationFrame(() => {
       // we on want to close only if focus rests outside the combobox
       if (
-        document.activeElement !== inputRef.current &&
-        document.activeElement !== buttonRef.current &&
+        ownerDocument.activeElement !== inputRef.current &&
+        ownerDocument.activeElement !== buttonRef.current &&
         popoverRef.current
       ) {
-        if (popoverRef.current.contains(document.activeElement)) {
+        if (popoverRef.current.contains(ownerDocument.activeElement)) {
           // focus landed inside the combobox, keep it open
           if (state !== INTERACTING) {
             transition(INTERACT);

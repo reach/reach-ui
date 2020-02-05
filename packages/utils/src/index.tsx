@@ -294,6 +294,16 @@ export function forwardRefWithAs<Props, ComponentType extends As>(
   >;
 }
 
+export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
+  element: T | null
+) {
+  return element && element.ownerDocument
+    ? element.ownerDocument
+    : canUseDOM()
+    ? document
+    : null;
+}
+
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 export let ponyfillGlobal =
   typeof window != "undefined" && window.Math == Math

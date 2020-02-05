@@ -30,6 +30,7 @@ import {
   Descendant,
   DescendantProvider,
   forwardRefWithAs,
+  getOwnerDocument,
   isFunction,
   isString,
   makeId,
@@ -418,9 +419,10 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
      * mouseEventStarted ref so we can check it again when needed.
      */
     useEffect(() => {
+      let ownerDocument = getOwnerDocument(ownRef.current) || document;
       let listener = () => (mouseEventStarted.current = false);
-      document.addEventListener("mouseup", listener);
-      return () => document.removeEventListener("mouseup", listener);
+      ownerDocument.addEventListener("mouseup", listener);
+      return () => ownerDocument.removeEventListener("mouseup", listener);
     }, []);
 
     /**
@@ -826,17 +828,18 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     function handleBlur(event: React.FocusEvent) {
-      const { relatedTarget } = event;
+      let { relatedTarget } = event;
+      let ownerDocument = getOwnerDocument(popoverRef.current) || document;
       requestAnimationFrame(() => {
         // We on want to close only if focus rests outside the menu
         if (
-          document.activeElement !== menuRef.current &&
-          document.activeElement !== buttonRef.current &&
+          ownerDocument.activeElement !== menuRef.current &&
+          ownerDocument.activeElement !== buttonRef.current &&
           popoverRef.current
         ) {
           if (
             !popoverRef.current.contains(
-              (relatedTarget as Element) || document.activeElement
+              (relatedTarget as Element) || ownerDocument.activeElement
             )
           ) {
             dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
