@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.8.0",
+    "@reach/descendants": "^0.1.0",
     "@reach/popover": "^0.8.0",
     "@reach/utils": "^0.8.0",
     "prop-types": "^15.7.2",

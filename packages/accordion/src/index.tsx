@@ -20,19 +20,21 @@ import React, {
 import {
   boolOrBoolString,
   checkStyles,
-  createDescendantContext,
   createNamedContext,
-  DescendantProvider,
   forwardRefWithAs,
   isBoolean,
   isNumber,
   makeId,
   noop,
-  useDescendant,
-  useDescendants,
   useForkedRef,
   wrapEvent,
 } from "@reach/utils";
+import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";

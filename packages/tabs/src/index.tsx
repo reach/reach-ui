@@ -37,19 +37,21 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
+import {
   boolOrBoolString,
   checkStyles,
   cloneValidElement,
-  createDescendantContext,
   createNamedContext,
-  DescendantProvider,
   forwardRefWithAs,
   isFunction,
   isNumber,
   makeId,
   noop,
-  useDescendant,
-  useDescendants,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useUpdateEffect,

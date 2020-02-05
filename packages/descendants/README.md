@@ -236,7 +236,7 @@ So now we need a way to define arbitrary components as a `MenuItem`. One workaro
 
 ## Our solution (for now): Descendants context registration
 
-The `descendants` package provides three key tools:
+The `descendants` package provides these key tools:
 
 - `createDescendantContext`: Creates a special context object to deal with registering descendants in a tree (accepts a name string for better debugging)
 - `useDescendants`: A hook to create a state object containing a descendants array and setter function.
@@ -317,5 +317,67 @@ function MenuItem(props) {
       {...props}
     />
   );
+}
+```
+
+The key tradeoff here is that descendants won't be available on the first render, and as such any components that need this data for server-side rendering will need to manage their own state and pass descendant data from from the top of the tree. For example
+
+```jsx
+function Comp() {
+  <Listbox>
+    {/*
+    The button needs to know which value is selected to render its label!
+    The label will be empty on the server if we depend on descendant hooks
+    */}
+    <ListboxButton />
+    <ListboxList>
+      <ListboxOption value="Apple" />
+      <ListboxOption value="Orange" />
+      <ListboxOption value="Banana" />
+    </ListboxList>
+  </Listbox>;
+}
+
+function CompSSR() {
+  // This limits composition, but now you have your data in one place at the top
+  let options = ["Apple", "Orange", "Banana"];
+  let [activeOption, setActiveOption] = useState(options[0]);
+  <Listbox onChange={setActiveOption} selected={activeOption}>
+    {/* The button needs to know which value is selected to render its label! */}
+    <ListboxButton>{activeOption}</ListboxButton>
+    <ListboxList>
+      {options.map(option => (
+        <ListboxOption value={option} key={option} />
+      ))}
+    </ListboxList>
+  </Listbox>;
+}
+
+function ComposableSSR() {
+  // You can manage state at the top and still get back some composition, you'll
+  // just have to deal with a bit of repitition
+  let [activeOption, setActiveOption] = useState("Apple");
+  <Listbox onChange={setActiveOption} selected={activeOption}>
+    {/* The button needs to know which value is selected to render its label! */}
+    <ListboxButton>{activeOption}</ListboxButton>
+    <ListboxList>
+      <ListboxOption value="Apple">
+        Apple <span aria-hidden>🍎</span>
+      </ListboxOption>
+      <ListboxOption
+        value="Orange"
+        aria-labelledby="orange-label"
+        aria-describedby="orange-description"
+      >
+        <span id="orange-label">
+          Orange <span aria-hidden>🍊</span>
+        </span>
+        <span id="orange-description">Fun fact: Oranges are delicious!</span>
+      </ListboxOption>
+      <ListboxOption value="Banana">
+        Banana <span aria-hidden>🍌</span>
+      </ListboxOption>
+    </ListboxList>
+  </Listbox>;
 }
 ```

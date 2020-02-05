@@ -24,19 +24,21 @@ import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
-  checkStyles,
   createDescendantContext,
-  createNamedContext,
   Descendant,
   DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
+import {
+  checkStyles,
+  createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
   isFunction,
   isString,
   makeId,
   noop,
-  useDescendant,
-  useDescendants,
   useForkedRef,
   usePrevious,
   wrapEvent,

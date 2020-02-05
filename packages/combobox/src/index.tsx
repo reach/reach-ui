@@ -31,19 +31,21 @@ import PropTypes from "prop-types";
 import {
   checkStyles,
   ComponentWithForwardedRef,
-  createDescendantContext,
   createNamedContext,
-  DescendantProvider,
   forwardRefWithAs,
   getOwnerDocument,
   makeId,
-  useDescendant,
-  useDescendants,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useForkedRef,
   wrapEvent,
   noop,
 } from "@reach/utils";
+import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
