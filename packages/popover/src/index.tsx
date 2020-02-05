@@ -5,7 +5,7 @@
 import React, { useRef, forwardRef, useEffect } from "react";
 import Portal from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { useForkedRef, canUseDOM } from "@reach/utils";
+import { getOwnerDocument, useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -173,12 +173,7 @@ function useSimulateTabNavigationForReactTree<
   T extends HTMLElement = HTMLElement,
   P extends HTMLElement = HTMLElement
 >(triggerRef: React.RefObject<T>, popoverRef: React.RefObject<P>) {
-  const ownerDocument =
-    triggerRef.current && triggerRef.current.ownerDocument
-      ? triggerRef.current.ownerDocument
-      : canUseDOM()
-      ? document
-      : null;
+  const ownerDocument = getOwnerDocument(triggerRef.current);
 
   function handleKeyDown(event: KeyboardEvent) {
     if (
