@@ -443,7 +443,16 @@ export function DescendantProvider<T, P>({
       }
 
       set(items => {
-        if (items.find(({ element: _el }) => _el === element) == null) {
+        let newItem: Descendant<T, P>;
+        let newItems: Descendant<T, P>[];
+        // If there are no items, register at index 0 and bail.
+        if (items.length === 0) {
+          newItem = { element, index: 0, ...rest } as Descendant<T, P>;
+          newItems = [...items, newItem];
+        } else if (items.find(item => item.element === element)) {
+          // If the element is already registered, just use the same array
+          newItems = items;
+        } else {
           // When registering a descendant, we need to make sure we insert in
           // into the array in the same order that it appears in the DOM. So as
           // new descendants are added or maybe some are removed, we always know
@@ -456,8 +465,8 @@ export function DescendantProvider<T, P>({
           // called in an effect every time the descendants state value changes,
           // we should be sure that this index is accurate when descendent
           // elements come or go from our component.
-          let index = items.findIndex(({ element: existingElement }) => {
-            if (!existingElement || !element) {
+          let index = items.findIndex(item => {
+            if (!item.element || !element) {
               return false;
             }
             // Does this element's DOM node appear before another item in the
@@ -465,20 +474,29 @@ export function DescendantProvider<T, P>({
             // this point in the array so we know where to insert the new
             // element.
             return Boolean(
-              existingElement.compareDocumentPosition(element) &
+              item.element.compareDocumentPosition(element) &
                 Node.DOCUMENT_POSITION_PRECEDING
             );
           });
 
-          let newItem = { element, index, ...rest } as Descendant<T, P>;
+          newItem = {
+            element,
+            index,
+            ...rest,
+          } as Descendant<T, P>;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
-            return [...items, newItem];
+            newItems = [...items, newItem];
+          } else {
+            newItems = [
+              ...items.slice(0, index),
+              newItem,
+              ...items.slice(index),
+            ];
           }
-          return [...items.slice(0, index), newItem, ...items.slice(index)];
         }
-        return items;
+        return newItems.map((item, index) => ({ ...item, index }));
       });
     },
     // setDescendants is a state setter initialized by the useDescendants hook.
@@ -494,7 +512,7 @@ export function DescendantProvider<T, P>({
         return;
       }
 
-      set(items => items.filter(({ element: _el }) => element !== _el));
+      set(items => items.filter(item => element !== item.element));
     },
     // setDescendants is a state setter initialized by the useDescendants hook.
     // We can safely ignore the lint warning here because it will not change
