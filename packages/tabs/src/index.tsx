@@ -37,17 +37,21 @@ import React, {
 import PropTypes from "prop-types";
 import warning from "warning";
 import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
+import {
   boolOrBoolString,
   checkStyles,
   cloneValidElement,
-  createDescendantContext,
   createNamedContext,
-  DescendantProvider,
   forwardRefWithAs,
+  isFunction,
+  isNumber,
   makeId,
   noop,
-  useDescendant,
-  useDescendants,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useUpdateEffect,
@@ -222,7 +226,7 @@ if (__DEV__) {
             compName +
             "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
-      } else if (props[name] != null && typeof props[name] !== "number") {
+      } else if (props[name] != null && !isNumber(props[name])) {
         return new Error(
           `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
             Array.isArray(val) ? "array" : typeof val
@@ -433,7 +437,7 @@ export type TabListProps = {
 if (__DEV__) {
   TabList.displayName = "TabList";
   TabList.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
   };
 }
@@ -551,9 +555,8 @@ export type TabPanelsProps = TabListProps & {};
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
   TabPanels.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
-    selectedIndex: PropTypes.number,
   };
 }
 
@@ -594,7 +597,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
         ref={ref}
         data-reach-tab-panel=""
         id={id}
-        tabIndex={-1}
+        tabIndex={isSelected ? 0 : -1}
       >
         {children}
       </Comp>
@@ -617,7 +620,7 @@ export type TabPanelProps = {
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
   TabPanel.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     children: PropTypes.node,
   };
 }
@@ -634,7 +637,7 @@ function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   } else if (
     element.ownerDocument &&
     element.ownerDocument.defaultView &&
-    typeof element.ownerDocument.defaultView.getComputedStyle === "function"
+    isFunction(element.ownerDocument.defaultView.getComputedStyle)
   ) {
     y = element.ownerDocument.defaultView
       .getComputedStyle(element, null)

@@ -49,10 +49,16 @@ import React, {
   Fragment,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import { useId } from "@reach/auto-id";
-import { checkStyles, makeId, useForkedRef, wrapEvent } from "@reach/utils";
+import {
+  checkStyles,
+  getOwnerDocument,
+  makeId,
+  useForkedRef,
+  wrapEvent,
+} from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
@@ -98,8 +104,8 @@ const chart: StateChart = {
       enter: clearContextId,
       on: {
         [MOUSE_ENTER]: FOCUSED,
-        [FOCUS]: VISIBLE
-      }
+        [FOCUS]: VISIBLE,
+      },
     },
     [FOCUSED]: {
       enter: startRestTimer,
@@ -109,8 +115,8 @@ const chart: StateChart = {
         [MOUSE_LEAVE]: IDLE,
         [MOUSE_DOWN]: DISMISSED,
         [BLUR]: IDLE,
-        [REST]: VISIBLE
-      }
+        [REST]: VISIBLE,
+      },
     },
     [VISIBLE]: {
       on: {
@@ -120,8 +126,8 @@ const chart: StateChart = {
         [BLUR]: LEAVING_VISIBLE,
         [MOUSE_DOWN]: DISMISSED,
         [SELECT_WITH_KEYBOARD]: DISMISSED,
-        [GLOBAL_MOUSE_MOVE]: LEAVING_VISIBLE
-      }
+        [GLOBAL_MOUSE_MOVE]: LEAVING_VISIBLE,
+      },
     },
     [LEAVING_VISIBLE]: {
       enter: startLeavingVisibleTimer,
@@ -132,8 +138,8 @@ const chart: StateChart = {
       on: {
         [MOUSE_ENTER]: VISIBLE,
         [FOCUS]: VISIBLE,
-        [TIME_COMPLETE]: IDLE
-      }
+        [TIME_COMPLETE]: IDLE,
+      },
     },
     [DISMISSED]: {
       leave: () => {
@@ -142,10 +148,10 @@ const chart: StateChart = {
       },
       on: {
         [MOUSE_LEAVE]: IDLE,
-        [BLUR]: IDLE
-      }
-    }
-  }
+        [BLUR]: IDLE,
+      },
+    },
+  },
 };
 
 /*
@@ -228,7 +234,7 @@ export function useTooltip<T extends HTMLElement>({
   onKeyDown,
   onMouseDown,
   ref: forwardedRef,
-  DEBUG_STYLE
+  DEBUG_STYLE,
 }: {
   ref?: React.Ref<any>;
   DEBUG_STYLE?: boolean;
@@ -265,6 +271,7 @@ export function useTooltip<T extends HTMLElement>({
   useEffect(() => checkStyles("tooltip"), []);
 
   useEffect(() => {
+    const ownerDocument = getOwnerDocument(ownRef.current) || document;
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&
@@ -273,8 +280,8 @@ export function useTooltip<T extends HTMLElement>({
         transition(SELECT_WITH_KEYBOARD);
       }
     }
-    document.addEventListener("keydown", listener);
-    return () => document.removeEventListener("keydown", listener);
+    ownerDocument.addEventListener("keydown", listener);
+    return () => ownerDocument.removeEventListener("keydown", listener);
   }, []);
 
   const handleMouseEnter = () => {
@@ -325,13 +332,13 @@ export function useTooltip<T extends HTMLElement>({
     onBlur: wrapEvent(onBlur, handleBlur),
     onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
     onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
-    onMouseDown: wrapEvent(onMouseDown, handleMouseDown)
+    onMouseDown: wrapEvent(onMouseDown, handleMouseDown),
   };
 
   const tooltip: TooltipParams = {
     id,
     triggerRect,
-    isVisible
+    isVisible,
   };
 
   return [trigger, tooltip, isVisible];
@@ -366,7 +373,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     onKeyDown: child.props.onKeyDown,
     onMouseDown: child.props.onMouseDown,
     ref: child.ref,
-    DEBUG_STYLE
+    DEBUG_STYLE,
   });
   return (
     <Fragment>
@@ -391,7 +398,7 @@ if (__DEV__) {
   Tooltip.propTypes = {
     children: PropTypes.node.isRequired,
     label: PropTypes.node.isRequired,
-    ariaLabel: PropTypes.string
+    ariaLabel: PropTypes.string,
   };
 }
 
@@ -446,7 +453,7 @@ if (__DEV__) {
   TooltipPopup.propTypes = {
     label: PropTypes.node.isRequired,
     ariaLabel: PropTypes.string,
-    position: PropTypes.func
+    position: PropTypes.func,
   };
 }
 
@@ -484,7 +491,7 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           children={label}
           style={{
             ...style,
-            ...getStyles(position, triggerRect as PRect, tooltipRect as PRect)
+            ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
           }}
           ref={ref}
           {...rest}
@@ -539,7 +546,7 @@ const positionDefault: Position = (triggerRect, tooltipRect) => {
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
     bottom:
       window.innerHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
-    left: triggerRect.left - tooltipRect.width < 0
+    left: triggerRect.left - tooltipRect.width < 0,
   };
 
   const directionRight = collisions.right && !collisions.left;
@@ -557,7 +564,7 @@ const positionDefault: Position = (triggerRect, tooltipRect) => {
       : `${triggerRect.top +
           OFFSET +
           triggerRect.height +
-          window.pageYOffset}px`
+          window.pageYOffset}px`,
   };
 };
 

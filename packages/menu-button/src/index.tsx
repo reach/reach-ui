@@ -24,16 +24,21 @@ import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
-  checkStyles,
   createDescendantContext,
-  createNamedContext,
   Descendant,
   DescendantProvider,
-  forwardRefWithAs,
-  makeId,
-  noop,
   useDescendant,
   useDescendants,
+} from "@reach/descendants";
+import {
+  checkStyles,
+  createNamedContext,
+  forwardRefWithAs,
+  getOwnerDocument,
+  isFunction,
+  isString,
+  makeId,
+  noop,
   useForkedRef,
   usePrevious,
   wrapEvent,
@@ -125,9 +130,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       set={setDescendants}
     >
       <MenuContext.Provider value={context}>
-        {typeof children === "function"
-          ? children({ isOpen: state.isOpen })
-          : children}
+        {isFunction(children) ? children({ isOpen: state.isOpen }) : children}
       </MenuContext.Provider>
     </DescendantProvider>
   );
@@ -142,7 +145,7 @@ export interface MenuProps {
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menu-children
    */
-  children: React.ReactNode;
+  children: React.ReactNode | ((props: { isOpen: boolean }) => React.ReactNode);
   id?: string;
 }
 
@@ -204,8 +207,10 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       }
     }
 
-    function handleMouseDown() {
-      if (isOpen) {
+    function handleMouseDown(event: React.MouseEvent) {
+      if (isRightClick(event.nativeEvent)) {
+        return;
+      } else if (isOpen) {
         dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
       } else {
         dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
@@ -416,9 +421,10 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
      * mouseEventStarted ref so we can check it again when needed.
      */
     useEffect(() => {
+      let ownerDocument = getOwnerDocument(ownRef.current) || document;
       let listener = () => (mouseEventStarted.current = false);
-      document.addEventListener("mouseup", listener);
-      return () => document.removeEventListener("mouseup", listener);
+      ownerDocument.addEventListener("mouseup", listener);
+      return () => ownerDocument.removeEventListener("mouseup", listener);
     }, []);
 
     /**
@@ -430,23 +436,22 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isOpen) {
         // @ts-ignore
         window.__REACH_DISABLE_TOOLTIPS = true;
-        window.requestAnimationFrame(() => {
-          if (selectionIndex !== -1) {
-            /*
-             * We haven't measured the popover yet, so give it a frame otherwise
-             * we'll scroll to the bottom of the page >.<
-             */
-            if (ownRef.current && index === selectionIndex) {
-              ownRef.current.focus();
-            }
-          } else {
-            /*
-             * Clear highlight when mousing over non-menu items, but focus the
-             * menu so the the keyboard will work after a mouseover.
-             */
-            menuRef.current && menuRef.current.focus();
+
+        if (selectionIndex !== -1) {
+          /*
+           * We haven't measured the popover yet, so give it a frame otherwise
+           * we'll scroll to the bottom of the page >.<
+           */
+          if (index === selectionIndex) {
+            focus(ownRef.current);
           }
-        });
+        } else {
+          /*
+           * Clear highlight when mousing over non-menu items, but focus the
+           * menu so the the keyboard will work after a mouseover.
+           */
+          focus(menuRef.current);
+        }
       } else {
         /*
          * We want to ignore the immediate focus of a tooltip so it doesn't pop
@@ -662,7 +667,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
            * Check if a user is typing some char keys and respond by setting the
            * query state.
            */
-          if (typeof key === "string" && key.length === 1) {
+          if (isString(key) && key.length === 1) {
             const query = typeaheadQuery + key.toLowerCase();
             dispatch({
               type: SEARCH_FOR_ITEM,
@@ -825,17 +830,18 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     function handleBlur(event: React.FocusEvent) {
-      const { relatedTarget } = event;
+      let { relatedTarget } = event;
+      let ownerDocument = getOwnerDocument(popoverRef.current) || document;
       requestAnimationFrame(() => {
         // We on want to close only if focus rests outside the menu
         if (
-          document.activeElement !== menuRef.current &&
-          document.activeElement !== buttonRef.current &&
+          ownerDocument.activeElement !== menuRef.current &&
+          ownerDocument.activeElement !== buttonRef.current &&
           popoverRef.current
         ) {
           if (
             !popoverRef.current.contains(
-              (relatedTarget as Element) || document.activeElement
+              (relatedTarget as Element) || ownerDocument.activeElement
             )
           ) {
             dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
@@ -927,6 +933,14 @@ function isRightClick(nativeEvent: MouseEvent) {
   return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
+function focus<T extends HTMLElement = HTMLElement>(
+  element: T | undefined | null
+) {
+  window.requestAnimationFrame(() => {
+    element && element.focus();
+  });
+}
+
 function reducer(
   state: MenuButtonState,
   action: MenuButtonAction = {} as MenuButtonAction
@@ -937,9 +951,7 @@ function reducer(
        * Focus the button first by default when an item is selected. We fire the
        * onSelect callback next so the app can manage focus if needed.
        */
-      if (action.payload.buttonRef.current) {
-        action.payload.buttonRef.current.focus();
-      }
+      focus(action.payload.buttonRef.current);
       action.payload.callback && action.payload.callback();
       return {
         ...state,
@@ -947,7 +959,7 @@ function reducer(
         selectionIndex: -1,
       };
     case CLOSE_MENU:
-      action.payload.buttonRef.current?.focus();
+      focus(action.payload.buttonRef.current);
       return {
         ...state,
         isOpen: false,

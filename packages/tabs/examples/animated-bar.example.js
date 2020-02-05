@@ -3,7 +3,7 @@ import React, {
   useRef,
   useContext,
   useLayoutEffect,
-  createContext
+  createContext,
 } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { useRect } from "@reach/rect";
@@ -62,7 +62,7 @@ function ExampleAnimatedTabs({ color, ...rest }) {
           transition: "all 300ms ease",
           left: activeRect && activeRect.left,
           width: activeRect && activeRect.width,
-          top: activeRect && activeRect.bottom - 2
+          top: activeRect && activeRect.bottom - 2,
         }}
       />
     </AnimatedContext.Provider>
@@ -78,6 +78,8 @@ function ExampleAnimatedTab(props) {
 
   // get the style changing function from context
   const setActiveRect = useContext(AnimatedContext);
+
+  console.log({ rect });
 
   // callup to set styles whenever we're active
   useLayoutEffect(() => {

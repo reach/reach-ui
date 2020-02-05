@@ -16,6 +16,7 @@
     "@reach/checkbox": "latest",
     "@reach/combobox": "latest",
     "@reach/component-component": "latest",
+    "@reach/descendants": "latest",
     "@reach/dialog": "latest",
     "@reach/disclosure": "latest",
     "@reach/menu-button": "latest",

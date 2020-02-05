@@ -40,6 +40,7 @@ import React, {
 } from "react";
 import {
   DistributiveOmit,
+  isString,
   useForkedRef,
   useIsomorphicLayoutEffect,
   wrapEvent,
@@ -562,7 +563,7 @@ function useMachine<
   // Add refs to every event so we can use them to perform actions.
   let send = useCallback(
     (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
-      let event = typeof rawEvent === "string" ? { type: rawEvent } : rawEvent;
+      let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
       let refValues = Object.keys(refs).reduce((value, name) => {
         (value as any)[name] = refs[name].current;
         return value;

@@ -12,7 +12,14 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import Portal from "@reach/portal";
-import { checkStyles, noop, useForkedRef, wrapEvent } from "@reach/utils";
+import {
+  checkStyles,
+  getOwnerDocument,
+  isString,
+  noop,
+  useForkedRef,
+  wrapEvent,
+} from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
@@ -20,7 +27,7 @@ import PropTypes from "prop-types";
 const overlayPropTypes = {
   initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
-  onDismiss: PropTypes.func
+  onDismiss: PropTypes.func,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +57,7 @@ if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
     ...overlayPropTypes,
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
   };
 }
 
@@ -131,7 +138,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
 if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
   DialogOverlay.propTypes = {
-    ...overlayPropTypes
+    ...overlayPropTypes,
   };
 }
 
@@ -186,7 +193,7 @@ if (__DEV__) {
   DialogContent.displayName = "DialogContent";
   DialogContent.propTypes = {
     "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType
+    "aria-labelledby": ariaLabelType,
   };
 }
 
@@ -261,7 +268,7 @@ if (__DEV__) {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType
+    "aria-labelledby": ariaLabelType,
   };
 }
 
@@ -271,6 +278,7 @@ export default Dialog;
 function createAriaHider(dialogNode: HTMLElement) {
   let originalValues: any[] = [];
   let rootNodes: HTMLElement[] = [];
+  let ownerDocument = getOwnerDocument(dialogNode) || document;
 
   if (!dialogNode) {
     if (__DEV__) {
@@ -281,20 +289,23 @@ function createAriaHider(dialogNode: HTMLElement) {
     return noop;
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("body > *"), node => {
-    const portalNode = dialogNode.parentNode?.parentNode?.parentNode;
-    if (node === portalNode) {
-      return;
+  Array.prototype.forEach.call(
+    ownerDocument.querySelectorAll("body > *"),
+    node => {
+      const portalNode = dialogNode.parentNode?.parentNode?.parentNode;
+      if (node === portalNode) {
+        return;
+      }
+      let attr = node.getAttribute("aria-hidden");
+      let alreadyHidden = attr !== null && attr !== "false";
+      if (alreadyHidden) {
+        return;
+      }
+      originalValues.push(attr);
+      rootNodes.push(node);
+      node.setAttribute("aria-hidden", "true");
     }
-    let attr = node.getAttribute("aria-hidden");
-    let alreadyHidden = attr !== null && attr !== "false";
-    if (alreadyHidden) {
-      return;
-    }
-    originalValues.push(attr);
-    rootNodes.push(node);
-    node.setAttribute("aria-hidden", "true");
-  });
+  );
 
   return () => {
     rootNodes.forEach((node, index) => {
@@ -332,7 +343,7 @@ function ariaLabelType(
         ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
         details
     );
-  } else if (props[propName] != null && typeof props[propName] !== "string") {
+  } else if (props[propName] != null && !isString(props[propName])) {
     return new Error(
       `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`string\`, received \`${
         Array.isArray(propFullName) ? "array" : typeof propFullName

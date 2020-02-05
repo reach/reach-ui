@@ -21,7 +21,7 @@
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
-import { usePrevious, useForkedRef } from "@reach/utils";
+import { getOwnerDocument, usePrevious, useForkedRef } from "@reach/utils";
 import PropTypes from "prop-types";
 
 /*
@@ -30,17 +30,17 @@ import PropTypes from "prop-types";
  */
 let keys: RegionKeys = {
   polite: -1,
-  assertive: -1
+  assertive: -1,
 };
 
 let elements: ElementTypes = {
   polite: {},
-  assertive: {}
+  assertive: {},
 };
 
 let liveRegions: RegionElements = {
   polite: null,
-  assertive: null
+  assertive: null,
 };
 
 let renderTimer: number | null;
@@ -94,7 +94,7 @@ if (__DEV__) {
   Alert.displayName = "Alert";
   Alert.propTypes = {
     children: PropTypes.node,
-    type: PropTypes.oneOf(["assertive", "polite"])
+    type: PropTypes.oneOf(["assertive", "polite"]),
   };
 }
 
@@ -102,7 +102,7 @@ export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function createMirror(type: "polite" | "assertive", doc = document): Mirror {
+function createMirror(type: "polite" | "assertive", doc: Document): Mirror {
   let key = ++keys[type];
 
   let mount = (element: JSX.Element) => {
@@ -149,7 +149,7 @@ function renderAlerts() {
               {Object.keys(elements[type]).map(key =>
                 React.cloneElement(elements[type][key], {
                   key,
-                  ref: null
+                  ref: null,
                 })
               )}
             </div>
@@ -170,7 +170,7 @@ function useMirrorEffects(
   const mirror = useRef<Mirror | null>(null);
   const mounted = useRef(false);
   useEffect(() => {
-    const { ownerDocument } = ref.current || {};
+    const ownerDocument = getOwnerDocument(ref.current) || document;
     if (!mounted.current) {
       mounted.current = true;
       mirror.current = createMirror(type, ownerDocument);

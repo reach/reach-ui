@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import styled from "styled-components";
 
@@ -56,7 +56,7 @@ function ArrowButton({ children, active, ...props }) {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
         }}
       >
         <span>{children}</span>
@@ -66,7 +66,7 @@ function ArrowButton({ children, active, ...props }) {
   );
 }
 
-function ArrowIcon(props) {
+function ArrowIcon({ active, ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

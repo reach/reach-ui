@@ -5,7 +5,7 @@
 import React, { useRef, forwardRef, useEffect } from "react";
 import Portal from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { useForkedRef } from "@reach/utils";
+import { getOwnerDocument, useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
         style={{
           ...style,
           position: "absolute",
-          ...getStyles(position, targetRect, popoverRect)
+          ...getStyles(position, targetRect, popoverRect),
         }}
         {...rest}
       />
@@ -104,7 +104,7 @@ export const positionDefault: Position = (targetRect, popoverRect) => {
       : `${targetRect.left + window.pageXOffset}px`,
     top: directionUp
       ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
-      : `${targetRect.top + targetRect.height + window.pageYOffset}px`
+      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
   };
 };
 
@@ -119,7 +119,7 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
     left: targetRect.left,
     top: directionUp
       ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
-      : `${targetRect.top + targetRect.height + window.pageYOffset}px`
+      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
   };
 };
 
@@ -154,7 +154,7 @@ function getCollisions(
     bottom:
       window.innerHeight <
       targetRect.bottom + popoverRect.height - offsetBottom,
-    left: targetRect.left - popoverRect.width < 0
+    left: targetRect.left - popoverRect.width < 0,
   };
 
   const directionRight = collisions.right && !collisions.left;
@@ -173,7 +173,7 @@ function useSimulateTabNavigationForReactTree<
   T extends HTMLElement = HTMLElement,
   P extends HTMLElement = HTMLElement
 >(triggerRef: React.RefObject<T>, popoverRef: React.RefObject<P>) {
-  const doc = triggerRef.current && triggerRef.current.ownerDocument; // maybe in devtools
+  const ownerDocument = getOwnerDocument(triggerRef.current);
 
   function handleKeyDown(event: KeyboardEvent) {
     if (
@@ -204,15 +204,18 @@ function useSimulateTabNavigationForReactTree<
   }
 
   useEffect(() => {
-    doc && doc.addEventListener("keydown", handleKeyDown);
-    return () => {
-      doc && doc.removeEventListener("keydown", handleKeyDown);
-    };
+    if (ownerDocument) {
+      ownerDocument.addEventListener("keydown", handleKeyDown);
+      return () => {
+        ownerDocument.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+    return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function getElementAfterTrigger() {
-    const elements = doc && tabbable(doc);
+    const elements = ownerDocument && tabbable(ownerDocument);
     const targetIndex =
       elements && triggerRef.current
         ? elements.indexOf(triggerRef.current)
@@ -221,7 +224,9 @@ function useSimulateTabNavigationForReactTree<
   }
 
   function tabbedFromTriggerToPopover() {
-    return triggerRef.current === document.activeElement;
+    return triggerRef.current && ownerDocument
+      ? triggerRef.current === ownerDocument.activeElement
+      : false;
   }
 
   function focusFirstPopoverTabbable(event: KeyboardEvent) {
@@ -233,11 +238,16 @@ function useSimulateTabNavigationForReactTree<
   }
 
   function tabbedOutOfPopover() {
-    const inPopover = popoverRef?.current?.contains(document.activeElement);
+    const inPopover =
+      popoverRef.current && ownerDocument
+        ? popoverRef.current.contains(ownerDocument.activeElement || null)
+        : false;
     if (inPopover) {
       const elements = popoverRef.current && tabbable(popoverRef.current);
       return Boolean(
-        elements && elements[elements.length - 1] === document.activeElement
+        elements &&
+          ownerDocument &&
+          elements[elements.length - 1] === ownerDocument.activeElement
       );
     }
     return false;
@@ -281,8 +291,8 @@ function useSimulateTabNavigationForReactTree<
 
   function tabbedToBrowserChrome(event: KeyboardEvent) {
     const elements =
-      doc && popoverRef.current
-        ? tabbable(doc).filter(
+      ownerDocument && popoverRef.current
+        ? tabbable(ownerDocument).filter(
             element => !popoverRef.current!.contains(element)
           )
         : null;
@@ -292,29 +302,29 @@ function useSimulateTabNavigationForReactTree<
   function shiftTabbedToBrowserChrome(event: KeyboardEvent) {
     // we're assuming the popover will never contain the first tabbable
     // element, and it better not, because the trigger needs to be tabbable!
-    return doc ? event.target === tabbable(doc)[0] : false;
+    return ownerDocument ? event.target === tabbable(ownerDocument)[0] : false;
   }
 
   let restoreTabIndexTuplés: [HTMLElement, number][] = [];
 
   function disableTabbablesInPopover() {
     const elements = popoverRef.current && tabbable(popoverRef.current);
-    if (elements && doc) {
+    if (elements) {
       elements.forEach(element => {
         restoreTabIndexTuplés.push([element, element.tabIndex]);
         element.tabIndex = -1;
       });
-      doc.addEventListener("focusin", enableTabbablesInPopover);
+      ownerDocument &&
+        ownerDocument.addEventListener("focusin", enableTabbablesInPopover);
     }
   }
 
   function enableTabbablesInPopover() {
-    if (doc) {
-      doc.removeEventListener("focusin", enableTabbablesInPopover);
-      restoreTabIndexTuplés.forEach(([element, tabIndex]) => {
-        element.tabIndex = tabIndex;
-      });
-    }
+    ownerDocument &&
+      ownerDocument.removeEventListener("focusin", enableTabbablesInPopover);
+    restoreTabIndexTuplés.forEach(([element, tabIndex]) => {
+      element.tabIndex = tabIndex;
+    });
   }
 }
 

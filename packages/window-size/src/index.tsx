@@ -5,10 +5,9 @@
  * @see Source https://github.com/reach/reach-ui/tree/master/packages/window-size
  */
 
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-
-let hasWindow = typeof window !== "undefined";
+import { canUseDOM } from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +37,7 @@ export type WindowSizeProps = {
 if (__DEV__) {
   WindowSize.displayName = "WindowSize";
   WindowSize.propTypes = {
-    children: PropTypes.func.isRequired
+    children: PropTypes.func.isRequired,
   };
 }
 
@@ -52,15 +51,16 @@ export default WindowSize;
  * @see Docs https://reacttraining.com/reach-ui/window-size#usewindowsize
  */
 export function useWindowSize() {
+  let { current: hasWindow } = useRef(canUseDOM());
   const [dimensions, setDimensions] = useState({
     width: hasWindow ? window.innerWidth : 0,
-    height: hasWindow ? window.innerHeight : 0
+    height: hasWindow ? window.innerHeight : 0,
   });
   useLayoutEffect(() => {
     const resize = () =>
       setDimensions({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       });
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);

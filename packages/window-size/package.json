@@ -15,6 +15,7 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
+    "@reach/utils": "^0.8.0",
     "prop-types": "^15.7.2",
     "tslib": "1.10.0"
   },

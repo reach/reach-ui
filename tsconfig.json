@@ -10,6 +10,7 @@
       "@reach/checkbox": ["packages/checkbox/src"],
       "@reach/combobox": ["packages/combobox/src"],
       "@reach/component-component": ["packages/component-component/src"],
+      "@reach/descendants": ["packages/descendants/src"],
       "@reach/dialog": ["packages/dialog/src"],
       "@reach/disclosure": ["packages/disclosure/src"],
       "@reach/listbox": ["packages/listbox/src"],

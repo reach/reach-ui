@@ -31,8 +31,10 @@ function Example() {
         <MenuList>
           <MenuItem
             onSelect={() => {
-              linkRef.current.focus();
               action("Select Google Link");
+              requestAnimationFrame(() => {
+                linkRef.current.focus();
+              });
             }}
           >
             Select Google Link

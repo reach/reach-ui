@@ -21,16 +21,20 @@ import {
   boolOrBoolString,
   checkStyles,
   createNamedContext,
-  createDescendantContext,
-  DescendantProvider,
   forwardRefWithAs,
+  isBoolean,
+  isNumber,
   makeId,
   noop,
-  useDescendant,
-  useDescendants,
   useForkedRef,
   wrapEvent,
 } from "@reach/utils";
+import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -306,12 +310,12 @@ if (__DEV__) {
         );
       }
       if (Array.isArray(props[name])) {
-        return props[name].every((i: any) => typeof i === "number")
-          ? null
-          : new Error(
+        return props[name].some((i: any) => !isNumber(i))
+          ? new Error(
               "You provided an array as an index in `Accordion` but one or more of the values are not numeric. Please check to make sure all indices are valid numbers."
-            );
-      } else if (props[name] != null && typeof props[name] !== "number") {
+            )
+          : null;
+      } else if (props[name] != null && !isNumber(props[name])) {
         return new Error(
           `Invalid prop "${propName}" supplied to "${compName}". Expected "number", received "${
             Array.isArray(val) ? "array" : typeof val
@@ -325,7 +329,7 @@ if (__DEV__) {
         return new Error(
           `The "${propName}" prop supplied to "${compName}" is not set or set to "false", but an array of indices was provided to the "defaultIndex" prop. "${compName}" can only have more than one default index if the "${propName}" prop is set to "true".`
         );
-      } else if (props[name] != null && typeof props[name] !== "boolean") {
+      } else if (props[name] != null && !isBoolean(props[name])) {
         return new Error(
           `Invalid prop "${propName}" supplied to "${compName}". Expected "boolean", received "${
             Array.isArray(props[name]) ? "array" : typeof props[name]

@@ -35,6 +35,8 @@ import { useId } from "@reach/auto-id";
 import {
   checkStyles,
   createNamedContext,
+  getOwnerDocument,
+  isFunction,
   makeId,
   useForkedRef,
   wrapEvent,
@@ -451,6 +453,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
     });
 
     useEffect(() => {
+      const ownerDocument = getOwnerDocument(sliderRef.current) || document;
       const handlePointerMove = wrapEvent(onPointerMove, event => {
         const newValue = getNewValueFromPointer(event);
         if (newValue !== value) {
@@ -459,17 +462,17 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       });
 
       if (isPointerDown) {
-        document.addEventListener("pointermove", handlePointerMove);
+        ownerDocument.addEventListener("pointermove", handlePointerMove);
       }
 
       return () => {
-        document.removeEventListener("pointermove", handlePointerMove);
+        ownerDocument.removeEventListener("pointermove", handlePointerMove);
       };
     }, [
-      onPointerMove,
       getNewValueFromPointer,
-      updateValue,
       isPointerDown,
+      onPointerMove,
+      updateValue,
       value,
     ]);
 
@@ -486,8 +489,8 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
         >
-          {typeof children === "function"
-            ? (children as SliderChildrenRender)({
+          {isFunction(children)
+            ? children({
                 hasFocus,
                 id,
                 max,

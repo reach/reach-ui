@@ -31,22 +31,25 @@ import PropTypes from "prop-types";
 import {
   checkStyles,
   ComponentWithForwardedRef,
-  createDescendantContext,
   createNamedContext,
-  DescendantProvider,
   forwardRefWithAs,
+  getOwnerDocument,
   makeId,
-  useDescendant,
-  useDescendants,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useForkedRef,
   wrapEvent,
   noop,
 } from "@reach/utils";
+import {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendants,
+} from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
-import Popover, { positionMatchWidth } from "@reach/popover";
+import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -368,7 +371,7 @@ export type ComboboxProps = {
 if (__DEV__) {
   Combobox.displayName = "Combobox";
   Combobox.propTypes = {
-    as: PropTypes.elementType,
+    as: PropTypes.any,
     onSelect: PropTypes.func,
     openOnFocus: PropTypes.bool,
   };
@@ -560,10 +563,10 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover
  */
-export const ComboboxPopover: ComponentWithForwardedRef<
-  "div",
-  ComboboxPopoverProps & __ComboboxPopoverProps
-> = forwardRef(function ComboboxPopover(
+export const ComboboxPopover = forwardRef<
+  HTMLDivElement,
+  ComboboxPopoverProps & Partial<PopoverProps>
+>(function ComboboxPopover(
   { children, portal = true, onKeyDown, onBlur, ...props },
   forwardedRef: React.Ref<any>
 ) {
@@ -739,11 +742,9 @@ export const ComboboxOption: ComponentWithForwardedRef<
         id={String(makeHash(value))}
         role="option"
         data-highlighted={isActive ? "" : undefined}
-        /*
-         * without this the menu will close from `onBlur`, but with it the
-         * element can be `document.activeElement` and then our focus checks in
-         * onBlur will work as intended
-         */
+        // Without this the menu will close from `onBlur`, but with it the
+        // element can be `document.activeElement` and then our focus checks in
+        // onBlur will work as intended
         tabIndex={-1}
         onClick={wrapEvent(onClick, handleClick)}
         // @ts-ignore
@@ -1051,14 +1052,15 @@ function useBlur() {
   );
 
   return function handleBlur() {
+    let ownerDocument = getOwnerDocument(inputRef.current) || document;
     requestAnimationFrame(() => {
       // we on want to close only if focus rests outside the combobox
       if (
-        document.activeElement !== inputRef.current &&
-        document.activeElement !== buttonRef.current &&
+        ownerDocument.activeElement !== inputRef.current &&
+        ownerDocument.activeElement !== buttonRef.current &&
         popoverRef.current
       ) {
-        if (popoverRef.current.contains(document.activeElement)) {
+        if (popoverRef.current.contains(ownerDocument.activeElement)) {
           // focus landed inside the combobox, keep it open
           if (state !== INTERACTING) {
             transition(INTERACT);

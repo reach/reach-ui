@@ -5,12 +5,11 @@ import {
   MenuPopover,
   MenuItems,
   MenuButton,
-  MenuItem
+  MenuItem,
 } from "@reach/menu-button";
-import { positionMatchWidth } from "@reach/popover";
 import "@reach/menu-button/styles.css";
 
-let name = "With Custom Wrapper";
+let name = "With Custom Wrapper (TS)";
 
 function Example() {
   return (
@@ -18,7 +17,7 @@ function Example() {
       <MenuButton id="example-button">
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
-      <MenuPopover position={positionMatchWidth}>
+      <MenuPopover>
         <div>
           <MenuItems>
             <MenuItem onSelect={action("Download")}>Download</MenuItem>

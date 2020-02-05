@@ -69,7 +69,7 @@ import {
   MenuItem,
   MenuItems,
   MenuPopover,
-  MenuLink
+  MenuLink,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 ```
@@ -646,12 +646,14 @@ function Example(props) {
   const screen1FocusRef = React.useRef();
   const screen2ButtonFocusRef = React.useRef();
   React.useEffect(() => {
-    if (screen === 1) {
-      screen1FocusRef.current.focus();
-    }
-    if (screen === 2) {
-      screen2ButtonFocusRef.current.focus();
-    }
+    requestAnimationFrame(() => {
+      if (screen === 1) {
+        screen1FocusRef.current.focus();
+      }
+      if (screen === 2) {
+        screen2ButtonFocusRef.current.focus();
+      }
+    });
   }, [screen]);
 
   const [screen, setScreen] = React.useState(1);

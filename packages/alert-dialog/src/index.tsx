@@ -30,15 +30,20 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog
  */
 
-import React, { forwardRef, useContext, useEffect } from "react";
+import React, { forwardRef, useContext, useEffect, useRef } from "react";
 import {
   DialogOverlay,
   DialogContent,
   DialogProps,
-  DialogContentProps
+  DialogContentProps,
 } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
-import { createNamedContext, makeId } from "@reach/utils";
+import {
+  getOwnerDocument,
+  createNamedContext,
+  makeId,
+  useForkedRef,
+} from "@reach/utils";
 import invariant from "invariant";
 import PropTypes from "prop-types";
 
@@ -61,24 +66,25 @@ let AlertDialogContext = createNamedContext<IAlertDialogContext>(
  * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogoverlay
  */
 export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
-  function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardRef) {
-    const id = useId(props.id);
-    const labelId = id ? makeId("alert-dialog", id) : undefined;
-    const descriptionId = id
-      ? makeId("alert-dialog-description", id)
-      : undefined;
+  function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardedRef) {
+    let ownRef = useRef<HTMLDivElement | null>(null);
+    let ref = useForkedRef(forwardedRef, ownRef);
+    let id = useId(props.id);
+    let labelId = id ? makeId("alert-dialog", id) : undefined;
+    let descriptionId = id ? makeId("alert-dialog-description", id) : undefined;
 
     return (
       <AlertDialogContext.Provider
         value={{
           labelId,
           descriptionId,
-          leastDestructiveRef
+          overlayRef: ownRef,
+          leastDestructiveRef,
         }}
       >
         <DialogOverlay
           {...props}
-          ref={forwardRef}
+          ref={ref}
           data-reach-alert-dialog-overlay
           initialFocusRef={leastDestructiveRef}
         />
@@ -93,7 +99,7 @@ if (__DEV__) {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
     leastDestructiveRef: () => null,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -117,11 +123,14 @@ export const AlertDialogContent = forwardRef<
   HTMLDivElement,
   AlertDialogContentProps
 >(function AlertDialogContent({ children, ...props }, forwardRef) {
-  const { labelId, leastDestructiveRef } = useContext(AlertDialogContext);
+  let { labelId, leastDestructiveRef, overlayRef } = useContext(
+    AlertDialogContext
+  );
   useEffect(() => {
+    let ownerDocument = getOwnerDocument(overlayRef.current) || document;
     if (labelId) {
       invariant(
-        document.getElementById(labelId),
+        ownerDocument.getElementById(labelId),
         `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
           inside an \`<AlertDialog/>\`.`
       );
@@ -132,6 +141,7 @@ export const AlertDialogContent = forwardRef<
           \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
           https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [labelId, leastDestructiveRef]);
   return (
     <DialogContent
@@ -165,7 +175,7 @@ export type AlertDialogContentProps = {
 if (__DEV__) {
   AlertDialogContent.displayName = "AlertDialogContent";
   AlertDialogContent.propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -283,7 +293,7 @@ if (__DEV__) {
     isOpen: PropTypes.bool,
     onDismiss: PropTypes.func,
     leastDestructiveRef: () => null,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 }
 
@@ -293,5 +303,6 @@ if (__DEV__) {
 interface IAlertDialogContext {
   labelId: string | undefined;
   descriptionId: string | undefined;
+  overlayRef: React.MutableRefObject<HTMLDivElement | null>;
   leastDestructiveRef?: React.RefObject<HTMLElement>;
 }
