@@ -14,8 +14,7 @@ export type AssignableRef<ValueType> =
   | {
       bivarianceHack(instance: ValueType | null): void;
     }["bivarianceHack"]
-  | React.MutableRefObject<ValueType | null>
-  | null;
+  | React.MutableRefObject<ValueType | null>;
 
 /**
  * Type can be either a single `ValueType` or an array of `ValueType`

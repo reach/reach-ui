@@ -104,7 +104,7 @@ export { checkStyles };
  * @param value
  */
 export function assignRef<RefValueType = any>(
-  ref: AssignableRef<RefValueType> | undefined,
+  ref: AssignableRef<RefValueType> | null | undefined,
   value: any
 ) {
   if (ref == null) return;
@@ -196,7 +196,7 @@ export function useConstant<ValueType>(fn: () => ValueType): ValueType {
  * @param refs Refs to fork
  */
 export function useForkedRef<RefValueType = any>(
-  ...refs: (AssignableRef<RefValueType> | undefined)[]
+  ...refs: (AssignableRef<RefValueType> | null | undefined)[]
 ) {
   return useMemo(() => {
     if (refs.every(ref => ref == null)) {
