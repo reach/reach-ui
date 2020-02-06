@@ -68,7 +68,7 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation 1`] = `
           data-reach-tab-panel=""
           id="tabs--4--panel--1"
           role="tabpanel"
-          tabindex="-1"
+          tabindex="0"
         >
           <h1>
             two!
@@ -145,7 +145,7 @@ exports[`<Tabs /> should match the snapshot 1`] = `
           data-reach-tab-panel=""
           id="tabs--1--panel--0"
           role="tabpanel"
-          tabindex="-1"
+          tabindex="0"
         >
           <h1>
             one!
