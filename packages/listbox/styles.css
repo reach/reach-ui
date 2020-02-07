@@ -99,3 +99,7 @@
     opacity: 1;
   }
 }
+
+:focus {
+  outline: 2px solid crimson !important;
+}

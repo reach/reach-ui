@@ -1,36 +1,36 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from "react";
 import {
   ListboxInput,
   ListboxButton,
   ListboxOption,
   ListboxList,
-  ListboxPopover
+  ListboxPopover,
 } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
 let name = "Composed";
 
 function Example() {
-  let [value, setValue] = useState("pollo");
+  let [value, setValue] = useState<React.ReactText>("pollo");
+  let taco = <span aria-hidden>🌮</span>;
   return (
     <ListboxInput value={value} onChange={value => setValue(value)}>
       <ListboxButton arrow="▼" />
       <ListboxPopover>
         <ListboxList>
-          <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
+          <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
           <hr />
           <ListboxOption value="asada" valueText="Carne Asada">
-            🌮 Carne Asada
+            {taco} Carne Asada
           </ListboxOption>
           <ListboxOption value="pollo" valueText="Pollo">
-            🌮 Pollo
+            {taco} Pollo
           </ListboxOption>
           <ListboxOption value="pastor" valueText="Pastor">
-            🌮 Pastor
+            {taco} Pastor
           </ListboxOption>
           <ListboxOption value="lengua" valueText="Lengua">
-            🌮 Lengua
+            {taco} Lengua
           </ListboxOption>
         </ListboxList>
         <hr />
@@ -38,7 +38,7 @@ function Example() {
           <p>
             I really like tacos. I hope you enjoy them as well!
             <br />
-            🌮 🌮 🌮
+            {taco} {taco} {taco}
           </p>
           <button type="button">Useless Button</button>
           <button type="button">Silly Button</button>

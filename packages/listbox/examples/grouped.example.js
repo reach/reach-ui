@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from "react";
 import { Listbox, ListboxGroup, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
@@ -7,33 +6,34 @@ let name = "Grouped";
 
 function Example() {
   let [value, setValue] = useState("default");
+  let taco = <span aria-hidden>🌮</span>;
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
-      <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
+      <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
       <ListboxGroup label={<span style={{ color: "crimson" }}>Meat</span>}>
         <ListboxOption value="asada" valueText="Carne Asada">
-          🌮 Carne Asada
+          {taco} Carne Asada
         </ListboxOption>
         <ListboxOption value="pollo" valueText="Pollo">
-          🌮 Pollo
+          {taco} Pollo
         </ListboxOption>
         <ListboxOption value="pastor" valueText="Pastor">
-          🌮 Pastor
+          {taco} Pastor
         </ListboxOption>
         <ListboxOption value="lengua" valueText="Lengua">
-          🌮 Lengua
+          {taco} Lengua
         </ListboxOption>
       </ListboxGroup>
       <ListboxGroup label="Veggie">
         <ListboxOption value="hibiscus" valueText="Hibiscus">
-          🌮 Hibiscus
+          {taco} Hibiscus
         </ListboxOption>
         <ListboxOption value="portobello" valueText="Portobello">
-          🌮 Portobello
+          {taco} Portobello
         </ListboxOption>
         <ListboxOption value="fajita" valueText="Fajita">
-          🌮 Fajita
+          {taco} Fajita
         </ListboxOption>
       </ListboxGroup>
     </Listbox>

@@ -1,10 +1,9 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from "react";
 import {
   Listbox,
   ListboxGroup,
   ListboxGroupLabel,
-  ListboxOption
+  ListboxOption,
 } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
@@ -13,42 +12,43 @@ let name = "Grouped with Composed Label";
 function GroupLabel({ icon, children, ...props }) {
   return (
     <ListboxGroupLabel {...props}>
-      <span>{icon}</span> {children}
+      <span aria-hidden>{icon}</span> {children}
     </ListboxGroupLabel>
   );
 }
 
 function Example() {
   let [value, setValue] = useState("default");
+  let taco = <span aria-hidden>🌮</span>;
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
-      <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
+      <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
       <ListboxGroup>
         <GroupLabel icon="🍖">Meat</GroupLabel>
         <ListboxOption value="asada" valueText="Carne Asada">
-          🌮 Carne Asada
+          {taco} Carne Asada
         </ListboxOption>
         <ListboxOption value="pollo" valueText="Pollo">
-          🌮 Pollo
+          {taco} Pollo
         </ListboxOption>
         <ListboxOption value="pastor" valueText="Pastor">
-          🌮 Pastor
+          {taco} Pastor
         </ListboxOption>
         <ListboxOption value="lengua" valueText="Lengua">
-          🌮 Lengua
+          {taco} Lengua
         </ListboxOption>
       </ListboxGroup>
       <ListboxGroup>
         <GroupLabel icon="🥕">Veggie</GroupLabel>
         <ListboxOption value="hibiscus" valueText="Hibiscus">
-          🌮 Hibiscus
+          {taco} Hibiscus
         </ListboxOption>
         <ListboxOption value="portobello" valueText="Portobello">
-          🌮 Portobello
+          {taco} Portobello
         </ListboxOption>
         <ListboxOption value="fajita" valueText="Fajita">
-          🌮 Fajita
+          {taco} Fajita
         </ListboxOption>
       </ListboxGroup>
     </Listbox>

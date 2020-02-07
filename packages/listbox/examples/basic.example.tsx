@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
@@ -6,22 +5,23 @@ import "@reach/listbox/styles.css";
 let name = "Basic";
 
 function Example() {
-  let [value, setValue] = useState("default");
+  let [value, setValue] = useState<React.ReactText>("default");
+  let taco = <span aria-hidden>🌮</span>;
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
-      <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
+      <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
       <ListboxOption value="asada" valueText="Carne Asada">
-        🌮 Carne Asada
+        {taco} Carne Asada
       </ListboxOption>
       <ListboxOption value="pollo" valueText="Pollo">
-        🌮 Pollo
+        {taco} Pollo
       </ListboxOption>
       <ListboxOption value="pastor" valueText="Pastor">
-        🌮 Pastor
+        {taco} Pastor
       </ListboxOption>
       <ListboxOption value="lengua" valueText="Lengua">
-        🌮 Lengua
+        {taco} Lengua
       </ListboxOption>
     </Listbox>
   );
