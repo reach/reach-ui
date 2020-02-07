@@ -82,6 +82,7 @@ function Menu({ items }) {
         <MenuItem
           // easy to tell the index
           index={index}
+          activeIndex={activeIndex}
           onSelect={item.onSelect}
         >
           {item.label}
@@ -91,7 +92,7 @@ function Menu({ items }) {
   );
 }
 
-function MenuItem({ index, onSelect, children }) {
+function MenuItem({ index, activeIndex, onSelect, children }) {
   // and now we can style
   const isActive = index === activeIndex;
   return (
@@ -111,7 +112,7 @@ This is where most people live. You see these APIs everywhere because it's way e
 What happens when we want to add a className to all, one, or just a few of the elements? You end up with weird APIs like:
 
 ```jsx
-<Listbox
+<Menu
   options={[
     { label: "Download", onSelect: download },
     { label: "Save", onSelect: save },
@@ -217,7 +218,7 @@ What if we need to put a div around one of the items?
 
 This is totally broken now because we cloned the `div`, not the `MenuItem`. You _could_ recurse down the tree and type check until you find a `MenuItem`, but…come on.
 
-A recursive type check could help a little, but it still limit composition, what if you wanted to do this?
+A recursive type check could help a little, but it still limits composition, what if you wanted to do this?
 
 ```jsx
 function BlueItem(props) {
@@ -252,6 +253,8 @@ import {
 } from "@reach/descendants";
 
 let DescendantContext = createDescendantContext("DescendantContext");
+let MenuContext = createContext();
+
 function Menu({ id, children }) {
   let [descendants, setDescendants] = useDescendants();
   let [activeIndex, setActiveIndex] = useState(-1);
@@ -261,31 +264,33 @@ function Menu({ id, children }) {
       items={descendants}
       set={setDescendants}
     >
-      <MenuContextProvider
-        value={{ buttonId: `button-${useId()}`, activeIndex, setActiveIndex }}
+      <MenuContext.Provider
+        value={{ buttonId: `button-${useId(id)}`, activeIndex, setActiveIndex }}
       >
         {children}
-      </MenuContextProvider>
+      </MenuContext.Provider>
     </DescendantProvider>
   );
 }
 
 function MenuList(props) {
-  let { buttonId, activeIndex } = useMenuContext();
-  <Popover>
-    <div
-      role="menu"
-      aria-labelledby={buttonId}
-      aria-activedescendant={activeIndex}
-      tabIndex={-1}
-    >
-      {children}
-    </div>
-  </Popover>;
+  let { buttonId, activeIndex } = useContext(MenuContext);
+  return (
+    <Popover>
+      <div
+        role="menu"
+        aria-labelledby={buttonId}
+        aria-activedescendant={activeIndex}
+        tabIndex={-1}
+      >
+        {children}
+      </div>
+    </Popover>
+  );
 }
 
 function MenuItem(props) {
-  let { setActiveIndex } = useMenuContext();
+  let { activeIndex, setActiveIndex } = useContext(MenuContext);
   let ref = useRef(null);
   let index = useDescendant({
     // Tell the useDescendant hook to use a specific context
@@ -300,7 +305,7 @@ function MenuItem(props) {
   });
 
   // Now we know the index, so let's use it!
-  let isSelected = index === selectionIndex;
+  let isSelected = index === activeIndex;
   function select() {
     if (!isSelected) {
       setActiveIndex(index);
