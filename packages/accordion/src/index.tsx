@@ -587,7 +587,10 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel
  */
 export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
-  function AccordionPanel({ children, ...props }, forwardedRef) {
+  function AccordionPanel(
+    { children, as: Element = "div", ...props },
+    forwardedRef
+  ) {
     const {
       dataAttributes,
       panelId,
@@ -623,6 +626,7 @@ export type AccordionPanelProps = {
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel-children
    */
   children: React.ReactNode;
+  as?: React.ElementType<any>;
 };
 
 if (__DEV__) {
