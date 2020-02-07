@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@reach/utils": "^0.8.0",
-    "tslib": "1.10.0"
+    "tslib": "^1.10.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

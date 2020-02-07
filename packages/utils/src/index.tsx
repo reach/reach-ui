@@ -8,6 +8,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
+import warning from "warning";
 import {
   As,
   AssignableRef,
@@ -51,8 +52,6 @@ export const useIsomorphicLayoutEffect = canUseDOM()
   ? React.useLayoutEffect
   : React.useEffect;
 
-const useLayoutEffect = useIsomorphicLayoutEffect;
-
 let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
@@ -83,6 +82,7 @@ if (__DEV__) {
         `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
 
     import "@reach/${packageName}/styles.css";
+import warning from 'warning';
 
   Otherwise you'll need to include them some other way:
 
@@ -324,6 +324,33 @@ export function isNumber(value: any): value is number {
 
 export function isString(value: any): value is string {
   return typeof value === "string";
+}
+
+export function useControlledSwitchWarning(
+  controlPropValue: any,
+  controlPropName: string,
+  componentName: string
+) {
+  /*
+   * Determine whether or not the component is controlled and warn the developer
+   * if this changes unexpectedly.
+   */
+  let isControlled = controlPropValue != null;
+  let { current: wasControlled } = useRef(isControlled);
+  let effect = noop;
+  if (__DEV__) {
+    effect = function() {
+      warning(
+        !(!isControlled && wasControlled),
+        `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
+      );
+      warning(
+        !(!isControlled && wasControlled),
+        `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
+      );
+    };
+  }
+  useEffect(effect, [componentName, controlPropName, isControlled]);
 }
 
 // Export types
