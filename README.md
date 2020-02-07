@@ -4,7 +4,7 @@ Thanks for getting involved with Reach UI development!
 
 ## Looking for the documentation?
 
-https://reacttraining.com/reach-ui/
+<https://reacttraining.com/reach-ui/>
 
 ## Getting Started
 
@@ -12,7 +12,7 @@ Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow the
 
 Then, run these commands:
 
-```
+```sh
 git clone git@github.com:reach/reach-ui.git
 cd reach-ui
 yarn install
@@ -31,7 +31,7 @@ yarn test         # runs tests in all packages
 
 First do the steps in "Getting started", then start the Storybook server:
 
-```
+```sh
 yarn start
 ```
 
@@ -64,19 +64,19 @@ Now you can edit the files in `packages/*` and storybook will automatically relo
 
 First do the steps in "Getting Started", then:
 
-```
+```sh
 yarn test
 ```
 
 Or if you want to run the tests as you edit files:
 
-```
+```sh
 yarn test --watch
 ```
 
 Often you'll want to just test the component you're working on:
 
-```
+```sh
 cd packages/<component-path>
 yarn test --watch
 ```
