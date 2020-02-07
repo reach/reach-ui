@@ -81,6 +81,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       readOnly = false,
       collapsible = false,
       multiple = false,
+      as: Element = "div",
       ...props
     },
     forwardedRef
@@ -206,9 +207,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         set={setDescendants}
       >
         <AccordionContext.Provider value={context}>
-          <div {...props} ref={forwardedRef} data-reach-accordion="">
+          <Element {...props} ref={forwardedRef} data-reach-accordion="">
             {children}
-          </div>
+          </Element>
         </AccordionContext.Provider>
       </DescendantProvider>
     );
@@ -287,6 +288,7 @@ export type AccordionProps = Omit<
    * by the index prop.
    */
   multiple?: boolean;
+  as?: React.ElementType<any>;
 };
 
 if (__DEV__) {

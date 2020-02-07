@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import VisuallyHidden from "@reach/visually-hidden";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
@@ -26,7 +26,7 @@ let name = "With Arbitrary Elements";
 
 function Example() {
   return (
-    <Accordion defaultIndex={1}>
+    <Accordion as={ArbitraryComponent} defaultIndex={1}>
       <AccordionItem>
         <ExampleAccordionHeader>Option 1</ExampleAccordionHeader>
         <ExampleAccordionBody>
@@ -63,6 +63,8 @@ Example.story = { name };
 export const Comp = Example;
 export default { title: "Accordion" };
 
+const ArbitraryComponent = props => <section {...props} />;
+
 function ExampleAccordionBody({ children }) {
   return <AccordionPanel style={{ padding: 16 }}>{children}</AccordionPanel>;
 }
@@ -77,7 +79,7 @@ function ExampleAccordionHeader({ children }) {
         color: "#fff",
         display: "flex",
         justifyContent: "space-between",
-        padding: "4px 10px"
+        padding: "4px 10px",
       }}
     >
       <AccordionButton
@@ -93,7 +95,7 @@ function ExampleAccordionHeader({ children }) {
           flexShrink: 0,
           font: "inherit",
           fontWeight: "bolder",
-          padding: "10px 0"
+          padding: "10px 0",
         }}
       >
         {children}
@@ -115,7 +117,7 @@ function MyMenuButton() {
           display: "block",
           height: 30,
           padding: 6,
-          width: 30
+          width: 30,
         }}
       >
         <VisuallyHidden>Actions</VisuallyHidden>
@@ -124,7 +126,7 @@ function MyMenuButton() {
             display: "block",
             fill: "#fff",
             height: "100%",
-            width: "100%"
+            width: "100%",
           }}
         />
       </MenuButton>
