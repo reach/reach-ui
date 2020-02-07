@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import Component from "./index";
+import Component from "@reach/component-component";
 
 const COMPONENT_ARGS = {
   state: null,

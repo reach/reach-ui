@@ -1,5 +1,5 @@
 import React from "react";
-import { useId } from "./index";
+import { useId } from "@reach/auto-id";
 import { render } from "$test/utils";
 
 describe("useId", () => {
