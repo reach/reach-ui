@@ -71,7 +71,7 @@ export enum AccordionStates {
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-1
  */
-export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
+export const Accordion = forwardRefWithAs<AccordionProps, "div">(
   function Accordion(
     {
       children,
@@ -81,7 +81,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       readOnly = false,
       collapsible = false,
       multiple = false,
-      as: Element = "div",
+      as: Comp = "div",
       ...props
     },
     forwardedRef
@@ -207,9 +207,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         set={setDescendants}
       >
         <AccordionContext.Provider value={context}>
-          <Element {...props} ref={forwardedRef} data-reach-accordion="">
+          <Comp {...props} ref={forwardedRef} data-reach-accordion="">
             {children}
-          </Element>
+          </Comp>
         </AccordionContext.Provider>
       </DescendantProvider>
     );
@@ -288,7 +288,6 @@ export type AccordionProps = Omit<
    * by the index prop.
    */
   multiple?: boolean;
-  as?: React.ElementType<any>;
 };
 
 if (__DEV__) {
@@ -586,9 +585,9 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel
  */
-export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
+export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
   function AccordionPanel(
-    { children, as: Element = "div", ...props },
+    { children, as: Comp = "div", ...props },
     forwardedRef
   ) {
     const {
@@ -599,7 +598,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
     } = useAccordionItemContext();
 
     return (
-      <div
+      <Comp
         hidden={!open}
         role="region"
         aria-labelledby={buttonId}
@@ -611,7 +610,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
         tabIndex={-1}
       >
         {children}
-      </div>
+      </Comp>
     );
   }
 );
