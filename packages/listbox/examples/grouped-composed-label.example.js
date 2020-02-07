@@ -26,28 +26,28 @@ function Example() {
       <hr />
       <ListboxGroup>
         <GroupLabel icon="🍖">Meat</GroupLabel>
-        <ListboxOption value="asada" valueText="Carne Asada">
+        <ListboxOption value="asada" label="Carne Asada">
           {taco} Carne Asada
         </ListboxOption>
-        <ListboxOption value="pollo" valueText="Pollo">
+        <ListboxOption value="pollo" label="Pollo">
           {taco} Pollo
         </ListboxOption>
-        <ListboxOption value="pastor" valueText="Pastor">
+        <ListboxOption value="pastor" label="Pastor">
           {taco} Pastor
         </ListboxOption>
-        <ListboxOption value="lengua" valueText="Lengua">
+        <ListboxOption value="lengua" label="Lengua">
           {taco} Lengua
         </ListboxOption>
       </ListboxGroup>
       <ListboxGroup>
         <GroupLabel icon="🥕">Veggie</GroupLabel>
-        <ListboxOption value="hibiscus" valueText="Hibiscus">
+        <ListboxOption value="hibiscus" label="Hibiscus">
           {taco} Hibiscus
         </ListboxOption>
-        <ListboxOption value="portobello" valueText="Portobello">
+        <ListboxOption value="portobello" label="Portobello">
           {taco} Portobello
         </ListboxOption>
-        <ListboxOption value="fajita" valueText="Fajita">
+        <ListboxOption value="fajita" label="Fajita">
           {taco} Fajita
         </ListboxOption>
       </ListboxGroup>

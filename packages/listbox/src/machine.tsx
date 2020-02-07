@@ -7,6 +7,7 @@ import {
   interpret,
   StateMachine,
 } from "@xstate/fsm";
+import { ListboxOptions } from "./types";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -23,10 +24,6 @@ export enum ListboxStates {
 
   // The user is searching for an option with the keyboard
   Searching = "SEARCHING",
-
-  // The user is searching for an option with the keyboard while the menu is
-  // collapsed
-  SearchingCollapsed = "SEARCHING",
 
   // The user is interacting with arbitrary elements inside the popover
   Interacting = "INTERACTING",
@@ -53,14 +50,13 @@ export enum ListboxEvents {
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
 
   // OptionSelect > User interacted with the list and selected something
-  // OptionSet > Value change may have come from somewhere else (I.E., controlled button click)
+  // ValueChange > Value change may have come from somewhere else (I.E., controlled button click)
   OptionSelect = "OPTION_SELECT",
-  OptionSet = "OPTION_SET",
+  ValueChange = "VALUE_CHANGE",
 
   OptionStartClick = "OPTION_START_CLICK",
   PopoverPointerDown = "POPOVER_POINTER_DOWN",
   PopoverPointerUp = "POPOVER_POINTER_UP",
-  SearchForOption = "SEARCH_FOR_OPTION",
 }
 
 /**
@@ -120,7 +116,7 @@ export type ListboxEvent = ListboxEventBase &
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
-        type: ListboxEvents.OptionSet;
+        type: ListboxEvents.ValueChange;
         value: ListboxValue;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
@@ -154,10 +150,6 @@ export type ListboxEvent = ListboxEventBase &
     | {
         type: ListboxEvents.KeyDownTab;
       }
-    | {
-        type: ListboxEvents.SearchForOption;
-        query: string;
-      }
   );
 
 /**
@@ -179,9 +171,17 @@ let assignValue = assign<ListboxStateData, any>({
   value: (_, event) => event.value,
 });
 
-let navigate = assign<ListboxStateData, any>({
-  navigationValue: (_, event) => event.value,
-});
+let navigate = assign<ListboxStateData, any>(
+  (data: ListboxStateData, event: any) => {
+    return {
+      ...data,
+      navigationNode:
+        data.options.find(({ value }) => event.value === value)?.element ||
+        data.navigationNode,
+      navigationValue: event.value,
+    };
+  }
+);
 
 function listboxLostFocus(data: ListboxStateData, event: any) {
   let inputHasFocus = document.activeElement === data.refs.input;
@@ -210,6 +210,7 @@ function focusOption(data: ListboxStateData, event: any) {
 
 function focusNavOption(data: ListboxStateData, event: any) {
   requestAnimationFrame(() => {
+    console.log(data.navigationNode);
     data.navigationNode && data.navigationNode.focus();
   });
 }
@@ -228,6 +229,45 @@ function preventDefault(data: ListboxStateData, event: any) {
   event.domEvent && event.domEvent.preventDefault();
 }
 
+let setValueFromSearch = assign<ListboxStateData, any>((data, event) => {
+  console.log("FUCKING GO");
+  const searchValue = event.query
+    ? findOptionValueFromSearch(data.options, event.query)
+    : null;
+  let newData = {
+    ...data,
+    typeaheadQuery: event.query,
+    value: searchValue || data.value,
+  };
+  console.log({
+    typeaheadQuery: event.query,
+    value: searchValue || data.value,
+  });
+  return newData;
+});
+
+let setNavSelectionFromSearch = assign<ListboxStateData, any>((data, event) => {
+  let searchValue = event.query
+    ? findOptionValueFromSearch(data.options, event.query)
+    : null;
+  let newValue = searchValue || data.navigationValue;
+  let newNode =
+    data.options.find(option => newValue === option.value)?.element ||
+    data.navigationNode;
+  let newData = {
+    ...data,
+    typeaheadQuery: event.query,
+    navigationValue: newValue,
+    navigationNode: newNode,
+  };
+  console.log({
+    searchValue,
+    typeaheadQuery: event.query,
+    value: searchValue || data.value,
+  });
+  return newData;
+});
+
 let commonEvents = {
   [ListboxEvents.GetDerivedData]: {
     actions: assign<ListboxStateData, any>((ctx, event) => {
@@ -241,8 +281,8 @@ let commonEvents = {
       };
     }),
   },
-  [ListboxEvents.OptionSet]: {
-    actions: [assignValue, selectOption, clearTypeaheadQuery],
+  [ListboxEvents.ValueChange]: {
+    actions: [assignValue, selectOption],
   },
   [ListboxEvents.ClearTypeaheadQuery]: {
     actions: clearTypeaheadQuery,
@@ -257,10 +297,6 @@ let openEvents = {
   [ListboxEvents.ClearNavSelection]: {
     actions: focusList,
   },
-  [ListboxEvents.OptionSet]: {
-    target: ListboxStates.Idle,
-    actions: [assignValue, selectOption, clearTypeaheadQuery],
-  },
   [ListboxEvents.OptionSelect]: {
     target: ListboxStates.Idle,
     actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
@@ -272,7 +308,8 @@ let openEvents = {
       actions: clearTypeaheadQuery,
     },
     {
-      target: ListboxStates.Interacting,
+      // TODO: Interacting state
+      target: ListboxStates.Navigating,
       actions: clearTypeaheadQuery,
     },
   ],
@@ -302,6 +339,7 @@ export const createListboxMachine = ({
       disabled,
       isControlled,
       value,
+      options: [],
       navigationValue: null,
       navigationNode: null,
       typeaheadQuery: null,
@@ -332,9 +370,7 @@ export const createListboxMachine = ({
           },
           [ListboxEvents.KeyDownSearch]: {
             target: ListboxStates.Idle,
-            actions: assign({
-              typeaheadQuery: (data, event) => event.query,
-            }),
+            actions: setValueFromSearch,
           },
           [ListboxEvents.OptionSelect]: {
             actions: [
@@ -396,6 +432,9 @@ export const createListboxMachine = ({
             target: ListboxStates.Idle,
             actions: [preventDefault, navigate, clearTypeaheadQuery],
           },
+          [ListboxEvents.KeyDownSearch]: {
+            actions: [setNavSelectionFromSearch, focusNavOption],
+          },
         },
       },
       [ListboxStates.NavigatingWithKeys]: {
@@ -421,6 +460,9 @@ export const createListboxMachine = ({
           [ListboxEvents.KeyDownEnter]: {
             target: ListboxStates.Idle,
             actions: [preventDefault, navigate, clearTypeaheadQuery],
+          },
+          [ListboxEvents.KeyDownSearch]: {
+            actions: [setNavSelectionFromSearch, focusNavOption],
           },
         },
       },
@@ -452,31 +494,8 @@ export const createListboxMachine = ({
             target: ListboxStates.Idle,
             actions: [preventDefault, navigate, clearTypeaheadQuery],
           },
-        },
-      },
-      [ListboxStates.SearchingCollapsed]: {
-        on: {
-          ...commonEvents,
-          [ListboxEvents.ButtonPointerDown]: {
-            target: ListboxStates.Navigating,
-            cond: isNotRightClick,
-            actions: clearTypeaheadQuery,
-          },
-          [ListboxEvents.KeyDownEnter]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.KeyDownSpace]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.ClearTypeaheadQuery]: {
-            target: ListboxStates.Idle,
-            actions: clearTypeaheadQuery,
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+          [ListboxEvents.KeyDownSearch]: {
+            actions: [setNavSelectionFromSearch, focusNavOption],
           },
         },
       },
@@ -528,6 +547,20 @@ export function useMachine<
   return [current, send, service];
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+function findOptionValueFromSearch(options: any[], string = "") {
+  if (!string) return;
+  const found = options.find(({ label }) => {
+    console.log({ label });
+    return label && label.toLowerCase().startsWith(string);
+  });
+  return found ? found.value : null;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
 export interface MachineEventWithRefs extends MachineEvent {
   refs: {
     [key: string]: any;
@@ -537,9 +570,6 @@ export interface MachineEventWithRefs extends MachineEvent {
 export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
   [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
 };
-
-////////////////////////////////////////////////////////////////////////////////
-// Types
 
 export type ListboxValue = string;
 
@@ -551,4 +581,5 @@ export type ListboxStateData = {
   refs: ListboxNodeRefs;
   typeaheadQuery: string | null;
   value: ListboxValue | null;
+  options: ListboxOptions;
 };

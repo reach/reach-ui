@@ -12,27 +12,27 @@ function Example() {
       <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
       <ListboxGroup label={<span style={{ color: "crimson" }}>Meat</span>}>
-        <ListboxOption value="asada" valueText="Carne Asada">
+        <ListboxOption value="asada" label="Carne Asada">
           {taco} Carne Asada
         </ListboxOption>
-        <ListboxOption value="pollo" valueText="Pollo">
+        <ListboxOption value="pollo" label="Pollo">
           {taco} Pollo
         </ListboxOption>
-        <ListboxOption value="pastor" valueText="Pastor">
+        <ListboxOption value="pastor" label="Pastor">
           {taco} Pastor
         </ListboxOption>
-        <ListboxOption value="lengua" valueText="Lengua">
+        <ListboxOption value="lengua" label="Lengua">
           {taco} Lengua
         </ListboxOption>
       </ListboxGroup>
       <ListboxGroup label="Veggie">
-        <ListboxOption value="hibiscus" valueText="Hibiscus">
+        <ListboxOption value="hibiscus" label="Hibiscus">
           {taco} Hibiscus
         </ListboxOption>
-        <ListboxOption value="portobello" valueText="Portobello">
+        <ListboxOption value="portobello" label="Portobello">
           {taco} Portobello
         </ListboxOption>
-        <ListboxOption value="fajita" valueText="Fajita">
+        <ListboxOption value="fajita" label="Fajita">
           {taco} Fajita
         </ListboxOption>
       </ListboxGroup>

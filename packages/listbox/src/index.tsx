@@ -50,7 +50,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
+import Popover, { positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -60,27 +60,42 @@ import {
 import {
   checkStyles,
   createNamedContext,
-  DistributiveOmit,
   forwardRefWithAs,
   isBoolean,
   isFunction,
   makeId,
+  useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
   isString,
 } from "@reach/utils";
-import { StateMachine } from "@xstate/fsm";
-import warning from "warning";
 import {
   createListboxMachine,
-  ListboxEvent,
   ListboxEvents,
-  ListboxState,
-  ListboxStateData,
   ListboxStates,
   useMachine,
 } from "./machine";
+import {
+  DescendantProps,
+  IListboxContext,
+  IListboxGroupContext,
+  ListboxArrowProps,
+  ListboxButtonProps,
+  ListboxGroupLabelProps,
+  ListboxGroupProps,
+  ListboxInputProps,
+  ListboxListProps,
+  ListboxOptionProps,
+  ListboxPopoverProps,
+  ListboxProps,
+  ListboxValue,
+  ListobxButtonRef,
+  ListobxInputRef,
+  ListobxListRef,
+  ListobxOptionRef,
+  ListobxPopoverRef,
+} from "./types";
 
 enum KeyEventKeys {
   ArrowDown = "ArrowDown",
@@ -212,23 +227,36 @@ export const ListboxInput = forwardRef<
     return selected ? selected.label : null;
   }, [options, listboxValue]);
 
-  let context: IListboxContext = {
+  let context: IListboxContext = useMemo(() => {
+    return {
+      buttonId,
+      buttonRef,
+      disabled: !!disabled,
+      inputRef,
+      instanceId: id,
+      isExpanded: expanded,
+      listboxId,
+      listboxValue,
+      listboxValueLabel: valueLabel,
+      listRef,
+      mouseMovedRef,
+      onValueChange: onChange,
+      popoverRef,
+      send,
+      state: current,
+    };
+  }, [
     buttonId,
-    buttonRef,
-    disabled: !!disabled,
-    inputRef,
-    instanceId: id,
-    isExpanded: expanded,
+    current,
+    disabled,
+    expanded,
+    id,
     listboxId,
     listboxValue,
-    listboxValueLabel: valueLabel,
-    listRef,
-    mouseMovedRef,
-    onValueChange: onChange,
-    popoverRef,
+    onChange,
     send,
-    state: current,
-  };
+    valueLabel,
+  ]);
 
   // These props are forwarded to a hidden select field
   let hiddenSelectProps = {
@@ -242,17 +270,15 @@ export const ListboxInput = forwardRef<
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
   useEffect(() => {
-    let newData: any = { disabled };
+    let newData: any = { disabled, options };
     if (valueProp != null) {
       newData.value = valueProp!;
     }
     send({
       type: ListboxEvents.GetDerivedData,
-      data: {
-        ...newData,
-      },
+      data: newData,
     });
-  }, [disabled, send, valueProp]);
+  }, [disabled, send, valueProp, options]);
 
   useEffect(() => {
     send({
@@ -312,32 +338,13 @@ if (__DEV__) {
   };
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-props
- */
-export type ListboxInputProps = Omit<
-  React.HTMLProps<HTMLDivElement>,
-  // WHY ARE THESE A THING ON A DIV, UGH
-  "autoComplete" | "autoFocus" | "form" | "name" | "onChange"
-> &
-  Pick<
-    React.SelectHTMLAttributes<HTMLSelectElement>,
-    "autoComplete" | "autoFocus" | "form" | "name" | "required"
-  > & {
-    children:
-      | React.ReactNode
-      | ((props: {
-          value: ListboxValue | null;
-          valueLabel: string | null;
-        }) => React.ReactNode);
-    onChange?(newValue: ListboxValue): void;
-    value?: ListboxValue;
-    // TODO: Maybe? multiple: boolean
-  };
+export { ListboxInputProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * ListboxHiddenSelect
+ *
  * A hidden select field to store values controlled by the listbox.
  * This *should* help with autoComplete (I think, need to test) and is useful if
  * the listbox is used in a form.
@@ -353,7 +360,7 @@ const ListboxHiddenSelect: React.FC<React.SelectHTMLAttributes<
       {...props}
       onChange={event => {
         send({
-          type: ListboxEvents.OptionSet,
+          type: ListboxEvents.ValueChange,
           value: event.target.value,
           callback: val => {
             onValueChange && onValueChange(val);
@@ -418,18 +425,7 @@ if (__DEV__) {
   };
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-props
- */
-export type ListboxProps = ListboxInputProps & {
-  arrow?: React.ReactNode | boolean;
-  button?:
-    | React.ReactNode
-    | ((props: {
-        value: ListboxValue | null;
-        label: string | null;
-      }) => React.ReactNode);
-};
+export { ListboxProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -539,19 +535,7 @@ if (__DEV__) {
   };
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
- */
-export type ListboxButtonProps = {
-  arrow?: React.ReactNode | boolean;
-  children?:
-    | React.ReactNode
-    | ((props: {
-        value: ListboxValue | null;
-        label: string;
-        isExpanded: boolean;
-      }) => React.ReactNode);
-};
+export { ListboxButtonProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -584,14 +568,7 @@ if (__DEV__) {
   ListboxArrow.propTypes = {};
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow-props
- */
-export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
-  children?:
-    | React.ReactNode
-    | ((props: { isExpanded: boolean }) => React.ReactNode);
-};
+export { ListboxArrowProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -644,7 +621,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
           },
         });
       }
-    }, [send, hidden]);
+    }, [send, hidden, listRef, popoverRef]);
 
     return portal ? (
       <Popover
@@ -666,14 +643,7 @@ if (__DEV__) {
   };
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-props
- */
-export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
-  portal?: boolean;
-  children: React.ReactNode;
-  position?: PopoverProps["position"];
-};
+export { ListboxPopoverProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -710,10 +680,7 @@ if (__DEV__) {
   ListboxList.propTypes = {};
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist-props
- */
-export type ListboxListProps = {};
+export { ListboxListProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -846,17 +813,6 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       }
     }
 
-    useEffect(() => {
-      if (isHighlighted) {
-        send({
-          type: ListboxEvents.GetDerivedData,
-          data: {
-            navigationNode: ownRef.current,
-          },
-        });
-      }
-    }, [isHighlighted, send]);
-
     return (
       <Comp
         aria-selected={isSelected}
@@ -890,13 +846,7 @@ if (__DEV__) {
   };
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-props
- */
-export type ListboxOptionProps = {
-  value: ListboxValue;
-  label?: string;
-};
+export { ListboxOptionProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -925,10 +875,7 @@ if (__DEV__) {
   ListboxGroup.propTypes = {};
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
- */
-export type ListboxGroupProps = React.HTMLProps<HTMLDivElement> & {};
+export { ListboxGroupProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -956,10 +903,7 @@ if (__DEV__) {
   ListboxGroupLabel.propTypes = {};
 }
 
-/**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
- */
-export type ListboxGroupLabelProps = {};
+export { ListboxGroupLabelProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -976,6 +920,7 @@ function useKeyDown() {
   const {
     state: {
       context: { navigationValue, typeaheadQuery },
+      value: state,
     },
     send,
   } = useListboxContext();
@@ -1037,6 +982,7 @@ function useKeyDown() {
       default:
         if (isSearching) {
           let query = (typeaheadQuery || "") + key;
+          console.log("SEARCHING", query, state);
           send({ type: ListboxEvents.KeyDownSearch, query });
         }
         return;
@@ -1057,70 +1003,3 @@ function useOptionId(value: ListboxValue | null) {
 function isRightClick(nativeEvent: MouseEvent) {
   return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
-
-// TODO: Move to @reach/utils
-export function useControlledSwitchWarning(
-  controlPropValue: any,
-  controlPropName: string,
-  componentName: string
-) {
-  /*
-   * Determine whether or not the component is controlled and warn the developer
-   * if this changes unexpectedly.
-   */
-  let isControlled = controlPropValue != null;
-  let { current: wasControlled } = useRef(isControlled);
-  useEffect(() => {
-    if (__DEV__) {
-      warning(
-        !(!isControlled && wasControlled),
-        `${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-      );
-      warning(
-        !(isControlled && !wasControlled),
-        `${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-      );
-    }
-  }, [componentName, controlPropName, isControlled, wasControlled]);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
-type ListboxValue = string;
-
-interface DescendantProps {
-  value: ListboxValue;
-  label: string;
-}
-
-interface IListboxContext {
-  buttonId: string;
-  buttonRef: ListobxButtonRef;
-  disabled: boolean;
-  inputRef: ListobxInputRef;
-  instanceId: string;
-  isExpanded: boolean;
-  listboxId: string;
-  listboxValue: ListboxValue | null;
-  listboxValueLabel: string | null;
-  listRef: ListobxListRef;
-  mouseMovedRef: React.MutableRefObject<boolean>;
-  onValueChange: ((newValue: ListboxValue) => void) | null | undefined;
-  popoverRef: ListobxPopoverRef;
-  send: StateMachine.Service<
-    ListboxStateData,
-    DistributiveOmit<ListboxEvent, "refs">
-  >["send"];
-  state: StateMachine.State<ListboxStateData, ListboxEvent, ListboxState>;
-}
-
-interface IListboxGroupContext {
-  labelId: string;
-}
-
-type ListobxInputRef = React.MutableRefObject<HTMLDivElement | null>;
-type ListobxListRef = React.MutableRefObject<HTMLUListElement | null>;
-type ListobxButtonRef = React.MutableRefObject<HTMLButtonElement | null>;
-type ListobxPopoverRef = React.MutableRefObject<HTMLDivElement | null>;
-type ListobxOptionRef = React.MutableRefObject<HTMLDivElement | null>;

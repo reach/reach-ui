@@ -5,22 +5,22 @@ import "@reach/listbox/styles.css";
 let name = "Basic";
 
 function Example() {
-  let [value, setValue] = useState<React.ReactText>("default");
+  let [value, setValue] = useState("default");
   let taco = <span aria-hidden>🌮</span>;
   return (
     <Listbox value={value} onChange={value => setValue(value)}>
       <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
-      <ListboxOption value="asada" valueText="Carne Asada">
+      <ListboxOption value="asada" label="Carne Asada">
         {taco} Carne Asada
       </ListboxOption>
-      <ListboxOption value="pollo" valueText="Pollo">
+      <ListboxOption value="pollo" label="Pollo">
         {taco} Pollo
       </ListboxOption>
-      <ListboxOption value="pastor" valueText="Pastor">
+      <ListboxOption value="pastor" label="Pastor">
         {taco} Pastor
       </ListboxOption>
-      <ListboxOption value="lengua" valueText="Lengua">
+      <ListboxOption value="lengua" label="Lengua">
         {taco} Lengua
       </ListboxOption>
     </Listbox>
