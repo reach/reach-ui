@@ -10,7 +10,7 @@ const COMPONENT_ARGS = {
   forceUpdate: expect.any(Function),
 };
 
-let snapshot = element => {
+let snapshot = (element: any) => {
   let wrapper = renderer.create(element);
   const tree = wrapper.toJSON();
   expect(tree).toMatchSnapshot();
@@ -73,9 +73,11 @@ describe("<Component /> ref handling", () => {
     };
     const testComponent = renderer.create(<Component refs={MOCK_REFS} />);
     // assert refs match expected on mount
+    // @ts-ignore
     expect(testComponent.getInstance()._refs).toEqual(MOCK_REFS);
     // "update" component and check if refs still match
     testComponent.update(<Component />);
+    // @ts-ignore
     expect(testComponent.getInstance()._refs).toEqual(MOCK_REFS);
   });
 });
@@ -89,7 +91,7 @@ describe("<Component /> state", () => {
           displayName: "Henry Winkler",
         }}
       >
-        {({ state }) => (
+        {({ state }: any) => (
           <div>
             <h1>{state.displayName}</h1>
             <h2>Favorites</h2>
@@ -108,9 +110,9 @@ describe("<Component /> state", () => {
         favoriteColor="green"
         favoriteFood="calzones"
         displayName="Jane Fonda"
-        getInitialState={props => ({ ...props })}
+        getInitialState={(props: any) => ({ ...props })}
       >
-        {({ state }) => (
+        {({ state }: any) => (
           <div>
             <h1>{state.displayName}</h1>
             <h2>Favorites</h2>
@@ -130,7 +132,7 @@ describe("<Component /> state", () => {
     });
     const testComponent = renderer.create(
       <Component initialState={{ goodAtTesting: false }}>
-        {({ setState }) => (
+        {({ setState }: any) => (
           <div>
             <button
               className="test-button"
@@ -146,11 +148,13 @@ describe("<Component /> state", () => {
       className: "test-button",
     });
     // assert state value to match initialState
+    // @ts-ignore
     expect(testComponent.getInstance().state.goodAtTesting).toBe(false);
     // trigger returned setState function using mock click event
     buttonElement.props.onClick();
     expect(setStateFunction).toHaveBeenCalled();
     // assert that state value has been updated
+    // @ts-ignore
     expect(testComponent.getInstance().state.goodAtTesting).toBe(true);
   });
 });
