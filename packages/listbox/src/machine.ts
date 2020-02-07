@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DistributiveOmit, useConstant } from "@reach/utils";
+import { assign, createMachine, interpret, StateMachine } from "@xstate/fsm";
 import {
-  assign,
-  createMachine,
-  EventObject as MachineEvent,
-  interpret,
-  StateMachine,
-} from "@xstate/fsm";
-import { ListboxOptions } from "./types";
+  ListboxEvent,
+  ListboxNodeRefs,
+  ListboxState,
+  ListboxStateData,
+  ListboxValue,
+  MachineEventWithRefs,
+  MachineToReactRefMap,
+} from "./types";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -46,7 +48,6 @@ export enum ListboxEvents {
   KeyDownSearch = "KEY_DOWN_SEARCH",
   KeyDownTab = "KEY_DOWN_TAB",
   Navigate = "NAVIGATE",
-  OptionClick = "OPTION_CLICK",
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
 
   // OptionSelect > User interacted with the list and selected something
@@ -55,110 +56,10 @@ export enum ListboxEvents {
   ValueChange = "VALUE_CHANGE",
 
   OptionStartClick = "OPTION_START_CLICK",
+  OptionFinishClick = "OPTION_FINISH_CLICK",
   PopoverPointerDown = "POPOVER_POINTER_DOWN",
   PopoverPointerUp = "POPOVER_POINTER_UP",
 }
-
-/**
- * DOM nodes for all of the refs used in the listbox state machine.
- */
-export type ListboxNodeRefs = {
-  button: HTMLButtonElement | null;
-  input: HTMLDivElement | null;
-  list: HTMLUListElement | null;
-  popover: HTMLDivElement | null;
-};
-
-/**
- * Shared partial interface for all of our event objects.
- */
-interface ListboxEventBase extends MachineEventWithRefs {
-  refs: ListboxNodeRefs;
-}
-
-/**
- * Event object for the checkbox state machine.
- */
-export type ListboxEvent = ListboxEventBase &
-  (
-    | {
-        type: ListboxEvents.Blur;
-      }
-    | {
-        type: ListboxEvents.GetDerivedData;
-        data: Omit<Partial<ListboxStateData>, "refs"> & {
-          refs?: Partial<ListboxStateData["refs"]>;
-        };
-      }
-    | {
-        type: ListboxEvents.ButtonPointerDown;
-        isRightClick: boolean;
-      }
-    | {
-        type: ListboxEvents.ButtonFinishClick;
-        isRightClick: boolean;
-      }
-    | {
-        type: ListboxEvents.ClearNavSelection;
-      }
-    | {
-        type: ListboxEvents.ClearTypeaheadQuery;
-      }
-    | {
-        type: ListboxEvents.Navigate;
-        value: ListboxValue;
-        node?: HTMLElement | null | undefined;
-      }
-    | {
-        type: ListboxEvents.OptionSelect;
-        value: ListboxValue;
-        node?: HTMLElement | null | undefined;
-        callback?: ((newValue: ListboxValue) => void) | null | undefined;
-      }
-    | {
-        type: ListboxEvents.ValueChange;
-        value: ListboxValue;
-        callback?: ((newValue: ListboxValue) => void) | null | undefined;
-      }
-    | {
-        type: ListboxEvents.KeyDownNavigate;
-        value: ListboxValue | null;
-        shouldManageFocus?: boolean;
-        node?: HTMLElement | null | undefined;
-        resetManagedFocus?(): void;
-      }
-    | {
-        type: ListboxEvents.KeyDownSearch;
-        query: string;
-      }
-    | {
-        type: ListboxEvents.KeyDownEscape;
-      }
-    | {
-        type: ListboxEvents.KeyDownEnter;
-        value?: ListboxValue | null | undefined;
-        domEvent?: KeyboardEvent;
-      }
-    | {
-        type: ListboxEvents.KeyDownSpace;
-        value?: ListboxValue | null | undefined;
-      }
-    | {
-        type: ListboxEvents.OptionStartClick;
-        isRightClick: boolean;
-      }
-    | {
-        type: ListboxEvents.KeyDownTab;
-      }
-  );
-
-/**
- * State object for the checkbox state machine.
- */
-export type ListboxState = {
-  value: ListboxStates;
-  context: ListboxStateData;
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions and conditions
@@ -192,7 +93,7 @@ function listboxLostFocus(data: ListboxStateData, event: any) {
   return inputHasFocus || buttonHasFocus;
 }
 
-function isNotRightClick(data: ListboxStateData, event: any) {
+function notRightClick(data: ListboxStateData, event: any) {
   return !event.isRightClick;
 }
 
@@ -287,10 +188,6 @@ let commonEvents = {
   [ListboxEvents.ClearTypeaheadQuery]: {
     actions: clearTypeaheadQuery,
   },
-  [ListboxEvents.Blur]: {
-    target: ListboxStates.Idle,
-    actions: clearTypeaheadQuery,
-  },
 };
 
 let openEvents = {
@@ -300,6 +197,11 @@ let openEvents = {
   [ListboxEvents.OptionSelect]: {
     target: ListboxStates.Idle,
     actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
+  },
+  [ListboxEvents.OptionFinishClick]: {
+    target: ListboxStates.Idle,
+    actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
+    cond: notRightClick,
   },
   [ListboxEvents.Blur]: [
     {
@@ -313,6 +215,11 @@ let openEvents = {
       actions: clearTypeaheadQuery,
     },
   ],
+  [ListboxEvents.ButtonPointerDown]: {
+    target: ListboxStates.Idle,
+    cond: notRightClick,
+    actions: [focusButton, preventDefault],
+  },
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,10 +234,12 @@ export const createListboxMachine = ({
   value,
   disabled,
   isControlled,
+  refs,
 }: {
-  value: ListboxValue;
+  value: ListboxValue | null;
   disabled: boolean;
   isControlled: boolean;
+  refs: ListboxNodeRefs;
 }) =>
   createMachine<ListboxStateData, ListboxEvent, ListboxState>({
     id: "mixed-checkbox",
@@ -339,16 +248,11 @@ export const createListboxMachine = ({
       disabled,
       isControlled,
       value,
+      refs,
       options: [],
       navigationValue: null,
       navigationNode: null,
       typeaheadQuery: null,
-      refs: {
-        input: null,
-        list: null,
-        button: null,
-        popover: null,
-      },
     },
     states: {
       [ListboxStates.Idle]: {
@@ -356,12 +260,12 @@ export const createListboxMachine = ({
           ...commonEvents,
           [ListboxEvents.ButtonPointerDown]: {
             target: ListboxStates.Navigating,
-            cond: isNotRightClick,
+            cond: notRightClick,
             actions: focusButton,
           },
           [ListboxEvents.ButtonFinishClick]: {
             target: ListboxStates.Navigating,
-            cond: isNotRightClick,
+            cond: notRightClick,
             actions: focusNavOption,
           },
           [ListboxEvents.KeyDownSpace]: {
@@ -390,10 +294,6 @@ export const createListboxMachine = ({
         on: {
           ...commonEvents,
           ...openEvents,
-          [ListboxEvents.ButtonPointerDown]: {
-            target: ListboxStates.Idle,
-            cond: isNotRightClick,
-          },
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
             actions: [navigate, focusOption],
@@ -408,12 +308,8 @@ export const createListboxMachine = ({
         on: {
           ...commonEvents,
           ...openEvents,
-          [ListboxEvents.ButtonPointerDown]: {
-            target: ListboxStates.Idle,
-            cond: isNotRightClick,
-          },
           [ListboxEvents.ButtonFinishClick]: {
-            cond: isNotRightClick,
+            cond: notRightClick,
             actions: focusNavOption,
           },
           [ListboxEvents.Navigate]: {
@@ -441,10 +337,6 @@ export const createListboxMachine = ({
         on: {
           ...commonEvents,
           ...openEvents,
-          [ListboxEvents.ButtonPointerDown]: {
-            target: ListboxStates.Idle,
-            cond: isNotRightClick,
-          },
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
             actions: [navigate, focusOption],
@@ -470,10 +362,6 @@ export const createListboxMachine = ({
         on: {
           ...commonEvents,
           ...openEvents,
-          [ListboxEvents.ButtonPointerDown]: {
-            target: ListboxStates.Idle,
-            cond: isNotRightClick,
-          },
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
             actions: [navigate, focusOption, clearTypeaheadQuery],
@@ -502,6 +390,15 @@ export const createListboxMachine = ({
     },
   });
 
+export function unwrapRefs<
+  TE extends MachineEventWithRefs = MachineEventWithRefs
+>(refs: MachineToReactRefMap<TE>): TE["refs"] {
+  return Object.entries(refs).reduce((value, [name, ref]) => {
+    (value as any)[name] = ref.current;
+    return value;
+  }, {} as TE["refs"]);
+}
+
 export function useMachine<
   TC extends object,
   TE extends MachineEventWithRefs = MachineEventWithRefs
@@ -526,11 +423,19 @@ export function useMachine<
   let send = useCallback(
     (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
       let event = typeof rawEvent === "string" ? { type: rawEvent } : rawEvent;
-      let refValues = Object.keys(refs).reduce((value, name) => {
-        (value as any)[name] = refs[name].current;
-        return value;
-      }, {});
-      service.send({ ...event, refs: refValues } as TE);
+      let refValues = unwrapRefs(refs);
+      let eventToSend = { ...event, refs: refValues } as TE;
+
+      service.send(eventToSend);
+      if (__DEV__) {
+        console.group("Event Sent");
+        console.log(
+          "%c" + eventToSend.type,
+          "font-weight: normal; font-size: 120%; font-style: italic;"
+        );
+        console.log(eventToSend);
+        console.groupEnd();
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -560,26 +465,3 @@ function findOptionValueFromSearch(options: any[], string = "") {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
-
-export interface MachineEventWithRefs extends MachineEvent {
-  refs: {
-    [key: string]: any;
-  };
-}
-
-export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
-  [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
-};
-
-export type ListboxValue = string;
-
-export type ListboxStateData = {
-  disabled: boolean;
-  isControlled: boolean;
-  navigationValue: ListboxValue | null;
-  navigationNode: HTMLElement | null;
-  refs: ListboxNodeRefs;
-  typeaheadQuery: string | null;
-  value: ListboxValue | null;
-  options: ListboxOptions;
-};

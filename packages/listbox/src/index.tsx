@@ -63,25 +63,27 @@ import {
   forwardRefWithAs,
   isBoolean,
   isFunction,
+  isString,
   makeId,
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
-  isString,
+  noop,
 } from "@reach/utils";
 import {
   createListboxMachine,
   ListboxEvents,
   ListboxStates,
+  unwrapRefs,
   useMachine,
 } from "./machine";
 import {
-  DescendantProps,
-  IListboxContext,
-  IListboxGroupContext,
   ListboxArrowProps,
   ListboxButtonProps,
+  ListboxContextValue,
+  ListboxDescendantProps,
+  ListboxGroupContextValue,
   ListboxGroupLabelProps,
   ListboxGroupProps,
   ListboxInputProps,
@@ -95,6 +97,9 @@ import {
   ListobxListRef,
   ListobxOptionRef,
   ListobxPopoverRef,
+  ListboxNodeRefs,
+  ListboxEvent,
+  MachineToReactRefMap,
 } from "./types";
 
 enum KeyEventKeys {
@@ -107,8 +112,6 @@ enum KeyEventKeys {
   Enter = "Enter",
   Space = " ",
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 const expandedStates = [
   ListboxStates.Navigating,
@@ -123,15 +126,15 @@ const isExpanded = (state: ListboxStates) => expandedStates.includes(state);
 
 const ListboxDescendantContext = createDescendantContext<
   HTMLElement,
-  DescendantProps
+  ListboxDescendantProps
 >("ListboxDescendantContext");
 const ListboxContext = createNamedContext(
   "ListboxContext",
-  {} as IListboxContext
+  {} as ListboxContextValue
 );
 const ListboxGroupContext = createNamedContext(
   "ListboxGroupContext",
-  {} as IListboxGroupContext
+  {} as ListboxGroupContextValue
 );
 const useDescendantContext = () => useContext(ListboxDescendantContext);
 const useListboxContext = () => useContext(ListboxContext);
@@ -164,13 +167,10 @@ export const ListboxInput = forwardRef<
   forwardedRef
 ) {
   let isControlled = useRef(valueProp != null);
-  let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
-
-  let defaultStateData = {
-    value: valueProp ?? "",
-    disabled: !!disabled,
-    isControlled: isControlled.current,
-  };
+  let [options, setOptions] = useDescendants<
+    HTMLElement,
+    ListboxDescendantProps
+  >();
 
   /*
    * We will track when a mouse has moved in a ref, then reset it to false each
@@ -179,6 +179,7 @@ export const ListboxInput = forwardRef<
    * is resting above an option it will steal the highlight.
    */
   let mouseMovedRef = useRef(false);
+  let mouseEventStartedRef = useRef(false);
   let autocompletePropRef = useRef<typeof autoComplete>(autoComplete);
 
   let inputRef: ListobxInputRef = useRef(null);
@@ -201,14 +202,24 @@ export const ListboxInput = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  let [current, send] = useMachine(createListboxMachine(defaultStateData), {
+  let machineRefs: MachineToReactRefMap<ListboxEvent> = {
     input: inputRef,
     button: buttonRef,
     popover: popoverRef,
     list: listRef,
-  });
+  };
 
-  let _id = useId(props.id) || "listbox";
+  let [current, send] = useMachine(
+    createListboxMachine({
+      value: valueProp || null,
+      disabled: !!disabled,
+      isControlled: isControlled.current,
+      refs: unwrapRefs(machineRefs),
+    }),
+    machineRefs
+  );
+
+  let _id = useId(props.id);
   let id = props.id || makeId("listbox-input", _id);
   let listboxId = makeId("listbox", id);
   let buttonId = makeId("button", id);
@@ -227,7 +238,7 @@ export const ListboxInput = forwardRef<
     return selected ? selected.label : null;
   }, [options, listboxValue]);
 
-  let context: IListboxContext = useMemo(() => {
+  let context: ListboxContextValue = useMemo(() => {
     return {
       buttonId,
       buttonRef,
@@ -239,6 +250,7 @@ export const ListboxInput = forwardRef<
       listboxValue,
       listboxValueLabel: valueLabel,
       listRef,
+      mouseEventStartedRef,
       mouseMovedRef,
       onValueChange: onChange,
       popoverRef,
@@ -294,6 +306,7 @@ export const ListboxInput = forwardRef<
     });
   }, [send]);
 
+  useStateLogger(current.value);
   useEffect(() => checkStyles("listbox"), []);
 
   return (
@@ -440,8 +453,8 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
       children,
       onBlur,
       onMouseDown,
+      onMouseUp,
       onKeyDown,
-      onClick,
       ...props
     },
     forwardedRef
@@ -452,6 +465,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
       buttonRef,
       isExpanded,
       listboxId,
+      mouseEventStartedRef,
       state,
       send,
     } = useListboxContext();
@@ -462,14 +476,17 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     let handleKeyDown = useKeyDown();
 
     function handleMouseDown(event: React.MouseEvent) {
+      mouseEventStartedRef.current = true;
       event.persist();
       send({
         type: ListboxEvents.ButtonPointerDown,
         isRightClick: isRightClick(event.nativeEvent),
+        domEvent: event.nativeEvent,
       });
     }
 
-    function handleClick(event: React.MouseEvent) {
+    function handleMouseUp(event: React.MouseEvent) {
+      mouseEventStartedRef.current = false;
       send({
         type: ListboxEvents.ButtonFinishClick,
         isRightClick: isRightClick(event.nativeEvent),
@@ -484,7 +501,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
       [options, listboxValue]
     );
 
-    let handleBlur = useBlur();
+    //let handleBlur = useBlur();
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -513,10 +530,10 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         ref={ref}
         data-reach-listbox-button=""
         id={buttonId}
-        onBlur={wrapEvent(onBlur, handleBlur)}
+        //onBlur={wrapEvent(onBlur, handleBlur)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-        onClick={wrapEvent(onClick, handleClick)}
+        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
       >
         {label}
         {arrow && (
@@ -716,6 +733,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         value: state,
         context: { value: listboxValue, navigationValue },
       },
+      mouseEventStartedRef,
       mouseMovedRef,
     } = useListboxContext();
 
@@ -751,8 +769,6 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let isHighlighted = navigationValue ? navigationValue === value : false;
     let isSelected = listboxValue === value;
 
-    let mouseEventStarted = useRef(false);
-
     function handleMouseEnter() {
       // If the user hasn't moved their mouse but mouse enter event still fires
       // (this happens if the popup opens due to a keyboard event), we don't
@@ -773,7 +789,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStarted.current = true;
+      mouseEventStartedRef.current = true;
       send({
         type: ListboxEvents.OptionStartClick,
         isRightClick: isRightClick(event.nativeEvent),
@@ -781,30 +797,21 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     function handleMouseUp(event: React.MouseEvent) {
-      if (mouseEventStarted.current) {
-        mouseEventStarted.current = false;
-        ownRef.current && ownRef.current.click();
-      }
-    }
-
-    function handleClick(event: React.MouseEvent) {
-      mouseEventStarted.current = false;
-      if (!isRightClick(event.nativeEvent)) {
+      if (mouseEventStartedRef.current) {
+        mouseEventStartedRef.current = false;
         send({
-          type: ListboxEvents.OptionSelect,
+          type: ListboxEvents.OptionFinishClick,
           value,
-          node: ownRef.current,
+          isRightClick: isRightClick(event.nativeEvent),
         });
       }
     }
 
     function handleMouseMove() {
       mouseMovedRef.current = true;
-      /*
-       * We don't really *need* this guard if we put this in the state machine,
-       * but in this case it seems wise not to needlessly run our transitions
-       * every time the user's mouse moves. Seems like a lot.
-       */
+      // We don't really *need* this guard if we put this in the state machine,
+      // but in this case it seems wise not to needlessly run our transitions
+      // every time the user's mouse moves. Seems like a lot.
       if (state === ListboxStates.Navigating) {
         send({
           type: ListboxEvents.Navigate,
@@ -824,7 +831,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         data-highlighted={isHighlighted ? "" : undefined}
         data-label={label}
         data-value={value}
-        onClick={wrapEvent(onClick, handleClick)}
+        //onClick={wrapEvent(onClick, handleClick)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
@@ -1002,4 +1009,22 @@ function useOptionId(value: ListboxValue | null) {
 
 function isRightClick(nativeEvent: MouseEvent) {
   return nativeEvent.which === 3 || nativeEvent.button === 2;
+}
+
+function useStatusLogger(name: string, status: string) {
+  let effect = noop;
+  if (__DEV__) {
+    effect = function() {
+      console.log(
+        "%cCurrent " + name + ":%c " + status,
+        "font-weight: bolder; font-size: 120%;",
+        "font-weight: normal; font-style: italic; font-size: 120%;"
+      );
+    };
+  }
+  useEffect(effect, [name, status]);
+}
+
+function useStateLogger(state: string) {
+  return useStatusLogger("State", state);
 }
