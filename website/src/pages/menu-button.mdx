@@ -82,11 +82,11 @@ The wrapper component for the other components. No DOM element is rendered.
 
 #### Menu Props
 
-| Prop                       | Type | Required |
-| -------------------------- | ---- | -------- |
-| [children](#menu-children) | node | false    |
+| Prop                         | Type   | Required |
+| ---------------------------- | ------ | -------- |
+| [`children`](#menu-children) | `node` | false    |
 
-##### Menu children
+##### Menu `children`
 
 _Type_: `oneOfType(node, function)`
 
@@ -172,16 +172,14 @@ If you'd like to target when the menu is open use `aria-expanded`:
 
 #### MenuButton Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [button props](#menubutton-button-props) | spread               | n/a      |
-| [children](#menubutton-children)         | node                 | false    |
-| onClick                                  | preventableEventFunc | false    |
-| onKeyDown                                | preventableEventFunc | false    |
+| Prop                                       | Type                   | Required |
+| ------------------------------------------ | ---------------------- | -------- |
+| [`button` props](#menubutton-button-props) |                        |          |
+| [`children`](#menubutton-children)         | `node`                 | false    |
+| `onClick`                                  | `preventableEventFunc` | false    |
+| `onKeyDown`                                | `preventableEventFunc` | false    |
 
-##### MenuButton button props
-
-_Type_: `spread`
+##### MenuButton `button` props
 
 Any props not listed above will be spread onto the underlying button element. You can treat it like any other button in your app for styling.
 
@@ -199,11 +197,11 @@ Any props not listed above will be spread onto the underlying button element. Yo
 </Menu>
 ```
 
-##### MenuButton as
+##### MenuButton `as`
 
 _Type_: ``
 
-##### MenuButton children
+##### MenuButton `children`
 
 _Type_: `node`
 
@@ -241,14 +239,12 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 #### MenuList Props
 
-| Prop                                      | Type   | Required |
-| ----------------------------------------- | ------ | -------- |
-| [element props](#menuitems-element-props) | spread | n/a      |
-| [children](#menuitems-children)           | node   | false    |
+| Prop                                | Type   | Required |
+| ----------------------------------- | ------ | -------- |
+| [`div` props](#menuitems-div-props) |        |          |
+| [`children`](#menuitems-children)   | `node` | false    |
 
-##### MenuList element props
-
-_Type_: `spread`
+##### MenuList `div` props
 
 All props are spread to the underlying element. Here we apply a `className` the element.
 
@@ -291,7 +287,7 @@ The stylesheet contains these rules to create the animation.
 }
 ```
 
-##### MenuList children
+##### MenuList `children`
 
 _Type_: `node`
 
@@ -330,11 +326,11 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 
 #### MenuPopover Props
 
-| Prop                              | Type | Required |
-| --------------------------------- | ---- | -------- |
-| [children](#menupopover-children) | node | true     |
+| Prop                                | Type   | Required |
+| ----------------------------------- | ------ | -------- |
+| [`children`](#menupopover-children) | `node` | true     |
 
-##### MenuPopover children props
+##### MenuPopover `children` props
 
 _Type_: `node`
 
@@ -410,16 +406,14 @@ function Example() {
 
 #### MenuItem Props
 
-| Prop                                     | Type   | Required |
-| ---------------------------------------- | ------ | -------- |
-| [element props](#menuitem-element-props) | spread | n/a      |
-| [as](#menuitem-as)                       | any    | false    |
-| [children](#menuitem-children)           | node   | false    |
-| [onSelect](#menuitem-onselect)           | func   | true     |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [element props](#menuitem-element-props) |                      |          |
+| [`as`](#menuitem-as)                     | `string | Component` | false    |
+| [`children`](#menuitem-children)         | `node`               | false    |
+| [`onSelect`](#menuitem-onselect)         | `func`               | true     |
 
 ##### MenuItem element props
-
-_Type_: `spread`
 
 All props are spread to the underlying element.
 
@@ -449,7 +443,7 @@ function Example(props) {
 }
 ```
 
-##### MenuItem as
+##### MenuItem `as`
 
 _Type_: `any`
 
@@ -487,7 +481,7 @@ function Example() {
 }
 ```
 
-##### MenuItem children
+##### MenuItem `children`
 
 _Type_: `node`
 
@@ -519,7 +513,7 @@ function Example(props) {
 }
 ```
 
-##### MenuItem onSelect
+##### MenuItem `onSelect`
 
 _Type_: `func`
 
@@ -564,16 +558,14 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 #### MenuLink Props
 
-| Prop                                     | Type   | Required |
-| ---------------------------------------- | ------ | -------- |
-| [element props](#menulink-element-props) | spread | n/a      |
-| [as](#menulink-as)                       | any    | true     |
-| [children](#menulink-children)           | node   | false    |
-| [onSelect](#menulink-onselect)           | func   | false    |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [element props](#menulink-element-props) |                      |          |
+| [`as`](#menulink-as)                     | `string | Component` | true     |
+| [`children`](#menulink-children)         | `node`               | false    |
+| [`onSelect`](#menulink-onselect)         | `func`               | false    |
 
 ##### MenuLink element props
-
-_Type_: `spread`
 
 All props are spread to the underlying element
 
@@ -587,7 +579,7 @@ All props are spread to the underlying element
 <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
 ```
 
-##### MenuLink as
+##### MenuLink `as`
 
 _Type_: `any`
 
@@ -614,7 +606,7 @@ import GatsbyLink from "gatsby/link";
 <MenuLink as={GatsbyLink} to="/somewhere" />;
 ```
 
-##### MenuLink children
+##### MenuLink `children`
 
 _Type_: `node`
 
@@ -627,7 +619,7 @@ You can render any kind of content inside of a MenuLink.
 </MenuLink>
 ```
 
-##### MenuLink onSelect
+##### MenuLink `onSelect`
 
 _Type_: `func`
 
@@ -754,19 +746,21 @@ This won't work because we actually do not call the `onClick` handler to activat
 
 As such, events for each component look more like this:
 
-- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (`"Enter"` or space `" "` keys)
-- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys)
-- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (`"Enter"` or space `" "` keys).
+- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys)
+- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys)
+- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys).
   - For `MenuLink`, the `click` event is fired after the selection events. So if you only need to intercept the event that triggers the anchor link, you can still use `onClick`, but the rest of the event handlers called in `MenuLink` will still be which means the `Menu` will close and your `onSelect` handler will be triggered.
 
 ### Keyboard Accessibility
 
-| Key             | Action                   |
-| --------------- | ------------------------ |
-| `Enter`         | Open/close               |
-| `ArrowUp`       | Highlight previous item  |
-| `ArrowDown`     | Highlight next item      |
-| `Enter`         | Select item              |
-| `Escape`        | Close                    |
-| `Tab`           | No effect                |
-| Type characters | Highlights matching item |
+| Key                  | Action                                                                         |
+| -------------------- | ------------------------------------------------------------------------------ |
+| <kbd>Enter</kbd>     | Open/close while focused on the `MenuButton`; Selects an item when navigating. |
+| <kbd>Space</kbd>     | Open/close while focused on the `MenuButton`; Selects an item when navigating. |
+| <kbd>ArrowUp</kbd>   | Highlight previous item                                                        |
+| <kbd>ArrowDown</kbd> | Highlight next item                                                            |
+| <kbd>Home</kbd>      | Highlight first item                                                           |
+| <kbd>End</kbd>       | Highlight last item                                                            |
+| <kbd>Escape</kbd>    | Close menu                                                                     |
+| <kbd>Tab</kbd>       | No effect                                                                      |
+| Type characters      | Highlights matching item                                                       |

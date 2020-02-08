@@ -351,9 +351,9 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem
  */
-export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
+export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   function AccordionItem(
-    { children, disabled = false, ...props },
+    { as: Comp = "div", children, disabled = false, ...props },
     forwardedRef
   ) {
     const { accordionId, openPanels, readOnly } = useAccordionContext();
@@ -391,14 +391,14 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 
     return (
       <AccordionItemContext.Provider value={context}>
-        <div
+        <Comp
           {...props}
           ref={forwardedRef}
           data-reach-accordion-item=""
           {...dataAttributes}
         >
           {children}
-        </div>
+        </Comp>
       </AccordionItemContext.Provider>
     );
   }
@@ -407,7 +407,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
 /**
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-props
  */
-export type AccordionItemProps = React.HTMLProps<HTMLDivElement> & {
+export type AccordionItemProps = {
   /**
    * An `AccordionItem` expects to receive an `AccordionButton` and
    * `AccordionPanel` components as its children, though you can also nest other
@@ -584,8 +584,11 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel
  */
-export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
-  function AccordionPanel({ children, ...props }, forwardedRef) {
+export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
+  function AccordionPanel(
+    { as: Comp = "div", children, ...props },
+    forwardedRef
+  ) {
     const {
       dataAttributes,
       panelId,
@@ -594,7 +597,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
     } = useAccordionItemContext();
 
     return (
-      <div
+      <Comp
         hidden={!open}
         role="region"
         aria-labelledby={buttonId}
@@ -606,7 +609,7 @@ export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
         tabIndex={-1}
       >
         {children}
-      </div>
+      </Comp>
     );
   }
 );

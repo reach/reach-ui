@@ -38,7 +38,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import "@reach/accordion/styles.css";
 ```
@@ -224,15 +224,15 @@ return (
 
 #### Accordion Props
 
-| Prop                                    | Type                   | Required |
-| --------------------------------------- | ---------------------- | -------- |
-| [children](#accordion-children)         | `node`                 | true     |
-| [collapsible](#accordion-collapsible)   | `boolean`              | false    |
-| [defaultIndex](#accordion-defaultindex) | `number` \| `number[]` | false    |
-| [index](#accordion-index)               | `number` \| `number[]` | false    |
-| [multiple](#accordion-multiple)         | `boolean`              | false    |
-| [onChange](#accordion-onchange)         | `func`                 | false    |
-| [readOnly](#accordion-readonly)         | `boolean`              | false    |
+| Prop                                      | Type                   | Required |
+| ----------------------------------------- | ---------------------- | -------- |
+| [`children`](#accordion-children)         | `node`                 | true     |
+| [`collapsible`](#accordion-collapsible)   | `boolean`              | false    |
+| [`defaultIndex`](#accordion-defaultindex) | `number` \| `number[]` | false    |
+| [`index`](#accordion-index)               | `number` \| `number[]` | false    |
+| [`multiple`](#accordion-multiple)         | `boolean`              | false    |
+| [`onChange`](#accordion-onchange)         | `func`                 | false    |
+| [`readOnly`](#accordion-readonly)         | `boolean`              | false    |
 
 ##### Accordion `children`
 
@@ -365,10 +365,19 @@ Please see the [styling guide](/styling).
 
 #### AccordionItem Props
 
-| Prop                                | Type      | Required |
-| ----------------------------------- | --------- | -------- |
-| [children](#accordionitem-children) | `node`    | true     |
-| [disabled](#accordionitem-disabled) | `boolean` | false    |
+| Prop                                  | Type                 | Required |
+| ------------------------------------- | -------------------- | -------- |
+| [`as`](#accordionitem-as)             | `string | Component` | false    |
+| [`children`](#accordionitem-children) | `node`               | true     |
+| [`disabled`](#accordionitem-disabled) | `boolean`            | false    |
+
+##### AccordionItem `as`
+
+`as: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `AccordionItem` what element to render. Defaults to `div`.
+
+> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionItem `children`
 
@@ -422,9 +431,18 @@ Please see the [styling guide](/styling).
 
 #### AccordionButton Props
 
-| Prop                                  | Type   | Required |
-| ------------------------------------- | ------ | -------- |
-| [children](#accordionbutton-children) | `node` | true     |
+| Prop                                    | Type                 | Required |
+| --------------------------------------- | -------------------- | -------- |
+| [`as`](#accordionbutton-as)             | `string | Component` | false    |
+| [`children`](#accordionbutton-children) | `node`               | true     |
+
+##### AccordionButton `as`
+
+`as: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `AccordionButton` what element to render. Defaults to `button`.
+
+> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionButton `children`
 
@@ -486,7 +504,7 @@ If you need to group interactive elements within an accordion's button, we recom
           margin: "9px 0",
           display: "flex",
           justifyContent: "space-between",
-          padding: "4px 10px"
+          padding: "4px 10px",
         }}
       >
         <AccordionButton
@@ -503,7 +521,7 @@ If you need to group interactive elements within an accordion's button, we recom
             font: "inherit",
             fontWeight: "bolder",
             margin: 0,
-            padding: "10px 0"
+            padding: "10px 0",
           }}
         >
           {children}
@@ -553,9 +571,18 @@ Please see the [styling guide](/styling).
 
 #### AccordionPanel Props
 
-| Prop                                 | Type   | Required |
-| ------------------------------------ | ------ | -------- |
-| [children](#accordionpanel-children) | `node` | true     |
+| Prop                                   | Type                 | Required |
+| -------------------------------------- | -------------------- | -------- |
+| [`as`](#accordionpanel-as)             | `string | Component` | false    |
+| [`children`](#accordionpanel-children) | `node`               | true     |
+
+##### AccordionPanel `as`
+
+`as: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `AccordionPanel` what element to render. Defaults to `div`.
+
+> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionPanel `children`
 
