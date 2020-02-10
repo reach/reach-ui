@@ -64,6 +64,9 @@ import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import PropTypes from "prop-types";
 
+export const MOUSE_REST_TIMEOUT = 100;
+export const LEAVE_TIMEOUT = 500;
+
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
@@ -192,7 +195,7 @@ let restTimeout: number;
 
 function startRestTimer() {
   window.clearTimeout(restTimeout);
-  restTimeout = window.setTimeout(() => transition(REST), 100);
+  restTimeout = window.setTimeout(() => transition(REST), MOUSE_REST_TIMEOUT);
 }
 
 function clearRestTimer() {
@@ -204,7 +207,10 @@ let leavingVisibleTimer: number;
 
 function startLeavingVisibleTimer() {
   window.clearTimeout(leavingVisibleTimer);
-  leavingVisibleTimer = window.setTimeout(() => transition(TIME_COMPLETE), 500);
+  leavingVisibleTimer = window.setTimeout(
+    () => transition(TIME_COMPLETE),
+    LEAVE_TIMEOUT
+  );
 }
 
 function clearLeavingVisibleTimer() {
