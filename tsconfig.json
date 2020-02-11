@@ -17,6 +17,7 @@
       "@reach/menu-button": ["packages/menu-button/src"],
       "@reach/popover": ["packages/popover/src"],
       "@reach/portal": ["packages/portal/src"],
+      "@reach/radio": ["packages/radio/src"],
       "@reach/rect": ["packages/rect/src"],
       "@reach/skip-nav": ["packages/skip-nav/src"],
       "@reach/slider": ["packages/slider/src"],
