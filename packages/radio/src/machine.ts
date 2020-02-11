@@ -34,6 +34,7 @@ export type RadioGroupState =
 export enum RadioGroupEvents {
   Blur = "BLUR",
   Focus = "FOCUS",
+  GroupClick = "GROUP_CLICK",
   KeyDown = "KEY_DOWN",
   SetValue = "SET_VALUE",
   Select = "SELECT",
@@ -73,6 +74,11 @@ export type RadioGroupEvent = RadioGroupEventBase &
         type: RadioGroupEvents.SetValue;
         value: RadioValue | null;
         callback?: RadioChangeHandler | undefined;
+      }
+    | {
+        type: RadioGroupEvents.GroupClick;
+        eventTarget: EventTarget | null | undefined;
+        node: HTMLElement | null | undefined;
       }
     | {
         type: RadioGroupEvents.Focus;
@@ -192,7 +198,10 @@ const navigate = assign<RadioGroupData, RadioGroupEvent>({
 const isNotDisabled = (data: RadioGroupData, event: any) => !event.disabled;
 
 function focusSelected(data: RadioGroupData, event: any) {
-  if (event.disabled && event.domEvent) {
+  if (event.disabled) {
+    return;
+  }
+  if (event.domEvent) {
     event.domEvent.preventDefault();
   }
   event.node && event.node.focus();
@@ -214,6 +223,24 @@ const commonEvents = {
   },
   [RadioGroupEvents.Focus]: {
     target: RadioGroupStates.Navigating,
+  },
+  // When a user clicks any item in the group and
+  //   - the event target is of type 'radio'
+  //   - a matching dom node was passed to the event
+  // Then we know the user clicked a `label` wrapping our custom radio button
+  // so we can focus the button and go to our navigating state.
+  [RadioGroupEvents.GroupClick]: {
+    target: RadioGroupStates.Navigating,
+    actions: [focusSelected],
+    cond: (data: RadioGroupData, event: any) => {
+      const shouldFocus =
+        !(
+          event.eventTarget == null ||
+          event.eventTarget.type !== "radio" ||
+          event.eventTarget.disabled
+        ) && event.node;
+      return !event.disabled && shouldFocus;
+    },
   },
 };
 
