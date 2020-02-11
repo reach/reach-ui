@@ -291,6 +291,33 @@ export function forwardRefWithAs<Props, ComponentType extends As>(
   >;
 }
 
+/**
+ * Get a computed style value by property, backwards compatible with IE
+ * @param element
+ * @param styleProp
+ */
+export function getElementComputedStyle(
+  element: HTMLElement & {
+    currentStyle?: Record<string, string>;
+  },
+  styleProp: string
+) {
+  let y: string | null = null;
+  let doc = getOwnerDocument(element);
+  if (element.currentStyle) {
+    y = element.currentStyle[styleProp];
+  } else if (
+    doc &&
+    doc.defaultView &&
+    isFunction(doc.defaultView.getComputedStyle)
+  ) {
+    y = doc.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(styleProp);
+  }
+  return y;
+}
+
 export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
   element: T | null
 ) {
