@@ -1,0 +1,90 @@
+:root {
+  --reach-radio: 1;
+}
+
+[data-reach-radio-group] {
+  display: flex;
+}
+
+[data-reach-radio] {
+  display: inline-block;
+  position: relative;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  box-sizing: border-box;
+  cursor: default;
+  margin: 3px 0;
+}
+
+[data-reach-radio]::before {
+  content: "";
+  display: inline-block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  background: none;
+  margin: 0 0.5ex;
+}
+
+[data-reach-radio][aria-checked="true"]::before {
+  background: hsl(211, 100%, 50%);
+}
+
+[data-reach-radio][data-disabled] {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+.pill-style [data-reach-radio]::before {
+  display: none;
+}
+
+.pill-style {
+  --pill-border: 1px solid #bbb;
+  --pill-focus-bg: hsla(211, 100%, 50%, 0.25);
+  --pill-focus-outline: hsla(211, 100%, 50%, 0.5);
+  --pill-active-bg: hsl(211, 100%, 50%);
+  --pill-active-text: #fff;
+  --pill-border-radius: 999px;
+  --pill-padding-base: 1rem;
+  font-weight: bold;
+  display: flex;
+  margin: 5px 0;
+}
+
+.pill-style [data-reach-radio] {
+  display: block;
+  border: var(--pill-border);
+  border-right: 0;
+  padding: calc(var(--pill-padding-base) * 0.625) var(--pill-padding-base);
+  line-height: 1;
+}
+
+.pill-style [data-reach-radio]:first-of-type {
+  border-top-left-radius: var(--pill-border-radius);
+  border-bottom-left-radius: var(--pill-border-radius);
+  padding-left: calc(var(--pill-padding-base) * 1.125);
+}
+
+.pill-style [data-reach-radio]:last-of-type {
+  border-right: var(--pill-border);
+  border-top-right-radius: var(--pill-border-radius);
+  border-bottom-right-radius: var(--pill-border-radius);
+  padding-right: calc(var(--pill-padding-base) * 1.125);
+}
+
+.pill-style [data-reach-radio]:focus {
+  background: var(--pill-focus-bg);
+  box-shadow: 0 0 3px 3px var(--pill-focus-outline);
+  z-index: 1;
+}
+
+.pill-style [data-reach-radio][aria-checked="true"] {
+  background: var(--pill-active-bg);
+  border-color: var(--pill-active-bg);
+  color: var(--pill-active-text);
+}

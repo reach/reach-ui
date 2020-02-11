@@ -1,6 +1,6 @@
 import React from "react";
 import { RadioGroup, Radio } from "@reach/radio";
-import "@reach/radio/styles.css";
+import "./example-styles.css";
 
 let name = "Basic (TS)";
 

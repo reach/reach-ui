@@ -1,19 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  Fragment,
-  useMemo,
-} from "react";
+import React, { useContext, useRef, useState, Fragment, useMemo } from "react";
 import {
-  checkStyles,
   createNamedContext,
   DistributiveOmit,
   forwardRefWithAs,
   getElementComputedStyle,
   getOwnerDocument,
+  isFunction,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
   useForkedRef,
@@ -123,8 +116,6 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
         return false;
       });
     }, []);
-
-    useEffect(() => checkStyles("radio"), []);
 
     return (
       <DescendantProvider
@@ -301,19 +292,15 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
         onFocus={wrapEvent(onFocus, handleFocus)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         tabIndex={isTabbable ? 0 : -1}
-      />
-      {children && (
-        <span
-          id={labelId}
-          data-reach-radio-label=""
-          onClick={wrapEvent(onClick, event => {
-            event.preventDefault();
-            handleClick(event);
-          })}
-        >
-          {children}
-        </span>
-      )}
+      >
+        {isFunction(children)
+          ? children({
+              checked: isSelected,
+              disabled,
+              value,
+            })
+          : children}
+      </Comp>
       {name && (
         <input
           ref={inputRef}

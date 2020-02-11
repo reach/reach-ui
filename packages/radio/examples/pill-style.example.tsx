@@ -1,27 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { RadioGroup, Radio } from "@reach/radio";
 import "./example-styles.css";
 
-let name = "Controlled (TS)";
+let name = "Pill Style (TS)";
 
 function Example() {
-  let [value, setValue] = useState<string | null>("one");
   return (
     <div>
-      <h3 id="second-fave">Which number is your second favorite?</h3>
+      <span id="second-fave">Which number is your second favorite?</span>
       <RadioGroup
-        value={value}
-        onChange={setValue}
+        className="pill-style"
         aria-labelledby="second-fave"
         name="faves-2"
       >
         <Radio value="one">One</Radio>
-        <Radio disabled value="two">
-          Two
-        </Radio>
+        <Radio value="two">Two</Radio>
         <Radio value="three">Three</Radio>
       </RadioGroup>
-      <button onClick={() => setValue(null)}>Clear Selection</button>
     </div>
   );
 }

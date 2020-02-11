@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { RadioGroup, Radio } from "@reach/radio";
-import "@reach/radio/styles.css";
+import "./example-styles.css";
 
 let name = "With a Form (TS)";
 
@@ -16,7 +16,6 @@ function Example() {
       <form
         ref={formRef}
         onSubmit={event => {
-          console.log("SUBMITTING");
           event.preventDefault();
           let data = formToJSON(formRef.current);
           setFormData(data);
