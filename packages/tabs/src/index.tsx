@@ -48,7 +48,7 @@ import {
   cloneValidElement,
   createNamedContext,
   forwardRefWithAs,
-  isFunction,
+  getElementComputedStyle,
   isNumber,
   makeId,
   noop,
@@ -289,7 +289,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
       ownRef.current &&
       ((ownRef.current.ownerDocument &&
         ownRef.current.ownerDocument.dir === "rtl") ||
-        getStyle(ownRef.current, "direction") === "rtl")
+        getElementComputedStyle(ownRef.current, "direction") === "rtl")
     ) {
       isRTL.current = true;
     }
@@ -624,31 +624,3 @@ if (__DEV__) {
     children: PropTypes.node,
   };
 }
-
-/**
- * Get a computed style value by property, backwards compatible with IE
- * @param element
- * @param styleProp
- */
-function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
-  let y: string | null = null;
-  if (element.currentStyle) {
-    y = element.currentStyle[styleProp];
-  } else if (
-    element.ownerDocument &&
-    element.ownerDocument.defaultView &&
-    isFunction(element.ownerDocument.defaultView.getComputedStyle)
-  ) {
-    y = element.ownerDocument.defaultView
-      .getComputedStyle(element, null)
-      .getPropertyValue(styleProp);
-  }
-  return y;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
-type HTMLElementWithCurrentStyle = HTMLElement & {
-  currentStyle?: Record<string, string>;
-};
