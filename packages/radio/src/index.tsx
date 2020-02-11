@@ -12,8 +12,8 @@ import {
   createNamedContext,
   DistributiveOmit,
   forwardRefWithAs,
+  getElementComputedStyle,
   getOwnerDocument,
-  isFunction,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
   useForkedRef,
@@ -116,7 +116,7 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
       setIsRTL(() => {
         if (
           doc.dir === "rtl" ||
-          getStyle(ownRef.current!, "direction") === "rtl"
+          getElementComputedStyle(ownRef.current!, "direction") === "rtl"
         ) {
           return true;
         }
@@ -364,30 +364,6 @@ export type RadioProps = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Get a computed style value by property, backwards compatible with IE
- * @param element
- * @param styleProp
- */
-function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
-  let y: string | null = null;
-  let doc = getOwnerDocument(element);
-  if (element.currentStyle) {
-    y = element.currentStyle[styleProp];
-  } else if (
-    doc &&
-    doc.defaultView &&
-    isFunction(doc.defaultView.getComputedStyle)
-  ) {
-    y = doc.defaultView
-      .getComputedStyle(element, null)
-      .getPropertyValue(styleProp);
-  }
-  return y;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Types
 
 export type RadioValue = string;
@@ -413,7 +389,3 @@ interface RadioGroupContextValue {
     DistributiveOmit<RadioGroupEvent, "refs">
   >["send"];
 }
-
-type HTMLElementWithCurrentStyle = HTMLElement & {
-  currentStyle?: Record<string, string>;
-};
