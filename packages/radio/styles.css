@@ -29,6 +29,7 @@
 [data-reach-radio][data-disabled] {
   opacity: 0.25;
   cursor: default;
+  pointer-events: none;
 }
 
 [data-reach-radio]::after {

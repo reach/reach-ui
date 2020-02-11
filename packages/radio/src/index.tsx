@@ -20,7 +20,6 @@ import {
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
   useForkedRef,
-  noop,
   makeId,
 } from "@reach/utils";
 import {
@@ -92,11 +91,16 @@ export type RadioGroupEvent = RadioGroupEventBase &
   (
     | {
         type: RadioGroupEvents.Select;
-        value: RadioValue;
+        callback: RadioChangeHandler | undefined;
+        disabled: boolean | undefined;
+        domEvent: MouseEvent;
         node: HTMLElement | null | undefined;
+        value: RadioValue;
       }
     | {
         type: RadioGroupEvents.KeyDown;
+        callback: RadioChangeHandler | undefined;
+        disabled: boolean | undefined;
         domEvent: KeyboardEvent;
         isRTL: boolean;
         key: string;
@@ -106,6 +110,7 @@ export type RadioGroupEvent = RadioGroupEventBase &
     | {
         type: RadioGroupEvents.SetValue;
         value: RadioValue | null;
+        callback?: RadioChangeHandler | undefined;
       }
     | {
         type: RadioGroupEvents.Focus;
@@ -128,7 +133,13 @@ const assignRefs = assign((data: RadioGroupData, event: RadioGroupEvent) => {
 });
 
 const setValue = assign({
-  value: (data: RadioGroupData, event: any) => event.value,
+  value: (data: RadioGroupData, event: any) => {
+    event.callback && event.callback(event.value);
+    if (event.value !== data.value) {
+      event.callback && event.callback(event.value);
+    }
+    return event.value;
+  },
 });
 
 const navigate = assign<RadioGroupData, RadioGroupEvent>({
@@ -142,7 +153,7 @@ const navigate = assign<RadioGroupData, RadioGroupEvent>({
       return data.value;
     }
 
-    let navOption: Descendant<HTMLElement, DescendantProps>;
+    let navOption: Descendant<HTMLElement, DescendantProps> | null = null;
     let currentIndex = options.findIndex(option => option.value === value);
     let first = options[0];
     let last = options[options.length - 1];
@@ -152,7 +163,9 @@ const navigate = assign<RadioGroupData, RadioGroupEvent>({
 
     switch (key) {
       case " ":
-        navOption = options[currentIndex];
+        if (!event.disabled) {
+          navOption = options[currentIndex];
+        }
         break;
       case "ArrowRight":
         navOption = isRTL ? prev : next;
@@ -182,7 +195,10 @@ const navigate = assign<RadioGroupData, RadioGroupEvent>({
 
     if (navOption) {
       navOption.element?.focus();
-      return navOption.value;
+      if (navOption.value !== data.value) {
+        event.callback && event.callback(navOption.value);
+        return navOption.value;
+      }
     }
 
     return data.value;
@@ -190,6 +206,9 @@ const navigate = assign<RadioGroupData, RadioGroupEvent>({
 });
 
 function focusSelected(data: RadioGroupData, event: any) {
+  if (event.disabled && event.domEvent) {
+    event.domEvent.preventDefault();
+  }
   event.node && event.node.focus();
 }
 
@@ -200,6 +219,7 @@ const commonEvents = {
   [RadioGroupEvents.Select]: {
     target: RadioGroupStates.Navigating,
     actions: [setValue, focusSelected],
+    cond: (context: any, event: any) => !event.disabled,
   },
   [RadioGroupEvents.Blur]: {
     target: RadioGroupStates.Idle,
@@ -293,6 +313,7 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
       isControlled,
       isRTL,
       name,
+      onChange,
       value: current.context.value,
       send,
     };
@@ -303,6 +324,7 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
       send({
         type: RadioGroupEvents.SetValue,
         value: valueProp as RadioValue | null,
+        callback: onChange,
       });
     }
 
@@ -374,7 +396,7 @@ export type RadioGroupProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
    */
-  onChange?: (value: RadioValue) => void;
+  onChange?: RadioChangeHandler;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -399,7 +421,13 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
   },
   forwardedRef
 ) {
-  let { isRTL, value: groupValue, name, send } = useRadioGroupContext();
+  let {
+    isRTL,
+    value: groupValue,
+    name,
+    onChange,
+    send,
+  } = useRadioGroupContext();
   let { descendants: radioOptions } = useContext(RadioDescendantsContext);
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
@@ -424,20 +452,25 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
     return nodes;
   }, [radioOptions]);
 
-  function handleClick() {
+  function handleClick(event: React.MouseEvent) {
     send({
       type: RadioGroupEvents.Select,
-      value,
+      callback: onChange,
+      disabled,
+      domEvent: event.nativeEvent,
       node: ownRef.current,
+      value,
     });
   }
 
   function handleKeyDown(event: React.KeyboardEvent) {
     send({
       type: RadioGroupEvents.KeyDown,
+      callback: onChange,
+      disabled,
+      domEvent: event.nativeEvent,
       isRTL,
       key: event.key,
-      domEvent: event.nativeEvent,
       options: focusableOptions,
       value,
     });
@@ -460,10 +493,12 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
     <Fragment>
       <Comp
         aria-checked={isSelected}
+        aria-disabled={disabled}
         aria-labelledby={children ? labelId : undefined}
         role="radio"
         {...props}
         data-reach-radio=""
+        data-disabled={disabled ? "" : undefined}
         ref={ref}
         id={id}
         onBlur={wrapEvent(onBlur, handleBlur)}
@@ -478,7 +513,7 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
           data-reach-radio-label=""
           onClick={wrapEvent(onClick, event => {
             event.preventDefault();
-            handleClick();
+            handleClick(event);
           })}
         >
           {children}
@@ -486,6 +521,7 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
       )}
       {name && (
         <input
+          readOnly
           checked={isSelected}
           hidden
           name={name}
@@ -527,6 +563,8 @@ export type RadioProps = {
 
 type RadioValue = string;
 
+type RadioChangeHandler = (value: RadioValue) => void;
+
 type DescendantProps = { disabled: boolean; value: RadioValue };
 
 interface RadioGroupData {
@@ -540,6 +578,7 @@ interface RadioGroupContextValue {
   isControlled: boolean;
   isRTL: boolean;
   name: string | undefined;
+  onChange: RadioChangeHandler | undefined;
   value: RadioValue | null;
   send: StateMachine.Service<
     RadioGroupData,
