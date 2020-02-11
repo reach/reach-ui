@@ -5,7 +5,7 @@ import "@reach/radio/styles.css";
 let name = "Controlled (TS)";
 
 function Example() {
-  let [value, setValue] = useState("one");
+  let [value, setValue] = useState<string | null>("one");
   return (
     <div>
       <h3 id="second-fave">Which number is your second favorite?</h3>
@@ -21,6 +21,7 @@ function Example() {
         </Radio>
         <Radio value="three">Three</Radio>
       </RadioGroup>
+      <button onClick={() => setValue(null)}>Clear Selection</button>
     </div>
   );
 }

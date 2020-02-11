@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, {
-  forwardRef,
   useContext,
   useEffect,
   useRef,
   useState,
-  useCallback,
   Fragment,
   useMemo,
 } from "react";
@@ -16,7 +14,6 @@ import {
   forwardRefWithAs,
   getOwnerDocument,
   isFunction,
-  isString,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
   useForkedRef,
@@ -24,248 +21,29 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
 } from "@reach/descendants";
-import {
-  assign,
-  createMachine,
-  EventObject as MachineEvent,
-  interpret,
-  StateMachine,
-} from "@xstate/fsm";
+import { StateMachine } from "@xstate/fsm";
 import { useId } from "@reach/auto-id";
+import {
+  createRadioMachine,
+  RadioGroupData,
+  RadioGroupEvent,
+  RadioGroupEvents,
+  useMachine,
+} from "./machine";
 
 const RadioDescendantsContext = createDescendantContext<
   HTMLElement,
-  DescendantProps
+  RadioDescendantProps
 >("RadioDescendantsContext");
 const RadioGroupContext = createNamedContext(
   "RadioGroupContext",
   {} as RadioGroupContextValue
 );
 const useRadioGroupContext = () => useContext(RadioGroupContext);
-
-////////////////////////////////////////////////////////////////////////////////
-// States
-
-export enum RadioGroupStates {
-  Idle = "IDLE",
-  Navigating = "NAVIGATING",
-}
-
-type RadioGroupState =
-  | {
-      value: RadioGroupStates.Idle;
-      context: RadioGroupData;
-    }
-  | {
-      value: RadioGroupStates.Navigating;
-      context: RadioGroupData;
-    };
-
-////////////////////////////////////////////////////////////////////////////////
-// Events
-
-export enum RadioGroupEvents {
-  Blur = "BLUR",
-  Focus = "FOCUS",
-  KeyDown = "KEY_DOWN",
-  SetValue = "SET_VALUE",
-  Select = "SELECT",
-}
-
-/**
- * Shared partial interface for all of our event objects.
- */
-interface RadioGroupEventBase extends MachineEventWithRefs {
-  refs: RadioGroupNodeRefs;
-}
-
-/**
- * Event object for the checkbox state machine.
- */
-export type RadioGroupEvent = RadioGroupEventBase &
-  (
-    | {
-        type: RadioGroupEvents.Select;
-        callback: RadioChangeHandler | undefined;
-        disabled: boolean | undefined;
-        domEvent: MouseEvent;
-        node: HTMLElement | null | undefined;
-        value: RadioValue;
-      }
-    | {
-        type: RadioGroupEvents.KeyDown;
-        callback: RadioChangeHandler | undefined;
-        disabled: boolean | undefined;
-        domEvent: KeyboardEvent;
-        isRTL: boolean;
-        key: string;
-        options: Descendant<HTMLElement, DescendantProps>[];
-        value: RadioValue;
-      }
-    | {
-        type: RadioGroupEvents.SetValue;
-        value: RadioValue | null;
-        callback?: RadioChangeHandler | undefined;
-      }
-    | {
-        type: RadioGroupEvents.Focus;
-        value: RadioValue;
-      }
-    | {
-        type: RadioGroupEvents.Blur;
-      }
-  );
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Assign refs to the machine's context data
- */
-const assignRefs = assign((data: RadioGroupData, event: RadioGroupEvent) => {
-  return {
-    ...data,
-    refs: event.refs,
-  };
-});
-
-const setValue = assign({
-  value: (data: RadioGroupData, event: any) => {
-    event.callback && event.callback(event.value);
-    if (event.value !== data.value) {
-      event.callback && event.callback(event.value);
-    }
-    return event.value;
-  },
-});
-
-const navigate = assign<RadioGroupData, RadioGroupEvent>({
-  value: (data, event) => {
-    if (event.type !== RadioGroupEvents.KeyDown) {
-      return data.value;
-    }
-    let { key, options, value, isRTL, domEvent } = event;
-
-    if (!(key || options || value || domEvent)) {
-      return data.value;
-    }
-
-    let navOption: Descendant<HTMLElement, DescendantProps> | null = null;
-    let currentIndex = options.findIndex(option => option.value === value);
-    let first = options[0];
-    let last = options[options.length - 1];
-    let next =
-      currentIndex === options.length - 1 ? first : options[currentIndex + 1];
-    let prev = currentIndex === 0 ? last : options[currentIndex - 1];
-
-    switch (key) {
-      case " ":
-        if (!event.disabled) {
-          navOption = options[currentIndex];
-        }
-        break;
-      case "ArrowRight":
-        navOption = isRTL ? prev : next;
-        break;
-      case "ArrowLeft":
-        navOption = isRTL ? next : prev;
-        break;
-      case "ArrowDown":
-        domEvent.preventDefault();
-        navOption = next;
-        break;
-      case "ArrowUp":
-        domEvent.preventDefault();
-        navOption = prev;
-        break;
-      case "Home":
-        domEvent.preventDefault();
-        navOption = first;
-        break;
-      case "End":
-        domEvent.preventDefault();
-        navOption = last;
-        break;
-      default:
-        return data.value;
-    }
-
-    if (navOption) {
-      navOption.element?.focus();
-      if (navOption.value !== data.value) {
-        event.callback && event.callback(navOption.value);
-        return navOption.value;
-      }
-    }
-
-    return data.value;
-  },
-});
-
-function focusSelected(data: RadioGroupData, event: any) {
-  if (event.disabled && event.domEvent) {
-    event.domEvent.preventDefault();
-  }
-  event.node && event.node.focus();
-}
-
-const commonEvents = {
-  [RadioGroupEvents.SetValue]: {
-    actions: [setValue],
-  },
-  [RadioGroupEvents.Select]: {
-    target: RadioGroupStates.Navigating,
-    actions: [setValue, focusSelected],
-    cond: (context: any, event: any) => !event.disabled,
-  },
-  [RadioGroupEvents.Blur]: {
-    target: RadioGroupStates.Idle,
-  },
-  [RadioGroupEvents.Focus]: {
-    target: RadioGroupStates.Navigating,
-  },
-};
-
-/**
- * Initializer for our state machine.
- *
- * @param initial
- * @param props
- */
-export const createRadioMachine = (props: {
-  isControlled: boolean;
-  value: RadioValue | null;
-}) =>
-  createMachine<RadioGroupData, RadioGroupEvent, RadioGroupState>({
-    id: "radio-group",
-    initial: RadioGroupStates.Idle,
-    context: {
-      isControlled: props.isControlled,
-      value: props.value,
-      refs: {},
-    },
-    states: {
-      [RadioGroupStates.Idle]: {
-        entry: assignRefs,
-        on: {
-          ...commonEvents,
-        },
-      },
-      [RadioGroupStates.Navigating]: {
-        entry: assignRefs,
-        on: {
-          ...commonEvents,
-          [RadioGroupEvents.KeyDown]: {
-            target: RadioGroupStates.Navigating,
-            actions: [navigate],
-          },
-        },
-      },
-    },
-  });
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -280,6 +58,7 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
       as: Comp = "div",
       children,
       defaultValue,
+      disabled,
       value: valueProp,
       name,
       onChange,
@@ -290,32 +69,34 @@ export const RadioGroup = forwardRefWithAs<RadioGroupProps, "div">(
     let { current: isControlled } = useRef(typeof valueProp !== "undefined");
     let [radioOptions, setRadioOptions] = useDescendants<
       HTMLElement,
-      DescendantProps
+      RadioDescendantProps
     >();
-    let [isRTL, setIsRTL] = useState(false);
     let ownRef = useRef<HTMLElement>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
-
-    let initialValue = isControlled
-      ? (valueProp as RadioValue | null)
-      : defaultValue || null;
 
     let [current, send] = useMachine(
       createRadioMachine({
         isControlled,
-        value: initialValue,
+        value: isControlled
+          ? (valueProp as RadioValue | null)
+          : defaultValue || null,
       }),
       {}
     );
 
+    // We need to know if the language mode is RTL to reverse
+    // ArrowLeft/ArrowRight behavior in the state machine.
+    let [isRTL, setIsRTL] = useState(false);
+
     let context: RadioGroupContextValue = {
-      state: current,
+      disabled: !!disabled,
       isControlled,
       isRTL,
       name,
       onChange,
-      value: current.context.value,
       send,
+      state: current,
+      value: current.context.value,
     };
 
     if (isControlled && current.context.value !== valueProp) {
@@ -377,13 +158,19 @@ export type RadioGroupProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/radio#radiogroup-value
    */
-  value?: RadioValue;
+  value?: RadioValue | null;
   /**
    * The default selected value for an uncontrolled radio group component.
    *
    * @see Docs https://reacttraining.com/reach-ui/radio#radiogroup-defaultvalue
    */
   defaultValue?: RadioValue;
+  /**
+   * Whether or not all radio buttons in a group should be disabled.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/radio#radiogroup-disabled
+   */
+  disabled?: boolean;
   /**
    * The `name` attribute passed to a hidden form input.
    *
@@ -414,7 +201,7 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
     onClick,
     onFocus,
     onKeyDown,
-    disabled,
+    disabled: disabledProp,
     readOnly,
     value,
     ...props
@@ -422,35 +209,40 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
   forwardedRef
 ) {
   let {
+    disabled: groupDisabled,
     isRTL,
-    value: groupValue,
     name,
     onChange,
     send,
+    value: groupValue,
   } = useRadioGroupContext();
   let { descendants: radioOptions } = useContext(RadioDescendantsContext);
+
+  let disabled = groupDisabled || !!disabledProp;
+
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
-  let isSelected = value === groupValue;
-  let index = useDescendant({
-    element: ownRef.current!,
-    context: RadioDescendantsContext,
-    disabled: !!disabled,
-    value,
-  });
 
-  let focusableOptions: Descendant<
-    HTMLElement,
-    DescendantProps
-  >[] = useMemo(() => {
-    let nodes = [];
-    for (let option of radioOptions) {
-      if (option.element && !option.disabled) {
-        nodes.push(option);
-      }
-    }
-    return nodes;
-  }, [radioOptions]);
+  let inputRef = useRef<HTMLInputElement | null>(null);
+
+  let focusableOptions = useMemo(
+    () => radioOptions.filter(option => option.element && !option.disabled),
+    [radioOptions]
+  );
+
+  let isSelected = value === groupValue;
+
+  // A radio button is only tabbable if it is either selected OR if no buttons
+  // are selected and it the first focusable option in our list.
+  let isTabbable =
+    isSelected ||
+    (groupValue === null &&
+      focusableOptions[0] &&
+      focusableOptions[0].element === ownRef.current);
+
+  let _id = useId(props.id);
+  let id = props.id ?? makeId("radio", value, _id);
+  let labelId = makeId("label", id);
 
   function handleClick(event: React.MouseEvent) {
     send({
@@ -484,10 +276,13 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
     send({ type: RadioGroupEvents.Focus, value });
   }
 
-  let isTabbable = isSelected || (groupValue === null && index === 0);
-  let _id = useId(props.id);
-  let id = props.id ?? makeId("radio", value, _id);
-  let labelId = makeId("label", id);
+  useDescendant({
+    context: RadioDescendantsContext,
+    disabled,
+    element: ownRef.current!,
+    inputNode: inputRef.current,
+    value,
+  });
 
   return (
     <Fragment>
@@ -521,10 +316,20 @@ export const Radio = forwardRefWithAs<RadioProps, "span">(function Radio(
       )}
       {name && (
         <input
-          readOnly
+          ref={inputRef}
           checked={isSelected}
+          data-checked={isSelected}
           hidden
           name={name}
+          onChange={event => {
+            event.preventDefault();
+            send({
+              type: RadioGroupEvents.SetValue,
+              value,
+              callback: onChange,
+            });
+          }}
+          readOnly
           type="radio"
           value={value}
         />
@@ -559,111 +364,6 @@ export type RadioProps = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-// Types
-
-type RadioValue = string;
-
-type RadioChangeHandler = (value: RadioValue) => void;
-
-type DescendantProps = { disabled: boolean; value: RadioValue };
-
-interface RadioGroupData {
-  isControlled: boolean;
-  refs: RadioGroupNodeRefs;
-  value: RadioValue | null;
-}
-
-interface RadioGroupContextValue {
-  state: StateMachine.State<RadioGroupData, RadioGroupEvent, any>;
-  isControlled: boolean;
-  isRTL: boolean;
-  name: string | undefined;
-  onChange: RadioChangeHandler | undefined;
-  value: RadioValue | null;
-  send: StateMachine.Service<
-    RadioGroupData,
-    DistributiveOmit<RadioGroupEvent, "refs">
-  >["send"];
-}
-
-type RadioGroupNodeRefs = {};
-
-/**
- * Events use in our `useMachine` always have a refs object and will inherit
- * this interface.
- */
-export interface MachineEventWithRefs extends MachineEvent {
-  refs: {
-    [key: string]: any;
-  };
-}
-
-export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
-  [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
-function useMachine<
-  TC extends object,
-  TE extends MachineEventWithRefs = MachineEventWithRefs
->(
-  initialMachine: StateMachine.Machine<TC, TE, any>,
-  refs: MachineToReactRefMap<TE>
-): [
-  StateMachine.State<TC, TE, any>,
-  StateMachine.Service<TC, DistributiveOmit<TE, "refs">>["send"],
-  StateMachine.Service<TC, TE>
-] {
-  /*
-   * State machine should not change between renders, so let's store it in a
-   * ref. This should also help if we need to use a creator function to inject
-   * dynamic initial state values based on props.
-   */
-  let { current: machine } = useRef(initialMachine);
-  let service = useConstant(() => interpret(machine).start());
-  let [current, setCurrent] = useState(machine.initialState);
-
-  // Add refs to every event so we can use them to perform actions.
-  let send = useCallback(
-    (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
-      let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
-      let refValues = Object.keys(refs).reduce((value, name) => {
-        (value as any)[name] = refs[name].current;
-        return value;
-      }, {});
-      service.send({ ...event, refs: refValues } as TE);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  useEffect(() => {
-    service.subscribe(setCurrent);
-    return () => {
-      service.stop();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return [current, send, service];
-}
-
-function useConstant<T>(fn: () => T): T {
-  let ref = React.useRef<{ v: T }>();
-
-  if (!ref.current) {
-    ref.current = { v: fn() };
-  }
-
-  return ref.current.v;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-type HTMLElementWithCurrentStyle = HTMLElement & {
-  currentStyle?: Record<string, string>;
-};
 
 /**
  * Get a computed style value by property, backwards compatible with IE
@@ -686,3 +386,34 @@ function getStyle(element: HTMLElementWithCurrentStyle, styleProp: string) {
   }
   return y;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+export type RadioValue = string;
+
+export type RadioChangeHandler = (value: RadioValue) => void;
+
+export type RadioDescendantProps = {
+  disabled: boolean;
+  inputNode: HTMLInputElement | null;
+  value: RadioValue;
+};
+
+interface RadioGroupContextValue {
+  disabled: boolean;
+  state: StateMachine.State<RadioGroupData, RadioGroupEvent, any>;
+  isControlled: boolean;
+  isRTL: boolean;
+  name: string | undefined;
+  onChange: RadioChangeHandler | undefined;
+  value: RadioValue | null;
+  send: StateMachine.Service<
+    RadioGroupData,
+    DistributiveOmit<RadioGroupEvent, "refs">
+  >["send"];
+}
+
+type HTMLElementWithCurrentStyle = HTMLElement & {
+  currentStyle?: Record<string, string>;
+};
