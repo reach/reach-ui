@@ -518,6 +518,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         aria-activedescendant={
           navigationValue ? String(makeHash(navigationValue)) : undefined
         }
+        aria-controls={listboxId}
         {...props}
         data-reach-combobox-input=""
         ref={ref}
@@ -527,7 +528,6 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         onFocus={wrapEvent(onFocus, handleFocus)}
         onChange={wrapEvent(onChange, handleChange)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        id={listboxId}
       />
     );
   }
@@ -674,7 +674,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
     },
     forwardedRef
   ) {
-    const { persistSelectionRef } = useContext(ComboboxContext);
+    const { persistSelectionRef, listboxId } = useContext(ComboboxContext);
 
     if (persistSelection) {
       persistSelectionRef.current = true;
@@ -686,6 +686,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
         ref={forwardedRef}
         data-reach-combobox-list=""
         role="listbox"
+        id={listboxId}
       />
     );
   }
