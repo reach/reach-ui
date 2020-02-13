@@ -88,7 +88,7 @@ _Type_: `func: ({ ref, rect }) => node`
 
 A function that calls back to you with a `ref` to place on an element and the `rect` measurements of the dom node.
 
-**Note**: On the first render `rect` will be `undefined` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
+**Note**: On the first render `rect` will be `null` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
 
 ##### Rect observe
 
