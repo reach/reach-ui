@@ -63,6 +63,12 @@ let checkedPkgs: { [key: string]: boolean } = {};
 // @ts-ignore
 let checkStyles = (packageName: string): void => void packageName;
 
+// In CJS files, process.env.NODE_ENV is stripped from our build, but we need it
+// to prevent style checks from clogging up user logs while testing.
+// This is a workaround until we can tweak the build a bit to accommodate.
+let { env } = process;
+let nodeEnv = env.NODE_ENV;
+
 if (__DEV__) {
   checkStyles = (packageName: string) => {
     // only check once per package
@@ -70,7 +76,7 @@ if (__DEV__) {
     checkedPkgs[packageName] = true;
 
     if (
-      process.env.NODE_ENV !== "test" &&
+      nodeEnv !== "test" &&
       parseInt(
         window
           .getComputedStyle(document.body)
