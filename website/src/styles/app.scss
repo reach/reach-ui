@@ -394,3 +394,101 @@ button#hamburger {
     margin: 0 0.25em;
   }
 }
+
+.example-custom-checkbox [data-reach-custom-checkbox-container]::before,
+.example-custom-checkbox [data-reach-custom-checkbox-container]::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: "";
+}
+
+.example-custom-checkbox [data-reach-custom-checkbox-container]::before {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #b8b8b8;
+  border-radius: 0.2em;
+  background-color: #edeced;
+}
+
+.example-custom-checkbox [data-reach-custom-checkbox-container]:focus-within {
+  outline: none;
+  box-shadow: none;
+}
+
+.example-custom-checkbox
+  [data-reach-custom-checkbox-container]:focus-within::before {
+  box-shadow: 0 0 0 2px rgba(63, 148, 191, 0.65);
+}
+
+.example-custom-checkbox
+  [data-reach-custom-checkbox-container][data-state="checked"]::before,
+.example-custom-checkbox
+  [data-reach-custom-checkbox-container][data-state="mixed"]::before {
+  border-color: #1159a6;
+  background-color: #3f94bf;
+}
+
+.example-custom-checkbox.orange
+  [data-reach-custom-checkbox-container]:focus-within::before {
+  box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.65);
+}
+
+.example-custom-checkbox.orange
+  [data-reach-custom-checkbox-container][data-state="checked"]::before,
+.example-custom-checkbox.orange
+  [data-reach-custom-checkbox-container][data-state="mixed"]::before {
+  border-color: #a7600b;
+  background-color: #ff8c00;
+}
+
+.example-custom-checkbox.banana
+  [data-reach-custom-checkbox-container]:focus-within::before {
+  box-shadow: 0 0 0 2px rgba(201, 171, 0, 0.65);
+}
+
+.example-custom-checkbox.banana
+  [data-reach-custom-checkbox-container][data-state="checked"]::before,
+.example-custom-checkbox.banana
+  [data-reach-custom-checkbox-container][data-state="mixed"]::before {
+  border-color: #968210;
+  background-color: #c9ab00;
+}
+
+.example-custom-checkbox.apple
+  [data-reach-custom-checkbox-container]:focus-within::before {
+  box-shadow: 0 0 0 2px rgba(158, 13, 13, 0.65);
+}
+
+.example-custom-checkbox.apple
+  [data-reach-custom-checkbox-container][data-state="checked"]::before,
+.example-custom-checkbox.apple
+  [data-reach-custom-checkbox-container][data-state="mixed"]::before {
+  border-color: #6b1111;
+  background-color: #9e0d0d;
+}
+
+.example-custom-checkbox
+  [data-reach-custom-checkbox-container][data-state="checked"]::after {
+  display: block;
+  width: calc(45% - 2px);
+  height: calc(90% - 4px);
+  border: medium solid #fff;
+  border-width: 0 0.125em 0.125em 0;
+  transform: translateY(-65%) translateX(-50%) rotate(45deg);
+}
+
+.example-custom-checkbox
+  [data-reach-custom-checkbox-container][data-state="mixed"]::after {
+  display: block;
+  width: calc(100% - 6px);
+  border-bottom: 0.125em solid #fff;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.example-custom-checkbox
+  [data-reach-custom-checkbox][data-custom-checkmarks]::after {
+  display: none;
+}

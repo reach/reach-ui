@@ -37,7 +37,7 @@ yarn add @reach/disclosure
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel
+  DisclosurePanel,
 } from "@reach/disclosure";
 ```
 
@@ -190,6 +190,19 @@ return (
 
 The trigger button a user clicks to interact with a disclosure.
 
+#### DisclosureButton CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-disclosure-button] {
+}
+[data-reach-disclosure-button][data-state="open"] {
+}
+[data-reach-disclosure-button][data-state="collapsed"] {
+}
+```
+
 #### DisclosureButton Props
 
 | Prop                                     | Type   | Required |
@@ -207,6 +220,19 @@ Typically a text string that serves as a label for the disclosure button, though
 ### DisclosurePanel
 
 The collapsible panel in which inner content for a disclosure item is rendered.
+
+#### DisclosurePanel CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-disclosure-panel] {
+}
+[data-reach-disclosure-panel][data-state="open"] {
+}
+[data-reach-disclosure-panel][data-state="collapsed"] {
+}
+```
 
 #### DisclosurePanel Props
 
