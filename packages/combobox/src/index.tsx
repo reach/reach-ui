@@ -37,6 +37,7 @@ import {
   makeId,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useForkedRef,
+  useUpdateEffect,
   wrapEvent,
   noop,
 } from "@reach/utils";
@@ -76,6 +77,11 @@ const CLEAR = "CLEAR";
 // User is typing
 const CHANGE = "CHANGE";
 
+// Initial input value change handler for syncing user state with state machine
+// Prevents initial change from sending the user to the NAVIGATING state
+// https://github.com/reach/reach-ui/issues/464
+const INITIAL_CHANGE = "INITIAL_CHANGE";
+
 // User is navigating w/ the keyboard
 const NAVIGATE = "NAVIGATE";
 
@@ -106,6 +112,7 @@ const stateChart: StateChart = {
         [BLUR]: IDLE,
         [CLEAR]: IDLE,
         [CHANGE]: SUGGESTING,
+        [INITIAL_CHANGE]: IDLE,
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
         [OPEN_WITH_BUTTON]: SUGGESTING,
@@ -156,6 +163,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   const nextState = { ...data, lastEventType: event.type };
   switch (event.type) {
     case CHANGE:
+    case INITIAL_CHANGE:
       return {
         ...nextState,
         navigationValue: null,
@@ -402,6 +410,13 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     },
     forwardedRef
   ) {
+    // https://github.com/reach/reach-ui/issues/464
+    const { current: initialControlledValue } = useRef(controlledValue);
+    const controlledValueChangedRef = useRef(false);
+    useUpdateEffect(() => {
+      controlledValueChangedRef.current = true;
+    }, [controlledValue]);
+
     const {
       data: { navigationValue, value, lastEventType },
       inputRef,
@@ -438,6 +453,11 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     const handleValueChange = (value: ComboboxValue) => {
       if (value.trim() === "") {
         transition(CLEAR);
+      } else if (
+        value === initialControlledValue &&
+        !controlledValueChangedRef.current
+      ) {
+        transition(INITIAL_CHANGE, { value });
       } else {
         transition(CHANGE, { value });
       }
@@ -1091,16 +1111,13 @@ function useReducerMachine(
   const [data, dispatch] = useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
+    console.log(event);
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
     if (nextState) {
       dispatch({ type: event, state, nextState: state, ...payload });
       setState(nextState);
       return;
-    }
-
-    if (__DEV__) {
-      throw new Error(`Unknown event "${event}" for state "${state}"`);
     }
   };
 
@@ -1172,6 +1189,7 @@ type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 type MachineEventType =
   | "CLEAR"
   | "CHANGE"
+  | "INITIAL_CHANGE"
   | "NAVIGATE"
   | "SELECT_WITH_KEYBOARD"
   | "SELECT_WITH_CLICK"
@@ -1202,6 +1220,7 @@ type StateData = {
 type MachineEvent =
   | { type: "BLUR" }
   | { type: "CHANGE"; value: ComboboxValue }
+  | { type: "INITIAL_CHANGE"; value: ComboboxValue }
   | { type: "CLEAR" }
   | { type: "CLOSE_WITH_BUTTON" }
   | { type: "ESCAPE" }
