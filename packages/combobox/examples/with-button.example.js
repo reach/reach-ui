@@ -5,8 +5,9 @@ import {
   ComboboxList,
   ComboboxPopover,
   ComboboxOption,
-  ComboboxButton
+  ComboboxButton,
 } from "@reach/combobox";
+import VisuallyHidden from "@reach/visually-hidden";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";
@@ -18,28 +19,29 @@ function Example() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
-  const handleChange = event => {
+  function handleChange(event) {
     setTerm(event.target.value);
-  };
+  }
 
   return (
     <div>
       <h2>No Portal</h2>
       <Combobox>
         <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
-        <ComboboxButton aria-label="toggle menu">▾</ComboboxButton>
-        {results && (
-          <ComboboxPopover>
-            <ComboboxList>
-              {results.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={`${result.city}, ${result.state}`}
-                />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        )}
+        <ComboboxButton>
+          <VisuallyHidden>Toggle the list of cities</VisuallyHidden>
+          <span aria-hidden>▾</span>
+        </ComboboxButton>
+        <ComboboxPopover>
+          <ComboboxList>
+            {results.slice(0, 10).map((result, index) => (
+              <ComboboxOption
+                key={index}
+                value={`${result.city}, ${result.state}`}
+              />
+            ))}
+          </ComboboxList>
+        </ComboboxPopover>
       </Combobox>
     </div>
   );
@@ -55,12 +57,11 @@ function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);
   return useMemo(
     () =>
-      term.trim() === ""
+      throttledTerm.trim() === ""
         ? null
-        : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+        : matchSorter(cities, throttledTerm, {
+            keys: [item => `${item.city}, ${item.state}`],
           }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
   );
 }
