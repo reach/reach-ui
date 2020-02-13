@@ -82,7 +82,6 @@ if (__DEV__) {
         `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
 
     import "@reach/${packageName}/styles.css";
-import warning from 'warning';
 
   Otherwise you'll need to include them some other way:
 
