@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -15,20 +15,29 @@ let name = "Open on focus";
 
 function Example() {
   let [term, setTerm] = useState("D");
+  let [selection, setSelection] = useState("");
   let results = useCityMatch(term);
+  let inputRef = useRef(null);
 
-  const handleChange = event => {
+  function handleChange(event) {
     setTerm(event.target.value);
-  };
+  }
+
+  function handleSelect(value) {
+    setSelection(value);
+    setTerm(value);
+  }
 
   return (
     <div>
       <h2>Clientside Search</h2>
-      <Combobox openOnFocus id="holy-smokes">
+      <p>Selection: {selection}</p>
+      <Combobox openOnFocus onSelect={handleSelect}>
         <ComboboxInput
           onChange={handleChange}
           value={term}
           style={inputStyle}
+          ref={inputRef}
         />
         {results && (
           <ComboboxPopover style={popupStyle}>
