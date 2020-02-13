@@ -13,7 +13,7 @@ import {
   // SLIDER_HANDLE_ALIGN_CONTAIN,
   // SLIDER_ORIENTATION_HORIZONTAL,
   // SLIDER_ORIENTATION_VERTICAL
-} from "./index";
+} from "@reach/slider";
 
 const getCurrentValue = (el: HTMLElement) =>
   Number(el.getAttribute("aria-valuenow"));

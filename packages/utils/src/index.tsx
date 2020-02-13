@@ -63,6 +63,12 @@ let checkedPkgs: { [key: string]: boolean } = {};
 // @ts-ignore
 let checkStyles = (packageName: string): void => void packageName;
 
+// In CJS files, process.env.NODE_ENV is stripped from our build, but we need it
+// to prevent style checks from clogging up user logs while testing.
+// This is a workaround until we can tweak the build a bit to accommodate.
+let { env } = process;
+let nodeEnv = env.NODE_ENV;
+
 if (__DEV__) {
   checkStyles = (packageName: string) => {
     // only check once per package
@@ -70,7 +76,7 @@ if (__DEV__) {
     checkedPkgs[packageName] = true;
 
     if (
-      process.env.NODE_ENV !== "test" &&
+      nodeEnv !== "test" &&
       parseInt(
         window
           .getComputedStyle(document.body)
@@ -82,7 +88,6 @@ if (__DEV__) {
         `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
 
     import "@reach/${packageName}/styles.css";
-import warning from 'warning';
 
   Otherwise you'll need to include them some other way:
 
@@ -289,6 +294,33 @@ export function forwardRefWithAs<Props, ComponentType extends As>(
     ComponentType,
     Props
   >;
+}
+
+/**
+ * Get a computed style value by property, backwards compatible with IE
+ * @param element
+ * @param styleProp
+ */
+export function getElementComputedStyle(
+  element: HTMLElement & {
+    currentStyle?: Record<string, string>;
+  },
+  styleProp: string
+) {
+  let y: string | null = null;
+  let doc = getOwnerDocument(element);
+  if (element.currentStyle) {
+    y = element.currentStyle[styleProp];
+  } else if (
+    doc &&
+    doc.defaultView &&
+    isFunction(doc.defaultView.getComputedStyle)
+  ) {
+    y = doc.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(styleProp);
+  }
+  return y;
 }
 
 export function getOwnerDocument<T extends HTMLElement = HTMLElement>(

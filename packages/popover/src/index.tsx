@@ -123,25 +123,6 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
   };
 };
 
-// Finish this another time
-// export function positionHorizontalCenter(targetRect, popoverRect) {
-//   const targetCenter = targetRect.width / 2 + targetRect.left;
-//   const popoverHalf = popoverRect.width / 2;
-
-//   const collisions = {
-//     right: window.innerWidth < targetCenter - popoverHalf,
-//     left: targetCenter - popoverHalf < 0
-//     // top:
-//     // bottom:
-//   };
-
-//   return {
-//     left: collisions.right
-//       ? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
-//       : collisions.left ? `` : ``
-//   };
-// }
-
 function getCollisions(
   targetRect: PRect,
   popoverRect: PRect,
@@ -154,7 +135,7 @@ function getCollisions(
     bottom:
       window.innerHeight <
       targetRect.bottom + popoverRect.height - offsetBottom,
-    left: targetRect.left - popoverRect.width < 0,
+    left: targetRect.left + targetRect.width - popoverRect.width < 0,
   };
 
   const directionRight = collisions.right && !collisions.left;

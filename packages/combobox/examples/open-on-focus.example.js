@@ -1,39 +1,49 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   Combobox,
   ComboboxInput,
   ComboboxList,
-  ComboboxPopover,
   ComboboxOption,
-  ComboboxButton,
+  ComboboxPopover,
 } from "@reach/combobox";
-import VisuallyHidden from "@reach/visually-hidden";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
 import cities from "./cities";
 import "@reach/combobox/styles.css";
 
-let name = "With Button";
+let name = "Open on focus";
 
 function Example() {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = useState("D");
+  let [selection, setSelection] = useState("");
   let results = useCityMatch(term);
+  let inputRef = useRef(null);
 
   function handleChange(event) {
     setTerm(event.target.value);
   }
 
+  function handleSelect(value) {
+    setSelection(value);
+    setTerm(value);
+  }
+
   return (
     <div>
-      <h2>No Portal</h2>
-      <Combobox>
-        <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
-        <ComboboxButton>
-          <VisuallyHidden>Toggle the list of cities</VisuallyHidden>
-          <span aria-hidden>▾</span>
-        </ComboboxButton>
+      <h2>Clientside Search</h2>
+      <p>Selection: {selection}</p>
+      <Combobox openOnFocus onSelect={handleSelect}>
+        <ComboboxInput
+          onChange={handleChange}
+          value={term}
+          style={inputStyle}
+          ref={inputRef}
+        />
         {results && (
-          <ComboboxPopover>
+          <ComboboxPopover style={popupStyle}>
+            <p>
+              <button>Hi</button>
+            </p>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
@@ -59,11 +69,23 @@ function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);
   return useMemo(
     () =>
-      throttledTerm.trim() === ""
+      term.trim() === ""
         ? null
-        : matchSorter(cities, throttledTerm, {
+        : matchSorter(cities, term, {
             keys: [item => `${item.city}, ${item.state}`],
           }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
   );
 }
+
+const inputStyle = {
+  width: 400,
+  fontSize: "100%",
+  padding: "0.33rem",
+};
+
+const popupStyle = {
+  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
+  border: "none",
+};

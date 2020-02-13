@@ -1,6 +1,6 @@
 {
   "name": "@reach/descendants",
-  "version": "0.1.0",
+  "version": "0.8.2",
   "description": "A descendant index solution for better accessibility support in compound components",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/utils": "^0.8.0",
+    "@reach/utils": "^0.8.2",
     "tslib": "^1.10.0"
   },
   "peerDependencies": {

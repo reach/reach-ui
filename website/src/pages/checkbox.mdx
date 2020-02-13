@@ -112,18 +112,61 @@ function Example() {
 
 ### Example CustomCheckbox
 
+With custom checkbox, you can choose between a high-level API where DOM elements
+are not individually exposed as components, or use the composed API to access
+each sub-component directly.
+
+#### High-level `CustomCheckbox` API
+
+```jsx
+// jsx-demo
+(() => {
+  function MyCheckbox({ children, ...props }) {
+    return (
+      <span className={`example-custom-checkbox ${props.value}`}>
+        <label>
+          <CustomCheckbox {...props} />
+          {children}
+        </label>
+      </span>
+    );
+  }
+
+  function Checklist() {
+    return (
+      <fieldset>
+        <legend>What is your favorite fruit?</legend>
+        <MyCheckbox name="favorite-fruit" value="apple" color="#B22222">
+          Apple <span aria-hidden>🍎</span>
+        </MyCheckbox>
+        <MyCheckbox name="favorite-fruit" value="orange" color="#FF8C00">
+          Orange <span aria-hidden>🍊</span>
+        </MyCheckbox>
+        <MyCheckbox name="favorite-fruit" value="banana" color="#FFD700">
+          Banana <span aria-hidden>🍌</span>
+        </MyCheckbox>
+      </fieldset>
+    );
+  }
+
+  return <Checklist />;
+})();
+```
+
+#### Composed CustomCheckbox API
+
 ```jsx
 // jsx-demo
 (() => {
   function Example() {
     return (
       <div>
-        <label>
+        <label style={{ display: "flex", alignItems: "center" }}>
           <MyCheckbox value="whatever" />
           This is a pretty cool checkbox; do you agree?
         </label>
         <br />
-        <label>
+        <label style={{ display: "flex", alignItems: "center" }}>
           <MyCheckbox checked="mixed" value="something-else" />
           I'm just an example of what I'd look like if I had a mixed state.
         </label>
@@ -374,8 +417,6 @@ Please see the [styling guide](/styling).
 }
 [data-reach-custom-checkbox][data-state="mixed"] {
 }
-[data-reach-custom-checkbox][data-focused] {
-}
 ```
 
 #### CustomCheckbox Props
@@ -473,8 +514,6 @@ Please see the [styling guide](/styling).
 [data-reach-custom-checkbox-container][data-state="unchecked"] {
 }
 [data-reach-custom-checkbox-container][data-state="mixed"] {
-}
-[data-reach-custom-checkbox-container][data-focused] {
 }
 ```
 
@@ -577,8 +616,6 @@ Please see the [styling guide](/styling).
 [data-reach-custom-checkbox-input][aria-checked="false"] {
 }
 [data-reach-custom-checkbox-input][aria-checked="mixed"] {
-}
-[data-reach-custom-checkbox-input][data-focused] {
 }
 ```
 

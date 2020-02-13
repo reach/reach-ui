@@ -1,24 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`didMount does not require it 1`] = `
+exports[`<Component /> didMount is not required 1`] = `
 <h1>
   No need for didMount prop for rendering!
 </h1>
 `;
 
-exports[`didUpdate does not require it 1`] = `
+exports[`<Component /> didUpdate is not required 1`] = `
 <h1>
   Can render without didUpdate prop!
 </h1>
 `;
 
-exports[`getSnapshotBeforeUpdate does not require it 1`] = `
+exports[`<Component /> getSnapshotBeforeUpdate is not required 1`] = `
 <h1>
   getSnapshotBeforeUpdate prop is not necessary for render!
 </h1>
 `;
 
-exports[`rendering prefers \`render\` over \`children\` 1`] = `
+exports[`<Component /> prefers \`render\` over \`children\` 1`] = `
 <div>
   <h1>
     Render with an actual "render" prop
@@ -26,7 +26,7 @@ exports[`rendering prefers \`render\` over \`children\` 1`] = `
 </div>
 `;
 
-exports[`rendering renders with children render prop 1`] = `
+exports[`<Component /> renders with children render prop 1`] = `
 <div>
   <h1>
     Using children prop as render prop!
@@ -37,7 +37,7 @@ exports[`rendering renders with children render prop 1`] = `
 </div>
 `;
 
-exports[`rendering renders with normal children 1`] = `
+exports[`<Component /> renders with normal children 1`] = `
 <div>
   <h1>
     Some regular children!
@@ -48,21 +48,21 @@ exports[`rendering renders with normal children 1`] = `
 </div>
 `;
 
-exports[`rendering renders without children 1`] = `null`;
+exports[`<Component /> renders without children 1`] = `null`;
 
-exports[`rendering renders without figuritively exploding 1`] = `
+exports[`<Component /> renders without figuritively exploding 1`] = `
 <div>
   Heyyyooooo
 </div>
 `;
 
-exports[`shouldUpdate does not require it 1`] = `
+exports[`<Component /> shouldUpdate is not required 1`] = `
 <h1>
   Can render without shouldUpdate prop.
 </h1>
 `;
 
-exports[`state calls getInitialState 1`] = `
+exports[`<Component /> state calls getInitialState 1`] = `
 <div>
   <h1>
     Jane Fonda
@@ -83,7 +83,7 @@ exports[`state calls getInitialState 1`] = `
 </div>
 `;
 
-exports[`state receives initialState 1`] = `
+exports[`<Component /> state receives initialState 1`] = `
 <div>
   <h1>
     Henry Winkler
@@ -104,7 +104,7 @@ exports[`state receives initialState 1`] = `
 </div>
 `;
 
-exports[`willUnmount does not require it 1`] = `
+exports[`<Component /> willUnmount is not required 1`] = `
 <h1>
   Don't need willUnmount prop in order to render!
 </h1>

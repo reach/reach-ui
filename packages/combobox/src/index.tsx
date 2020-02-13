@@ -37,6 +37,7 @@ import {
   makeId,
   useIsomorphicLayoutEffect as useLayoutEffect,
   useForkedRef,
+  useUpdateEffect,
   wrapEvent,
   noop,
 } from "@reach/utils";
@@ -76,6 +77,11 @@ const CLEAR = "CLEAR";
 // User is typing
 const CHANGE = "CHANGE";
 
+// Initial input value change handler for syncing user state with state machine
+// Prevents initial change from sending the user to the NAVIGATING state
+// https://github.com/reach/reach-ui/issues/464
+const INITIAL_CHANGE = "INITIAL_CHANGE";
+
 // User is navigating w/ the keyboard
 const NAVIGATE = "NAVIGATE";
 
@@ -106,6 +112,7 @@ const stateChart: StateChart = {
         [BLUR]: IDLE,
         [CLEAR]: IDLE,
         [CHANGE]: SUGGESTING,
+        [INITIAL_CHANGE]: IDLE,
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
         [OPEN_WITH_BUTTON]: SUGGESTING,
@@ -156,6 +163,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   const nextState = { ...data, lastEventType: event.type };
   switch (event.type) {
     case CHANGE:
+    case INITIAL_CHANGE:
       return {
         ...nextState,
         navigationValue: null,
@@ -214,9 +222,12 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
 const visibleStates: State[] = [SUGGESTING, NAVIGATING, INTERACTING];
 const isVisible = (state: State) => visibleStates.includes(state);
 
-/*
+/**
  * When we open a list, set the navigation value to the value in the input, if
  * it's in the list, then it'll automatically be highlighted.
+ *
+ * @param stateData
+ * @param event
  */
 function findNavigationValue(stateData: StateData, event: MachineEvent) {
   // @ts-ignore
@@ -240,11 +251,9 @@ const ComboboxContext = createNamedContext(
   {} as IComboboxContext
 );
 
-/*
- * Allows us to put the option's value on context so that ComboboxOptionText
- * can work it's highlight text magic no matter what else is rendered around
- * it.
- */
+// Allows us to put the option's value on context so that ComboboxOptionText
+// can work it's highlight text magic no matter what else is rendered around
+// it.
 const OptionContext = createNamedContext(
   "OptionContext",
   {} as IComboboxOptionContext
@@ -271,23 +280,19 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 
     const buttonRef = useRef();
 
-    /*
-     * When <ComboboxInput autocomplete={false} /> we don't want cycle back to
-     * the user's value while navigating (because it's always the user's value),
-     * but we need to know this in useKeyDown which is far away from the prop
-     * here, so we do something sneaky and write it to this ref on context so we
-     * can use it anywhere else 😛. Another new trick for me and I'm excited
-     * about this one too!
-     */
+    // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
+    // the user's value while navigating (because it's always the user's value),
+    // but we need to know this in useKeyDown which is far away from the prop
+    // here, so we do something sneaky and write it to this ref on context so we
+    // can use it anywhere else 😛. Another new trick for me and I'm excited
+    // about this one too!
     const autocompletePropRef = useRef();
 
     const persistSelectionRef = useRef();
 
     const defaultData: StateData = {
-      /*
-       * The value the user has typed. We derive this also when the developer is
-       * controlling the value of ComboboxInput.
-       */
+      // The value the user has typed. We derive this also when the developer is
+      // controlling the value of ComboboxInput.
       value: "",
       // the value the user has navigated to with the keyboard
       navigationValue: null,
@@ -402,6 +407,13 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     },
     forwardedRef
   ) {
+    // https://github.com/reach/reach-ui/issues/464
+    const { current: initialControlledValue } = useRef(controlledValue);
+    const controlledValueChangedRef = useRef(false);
+    useUpdateEffect(() => {
+      controlledValueChangedRef.current = true;
+    }, [controlledValue]);
+
     const {
       data: { navigationValue, value, lastEventType },
       inputRef,
@@ -414,10 +426,8 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     const ref = useForkedRef(inputRef, forwardedRef);
 
-    /*
-     * Because we close the List on blur, we need to track if the blur is
-     * caused by clicking inside the list, and if so, don't close the List.
-     */
+    // Because we close the List on blur, we need to track if the blur is
+    // caused by clicking inside the list, and if so, don't close the List.
     const selectOnClickRef = useRef(false);
 
     const handleKeyDown = useKeyDown();
@@ -426,11 +436,9 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     const isControlled = controlledValue != null;
 
-    /*
-     * Layout effect should be SSR-safe here because we don't actually do
-     * anything with this ref that involves rendering until after we've
-     * let the client hydrate in nested components.
-     */
+    // Layout effect should be SSR-safe here because we don't actually do
+    // anything with this ref that involves rendering until after we've
+    // let the client hydrate in nested components.
     useLayoutEffect(() => {
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
@@ -438,25 +446,26 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     const handleValueChange = (value: ComboboxValue) => {
       if (value.trim() === "") {
         transition(CLEAR);
+      } else if (
+        value === initialControlledValue &&
+        !controlledValueChangedRef.current
+      ) {
+        transition(INITIAL_CHANGE, { value });
       } else {
         transition(CHANGE, { value });
       }
     };
 
-    /*
-     * If they are controlling the value we still need to do our transitions, so
-     * we have this derived state to emulate onChange of the input as we receive
-     * new `value`s ...[*]
-     */
+    // If they are controlling the value we still need to do our transitions, so
+    // we have this derived state to emulate onChange of the input as we receive
+    // new `value`s ...[*]
     if (isControlled && controlledValue !== value) {
       handleValueChange(controlledValue!);
     }
 
-    /*
-     * [*]... and when controlled, we don't trigger handleValueChange as the user
-     * types, instead the developer controls it with the normal input onChange
-     * prop
-     */
+    // [*]... and when controlled, we don't trigger handleValueChange as the user
+    // types, instead the developer controls it with the normal input onChange
+    // prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       const { value } = event.target;
       if (!isControlled) {
@@ -469,11 +478,9 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         selectOnClickRef.current = true;
       }
 
-      /*
-       * If we select an option with click, useFocusManagement will focus the
-       * input, in those cases we don't want to cause the menu to open back up,
-       * so we guard behind these states.
-       */
+      // If we select an option with click, useFocusManagement will focus the
+      // input, in those cases we don't want to cause the menu to open back up,
+      // so we guard behind these states.
       if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
         transition(FOCUS);
       }
@@ -494,20 +501,20 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 
     return (
       <Comp
-        aria-autocomplete="both"
         aria-activedescendant={
           navigationValue ? String(makeHash(navigationValue)) : undefined
         }
+        aria-autocomplete="both"
+        aria-controls={listboxId}
         {...props}
         data-reach-combobox-input=""
         ref={ref}
-        value={inputValue || ""}
-        onClick={wrapEvent(onClick, handleClick)}
         onBlur={wrapEvent(onBlur, handleBlur)}
-        onFocus={wrapEvent(onFocus, handleFocus)}
         onChange={wrapEvent(onChange, handleChange)}
+        onClick={wrapEvent(onClick, handleClick)}
+        onFocus={wrapEvent(onFocus, handleFocus)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        id={listboxId}
+        value={inputValue || ""}
       />
     );
   }
@@ -579,13 +586,11 @@ export const ComboboxPopover = forwardRef<
     "data-reach-combobox-popover": "",
     onKeyDown: wrapEvent<any>(onKeyDown, handleKeyDown),
     onBlur: wrapEvent<any>(onBlur, handleBlur),
-    /*
-     * Instead of conditionally rendering the popover we use the `hidden` prop
-     * because we don't want to unmount on close (from escape or onSelect).
-     * However, the developer can conditionally render the ComboboxPopover if
-     * they do want to cause mount/unmount based on the app's own data (like
-     * results.length or whatever).
-     */
+    // Instead of conditionally rendering the popover we use the `hidden` prop
+    // because we don't want to unmount on close (from escape or onSelect).
+    // However, the developer can conditionally render the ComboboxPopover if
+    // they do want to cause mount/unmount based on the app's own data (like
+    // results.length or whatever).
     hidden: !isVisible,
     tabIndex: -1,
     children,
@@ -654,7 +659,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
     },
     forwardedRef
   ) {
-    const { persistSelectionRef } = useContext(ComboboxContext);
+    const { persistSelectionRef, listboxId } = useContext(ComboboxContext);
 
     if (persistSelection) {
       persistSelectionRef.current = true;
@@ -666,6 +671,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
         ref={forwardedRef}
         data-reach-combobox-list=""
         role="listbox"
+        id={listboxId}
       />
     );
   }
@@ -900,12 +906,10 @@ function useFocusManagement(
   lastEventType: MachineEventType | undefined,
   inputRef: React.MutableRefObject<any>
 ) {
-  /*
-   * useLayoutEffect so that the cursor goes to the end of the input instead
-   * of awkwardly at the beginning, unclear to me why 🤷‍♂️
-   *
-   * Should be safe to use here since we're just focusing an input.
-   */
+  // useLayoutEffect so that the cursor goes to the end of the input instead
+  // of awkwardly at the beginning, unclear to me why 🤷‍♂️
+  //
+  // Should be safe to use here since we're just focusing an input.
   useLayoutEffect(() => {
     if (
       lastEventType === NAVIGATE ||
@@ -940,11 +944,9 @@ function useKeyDown() {
         // Don't scroll the page
         event.preventDefault();
 
-        /*
-         * If the developer didn't render any options, there's no point in
-         * trying to navigate--but seriously what the heck? Give us some
-         * options fam.
-         */
+        // If the developer didn't render any options, there's no point in
+        // trying to navigate--but seriously what the heck? Give us some
+        // options fam.
         if (!options || options.length === 0) {
           return;
         }
@@ -961,11 +963,9 @@ function useKeyDown() {
           const atBottom = index === options.length - 1;
           if (atBottom) {
             if (autocompletePropRef.current) {
-              /*
-               * Go back to the value the user has typed because we are
-               * autocompleting and they need to be able to get back to what
-               * they had typed w/o having to backspace out.
-               */
+              // Go back to the value the user has typed because we are
+              // autocompleting and they need to be able to get back to what
+              // they had typed w/o having to backspace out.
               transition(NAVIGATE, { value: null });
             } else {
               // cycle through
@@ -985,11 +985,9 @@ function useKeyDown() {
         // Don't scroll the page
         event.preventDefault();
 
-        /*
-         * If the developer didn't render any options, there's no point in
-         * trying to navigate--but seriously what the heck? Give us some
-         * options fam.
-         */
+        // If the developer didn't render any options, there's no point in
+        // trying to navigate--but seriously what the heck? Give us some
+        // options fam.
         if (!options || options.length === 0) {
           return;
         }
@@ -1002,11 +1000,9 @@ function useKeyDown() {
           );
           if (index === 0) {
             if (autocompletePropRef.current) {
-              /*
-               * Go back to the value the user has typed because we are
-               * autocompleting and they need to be able to get back to what
-               * they had typed w/o having to backspace out.
-               */
+              // Go back to the value the user has typed because we are
+              // autocompleting and they need to be able to get back to what
+              // they had typed w/o having to backspace out.
               transition(NAVIGATE, { value: null });
             } else {
               // cycle through
@@ -1091,16 +1087,13 @@ function useReducerMachine(
   const [data, dispatch] = useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
+    console.log(event);
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
     if (nextState) {
       dispatch({ type: event, state, nextState: state, ...payload });
       setState(nextState);
       return;
-    }
-
-    if (__DEV__) {
-      throw new Error(`Unknown event "${event}" for state "${state}"`);
     }
   };
 
@@ -1172,6 +1165,7 @@ type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 type MachineEventType =
   | "CLEAR"
   | "CHANGE"
+  | "INITIAL_CHANGE"
   | "NAVIGATE"
   | "SELECT_WITH_KEYBOARD"
   | "SELECT_WITH_CLICK"
@@ -1202,6 +1196,7 @@ type StateData = {
 type MachineEvent =
   | { type: "BLUR" }
   | { type: "CHANGE"; value: ComboboxValue }
+  | { type: "INITIAL_CHANGE"; value: ComboboxValue }
   | { type: "CLEAR" }
   | { type: "CLOSE_WITH_BUTTON" }
   | { type: "ESCAPE" }

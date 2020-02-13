@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { fireEvent, render, cleanup } from "$test/utils";
-import { Dialog } from "./index";
+import { Dialog } from "@reach/dialog";
 
 expect.extend(toHaveNoViolations);
 

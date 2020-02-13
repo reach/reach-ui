@@ -207,7 +207,7 @@ export const DisclosureButton = forwardRefWithAs<
       {...props}
       ref={ref}
       onClick={wrapEvent(onClick, handleClick)}
-      data-reach-disclosure-trigger=""
+      data-reach-disclosure-button=""
       data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
     >
       {children}
