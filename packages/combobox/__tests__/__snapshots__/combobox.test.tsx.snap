@@ -16,9 +16,9 @@ exports[`<Combobox /> should match the snapshot 1`] = `
     >
       <input
         aria-autocomplete="both"
+        aria-controls="listbox--holy-smokes"
         data-reach-combobox-input=""
         data-testid="input"
-        id="listbox--holy-smokes"
         name="awesome"
         value=""
       />
@@ -43,9 +43,9 @@ exports[`<Combobox /> should match the snapshot 2`] = `
     >
       <input
         aria-autocomplete="both"
+        aria-controls="listbox--holy-smokes"
         data-reach-combobox-input=""
         data-testid="input"
-        id="listbox--holy-smokes"
         name="awesome"
         value="e"
       />
