@@ -100,6 +100,8 @@
   }
 }
 
+/* FOR DEBUGGING FOCUS */
+
 :focus {
   outline: 2px solid crimson !important;
 }

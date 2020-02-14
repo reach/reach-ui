@@ -53,6 +53,7 @@ import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
@@ -65,11 +66,11 @@ import {
   isFunction,
   isString,
   makeId,
+  noop,
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
-  noop,
 } from "@reach/utils";
 import {
   createListboxMachine,
@@ -83,6 +84,7 @@ import {
   ListboxButtonProps,
   ListboxContextValue,
   ListboxDescendantProps,
+  ListboxEvent,
   ListboxGroupContextValue,
   ListboxGroupLabelProps,
   ListboxGroupProps,
@@ -97,21 +99,10 @@ import {
   ListobxListRef,
   ListobxOptionRef,
   ListobxPopoverRef,
-  ListboxNodeRefs,
-  ListboxEvent,
   MachineToReactRefMap,
 } from "./types";
 
-enum KeyEventKeys {
-  ArrowDown = "ArrowDown",
-  ArrowUp = "ArrowUp",
-  Home = "Home",
-  End = "End",
-  Tab = "Tab",
-  Escape = "Escape",
-  Enter = "Enter",
-  Space = " ",
-}
+let __DEBUG__ = false;
 
 const expandedStates = [
   ListboxStates.Navigating,
@@ -153,7 +144,6 @@ export const ListboxInput = forwardRef<
 >(function ListboxInput(
   {
     autoComplete,
-    autoFocus,
     children,
     disabled,
     form,
@@ -172,14 +162,20 @@ export const ListboxInput = forwardRef<
     ListboxDescendantProps
   >();
 
-  /*
-   * We will track when a mouse has moved in a ref, then reset it to false each
-   * time a popover closes. This is useful because we want the selected value of
-   * the listbox to be highlighted when the user opens it, but if the pointer
-   * is resting above an option it will steal the highlight.
-   */
+  // We will track when a mouse has moved in a ref, then reset it to false each
+  // time a popover closes. This is useful because we want the selected value of
+  // the listbox to be highlighted when the user opens it, but if the pointer
+  // is resting above an option it will steal the highlight.
   let mouseMovedRef = useRef(false);
-  let mouseEventStartedRef = useRef(false);
+
+  // If a user clicks the button while the listbox is open, the blur event
+  // will close the popover and send us back to IDLE. The mousup event will
+  // then fire and send us right back to NAVIGATING, which we probably don't
+  // want. We can probably do this better in the state machine, but for now
+  // this ref will track where these mouse events are starting so we can
+  // conditionally send events based on this value.
+  let mouseEventStartedRef = useRef<false | "listbox" | "button">(false);
+
   let autocompletePropRef = useRef<typeof autoComplete>(autoComplete);
 
   let inputRef: ListobxInputRef = useRef(null);
@@ -191,17 +187,6 @@ export const ListboxInput = forwardRef<
     autocompletePropRef.current = autoComplete;
   }, [autoComplete, autocompletePropRef]);
 
-  useEffect(() => {
-    if (autoFocus) {
-      window.requestAnimationFrame(() => {
-        buttonRef.current && buttonRef.current.focus();
-      });
-    }
-    // autoFocus should only do anything on the first render, so we don't care
-    // if the prop value changes here.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   let machineRefs: MachineToReactRefMap<ListboxEvent> = {
     input: inputRef,
     button: buttonRef,
@@ -212,7 +197,6 @@ export const ListboxInput = forwardRef<
   let [current, send] = useMachine(
     createListboxMachine({
       value: valueProp || null,
-      disabled: !!disabled,
       isControlled: isControlled.current,
       refs: unwrapRefs(machineRefs),
     }),
@@ -245,7 +229,7 @@ export const ListboxInput = forwardRef<
       disabled: !!disabled,
       inputRef,
       instanceId: id,
-      isExpanded: expanded,
+      expanded,
       listboxId,
       listboxValue,
       listboxValueLabel: valueLabel,
@@ -281,30 +265,25 @@ export const ListboxInput = forwardRef<
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
-  useEffect(() => {
-    let newData: any = { disabled, options };
-    if (valueProp != null) {
-      newData.value = valueProp!;
-    }
+  // We need to get some data from props to pass to the state machine in the
+  // event that they change
+  if (
+    isControlled.current &&
+    valueProp != null &&
+    valueProp !== current.context.value
+  ) {
     send({
-      type: ListboxEvents.GetDerivedData,
-      data: newData,
+      type: ListboxEvents.ValueChange,
+      value: valueProp,
     });
-  }, [disabled, send, valueProp, options]);
+  }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     send({
       type: ListboxEvents.GetDerivedData,
-      data: {
-        refs: {
-          input: inputRef.current,
-          button: buttonRef.current,
-          list: listRef.current,
-          popover: popoverRef.current,
-        },
-      },
+      data: { options },
     });
-  }, [send]);
+  }, [options, send]);
 
   useStateLogger(current.value);
   useEffect(() => checkStyles("listbox"), []);
@@ -343,7 +322,11 @@ if (__DEV__) {
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     autoComplete: PropTypes.string,
-    autoFocus: PropTypes.bool,
+
+    // TODO: Consider autoFocus prop implementation, if possible
+    // Not sure how this would work without some sort of App-wrapper provider
+    // that manages focus. Inputs get this out of the box, div's do not.
+    // autoFocus: PropTypes.bool,
     form: PropTypes.string,
     name: PropTypes.string,
     required: PropTypes.bool,
@@ -463,7 +446,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     let {
       buttonId,
       buttonRef,
-      isExpanded,
+      expanded,
       listboxId,
       mouseEventStartedRef,
       state,
@@ -476,7 +459,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     let handleKeyDown = useKeyDown();
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStartedRef.current = true;
+      mouseEventStartedRef.current = "button";
       event.persist();
       send({
         type: ListboxEvents.ButtonPointerDown,
@@ -486,11 +469,13 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     }
 
     function handleMouseUp(event: React.MouseEvent) {
+      if (mouseEventStartedRef.current === "button") {
+        send({
+          type: ListboxEvents.ButtonFinishClick,
+          isRightClick: isRightClick(event.nativeEvent),
+        });
+      }
       mouseEventStartedRef.current = false;
-      send({
-        type: ListboxEvents.ButtonFinishClick,
-        isRightClick: isRightClick(event.nativeEvent),
-      });
     }
 
     let getLabelFromContext = useCallback(
@@ -512,18 +497,18 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         return getLabelFromContext();
       } else if (isFunction(children)) {
         return children({
-          isExpanded,
+          isExpanded: expanded,
           label: getLabelFromContext(),
           value: listboxValue,
         });
       }
       return children;
-    }, [children, getLabelFromContext, isExpanded, listboxValue]);
+    }, [children, getLabelFromContext, expanded, listboxValue]);
 
     return (
       <Comp
         aria-controls={listboxId}
-        aria-expanded={isExpanded}
+        aria-expanded={expanded}
         aria-haspopup="listbox"
         aria-labelledby={`${buttonId} ${listboxId}`}
         {...props}
@@ -563,8 +548,8 @@ export { ListboxButtonProps };
  */
 export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
   function ListboxArrow({ children, ...props }, forwardedRef) {
-    let { isExpanded } = useListboxContext();
-    let defaultArrow = isExpanded ? "▲" : "▼";
+    let { expanded } = useListboxContext();
+    let defaultArrow = expanded ? "▲" : "▼";
     return (
       <span
         aria-hidden
@@ -573,7 +558,7 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
         data-reach-listbox-arrow=""
       >
         {isFunction(children)
-          ? children({ isExpanded })
+          ? children({ isExpanded: expanded })
           : children || defaultArrow}
       </span>
     );
@@ -603,15 +588,9 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let {
-      isExpanded,
-      popoverRef,
-      buttonRef,
-      send,
-      listRef,
-    } = useListboxContext();
+    let { expanded, popoverRef, buttonRef } = useListboxContext();
     let ref = useForkedRef(popoverRef, forwardedRef);
-    let hidden = !isExpanded;
+    let hidden = !expanded;
 
     let handleKeyDown = useKeyDown();
     let handleBlur = useBlur();
@@ -625,20 +604,6 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
       onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
       tabIndex: -1,
     };
-
-    useEffect(() => {
-      if (!hidden) {
-        send({
-          type: ListboxEvents.GetDerivedData,
-          data: {
-            refs: {
-              list: listRef.current,
-              popover: popoverRef.current,
-            },
-          },
-        });
-      }
-    }, [send, hidden, listRef, popoverRef]);
 
     return portal ? (
       <Popover
@@ -709,7 +674,6 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     {
       as: Comp = "li",
       children,
-      onClick,
       onMouseDown,
       onMouseEnter,
       onMouseLeave,
@@ -733,6 +697,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         value: state,
         context: { value: listboxValue, navigationValue },
       },
+      onValueChange,
       mouseEventStartedRef,
       mouseMovedRef,
     } = useListboxContext();
@@ -789,7 +754,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStartedRef.current = true;
+      mouseEventStartedRef.current = "listbox";
       send({
         type: ListboxEvents.OptionStartClick,
         isRightClick: isRightClick(event.nativeEvent),
@@ -803,6 +768,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
           type: ListboxEvents.OptionFinishClick,
           value,
           isRightClick: isRightClick(event.nativeEvent),
+          callback: onValueChange,
         });
       }
     }
@@ -915,28 +881,59 @@ export { ListboxGroupLabelProps };
 ////////////////////////////////////////////////////////////////////////////////
 
 function useBlur() {
-  const { send } = useListboxContext();
-  return function handleBlur() {
+  const { send, mouseEventStartedRef } = useListboxContext();
+  return function handleBlur(event: React.FocusEvent) {
+    let { nativeEvent } = event;
     requestAnimationFrame(() => {
-      send({ type: ListboxEvents.Blur });
+      mouseEventStartedRef.current = "listbox";
+      send({
+        type: ListboxEvents.Blur,
+        domEvent: nativeEvent,
+      });
     });
   };
 }
 
 function useKeyDown() {
   const {
+    onValueChange,
     state: {
       context: { navigationValue, typeaheadQuery },
-      value: state,
     },
+    popoverRef,
     send,
   } = useListboxContext();
 
   let { descendants: options } = useContext(ListboxDescendantContext);
 
+  useEffect(() => {
+    let timeout = setTimeout(() => {}, 2000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeaheadQuery) {
+      send({
+        type: ListboxEvents.UpdateAfterTypeahead,
+        query: typeaheadQuery,
+        callback: onValueChange,
+      });
+    }
+    let timeout = window.setTimeout(() => {
+      if (typeaheadQuery != null) {
+        send({ type: ListboxEvents.ClearTypeahead });
+      }
+    }, 1000);
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [onValueChange, send, typeaheadQuery]);
+
   return function handleKeyDown(event: React.KeyboardEvent) {
-    event.persist();
-    let { key } = event;
+    // event.persist();
+    let { key, nativeEvent } = event;
     let isSearching = isString(key) && key.length === 1;
     let navIndex = options.findIndex(({ value }) => value === navigationValue);
     let atBottom = navIndex === options.length - 1;
@@ -945,32 +942,44 @@ function useKeyDown() {
     let nextIndex: number;
 
     switch (key) {
-      case KeyEventKeys.Enter:
+      case "Enter":
         send({
           type: ListboxEvents.KeyDownEnter,
           value: navigationValue,
-          domEvent: event.nativeEvent,
+          domEvent: nativeEvent,
+          callback: onValueChange,
+          disabled: false,
         });
         return;
-      case KeyEventKeys.Space:
-        send({ type: ListboxEvents.KeyDownSpace, value: navigationValue });
+      case " ":
+        send({
+          type: ListboxEvents.KeyDownSpace,
+          value: navigationValue,
+          domEvent: nativeEvent,
+          callback: onValueChange,
+          disabled: false,
+        });
         return;
-      case KeyEventKeys.Escape:
-        send({ type: ListboxEvents.KeyDownEscape });
+      case "Escape":
+        send({
+          type: ListboxEvents.KeyDownEscape,
+        });
         return;
-      case KeyEventKeys.Tab:
-        event.preventDefault();
-        send({ type: ListboxEvents.KeyDownTab });
+      case "Tab":
+        let eventType = event.shiftKey
+          ? ListboxEvents.KeyDownShiftTab
+          : ListboxEvents.KeyDownTab;
+        send({ type: eventType });
         return;
-      case KeyEventKeys.Home:
+      case "Home":
         event.preventDefault();
         nextIndex = 0;
         return;
-      case KeyEventKeys.End:
+      case "End":
         event.preventDefault();
         nextIndex = options.length - 1;
         break;
-      case KeyEventKeys.ArrowUp:
+      case "ArrowUp":
         event.preventDefault();
         nextIndex = atTop
           ? options.length - 1
@@ -978,7 +987,7 @@ function useKeyDown() {
           ? options.length - 1
           : (navIndex - 1 + options.length) % options.length;
         break;
-      case KeyEventKeys.ArrowDown:
+      case "ArrowDown":
         event.preventDefault();
         nextIndex = atBottom
           ? 0
@@ -988,9 +997,10 @@ function useKeyDown() {
         break;
       default:
         if (isSearching) {
-          let query = (typeaheadQuery || "") + key;
-          console.log("SEARCHING", query, state);
-          send({ type: ListboxEvents.KeyDownSearch, query });
+          send({
+            type: ListboxEvents.KeyDownSearch,
+            query: key,
+          });
         }
         return;
     }
@@ -1011,20 +1021,17 @@ function isRightClick(nativeEvent: MouseEvent) {
   return nativeEvent.which === 3 || nativeEvent.button === 2;
 }
 
-function useStatusLogger(name: string, status: string) {
+function useStateLogger(state: string) {
   let effect = noop;
-  if (__DEV__) {
+  if (__DEV__ && __DEBUG__) {
     effect = function() {
+      console.group("State Updated");
       console.log(
-        "%cCurrent " + name + ":%c " + status,
-        "font-weight: bolder; font-size: 120%;",
-        "font-weight: normal; font-style: italic; font-size: 120%;"
+        "%c" + state,
+        "font-weight: normal; font-size: 120%; font-style: italic;"
       );
+      console.groupEnd();
     };
   }
-  useEffect(effect, [name, status]);
-}
-
-function useStateLogger(state: string) {
-  return useStatusLogger("State", state);
+  useEffect(effect, [state]);
 }

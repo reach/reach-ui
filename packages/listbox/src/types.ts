@@ -18,14 +18,14 @@ export interface ListboxContextValue {
   buttonId: string;
   buttonRef: ListobxButtonRef;
   disabled: boolean;
+  expanded: boolean;
   inputRef: ListobxInputRef;
   instanceId: string;
-  isExpanded: boolean;
   listboxId: string;
   listboxValue: ListboxValue | null;
   listboxValueLabel: string | null;
   listRef: ListobxListRef;
-  mouseEventStartedRef: React.MutableRefObject<boolean>;
+  mouseEventStartedRef: React.MutableRefObject<false | "listbox" | "button">;
   mouseMovedRef: React.MutableRefObject<boolean>;
   onValueChange: ((newValue: ListboxValue) => void) | null | undefined;
   popoverRef: ListobxPopoverRef;
@@ -62,6 +62,7 @@ export type ListboxEvent = ListboxEventBase &
   (
     | {
         type: ListboxEvents.Blur;
+        domEvent?: FocusEvent;
       }
     | {
         type: ListboxEvents.GetDerivedData;
@@ -80,9 +81,6 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.ClearNavSelection;
-      }
-    | {
-        type: ListboxEvents.ClearTypeaheadQuery;
       }
     | {
         type: ListboxEvents.Navigate;
@@ -118,10 +116,15 @@ export type ListboxEvent = ListboxEventBase &
         type: ListboxEvents.KeyDownEnter;
         value?: ListboxValue | null | undefined;
         domEvent?: Event;
+        disabled?: boolean;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.KeyDownSpace;
         value?: ListboxValue | null | undefined;
+        domEvent?: KeyboardEvent;
+        disabled?: boolean;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.OptionStartClick;
@@ -131,9 +134,21 @@ export type ListboxEvent = ListboxEventBase &
         type: ListboxEvents.OptionFinishClick;
         isRightClick: boolean;
         value: ListboxValue | null | undefined;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.KeyDownTab;
+      }
+    | {
+        type: ListboxEvents.KeyDownShiftTab;
+      }
+    | {
+        type: ListboxEvents.UpdateAfterTypeahead;
+        query: string;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+      }
+    | {
+        type: ListboxEvents.ClearTypeahead;
       }
   );
 
@@ -166,7 +181,6 @@ export type ListboxNodeRefs = {
 };
 
 export type ListboxStateData = {
-  disabled: boolean;
   isControlled: boolean;
   navigationValue: ListboxValue | null;
   navigationNode: HTMLElement | null;

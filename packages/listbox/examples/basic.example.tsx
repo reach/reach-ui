@@ -11,6 +11,9 @@ function Example() {
     <Listbox value={value} onChange={value => setValue(value)}>
       <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
       <hr />
+      <button>Yo, what am I here for?</button>
+      <input type="text" />
+      <hr />
       <ListboxOption value="asada" label="Carne Asada">
         {taco} Carne Asada
       </ListboxOption>
