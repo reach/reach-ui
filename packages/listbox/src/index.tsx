@@ -102,7 +102,7 @@ import {
   MachineToReactRefMap,
 } from "./types";
 
-let __DEBUG__ = false;
+let __DEBUG__ = true;
 
 const expandedStates = [
   ListboxStates.Navigating,

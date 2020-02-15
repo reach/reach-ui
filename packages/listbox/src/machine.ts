@@ -99,8 +99,7 @@ function listboxLostFocus(data: ListboxStateData, event: any) {
     let { button, list, popover } = event.refs;
     let relatedTarget = event.domEvent && event.domEvent.relatedTarget;
 
-    let ownerDocument =
-      (event.refs.button && getOwnerDocument(button)) || document;
+    let ownerDocument = (button && getOwnerDocument(button)) || document;
 
     return !!(
       ownerDocument.activeElement !== list &&
@@ -111,6 +110,14 @@ function listboxLostFocus(data: ListboxStateData, event: any) {
     );
   }
   return false;
+}
+
+function optionIsActive(data: ListboxStateData, event: any) {
+  let ownerDocument =
+    (event.refs.popover && getOwnerDocument(event.refs.popover)) || document;
+  return !!data.options.find(
+    ({ element }) => element === ownerDocument.activeElement
+  );
 }
 
 function notRightClick(data: ListboxStateData, event: any) {
@@ -186,10 +193,7 @@ let setNavSelectionFromSearch = assign<ListboxStateData, any>({
   navigationValue: (data, event) => {
     if (event.query) {
       const searchValue = findOptionValueFromSearch(data.options, event.query);
-      if (searchValue) {
-        event.callback && event.callback(searchValue);
-        return searchValue;
-      }
+      return searchValue || data.navigationValue;
     }
     return data.navigationValue;
   },
@@ -302,7 +306,7 @@ export const createListboxMachine = ({
           },
           [ListboxEvents.UpdateAfterTypeahead]: {
             target: ListboxStates.Idle,
-            actions: setValueFromSearch,
+            actions: [setValueFromSearch],
           },
           [ListboxEvents.ClearTypeahead]: {
             target: ListboxStates.Idle,
@@ -330,7 +334,11 @@ export const createListboxMachine = ({
             {
               target: ListboxStates.Idle,
               cond: listboxLostFocus,
-              // actions: clearTypeaheadQuery,
+              actions: clearTypeaheadQuery,
+            },
+            {
+              target: ListboxStates.Navigating,
+              cond: optionIsActive,
             },
             {
               target: ListboxStates.Interacting,
@@ -359,6 +367,10 @@ export const createListboxMachine = ({
               actions: clearTypeaheadQuery,
             },
             {
+              target: ListboxStates.Navigating,
+              cond: optionIsActive,
+            },
+            {
               target: ListboxStates.Interacting,
               actions: clearTypeaheadQuery,
             },
@@ -380,7 +392,7 @@ export const createListboxMachine = ({
             actions: setTypeahead,
           },
           [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: setNavSelectionFromSearch,
+            actions: [setNavSelectionFromSearch, focusNavOption],
           },
           [ListboxEvents.ClearTypeahead]: {
             actions: clearTypeahead,
@@ -398,7 +410,10 @@ export const createListboxMachine = ({
               actions: clearTypeaheadQuery,
             },
             {
-              // TODO: Interacting state
+              target: ListboxStates.NavigatingWithKeys,
+              cond: optionIsActive,
+            },
+            {
               target: ListboxStates.Interacting,
               actions: clearTypeaheadQuery,
             },
@@ -416,7 +431,7 @@ export const createListboxMachine = ({
             actions: setTypeahead,
           },
           [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: setNavSelectionFromSearch,
+            actions: [setNavSelectionFromSearch, focusNavOption],
           },
           [ListboxEvents.ClearTypeahead]: {
             actions: clearTypeahead,
@@ -434,7 +449,10 @@ export const createListboxMachine = ({
               actions: clearTypeaheadQuery,
             },
             {
-              // TODO: Interacting state
+              target: ListboxStates.Searching,
+              cond: optionIsActive,
+            },
+            {
               target: ListboxStates.Interacting,
               actions: clearTypeaheadQuery,
             },
@@ -452,7 +470,7 @@ export const createListboxMachine = ({
             actions: setTypeahead,
           },
           [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: setNavSelectionFromSearch,
+            actions: [setNavSelectionFromSearch, focusNavOption],
           },
           [ListboxEvents.ClearTypeahead]: {
             actions: clearTypeahead,
