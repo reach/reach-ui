@@ -1,6 +1,6 @@
 {
   "name": "@reach/slider",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Accessible React Slider Component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.8.2",
-    "@reach/utils": "^0.8.3",
+    "@reach/utils": "^0.8.4",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0",
     "warning": "^4.0.3"
