@@ -1087,7 +1087,6 @@ function useReducerMachine(
   const [data, dispatch] = useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
-    console.log(event);
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
     if (nextState) {
