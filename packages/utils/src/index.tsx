@@ -66,7 +66,7 @@ let checkStyles = (packageName: string): void => void packageName;
 // In CJS files, process.env.NODE_ENV is stripped from our build, but we need it
 // to prevent style checks from clogging up user logs while testing.
 // This is a workaround until we can tweak the build a bit to accommodate.
-let { env } = process;
+let { env = { NODE_ENV: "production" } } = process || {};
 let nodeEnv = env.NODE_ENV;
 
 if (__DEV__) {
