@@ -333,7 +333,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       [isVertical, max, min, step]
     );
 
-    const handleKeyDown = wrapEvent(onKeyDown, function(event) {
+    const handleKeyDown = wrapEvent(onKeyDown, event => {
       let flag = false;
       let newValue;
       const tenSteps = (max - min) / 10;
@@ -371,13 +371,11 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       }
 
       if (flag) {
-        // event.preventDefault();
-        // event.stopPropagation();
+        event.preventDefault();
+        newValue = roundValueToStep(newValue, keyStep);
+        newValue = getAllowedValue(newValue, min, max);
+        updateValue(newValue);
       }
-
-      newValue = roundValueToStep(newValue, keyStep);
-      newValue = getAllowedValue(newValue, min, max);
-      updateValue(newValue);
     });
 
     const handlePointerDown = wrapEvent(onPointerDown, event => {

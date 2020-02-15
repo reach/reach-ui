@@ -18,7 +18,6 @@ If creating a new package:
 
 - [ ] Make sure the new package directory contains each of the following, and that their structure/formatting mirrors other related examples in the project:
   - [ ] `examples` directory
-  - [ ] `src` directory with an `index.js` entry file
-  - [ ] Type definitions in an `index.d.ts` file are desired but not required for the PR to be merged
+  - [ ] `src` directory with an `index.tsx` entry file
   - [ ] At least one example file per feature introduced by the new package
   - [ ] Base styles in a `style.css` file (if needed by the new package)

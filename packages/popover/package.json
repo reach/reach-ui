@@ -1,6 +1,6 @@
 {
   "name": "@reach/popover",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Render a portal positioned relative to another element.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@reach/portal": "^0.8.2",
     "@reach/rect": "^0.8.2",
-    "@reach/utils": "^0.8.2",
+    "@reach/utils": "^0.8.3",
     "tabbable": "^4.0.0",
     "tslib": "^1.10.0"
   },
