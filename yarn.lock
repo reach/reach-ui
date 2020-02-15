@@ -2338,29 +2338,6 @@
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.0.5.tgz#28bf3c5c35da7fef72cd124af4ac32308d0c3f15"
   integrity sha512-EQLHhquzwAh2TFtMJU0PXJRmhpOrAhzApgoI4Lwn72J7ygrMk3Ys3a3i8KDnV0TetbwAxn4XSHi4pE8sPWUYLg==
 
-"@reach/popover@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.7.4.tgz#def055c588a76ef4a48ac81f0b4e7373e2781b28"
-  integrity sha512-fNODnIqXOJ+Co43E5c1mEvR/ubF7S26ZvDcNHBAVJ0mlJBdO77AdI0ar/nE5fb3qCHBhbOcmOu8OpqsLP4hv1g==
-  dependencies:
-    "@reach/portal" "^0.7.4"
-    "@reach/rect" "^0.7.4"
-    "@reach/utils" "^0.7.4"
-    tabbable "^4.0.0"
-
-"@reach/portal@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.7.4.tgz#6e182f9061ba52dc6a5e460516b4aedf8623103f"
-  integrity sha512-yI/UUtErNfb3RbWRMfJW1BTJGjE07/OjVONU8qJ65E28rsnLlwk5UDnWeDPvwIpOixXhUaUI5Bk1HEHDqAOa1w==
-
-"@reach/rect@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.7.4.tgz#98fa7a42e7ff7e74ba501d38a1b8797fa87b6bb3"
-  integrity sha512-5AhFGxgMHRkrY9gB9tV+juX7FgH/sXcZAvwzspO+nCjnMOa9PK+YA2kZHrRfSRy5WPGiYq0ezmaxjHsl0aHpCQ==
-  dependencies:
-    "@reach/observe-rect" "^1.0.5"
-    prop-types "^15.7.2"
-
 "@reach/router@^1.2.1":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@reach/router/-/router-1.3.1.tgz#0a49f75fa9621323d6e21c803447bcfcde1713b2"
@@ -2370,11 +2347,6 @@
     invariant "^2.2.3"
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
-
-"@reach/utils@^0.7.4":
-  version "0.7.4"
-  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.7.4.tgz#cdd0cff8c57445ce9c2b11204e6a62868f1093a1"
-  integrity sha512-RFhWmeaEfcu+xATfGPH4yjTlgD01ek0D8bVhtP4CgCqV2gnyS0KLAlWshzlAlSrBvr7zmpkA5QZJ1g43vFBSww==
 
 "@rollup/plugin-commonjs@^11.0.0":
   version "11.0.2"

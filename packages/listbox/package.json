@@ -15,9 +15,9 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/descendants": "^0.8.2",
-    "@reach/popover": "^0.7.4",
-    "@reach/utils": "^0.7.4",
+    "@reach/descendants": "^0.8.3",
+    "@reach/popover": "^0.8.3",
+    "@reach/utils": "^0.8.3",
     "@xstate/fsm": "^1.3.0",
     "prop-types": "^15.7.2"
   },
