@@ -1024,6 +1024,38 @@ function useKeyDown() {
         }
         break;
       }
+      case "Home": {
+        // Don't scroll the page
+        event.preventDefault();
+
+        if (!options || options.length === 0) {
+          return;
+        }
+
+        if (state === IDLE) {
+          transition(NAVIGATE);
+        } else {
+          const firstOption = options[0].value;
+          transition(NAVIGATE, { value: firstOption });
+        }
+        break;
+      }
+      case "End": {
+        // Don't scroll the page
+        event.preventDefault();
+
+        if (!options || options.length === 0) {
+          return;
+        }
+
+        if (state === IDLE) {
+          transition(NAVIGATE);
+        } else {
+          const lastOption = options[options.length - 1].value;
+          transition(NAVIGATE, { value: lastOption });
+        }
+        break;
+      }
       case "Escape": {
         if (state !== IDLE) {
           transition(ESCAPE);
