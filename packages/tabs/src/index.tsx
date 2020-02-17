@@ -334,43 +334,42 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   // TODO: Determine proper behavior for Home/End key in RTL mode.
   function handleKeyDown(event: React.KeyboardEvent) {
-    const { key } = event;
-
-    // Bail if we aren't navigating
-    if (
-      !(
-        key === "ArrowLeft" ||
-        key === "ArrowRight" ||
-        key === "ArrowDown" ||
-        key === "Home" ||
-        key === "End"
-      )
-    ) {
-      return;
-    }
+    let { key } = event;
+    let flag = false;
+    let nextTab: number = null as any;
 
     let { first, last, prev, next } = getFocusIndices();
 
     switch (key) {
       case "ArrowRight":
-        onSelectTab(isRTL.current ? prev : next);
+        flag = true;
+        nextTab = isRTL.current ? prev : next;
         break;
       case "ArrowLeft":
-        onSelectTab(isRTL.current ? next : prev);
+        flag = true;
+        nextTab = isRTL.current ? next : prev;
         break;
       case "ArrowDown":
-        // don't scroll down
-        event.preventDefault();
+        flag = true;
         onFocusPanel();
         break;
       case "Home":
-        onSelectTab(first);
+        flag = true;
+        nextTab = first;
         break;
       case "End":
-        onSelectTab(last);
+        flag = true;
+        nextTab = last;
         break;
       default:
         return;
+    }
+
+    if (flag) {
+      event.preventDefault();
+    }
+    if (nextTab != null) {
+      onSelectTab(nextTab);
     }
   }
 
