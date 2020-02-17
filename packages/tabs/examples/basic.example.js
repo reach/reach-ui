@@ -1,12 +1,13 @@
 import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import { action } from "@storybook/addon-actions";
 import "@reach/tabs/styles.css";
 
 let name = "Basic";
 
 function Example() {
   return (
-    <Tabs id="awesome">
+    <Tabs id="awesome" onChange={action("Change")}>
       <TabList>
         <Tab>One</Tab>
         <Tab>Two</Tab>

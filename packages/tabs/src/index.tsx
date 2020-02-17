@@ -32,7 +32,6 @@ import React, {
   useRef,
   useState,
   Children,
-  useCallback,
 } from "react";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -40,6 +39,7 @@ import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
+  useDescendantKeyDown,
   useDescendants,
 } from "@reach/descendants";
 import {
@@ -70,9 +70,10 @@ interface ITabsContext {
   userInteractedRef: React.MutableRefObject<boolean>;
 }
 
-const TabsDescendantsContext = createDescendantContext<HTMLElement>(
-  "TabsDescendantsContext"
-);
+const TabsDescendantsContext = createDescendantContext<
+  HTMLElement,
+  TabDescendantProps
+>("TabsDescendantsContext");
 
 const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
   "TabPanelDescendantsContext"
@@ -126,7 +127,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
   let [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
-  let [tabs, setTabs] = useDescendants<HTMLElement>();
+  let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
 
   const context: ITabsContext = useMemo(() => {
     return {
@@ -260,31 +261,12 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     selectedIndex,
   } = useTabsContext();
 
-  const { descendants } = useContext(TabsDescendantsContext);
-
-  let focusableTabs = useMemo(() => {
-    let nodes: HTMLElement[] = [];
-    for (let i = 0; i < descendants.length; i++) {
-      let element = descendants[i].element;
-      if (element && !boolOrBoolString(element.dataset.disabled)) {
-        nodes.push(element);
-      }
-    }
-    return nodes;
-  }, [descendants]);
-
+  let { descendants } = useContext(TabsDescendantsContext);
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
   let isRTL = useRef(false);
 
-  const getFocusIndices = useCallback(() => {
-    /*
-     * To detect RTL mode, we'll look first for <html dir="rtl">, as it is the
-     * generally preferred method for handling RTL writing modes and is more
-     * performant than checking computed styles (event though the computed
-     * styles should take the dir attribute into account).
-     */
-    isRTL.current = false;
+  useEffect(() => {
     if (
       ownRef.current &&
       ((ownRef.current.ownerDocument &&
@@ -293,85 +275,24 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     ) {
       isRTL.current = true;
     }
+  }, []);
 
-    /*
-     * We could be clever and ~~functional~~ here but we really shouldn't need
-     * to loop through these arrays more than once.
-     *
-     * TODO: We may want to check the document's active element here instead
-     *       instead of the selectedIndex, even though you *shouldn't* be able
-     *       to to focus a tab unless it's selected.
-     */
-    let selectedFocusIndex = focusableTabs.findIndex(
-      element => element === descendants[selectedIndex].element
-    );
-    let first = -1;
-    let last = -1;
-    let prev = -1;
-    let next = -1;
-    for (let n = 0; n < descendants.length; n++) {
-      let element = descendants[n].element;
-      if (element === focusableTabs[0]) {
-        first = n;
-      }
-      if (element === focusableTabs[focusableTabs.length - 1]) {
-        last = n;
-      }
-      if (element === focusableTabs[selectedFocusIndex - 1]) {
-        prev = n;
-      }
-      if (element === focusableTabs[selectedFocusIndex + 1]) {
-        next = n;
-      }
-    }
-    return {
-      first,
-      last,
-      prev: prev === -1 ? last : prev,
-      next: next === -1 ? first : next,
-    };
-  }, [descendants, focusableTabs, selectedIndex]);
-
-  // TODO: Determine proper behavior for Home/End key in RTL mode.
-  function handleKeyDown(event: React.KeyboardEvent) {
-    let { key } = event;
-    let flag = false;
-    let nextTab: number = null as any;
-
-    let { first, last, prev, next } = getFocusIndices();
-
-    switch (key) {
-      case "ArrowRight":
-        flag = true;
-        nextTab = isRTL.current ? prev : next;
-        break;
-      case "ArrowLeft":
-        flag = true;
-        nextTab = isRTL.current ? next : prev;
-        break;
-      case "ArrowDown":
-        flag = true;
+  let handleKeyDown = wrapEvent(
+    function(event: React.KeyboardEvent) {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
         onFocusPanel();
-        break;
-      case "Home":
-        flag = true;
-        nextTab = first;
-        break;
-      case "End":
-        flag = true;
-        nextTab = last;
-        break;
-      default:
-        return;
-    }
-
-    if (flag) {
-      event.preventDefault();
-    }
-    if (nextTab != null) {
-      onSelectTab(nextTab);
-    }
-  }
+      }
+    },
+    useDescendantKeyDown(TabsDescendantsContext, {
+      currentIndex: selectedIndex,
+      orientation: "horizontal",
+      rotate: true,
+      callback: onSelectTab,
+      filter: tab => !tab.disabled,
+      rtl: isRTL.current,
+    })
+  );
 
   useLayoutEffect(() => {
     /*
@@ -382,18 +303,14 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
      */
     if (
       !isControlled &&
-      boolOrBoolString(descendants[selectedIndex]?.element?.dataset.disabled)
+      boolOrBoolString(descendants[selectedIndex]?.disabled)
     ) {
-      let { next } = getFocusIndices();
-      setSelectedIndex(next);
+      let next = descendants.find(tab => !tab.disabled);
+      if (next) {
+        setSelectedIndex(next.index);
+      }
     }
-  }, [
-    descendants,
-    getFocusIndices,
-    isControlled,
-    selectedIndex,
-    setSelectedIndex,
-  ]);
+  }, [descendants, isControlled, selectedIndex, setSelectedIndex]);
 
   return (
     <Comp
@@ -469,6 +386,7 @@ export const Tab = forwardRefWithAs<
   const index = useDescendant({
     element: ownRef.current!,
     context: TabsDescendantsContext,
+    disabled: !!disabled,
   });
 
   const isSelected = index === selectedIndex;
@@ -623,3 +541,10 @@ if (__DEV__) {
     children: PropTypes.node,
   };
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+type TabDescendantProps = {
+  disabled: boolean;
+};
