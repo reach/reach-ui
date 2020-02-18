@@ -3,7 +3,6 @@ import { DistributiveOmit, useConstant, getOwnerDocument } from "@reach/utils";
 import { assign, createMachine, interpret, StateMachine } from "@xstate/fsm";
 import {
   ListboxEvent,
-  ListboxNodeRefs,
   ListboxState,
   ListboxStateData,
   ListboxValue,
@@ -53,9 +52,8 @@ export enum ListboxEvents {
   Navigate = "NAVIGATE",
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
 
-  // OptionSelect > User interacted with the list and selected something
-  // ValueChange > Value change may have come from somewhere else (I.E., controlled button click)
-  OptionSelect = "OPTION_SELECT",
+  // Uncontrolled value changes come from specific events (click, key, etc.)
+  // ValueChange > Value change may have come from somewhere else
   ValueChange = "VALUE_CHANGE",
 
   OptionStartClick = "OPTION_START_CLICK",
@@ -81,23 +79,23 @@ let assignValue = assign<ListboxStateData, any>({
 });
 
 let navigate = assign<ListboxStateData, any>({
-  navigationNode: (data, event) =>
-    data.options.find(({ value }) => event.value === value)?.element ||
-    data.navigationNode,
   navigationValue: (data, event) => event.value,
 });
 
 let navigateFromCurrentValue = assign<ListboxStateData, any>({
-  navigationNode: data =>
-    data.options.find(({ value }) => data.value === value)?.element ||
-    data.navigationNode,
-  navigationValue: data => data.value,
+  navigationValue: data => {
+    // TODO: Not sure what's going on here yet
+    //       value is correct, but assignment doesn't seem to work
+    //       for button click events 🤷‍♂️
+    // console.log(data.value);
+    return data.value;
+  },
 });
 
-function listboxLostFocus(data: ListboxStateData, event: any) {
+function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
   if (event.type === ListboxEvents.Blur) {
     let { button, list, popover } = event.refs;
-    let relatedTarget = event.domEvent && event.domEvent.relatedTarget;
+    let { relatedTarget } = event;
 
     let ownerDocument = (button && getOwnerDocument(button)) || document;
 
@@ -120,32 +118,19 @@ function optionIsActive(data: ListboxStateData, event: any) {
   );
 }
 
-function notRightClick(data: ListboxStateData, event: any) {
-  return !event.isRightClick;
-}
-
 function focusList(data: ListboxStateData, event: any) {
-  requestAnimationFrame(() => {
-    event.refs.list && event.refs.list.focus();
-  });
-}
-
-function focusOption(data: ListboxStateData, event: any) {
-  requestAnimationFrame(() => {
-    event.node && event.node.focus();
-  });
+  event.refs.list && event.refs.list.focus();
 }
 
 function focusNavOption(data: ListboxStateData, event: any) {
   requestAnimationFrame(() => {
-    data.navigationNode && data.navigationNode.focus();
+    let node = getNavigationNodeFromValue(data, data.navigationValue);
+    node && node.focus();
   });
 }
 
 function focusButton(data: ListboxStateData, event: any) {
-  requestAnimationFrame(() => {
-    event.refs.button && event.refs.button.focus();
-  });
+  event.refs.button && event.refs.button.focus();
 }
 
 function isSelectingValidOption(data: ListboxStateData, event: any) {
@@ -156,18 +141,8 @@ function selectOption(data: ListboxStateData, event: any) {
   event.callback && event.callback(event.value);
 }
 
-function preventDefault(data: ListboxStateData, event: any) {
-  if (event.domEvent) {
-    event.domEvent.preventDefault();
-  }
-}
-
 let setTypeahead = assign<ListboxStateData, any>({
   typeaheadQuery: (data, event) => {
-    console.log({
-      fromData: data.typeaheadQuery,
-      fromEvent: event.query,
-    });
     return (data.typeaheadQuery || "") + event.query;
   },
 });
@@ -220,19 +195,10 @@ let commonEvents = {
 let openEvents = {
   [ListboxEvents.ClearNavSelection]: {
     actions: [clearNavigationValue, focusList],
-    cond: (data: any, event: any) => {
-      console.log({ event });
-      return true;
-    },
-  },
-  [ListboxEvents.OptionSelect]: {
-    target: ListboxStates.Idle,
-    actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
   },
   [ListboxEvents.OptionFinishClick]: {
     target: ListboxStates.Idle,
     actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
-    cond: notRightClick,
   },
   [ListboxEvents.KeyDownEnter]: {
     target: ListboxStates.Idle,
@@ -246,11 +212,12 @@ let openEvents = {
   },
   [ListboxEvents.ButtonPointerDown]: {
     target: ListboxStates.Idle,
-    cond: notRightClick,
-    actions: [focusButton, preventDefault],
+    actions: [focusButton],
   },
-  [ListboxEvents.KeyDownTab]: {},
-  [ListboxEvents.KeyDownShiftTab]: {},
+  [ListboxEvents.KeyDownEscape]: {
+    target: ListboxStates.Idle,
+    actions: [focusButton],
+  },
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -263,23 +230,22 @@ let openEvents = {
  */
 export const createListboxMachine = ({
   value,
-  isControlled,
-  refs,
 }: {
   value: ListboxValue | null;
-  isControlled: boolean;
-  refs: ListboxNodeRefs;
 }) =>
   createMachine<ListboxStateData, ListboxEvent, ListboxState>({
     id: "mixed-checkbox",
     initial: ListboxStates.Idle,
     context: {
-      isControlled,
       value,
-      refs,
+      refs: {
+        button: null,
+        input: null,
+        list: null,
+        popover: null,
+      },
       options: [],
       navigationValue: null,
-      navigationNode: null,
       typeaheadQuery: null,
     },
     states: {
@@ -288,13 +254,7 @@ export const createListboxMachine = ({
           ...commonEvents,
           [ListboxEvents.ButtonPointerDown]: {
             target: ListboxStates.Navigating,
-            cond: notRightClick,
-            actions: focusButton,
-          },
-          [ListboxEvents.ButtonFinishClick]: {
-            target: ListboxStates.Navigating,
-            cond: notRightClick,
-            actions: [navigateFromCurrentValue, focusNavOption],
+            actions: [navigateFromCurrentValue, focusButton],
           },
           [ListboxEvents.KeyDownSpace]: {
             target: ListboxStates.NavigatingWithKeys,
@@ -312,17 +272,9 @@ export const createListboxMachine = ({
             target: ListboxStates.Idle,
             actions: clearTypeahead,
           },
-          [ListboxEvents.OptionSelect]: {
-            actions: [
-              assignValue,
-              selectOption,
-              focusOption,
-              clearTypeaheadQuery,
-            ],
-          },
           [ListboxEvents.KeyDownNavigate]: {
             target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
         },
       },
@@ -347,11 +299,11 @@ export const createListboxMachine = ({
           ],
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
-            actions: [navigate, focusOption],
+            actions: [navigate, focusNavOption],
           },
           [ListboxEvents.KeyDownNavigate]: {
             target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
         },
       },
@@ -376,16 +328,17 @@ export const createListboxMachine = ({
             },
           ],
           [ListboxEvents.ButtonFinishClick]: {
-            cond: notRightClick,
-            actions: [navigate, focusNavOption],
+            // TODO: Figure out why `navigateFromCurrentValue` isn't assigning
+            //       the value
+            actions: [focusList, navigateFromCurrentValue, focusNavOption],
           },
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
-            actions: [navigate, focusOption],
+            actions: [navigate, focusNavOption],
           },
           [ListboxEvents.KeyDownNavigate]: {
             target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
           [ListboxEvents.KeyDownSearch]: {
             target: ListboxStates.NavigatingWithKeys,
@@ -420,11 +373,11 @@ export const createListboxMachine = ({
           ],
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
-            actions: [navigate, focusOption],
+            actions: [navigate, focusNavOption],
           },
           [ListboxEvents.KeyDownNavigate]: {
             target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
           [ListboxEvents.KeyDownSearch]: {
             target: ListboxStates.NavigatingWithKeys,
@@ -459,11 +412,11 @@ export const createListboxMachine = ({
           ],
           [ListboxEvents.Navigate]: {
             target: ListboxStates.Navigating,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
           [ListboxEvents.KeyDownNavigate]: {
             target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusOption, clearTypeaheadQuery],
+            actions: [navigate, focusNavOption, clearTypeaheadQuery],
           },
           [ListboxEvents.KeyDownSearch]: {
             target: ListboxStates.NavigatingWithKeys,
@@ -553,6 +506,10 @@ function findOptionValueFromSearch(
     return label && label.toLowerCase().startsWith(string.toLowerCase());
   });
   return found ? found.value : null;
+}
+
+function getNavigationNodeFromValue(data: ListboxStateData, value: any) {
+  return data.options.find(option => value === option.value)?.element;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

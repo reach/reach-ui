@@ -25,7 +25,7 @@ export interface ListboxContextValue {
   listboxValue: ListboxValue | null;
   listboxValueLabel: string | null;
   listRef: ListobxListRef;
-  mouseEventStartedRef: React.MutableRefObject<false | "listbox" | "button">;
+  mouseEventStartedRef: React.MutableRefObject<boolean>;
   mouseMovedRef: React.MutableRefObject<boolean>;
   onValueChange: ((newValue: ListboxValue) => void) | null | undefined;
   popoverRef: ListobxPopoverRef;
@@ -62,7 +62,7 @@ export type ListboxEvent = ListboxEventBase &
   (
     | {
         type: ListboxEvents.Blur;
-        domEvent?: FocusEvent;
+        relatedTarget: EventTarget | null;
       }
     | {
         type: ListboxEvents.GetDerivedData;
@@ -72,12 +72,9 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.ButtonPointerDown;
-        isRightClick: boolean;
-        domEvent?: Event;
       }
     | {
         type: ListboxEvents.ButtonFinishClick;
-        isRightClick: boolean;
       }
     | {
         type: ListboxEvents.ClearNavSelection;
@@ -85,13 +82,6 @@ export type ListboxEvent = ListboxEventBase &
     | {
         type: ListboxEvents.Navigate;
         value: ListboxValue;
-        node?: HTMLElement | null | undefined;
-      }
-    | {
-        type: ListboxEvents.OptionSelect;
-        value: ListboxValue;
-        node?: HTMLElement | null | undefined;
-        callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.ValueChange;
@@ -102,7 +92,6 @@ export type ListboxEvent = ListboxEventBase &
         type: ListboxEvents.KeyDownNavigate;
         value: ListboxValue | null;
         shouldManageFocus?: boolean;
-        node?: HTMLElement | null | undefined;
         resetManagedFocus?(): void;
       }
     | {
@@ -115,24 +104,20 @@ export type ListboxEvent = ListboxEventBase &
     | {
         type: ListboxEvents.KeyDownEnter;
         value?: ListboxValue | null | undefined;
-        domEvent?: Event;
         disabled?: boolean;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.KeyDownSpace;
         value?: ListboxValue | null | undefined;
-        domEvent?: KeyboardEvent;
         disabled?: boolean;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
         type: ListboxEvents.OptionStartClick;
-        isRightClick: boolean;
       }
     | {
         type: ListboxEvents.OptionFinishClick;
-        isRightClick: boolean;
         value: ListboxValue | null | undefined;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
@@ -181,9 +166,7 @@ export type ListboxNodeRefs = {
 };
 
 export type ListboxStateData = {
-  isControlled: boolean;
   navigationValue: ListboxValue | null;
-  navigationNode: HTMLElement | null;
   refs: ListboxNodeRefs;
   typeaheadQuery: string | null;
   value: ListboxValue | null;

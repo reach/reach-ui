@@ -33,6 +33,11 @@
  * controlled state for your listbox and explicitly tell the button what to
  * render at the top of the tree.
  *
+ * TODO:
+ *   - Test in a form
+ *   - Finish prop types
+ *   - Figure out why nav selection isn't working with button clicks
+ *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox
@@ -53,9 +58,9 @@ import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
+  useDescendantKeyDown,
   useDescendants,
 } from "@reach/descendants";
 import {
@@ -76,7 +81,6 @@ import {
   createListboxMachine,
   ListboxEvents,
   ListboxStates,
-  unwrapRefs,
   useMachine,
 } from "./machine";
 import {
@@ -84,7 +88,6 @@ import {
   ListboxButtonProps,
   ListboxContextValue,
   ListboxDescendantProps,
-  ListboxEvent,
   ListboxGroupContextValue,
   ListboxGroupLabelProps,
   ListboxGroupProps,
@@ -99,7 +102,6 @@ import {
   ListobxListRef,
   ListobxOptionRef,
   ListobxPopoverRef,
-  MachineToReactRefMap,
 } from "./types";
 
 let __DEBUG__ = true;
@@ -151,12 +153,14 @@ export const ListboxInput = forwardRef<
     onChange,
     required,
     value: valueProp,
+
+    // We only use this prop for console warnings
     _componentName = "ListboxInput",
     ...props
   },
   forwardedRef
 ) {
-  let isControlled = useRef(valueProp != null);
+  let { current: isControlled } = useRef(valueProp != null);
   let [options, setOptions] = useDescendants<
     HTMLElement,
     ListboxDescendantProps
@@ -166,43 +170,34 @@ export const ListboxInput = forwardRef<
   // time a popover closes. This is useful because we want the selected value of
   // the listbox to be highlighted when the user opens it, but if the pointer
   // is resting above an option it will steal the highlight.
+  // TODO: Use state machine instead
   let mouseMovedRef = useRef(false);
 
   // If a user clicks the button while the listbox is open, the blur event
   // will close the popover and send us back to IDLE. The mousup event will
   // then fire and send us right back to NAVIGATING, which we probably don't
-  // want. We can probably do this better in the state machine, but for now
+  // want.
+  // TODO: We can probably do this better in the state machine, but for now
   // this ref will track where these mouse events are starting so we can
-  // conditionally send events based on this value.
-  let mouseEventStartedRef = useRef<false | "listbox" | "button">(false);
-
-  let autocompletePropRef = useRef<typeof autoComplete>(autoComplete);
+  // conditionally send events based on this value. Old habits die hard 🙃
+  let mouseEventStartedRef = useRef(false);
 
   let inputRef: ListobxInputRef = useRef(null);
   let buttonRef: ListobxButtonRef = useRef(null);
   let popoverRef: ListobxPopoverRef = useRef(null);
   let listRef: ListobxListRef = useRef(null);
 
-  useLayoutEffect(() => {
-    autocompletePropRef.current = autoComplete;
-  }, [autoComplete, autocompletePropRef]);
-
-  let machineRefs: MachineToReactRefMap<ListboxEvent> = {
-    input: inputRef,
-    button: buttonRef,
-    popover: popoverRef,
-    list: listRef,
-  };
-
   let [current, send] = useMachine(
-    createListboxMachine({
-      value: valueProp || null,
-      isControlled: isControlled.current,
-      refs: unwrapRefs(machineRefs),
-    }),
-    machineRefs
+    createListboxMachine({ value: valueProp || null }),
+    {
+      input: inputRef,
+      button: buttonRef,
+      popover: popoverRef,
+      list: listRef,
+    }
   );
 
+  // IDs for aria attributes
   let _id = useId(props.id);
   let id = props.id || makeId("listbox-input", _id);
   let listboxId = makeId("listbox", id);
@@ -212,15 +207,19 @@ export const ListboxInput = forwardRef<
 
   let expanded = isExpanded(current.value as ListboxStates);
 
-  // If the button has children, we just render them as the label
-  // If a user needs the label on the server to prevent hydration mismatch
-  // errors, they need to control the state of the component and pass a label
-  // directly to the button.
-  let listboxValue = current.context.value;
+  // If the button has children, we just render them as the label.
+  // Otherwise we'll find the option with a value that matches the listbox value
+  // and use its label in the button. We'll get that here and send it to the
+  // button via context.
+  // If a user needs the label for SSR to prevent hydration mismatch issues,
+  // they need to control the state of the component and pass a label directly
+  // to the button.
   let valueLabel = useMemo(() => {
-    let selected = options.find(option => option.value === listboxValue);
+    let selected = options.find(
+      option => option.value === current.context.value
+    );
     return selected ? selected.label : null;
-  }, [options, listboxValue]);
+  }, [options, current.context.value]);
 
   let context: ListboxContextValue = useMemo(() => {
     return {
@@ -231,7 +230,7 @@ export const ListboxInput = forwardRef<
       instanceId: id,
       expanded,
       listboxId,
-      listboxValue,
+      listboxValue: current.context.value,
       listboxValueLabel: valueLabel,
       listRef,
       mouseEventStartedRef,
@@ -248,7 +247,6 @@ export const ListboxInput = forwardRef<
     expanded,
     id,
     listboxId,
-    listboxValue,
     onChange,
     send,
     valueLabel,
@@ -267,14 +265,10 @@ export const ListboxInput = forwardRef<
 
   // We need to get some data from props to pass to the state machine in the
   // event that they change
-  if (
-    isControlled.current &&
-    valueProp != null &&
-    valueProp !== current.context.value
-  ) {
+  if (isControlled && valueProp !== current.context.value) {
     send({
       type: ListboxEvents.ValueChange,
-      value: valueProp,
+      value: valueProp!,
     });
   }
 
@@ -300,13 +294,14 @@ export const ListboxInput = forwardRef<
           ref={ref}
           data-reach-listbox=""
           data-expanded={expanded ? "" : undefined}
-          data-state={String(current.value)
-            .toLowerCase()
-            .replace("_", "-")}
+          data-state={stateToAttribute(current.value)}
           data-value={current.context.value}
         >
           {isFunction(children)
-            ? children({ value: current.context.value, valueLabel })
+            ? children({
+                value: current.context.value,
+                valueLabel,
+              })
             : children}
         </div>
         {Object.values(hiddenSelectProps).some(val => val) && (
@@ -384,6 +379,14 @@ if (__DEV__) {
 /**
  * Listbox
  *
+ * High-level listbox API
+ *
+ * <Listbox>
+ *   <ListboxOption value="1">Option 1</ListboxOption>
+ *   <ListboxOption value="2">Option 2</ListboxOption>
+ *   <ListboxOption value="3">Option 3</ListboxOption>
+ * </Listbox>
+ *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-1
  */
 export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
@@ -434,15 +437,13 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
       arrow = false,
       as: Comp = "button",
       children,
-      onBlur,
+      onKeyDown,
       onMouseDown,
       onMouseUp,
-      onKeyDown,
       ...props
     },
     forwardedRef
   ) {
-    let { descendants: options } = useDescendantContext();
     let {
       buttonId,
       buttonRef,
@@ -451,6 +452,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
       mouseEventStartedRef,
       state,
       send,
+      listboxValueLabel,
     } = useListboxContext();
     let listboxValue = state.context.value;
 
@@ -459,34 +461,22 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     let handleKeyDown = useKeyDown();
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStartedRef.current = "button";
-      event.persist();
-      send({
-        type: ListboxEvents.ButtonPointerDown,
-        isRightClick: isRightClick(event.nativeEvent),
-        domEvent: event.nativeEvent,
-      });
+      if (!isRightClick(event.nativeEvent)) {
+        mouseEventStartedRef.current = true;
+        event.persist();
+        event.preventDefault();
+        send({ type: ListboxEvents.ButtonPointerDown });
+      }
     }
 
     function handleMouseUp(event: React.MouseEvent) {
-      if (mouseEventStartedRef.current === "button") {
-        send({
-          type: ListboxEvents.ButtonFinishClick,
-          isRightClick: isRightClick(event.nativeEvent),
-        });
+      if (mouseEventStartedRef.current === true) {
+        if (!isRightClick(event.nativeEvent)) {
+          send({ type: ListboxEvents.ButtonFinishClick });
+        }
       }
       mouseEventStartedRef.current = false;
     }
-
-    let getLabelFromContext = useCallback(
-      function getLabelFromContext() {
-        let selected = options.find(option => option.value === listboxValue);
-        return selected ? selected.label : "";
-      },
-      [options, listboxValue]
-    );
-
-    //let handleBlur = useBlur();
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -494,16 +484,16 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     // directly to the button.
     let label: React.ReactNode = useMemo(() => {
       if (!children) {
-        return getLabelFromContext();
+        return listboxValueLabel;
       } else if (isFunction(children)) {
         return children({
           isExpanded: expanded,
-          label: getLabelFromContext(),
+          label: listboxValueLabel!,
           value: listboxValue,
         });
       }
       return children;
-    }, [children, getLabelFromContext, expanded, listboxValue]);
+    }, [children, listboxValueLabel, expanded, listboxValue]);
 
     return (
       <Comp
@@ -515,7 +505,6 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         ref={ref}
         data-reach-listbox-button=""
         id={buttonId}
-        //onBlur={wrapEvent(onBlur, handleBlur)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
@@ -685,16 +674,13 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     },
     forwardedRef
   ) {
-    if (__DEV__) {
-      if (!value) {
-        throw Error(`A ListboxOption must have a value prop.`);
-      }
+    if (__DEV__ && !value) {
+      throw Error(`A ListboxOption must have a value prop.`);
     }
 
     let {
       send,
       state: {
-        value: state,
         context: { value: listboxValue, navigationValue },
       },
       onValueChange,
@@ -739,37 +725,35 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       // (this happens if the popup opens due to a keyboard event), we don't
       // want to change the navigationSelect value
       if (mouseMovedRef.current) {
+        mouseMovedRef.current = false;
         send({
           type: ListboxEvents.Navigate,
           value,
-          node: ownRef.current!,
         });
       }
     }
 
     function handleMouseLeave() {
-      send({
-        type: ListboxEvents.ClearNavSelection,
-      });
+      send({ type: ListboxEvents.ClearNavSelection });
     }
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStartedRef.current = "listbox";
-      send({
-        type: ListboxEvents.OptionStartClick,
-        isRightClick: isRightClick(event.nativeEvent),
-      });
+      mouseEventStartedRef.current = false;
+      if (!isRightClick(event.nativeEvent)) {
+        send({ type: ListboxEvents.OptionStartClick });
+      }
     }
 
     function handleMouseUp(event: React.MouseEvent) {
       if (mouseEventStartedRef.current) {
         mouseEventStartedRef.current = false;
-        send({
-          type: ListboxEvents.OptionFinishClick,
-          value,
-          isRightClick: isRightClick(event.nativeEvent),
-          callback: onValueChange,
-        });
+        if (!isRightClick(event.nativeEvent)) {
+          send({
+            type: ListboxEvents.OptionFinishClick,
+            value,
+            callback: onValueChange,
+          });
+        }
       }
     }
 
@@ -778,7 +762,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       // We don't really *need* this guard if we put this in the state machine,
       // but in this case it seems wise not to needlessly run our transitions
       // every time the user's mouse moves. Seems like a lot.
-      if (state === ListboxStates.Navigating) {
+      if (navigationValue !== value) {
         send({
           type: ListboxEvents.Navigate,
           value,
@@ -797,7 +781,6 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         data-highlighted={isHighlighted ? "" : undefined}
         data-label={label}
         data-value={value}
-        //onClick={wrapEvent(onClick, handleClick)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
@@ -885,10 +868,10 @@ function useBlur() {
   return function handleBlur(event: React.FocusEvent) {
     let { nativeEvent } = event;
     requestAnimationFrame(() => {
-      mouseEventStartedRef.current = "listbox";
+      mouseEventStartedRef.current = false;
       send({
         type: ListboxEvents.Blur,
-        domEvent: nativeEvent,
+        relatedTarget: nativeEvent.relatedTarget,
       });
     });
   };
@@ -900,18 +883,10 @@ function useKeyDown() {
     state: {
       context: { navigationValue, typeaheadQuery },
     },
-    popoverRef,
     send,
   } = useListboxContext();
 
-  let { descendants: options } = useContext(ListboxDescendantContext);
-
-  useEffect(() => {
-    let timeout = setTimeout(() => {}, 2000);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
+  let { descendants: options } = useDescendantContext();
 
   useEffect(() => {
     if (typeaheadQuery) {
@@ -931,85 +906,63 @@ function useKeyDown() {
     };
   }, [onValueChange, send, typeaheadQuery]);
 
-  return function handleKeyDown(event: React.KeyboardEvent) {
-    // event.persist();
-    let { key, nativeEvent } = event;
-    let isSearching = isString(key) && key.length === 1;
-    let navIndex = options.findIndex(({ value }) => value === navigationValue);
-    let atBottom = navIndex === options.length - 1;
-    let atTop = navIndex === 0;
-    let noSelection = navIndex < 0;
-    let nextIndex: number;
+  let index = options.findIndex(({ value }) => value === navigationValue);
 
-    switch (key) {
-      case "Enter":
-        send({
-          type: ListboxEvents.KeyDownEnter,
-          value: navigationValue,
-          domEvent: nativeEvent,
-          callback: onValueChange,
-          disabled: false,
-        });
-        return;
-      case " ":
-        send({
-          type: ListboxEvents.KeyDownSpace,
-          value: navigationValue,
-          domEvent: nativeEvent,
-          callback: onValueChange,
-          disabled: false,
-        });
-        return;
-      case "Escape":
-        send({
-          type: ListboxEvents.KeyDownEscape,
-        });
-        return;
-      case "Tab":
-        let eventType = event.shiftKey
-          ? ListboxEvents.KeyDownShiftTab
-          : ListboxEvents.KeyDownTab;
-        send({ type: eventType });
-        return;
-      case "Home":
-        event.preventDefault();
-        nextIndex = 0;
-        return;
-      case "End":
-        event.preventDefault();
-        nextIndex = options.length - 1;
-        break;
-      case "ArrowUp":
-        event.preventDefault();
-        nextIndex = atTop
-          ? options.length - 1
-          : noSelection
-          ? options.length - 1
-          : (navIndex - 1 + options.length) % options.length;
-        break;
-      case "ArrowDown":
-        event.preventDefault();
-        nextIndex = atBottom
-          ? 0
-          : noSelection
-          ? 0
-          : (navIndex + 1) % options.length;
-        break;
-      default:
-        if (isSearching) {
+  let handleKeyDown = wrapEvent(
+    function(event: React.KeyboardEvent) {
+      let { key } = event;
+      let isSearching = isString(key) && key.length === 1;
+      switch (key) {
+        case "Enter":
           send({
-            type: ListboxEvents.KeyDownSearch,
-            query: key,
+            type: ListboxEvents.KeyDownEnter,
+            value: navigationValue,
+            callback: onValueChange,
+            disabled: false,
           });
-        }
-        return;
-    }
-    send({
-      type: ListboxEvents.KeyDownNavigate,
-      value: options[nextIndex].value,
-      node: options[nextIndex].element,
-    });
-  };
+          return;
+        case " ":
+          send({
+            type: ListboxEvents.KeyDownSpace,
+            value: navigationValue,
+            callback: onValueChange,
+            disabled: false,
+          });
+          return;
+        case "Escape":
+          send({ type: ListboxEvents.KeyDownEscape });
+          return;
+        case "Tab":
+          let eventType = event.shiftKey
+            ? ListboxEvents.KeyDownShiftTab
+            : ListboxEvents.KeyDownTab;
+          send({ type: eventType });
+          return;
+        default:
+          if (isSearching) {
+            send({
+              type: ListboxEvents.KeyDownSearch,
+              query: key,
+            });
+          }
+          return;
+      }
+    },
+    useDescendantKeyDown(ListboxDescendantContext, {
+      currentIndex: index,
+      orientation: "vertical",
+      key: "index",
+      rotate: true,
+      callback(nextIndex: number) {
+        send({
+          type: ListboxEvents.KeyDownNavigate,
+          value: options[nextIndex].value,
+        });
+      },
+    })
+  );
+
+  return handleKeyDown;
 }
 
 function useOptionId(value: ListboxValue | null) {
@@ -1034,4 +987,11 @@ function useStateLogger(state: string) {
     };
   }
   useEffect(effect, [state]);
+}
+
+// No need for a fancy kebab-caser here, we know what our state strings are!
+function stateToAttribute(state: any) {
+  return String(state)
+    .toLowerCase()
+    .replace("_", "-");
 }
