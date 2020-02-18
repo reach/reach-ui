@@ -105,6 +105,19 @@ if (__DEV__) {
 export { checkStyles };
 
 /**
+ * Ponyfill for the global object in some environments.
+ *
+ * @link https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+ */
+export const ponyfillGlobal =
+  typeof window != "undefined" && window.Math == Math
+    ? window
+    : typeof self != "undefined" && self.Math == Math
+    ? self
+    : // eslint-disable-next-line no-new-func
+      Function("return this")();
+
+/**
  * Passes or assigns an arbitrary value to a ref function or object.
  *
  * @param ref
@@ -126,6 +139,11 @@ export function assignRef<RefValueType = any>(
   }
 }
 
+/**
+ * Checks true|"true" vs false|"false"
+ *
+ * @param value
+ */
 export function boolOrBoolString(value: any): value is "true" | true {
   return value === "true" ? true : isBoolean(value) ? value : false;
 }
@@ -138,6 +156,13 @@ export function canUseDOM() {
   );
 }
 
+/**
+ * Type-safe clone element
+ *
+ * @param element
+ * @param props
+ * @param children
+ */
 export function cloneValidElement<Props>(
   element: React.ReactElement<Props> | React.ReactNode,
   props?: Partial<Props> & React.Attributes,
@@ -158,6 +183,75 @@ export function createNamedContext<ContextValueType>(
 }
 
 /**
+ * This is a hack for sure. The thing is, getting a component to intelligently
+ * infer props based on a component or JSX string passed into an `as` prop is
+ * kind of a huge pain. Getting it to work and satisfy the constraints of
+ * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
+ * type song-and-dance every time we want to forward a ref into a component
+ * that accepts an `as` prop, we abstract all of that mess to this function for
+ * the time time being.
+ *
+ * TODO: Eventually we should probably just try to get the type defs above
+ * working across the board, but ain't nobody got time for that mess!
+ *
+ * @param Comp
+ */
+export function forwardRefWithAs<Props, ComponentType extends As>(
+  comp: (
+    props: PropsFromAs<ComponentType, Props>,
+    ref: React.RefObject<any>
+  ) => React.ReactElement | null
+) {
+  return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
+    ComponentType,
+    Props
+  >;
+}
+
+/**
+ * Get a computed style value by property, backwards compatible with IE
+ * @param element
+ * @param styleProp
+ */
+export function getElementComputedStyle(
+  element: HTMLElement & {
+    currentStyle?: Record<string, string>;
+  },
+  styleProp: string
+) {
+  let y: string | null = null;
+  let doc = getOwnerDocument(element);
+  if (element.currentStyle) {
+    y = element.currentStyle[styleProp];
+  } else if (
+    doc &&
+    doc.defaultView &&
+    isFunction(doc.defaultView.getComputedStyle)
+  ) {
+    y = doc.defaultView
+      .getComputedStyle(element, null)
+      .getPropertyValue(styleProp);
+  }
+  return y;
+}
+
+/**
+ * Get an element's owner document. Useful when components are used in iframes
+ * or other environments like dev tools.
+ *
+ * @param element
+ */
+export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
+  element: T | null
+) {
+  return element && element.ownerDocument
+    ? element.ownerDocument
+    : canUseDOM()
+    ? document
+    : null;
+}
+
+/**
  * Get the scrollbar offset distance.
  */
 export function getScrollbarOffset() {
@@ -167,6 +261,51 @@ export function getScrollbarOffset() {
     }
   } catch (err) {}
   return 0;
+}
+
+/**
+ * Checks whether or not a value is a boolean.
+ *
+ * @param value
+ */
+export function isBoolean(value: any): value is boolean {
+  return typeof value === "boolean";
+}
+
+/**
+ * Checks whether or not a value is a function.
+ *
+ * @param value
+ */
+export function isFunction(value: any): value is Function {
+  return !!(value && {}.toString.call(value) == "[object Function]");
+}
+
+/**
+ * Checks whether or not a value is a number.
+ *
+ * @param value
+ */
+export function isNumber(value: any): value is number {
+  return typeof value === "number";
+}
+
+/**
+ * Detects right clicks
+ *
+ * @param nativeEvent
+ */
+export function isRightClick(nativeEvent: MouseEvent) {
+  return nativeEvent.which === 3 || nativeEvent.button === 2;
+}
+
+/**
+ * Checks whether or not a value is a string.
+ *
+ * @param value
+ */
+export function isString(value: any): value is string {
+  return typeof value === "string";
 }
 
 /**
@@ -182,6 +321,56 @@ export function makeId(...args: (string | number | null | undefined)[]) {
  * No-op function.
  */
 export function noop(): void {}
+
+/**
+ * Convert our state strings for HTML data attributes.
+ * No need for a fancy kebab-caser here, we know what our state strings are!
+ *
+ * @param state
+ */
+export function stateToAttributeString(state: any) {
+  return String(state)
+    .replace(/([\s_]+)/g, "-")
+    .toLowerCase();
+}
+
+/**
+ * Logs a warning in dev mode when a component switches from controlled to
+ * uncontrolled, or vice versa
+ *
+ * A single prop should typically be used to determine whether or not a
+ * component is controlled or not.
+ *
+ * @param controlPropValue
+ * @param controlPropName
+ * @param componentName
+ */
+export function useControlledSwitchWarning(
+  controlPropValue: any,
+  controlPropName: string,
+  componentName: string
+) {
+  /*
+   * Determine whether or not the component is controlled and warn the developer
+   * if this changes unexpectedly.
+   */
+  let isControlled = controlPropValue != null;
+  let { current: wasControlled } = useRef(isControlled);
+  let effect = noop;
+  if (__DEV__) {
+    effect = function() {
+      warning(
+        !(!isControlled && wasControlled),
+        `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
+      );
+      warning(
+        !(!isControlled && wasControlled),
+        `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
+      );
+    };
+  }
+  useEffect(effect, [componentName, controlPropName, isControlled]);
+}
 
 /**
  * React hook for creating a value exactly once.
@@ -253,6 +442,29 @@ export function useUpdateEffect(
 }
 
 /**
+ * Just a lil state logger
+ *
+ * @param state
+ * @param DEBUG
+ */
+export function useStateLogger(state: string, DEBUG: boolean = false) {
+  let effect = noop;
+  if (__DEV__) {
+    if (DEBUG) {
+      effect = function() {
+        console.group("State Updated");
+        console.log(
+          "%c" + state,
+          "font-weight: normal; font-size: 120%; font-style: italic;"
+        );
+        console.groupEnd();
+      };
+    }
+  }
+  useEffect(effect, [state]);
+}
+
+/**
  * Wraps a lib-defined event handler and a user-defined event handler, returning
  * a single handler that allows a user to prevent lib-defined handlers from
  * firing.
@@ -270,121 +482,6 @@ export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
       return ourHandler(event);
     }
   };
-}
-
-/**
- * This is a hack for sure. The thing is, getting a component to intelligently
- * infer props based on a component or JSX string passed into an `as` prop is
- * kind of a huge pain. Getting it to work and satisfy the constraints of
- * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
- * type song-and-dance every time we want to forward a ref into a component
- * that accepts an `as` prop, we abstract all of that mess to this function for
- * the time time being.
- *
- * TODO: Eventually we should probably just try to get the type defs above
- * working across the board, but ain't nobody got time for that mess!
- *
- * @param Comp
- */
-export function forwardRefWithAs<Props, ComponentType extends As>(
-  comp: (
-    props: PropsFromAs<ComponentType, Props>,
-    ref: React.RefObject<any>
-  ) => React.ReactElement | null
-) {
-  return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
-    ComponentType,
-    Props
-  >;
-}
-
-/**
- * Get a computed style value by property, backwards compatible with IE
- * @param element
- * @param styleProp
- */
-export function getElementComputedStyle(
-  element: HTMLElement & {
-    currentStyle?: Record<string, string>;
-  },
-  styleProp: string
-) {
-  let y: string | null = null;
-  let doc = getOwnerDocument(element);
-  if (element.currentStyle) {
-    y = element.currentStyle[styleProp];
-  } else if (
-    doc &&
-    doc.defaultView &&
-    isFunction(doc.defaultView.getComputedStyle)
-  ) {
-    y = doc.defaultView
-      .getComputedStyle(element, null)
-      .getPropertyValue(styleProp);
-  }
-  return y;
-}
-
-export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
-  element: T | null
-) {
-  return element && element.ownerDocument
-    ? element.ownerDocument
-    : canUseDOM()
-    ? document
-    : null;
-}
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-export let ponyfillGlobal =
-  typeof window != "undefined" && window.Math == Math
-    ? window
-    : typeof self != "undefined" && self.Math == Math
-    ? self
-    : // eslint-disable-next-line no-new-func
-      Function("return this")();
-
-export function isBoolean(value: any): value is boolean {
-  return typeof value === "boolean";
-}
-
-export function isFunction(value: any): value is Function {
-  return !!(value && {}.toString.call(value) == "[object Function]");
-}
-
-export function isNumber(value: any): value is number {
-  return typeof value === "number";
-}
-
-export function isString(value: any): value is string {
-  return typeof value === "string";
-}
-
-export function useControlledSwitchWarning(
-  controlPropValue: any,
-  controlPropName: string,
-  componentName: string
-) {
-  /*
-   * Determine whether or not the component is controlled and warn the developer
-   * if this changes unexpectedly.
-   */
-  let isControlled = controlPropValue != null;
-  let { current: wasControlled } = useRef(isControlled);
-  let effect = noop;
-  if (__DEV__) {
-    effect = function() {
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-    };
-  }
-  useEffect(effect, [componentName, controlPropName, isControlled]);
 }
 
 // Export types
