@@ -939,15 +939,60 @@ function useKeyDown() {
   const { descendants: options } = useContext(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
+    let index = options.findIndex(({ value }) => value === navigationValue);
+
+    function getNextOption() {
+      let atBottom = index === options.length - 1;
+      if (atBottom) {
+        if (autocompletePropRef.current) {
+          // Go back to the value the user has typed because we are
+          // autocompleting and they need to be able to get back to what
+          // they had typed w/o having to backspace out.
+          return null;
+        } else {
+          // cycle through
+          return getFirstOption();
+        }
+      } else {
+        // Go to the next item in the list
+        return options[(index + 1) % options.length];
+      }
+    }
+
+    function getPreviousOption() {
+      let atTop = index === 0;
+      if (atTop) {
+        if (autocompletePropRef.current) {
+          // Go back to the value the user has typed because we are
+          // autocompleting and they need to be able to get back to what
+          // they had typed w/o having to backspace out.
+          return null;
+        } else {
+          // cycle through
+          return getLastOption();
+        }
+      } else if (index === -1) {
+        // displaying the user's value, so go select the last one
+        return getLastOption();
+      } else {
+        // normal case, select previous
+        return options[(index - 1 + options.length) % options.length];
+      }
+    }
+
+    function getFirstOption() {
+      return options[0];
+    }
+
+    function getLastOption() {
+      return options[options.length - 1];
+    }
+
     switch (event.key) {
-      case "ArrowDown": {
+      case "ArrowDown":
         // Don't scroll the page
         event.preventDefault();
-
-        // If the developer didn't render any options, there's no point in
-        // trying to navigate--but seriously what the heck? Give us some
-        // options fam.
-        if (!options || options.length === 0) {
+        if (!options || !options.length) {
           return;
         }
 
@@ -957,37 +1002,15 @@ function useKeyDown() {
             persistSelection: persistSelectionRef.current,
           });
         } else {
-          const index = options.findIndex(
-            ({ value }) => value === navigationValue
-          );
-          const atBottom = index === options.length - 1;
-          if (atBottom) {
-            if (autocompletePropRef.current) {
-              // Go back to the value the user has typed because we are
-              // autocompleting and they need to be able to get back to what
-              // they had typed w/o having to backspace out.
-              transition(NAVIGATE, { value: null });
-            } else {
-              // cycle through
-              const firstOption = options[0].value;
-              transition(NAVIGATE, { value: firstOption });
-            }
-          } else {
-            // Go to the next item in the list
-            const nextValue = options[(index + 1) % options.length].value;
-            transition(NAVIGATE, { value: nextValue });
-          }
+          let next = getNextOption();
+          transition(NAVIGATE, { value: next ? next.value : null });
         }
         break;
-      }
+
       // A lot of duplicate code with ArrowDown up next, I'm already over it.
-      case "ArrowUp": {
+      case "ArrowUp":
         // Don't scroll the page
         event.preventDefault();
-
-        // If the developer didn't render any options, there's no point in
-        // trying to navigate--but seriously what the heck? Give us some
-        // options fam.
         if (!options || options.length === 0) {
           return;
         }
@@ -995,39 +1018,15 @@ function useKeyDown() {
         if (state === IDLE) {
           transition(NAVIGATE);
         } else {
-          const index = options.findIndex(
-            ({ value }) => value === navigationValue
-          );
-          if (index === 0) {
-            if (autocompletePropRef.current) {
-              // Go back to the value the user has typed because we are
-              // autocompleting and they need to be able to get back to what
-              // they had typed w/o having to backspace out.
-              transition(NAVIGATE, { value: null });
-            } else {
-              // cycle through
-              const lastOption = options[options.length - 1].value;
-              transition(NAVIGATE, { value: lastOption });
-            }
-          } else if (index === -1) {
-            // displaying the user's value, so go select the last one
-            const value = options.length
-              ? options[options.length - 1].value
-              : null;
-            transition(NAVIGATE, { value });
-          } else {
-            // normal case, select previous
-            const nextValue =
-              options[(index - 1 + options.length) % options.length].value;
-            transition(NAVIGATE, { value: nextValue });
-          }
+          let prev = getPreviousOption();
+          transition(NAVIGATE, { value: prev ? prev.value : null });
         }
         break;
-      }
-      case "Home": {
+
+      case "Home":
+      case "PageUp":
         // Don't scroll the page
         event.preventDefault();
-
         if (!options || options.length === 0) {
           return;
         }
@@ -1035,15 +1034,14 @@ function useKeyDown() {
         if (state === IDLE) {
           transition(NAVIGATE);
         } else {
-          const firstOption = options[0].value;
-          transition(NAVIGATE, { value: firstOption });
+          transition(NAVIGATE, { value: getFirstOption().value });
         }
         break;
-      }
-      case "End": {
+
+      case "End":
+      case "PageDown":
         // Don't scroll the page
         event.preventDefault();
-
         if (!options || options.length === 0) {
           return;
         }
@@ -1051,25 +1049,22 @@ function useKeyDown() {
         if (state === IDLE) {
           transition(NAVIGATE);
         } else {
-          const lastOption = options[options.length - 1].value;
-          transition(NAVIGATE, { value: lastOption });
+          transition(NAVIGATE, { value: getLastOption().value });
         }
         break;
-      }
-      case "Escape": {
+
+      case "Escape":
         if (state !== IDLE) {
           transition(ESCAPE);
         }
         break;
-      }
-      case "Enter": {
+      case "Enter":
         if (state === NAVIGATING && navigationValue !== null) {
           // don't want to submit forms
           event.preventDefault();
           transition(SELECT_WITH_KEYBOARD, { callback: onSelect });
         }
         break;
-      }
     }
   };
 }
