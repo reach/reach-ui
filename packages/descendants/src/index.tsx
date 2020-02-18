@@ -195,6 +195,7 @@ export function DescendantProvider<ElementType, DescendantProps>({
  *
  * Currently used in:
  *   - Tabs
+ *   - Accordion
  *
  * @param context
  * @param options
@@ -317,21 +318,27 @@ export function useDescendantKeyDown<ElementType, DescendantProps = {}>(
       case "ArrowLeft":
         if (orientation === "horizontal" || orientation === "both") {
           event.preventDefault();
-          callback((rtl ? getNextOption() : getPreviousOption())[key]);
+          callback((rtl ? getNextOption : getPreviousOption)()[key]);
         }
         break;
       case "ArrowRight":
         if (orientation === "horizontal" || orientation === "both") {
           event.preventDefault();
-          callback((rtl ? getPreviousOption() : getNextOption())[key]);
+          callback((rtl ? getPreviousOption : getNextOption)()[key]);
         }
         break;
       case "PageUp":
+        event.preventDefault();
+        callback((event.ctrlKey ? getPreviousOption : getFirstOption)()[key]);
+        break;
       case "Home":
         event.preventDefault();
         callback(getFirstOption()[key]);
         break;
       case "PageDown":
+        event.preventDefault();
+        callback((event.ctrlKey ? getNextOption : getLastOption)()[key]);
+        break;
       case "End":
         event.preventDefault();
         callback(getLastOption()[key]);

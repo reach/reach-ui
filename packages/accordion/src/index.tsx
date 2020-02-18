@@ -18,7 +18,6 @@ import React, {
   useState,
 } from "react";
 import {
-  boolOrBoolString,
   checkStyles,
   createNamedContext,
   forwardRefWithAs,
@@ -33,15 +32,17 @@ import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
+  useDescendantKeyDown,
   useDescendants,
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
 
-const AccordionDescendantContext = createDescendantContext(
-  "AccordionDescendantContext"
-);
+const AccordionDescendantContext = createDescendantContext<
+  HTMLElement,
+  DescendantProps
+>("AccordionDescendantContext");
 const AccordionContext = createNamedContext<IAccordionContext>(
   "AccordionContext",
   {} as IAccordionContext
@@ -92,7 +93,10 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const wasControlled = typeof controlledIndex !== "undefined";
     const { current: isControlled } = useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendants();
+    const [descendants, setDescendants] = useDescendants<
+      HTMLElement,
+      DescendantProps
+    >();
 
     const id = useId(props.id) || "accordion";
 
@@ -358,9 +362,11 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   ) {
     const { accordionId, openPanels, readOnly } = useAccordionContext();
     const buttonRef: ButtonRef = useRef(null);
+
     const index = useDescendant({
       context: AccordionDescendantContext,
       element: buttonRef.current,
+      disabled,
     });
 
     // We need unique IDs for the panel and button to point to one another
@@ -458,9 +464,9 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
     },
     forwardedRef
   ) {
-    const { onSelectPanel } = useAccordionContext();
+    let { onSelectPanel } = useAccordionContext();
 
-    const {
+    let {
       open,
       dataAttributes,
       disabled,
@@ -470,19 +476,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       panelId,
     } = useAccordionItemContext();
 
-    let { descendants } = useContext(AccordionDescendantContext);
-    let focusableButtons = useMemo(() => {
-      let nodes: HTMLElement[] = [];
-      for (let i = 0; i < descendants.length; i++) {
-        let element = descendants[i].element;
-        if (element && !boolOrBoolString(element.dataset.disabled)) {
-          nodes.push(element);
-        }
-      }
-      return nodes;
-    }, [descendants]);
-
-    const ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useForkedRef(forwardedRef, ownRef);
 
     function handleClick(event: React.MouseEvent) {
       event.preventDefault();
@@ -493,43 +487,16 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       onSelectPanel(index);
     }
 
-    function handleKeyDown(event: React.KeyboardEvent) {
-      const { key, ctrlKey } = event;
-      const focusIndex = focusableButtons.findIndex(
-        el => el === ownRef.current
-      );
-
-      const firstItem = focusableButtons[0];
-      const lastItem = focusableButtons[focusableButtons.length - 1];
-      const nextItem = focusableButtons[focusIndex + 1];
-      const prevItem = focusableButtons[focusIndex - 1];
-
-      // Bail if we aren't moving focus
-      if (
-        !(
-          key === "ArrowDown" ||
-          key === "ArrowUp" ||
-          (ctrlKey && key === "PageDown") ||
-          (ctrlKey && key === "PageUp") ||
-          key === "Home" ||
-          key === "End"
-        )
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-
-      if (key === "ArrowDown" || (ctrlKey && key === "PageDown")) {
-        nextItem ? nextItem.focus() : firstItem && firstItem.focus();
-      } else if (key === "ArrowUp" || (ctrlKey && key === "PageUp")) {
-        prevItem ? prevItem.focus() : lastItem && lastItem.focus();
-      } else if (key === "Home") {
-        firstItem && firstItem.focus();
-      } else if (key === "End") {
-        lastItem && lastItem.focus();
-      }
-    }
+    let handleKeyDown = useDescendantKeyDown(AccordionDescendantContext, {
+      currentIndex: index,
+      orientation: "vertical",
+      key: "element",
+      rotate: true,
+      callback(element: HTMLElement) {
+        element && element.focus();
+      },
+      filter: button => !button.disabled,
+    });
 
     return (
       <Comp
@@ -635,6 +602,10 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+type DescendantProps = {
+  disabled: boolean;
+};
 
 type ResultBox<T> = { v: T };
 
