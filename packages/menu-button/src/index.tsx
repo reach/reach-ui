@@ -324,10 +324,13 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let isSelected = index === selectionIndex;
 
     function select() {
-      dispatch({
-        type: CLICK_MENU_ITEM,
-        payload: { buttonRef, callback: onSelect },
-      });
+      /*
+       * Focus the button first by default when an item is selected. We fire the
+       * onSelect callback next so the app can manage focus if needed.
+       */
+      focus(buttonRef.current);
+      onSelect && onSelect();
+      dispatch({ type: CLICK_MENU_ITEM });
     }
 
     function handleClick(event: React.MouseEvent) {
@@ -915,10 +918,7 @@ interface MenuButtonState {
 }
 
 type MenuButtonAction =
-  | {
-      type: "CLICK_MENU_ITEM";
-      payload: { buttonRef: ButtonRef; callback?: () => any };
-    }
+  | { type: "CLICK_MENU_ITEM" }
   | { type: "CLOSE_MENU"; payload: { buttonRef: ButtonRef } }
   | { type: "OPEN_MENU_AT_FIRST_ITEM" }
   | {
@@ -947,12 +947,6 @@ function reducer(
 ): MenuButtonState {
   switch (action.type) {
     case CLICK_MENU_ITEM:
-      /*
-       * Focus the button first by default when an item is selected. We fire the
-       * onSelect callback next so the app can manage focus if needed.
-       */
-      focus(action.payload.buttonRef.current);
-      action.payload.callback && action.payload.callback();
       return {
         ...state,
         isOpen: false,

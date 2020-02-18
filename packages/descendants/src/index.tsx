@@ -187,6 +187,166 @@ export function DescendantProvider<ElementType, DescendantProps>({
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
+/**
+ * Testing this as an abstraction for compound components that use keyboard
+ * navigation. Hoping this will help us prevent bugs and mismatched behavior
+ * across various components, but it may also prove to be too messy of an
+ * abstraction in the end.
+ *
+ * Currently used in:
+ *   - Tabs
+ *   - Accordion
+ *
+ * @param context
+ * @param options
+ */
+export function useDescendantKeyDown<ElementType, DescendantProps = {}>(
+  context: React.Context<IDescendantContext<ElementType, DescendantProps>>,
+  options: {
+    currentIndex: number | null | undefined;
+    key?: keyof Descendant<ElementType, DescendantProps>;
+    filter?: (descendant: Descendant<ElementType, DescendantProps>) => boolean;
+    orientation?: "vertical" | "horizontal" | "both";
+    rotate?: boolean;
+    rtl?: boolean;
+    callback(
+      nextOption: Descendant<ElementType, DescendantProps>[keyof Descendant<
+        ElementType,
+        DescendantProps
+      >]
+    ): void;
+  }
+) {
+  let { descendants } = useContext(context);
+  let {
+    currentIndex,
+    orientation = "vertical",
+    callback,
+    filter,
+    rotate = true,
+    rtl = false,
+  } = options;
+  let index = currentIndex ?? -1;
+
+  let key = (options.key || "index") as keyof Descendant<
+    ElementType,
+    DescendantProps
+  >;
+
+  return function handleKeyDown(event: React.KeyboardEvent) {
+    if (
+      ![
+        "ArrowDown",
+        "ArrowUp",
+        "ArrowLeft",
+        "ArrowRight",
+        "PageUp",
+        "PageDown",
+        "Home",
+        "End",
+      ].includes(event.key)
+    ) {
+      return;
+    }
+
+    // If we use a filter function, we need to re-index our descendants array
+    // so that filtered descendent elements aren't selected.
+    let selectableDescendants = descendants;
+    if (filter) {
+      selectableDescendants = [];
+      let n = -1;
+      for (let i = 0; i < descendants.length; i++) {
+        let descendant = descendants[i];
+        if (filter(descendant)) {
+          selectableDescendants.push({ ...descendant, index: n++ });
+
+          // Current index should map to the updated array vs. the original
+          // descendants array.
+          index = i === currentIndex ? n : index;
+        }
+      }
+      selectableDescendants = descendants.filter(filter);
+    }
+
+    // We need some options for any of this to work!
+    if (!selectableDescendants.length) {
+      return;
+    }
+
+    function getNextOption() {
+      let atBottom = index === selectableDescendants.length - 1;
+      return atBottom
+        ? rotate
+          ? getFirstOption()
+          : selectableDescendants[index]
+        : selectableDescendants[(index + 1) % selectableDescendants.length];
+    }
+
+    function getPreviousOption() {
+      let atTop = index === 0;
+      return atTop
+        ? rotate
+          ? getLastOption()
+          : selectableDescendants[index]
+        : selectableDescendants[
+            (index - 1 + selectableDescendants.length) %
+              selectableDescendants.length
+          ];
+    }
+
+    function getFirstOption() {
+      return selectableDescendants[0];
+    }
+
+    function getLastOption() {
+      return selectableDescendants[selectableDescendants.length - 1];
+    }
+
+    switch (event.key) {
+      case "ArrowDown":
+        if (orientation === "vertical" || orientation === "both") {
+          event.preventDefault();
+          callback(getNextOption()[key]);
+        }
+        break;
+      case "ArrowUp":
+        if (orientation === "vertical" || orientation === "both") {
+          event.preventDefault();
+          callback(getPreviousOption()[key]);
+        }
+        break;
+      case "ArrowLeft":
+        if (orientation === "horizontal" || orientation === "both") {
+          event.preventDefault();
+          callback((rtl ? getNextOption : getPreviousOption)()[key]);
+        }
+        break;
+      case "ArrowRight":
+        if (orientation === "horizontal" || orientation === "both") {
+          event.preventDefault();
+          callback((rtl ? getPreviousOption : getNextOption)()[key]);
+        }
+        break;
+      case "PageUp":
+        event.preventDefault();
+        callback((event.ctrlKey ? getPreviousOption : getFirstOption)()[key]);
+        break;
+      case "Home":
+        event.preventDefault();
+        callback(getFirstOption()[key]);
+        break;
+      case "PageDown":
+        event.preventDefault();
+        callback((event.ctrlKey ? getNextOption : getLastOption)()[key]);
+        break;
+      case "End":
+        event.preventDefault();
+        callback(getLastOption()[key]);
+        break;
+    }
+  };
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 

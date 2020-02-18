@@ -1,13 +1,14 @@
-import React from "react";
+import React, { StrictMode } from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import { action } from "@storybook/addon-actions";
 import "@reach/tabs/styles.css";
 
-let name = "Basic (TS)";
+let name = "Basic (Strict Mode)";
 
 function Example() {
   return (
-    <div>
-      <Tabs>
+    <StrictMode>
+      <Tabs id="awesome" onChange={action("Change")}>
         <TabList>
           <Tab>One</Tab>
           <Tab>Two</Tab>
@@ -27,10 +28,7 @@ function Example() {
           </TabPanel>
         </TabPanels>
       </Tabs>
-      <div style={{ marginTop: 800 }}>
-        <p>Yo!</p>
-      </div>
-    </div>
+    </StrictMode>
   );
 }
 

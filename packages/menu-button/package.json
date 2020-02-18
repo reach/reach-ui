@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "Accessible React button dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@reach/auto-id": "^0.8.2",
-    "@reach/descendants": "^0.8.3",
-    "@reach/popover": "^0.8.3",
-    "@reach/utils": "^0.8.3",
+    "@reach/descendants": "^0.8.4",
+    "@reach/popover": "^0.8.4",
+    "@reach/utils": "^0.8.4",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0",
     "warning": "^4.0.3"
