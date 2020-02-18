@@ -69,12 +69,14 @@ import {
   forwardRefWithAs,
   isBoolean,
   isFunction,
+  isRightClick,
   isString,
   makeId,
-  noop,
+  stateToAttributeString,
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
+  useStateLogger,
   wrapEvent,
 } from "@reach/utils";
 import {
@@ -279,7 +281,7 @@ export const ListboxInput = forwardRef<
     });
   }, [options, send]);
 
-  useStateLogger(current.value);
+  useStateLogger(current.value, __DEBUG__);
   useEffect(() => checkStyles("listbox"), []);
 
   return (
@@ -294,7 +296,7 @@ export const ListboxInput = forwardRef<
           ref={ref}
           data-reach-listbox=""
           data-expanded={expanded ? "" : undefined}
-          data-state={stateToAttribute(current.value)}
+          data-state={stateToAttributeString(current.value)}
           data-value={current.context.value}
         >
           {isFunction(children)
@@ -968,30 +970,4 @@ function useKeyDown() {
 function useOptionId(value: ListboxValue | null) {
   const { instanceId } = useListboxContext();
   return value ? makeId(`option-${value}`, instanceId) : "";
-}
-
-function isRightClick(nativeEvent: MouseEvent) {
-  return nativeEvent.which === 3 || nativeEvent.button === 2;
-}
-
-function useStateLogger(state: string) {
-  let effect = noop;
-  if (__DEV__ && __DEBUG__) {
-    effect = function() {
-      console.group("State Updated");
-      console.log(
-        "%c" + state,
-        "font-weight: normal; font-size: 120%; font-style: italic;"
-      );
-      console.groupEnd();
-    };
-  }
-  useEffect(effect, [state]);
-}
-
-// No need for a fancy kebab-caser here, we know what our state strings are!
-function stateToAttribute(state: any) {
-  return String(state)
-    .toLowerCase()
-    .replace("_", "-");
 }
