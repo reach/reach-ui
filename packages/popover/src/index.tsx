@@ -89,22 +89,40 @@ function getStyles(
   return position(targetRect, popoverRect);
 }
 
+function getTopPosition(targetRect: PRect, popoverRect: PRect) {
+  const { directionUp } = getCollisions(targetRect, popoverRect);
+  return {
+    top: directionUp
+      ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
+      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
+  };
+}
+
 export const positionDefault: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
 
-  const { directionUp, directionRight } = getCollisions(
-    targetRect,
-    popoverRect
-  );
+  const { directionRight } = getCollisions(targetRect, popoverRect);
   return {
     left: directionRight
       ? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
       : `${targetRect.left + window.pageXOffset}px`,
-    top: directionUp
-      ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
-      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
+    ...getTopPosition(targetRect, popoverRect),
+  };
+};
+
+export const positionRight: Position = (targetRect, popoverRect) => {
+  if (!targetRect || !popoverRect) {
+    return {};
+  }
+
+  const { directionLeft } = getCollisions(targetRect, popoverRect);
+  return {
+    left: directionLeft
+      ? `${targetRect.left + window.pageXOffset}px`
+      : `${targetRect.right - popoverRect.width + window.pageXOffset}px`,
+    ...getTopPosition(targetRect, popoverRect),
   };
 };
 
@@ -113,13 +131,10 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
     return {};
   }
 
-  const { directionUp } = getCollisions(targetRect, popoverRect);
   return {
     width: targetRect.width,
     left: targetRect.left,
-    top: directionUp
-      ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
-      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
+    ...getTopPosition(targetRect, popoverRect),
   };
 };
 
@@ -139,9 +154,10 @@ function getCollisions(
   };
 
   const directionRight = collisions.right && !collisions.left;
+  const directionLeft = collisions.left && !collisions.right;
   const directionUp = collisions.bottom && !collisions.top;
 
-  return { directionRight, directionUp };
+  return { directionRight, directionLeft, directionUp };
 }
 
 // Heads up, my jQuery past haunts this function. This hook scopes the tab
