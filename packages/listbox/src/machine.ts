@@ -36,8 +36,8 @@ export enum ListboxStates {
 // Events
 
 export enum ListboxEvents {
-  ButtonPointerDown = "BUTTON_POINTER_DOWN",
-  ButtonFinishClick = "BUTTON_FINISH_CLICK",
+  ButtonMouseDown = "BUTTON_MOUSE_DOWN",
+  ButtonMouseUp = "BUTTON_MOUSE_UP",
   Blur = "BLUR",
   ClearNavSelection = "CLEAR_NAV_SELECTION",
   ClearTypeahead = "CLEAR_TYPEAHEAD",
@@ -210,7 +210,7 @@ let openEvents = {
     actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
     cond: isSelectingValidOption,
   },
-  [ListboxEvents.ButtonPointerDown]: {
+  [ListboxEvents.ButtonMouseDown]: {
     target: ListboxStates.Idle,
     actions: [focusButton],
   },
@@ -252,7 +252,7 @@ export const createListboxMachine = ({
       [ListboxStates.Idle]: {
         on: {
           ...commonEvents,
-          [ListboxEvents.ButtonPointerDown]: {
+          [ListboxEvents.ButtonMouseDown]: {
             target: ListboxStates.Navigating,
             actions: [navigateFromCurrentValue, focusButton],
           },
@@ -327,7 +327,7 @@ export const createListboxMachine = ({
               actions: clearTypeaheadQuery,
             },
           ],
-          [ListboxEvents.ButtonFinishClick]: {
+          [ListboxEvents.ButtonMouseUp]: {
             // TODO: Figure out why `navigateFromCurrentValue` isn't assigning
             //       the value
             actions: [focusList, navigateFromCurrentValue, focusNavOption],

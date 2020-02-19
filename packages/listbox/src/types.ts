@@ -71,10 +71,10 @@ export type ListboxEvent = ListboxEventBase &
         };
       }
     | {
-        type: ListboxEvents.ButtonPointerDown;
+        type: ListboxEvents.ButtonMouseDown;
       }
     | {
-        type: ListboxEvents.ButtonFinishClick;
+        type: ListboxEvents.ButtonMouseUp;
       }
     | {
         type: ListboxEvents.ClearNavSelection;

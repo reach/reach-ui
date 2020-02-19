@@ -467,14 +467,14 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         mouseEventStartedRef.current = true;
         event.persist();
         event.preventDefault();
-        send({ type: ListboxEvents.ButtonPointerDown });
+        send({ type: ListboxEvents.ButtonMouseDown });
       }
     }
 
     function handleMouseUp(event: React.MouseEvent) {
       if (mouseEventStartedRef.current) {
         if (!isRightClick(event.nativeEvent)) {
-          send({ type: ListboxEvents.ButtonFinishClick });
+          send({ type: ListboxEvents.ButtonMouseUp });
         }
       }
       mouseEventStartedRef.current = false;
@@ -869,7 +869,7 @@ export { ListboxGroupLabelProps };
 ////////////////////////////////////////////////////////////////////////////////
 
 function useBlur() {
-  const { send, mouseEventStartedRef } = useListboxContext();
+  const { send } = useListboxContext();
   return function handleBlur(event: React.FocusEvent) {
     let { nativeEvent } = event;
     requestAnimationFrame(() => {
