@@ -472,7 +472,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
     }
 
     function handleMouseUp(event: React.MouseEvent) {
-      if (mouseEventStartedRef.current === true) {
+      if (mouseEventStartedRef.current) {
         if (!isRightClick(event.nativeEvent)) {
           send({ type: ListboxEvents.ButtonFinishClick });
         }
@@ -740,7 +740,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
-      mouseEventStartedRef.current = false;
+      mouseEventStartedRef.current = true;
       if (!isRightClick(event.nativeEvent)) {
         send({ type: ListboxEvents.OptionStartClick });
       }
@@ -812,7 +812,7 @@ export { ListboxOptionProps };
  * ListboxGroup
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
-  function ListboxGroup({ ...props }, forwardedRef) {
+  function ListboxGroup({ label, children, ...props }, forwardedRef) {
     const { listboxId } = useListboxContext();
     const labelId = makeId("label", useId(props.id), listboxId);
     return (
@@ -822,7 +822,10 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
           role="group"
           {...props}
           ref={forwardedRef}
-        />
+        >
+          {label && <ListboxGroupLabel>{label}</ListboxGroupLabel>}
+          {children}
+        </div>
       </ListboxGroupContext.Provider>
     );
   }
@@ -870,7 +873,6 @@ function useBlur() {
   return function handleBlur(event: React.FocusEvent) {
     let { nativeEvent } = event;
     requestAnimationFrame(() => {
-      mouseEventStartedRef.current = false;
       send({
         type: ListboxEvents.Blur,
         relatedTarget: nativeEvent.relatedTarget,

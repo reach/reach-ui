@@ -260,7 +260,12 @@ export type ListboxOptionProps = {
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
  */
-export type ListboxGroupProps = React.HTMLProps<HTMLDivElement> & {};
+export type ListboxGroupProps = Omit<
+  React.HTMLProps<HTMLDivElement>,
+  "label"
+> & {
+  label?: string;
+};
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
