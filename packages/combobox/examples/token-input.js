@@ -152,7 +152,13 @@ function ExampleToken({ value, ...props }) {
 
 function ExampleTokenbox({ onSelect, ...props }) {
   const handleSelect = () => {};
-  return <Combobox onSelect={wrapEvent(onSelect, handleSelect)} {...props} />;
+  return (
+    <Combobox
+      onSelect={wrapEvent(onSelect, handleSelect)}
+      aria-label="choose a city"
+      {...props}
+    />
+  );
 }
 
 function ExampleTokenInput({ onKeyDown, ...props }) {

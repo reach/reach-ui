@@ -48,6 +48,40 @@ import {
 import "@reach/combobox/styles.css";
 ```
 
+## Accessibility
+
+Reach UI aims to handle most ARIA and accessibility concerns so that developers
+don't have to worry about it. Labeling is often the one thing Reach can't do for
+folks by default since there a many ways to accomplish it and some of those ways
+require app-level knowledge.
+
+However, we still aim to make accessibility as easy as possible. Labels for the
+compound component can go on the parent unless there's a good reason to not provide
+this pattern for a specific component.
+
+For instance, instead of adding `aria-label` to `<ComboboxInput>`, we can add it
+to `<Combobox>`. The same goes for `aria-labelledby`.
+
+```jsx
+<Combobox aria-label="choose a fruit">
+  <ComboboxInput />
+  <ComboboxPopover>
+    <ComboboxList>
+      <ComboboxOption value="Apple" />
+      <ComboboxOption value="Banana" />
+    </ComboboxList>
+  </ComboboxPopover>
+</Combobox>
+```
+
+One benefit reaped from this pattern is that it alleviates the need for developers
+to know about precisely which `aria-*` attributes belong on which piece of a compound
+component—just pass all `aria-*` attributes to the parent and let Reach handle putting
+it in the proper place.
+
+Another benefit is that if the ARIA spec changes in the future (as it did from
+1.1 to 1.2 for Combobox) Reach doesn't have to introduce a breaking API change.
+
 ## Examples
 
 To get you started, let's take a look at a few examples that grow from simple to complex, after the examples you can see the API for each component.
@@ -62,10 +96,10 @@ function Example() {
   return (
     <div>
       <h4 id="demo">Basic, Fixed List Combobox</h4>
-      <Combobox>
-        <ComboboxInput aria-labelledby="demo" />
+      <Combobox aria-labelledby="demo">
+        <ComboboxInput />
         <ComboboxPopover>
-          <ComboboxList aria-labelledby="demo">
+          <ComboboxList>
             <ComboboxOption value="Apple" />
             <ComboboxOption value="Banana" />
             <ComboboxOption value="Orange" />
@@ -87,14 +121,13 @@ Sometimes your items need to be more than just text, in these cases you can pass
 // jsx-demo
 function Example() {
   return (
-    <Combobox>
+    <Combobox aria-label="custom option demo">
       <ComboboxInput
         placeholder="Custom Option Rendering"
-        aria-label="custom option demo"
         style={{ width: 300 }}
       />
       <ComboboxPopover>
-        <ComboboxList aria-label="custom option demo">
+        <ComboboxList>
           <ComboboxOption value="Apple">
             🍎 <ComboboxOptionText />
           </ComboboxOption>
@@ -138,16 +171,15 @@ There is nothing special about managing state for a combobox, it's like managing
     return (
       <div>
         <h4>Clientside Search</h4>
-        <Combobox>
+        <Combobox aria-label="Cities">
           <ComboboxInput
-            aria-label="Cities"
             className="city-search-input"
             onChange={handleChange}
           />
           {results && (
             <ComboboxPopover className="shadow-popup">
               {results.length > 0 ? (
-                <ComboboxList aria-label="Cities">
+                <ComboboxList>
                   {results.slice(0, 10).map((result, index) => (
                     <ComboboxOption
                       key={index}
@@ -199,11 +231,10 @@ This is the same demo as above, except this time we're going to a server to get 
     };
 
     return (
-      <Combobox>
+      <Combobox aria-label="Cities">
         <ComboboxInput
           className="city-search-input"
           onChange={handleSearchTermChange}
-          aria-label="Cities"
         />
         {cities && (
           <ComboboxPopover className="shadow-popup">

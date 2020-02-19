@@ -32,7 +32,7 @@ function Example() {
     <div>
       <h2>Clientside Search</h2>
       <p>Selection: {selection}</p>
-      <Combobox openOnFocus onSelect={handleSelect}>
+      <Combobox openOnFocus onSelect={handleSelect} aria-label="choose a city">
         <ComboboxInput
           onChange={handleChange}
           value={term}
