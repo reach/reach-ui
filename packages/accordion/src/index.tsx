@@ -98,7 +98,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       DescendantProps
     >();
 
-    const id = useId(props.id) || "accordion";
+    const id = useId(props.id);
 
     // Define our default starting index
     const [openPanels, setOpenPanels] = useState<AccordionIndex>(() => {
