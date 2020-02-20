@@ -91,6 +91,7 @@ Please see the [styling guide](/styling).
 | [onChange](#tabs-onchange)         | function      | false    |
 | [defaultIndex](#tabs-defaultindex) | number        | false    |
 | [index](#tabs-index)               | number        | false    |
+| [orientation](#tabs-orientation)   | string        | false    |
 | [as](#tabs-as)                     | ComponentType | false    |
 | [rest](#tabs-rest)                 | HTMLDivProps  | false    |
 
@@ -143,7 +144,7 @@ function Example() {
       onChange={index => setTabIndex(index)}
       style={{
         color: "white",
-        background: backgroundColor
+        background: backgroundColor,
       }}
     >
       <TabList>
@@ -240,6 +241,37 @@ function Example() {
         </TabPanels>
       </Tabs>
     </div>
+  );
+}
+```
+
+##### Tabs orientation
+
+_Type_: `"horizontal" | "vertical"`
+
+Allows you to switch between horizontally-oriented and vertically-oriented tabs. Defaults to `horizontal`.
+
+```jsx
+// jsx-demo
+function Example() {
+  return (
+    <Tabs orientation="horizontal">
+      <TabPanels>
+        <TabPanel>
+          <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
+        </TabPanel>
+        <TabPanel>
+          <img
+            src="https://www.placecage.com/400/200"
+            alt="A picture of Nicolas Cage"
+          />
+        </TabPanel>
+      </TabPanels>
+      <TabList>
+        <Tab>Kitten</Tab>
+        <Tab>Cage</Tab>
+      </TabList>
+    </Tabs>
   );
 }
 ```
@@ -606,8 +638,8 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
     {
       label: "Burrito",
       content:
-        "Perhaps the greatest dish ever invented but bigger and with rice."
-    }
+        "Perhaps the greatest dish ever invented but bigger and with rice.",
+    },
   ];
 
   // you can just pass it in:
@@ -657,7 +689,7 @@ With a little composition we can animate the selected tab bar.
               // rect from the selected tab to set the styles of the bar
               transition: "all 300ms ease",
               left: selectedRect && selectedRect.left - tabsRect.left,
-              width: selectedRect && selectedRect.width
+              width: selectedRect && selectedRect.width,
             }}
           />
           {props.children[1]}
