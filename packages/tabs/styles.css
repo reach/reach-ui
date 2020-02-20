@@ -2,6 +2,10 @@
   --reach-tabs: 1;
 }
 
+[data-reach-tabs-orientation="vertical"] {
+  display: flex;
+}
+
 [data-reach-tab-panel] {
   outline: none;
 }
@@ -9,6 +13,10 @@
 [data-reach-tab-list] {
   display: flex;
   background: hsla(0, 0%, 0%, 0.05);
+}
+
+[data-reach-tab-list][aria-orientation="vertical"] {
+  flex-direction: column;
 }
 
 [data-reach-tab] {

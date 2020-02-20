@@ -62,6 +62,7 @@ import { useId } from "@reach/auto-id";
 interface ITabsContext {
   id: string;
   isControlled: boolean;
+  orientation?: "vertical" | "horizontal";
   onFocusPanel: () => void;
   onSelectTab: (index: number) => void;
   selectedIndex: number;
@@ -95,6 +96,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
     as: Comp = "div",
     children,
     defaultIndex,
+    orientation = "horizontal",
     index: controlledIndex = undefined,
     onChange,
     readOnly = false,
@@ -135,6 +137,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
       selectedIndex: isControlled.current
         ? (controlledIndex as number)
         : selectedIndex,
+      orientation,
       id,
       userInteractedRef,
       selectedPanelRef,
@@ -152,7 +155,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
             }
           },
     };
-  }, [controlledIndex, id, onChange, readOnly, selectedIndex]);
+  }, [controlledIndex, orientation, id, onChange, readOnly, selectedIndex]);
 
   useEffect(() => checkStyles("tabs"), []);
 
@@ -163,7 +166,13 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
       set={setTabs}
     >
       <TabsContext.Provider value={context}>
-        <Comp {...props} ref={ref} data-reach-tabs="" id={props.id}>
+        <Comp
+          {...props}
+          ref={ref}
+          data-reach-tabs=""
+          id={props.id}
+          data-reach-tabs-orientation={orientation}
+        >
           {children}
         </Comp>
       </TabsContext.Provider>
@@ -201,6 +210,12 @@ export type TabsProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
    */
   defaultIndex?: number;
+  /**
+   * TODO
+   *
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   */
+  orientation?: "vertical" | "horizontal";
   /**
    * Calls back with the tab index whenever the user changes tabs, allowing your
    * app to synchronize with it.
@@ -259,6 +274,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     onFocusPanel,
     setSelectedIndex,
     selectedIndex,
+    orientation,
   } = useTabsContext();
 
   let { descendants } = useContext(TabsDescendantsContext);
@@ -279,14 +295,18 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   let handleKeyDown = wrapEvent(
     function(event: React.KeyboardEvent) {
-      if (event.key === "ArrowDown") {
+      if (
+        orientation === "vertical"
+          ? event.key === "ArrowRight"
+          : event.key === "ArrowDown"
+      ) {
         event.preventDefault();
         onFocusPanel();
       }
     },
     useDescendantKeyDown(TabsDescendantsContext, {
       currentIndex: selectedIndex,
-      orientation: "horizontal",
+      orientation,
       rotate: true,
       callback: onSelectTab,
       filter: tab => !tab.disabled,
@@ -317,6 +337,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
       role="tablist"
       {...props}
       data-reach-tab-list=""
+      aria-orientation={orientation}
       ref={ref}
       onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
     >
