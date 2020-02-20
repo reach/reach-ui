@@ -1,5 +1,5 @@
 /**
- * Welcom to @reach/tabs!
+ * Welcome to @reach/tabs!
  *
  * An accessible tabs component.
  *
