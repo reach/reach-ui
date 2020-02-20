@@ -332,15 +332,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
         set={setOptions}
       >
         <ComboboxContext.Provider value={context}>
-          <Comp
-            aria-haspopup="listbox"
-            aria-owns={listboxId}
-            aria-expanded={context.isVisible}
-            role="combobox"
-            {...rest}
-            data-reach-combobox=""
-            ref={forwardedRef}
-          >
+          <Comp {...rest} data-reach-combobox="" ref={forwardedRef}>
             {children}
           </Comp>
         </ComboboxContext.Provider>
@@ -421,6 +413,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       listboxId,
       autocompletePropRef,
       openOnFocus,
+      isVisible,
     } = useContext(ComboboxContext);
 
     let ref = useForkedRef(inputRef, forwardedRef);
@@ -515,6 +508,9 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         }
         aria-autocomplete="both"
         aria-controls={listboxId}
+        aria-expanded={isVisible}
+        aria-haspopup="listbox"
+        role="combobox"
         {...props}
         data-reach-combobox-input=""
         ref={ref}
