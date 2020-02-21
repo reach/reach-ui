@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { render } from "$test/utils";
+import React, { useState } from "react";
+import { render, act, withMarkup } from "$test/utils";
 import userEvent from "@testing-library/user-event";
 import {
   Combobox,
@@ -9,17 +9,32 @@ import {
   ComboboxPopover,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
-import { useThrottle } from "../examples/use-throttle";
 import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   it("should match the snapshot", () => {
-    let { asFragment, getByTestId, getByRole } = render(<BasicCombobox />);
+    let { baseElement, getByTestId, getByRole } = render(<BasicCombobox />);
     let input = getByTestId("input");
-    expect(asFragment()).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("before text input");
     userEvent.type(input, "e");
-    expect(asFragment()).toMatchSnapshot();
+    expect(baseElement).toMatchSnapshot("after text input");
     expect(getByRole("combobox")).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("should open a list on text entry", () => {
+    let optionToSelect = "Eagle Pass, Texas";
+
+    let { getByTestId, getByText } = render(<BasicCombobox />);
+    let getByTextWithMarkup = withMarkup(getByText);
+    let input = getByTestId("input");
+    userEvent.type(input, "e");
+    act(() => void jest.advanceTimersByTime(100));
+    expect(getByTestId("list")).toBeInTheDocument();
+    expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
   });
 });
 
@@ -41,12 +56,12 @@ function BasicCombobox() {
           name="awesome"
           onChange={handleChange}
         />
-        {results && (
+        {results ? (
           <ComboboxPopover portal={false}>
             <p>
               <button>Test focus</button>
             </p>
-            <ComboboxList>
+            <ComboboxList data-testid="list">
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
@@ -55,6 +70,8 @@ function BasicCombobox() {
               ))}
             </ComboboxList>
           </ComboboxPopover>
+        ) : (
+          <span>No Results!</span>
         )}
       </Combobox>
     </div>
@@ -62,15 +79,9 @@ function BasicCombobox() {
 }
 
 function useCityMatch(term: string) {
-  let throttledTerm = useThrottle(term, 100);
-  return useMemo(
-    () =>
-      term.trim() === ""
-        ? null
-        : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`],
-          }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [throttledTerm]
-  );
+  return term.trim() === ""
+    ? null
+    : matchSorter(cities, term, {
+        keys: [item => `${item.city}, ${item.state}`],
+      });
 }

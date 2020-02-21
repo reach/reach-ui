@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> hides on ESC: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
@@ -23,7 +23,7 @@ exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip hides on ESC: not visible after ESC 1`] = `
+exports[`<Tooltip /> hides on ESC: not visible after ESC 1`] = `
 <body>
   <div>
     <button
@@ -35,7 +35,7 @@ exports[`rendering tooltip hides on ESC: not visible after ESC 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows without timeout when one tooltip is already visible: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> shows without timeout when one tooltip is already visible: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
@@ -63,7 +63,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
 </body>
 `;
 
-exports[`rendering tooltip shows without timeout when one tooltip is already visible: after switch without timeout 1`] = `
+exports[`<Tooltip /> shows without timeout when one tooltip is already visible: after switch without timeout 1`] = `
 <body>
   <div>
     <button
@@ -91,7 +91,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: after leave timeout 1`] = `
+exports[`<Tooltip /> shows/hides on hover: after leave timeout 1`] = `
 <body>
   <div>
     <button
@@ -103,7 +103,7 @@ exports[`rendering tooltip shows/hides on hover: after leave timeout 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> shows/hides on hover: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
@@ -126,7 +126,7 @@ exports[`rendering tooltip shows/hides on hover: after mouse rest timeout 1`] = 
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: not visible 1`] = `
+exports[`<Tooltip /> shows/hides on hover: not visible 1`] = `
 <body>
   <div>
     <button
@@ -138,7 +138,7 @@ exports[`rendering tooltip shows/hides on hover: not visible 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows/hides when trigger is activeElement: after blur 1`] = `
+exports[`<Tooltip /> shows/hides when trigger is activeElement: after blur 1`] = `
 <body>
   <div>
     <button
@@ -150,7 +150,7 @@ exports[`rendering tooltip shows/hides when trigger is activeElement: after blur
 </body>
 `;
 
-exports[`rendering tooltip shows/hides when trigger is activeElement: after focus 1`] = `
+exports[`<Tooltip /> shows/hides when trigger is activeElement: after focus 1`] = `
 <body>
   <div>
     <button
@@ -162,7 +162,7 @@ exports[`rendering tooltip shows/hides when trigger is activeElement: after focu
 </body>
 `;
 
-exports[`rendering tooltip shows/hides when trigger is activeElement: not visible 1`] = `
+exports[`<Tooltip /> shows/hides when trigger is activeElement: not visible 1`] = `
 <body>
   <div>
     <button

@@ -188,14 +188,12 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         navigationValue: null,
       };
     case SELECT_WITH_CLICK:
-      event.callback(event.value);
       return {
         ...nextState,
         value: event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
-      event.callback(data.navigationValue || null);
       return {
         ...nextState,
         value: data.navigationValue,
@@ -735,7 +733,8 @@ export const ComboboxOption: ComponentWithForwardedRef<
   const isActive = navigationValue === value;
 
   const handleClick = () => {
-    transition(SELECT_WITH_CLICK, { value, callback: onSelect });
+    onSelect && onSelect(value);
+    transition(SELECT_WITH_CLICK, { value });
   };
 
   return (
@@ -1062,7 +1061,8 @@ function useKeyDown() {
         if (state === NAVIGATING && navigationValue !== null) {
           // don't want to submit forms
           event.preventDefault();
-          transition(SELECT_WITH_KEYBOARD, { callback: onSelect });
+          onSelect && onSelect(navigationValue);
+          transition(SELECT_WITH_KEYBOARD);
         }
         break;
     }
@@ -1237,11 +1237,9 @@ type MachineEvent =
   | {
       type: "SELECT_WITH_CLICK";
       value: ComboboxValue;
-      callback(value: ComboboxValue | null): void;
     }
   | {
       type: "SELECT_WITH_KEYBOARD";
-      callback(value: ComboboxValue | null): void;
     };
 
 type Reducer = (data: StateData, event: MachineEvent) => StateData;

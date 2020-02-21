@@ -4,7 +4,7 @@ import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 
 const { keyDown, mouseOver, mouseLeave, focus, blur } = fireEvent;
 
-describe("rendering tooltip", () => {
+describe("<Tooltip />", () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
