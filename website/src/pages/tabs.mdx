@@ -255,22 +255,24 @@ Allows you to switch between horizontally-oriented and vertically-oriented tabs.
 // jsx-demo
 function Example() {
   return (
-    <Tabs orientation="horizontal">
+    <Tabs orientation="vertical">
+      <TabList>
+        <Tab>One</Tab>
+        <Tab>Two</Tab>
+        <Tab>Three</Tab>
+      </TabList>
+
       <TabPanels>
         <TabPanel>
-          <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
+          <p>one!</p>
         </TabPanel>
         <TabPanel>
-          <img
-            src="https://www.placecage.com/400/200"
-            alt="A picture of Nicolas Cage"
-          />
+          <p>two!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>three!</p>
         </TabPanel>
       </TabPanels>
-      <TabList>
-        <Tab>Kitten</Tab>
-        <Tab>Cage</Tab>
-      </TabList>
     </Tabs>
   );
 }
