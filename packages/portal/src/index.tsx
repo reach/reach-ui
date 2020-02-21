@@ -41,7 +41,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   return portalNode.current ? (
     createPortal(children, portalNode.current)
   ) : (
-    <div ref={mountNode} />
+    <span ref={mountNode} />
   );
 };
 
