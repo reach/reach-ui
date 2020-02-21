@@ -28,6 +28,7 @@ function MyTabs() {
       <TabPanels>
         <TabPanel>
           <h1>one!</h1>
+          <button>yo</button>
         </TabPanel>
         <TabPanel>
           <h1>two!</h1>

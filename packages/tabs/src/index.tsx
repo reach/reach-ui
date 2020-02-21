@@ -297,7 +297,9 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     function(event: React.KeyboardEvent) {
       if (
         orientation === "vertical"
-          ? event.key === "ArrowRight"
+          ? isRTL
+            ? event.key === "ArrowLeft"
+            : event.key === "ArrowRight"
           : event.key === "ArrowDown"
       ) {
         event.preventDefault();
