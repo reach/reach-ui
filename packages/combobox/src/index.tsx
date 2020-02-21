@@ -457,7 +457,12 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     // If they are controlling the value we still need to do our transitions, so
     // we have this derived state to emulate onChange of the input as we receive
     // new `value`s ...[*]
-    if (isControlled && controlledValue !== value) {
+    if (
+      isControlled &&
+      controlledValue !== value &&
+      // https://github.com/reach/reach-ui/issues/481
+      (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+    ) {
       handleValueChange(controlledValue!);
     }
 
