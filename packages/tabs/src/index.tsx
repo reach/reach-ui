@@ -411,7 +411,6 @@ export const Tab = forwardRefWithAs<
       {...props}
       ref={ref}
       data-reach-tab=""
-      data-disabled={disabled}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
