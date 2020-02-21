@@ -162,6 +162,7 @@ export const ListboxInput = forwardRef<
   },
   forwardedRef
 ) {
+  let mounted = useRef(false);
   let { current: isControlled } = useRef(valueProp != null);
   let [options, setOptions] = useDescendants<
     HTMLElement,
@@ -265,6 +266,23 @@ export const ListboxInput = forwardRef<
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
+  // For uncontrolled listbox components where no `defaultValue` is provided, we
+  // will update the value based on the value of the first selectable option.
+  // We call the update directly because:
+  //   A) we only ever need to do this once, so we can guard with a mounted ref
+  //   B) useLayoutEffect races useDecendant, so we might not have options yet
+  //   C) useEffect will cause a flash
+  if (!isControlled && !mounted.current && options.length) {
+    mounted.current = true;
+    let first = options.find(option => !option.disabled);
+    if (first && first.value) {
+      send({
+        type: ListboxEvents.ValueChange,
+        value: first.value!,
+      });
+    }
+  }
+
   // We need to get some data from props to pass to the state machine in the
   // event that they change
   if (isControlled && valueProp !== current.context.value) {
@@ -294,7 +312,7 @@ export const ListboxInput = forwardRef<
         <div
           {...props}
           ref={ref}
-          data-reach-listbox=""
+          data-reach-listbox-input=""
           data-expanded={expanded ? "" : undefined}
           data-state={stateToAttributeString(current.value)}
           data-value={current.context.value}
@@ -392,7 +410,7 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-1
  */
 export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
-  function Listbox({ arrow, button, children, ...props }, forwardedRef) {
+  function Listbox({ arrow = "▼", button, children, ...props }, forwardedRef) {
     return (
       <ListboxInput {...props} _componentName="Listbox" ref={forwardedRef}>
         {({ value, valueLabel }) => (
@@ -433,15 +451,16 @@ export { ListboxProps };
 /**
  * ListboxButton
  */
-export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
+export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   function ListboxButton(
     {
       arrow = false,
-      as: Comp = "button",
+      as: Comp = "span",
       children,
       onKeyDown,
       onMouseDown,
       onMouseUp,
+      tabIndex,
       ...props
     },
     forwardedRef
@@ -503,6 +522,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         aria-expanded={expanded}
         aria-haspopup="listbox"
         aria-labelledby={`${buttonId} ${listboxId}`}
+        role="button"
         {...props}
         ref={ref}
         data-reach-listbox-button=""
@@ -510,6 +530,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "button">(
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+        tabIndex={tabIndex ?? 0}
       >
         {label}
         {arrow && (
@@ -665,6 +686,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     {
       as: Comp = "li",
       children,
+      disabled,
       onMouseDown,
       onMouseEnter,
       onMouseLeave,
@@ -699,6 +721,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       element: ownRef.current!,
       value,
       label,
+      disabled: !!disabled,
     });
 
     // After the ref is mounted to the DOM node, we check to see if we have an
@@ -754,6 +777,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
             type: ListboxEvents.OptionFinishClick,
             value,
             callback: onValueChange,
+            disabled: !!disabled,
           });
         }
       }
@@ -775,6 +799,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     return (
       <Comp
         aria-selected={isSelected}
+        aria-disabled={disabled ? true : undefined}
         role="option"
         {...props}
         ref={ref}
@@ -916,13 +941,14 @@ function useKeyDown() {
     function(event: React.KeyboardEvent) {
       let { key } = event;
       let isSearching = isString(key) && key.length === 1;
+      let navOption = options.find(option => option.value === navigationValue);
       switch (key) {
         case "Enter":
           send({
             type: ListboxEvents.KeyDownEnter,
             value: navigationValue,
             callback: onValueChange,
-            disabled: false,
+            disabled: !!navOption?.disabled,
           });
           return;
         case " ":
@@ -930,7 +956,7 @@ function useKeyDown() {
             type: ListboxEvents.KeyDownSpace,
             value: navigationValue,
             callback: onValueChange,
-            disabled: false,
+            disabled: !!navOption?.disabled,
           });
           return;
         case "Escape":
@@ -952,11 +978,13 @@ function useKeyDown() {
           return;
       }
     },
+
     useDescendantKeyDown(ListboxDescendantContext, {
       currentIndex: index,
       orientation: "vertical",
       key: "index",
       rotate: true,
+      filter: option => !option.disabled,
       callback(nextIndex: number) {
         send({
           type: ListboxEvents.KeyDownNavigate,

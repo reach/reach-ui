@@ -15,3 +15,11 @@ This one feels like it's in a good place for the most part! Notes below reflect 
 - Touch events: I assume since we did some tricky stuff with mouse-events vs. clicks, touch will have some nuances we need to cover.
 - Not sure what expected behavior should be for tab key. Should we focus lock inside the popover or close the popover? Native selects will close on tab in some browsers, but it's not universal. Right now if the user tabs out of the listbox it just closes.
 - I made some assumptions about how `autoComplete` might work, but we'll need to spin this up in a form and test to be sure. Probably need to borrow the logic I used in `radio` to trigger a form submit on enter when the listbox is closed.
+
+## Notes from review call
+
+- Simple implementation of touch event onTouchStart
+- Popovers with interactive content: write up arguments for/against focus lock, maybe bring it up for WebAIM audit
+- autoComplete might not work, shouldn't be a blocker.
+
+- Mouse down on button, up off to the side, now you can't close the popover!
