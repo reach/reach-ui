@@ -153,7 +153,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     }
 
     const onSelectPanel = useCallback(
-      (index: AccordionIndex) => {
+      (index: number) => {
         onChange && onChange(index);
 
         if (!isControlled) {
@@ -263,7 +263,7 @@ export type AccordionProps = Omit<
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
    */
-  onChange?(index?: AccordionIndex): void;
+  onChange?(index?: number): void;
   /**
    * Whether or not an uncontrolled accordion is read-only or controllable by a
    * user interaction.
@@ -614,7 +614,7 @@ type ButtonRef = React.MutableRefObject<any>;
 type AccordionIndex = number | number[];
 
 interface IAccordionContext {
-  accordionId: string;
+  accordionId: string | undefined;
   openPanels: AccordionIndex;
   onSelectPanel(index: AccordionIndex): void;
   readOnly: boolean;
