@@ -211,7 +211,8 @@ export type TabsProps = {
    */
   defaultIndex?: number;
   /**
-   * TODO
+   * Allows you to switch between horizontally-oriented and vertically-oriented
+   * tabs. Defaults to `horizontal`.
    *
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
    */
