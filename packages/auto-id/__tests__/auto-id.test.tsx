@@ -1,6 +1,8 @@
 import React from "react";
-import { useId } from "@reach/auto-id";
+import { useId as mockedId } from "@reach/auto-id";
 import { render } from "$test/utils";
+
+const { useId } = jest.requireActual("@reach/auto-id");
 
 describe("useId", () => {
   it("should generate an incremented ID value", () => {

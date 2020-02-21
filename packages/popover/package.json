@@ -1,6 +1,6 @@
 {
   "name": "@reach/popover",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Render a portal positioned relative to another element.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,9 +15,9 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
-    "@reach/portal": "^0.8.2",
+    "@reach/portal": "^0.8.5",
     "@reach/rect": "^0.8.2",
-    "@reach/utils": "^0.8.4",
+    "@reach/utils": "^0.8.5",
     "tabbable": "^4.0.0",
     "tslib": "^1.10.0"
   },

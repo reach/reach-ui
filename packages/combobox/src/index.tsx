@@ -188,14 +188,12 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
         navigationValue: null,
       };
     case SELECT_WITH_CLICK:
-      event.callback(event.value);
       return {
         ...nextState,
         value: event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
-      event.callback(data.navigationValue || null);
       return {
         ...nextState,
         value: data.navigationValue,
@@ -459,7 +457,12 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     // If they are controlling the value we still need to do our transitions, so
     // we have this derived state to emulate onChange of the input as we receive
     // new `value`s ...[*]
-    if (isControlled && controlledValue !== value) {
+    if (
+      isControlled &&
+      controlledValue !== value &&
+      // https://github.com/reach/reach-ui/issues/481
+      (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+    ) {
       handleValueChange(controlledValue!);
     }
 
@@ -735,7 +738,8 @@ export const ComboboxOption: ComponentWithForwardedRef<
   const isActive = navigationValue === value;
 
   const handleClick = () => {
-    transition(SELECT_WITH_CLICK, { value, callback: onSelect });
+    onSelect && onSelect(value);
+    transition(SELECT_WITH_CLICK, { value });
   };
 
   return (
@@ -1062,7 +1066,8 @@ function useKeyDown() {
         if (state === NAVIGATING && navigationValue !== null) {
           // don't want to submit forms
           event.preventDefault();
-          transition(SELECT_WITH_KEYBOARD, { callback: onSelect });
+          onSelect && onSelect(navigationValue);
+          transition(SELECT_WITH_KEYBOARD);
         }
         break;
     }
@@ -1237,11 +1242,9 @@ type MachineEvent =
   | {
       type: "SELECT_WITH_CLICK";
       value: ComboboxValue;
-      callback(value: ComboboxValue | null): void;
     }
   | {
       type: "SELECT_WITH_KEYBOARD";
-      callback(value: ComboboxValue | null): void;
     };
 
 type Reducer = (data: StateData, event: MachineEvent) => StateData;
