@@ -28,6 +28,22 @@ describe("rendering tooltip", () => {
     expect(baseElement).toMatchSnapshot("after leave timeout");
   });
 
+  it("renders as any HTML element", () => {
+    const { getByText } = render(
+      <p>
+        <Tooltip as="span" style={{ display: "block" }} label="Content">
+          <span>Trigger</span>
+        </Tooltip>
+      </p>
+    );
+
+    const trigger = getByText("Trigger");
+    mouseOver(trigger);
+    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
+    const tooltip = getByText("Content");
+    expect(tooltip).toBeInstanceOf(HTMLSpanElement);
+  });
+
   it("shows/hides when trigger is activeElement", () => {
     const { baseElement, getByText } = render(
       <Tooltip label="Content">

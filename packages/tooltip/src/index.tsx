@@ -45,7 +45,6 @@
 import React, {
   Children,
   cloneElement,
-  forwardRef,
   Fragment,
   useEffect,
   useRef,
@@ -54,6 +53,7 @@ import React, {
 import { useId } from "@reach/auto-id";
 import {
   checkStyles,
+  forwardRefWithAs,
   getOwnerDocument,
   makeId,
   useForkedRef,
@@ -357,14 +357,10 @@ export function useTooltip<T extends HTMLElement>({
  *
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltip
  */
-export const Tooltip: React.FC<TooltipProps> = ({
-  children,
-  label,
-  ariaLabel,
-  id,
-  DEBUG_STYLE,
-  ...rest
-}) => {
+export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
+  { children, label, ariaLabel, id, DEBUG_STYLE, ...rest },
+  forwardedRef
+) {
   const child = Children.only(children) as any;
 
   // We need to pass some properties from the child into useTooltip
@@ -385,6 +381,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
     <Fragment>
       {cloneElement(child, trigger as any)}
       <TooltipPopup
+        ref={forwardedRef}
         label={label}
         ariaLabel={ariaLabel}
         {...tooltip}
@@ -392,7 +389,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       />
     </Fragment>
   );
-};
+});
 
 export type TooltipProps = {
   children: React.ReactNode;
@@ -417,7 +414,7 @@ export default Tooltip;
  *
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltippopup
  */
-export const TooltipPopup = forwardRef<HTMLDivElement, TooltipPopupProps>(
+export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   function TooltipPopup(
     {
       // own props
@@ -470,16 +467,18 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltipcontent
  */
-const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
+const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
   function TooltipContent(
     {
-      label,
+      // TODO: Consider just using `aria-label` for 1.0
       ariaLabel,
-      position = positionDefault,
-      isVisible,
+      as: Comp = "div",
       id,
-      triggerRect,
+      isVisible,
+      label,
+      position = positionDefault,
       style,
+      triggerRect,
       ...rest
     },
     forwardedRef
@@ -490,7 +489,7 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     const tooltipRect = useRect(ownRef, isVisible);
     return (
       <Fragment>
-        <div
+        <Comp
           data-reach-tooltip
           role={useAriaLabel ? undefined : "tooltip"}
           id={useAriaLabel ? undefined : id}
@@ -518,7 +517,7 @@ export type TooltipContentProps = {
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
-} & Omit<React.HTMLAttributes<HTMLDivElement>, "label">;
+};
 
 if (__DEV__) {
   TooltipContent.displayName = "TooltipContent";

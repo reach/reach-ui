@@ -4,7 +4,7 @@ exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--19"
+      aria-describedby="tooltip--22"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -13,7 +13,7 @@ exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--19"
+      id="tooltip--22"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -39,7 +39,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
 <body>
   <div>
     <button
-      aria-describedby="tooltip--10"
+      aria-describedby="tooltip--13"
       data-reach-tooltip-trigger=""
     >
       First Trigger
@@ -53,7 +53,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--10"
+      id="tooltip--13"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -72,7 +72,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
       First Trigger
     </button>
     <button
-      aria-describedby="tooltip--11"
+      aria-describedby="tooltip--14"
       data-reach-tooltip-trigger=""
     >
       Second Trigger
@@ -81,7 +81,7 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--11"
+      id="tooltip--14"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -154,22 +154,11 @@ exports[`rendering tooltip shows/hides when trigger is activeElement: after focu
 <body>
   <div>
     <button
-      aria-describedby="tooltip--6"
       data-reach-tooltip-trigger=""
     >
       Trigger
     </button>
   </div>
-  <reach-portal>
-    <div
-      data-reach-tooltip="true"
-      id="tooltip--6"
-      role="tooltip"
-      style="left: 0px; top: 8px;"
-    >
-      Content
-    </div>
-  </reach-portal>
 </body>
 `;
 
