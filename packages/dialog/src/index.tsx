@@ -208,12 +208,13 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { isOpen, onDismiss = noop, initialFocusRef, ...props },
+  { isOpen, onDismiss = noop, initialFocusRef, allowPinchZoom, ...props },
   forwardedRef
 ) {
   return (
     <DialogOverlay
       initialFocusRef={initialFocusRef}
+      allowPinchZoom={allowPinchZoom}
       isOpen={isOpen}
       onDismiss={onDismiss}
     >
