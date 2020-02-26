@@ -8,7 +8,7 @@ import {
   StateMachine,
   Typestate,
 } from "@xstate/fsm";
-import { DistributiveOmit, isString, noop, useConstant } from "@reach/utils";
+import { DistributiveOmit, isString, useConstant } from "@reach/utils";
 
 /**
  * This `useMachine` works very similiarly to what you get from `@xstate/react`
@@ -107,18 +107,21 @@ export function useMachineLogger<
   ],
   DEBUG?: boolean
 ): [MachineState<TC, TE>, MachineSend<TC, TE>, MachineService<TC, TE>] {
-  let effect = noop;
-  let newSend = send;
   let eventRef = useRef<any>();
-  let newSendRef = useRef<MachineSend<TC, TE>>((event: any) => {
-    eventRef.current = event;
-    send(event);
-  });
+  let newSendRef = useRef<MachineSend<TC, TE>>(send);
 
   if (__DEV__) {
     if (DEBUG) {
-      newSend = newSendRef.current;
-      effect = () => {
+      newSendRef.current = (event: any) => {
+        eventRef.current = event;
+        send(event);
+      };
+    }
+  }
+
+  useEffect(() => {
+    if (__DEV__) {
+      if (DEBUG) {
         let event = eventRef.current;
         if (event) {
           console.group("Event Sent");
@@ -126,13 +129,11 @@ export function useMachineLogger<
           console.log("State:", current);
           console.groupEnd();
         }
-      };
+      }
     }
-  }
+  }, [DEBUG, current]);
 
-  useEffect(effect, [DEBUG, current]);
-
-  return [current, newSend, service];
+  return [current, newSendRef.current, service];
 }
 
 /**
