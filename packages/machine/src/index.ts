@@ -108,16 +108,14 @@ export function useMachineLogger<
   DEBUG?: boolean
 ): [MachineState<TC, TE>, MachineSend<TC, TE>, MachineService<TC, TE>] {
   let eventRef = useRef<any>();
-  let newSendRef = useRef<MachineSend<TC, TE>>(send);
-
-  if (__DEV__) {
-    if (DEBUG) {
-      newSendRef.current = (event: any) => {
-        eventRef.current = event;
-        send(event);
-      };
-    }
-  }
+  let newSendRef = useRef<MachineSend<TC, TE>>(
+    __DEV__ && DEBUG
+      ? (event: any) => {
+          eventRef.current = event;
+          send(event);
+        }
+      : send
+  );
 
   useEffect(() => {
     if (__DEV__) {
