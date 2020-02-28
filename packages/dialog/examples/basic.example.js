@@ -13,6 +13,7 @@ function Example() {
         aria-label="Announcement"
         isOpen={showDialog}
         onDismiss={() => setShowDialog(false)}
+        allowPinchZoom
       >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>This is killer!</p>

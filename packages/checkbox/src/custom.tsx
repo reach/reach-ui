@@ -19,7 +19,6 @@
 
 import React, {
   forwardRef,
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -224,19 +223,19 @@ export const CustomCheckboxInput = forwardRef<
 
   let ref = useForkedRef(forwardedRef, inputRef);
 
-  let handleBlur = useCallback(() => {
+  function handleBlur() {
     // window.requestAnimationFrame(() => send(CustomCheckboxEvents.Blur));
     window.requestAnimationFrame(() => {
       setFocused(false);
     });
-  }, [setFocused]);
+  }
 
-  let handleFocus = useCallback(() => {
+  function handleFocus() {
     // window.requestAnimationFrame(() => send(CustomCheckboxEvents.Focus));
     window.requestAnimationFrame(() => {
       setFocused(true);
     });
-  }, [setFocused]);
+  }
 
   return (
     <input

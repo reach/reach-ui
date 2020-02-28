@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> hides on ESC: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--19"
+      aria-describedby="tooltip--REACH_ID_"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -13,7 +13,7 @@ exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--19"
+      id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -23,7 +23,7 @@ exports[`rendering tooltip hides on ESC: after mouse rest timeout 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip hides on ESC: not visible after ESC 1`] = `
+exports[`<Tooltip /> hides on ESC: not visible after ESC 1`] = `
 <body>
   <div>
     <button
@@ -35,16 +35,17 @@ exports[`rendering tooltip hides on ESC: not visible after ESC 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows without timeout when one tooltip is already visible: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> shows without timeout when one tooltip is already visible: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--10"
+      aria-describedby="tooltip--REACH_ID_"
       data-reach-tooltip-trigger=""
     >
       First Trigger
     </button>
     <button
+      aria-describedby="tooltip--REACH_ID_"
       data-reach-tooltip-trigger=""
     >
       Second Trigger
@@ -53,35 +54,17 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--10"
+      id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
       First
     </div>
   </reach-portal>
-</body>
-`;
-
-exports[`rendering tooltip shows without timeout when one tooltip is already visible: after switch without timeout 1`] = `
-<body>
-  <div>
-    <button
-      data-reach-tooltip-trigger=""
-    >
-      First Trigger
-    </button>
-    <button
-      aria-describedby="tooltip--11"
-      data-reach-tooltip-trigger=""
-    >
-      Second Trigger
-    </button>
-  </div>
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--11"
+      id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -91,7 +74,46 @@ exports[`rendering tooltip shows without timeout when one tooltip is already vis
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: after leave timeout 1`] = `
+exports[`<Tooltip /> shows without timeout when one tooltip is already visible: after switch without timeout 1`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip--REACH_ID_"
+      data-reach-tooltip-trigger=""
+    >
+      First Trigger
+    </button>
+    <button
+      aria-describedby="tooltip--REACH_ID_"
+      data-reach-tooltip-trigger=""
+    >
+      Second Trigger
+    </button>
+  </div>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip--REACH_ID_"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      First
+    </div>
+  </reach-portal>
+  <reach-portal>
+    <div
+      data-reach-tooltip="true"
+      id="tooltip--REACH_ID_"
+      role="tooltip"
+      style="left: 0px; top: 8px;"
+    >
+      Second
+    </div>
+  </reach-portal>
+</body>
+`;
+
+exports[`<Tooltip /> shows/hides on hover: after leave timeout 1`] = `
 <body>
   <div>
     <button
@@ -103,11 +125,11 @@ exports[`rendering tooltip shows/hides on hover: after leave timeout 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: after mouse rest timeout 1`] = `
+exports[`<Tooltip /> shows/hides on hover: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--1"
+      aria-describedby="tooltip--REACH_ID_"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -116,7 +138,7 @@ exports[`rendering tooltip shows/hides on hover: after mouse rest timeout 1`] = 
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--1"
+      id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -126,7 +148,7 @@ exports[`rendering tooltip shows/hides on hover: after mouse rest timeout 1`] = 
 </body>
 `;
 
-exports[`rendering tooltip shows/hides on hover: not visible 1`] = `
+exports[`<Tooltip /> shows/hides on hover: not visible 1`] = `
 <body>
   <div>
     <button
@@ -138,7 +160,7 @@ exports[`rendering tooltip shows/hides on hover: not visible 1`] = `
 </body>
 `;
 
-exports[`rendering tooltip shows/hides when trigger is activeElement: after blur 1`] = `
+exports[`<Tooltip /> shows/hides when trigger is activeElement: after blur 1`] = `
 <body>
   <div>
     <button
@@ -150,11 +172,23 @@ exports[`rendering tooltip shows/hides when trigger is activeElement: after blur
 </body>
 `;
 
-exports[`rendering tooltip shows/hides when trigger is activeElement: after focus 1`] = `
+exports[`<Tooltip /> shows/hides when trigger is activeElement: after focus 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--6"
+      data-reach-tooltip-trigger=""
+    >
+      Trigger
+    </button>
+  </div>
+</body>
+`;
+
+exports[`<Tooltip /> shows/hides when trigger is activeElement: not visible 1`] = `
+<body>
+  <div>
+    <button
+      aria-describedby="tooltip--REACH_ID_"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -163,24 +197,12 @@ exports[`rendering tooltip shows/hides when trigger is activeElement: after focu
   <reach-portal>
     <div
       data-reach-tooltip="true"
-      id="tooltip--6"
+      id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
       Content
     </div>
   </reach-portal>
-</body>
-`;
-
-exports[`rendering tooltip shows/hides when trigger is activeElement: not visible 1`] = `
-<body>
-  <div>
-    <button
-      data-reach-tooltip-trigger=""
-    >
-      Trigger
-    </button>
-  </div>
 </body>
 `;

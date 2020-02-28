@@ -1,8 +1,37 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { render as tlRender } from "@testing-library/react";
+import { render as tlRender, MatcherFunction } from "@testing-library/react";
 export * from "@testing-library/react";
 import { RenderOptions, RenderResult } from "./types";
+
+/**
+ * This function is useful if you want to query a DOM element by its text
+ * string, but the text is split up by nested DOM elements.
+ *
+ * @example
+ *   it('tests foo and bar', () => {
+ *     const { getByText } = render(<App />)
+ *     const getByTextWithMarkup = withMarkup(getByText)
+ *     let node = getByTextWithMarkup('Hello, world');
+ *     expect(node).toBeInTheDocument()
+ *   });
+ *
+ *   function App() {
+ *     return <span>Hello, <span>world</span></span>
+ *   }
+ *
+ * @param query The getter function returned from RTL's render method
+ */
+export function withMarkup(query: Query) {
+  return (text: string): HTMLElement =>
+    query((content: string, node: HTMLElement) => {
+      const hasText = (node: HTMLElement) => node.textContent === text;
+      const childrenDontHaveText = Array.from(node.children).every(
+        child => !hasText(child as HTMLElement)
+      );
+      return hasText(node) && childrenDontHaveText;
+    });
+}
 
 export function render<
   P extends React.HTMLAttributes<T>,
@@ -50,5 +79,7 @@ export function render<
 
   return result;
 }
+
+type Query = (f: MatcherFunction) => HTMLElement;
 
 export { RenderOptions, RenderResult };
