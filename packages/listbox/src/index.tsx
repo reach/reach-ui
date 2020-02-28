@@ -106,7 +106,11 @@ import {
   ListobxPopoverRef,
 } from "./types";
 
-let DEBUG = true;
+let DEBUG = __DEV__
+  ? // set here if we want to debug during development
+    false
+  : // leave this alone!
+    false;
 
 const expandedStates = [
   ListboxStates.Navigating,
@@ -168,8 +172,6 @@ export const ListboxInput = forwardRef<
     HTMLElement,
     ListboxDescendantProps
   >();
-
-  useFocusChange();
 
   // We will track when a mouse has moved in a ref, then reset it to false each
   // time a popover closes. This is useful because we want the selected value of
@@ -1019,38 +1021,4 @@ function useKeyDown() {
 function useOptionId(value: ListboxValue | null) {
   let { instanceId } = useListboxContext();
   return value ? makeId(`option-${value}`, instanceId) : "";
-}
-
-function useFocusChange(
-  handleChange: (
-    activeElement: Element | null,
-    previousActiveElement: Element | null,
-    event?: FocusEvent
-  ) => void = console.log,
-  when: "focus" | "blur" = "focus",
-  ownerDocument: Document = document
-) {
-  let lastActiveElement = useRef(ownerDocument.activeElement);
-
-  useEffect(() => {
-    lastActiveElement.current = ownerDocument.activeElement;
-
-    function onChange(event: FocusEvent) {
-      if (lastActiveElement.current !== ownerDocument.activeElement) {
-        typeof handleChange === "function" &&
-          handleChange(
-            ownerDocument.activeElement,
-            lastActiveElement.current,
-            event
-          );
-        lastActiveElement.current = ownerDocument.activeElement;
-      }
-    }
-
-    ownerDocument.addEventListener(when, onChange, true);
-
-    return () => {
-      ownerDocument.removeEventListener(when, onChange);
-    };
-  }, [when, handleChange, ownerDocument]);
 }
