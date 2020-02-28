@@ -4,7 +4,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -48,7 +48,6 @@ function Example() {
                 No Results{" "}
                 <button
                   onClick={() => {
-                    console.log("YOOOOOO");
                     setTerm("");
                     ref.current.focus();
                   }}
@@ -88,7 +87,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [item => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

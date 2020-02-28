@@ -5,14 +5,14 @@ import React, {
   useRef,
   useLayoutEffect,
   useEffect,
-  createContext
+  createContext,
 } from "react";
 import {
   Combobox,
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import { wrapEvent } from "@reach/utils";
 import matchSorter from "match-sorter";
@@ -49,7 +49,7 @@ function Example() {
           style={{
             border: "1px solid #888",
             display: "flex",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         >
           {selections.map(selection => (
@@ -64,7 +64,7 @@ function Example() {
               border: "none",
               flexGrow: 1,
               margin: "0.25rem",
-              font: "inherit"
+              font: "inherit",
             }}
           />
         </ExampleTokenLabel>
@@ -75,7 +75,6 @@ function Example() {
                 No Results{" "}
                 <button
                   onClick={() => {
-                    console.log("YOOOOOO");
                     setTerm("");
                   }}
                 >
@@ -126,7 +125,7 @@ function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
   const context = {
     onRemove,
     selectionsRef,
-    selectionNavIndex
+    selectionNavIndex,
   };
 
   return (
@@ -180,7 +179,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [item => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
@@ -193,5 +192,5 @@ const selectionStyle = {
   border: "solid 1px #aaa",
   margin: "0.25rem",
   borderRadius: "1000px",
-  padding: "0.2rem 0.5rem"
+  padding: "0.2rem 0.5rem",
 };
