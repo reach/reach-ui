@@ -56,20 +56,25 @@
   animation-iteration-count: 1;
 }
 
+[data-reach-listbox-option][aria-disabled="true"] {
+  opacity: 0.5;
+}
+
 [data-reach-listbox-button] {
-  display: flex;
-  justify-content: space-between;
+  display: inline-flex;
   align-items: center;
-  font-size: unset;
+  justify-content: space-between;
+  padding: 1px 10px 2px;
+  border: 1px solid;
+  border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+  cursor: default;
+  user-select: none;
 }
 
-[data-reach-listbox-button-inner] {
-  display: block;
-}
-
-[data-reach-listbox-button-arrow] {
+[data-reach-listbox-arrow] {
   margin-left: 0.5rem;
   display: block;
+  font-size: 0.5em;
 }
 
 [data-reach-listbox-group-label] {

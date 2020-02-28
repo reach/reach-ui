@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-let name = "Basic";
+let name = "Controlled";
 
 function Example() {
   let [value, setValue] = useState("default");

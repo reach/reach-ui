@@ -9,6 +9,7 @@ export type ListboxValue = string;
 export interface ListboxDescendantProps {
   value: ListboxValue;
   label: string;
+  disabled: boolean;
 }
 
 export type ListboxOption = Descendant<HTMLElement, ListboxDescendantProps>;
@@ -120,6 +121,7 @@ export type ListboxEvent = ListboxEventBase &
         type: ListboxEvents.OptionFinishClick;
         value: ListboxValue | null | undefined;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
+        disabled: boolean;
       }
     | {
         type: ListboxEvents.KeyDownTab;
@@ -255,6 +257,7 @@ export type ListboxListProps = {};
 export type ListboxOptionProps = {
   value: ListboxValue;
   label?: string;
+  disabled?: boolean;
 };
 
 /**
