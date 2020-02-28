@@ -66,6 +66,10 @@ export type ListboxEvent = ListboxEventBase &
         relatedTarget: EventTarget | null;
       }
     | {
+        type: ListboxEvents.OutsideMouseDown;
+        relatedTarget: EventTarget | null;
+      }
+    | {
         type: ListboxEvents.GetDerivedData;
         data: Omit<Partial<ListboxStateData>, "refs"> & {
           refs?: Partial<ListboxStateData["refs"]>;
@@ -83,6 +87,7 @@ export type ListboxEvent = ListboxEventBase &
     | {
         type: ListboxEvents.Navigate;
         value: ListboxValue;
+        disabled: boolean;
       }
     | {
         type: ListboxEvents.ValueChange;

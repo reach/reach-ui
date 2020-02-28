@@ -79,11 +79,11 @@ import {
   useStateLogger,
   wrapEvent,
 } from "@reach/utils";
+import { useMachine, useMachineLogger, useCreateMachine } from "@reach/machine";
 import {
-  createListboxMachine,
+  createMachineDefinition,
   ListboxEvents,
   ListboxStates,
-  useMachine,
 } from "./machine";
 import {
   ListboxArrowProps,
@@ -106,7 +106,7 @@ import {
   ListobxPopoverRef,
 } from "./types";
 
-let __DEBUG__ = true;
+let DEBUG = true;
 
 const expandedStates = [
   ListboxStates.Navigating,
@@ -169,6 +169,8 @@ export const ListboxInput = forwardRef<
     ListboxDescendantProps
   >();
 
+  useFocusChange();
+
   // We will track when a mouse has moved in a ref, then reset it to false each
   // time a popover closes. This is useful because we want the selected value of
   // the listbox to be highlighted when the user opens it, but if the pointer
@@ -190,14 +192,18 @@ export const ListboxInput = forwardRef<
   let popoverRef: ListobxPopoverRef = useRef(null);
   let listRef: ListobxListRef = useRef(null);
 
-  let [current, send] = useMachine(
-    createListboxMachine({ value: valueProp || null }),
-    {
+  let machine = useCreateMachine(
+    createMachineDefinition({ value: valueProp || null })
+  );
+
+  let [current, send] = useMachineLogger(
+    useMachine(machine, {
       input: inputRef,
       button: buttonRef,
       popover: popoverRef,
       list: listRef,
-    }
+    }),
+    DEBUG
   );
 
   // IDs for aria attributes
@@ -299,7 +305,21 @@ export const ListboxInput = forwardRef<
     });
   }, [options, send]);
 
-  useStateLogger(current.value, __DEBUG__);
+  useEffect(() => {
+    function listener(event: MouseEvent) {
+      let { target, relatedTarget } = event;
+      send({
+        type: ListboxEvents.OutsideMouseDown,
+        relatedTarget: relatedTarget || target,
+      });
+    }
+    window.addEventListener("mousedown", listener);
+    return () => {
+      window.removeEventListener("mousedown", listener);
+    };
+  }, [send]);
+
+  useStateLogger(current.value, DEBUG);
   useEffect(() => checkStyles("listbox"), []);
 
   return (
@@ -600,12 +620,11 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let { expanded, popoverRef, buttonRef } = useListboxContext();
+    let { expanded, popoverRef, buttonRef, send } = useListboxContext();
     let ref = useForkedRef(popoverRef, forwardedRef);
     let hidden = !expanded;
 
     let handleKeyDown = useKeyDown();
-    let handleBlur = useBlur();
 
     let commonProps = {
       ...props,
@@ -616,6 +635,16 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
       onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
       tabIndex: -1,
     };
+
+    function handleBlur(event: React.FocusEvent) {
+      let { nativeEvent } = event;
+      requestAnimationFrame(() => {
+        send({
+          type: ListboxEvents.Blur,
+          relatedTarget: nativeEvent.relatedTarget,
+        });
+      });
+    }
 
     return portal ? (
       <Popover
@@ -754,6 +783,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         send({
           type: ListboxEvents.Navigate,
           value,
+          disabled: !!disabled,
         });
       }
     }
@@ -792,6 +822,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         send({
           type: ListboxEvents.Navigate,
           value,
+          disabled: !!disabled,
         });
       }
     }
@@ -838,8 +869,8 @@ export { ListboxOptionProps };
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
   function ListboxGroup({ label, children, ...props }, forwardedRef) {
-    const { listboxId } = useListboxContext();
-    const labelId = makeId("label", useId(props.id), listboxId);
+    let { listboxId } = useListboxContext();
+    let labelId = makeId("label", useId(props.id), listboxId);
     return (
       <ListboxGroupContext.Provider value={{ labelId }}>
         <div
@@ -872,7 +903,7 @@ export const ListboxGroupLabel = forwardRefWithAs<
   ListboxGroupLabelProps,
   "span"
 >(function ListboxGroupLabel({ as: Comp = "span", ...props }, forwardedRef) {
-  const { labelId } = useListboxGroupContext();
+  let { labelId } = useListboxGroupContext();
   return (
     <Comp
       role="none"
@@ -893,21 +924,8 @@ export { ListboxGroupLabelProps };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function useBlur() {
-  const { send } = useListboxContext();
-  return function handleBlur(event: React.FocusEvent) {
-    let { nativeEvent } = event;
-    requestAnimationFrame(() => {
-      send({
-        type: ListboxEvents.Blur,
-        relatedTarget: nativeEvent.relatedTarget,
-      });
-    });
-  };
-}
-
 function useKeyDown() {
-  const {
+  let {
     onValueChange,
     state: {
       context: { navigationValue, typeaheadQuery },
@@ -952,6 +970,7 @@ function useKeyDown() {
           });
           return;
         case " ":
+          event.preventDefault();
           send({
             type: ListboxEvents.KeyDownSpace,
             value: navigationValue,
@@ -998,6 +1017,40 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  const { instanceId } = useListboxContext();
+  let { instanceId } = useListboxContext();
   return value ? makeId(`option-${value}`, instanceId) : "";
+}
+
+function useFocusChange(
+  handleChange: (
+    activeElement: Element | null,
+    previousActiveElement: Element | null,
+    event?: FocusEvent
+  ) => void = console.log,
+  when: "focus" | "blur" = "focus",
+  ownerDocument: Document = document
+) {
+  let lastActiveElement = useRef(ownerDocument.activeElement);
+
+  useEffect(() => {
+    lastActiveElement.current = ownerDocument.activeElement;
+
+    function onChange(event: FocusEvent) {
+      if (lastActiveElement.current !== ownerDocument.activeElement) {
+        typeof handleChange === "function" &&
+          handleChange(
+            ownerDocument.activeElement,
+            lastActiveElement.current,
+            event
+          );
+        lastActiveElement.current = ownerDocument.activeElement;
+      }
+    }
+
+    ownerDocument.addEventListener(when, onChange, true);
+
+    return () => {
+      ownerDocument.removeEventListener(when, onChange);
+    };
+  }, [when, handleChange, ownerDocument]);
 }

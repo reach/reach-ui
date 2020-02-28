@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Descendant } from "@reach/descendants";
-import { assign, createMachine, interpret, StateMachine } from "@reach/machine";
+import { assign, interpret, StateMachine } from "@reach/machine";
 import { DistributiveOmit, useConstant, getOwnerDocument } from "@reach/utils";
 import {
   ListboxDescendantProps,
@@ -53,6 +53,7 @@ export enum ListboxEvents {
   KeyDownShiftTab = "KEY_DOWN_SHIFT_TAB",
   Navigate = "NAVIGATE",
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
+  OutsideMouseDown = "OUTSIDE_MOUSE_DOWN",
 
   // Uncontrolled value changes come from specific events (click, key, etc.)
   // ValueChange > Value change may have come from somewhere else
@@ -106,32 +107,57 @@ function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
   return false;
 }
 
+function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
+  if (event.type === ListboxEvents.OutsideMouseDown) {
+    let { button, popover } = event.refs;
+    let { relatedTarget } = event;
+
+    // Close the popover IF:
+    return !!(
+      // clicked element is not the button
+      (
+        relatedTarget !== button &&
+        // clicked element is not inside the popover
+        popover &&
+        !popover.contains(relatedTarget as Element)
+      )
+    );
+  }
+  return false;
+}
+
 function optionIsActive(data: ListboxStateData, event: any) {
-  let ownerDocument =
-    (event.refs.popover && getOwnerDocument(event.refs.popover)) || document;
-  return !!data.options.find(
-    ({ element }) => element === ownerDocument.activeElement
-  );
+  return !!data.options.find(option => option.value === data.navigationValue);
 }
 
 function focusList(data: ListboxStateData, event: any) {
-  event.refs.list && event.refs.list.focus();
-}
-
-function focusNavOption(data: ListboxStateData, event: any) {
   requestAnimationFrame(() => {
-    let node = getNavigationNodeFromValue(data, data.navigationValue);
-    node && node.focus();
+    event.refs.list && event.refs.list.focus();
   });
 }
+
+// function focusNavOption(data: ListboxStateData, event: any) {
+//   requestAnimationFrame(() => {
+//     let node = getNavigationNodeFromValue(data, data.navigationValue);
+//     node && node.focus();
+//   });
+// }
 
 function focusButton(data: ListboxStateData, event: any) {
   event.refs.button && event.refs.button.focus();
 }
 
+function optionIsNavigable(data: ListboxStateData, event: ListboxEvent) {
+  if (event.type === ListboxEvents.Navigate) {
+    if (event && event.disabled) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function optionIsSelectable(data: ListboxStateData, event: any) {
   if (event && event.disabled) {
-    console.log("BLOCKED");
     return false;
   }
   return data.navigationValue != null;
@@ -231,209 +257,272 @@ let openEvents = {
  * @param initial
  * @param props
  */
-export const createListboxMachine = ({
+export const createMachineDefinition = ({
   value,
 }: {
   value: ListboxValue | null;
-}) =>
-  createMachine<ListboxStateData, ListboxEvent, ListboxState>({
-    id: "mixed-checkbox",
-    initial: ListboxStates.Idle,
-    context: {
-      value,
-      refs: {
-        button: null,
-        input: null,
-        list: null,
-        popover: null,
-      },
-      options: [],
-      navigationValue: null,
-      typeaheadQuery: null,
+}): StateMachine.Config<ListboxStateData, ListboxEvent, ListboxState> => ({
+  id: "mixed-checkbox",
+  initial: ListboxStates.Idle,
+  context: {
+    value,
+    refs: {
+      button: null,
+      input: null,
+      list: null,
+      popover: null,
     },
-    states: {
-      [ListboxStates.Idle]: {
-        on: {
-          ...commonEvents,
-          [ListboxEvents.ButtonMouseDown]: {
-            target: ListboxStates.Navigating,
-            actions: [navigateFromCurrentValue, focusButton],
-          },
-          [ListboxEvents.KeyDownSpace]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigateFromCurrentValue, focusNavOption],
-          },
-          [ListboxEvents.KeyDownSearch]: {
-            target: ListboxStates.Idle,
-            actions: setTypeahead,
-          },
-          [ListboxEvents.UpdateAfterTypeahead]: {
-            target: ListboxStates.Idle,
-            actions: [setValueFromTypeahead],
-          },
-          [ListboxEvents.ClearTypeahead]: {
-            target: ListboxStates.Idle,
-            actions: clearTypeahead,
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
+    options: [],
+    navigationValue: null,
+    typeaheadQuery: null,
+  },
+  states: {
+    [ListboxStates.Idle]: {
+      on: {
+        ...commonEvents,
+        [ListboxEvents.ButtonMouseDown]: {
+          target: ListboxStates.Navigating,
+          actions: [navigateFromCurrentValue, focusButton],
         },
-      },
-      [ListboxStates.Interacting]: {
-        on: {
-          ...commonEvents,
-          ...openEvents,
-          [ListboxEvents.Blur]: [
-            {
-              target: ListboxStates.Idle,
-              cond: listboxLostFocus,
-              actions: clearTypeaheadQuery,
-            },
-            {
-              target: ListboxStates.Navigating,
-              cond: optionIsActive,
-            },
-            {
-              target: ListboxStates.Interacting,
-              actions: clearTypeaheadQuery,
-            },
-          ],
-          [ListboxEvents.Navigate]: {
-            target: ListboxStates.Navigating,
-            actions: [navigate, focusNavOption],
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
+        [ListboxEvents.KeyDownSpace]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigateFromCurrentValue, focusList],
         },
-      },
-      [ListboxStates.Navigating]: {
-        on: {
-          ...commonEvents,
-          ...openEvents,
-          [ListboxEvents.Blur]: [
-            {
-              target: ListboxStates.Idle,
-              cond: listboxLostFocus,
-              actions: clearTypeaheadQuery,
-            },
-            {
-              target: ListboxStates.Navigating,
-              cond: optionIsActive,
-            },
-            {
-              target: ListboxStates.Interacting,
-              actions: clearTypeaheadQuery,
-            },
-          ],
-          [ListboxEvents.ButtonMouseUp]: {
-            // TODO: Figure out why `navigateFromCurrentValue` isn't assigning
-            //       the value
-            actions: [focusList, navigateFromCurrentValue, focusNavOption],
-          },
-          [ListboxEvents.Navigate]: {
-            target: ListboxStates.Navigating,
-            actions: [navigate, focusNavOption],
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.KeyDownSearch]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: setTypeahead,
-          },
-          [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: [setNavSelectionFromTypeahead, focusNavOption],
-          },
-          [ListboxEvents.ClearTypeahead]: {
-            actions: clearTypeahead,
-          },
+        [ListboxEvents.KeyDownSearch]: {
+          target: ListboxStates.Idle,
+          actions: setTypeahead,
         },
-      },
-      [ListboxStates.NavigatingWithKeys]: {
-        on: {
-          ...commonEvents,
-          ...openEvents,
-          [ListboxEvents.Blur]: [
-            {
-              target: ListboxStates.Idle,
-              cond: listboxLostFocus,
-              actions: clearTypeaheadQuery,
-            },
-            {
-              target: ListboxStates.NavigatingWithKeys,
-              cond: optionIsActive,
-            },
-            {
-              target: ListboxStates.Interacting,
-              actions: clearTypeaheadQuery,
-            },
-          ],
-          [ListboxEvents.Navigate]: {
-            target: ListboxStates.Navigating,
-            actions: [navigate, focusNavOption],
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.KeyDownSearch]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: setTypeahead,
-          },
-          [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: [setNavSelectionFromTypeahead, focusNavOption],
-          },
-          [ListboxEvents.ClearTypeahead]: {
-            actions: clearTypeahead,
-          },
+        [ListboxEvents.UpdateAfterTypeahead]: {
+          target: ListboxStates.Idle,
+          actions: [setValueFromTypeahead],
         },
-      },
-      [ListboxStates.Searching]: {
-        on: {
-          ...commonEvents,
-          ...openEvents,
-          [ListboxEvents.Blur]: [
-            {
-              target: ListboxStates.Idle,
-              cond: listboxLostFocus,
-              actions: clearTypeaheadQuery,
-            },
-            {
-              target: ListboxStates.Searching,
-              cond: optionIsActive,
-            },
-            {
-              target: ListboxStates.Interacting,
-              actions: clearTypeaheadQuery,
-            },
-          ],
-          [ListboxEvents.Navigate]: {
-            target: ListboxStates.Navigating,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.KeyDownNavigate]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: [navigate, focusNavOption, clearTypeaheadQuery],
-          },
-          [ListboxEvents.KeyDownSearch]: {
-            target: ListboxStates.NavigatingWithKeys,
-            actions: setTypeahead,
-          },
-          [ListboxEvents.UpdateAfterTypeahead]: {
-            actions: [setNavSelectionFromTypeahead, focusNavOption],
-          },
-          [ListboxEvents.ClearTypeahead]: {
-            actions: clearTypeahead,
-          },
+        [ListboxEvents.ClearTypeahead]: {
+          target: ListboxStates.Idle,
+          actions: clearTypeahead,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigate, clearTypeaheadQuery, focusList],
         },
       },
     },
-  });
+    [ListboxStates.Interacting]: {
+      on: {
+        ...commonEvents,
+        ...openEvents,
+        [ListboxEvents.Blur]: [
+          {
+            target: ListboxStates.Idle,
+            cond: listboxLostFocus,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.Navigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigate, clearTypeaheadQuery, focusList],
+        },
+      },
+    },
+    [ListboxStates.Navigating]: {
+      on: {
+        ...commonEvents,
+        ...openEvents,
+        [ListboxEvents.Blur]: [
+          {
+            target: ListboxStates.Idle,
+            cond: listboxLostFocus,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.ButtonMouseUp]: {
+          target: ListboxStates.Navigating,
+          actions: [navigateFromCurrentValue, focusList],
+        },
+        [ListboxEvents.Navigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigate, clearTypeaheadQuery, focusList],
+        },
+        [ListboxEvents.KeyDownSearch]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: setTypeahead,
+        },
+        [ListboxEvents.UpdateAfterTypeahead]: {
+          actions: [setNavSelectionFromTypeahead],
+        },
+        [ListboxEvents.ClearTypeahead]: {
+          actions: clearTypeahead,
+        },
+      },
+    },
+    [ListboxStates.NavigatingWithKeys]: {
+      entry: focusList,
+      on: {
+        ...commonEvents,
+        ...openEvents,
+        [ListboxEvents.Blur]: [
+          {
+            target: ListboxStates.Idle,
+            cond: listboxLostFocus,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.NavigatingWithKeys,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.NavigatingWithKeys,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.Navigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigate, clearTypeaheadQuery, focusList],
+        },
+        [ListboxEvents.KeyDownSearch]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: setTypeahead,
+        },
+        [ListboxEvents.UpdateAfterTypeahead]: {
+          actions: [setNavSelectionFromTypeahead],
+        },
+        [ListboxEvents.ClearTypeahead]: {
+          actions: clearTypeahead,
+        },
+      },
+    },
+    [ListboxStates.Searching]: {
+      on: {
+        ...commonEvents,
+        ...openEvents,
+        [ListboxEvents.Blur]: [
+          {
+            target: ListboxStates.Idle,
+            cond: listboxLostFocus,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Searching,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeaheadQuery,
+          },
+          {
+            target: ListboxStates.Searching,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeaheadQuery,
+          },
+        ],
+        [ListboxEvents.Navigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeaheadQuery],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: [navigate, clearTypeaheadQuery, focusList],
+        },
+        [ListboxEvents.KeyDownSearch]: {
+          target: ListboxStates.NavigatingWithKeys,
+          actions: setTypeahead,
+        },
+        [ListboxEvents.UpdateAfterTypeahead]: {
+          actions: [setNavSelectionFromTypeahead],
+        },
+        [ListboxEvents.ClearTypeahead]: {
+          actions: clearTypeahead,
+        },
+      },
+    },
+  },
+});
 
 export function unwrapRefs<
   TE extends MachineEventWithRefs = MachineEventWithRefs
@@ -513,9 +602,9 @@ function findOptionFromTypeahead(
   return found || null;
 }
 
-function getNavigationNodeFromValue(data: ListboxStateData, value: any) {
-  return data.options.find(option => value === option.value)?.element;
-}
+// function getNavigationNodeFromValue(data: ListboxStateData, value: any) {
+//   return data.options.find(option => value === option.value)?.element;
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
