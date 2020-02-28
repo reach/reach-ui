@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Descendant } from "@reach/descendants";
+import { assign, createMachine, interpret, StateMachine } from "@reach/machine";
 import { DistributiveOmit, useConstant, getOwnerDocument } from "@reach/utils";
-import { assign, createMachine, interpret, StateMachine } from "@xstate/fsm";
 import {
   ListboxDescendantProps,
   ListboxEvent,

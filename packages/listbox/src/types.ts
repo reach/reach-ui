@@ -1,7 +1,7 @@
 import { Descendant } from "@reach/descendants";
 import { DistributiveOmit } from "@reach/utils";
 import { PopoverProps } from "@reach/popover";
-import { StateMachine, EventObject as MachineEvent } from "@xstate/fsm";
+import { StateMachine, MachineEvent } from "@reach/machine";
 import { ListboxEvents, ListboxStates } from "./machine";
 
 export type ListboxValue = string;
