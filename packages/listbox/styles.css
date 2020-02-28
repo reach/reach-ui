@@ -104,9 +104,3 @@
     opacity: 1;
   }
 }
-
-/* FOR DEBUGGING FOCUS */
-
-:focus {
-  outline: 2px solid crimson !important;
-}
