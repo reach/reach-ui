@@ -39,11 +39,11 @@ import {
 } from "@reach/utils";
 import {
   assign,
-  MachineEvent,
+  MachineEventWithRefs,
   StateMachine,
+  useCreateMachine,
   useMachine,
   useMachineLogger,
-  useCreateMachine,
 } from "@reach/machine";
 import PropTypes from "prop-types";
 import warning from "warning";
@@ -512,21 +512,4 @@ export type MixedCheckboxNodeRefs = {
 /**
  * Input element ref object.
  */
-type MixedCheckboxInputRef = React.RefObject<HTMLInputElement | null>;
-
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
-/**
- * Events use in our `useMachine` always have a refs object and will inherit
- * this interface.
- */
-export interface MachineEventWithRefs extends MachineEvent {
-  refs: {
-    [key: string]: any;
-  };
-}
-
-export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
-  [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
-};
+type MixedCheckboxInputRef = React.RefObject<MixedCheckboxNodeRefs["input"]>;
