@@ -154,7 +154,7 @@ export function useCreateMachine<
   TE extends MachineEventWithRefs = MachineEventWithRefs,
   TS extends Typestate<TC> = any
 >(
-  machineDefinition: StateMachine.Config<TC, TE>,
+  machineDefinition: StateMachine.Config<TC, TE, TS>,
   options?: {
     actions?: StateMachine.ActionMap<TC, TE>;
   }
