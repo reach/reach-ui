@@ -63,6 +63,7 @@ interface ITabsContext {
   id: string;
   isControlled: boolean;
   orientation?: "vertical" | "horizontal";
+  listBeforePanels: boolean;
   onFocusPanel: () => void;
   onSelectTab: (index: number) => void;
   selectedIndex: number;
@@ -121,6 +122,18 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   let _id = useId(props.id);
   let id = props.id ?? makeId("tabs", _id);
 
+  const childrenArray = React.Children.toArray(children);
+  const indexOfTabPanels = childrenArray.findIndex(
+    child => React.isValidElement(child) && child.type === TabPanels
+  );
+  const indexOfTabList = childrenArray.findIndex(
+    child => React.isValidElement(child) && child.type === TabList
+  );
+  const listBeforePanels =
+    indexOfTabList > -1 &&
+    indexOfTabPanels > -1 &&
+    indexOfTabList < indexOfTabPanels;
+
   /*
    * We only manage focus if the user caused the update vs. a new controlled
    * index coming in.
@@ -138,6 +151,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
         ? (controlledIndex as number)
         : selectedIndex,
       orientation,
+      listBeforePanels,
       id,
       userInteractedRef,
       selectedPanelRef,
@@ -155,7 +169,15 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
             }
           },
     };
-  }, [controlledIndex, orientation, id, onChange, readOnly, selectedIndex]);
+  }, [
+    controlledIndex,
+    orientation,
+    listBeforePanels,
+    id,
+    onChange,
+    readOnly,
+    selectedIndex,
+  ]);
 
   useEffect(() => checkStyles("tabs"), []);
 
@@ -276,6 +298,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     setSelectedIndex,
     selectedIndex,
     orientation,
+    listBeforePanels,
   } = useTabsContext();
 
   let { descendants } = useContext(TabsDescendantsContext);
@@ -296,13 +319,19 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   let handleKeyDown = wrapEvent(
     function(event: React.KeyboardEvent) {
-      if (
-        orientation === "vertical"
-          ? isRTL
-            ? event.key === "ArrowLeft"
-            : event.key === "ArrowRight"
-          : event.key === "ArrowDown"
-      ) {
+      let keyToMatch;
+
+      if (orientation === "vertical") {
+        if (isRTL.current) {
+          keyToMatch = listBeforePanels ? "ArrowLeft" : "ArrowRight";
+        } else {
+          keyToMatch = listBeforePanels ? "ArrowRight" : "ArrowLeft";
+        }
+      } else {
+        keyToMatch = listBeforePanels ? "ArrowDown" : "ArrowUp";
+      }
+
+      if (event.key === keyToMatch) {
         event.preventDefault();
         onFocusPanel();
       }
