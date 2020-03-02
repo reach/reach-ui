@@ -151,8 +151,8 @@ export const ListboxInput = forwardRef<
   ListboxInputProps & { _componentName?: string }
 >(function ListboxInput(
   {
-    autoComplete,
     children,
+    defaultValue,
     disabled,
     form,
     name,
@@ -195,7 +195,9 @@ export const ListboxInput = forwardRef<
   let listRef: ListobxListRef = useRef(null);
 
   let machine = useCreateMachine(
-    createMachineDefinition({ value: valueProp || null })
+    createMachineDefinition({
+      value: (isControlled ? valueProp! : defaultValue) || null,
+    })
   );
 
   let [current, send] = useMachineLogger(
@@ -264,8 +266,7 @@ export const ListboxInput = forwardRef<
   ]);
 
   // These props are forwarded to a hidden select field
-  let hiddenSelectProps = {
-    autoComplete,
+  let hiddenInputProps = {
     disabled,
     form,
     name,
@@ -280,7 +281,7 @@ export const ListboxInput = forwardRef<
   //   A) we only ever need to do this once, so we can guard with a mounted ref
   //   B) useLayoutEffect races useDecendant, so we might not have options yet
   //   C) useEffect will cause a flash
-  if (!isControlled && !mounted.current && options.length) {
+  if (!isControlled && !defaultValue && !mounted.current && options.length) {
     mounted.current = true;
     let first = options.find(option => !option.disabled);
     if (first && first.value) {
@@ -346,8 +347,8 @@ export const ListboxInput = forwardRef<
               })
             : children}
         </div>
-        {Object.values(hiddenSelectProps).some(val => val) && (
-          <ListboxHiddenSelect {...hiddenSelectProps} />
+        {Object.values(hiddenInputProps).some(val => val) && (
+          <ListboxHiddenInput {...hiddenInputProps} />
         )}
       </ListboxContext.Provider>
     </DescendantProvider>
@@ -358,8 +359,8 @@ if (__DEV__) {
   ListboxInput.displayName = "ListboxInput";
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    autoComplete: PropTypes.string,
 
+    // TODO: Consider autoComplete support if possible
     // TODO: Consider autoFocus prop implementation, if possible
     // Not sure how this would work without some sort of App-wrapper provider
     // that manages focus. Inputs get this out of the box, div's do not.
@@ -376,44 +377,19 @@ export { ListboxInputProps };
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * ListboxHiddenSelect
- *
- * A hidden select field to store values controlled by the listbox.
- * This *should* help with autoComplete (I think, need to test) and is useful if
- * the listbox is used in a form.
+ * ListboxHiddenInput
  */
-const ListboxHiddenSelect: React.FC<React.SelectHTMLAttributes<
-  HTMLSelectElement
+const ListboxHiddenInput: React.FC<React.InputHTMLAttributes<
+  HTMLInputElement
 >> = props => {
-  let { descendants: options } = useDescendantContext();
-  let { send, state, onValueChange, mouseMovedRef } = useListboxContext();
+  let { state } = useListboxContext();
   return (
-    <select
-      hidden
-      {...props}
-      onChange={event => {
-        send({
-          type: ListboxEvents.ValueChange,
-          value: event.target.value,
-          callback: val => {
-            onValueChange && onValueChange(val);
-            mouseMovedRef.current = false;
-          },
-        });
-      }}
-      value={state.context.value || undefined}
-    >
-      {options.map(({ value, label }) => (
-        <option value={value} key={value}>
-          {label}
-        </option>
-      ))}
-    </select>
+    <input type="text" hidden {...props} value={state.context.value || ""} />
   );
 };
 
 if (__DEV__) {
-  ListboxHiddenSelect.displayName = "ListboxHiddenSelect";
+  ListboxHiddenInput.displayName = "ListboxHiddenInput";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -643,7 +619,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
       requestAnimationFrame(() => {
         send({
           type: ListboxEvents.Blur,
-          relatedTarget: nativeEvent.relatedTarget,
+          relatedTarget: nativeEvent.relatedTarget || nativeEvent.target,
         });
       });
     }
@@ -795,6 +771,8 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
+      // Prevent blur event from firing and bubbling to the popover
+      event.preventDefault();
       mouseEventStartedRef.current = true;
       if (!isRightClick(event.nativeEvent)) {
         send({ type: ListboxEvents.OptionStartClick });
@@ -972,7 +950,6 @@ function useKeyDown() {
           });
           return;
         case " ":
-          event.preventDefault();
           send({
             type: ListboxEvents.KeyDownSpace,
             value: navigationValue,

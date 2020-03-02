@@ -7,7 +7,7 @@ let name = "Basic";
 
 function Example() {
   return (
-    <Listbox onChange={action("value changed")}>
+    <Listbox defaultValue="asada" onChange={action("value changed")}>
       <ListboxOption value="default">
         Choose a taco <Taco />
       </ListboxOption>
@@ -18,9 +18,11 @@ function Example() {
       <ListboxOption value="pollo" disabled>
         Pollo <Taco /> <Tag>Sold Out!</Tag>
       </ListboxOption>
-      <ListboxOption value="pastor">
-        Pastor <Taco />
-      </ListboxOption>
+      <div style={{ background: "#ccc" }}>
+        <ListboxOption value="pastor">
+          Pastor <Taco /> <Tag>Fan favorite!</Tag>
+        </ListboxOption>
+      </div>
       <ListboxOption value="lengua">
         Lengua <Taco />
       </ListboxOption>

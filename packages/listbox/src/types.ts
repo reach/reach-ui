@@ -180,7 +180,7 @@ export type ListboxStateData = {
   options: ListboxOptions;
 };
 
-///////
+////////////////////////////////////////////////////////////////////////////////
 // Component props
 
 /**
@@ -189,20 +189,44 @@ export type ListboxStateData = {
 export type ListboxInputProps = Omit<
   React.HTMLProps<HTMLDivElement>,
   // WHY ARE THESE A THING ON A DIV, UGH
-  "autoComplete" | "autoFocus" | "form" | "name" | "onChange"
+  "autoComplete" | "autoFocus" | "form" | "name" | "onChange" | "defaultValue"
 > &
   Pick<
     React.SelectHTMLAttributes<HTMLSelectElement>,
     "autoComplete" | "autoFocus" | "form" | "name" | "required"
   > & {
+    /**
+     * The composed listbox expects to receive `ListboxButton` and
+     * `ListboxPopover` as children. You can also pass in arbitrary wrapper
+     * elements if desired.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-children
+     */
     children:
       | React.ReactNode
       | ((props: {
           value: ListboxValue | null;
           valueLabel: string | null;
         }) => React.ReactNode);
+    /**
+     * The callback that fires when the listbox value changes.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-onchange
+     * @param newValue
+     */
     onChange?(newValue: ListboxValue): void;
+    /**
+     * The current value of the listbox.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-value
+     */
     value?: ListboxValue;
+    /**
+     * The default value of an uncontrolled listbox.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
+     */
+    defaultValue?: ListboxValue;
     // TODO: Maybe? multiple: boolean
   };
 
@@ -260,8 +284,28 @@ export type ListboxListProps = {};
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-props
  */
 export type ListboxOptionProps = {
+  /**
+   * The option's value. This will be passed into a hidden input field for use
+   * in forms.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-value
+   */
   value: ListboxValue;
+  /**
+   * The option's human-readable label. This prop is optional but highly
+   * encouraged if your option has multiple text nodes that may or may not
+   * correlate with the intended value. It is also ueful if the inner text node
+   * begins with a character other than a readable letter (like an emoji or
+   * symbol) so that typeahead works as expected for the user.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-label
+   */
   label?: string;
+  /**
+   * Whether or not the option is disabled from selection and navigation.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-disabled
+   */
   disabled?: boolean;
 };
 
@@ -272,6 +316,13 @@ export type ListboxGroupProps = Omit<
   React.HTMLProps<HTMLDivElement>,
   "label"
 > & {
+  /**
+   * The text label to use for the listbox group. This can be omitted if a
+   * group contains a `ListboxGroupLabel` component. The label should always
+   * be human-readable.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-label
+   */
   label?: string;
 };
 

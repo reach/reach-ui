@@ -91,10 +91,10 @@ let navigateFromCurrentValue = assign<ListboxStateData, any>({
 
 function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
   if (event.type === ListboxEvents.Blur) {
-    let { button, list, popover } = event.refs;
+    let { list, popover } = event.refs;
     let { relatedTarget } = event;
 
-    let ownerDocument = (button && getOwnerDocument(button)) || document;
+    let ownerDocument = (popover && getOwnerDocument(popover)) || document;
 
     return !!(
       ownerDocument.activeElement !== list &&
@@ -130,18 +130,23 @@ function optionIsActive(data: ListboxStateData, event: any) {
   return !!data.options.find(option => option.value === data.navigationValue);
 }
 
+function shouldNavigateWithKeys(data: ListboxStateData, event: any) {
+  let { popover } = event.refs;
+  let { relatedTarget } = event;
+  // When a blur event happens, we want to move to NavigatingWithKeys state
+  // unless the user is interacting with elements inside the popover...
+  if (popover && relatedTarget && popover.contains(relatedTarget as Element)) {
+    return false;
+  }
+  // ...otherwise, just make sure the next option is selectable
+  return optionIsActive(data, event);
+}
+
 function focusList(data: ListboxStateData, event: any) {
   requestAnimationFrame(() => {
     event.refs.list && event.refs.list.focus();
   });
 }
-
-// function focusNavOption(data: ListboxStateData, event: any) {
-//   requestAnimationFrame(() => {
-//     let node = getNavigationNodeFromValue(data, data.navigationValue);
-//     node && node.focus();
-//   });
-// }
 
 function focusButton(data: ListboxStateData, event: any) {
   event.refs.button && event.refs.button.focus();
@@ -302,14 +307,16 @@ export const createMachineDefinition = ({
         },
         [ListboxEvents.KeyDownNavigate]: {
           target: ListboxStates.NavigatingWithKeys,
-          actions: [navigate, clearTypeaheadQuery, focusList],
+          actions: [navigateFromCurrentValue, clearTypeaheadQuery],
         },
       },
     },
     [ListboxStates.Interacting]: {
+      entry: [clearNavigationValue],
       on: {
         ...commonEvents,
         ...openEvents,
+        [ListboxEvents.KeyDownEnter]: ListboxStates.Interacting,
         [ListboxEvents.Blur]: [
           {
             target: ListboxStates.Idle,
@@ -318,7 +325,7 @@ export const createMachineDefinition = ({
           },
           {
             target: ListboxStates.Navigating,
-            cond: optionIsActive,
+            cond: shouldNavigateWithKeys,
           },
           {
             target: ListboxStates.Interacting,
@@ -363,7 +370,7 @@ export const createMachineDefinition = ({
           },
           {
             target: ListboxStates.Navigating,
-            cond: optionIsActive,
+            cond: shouldNavigateWithKeys,
           },
           {
             target: ListboxStates.Interacting,
@@ -411,7 +418,7 @@ export const createMachineDefinition = ({
       },
     },
     [ListboxStates.NavigatingWithKeys]: {
-      entry: focusList,
+      // entry: focusList,
       on: {
         ...commonEvents,
         ...openEvents,
@@ -423,7 +430,7 @@ export const createMachineDefinition = ({
           },
           {
             target: ListboxStates.NavigatingWithKeys,
-            cond: optionIsActive,
+            cond: shouldNavigateWithKeys,
           },
           {
             target: ListboxStates.Interacting,
@@ -478,7 +485,7 @@ export const createMachineDefinition = ({
           },
           {
             target: ListboxStates.Searching,
-            cond: optionIsActive,
+            cond: shouldNavigateWithKeys,
           },
           {
             target: ListboxStates.Interacting,
