@@ -617,15 +617,6 @@ if (__DEV__) {
   ComboboxPopover.displayName = "ComboboxPopover";
 }
 
-export type __ComboboxPopoverProps = {
-  targetRef?: any;
-  positionMatchWidth?: {
-    width: string;
-    left: number;
-    top: string;
-  };
-};
-
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-props
  */
