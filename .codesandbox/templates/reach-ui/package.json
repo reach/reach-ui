@@ -30,8 +30,8 @@
     "@reach/utils": "latest",
     "@reach/visually-hidden": "latest",
     "@reach/window-size": "latest",
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
     "react-scripts": "3.3.0"
   },
   "devDependencies": {

@@ -79,8 +79,6 @@ function ExampleAnimatedTab(props) {
   // get the style changing function from context
   const setActiveRect = useContext(AnimatedContext);
 
-  console.log({ rect });
-
   // callup to set styles whenever we're active
   useLayoutEffect(() => {
     if (isSelected) {

@@ -22,11 +22,11 @@ import React, {
   forwardRef,
   useEffect,
   useRef,
+  useCallback,
   useContext,
   useMemo,
   useReducer,
   useState,
-  useCallback
 } from "react";
 import PropTypes from "prop-types";
 import {
@@ -36,7 +36,7 @@ import {
   forwardRefWithAs,
   getOwnerDocument,
   makeId,
-  useIsomorphicLayoutEffect as useLayoutEffect,
+  useIsomorphicLayoutEffect,
   useForkedRef,
   useUpdateEffect,
   wrapEvent,
@@ -407,13 +407,13 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     forwardedRef
   ) {
     // https://github.com/reach/reach-ui/issues/464
-    const { current: initialControlledValue } = useRef(controlledValue);
-    const controlledValueChangedRef = useRef(false);
+    let { current: initialControlledValue } = useRef(controlledValue);
+    let controlledValueChangedRef = useRef(false);
     useUpdateEffect(() => {
       controlledValueChangedRef.current = true;
     }, [controlledValue]);
 
-    const {
+    let {
       data: { navigationValue, value, lastEventType },
       inputRef,
       state,
@@ -423,42 +423,45 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       openOnFocus,
     } = useContext(ComboboxContext);
 
-    const ref = useForkedRef(inputRef, forwardedRef);
+    let ref = useForkedRef(inputRef, forwardedRef);
 
     // Because we close the List on blur, we need to track if the blur is
     // caused by clicking inside the list, and if so, don't close the List.
-    const selectOnClickRef = useRef(false);
+    let selectOnClickRef = useRef(false);
 
-    const handleKeyDown = useKeyDown();
+    let handleKeyDown = useKeyDown();
 
-    const handleBlur = useBlur();
+    let handleBlur = useBlur();
 
-    const isControlled = controlledValue != null;
+    let isControlled = controlledValue != null;
 
     // Layout effect should be SSR-safe here because we don't actually do
     // anything with this ref that involves rendering until after we've
     // let the client hydrate in nested components.
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = useCallback((value: ComboboxValue) => {
-      if (value.trim() === "") {
-        transition(CLEAR);
-      } else if (
-        value === initialControlledValue &&
-        !controlledValueChangedRef.current
-      ) {
-        transition(INITIAL_CHANGE, { value });
-      } else {
-        transition(CHANGE, { value });
-      }
-    }, [initialControlledValue, transition]);
+    const handleValueChange = useCallback(
+      (value: ComboboxValue) => {
+        if (value.trim() === "") {
+          transition(CLEAR);
+        } else if (
+          value === initialControlledValue &&
+          !controlledValueChangedRef.current
+        ) {
+          transition(INITIAL_CHANGE, { value });
+        } else {
+          transition(CHANGE, { value });
+        }
+      },
+      [initialControlledValue, transition]
+    );
 
-    // If they are controlling the value we still need to do our transitions, so
-    // we have this derived state to emulate onChange of the input as we receive
-    // new `value`s ...[*]
-    useEffect(()=>{
+    useEffect(() => {
+      // If they are controlling the value we still need to do our transitions,
+      // so  we have this derived state to emulate onChange of the input as we
+      // receive new `value`s ...[*]
       if (
         isControlled &&
         controlledValue !== value &&
@@ -467,11 +470,11 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       ) {
         handleValueChange(controlledValue!);
       }
-    }, [controlledValue, handleValueChange, isControlled, value])
+    }, [controlledValue, handleValueChange, isControlled, value]);
 
-    // [*]... and when controlled, we don't trigger handleValueChange as the user
-    // types, instead the developer controls it with the normal input onChange
-    // prop
+    // [*]... and when controlled, we don't trigger handleValueChange as the
+    // user types, instead the developer controls it with the normal input
+    // onChange prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
       const { value } = event.target;
       if (!isControlled) {
@@ -657,8 +660,8 @@ export type ComboboxPopoverProps = {
 export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   function ComboboxList(
     {
-      // when true, and the list opens again, the option with a matching value will be
-      // automatically highleted.
+      // when true, and the list opens again, the option with a matching value
+      // will be automatically highleted.
       persistSelection = false,
       as: Comp = "ul",
       ...props
@@ -917,7 +920,7 @@ function useFocusManagement(
   // of awkwardly at the beginning, unclear to me why 🤷‍♂️
   //
   // Should be safe to use here since we're just focusing an input.
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (
       lastEventType === NAVIGATE ||
       lastEventType === ESCAPE ||

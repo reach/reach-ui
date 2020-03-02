@@ -5,7 +5,7 @@ import {
   MenuList,
   MenuButton,
   MenuLink,
-  MenuItem
+  MenuItem,
 } from "@reach/menu-button";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -58,7 +58,6 @@ const StyledLink = styled(Link)`
 `;
 
 function Home() {
-  console.log({ StyledLink });
   return (
     <div>
       <h2>Home</h2>

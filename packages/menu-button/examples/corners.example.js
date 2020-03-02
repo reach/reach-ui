@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
-import { createGlobalStyle } from "styled-components";
 import "@reach/menu-button/styles.css";
 
 let name = "At the Corners";
@@ -9,23 +8,30 @@ let name = "At the Corners";
 function Example() {
   return (
     <Fragment>
-      <GlobalStyle />
-      <MyMenuButton
-        style={{ position: "absolute", top: 0, left: 0 }}
-        id="button-1"
-      />
-      <MyMenuButton
-        style={{ position: "absolute", top: 0, right: 0 }}
-        id="button-2"
-      />
-      <MyMenuButton
-        style={{ position: "absolute", bottom: 0, left: 0 }}
-        id="button-3"
-      />
-      <MyMenuButton
-        style={{ position: "absolute", bottom: 0, right: 0 }}
-        id="button-4"
-      />
+      <div
+        style={{
+          position: "relative",
+          height: "calc(100vh - 50px)",
+          width: "calc(100vw - 50px)",
+        }}
+      >
+        <MyMenuButton
+          style={{ position: "absolute", top: 50, left: 0 }}
+          id="button-1"
+        />
+        <MyMenuButton
+          style={{ position: "absolute", top: 50, right: 0 }}
+          id="button-2"
+        />
+        <MyMenuButton
+          style={{ position: "absolute", bottom: 0, left: 0 }}
+          id="button-3"
+        />
+        <MyMenuButton
+          style={{ position: "absolute", bottom: 0, right: 0 }}
+          id="button-4"
+        />
+      </div>
     </Fragment>
   );
 }
@@ -35,20 +41,6 @@ export const Comp = Example;
 export default { title: "MenuButton" };
 
 ////////////////////////////////////////////////////////////////////////////////
-
-const GlobalStyle = createGlobalStyle`
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-
-  #root {
-    position: relative;
-    height: 100%;
-  }
-`;
 
 function MyMenuButton({ ...props }) {
   return (
