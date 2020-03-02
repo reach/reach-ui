@@ -12,6 +12,7 @@ function Example() {
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
       <MenuList>
+        <input type="text" />
         <MenuItem onSelect={action("Download")}>Download</MenuItem>
         <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
         <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
