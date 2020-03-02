@@ -146,9 +146,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // update-only effect.
   useUpdateEffect(() => {
     if (!state.isOpen) {
-      window.requestAnimationFrame(() => {
-        focus(buttonRef.current);
-      });
+      focus(buttonRef.current);
     }
   }, [state.isOpen]);
 
@@ -315,10 +313,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     forwardedRef
   ) {
     let {
-      buttonRef,
       dispatch,
-      menuRef,
-      state: { isOpen, selectionIndex },
+      state: { selectionIndex },
     } = useMenuContext();
 
     let ownRef = useRef<HTMLElement | null>(null);
