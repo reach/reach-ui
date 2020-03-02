@@ -319,11 +319,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let ownRef = useRef<HTMLElement | null>(null);
 
-    /*
-     * After the ref is mounted to the DOM node, we check to see if we have an
-     * explicit valueText prop before looking for the node's textContent for
-     * typeahead functionality.
-     */
+    // After the ref is mounted to the DOM node, we check to see if we have an
+    // explicit valueText prop before looking for the node's textContent for
+    // typeahead functionality.
     let [valueText, setValueText] = useState(valueTextProp || "");
     let setValueTextFromDom = useCallback(
       node => {
@@ -368,11 +366,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     function handleDragStart(event: React.MouseEvent) {
-      /*
-       * Because we don't preventDefault on mousedown for links (we need the
-       * native click event), clicking and holding on a link triggers a dragstart
-       * which we don't want.
-       */
+      // Because we don't preventDefault on mousedown for links (we need the
+      // native click event), clicking and holding on a link triggers a dragstart
+      // which we don't want.
       if (isLink) {
         event.preventDefault();
       }
@@ -382,10 +378,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isRightClick(event.nativeEvent)) return;
 
       if (isLink) {
-        /*
-         * Signal that the mouse is down so we can react call the right function
-         * if the user is clicking on a link.
-         */
+        // Signal that the mouse is down so we can react call the right function
+        // if the user is clicking on a link.
         mouseEventStarted.current = true;
       } else {
         event.preventDefault();
@@ -549,24 +543,20 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
 
     useEffect(() => {
       if (selectionIndex > menuItems.length - 1) {
-        /*
-         * If for some reason our selection index is larger than our possible
-         * index range (let's say the last item is selected and the list
-         * dynamically updates), we need to select the last item in the list.
-         */
+        // If for some reason our selection index is larger than our possible
+        // index range (let's say the last item is selected and the list
+        // dynamically updates), we need to select the last item in the list.
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
           payload: { index: menuItems.length - 1 },
         });
       } else if (
-        /*
-         * Checks if
-         *  - menu length has changed
-         *  - selection index has not changed BUT selected item has changed
-         *
-         * This prevents any dynamic adding/removing of menu items from actually
-         * changing a user's expected selection.
-         */
+        // Checks if
+        //  - menu length has changed
+        //  - selection index has not changed BUT selected item has changed
+        //
+        // This prevents any dynamic adding/removing of menu items from actually
+        // changing a user's expected selection.
         prevMenuItemsLength !== menuItems.length &&
         selectionIndex > -1 &&
         prevSelected &&
