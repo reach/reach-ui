@@ -26,6 +26,7 @@ import React, {
   useMemo,
   useReducer,
   useState,
+  useCallback
 } from "react";
 import PropTypes from "prop-types";
 import {
@@ -441,7 +442,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = (value: ComboboxValue) => {
+    const handleValueChange = useCallback((value: ComboboxValue) => {
       if (value.trim() === "") {
         transition(CLEAR);
       } else if (
@@ -452,19 +453,21 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       } else {
         transition(CHANGE, { value });
       }
-    };
+    }, [initialControlledValue, transition]);
 
     // If they are controlling the value we still need to do our transitions, so
     // we have this derived state to emulate onChange of the input as we receive
     // new `value`s ...[*]
-    if (
-      isControlled &&
-      controlledValue !== value &&
-      // https://github.com/reach/reach-ui/issues/481
-      (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
-    ) {
-      handleValueChange(controlledValue!);
-    }
+    useEffect(()=>{
+      if (
+        isControlled &&
+        controlledValue !== value &&
+        // https://github.com/reach/reach-ui/issues/481
+        (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+      ) {
+        handleValueChange(controlledValue!);
+      }
+    }, [controlledValue, handleValueChange, isControlled, value])
 
     // [*]... and when controlled, we don't trigger handleValueChange as the user
     // types, instead the developer controls it with the normal input onChange
