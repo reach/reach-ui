@@ -1,4 +1,5 @@
 import React from "react";
+import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
@@ -9,12 +10,10 @@ export default function Basic() {
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
       <MenuList>
-        <MenuItem onSelect={() => console.log("Download")}>Download</MenuItem>
-        <MenuItem onSelect={() => console.log("Copy")}>Create a Copy</MenuItem>
-        <MenuItem onSelect={() => console.log("Mark as Draft")}>
-          Mark as Draft
-        </MenuItem>
-        <MenuItem onSelect={() => console.log("Delete")}>Delete</MenuItem>
+        <MenuItem onSelect={action("Download")}>Download</MenuItem>
+        <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
+        <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
+        <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
       </MenuList>
     </Menu>
   );

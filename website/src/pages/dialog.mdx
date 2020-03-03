@@ -397,7 +397,7 @@ function Example(props) {
         <DialogContent
           style={{
             border: "solid 5px hsla(0, 0%, 0%, 0.5)",
-            borderRadius: "10px"
+            borderRadius: "10px",
           }}
         >
           <p>I have a nice border now.</p>
@@ -461,14 +461,14 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 
 ```jsx
 // jsx-demo
+const AnimatedDialogOverlay = animated(DialogOverlay);
+const AnimatedDialogContent = animated(DialogContent);
 function Example(props) {
-  const AnimatedDialogOverlay = animated(DialogOverlay);
-  const AnimatedDialogContent = animated(DialogContent);
   const [showDialog, setShowDialog] = React.useState(false);
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
-    leave: { opacity: 0, y: 10 }
+    leave: { opacity: 0, y: 10 },
   });
   return (
     <div>
@@ -483,7 +483,7 @@ function Example(props) {
                     value => `translate3d(0px, ${value}px, 0px)`
                   ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
               >
                 <button onClick={() => setShowDialog(false)}>

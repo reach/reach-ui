@@ -29,6 +29,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantKeyDown,
 } from "@reach/descendants";
 import {
   checkStyles,
@@ -41,6 +42,7 @@ import {
   noop,
   useForkedRef,
   usePrevious,
+  useUpdateEffect,
   wrapEvent,
 } from "@reach/utils";
 
@@ -104,6 +106,11 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let [state, dispatch] = useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
+
+  // We use an event listener attached to the window to capture outside clicks
+  // that close the menu. We don't want the initial button click to trigger this
+  // when a menu is closed, so we can track this behavior in a ref for now.
+  // We shouldn't need this when we rewrite with state machine logic.
   let buttonClickedRef = useRef(false);
 
   let context: IMenuContext = {
@@ -115,6 +122,33 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     buttonClickedRef,
     state,
   };
+
+  // When the menu is open, focus is placed on the menu itself so that
+  // keyboard navigation is still possible.
+  useEffect(() => {
+    if (state.isOpen) {
+      // @ts-ignore
+      window.__REACH_DISABLE_TOOLTIPS = true;
+      window.requestAnimationFrame(() => {
+        focus(menuRef.current);
+      });
+    } else {
+      // We want to ignore the immediate focus of a tooltip so it doesn't pop
+      // up again when the menu closes, only pops up when focus returns again
+      // to the tooltip (like native OS tooltips).
+      // @ts-ignore
+      window.__REACH_DISABLE_TOOLTIPS = false;
+    }
+  }, [state.isOpen]);
+
+  // We want to focus the button by default when the menu moves from open to
+  // closed, but we don't want to focus the button on mount so we use an
+  // update-only effect.
+  useUpdateEffect(() => {
+    if (!state.isOpen) {
+      focus(buttonRef.current);
+    }
+  }, [state.isOpen]);
 
   useEffect(() => checkStyles("menu-button"), []);
 
@@ -279,19 +313,15 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     forwardedRef
   ) {
     let {
-      buttonRef,
       dispatch,
-      menuRef,
-      state: { isOpen, selectionIndex },
+      state: { selectionIndex },
     } = useMenuContext();
 
     let ownRef = useRef<HTMLElement | null>(null);
 
-    /*
-     * After the ref is mounted to the DOM node, we check to see if we have an
-     * explicit valueText prop before looking for the node's textContent for
-     * typeahead functionality.
-     */
+    // After the ref is mounted to the DOM node, we check to see if we have an
+    // explicit valueText prop before looking for the node's textContent for
+    // typeahead functionality.
     let [valueText, setValueText] = useState(valueTextProp || "");
     let setValueTextFromDom = useCallback(
       node => {
@@ -325,9 +355,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let isSelected = index === selectionIndex;
 
     function select() {
-      // Focus the button first by default when an item is selected. We fire the
-      // onSelect callback next so the app can manage focus if needed.
-      focus(buttonRef.current);
       onSelect && onSelect();
       dispatch({ type: CLICK_MENU_ITEM });
     }
@@ -339,11 +366,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     function handleDragStart(event: React.MouseEvent) {
-      /*
-       * Because we don't preventDefault on mousedown for links (we need the
-       * native click event), clicking and holding on a link triggers a dragstart
-       * which we don't want.
-       */
+      // Because we don't preventDefault on mousedown for links (we need the
+      // native click event), clicking and holding on a link triggers a dragstart
+      // which we don't want.
       if (isLink) {
         event.preventDefault();
       }
@@ -353,10 +378,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isRightClick(event.nativeEvent)) return;
 
       if (isLink) {
-        /*
-         * Signal that the mouse is down so we can react call the right function
-         * if the user is clicking on a link.
-         */
+        // Signal that the mouse is down so we can react call the right function
+        // if the user is clicking on a link.
         mouseEventStarted.current = true;
       } else {
         event.preventDefault();
@@ -405,24 +428,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       ownerDocument.addEventListener("mouseup", listener);
       return () => ownerDocument.removeEventListener("mouseup", listener);
     }, []);
-
-    // When the menu is open, focus is placed on the menu itself so that
-    // keyboard navigation is still possible.
-    useEffect(() => {
-      if (isOpen) {
-        // @ts-ignore
-        window.__REACH_DISABLE_TOOLTIPS = true;
-        window.requestAnimationFrame(() => {
-          focus(menuRef.current);
-        });
-      } else {
-        // We want to ignore the immediate focus of a tooltip so it doesn't pop
-        // up again when the menu closes, only pops up when focus returns again
-        // to the tooltip (like native OS tooltips).
-        // @ts-ignore
-        window.__REACH_DISABLE_TOOLTIPS = false;
-      }
-    }, [isOpen, menuRef]);
 
     return (
       <Comp
@@ -504,7 +509,7 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems
  */
 export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
-  function MenuItems({ children, onKeyDown, ...props }, forwardedRef) {
+  function MenuItems({ children, id, onKeyDown, ...props }, forwardedRef) {
     const {
       menuId,
       dispatch,
@@ -538,24 +543,20 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
 
     useEffect(() => {
       if (selectionIndex > menuItems.length - 1) {
-        /*
-         * If for some reason our selection index is larger than our possible
-         * index range (let's say the last item is selected and the list
-         * dynamically updates), we need to select the last item in the list.
-         */
+        // If for some reason our selection index is larger than our possible
+        // index range (let's say the last item is selected and the list
+        // dynamically updates), we need to select the last item in the list.
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
           payload: { index: menuItems.length - 1 },
         });
       } else if (
-        /*
-         * Checks if
-         *  - menu length has changed
-         *  - selection index has not changed BUT selected item has changed
-         *
-         * This prevents any dynamic adding/removing of menu items from actually
-         * changing a user's expected selection.
-         */
+        // Checks if
+        //  - menu length has changed
+        //  - selection index has not changed BUT selected item has changed
+        //
+        // This prevents any dynamic adding/removing of menu items from actually
+        // changing a user's expected selection.
         prevMenuItemsLength !== menuItems.length &&
         selectionIndex > -1 &&
         prevSelected &&
@@ -578,87 +579,70 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       selectionIndex,
     ]);
 
-    function handleKeyDown(event: React.KeyboardEvent) {
-      const { key } = event;
+    let handleKeyDown = wrapEvent(
+      function handleKeyDown(event: React.KeyboardEvent) {
+        let { key } = event;
 
-      if (!isOpen) {
-        return;
-      }
+        if (!isOpen) {
+          return;
+        }
 
-      switch (key) {
-        case "Enter":
-        case " ":
-          let selected = menuItems.find(item => item.index === selectionIndex);
-          // For links, the Enter key will trigger a click by default, but for
-          // consistent behavior across menu items we'll trigger a click when
-          // the spacebar is pressed.
-          if (selected) {
-            if (selected.isLink && selected.element) {
-              selected.element.click();
-            } else {
-              event.preventDefault();
-              // Focus the button first by default when an item is selected. We
-              // fire the onSelect callback next so the app can manage focus if
-              // needed.
-              focus(buttonRef.current);
-              selected.onSelect && selected.onSelect();
-              dispatch({ type: CLICK_MENU_ITEM });
+        switch (key) {
+          case "Enter":
+          case " ":
+            let selected = menuItems.find(
+              item => item.index === selectionIndex
+            );
+            // For links, the Enter key will trigger a click by default, but for
+            // consistent behavior across menu items we'll trigger a click when
+            // the spacebar is pressed.
+            if (selected) {
+              if (selected.isLink && selected.element) {
+                selected.element.click();
+              } else {
+                event.preventDefault();
+                // Focus the button first by default when an item is selected. We
+                // fire the onSelect callback next so the app can manage focus if
+                // needed.
+                focus(buttonRef.current);
+                selected.onSelect && selected.onSelect();
+                dispatch({ type: CLICK_MENU_ITEM });
+              }
             }
-          }
-          break;
-        case "Escape":
-          dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
-          break;
-        case "Home":
-          // prevent window scroll
-          event.preventDefault();
-          dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index: 0 } });
-          break;
-        case "End":
-          // prevent window scroll
-          event.preventDefault();
+            break;
+          case "Escape":
+            dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+            break;
+          case "Tab":
+            // prevent leaving
+            event.preventDefault();
+            break;
+          default:
+            // Check if a user is typing some char keys and respond by setting the
+            // query state.
+            if (isString(key) && key.length === 1) {
+              const query = typeaheadQuery + key.toLowerCase();
+              dispatch({
+                type: SEARCH_FOR_ITEM,
+                payload: query,
+              });
+            }
+            break;
+        }
+      },
+      useDescendantKeyDown(MenuDescendantContext, {
+        currentIndex: selectionIndex,
+        orientation: "vertical",
+        rotate: false,
+        callback: (index: number) => {
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
-            payload: { index: menuItems.length - 1 },
+            payload: { index },
           });
-          break;
-        case "ArrowDown":
-          // prevent window scroll
-          event.preventDefault();
-          const nextIndex = Math.min(selectionIndex + 1, menuItems.length - 1);
-          dispatch({
-            type: SELECT_ITEM_AT_INDEX,
-            payload: { index: nextIndex },
-          });
-          break;
-        case "ArrowUp":
-          // prevent window scroll
-          event.preventDefault();
-          const prevIndex = Math.max(selectionIndex - 1, 0);
-          dispatch({
-            type: SELECT_ITEM_AT_INDEX,
-            payload: { index: prevIndex },
-          });
-          break;
-        case "Tab":
-          // prevent leaving
-          event.preventDefault();
-          break;
-        default:
-          /*
-           * Check if a user is typing some char keys and respond by setting the
-           * query state.
-           */
-          if (isString(key) && key.length === 1) {
-            const query = typeaheadQuery + key.toLowerCase();
-            dispatch({
-              type: SEARCH_FOR_ITEM,
-              payload: query,
-            });
-          }
-          break;
-      }
-    }
+        },
+        key: "index",
+      })
+    );
 
     return (
       // TODO: Should probably file a but in jsx-a11y, but this is correct
@@ -947,11 +931,6 @@ function reducer(
         selectionIndex: -1,
       };
     case CLOSE_MENU:
-      // This will make it tricky for apps to manage focus, but if we don't rAF
-      // the focus call we get the unstable_flushDiscreteUpdates error
-      requestAnimationFrame(() => {
-        focus(action.payload.buttonRef.current);
-      });
       return {
         ...state,
         isOpen: false,
