@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VisuallyHidden from "@reach/visually-hidden";
 import {
   Listbox,
   ListboxGroup,
@@ -21,37 +22,46 @@ function Example() {
   let [value, setValue] = useState("default");
   let taco = <span aria-hidden>🌮</span>;
   return (
-    <Listbox value={value} onChange={value => setValue(value)}>
-      <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
-      <hr />
-      <ListboxGroup>
-        <GroupLabel icon="🍖">Meat</GroupLabel>
-        <ListboxOption value="asada" label="Carne Asada">
-          {taco} Carne Asada
+    <div>
+      <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
+      <Listbox
+        aria-labelledby="taco-label"
+        value={value}
+        onChange={value => setValue(value)}
+      >
+        <ListboxOption value="default" label="Choose a taco">
+          {taco} Choose a taco
         </ListboxOption>
-        <ListboxOption value="pollo" label="Pollo">
-          {taco} Pollo
-        </ListboxOption>
-        <ListboxOption value="pastor" label="Pastor">
-          {taco} Pastor
-        </ListboxOption>
-        <ListboxOption value="lengua" label="Lengua">
-          {taco} Lengua
-        </ListboxOption>
-      </ListboxGroup>
-      <ListboxGroup>
-        <GroupLabel icon="🥕">Veggie</GroupLabel>
-        <ListboxOption value="hibiscus" label="Hibiscus">
-          {taco} Hibiscus
-        </ListboxOption>
-        <ListboxOption value="portobello" label="Portobello">
-          {taco} Portobello
-        </ListboxOption>
-        <ListboxOption value="fajita" label="Fajita">
-          {taco} Fajita
-        </ListboxOption>
-      </ListboxGroup>
-    </Listbox>
+        <hr />
+        <ListboxGroup>
+          <GroupLabel icon="🍖">Meat</GroupLabel>
+          <ListboxOption value="asada" label="Carne Asada">
+            {taco} Carne Asada
+          </ListboxOption>
+          <ListboxOption value="pollo" label="Pollo">
+            {taco} Pollo
+          </ListboxOption>
+          <ListboxOption value="pastor" label="Pastor">
+            {taco} Pastor
+          </ListboxOption>
+          <ListboxOption value="lengua" label="Lengua">
+            {taco} Lengua
+          </ListboxOption>
+        </ListboxGroup>
+        <ListboxGroup>
+          <GroupLabel icon="🥕">Veggie</GroupLabel>
+          <ListboxOption value="hibiscus" label="Hibiscus">
+            {taco} Hibiscus
+          </ListboxOption>
+          <ListboxOption value="portobello" label="Portobello">
+            {taco} Portobello
+          </ListboxOption>
+          <ListboxOption value="fajita" label="Fajita">
+            {taco} Fajita
+          </ListboxOption>
+        </ListboxGroup>
+      </Listbox>
+    </div>
   );
 }
 

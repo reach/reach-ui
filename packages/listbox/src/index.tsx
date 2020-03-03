@@ -169,8 +169,6 @@ export const ListboxInput = forwardRef<
 
   let ref = useForkedRef(input, forwardedRef);
 
-  let expanded = isExpanded(current.value as ListboxStates);
-
   // If the button has children, we just render them as the label.
   // Otherwise we'll find the option with a value that matches the listbox value
   // and use its label in the button. We'll get that here and send it to the
@@ -188,7 +186,6 @@ export const ListboxInput = forwardRef<
   let context: ListboxContextValue = useMemo(() => {
     return {
       disabled,
-      expanded,
       ids: {
         label: ariaLabelledBy,
         input: id,
@@ -199,6 +196,7 @@ export const ListboxInput = forwardRef<
       listboxValueLabel: valueLabel,
       mouseEventStartedRef,
       mouseMovedRef,
+      // TODO: Should we memoize onChange?
       onValueChange: onChange,
       refs: {
         input,
@@ -209,24 +207,7 @@ export const ListboxInput = forwardRef<
       send,
       state: current,
     };
-  }, [
-    ariaLabelledBy,
-    current,
-    disabled,
-    expanded,
-    id,
-    onChange,
-    send,
-    valueLabel,
-  ]);
-
-  // These props are forwarded to a hidden select field
-  let hiddenInputProps = {
-    disabled,
-    form,
-    name,
-    required,
-  };
+  }, [ariaLabelledBy, current, disabled, id, onChange, send, valueLabel]);
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
@@ -291,7 +272,6 @@ export const ListboxInput = forwardRef<
           {...props}
           ref={ref}
           data-reach-listbox-input=""
-          data-expanded={expanded ? "" : undefined}
           data-state={stateToAttributeString(current.value)}
           data-value={current.context.value}
           id={id}
@@ -303,8 +283,13 @@ export const ListboxInput = forwardRef<
               })
             : children}
         </div>
-        {Object.values(hiddenInputProps).some(val => val) && (
-          <ListboxHiddenInput {...hiddenInputProps} />
+        {(disabled || form || name || required) && (
+          <ListboxHiddenInput
+            disabled={disabled}
+            form={form}
+            name={name}
+            required={required}
+          />
         )}
       </ListboxContext.Provider>
     </DescendantProvider>
@@ -477,7 +462,6 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   ) {
     let {
       ids: { button: buttonId, label: labelId, listbox: listboxId },
-      expanded,
       mouseEventStartedRef,
       refs: { button: buttonRef },
       state,
@@ -507,6 +491,8 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
       }
       mouseEventStartedRef.current = false;
     }
+
+    let expanded = isExpanded(state.value as ListboxStates);
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -581,7 +567,10 @@ export type ListboxButtonProps = {
  */
 export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
   function ListboxArrow({ children, ...props }, forwardedRef) {
-    let { expanded } = useListboxContext();
+    let {
+      state: { value: state },
+    } = useListboxContext();
+    let expanded = isExpanded(state as ListboxStates);
     let defaultArrow = expanded ? "▲" : "▼";
     return (
       <span
@@ -629,12 +618,11 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     forwardedRef
   ) {
     let {
-      expanded,
       refs: { popover: popoverRef, button: buttonRef },
       send,
+      state: { value: state },
     } = useListboxContext();
     let ref = useForkedRef(popoverRef, forwardedRef);
-    let hidden = !expanded;
 
     let handleKeyDown = useKeyDown();
 
@@ -642,7 +630,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
       ...props,
       ref,
       "data-reach-listbox-popover": "",
-      hidden,
+      hidden: !isExpanded(state as ListboxStates),
       onBlur: wrapEvent(onBlur, handleBlur),
       onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
       tabIndex: -1,
@@ -1119,7 +1107,6 @@ export type ListboxDescendant = Descendant<HTMLElement, ListboxDescendantProps>;
 export interface ListboxContextValue {
   refs: MachineToReactRefMap<ListboxEvent>;
   disabled: boolean;
-  expanded: boolean;
   ids: {
     label: string | undefined;
     button: string;

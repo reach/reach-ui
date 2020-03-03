@@ -1,5 +1,6 @@
 import React, { StrictMode } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
+import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import "@reach/listbox/styles.css";
 
@@ -10,7 +11,12 @@ type Option = { value: string; label: string };
 function Example() {
   return (
     <StrictMode>
-      <Listbox defaultValue="asada" onChange={action("value changed")}>
+      <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
+      <Listbox
+        aria-labelledby="taco-label"
+        defaultValue="asada"
+        onChange={action("value changed")}
+      >
         <ListboxOption value="default">
           Choose a taco <Taco />
         </ListboxOption>

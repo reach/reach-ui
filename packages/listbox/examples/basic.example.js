@@ -1,5 +1,6 @@
 import React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
+import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import "@reach/listbox/styles.css";
 
@@ -7,26 +8,33 @@ let name = "Basic";
 
 function Example() {
   return (
-    <Listbox defaultValue="asada" onChange={action("value changed")}>
-      <ListboxOption value="default">
-        Choose a taco <Taco />
-      </ListboxOption>
-      <hr />
-      <ListboxOption value="asada">
-        Carne Asada <Taco />
-      </ListboxOption>
-      <ListboxOption value="pollo" disabled>
-        Pollo <Taco /> <Tag>Sold Out!</Tag>
-      </ListboxOption>
-      <div style={{ background: "#ccc" }}>
-        <ListboxOption value="pastor">
-          Pastor <Taco /> <Tag>Fan favorite!</Tag>
+    <div>
+      <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
+      <Listbox
+        aria-labelledby="taco-label"
+        defaultValue="asada"
+        onChange={action("value changed")}
+      >
+        <ListboxOption value="default">
+          Choose a taco <Taco />
         </ListboxOption>
-      </div>
-      <ListboxOption value="lengua">
-        Lengua <Taco />
-      </ListboxOption>
-    </Listbox>
+        <hr />
+        <ListboxOption value="asada">
+          Carne Asada <Taco />
+        </ListboxOption>
+        <ListboxOption value="pollo" disabled>
+          Pollo <Taco /> <Tag>Sold Out!</Tag>
+        </ListboxOption>
+        <div style={{ background: "#ccc" }}>
+          <ListboxOption value="pastor">
+            Pastor <Taco /> <Tag>Fan favorite!</Tag>
+          </ListboxOption>
+        </div>
+        <ListboxOption value="lengua">
+          Lengua <Taco />
+        </ListboxOption>
+      </Listbox>
+    </div>
   );
 }
 

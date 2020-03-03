@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VisuallyHidden from "@reach/visually-hidden";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
 import "@reach/listbox/styles.css";
@@ -8,7 +9,6 @@ let name = "With nested tabbables";
 type Option = { value: string; label: string };
 
 function Example() {
-  let actionHandler = action("Value Change");
   let [value, setValue] = useState("default");
   let [newOption, setNewOption] = useState("");
   let [newOptions, setNewOptions] = useState<Option[]>([]);
@@ -31,14 +31,18 @@ function Example() {
 
   return (
     <div>
+      <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
       <Listbox
+        aria-labelledby="taco-label"
         value={value}
         onChange={value => {
           setValue(value);
-          actionHandler(value);
+          action("Value Change")(value);
         }}
       >
-        <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
+        <ListboxOption value="default" label="Choose a taco">
+          {taco} Choose a taco
+        </ListboxOption>
         <hr />
 
         <form onSubmit={handleSubmit}>
