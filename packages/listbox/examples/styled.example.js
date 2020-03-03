@@ -25,8 +25,10 @@ function Example() {
         </StyledButton>
         <ListboxPopover>
           <UserList>
-            {users.map(user => {
-              return <UserOption key={user.userName} {...user} />;
+            {Object.entries(users).map(([userName, user]) => {
+              return (
+                <UserOption key={userName} userName={userName} {...user} />
+              );
             })}
           </UserList>
         </ListboxPopover>
@@ -55,33 +57,28 @@ Example.story = { name };
 export const Comp = Example;
 export default { title: "Listbox" };
 
-let users = [
-  {
-    userName: "bradwestfall",
+let users = {
+  bradwestfall: {
     displayName: "Brad Westfall",
     avatar: "https://avatars3.githubusercontent.com/u/2272118?s=56&v=4",
   },
-  {
-    userName: "cassidoo",
+  cassidoo: {
     displayName: "Cassidy Williams",
     avatar: "https://avatars1.githubusercontent.com/u/1454517?s=56&v=4",
   },
-  {
-    userName: "chancestrickland",
+  chancestrickland: {
     displayName: "Chance Strickland",
     avatar: "https://avatars2.githubusercontent.com/u/3082153?s=56&v=4",
   },
-  {
-    userName: "mjackson",
+  mjackson: {
     displayName: "Michael Jackson",
     avatar: "https://avatars2.githubusercontent.com/u/92839?s=56&v=4",
   },
-  {
-    userName: "ryanflorence",
+  ryanflorence: {
     displayName: "Ryan Florence",
     avatar: "https://avatars1.githubusercontent.com/u/100200?s=56&v=4",
   },
-];
+};
 
 function UserList(props) {
   return <StyledList {...props} />;
