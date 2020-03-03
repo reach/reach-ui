@@ -1,4 +1,4 @@
-import React, { useState, StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
 import "@reach/listbox/styles.css";
@@ -8,87 +8,58 @@ let name = "Basic (Strict Mode)";
 type Option = { value: string; label: string };
 
 function Example() {
-  let actionHandler = action("Value Change");
-  let [value, setValue] = useState("default");
-  let [newOption, setNewOption] = useState("");
-  let [newOptions, setNewOptions] = useState<Option[]>([]);
-  let taco = <span aria-hidden>🌮</span>;
-
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    if (!newOption.trim()) {
-      return;
-    }
-    setNewOptions([
-      ...newOptions,
-      {
-        value: newOption.toLowerCase().replace(" ", ""),
-        label: cleanString(newOption),
-      },
-    ]);
-    setNewOption("");
-  }
-
   return (
     <StrictMode>
-      <Listbox
-        value={value}
-        onChange={value => {
-          setValue(value);
-          actionHandler(value);
-        }}
-      >
-        <ListboxOption value="default">{taco} Choose a taco</ListboxOption>
+      <Listbox defaultValue="asada" onChange={action("value changed")}>
+        <ListboxOption value="default">
+          Choose a taco <Taco />
+        </ListboxOption>
         <hr />
-
-        <form onSubmit={handleSubmit}>
-          <label>
-            <span>Add another option</span>
-            <input
-              type="text"
-              value={newOption}
-              onChange={event => setNewOption(event.target.value)}
-            />
-          </label>
-          <button type="submit">Add it!</button>
-        </form>
-        <hr />
-        <ListboxOption value="asada" label="Carne Asada">
-          {taco} Carne Asada
+        <ListboxOption value="asada">
+          Carne Asada <Taco />
         </ListboxOption>
-        <ListboxOption value="pollo" label="Pollo">
-          {taco} Pollo
+        <ListboxOption value="pollo" disabled>
+          Pollo <Taco /> <Tag>Sold Out!</Tag>
         </ListboxOption>
-        <ListboxOption value="pastor" label="Pastor">
-          {taco} Pastor
-        </ListboxOption>
-        <ListboxOption value="lengua" label="Lengua">
-          {taco} Lengua
-        </ListboxOption>
-        {newOptions.map(option => (
-          <ListboxOption
-            key={option.value}
-            value={option.value}
-            label={option.label}
-          >
-            {taco} {option.label}
+        <div style={{ background: "#ccc" }}>
+          <ListboxOption value="pastor">
+            Pastor <Taco /> <Tag>Fan favorite!</Tag>
           </ListboxOption>
-        ))}
+        </div>
+        <ListboxOption value="lengua">
+          Lengua <Taco />
+        </ListboxOption>
       </Listbox>
     </StrictMode>
   );
 }
 
-function cleanString(string: string) {
-  return string
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase()
-    .split(" ")
-    .map(word => {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(" ");
+function Taco() {
+  return (
+    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
+      🌮
+    </span>
+  );
+}
+
+function Tag(props: any) {
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        lineHeight: 1,
+        fontSize: 11,
+        textTransform: "uppercase",
+        fontWeight: "bolder",
+        marginLeft: 6,
+        padding: 4,
+        background: "crimson",
+        borderRadius: 2,
+        color: "#fff",
+      }}
+      {...props}
+    />
+  );
 }
 
 Example.story = { name };
