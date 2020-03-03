@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Descendant } from "@reach/descendants";
-import { assign, interpret, StateMachine } from "@reach/machine";
-import { DistributiveOmit, useConstant, getOwnerDocument } from "@reach/utils";
 import {
-  ListboxDescendantProps,
-  ListboxEvent,
-  ListboxState,
-  ListboxStateData,
-  ListboxValue,
+  assign,
+  interpret,
   MachineEventWithRefs,
   MachineToReactRefMap,
-} from "./types";
+  StateMachine,
+} from "@reach/machine";
+import { DistributiveOmit, getOwnerDocument, useConstant } from "@reach/utils";
+import {
+  ListboxDescendant,
+  ListboxDescendantProps,
+  ListboxValue,
+} from "./index";
 
 let __DEBUG__ = true;
 
@@ -609,9 +611,126 @@ function findOptionFromTypeahead(
   return found || null;
 }
 
-// function getNavigationNodeFromValue(data: ListboxStateData, value: any) {
-//   return data.options.find(option => value === option.value)?.element;
-// }
-
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+/**
+ * Shared partial interface for all of our event objects.
+ */
+export interface ListboxEventBase extends MachineEventWithRefs {
+  refs: ListboxNodeRefs;
+}
+
+/**
+ * DOM nodes for all of the refs used in the listbox state machine.
+ */
+export type ListboxNodeRefs = {
+  button: HTMLElement | null;
+  input: HTMLElement | null;
+  list: HTMLElement | null;
+  popover: HTMLElement | null;
+};
+
+/**
+ * Event object for the checkbox state machine.
+ */
+export type ListboxEvent = ListboxEventBase &
+  (
+    | {
+        type: ListboxEvents.Blur;
+        relatedTarget: EventTarget | null;
+      }
+    | {
+        type: ListboxEvents.OutsideMouseDown;
+        relatedTarget: EventTarget | null;
+      }
+    | {
+        type: ListboxEvents.GetDerivedData;
+        data: Omit<Partial<ListboxStateData>, "refs"> & {
+          refs?: Partial<ListboxStateData["refs"]>;
+        };
+      }
+    | {
+        type: ListboxEvents.ButtonMouseDown;
+      }
+    | {
+        type: ListboxEvents.ButtonMouseUp;
+      }
+    | {
+        type: ListboxEvents.ClearNavSelection;
+      }
+    | {
+        type: ListboxEvents.Navigate;
+        value: ListboxValue;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.ValueChange;
+        value: ListboxValue;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+      }
+    | {
+        type: ListboxEvents.KeyDownNavigate;
+        value: ListboxValue | null;
+        shouldManageFocus?: boolean;
+        resetManagedFocus?(): void;
+      }
+    | {
+        type: ListboxEvents.KeyDownSearch;
+        query: string;
+      }
+    | {
+        type: ListboxEvents.KeyDownEscape;
+      }
+    | {
+        type: ListboxEvents.KeyDownEnter;
+        value?: ListboxValue | null | undefined;
+        disabled?: boolean;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+      }
+    | {
+        type: ListboxEvents.KeyDownSpace;
+        value?: ListboxValue | null | undefined;
+        disabled?: boolean;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+      }
+    | {
+        type: ListboxEvents.OptionStartClick;
+      }
+    | {
+        type: ListboxEvents.OptionFinishClick;
+        value: ListboxValue | null | undefined;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.KeyDownTab;
+      }
+    | {
+        type: ListboxEvents.KeyDownShiftTab;
+      }
+    | {
+        type: ListboxEvents.UpdateAfterTypeahead;
+        query: string;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+      }
+    | {
+        type: ListboxEvents.ClearTypeahead;
+      }
+  );
+
+/**
+ * State object for the checkbox state machine.
+ */
+export type ListboxState = {
+  value: ListboxStates;
+  context: ListboxStateData;
+};
+
+export type ListboxStateData = {
+  navigationValue: ListboxValue | null;
+  refs: ListboxNodeRefs;
+  typeaheadQuery: string | null;
+  value: ListboxValue | null;
+  options: ListboxDescendant[];
+};

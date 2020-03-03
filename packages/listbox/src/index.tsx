@@ -1,42 +1,10 @@
 /**
  * Welcome to @reach/listbox!
  *
- * A few notes:
+ * See NOTES.md for some background info if you're interested!
  *
- * Listbox has turned out to be a real test for us in many ways. Primarily, it
- * challenges our desire for maximum composability, a key goal for all of the
- * Reach UI components. A listbox select component essentially consists of:
- *
- *  - A button the user clicks when a listbox is closed
- *  - A list of options in a popover that is displayed after a user clicks
- *
- * This sounds a lot like MenuButton from a UI perspective, but two key
- * differences:
- *
- *  - ListboxOption holds a value, whereas a MenuItem does not
- *  - The ListboxButton rendered result depends on the currently selected
- *    ListboxOption
- *
- * This last point is the kicker! In order for the ListboxButton to know what's
- * going on the the ListboxList, we need to update state in context and store it
- * at the top of the tree. This means we can't show the ListboxButton's inner
- * content on the first render, which means we can't render ListboxButton on
- * the server ... UNLESS the component state is controlled in the app.
- *
- * So in most Reach components, we offer the user the ability to choose between
- * uncontrolled or controlled state. For an uncontrolled component, all you'd
- * have to do is compose the parts and everything just works. AWESOME.
- *
- * We still offer that choice for Listbox, but the concession here is that if
- * you are server rendering your component you may get a server/client mismatch.
- * For this reason, if you are server rendering we always recommend using
- * controlled state for your listbox and explicitly tell the button what to
- * render at the top of the tree.
- *
- * TODO:
- *   - Test in a form
- *   - Finish prop types
- *   - Figure out why nav selection isn't working with button clicks
+ * TODO: Test in a form
+ * TODO: Finish prop types
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
@@ -55,9 +23,10 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import Popover, { positionMatchWidth } from "@reach/popover";
+import Popover, { PopoverProps, positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -66,6 +35,7 @@ import {
 import {
   checkStyles,
   createNamedContext,
+  DistributiveOmit,
   forwardRefWithAs,
   isBoolean,
   isFunction,
@@ -76,49 +46,30 @@ import {
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
-  useStateLogger,
   wrapEvent,
 } from "@reach/utils";
-import { useMachine, useMachineLogger, useCreateMachine } from "@reach/machine";
+import {
+  MachineToReactRefMap,
+  StateMachine,
+  useCreateMachine,
+  useMachine,
+  useMachineLogger,
+} from "@reach/machine";
 import {
   createMachineDefinition,
   ListboxEvents,
   ListboxStates,
+  ListboxNodeRefs,
+  ListboxStateData,
+  ListboxEvent,
+  ListboxState,
 } from "./machine";
-import {
-  ListboxArrowProps,
-  ListboxButtonProps,
-  ListboxContextValue,
-  ListboxDescendantProps,
-  ListboxGroupContextValue,
-  ListboxGroupLabelProps,
-  ListboxGroupProps,
-  ListboxInputProps,
-  ListboxListProps,
-  ListboxOptionProps,
-  ListboxPopoverProps,
-  ListboxProps,
-  ListboxValue,
-  ListobxButtonRef,
-  ListobxInputRef,
-  ListobxListRef,
-  ListobxOptionRef,
-  ListobxPopoverRef,
-} from "./types";
 
-let DEBUG = __DEV__
+const DEBUG = __DEV__
   ? // set here if we want to debug during development
     false
   : // leave this alone!
     false;
-
-const expandedStates = [
-  ListboxStates.Navigating,
-  ListboxStates.NavigatingWithKeys,
-  ListboxStates.Interacting,
-  ListboxStates.Searching,
-];
-const isExpanded = (state: ListboxStates) => expandedStates.includes(state);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext
@@ -144,6 +95,8 @@ const useListboxGroupContext = () => useContext(ListboxGroupContext);
 /**
  * ListboxInput
  *
+ * The top-level component and context provider for the listbox.
+ *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput
  */
 export const ListboxInput = forwardRef<
@@ -151,9 +104,10 @@ export const ListboxInput = forwardRef<
   ListboxInputProps & { _componentName?: string }
 >(function ListboxInput(
   {
+    "aria-labelledby": ariaLabelledBy,
     children,
     defaultValue,
-    disabled,
+    disabled = false,
     form,
     name,
     onChange,
@@ -166,7 +120,6 @@ export const ListboxInput = forwardRef<
   },
   forwardedRef
 ) {
-  let mounted = useRef(false);
   let { current: isControlled } = useRef(valueProp != null);
   let [options, setOptions] = useDescendants<
     HTMLElement,
@@ -189,23 +142,23 @@ export const ListboxInput = forwardRef<
   // conditionally send events based on this value. Old habits die hard 🙃
   let mouseEventStartedRef = useRef(false);
 
-  let inputRef: ListobxInputRef = useRef(null);
-  let buttonRef: ListobxButtonRef = useRef(null);
-  let popoverRef: ListobxPopoverRef = useRef(null);
-  let listRef: ListobxListRef = useRef(null);
+  // DOM refs
+  let input = useRef<ListboxNodeRefs["input"]>(null);
+  let button = useRef<ListboxNodeRefs["button"]>(null);
+  let popover = useRef<ListboxNodeRefs["popover"]>(null);
+  let list = useRef<ListboxNodeRefs["list"]>(null);
 
   let machine = useCreateMachine(
     createMachineDefinition({
       value: (isControlled ? valueProp! : defaultValue) || null,
     })
   );
-
   let [current, send] = useMachineLogger(
     useMachine(machine, {
-      input: inputRef,
-      button: buttonRef,
-      popover: popoverRef,
-      list: listRef,
+      input,
+      button,
+      popover,
+      list,
     }),
     DEBUG
   );
@@ -213,10 +166,8 @@ export const ListboxInput = forwardRef<
   // IDs for aria attributes
   let _id = useId(props.id);
   let id = props.id || makeId("listbox-input", _id);
-  let listboxId = makeId("listbox", id);
-  let buttonId = makeId("button", id);
 
-  let ref = useForkedRef(inputRef, forwardedRef);
+  let ref = useForkedRef(input, forwardedRef);
 
   let expanded = isExpanded(current.value as ListboxStates);
 
@@ -236,30 +187,34 @@ export const ListboxInput = forwardRef<
 
   let context: ListboxContextValue = useMemo(() => {
     return {
-      buttonId,
-      buttonRef,
-      disabled: !!disabled,
-      inputRef,
-      instanceId: id,
+      disabled,
       expanded,
-      listboxId,
+      ids: {
+        label: ariaLabelledBy,
+        input: id,
+        listbox: makeId("listbox", id),
+        button: makeId("button", id),
+      },
       listboxValue: current.context.value,
       listboxValueLabel: valueLabel,
-      listRef,
       mouseEventStartedRef,
       mouseMovedRef,
       onValueChange: onChange,
-      popoverRef,
+      refs: {
+        input,
+        button,
+        popover,
+        list,
+      },
       send,
       state: current,
     };
   }, [
-    buttonId,
+    ariaLabelledBy,
     current,
     disabled,
     expanded,
     id,
-    listboxId,
     onChange,
     send,
     valueLabel,
@@ -281,6 +236,7 @@ export const ListboxInput = forwardRef<
   //   A) we only ever need to do this once, so we can guard with a mounted ref
   //   B) useLayoutEffect races useDecendant, so we might not have options yet
   //   C) useEffect will cause a flash
+  let mounted = useRef(false);
   if (!isControlled && !defaultValue && !mounted.current && options.length) {
     mounted.current = true;
     let first = options.find(option => !option.disabled);
@@ -322,7 +278,6 @@ export const ListboxInput = forwardRef<
     };
   }, [send]);
 
-  useStateLogger(current.value, DEBUG);
   useEffect(() => checkStyles("listbox"), []);
 
   return (
@@ -339,6 +294,7 @@ export const ListboxInput = forwardRef<
           data-expanded={expanded ? "" : undefined}
           data-state={stateToAttributeString(current.value)}
           data-value={current.context.value}
+          id={id}
         >
           {isFunction(children)
             ? children({
@@ -360,11 +316,11 @@ if (__DEV__) {
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
-    // TODO: Consider autoComplete support if possible
-    // TODO: Consider autoFocus prop implementation, if possible
+    // TODO: Consider autoComplete support if possible (needs reseach)
+    // TODO: Consider autoFocus prop implementation, if possible (needs reseach)
     // Not sure how this would work without some sort of App-wrapper provider
     // that manages focus. Inputs get this out of the box, div's do not.
-    // autoFocus: PropTypes.bool,
+
     form: PropTypes.string,
     name: PropTypes.string,
     required: PropTypes.bool,
@@ -372,7 +328,52 @@ if (__DEV__) {
   };
 }
 
-export { ListboxInputProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-props
+ */
+export type ListboxInputProps = Omit<
+  React.HTMLProps<HTMLDivElement>,
+  // WHY ARE THESE A THING ON A DIV, UGH
+  "autoComplete" | "autoFocus" | "form" | "name" | "onChange" | "defaultValue"
+> &
+  Pick<
+    React.SelectHTMLAttributes<HTMLSelectElement>,
+    "autoComplete" | "autoFocus" | "form" | "name" | "required"
+  > & {
+    /**
+     * The composed listbox expects to receive `ListboxButton` and
+     * `ListboxPopover` as children. You can also pass in arbitrary wrapper
+     * elements if desired.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-children
+     */
+    children:
+      | React.ReactNode
+      | ((props: {
+          value: ListboxValue | null;
+          valueLabel: string | null;
+        }) => React.ReactNode);
+    /**
+     * The callback that fires when the listbox value changes.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-onchange
+     * @param newValue
+     */
+    onChange?(newValue: ListboxValue): void;
+    /**
+     * The current value of the listbox.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-value
+     */
+    value?: ListboxValue;
+    /**
+     * The default value of an uncontrolled listbox.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
+     */
+    defaultValue?: ListboxValue;
+    // TODO: Maybe? multiple: boolean
+  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -442,7 +443,18 @@ if (__DEV__) {
   };
 }
 
-export { ListboxProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-props
+ */
+export type ListboxProps = ListboxInputProps & {
+  arrow?: React.ReactNode | boolean;
+  button?:
+    | React.ReactNode
+    | ((props: {
+        value: ListboxValue | null;
+        label: string | null;
+      }) => React.ReactNode);
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -464,11 +476,10 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     forwardedRef
   ) {
     let {
-      buttonId,
-      buttonRef,
+      ids: { button: buttonId, label: labelId, listbox: listboxId },
       expanded,
-      listboxId,
       mouseEventStartedRef,
+      refs: { button: buttonRef },
       state,
       send,
       listboxValueLabel,
@@ -519,7 +530,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         aria-controls={listboxId}
         aria-expanded={expanded}
         aria-haspopup="listbox"
-        aria-labelledby={`${buttonId} ${listboxId}`}
+        aria-labelledby={[labelId, buttonId].filter(Boolean).join(" ")}
         role="button"
         {...props}
         ref={ref}
@@ -547,7 +558,19 @@ if (__DEV__) {
   };
 }
 
-export { ListboxButtonProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
+ */
+export type ListboxButtonProps = {
+  arrow?: React.ReactNode | boolean;
+  children?:
+    | React.ReactNode
+    | ((props: {
+        value: ListboxValue | null;
+        label: string;
+        isExpanded: boolean;
+      }) => React.ReactNode);
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -580,7 +603,14 @@ if (__DEV__) {
   ListboxArrow.propTypes = {};
 }
 
-export { ListboxArrowProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow-props
+ */
+export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
+  children?:
+    | React.ReactNode
+    | ((props: { isExpanded: boolean }) => React.ReactNode);
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -598,7 +628,11 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let { expanded, popoverRef, buttonRef, send } = useListboxContext();
+    let {
+      expanded,
+      refs: { popover: popoverRef, button: buttonRef },
+      send,
+    } = useListboxContext();
     let ref = useForkedRef(popoverRef, forwardedRef);
     let hidden = !expanded;
 
@@ -644,7 +678,14 @@ if (__DEV__) {
   };
 }
 
-export { ListboxPopoverProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-props
+ */
+export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
+  portal?: boolean;
+  children: React.ReactNode;
+  position?: PopoverProps["position"];
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -654,8 +695,8 @@ export { ListboxPopoverProps };
 export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
     let {
-      listRef,
-      listboxId,
+      ids: { listbox: listboxId, label: labelId },
+      refs: { list: listRef },
       state: {
         context: { value },
       },
@@ -665,6 +706,7 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
     return (
       <Comp
         aria-activedescendant={useOptionId(value)}
+        aria-labelledby={labelId}
         role="listbox"
         {...props}
         ref={ref}
@@ -681,7 +723,10 @@ if (__DEV__) {
   ListboxList.propTypes = {};
 }
 
-export { ListboxListProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist-props
+ */
+export type ListboxListProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -722,7 +767,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let [labelState, setLabel] = useState(labelProp);
     let label = labelProp || labelState || "";
 
-    let ownRef: ListobxOptionRef = useRef(null);
+    let ownRef = useRef<HTMLElement | null>(null);
     useDescendant({
       context: ListboxDescendantContext,
       element: ownRef.current!,
@@ -840,7 +885,34 @@ if (__DEV__) {
   };
 }
 
-export { ListboxOptionProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-props
+ */
+export type ListboxOptionProps = {
+  /**
+   * The option's value. This will be passed into a hidden input field for use
+   * in forms.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-value
+   */
+  value: ListboxValue;
+  /**
+   * The option's human-readable label. This prop is optional but highly
+   * encouraged if your option has multiple text nodes that may or may not
+   * correlate with the intended value. It is also ueful if the inner text node
+   * begins with a character other than a readable letter (like an emoji or
+   * symbol) so that typeahead works as expected for the user.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-label
+   */
+  label?: string;
+  /**
+   * Whether or not the option is disabled from selection and navigation.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-disabled
+   */
+  disabled?: boolean;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -849,7 +921,9 @@ export { ListboxOptionProps };
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
   function ListboxGroup({ label, children, ...props }, forwardedRef) {
-    let { listboxId } = useListboxContext();
+    let {
+      ids: { listbox: listboxId },
+    } = useListboxContext();
     let labelId = makeId("label", useId(props.id), listboxId);
     return (
       <ListboxGroupContext.Provider value={{ labelId }}>
@@ -872,7 +946,22 @@ if (__DEV__) {
   ListboxGroup.propTypes = {};
 }
 
-export { ListboxGroupProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
+ */
+export type ListboxGroupProps = Omit<
+  React.HTMLProps<HTMLDivElement>,
+  "label"
+> & {
+  /**
+   * The text label to use for the listbox group. This can be omitted if a
+   * group contains a `ListboxGroupLabel` component. The label should always
+   * be human-readable.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-label
+   */
+  label?: string;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -900,9 +989,21 @@ if (__DEV__) {
   ListboxGroupLabel.propTypes = {};
 }
 
-export { ListboxGroupLabelProps };
+/**
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
+ */
+export type ListboxGroupLabelProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function isExpanded(state: ListboxStates) {
+  return [
+    ListboxStates.Navigating,
+    ListboxStates.NavigatingWithKeys,
+    ListboxStates.Interacting,
+    ListboxStates.Searching,
+  ].includes(state);
+}
 
 function useKeyDown() {
   let {
@@ -996,6 +1097,47 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  let { instanceId } = useListboxContext();
-  return value ? makeId(`option-${value}`, instanceId) : "";
+  let {
+    ids: { input },
+  } = useListboxContext();
+  return value ? makeId(`option-${value}`, input) : "";
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Types
+
+export type ListboxValue = string;
+
+export interface ListboxDescendantProps {
+  value: ListboxValue;
+  label: string;
+  disabled: boolean;
+}
+
+export type ListboxDescendant = Descendant<HTMLElement, ListboxDescendantProps>;
+
+export interface ListboxContextValue {
+  refs: MachineToReactRefMap<ListboxEvent>;
+  disabled: boolean;
+  expanded: boolean;
+  ids: {
+    label: string | undefined;
+    button: string;
+    input: string;
+    listbox: string;
+  };
+  listboxValue: ListboxValue | null;
+  listboxValueLabel: string | null;
+  mouseEventStartedRef: React.MutableRefObject<boolean>;
+  mouseMovedRef: React.MutableRefObject<boolean>;
+  onValueChange: ((newValue: ListboxValue) => void) | null | undefined;
+  send: StateMachine.Service<
+    ListboxStateData,
+    DistributiveOmit<ListboxEvent, "refs">
+  >["send"];
+  state: StateMachine.State<ListboxStateData, ListboxEvent, ListboxState>;
+}
+
+export interface ListboxGroupContextValue {
+  labelId: string;
 }
