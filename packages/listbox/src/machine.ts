@@ -119,6 +119,9 @@ function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
       // clicked element is not the button
       (
         relatedTarget !== button &&
+        // clicked element is not inside the button
+        button &&
+        !button.contains(relatedTarget as Element) &&
         // clicked element is not inside the popover
         popover &&
         !popover.contains(relatedTarget as Element)

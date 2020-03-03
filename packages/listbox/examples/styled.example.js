@@ -20,7 +20,9 @@ function Example() {
         aria-labelledby="dev-label"
         onChange={action("value changed")}
       >
-        <StyledButton />
+        <StyledButton arrow="▼">
+          {({ label }) => <ButtonLabel>{label}</ButtonLabel>}
+        </StyledButton>
         <ListboxPopover>
           <UserList>
             {users.map(user => {
@@ -92,7 +94,9 @@ let Label = styled.span`
 
 let StyledButton = styled(ListboxButton)`
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 3px 10px;
   font-size: 12px;
   font-weight: 500;
@@ -108,18 +112,15 @@ let StyledButton = styled(ListboxButton)`
   background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
   white-space: nowrap;
   cursor: pointer;
+  width: 140px;
+  max-width: 100%;
+`;
 
-  &::after {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    vertical-align: -2px;
-    content: "";
-    margin-left: 4px;
-    border: 4px solid transparent;
-    border-top-color: transparent;
-    border-top-color: currentcolor;
-  }
+let ButtonLabel = styled.span`
+  flex-grow: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 let StyledWrapper = styled.div`
