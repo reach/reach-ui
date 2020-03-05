@@ -17,6 +17,7 @@ function Example() {
       <Dialog
         aria-label="Announcement"
         isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
         initialFocusRef={button}
       >
         <h3>Tab Around!</h3>

@@ -26,6 +26,7 @@
     "@reach/component-component": "file:../packages/component-component",
     "@reach/dialog": "file:../packages/dialog",
     "@reach/disclosure": "file:../packages/disclosure",
+    "@reach/listbox": "file:../packages/listbox",
     "@reach/menu-button": "file:../packages/menu-button",
     "@reach/popover": "file:../packages/popover",
     "@reach/portal": "file:../packages/portal",

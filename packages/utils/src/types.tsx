@@ -14,8 +14,7 @@ export type AssignableRef<ValueType> =
   | {
       bivarianceHack(instance: ValueType | null): void;
     }["bivarianceHack"]
-  | React.MutableRefObject<ValueType | null>
-  | null;
+  | React.MutableRefObject<ValueType | null>;
 
 /**
  * Type can be either a single `ValueType` or an array of `ValueType`
@@ -34,7 +33,9 @@ export type SingleOrArray<ValueType> = ValueType[] | ValueType;
  *
  * you might expect `Omit<B, 'a'>` to give you:
  *
- *    Omit<{ a: 'whatever'; b: number }, 'a'> | Omit<{ a: 'whatever'; b: string; c: number }, 'a'>
+ *    type B =
+ *      | Omit<{ a: "whatever"; b: number }, "a">
+        | Omit<{ a: "whatever"; b: string; c: number }, "a">;
  *
  * This is not the case, unfortunately, so we need to create our own version of
  * `Omit` that distributes over unions with a distributive conditional type. If

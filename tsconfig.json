@@ -14,6 +14,7 @@
       "@reach/descendants": ["packages/descendants/src"],
       "@reach/dialog": ["packages/dialog/src"],
       "@reach/disclosure": ["packages/disclosure/src"],
+      "@reach/listbox": ["packages/listbox/src"],
       "@reach/machine": ["packages/machine/src"],
       "@reach/menu-button": ["packages/menu-button/src"],
       "@reach/popover": ["packages/popover/src"],

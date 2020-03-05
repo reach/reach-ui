@@ -803,7 +803,6 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
 
     useEffect(() => {
       function listener(event: MouseEvent) {
-        console.log(event.target);
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
         } else {
