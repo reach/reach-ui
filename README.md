@@ -97,7 +97,8 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ✅     | Combo Box      |
 | ✅     | Dialog (Modal) |
 | ✅     | Disclosure     |
-| 🛠      | Listbox        |
+| 🛠      | Hover Card     |
+| ✅     | Listbox        |
 | ✅     | Menu Button    |
 | 🛠      | Radio Group    |
 | ✅     | Slider         |
