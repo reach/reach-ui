@@ -302,8 +302,10 @@ if (__DEV__) {
   ListboxInput.displayName = "ListboxInput";
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+    defaultValue: PropTypes.string,
     form: PropTypes.string,
     name: PropTypes.string,
+    onChange: PropTypes.func,
     required: PropTypes.bool,
     value: PropTypes.string,
   };
@@ -437,7 +439,19 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-props
  */
 export type ListboxProps = ListboxInputProps & {
+  /**
+   * Renders a text string or React node to represent an arrow inside the
+   * Listbox button.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-arrow
+   */
   arrow?: React.ReactNode | boolean;
+  /**
+   * A render function or React node to to render the Listbox button's inner
+   * content. See the API for the ListboxButton children prop for details.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
+   */
   button?:
     | React.ReactNode
     | ((props: {
@@ -553,7 +567,52 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
  */
 export type ListboxButtonProps = {
+  /**
+   * Renders a text string or React node to represent an arrow inside the
+   * Listbox button.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-arrow
+   */
   arrow?: React.ReactNode | boolean;
+  /**
+   * A render function or React node to to render the Listbox button's inner
+   * content.
+   *
+   * By default, the button will display the text label of the selected option
+   * as its inner content. This label can be pulled from the option's inner
+   * text content or explicitly provided to the ListboxOption component via the
+   * label prop. If you want to render the button differently from its default,
+   * you must pass children.
+   *
+   * It's important to note that the ListboxButton's default inner content
+   * cannot be server-side rendered. On the initial render, the button has no
+   * contextual information about the available options in a Listbox. As each
+   * ListboxOption is rendered, it is registered in a context object and updated
+   * at the top of the Listbox tree, which evaluates the options and their props
+   * to determine which option is selectable and which label to display inside
+   * the button. If you need the inner content of the button on the first render
+   * you must control the listbox's state and keep its options' values and
+   * labels in data at the top of the tree, and render the button directly via
+   * children.
+   *
+   * @example
+   * let options = { one: 'One option', two: 'Another option' }
+   * let [value, setValue] = useState(options.one)
+   * return (
+   *   <ListboxInput>
+   *     <ListboxButton>{options[value]}</ListboxButton>
+   *     <ListboxPopover>
+   *       <ListboxList>
+   *         {Object.keys(options).map(option => (
+   *           <ListboxOption key={option} value={option} label={options[option]}>
+   *             {options[option]}
+   *           </ListboxOption>
+   *         ))}
+   *       </ListboxList>
+   *     </ListboxPopover>
+   *   </ListboxInput>
+   * )
+   */
   children?:
     | React.ReactNode
     | ((props: {
@@ -585,7 +644,7 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
         data-reach-listbox-arrow=""
       >
         {isFunction(children)
-          ? children({ isExpanded: expanded })
+          ? children({ expanded })
           : children || defaultArrow}
       </span>
     );
@@ -594,22 +653,30 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
 
 if (__DEV__) {
   ListboxArrow.displayName = "ListboxArrow";
-  ListboxArrow.propTypes = {};
+  ListboxArrow.propTypes = {
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  };
 }
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow-props
  */
 export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
+  /**
+   * Children to render as the listbox button's arrow. This can be a render
+   * function that accepts the listbox's `expanded` state as an argument.
+   */
   children?:
     | React.ReactNode
-    | ((props: { isExpanded: boolean }) => React.ReactNode);
+    | ((props: { expanded: boolean }) => React.ReactNode);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * ListboxPopover
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover
  */
 export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
   function ListboxPopover(
@@ -667,7 +734,8 @@ if (__DEV__) {
   ListboxPopover.displayName = "ListboxPopover";
   ListboxPopover.propTypes = {
     portal: PropTypes.bool,
-    children: PropTypes.node,
+    children: PropTypes.node.isRequired,
+    position: PropTypes.func,
   };
 }
 
@@ -675,8 +743,24 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-props
  */
 export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-portal
+   */
   portal?: boolean;
+  /**
+   * ListboxPopover expects to receive ListboxList as its children.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-children
+   */
   children: React.ReactNode;
+  /**
+   * The positioning function for the popover.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-position
+   */
   position?: PopoverProps["position"];
 };
 
@@ -684,6 +768,8 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
 
 /**
  * ListboxList
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist
  */
 export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
@@ -725,6 +811,8 @@ export type ListboxListProps = {};
 
 /**
  * ListboxOption
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption
  */
 export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
   function ListboxOption(
@@ -873,8 +961,9 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
 if (__DEV__) {
   ListboxOption.displayName = "ListboxOption";
   ListboxOption.propTypes = {
-    value: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
     label: PropTypes.string,
+    value: PropTypes.string.isRequired,
   };
 }
 
@@ -911,6 +1000,8 @@ export type ListboxOptionProps = {
 
 /**
  * ListboxGroup
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
   function ListboxGroup({ label, children, ...props }, forwardedRef) {
@@ -936,7 +1027,9 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
 
 if (__DEV__) {
   ListboxGroup.displayName = "ListboxGroup";
-  ListboxGroup.propTypes = {};
+  ListboxGroup.propTypes = {
+    label: PropTypes.string,
+  };
 }
 
 /**
@@ -960,6 +1053,8 @@ export type ListboxGroupProps = Omit<
 
 /**
  * ListboxGroupLabel
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgrouplabel
  */
 export const ListboxGroupLabel = forwardRefWithAs<
   ListboxGroupLabelProps,
