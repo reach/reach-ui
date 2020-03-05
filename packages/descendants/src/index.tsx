@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import {
   createNamedContext,
   noop,
-  useIsomorphicLayoutEffect as useLayoutEffect,
+  useIsomorphicLayoutEffect,
 } from "@reach/utils";
 
 export function createDescendantContext<ElementType, DescendantProps = {}>(
@@ -56,7 +56,7 @@ export function useDescendant<ElementType, DescendantProps>(
   );
 
   // Prevent any flashing
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!element) forceUpdate({});
     // @ts-ignore
     registerDescendant({ element, ...rest });

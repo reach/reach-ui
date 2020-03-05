@@ -25,7 +25,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -39,6 +38,7 @@ import {
   isFunction,
   makeId,
   useForkedRef,
+  useIsomorphicLayoutEffect,
   wrapEvent,
 } from "@reach/utils";
 
@@ -844,7 +844,7 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     ? ref.current.getBoundingClientRect()
     : 0; */
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (ref.current) {
       const { height: _newHeight, width: _newWidth } = window.getComputedStyle(
         ref.current

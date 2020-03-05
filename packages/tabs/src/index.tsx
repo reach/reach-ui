@@ -53,7 +53,7 @@ import {
   makeId,
   noop,
   useForkedRef,
-  useIsomorphicLayoutEffect as useLayoutEffect,
+  useIsomorphicLayoutEffect,
   useUpdateEffect,
   wrapEvent,
 } from "@reach/utils";
@@ -294,7 +294,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     })
   );
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     /*
      * In the event an uncontrolled component's selected index is disabled,
      * (this should only happen if the first tab is disabled and no default
