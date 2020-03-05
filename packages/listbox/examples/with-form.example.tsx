@@ -37,20 +37,22 @@ function Example() {
           <span id="taco-label">Choose a taco</span>
           <Listbox
             aria-labelledby="taco-label"
-            defaultValue="asada"
+            defaultValue="none"
             onChange={action("value changed")}
+            name="taco"
           >
+            <ListboxOption value="none" disabled>
+              --
+            </ListboxOption>
             <ListboxOption value="asada">
               Carne Asada <Taco />
             </ListboxOption>
             <ListboxOption value="pollo">
               Pollo <Taco />
             </ListboxOption>
-            <div style={{ background: "#ccc" }}>
-              <ListboxOption value="pastor">
-                Pastor <Taco />
-              </ListboxOption>
-            </div>
+            <ListboxOption value="pastor">
+              Pastor <Taco />
+            </ListboxOption>
             <ListboxOption value="lengua">
               Lengua <Taco />
             </ListboxOption>

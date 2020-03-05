@@ -143,10 +143,11 @@ export const ListboxInput = forwardRef<
   let mouseEventStartedRef = useRef(false);
 
   // DOM refs
-  let input = useRef<ListboxNodeRefs["input"]>(null);
   let button = useRef<ListboxNodeRefs["button"]>(null);
-  let popover = useRef<ListboxNodeRefs["popover"]>(null);
+  let hiddenInput = useRef<ListboxNodeRefs["hiddenInput"]>(null);
+  let input = useRef<ListboxNodeRefs["input"]>(null);
   let list = useRef<ListboxNodeRefs["list"]>(null);
+  let popover = useRef<ListboxNodeRefs["popover"]>(null);
 
   let machine = useCreateMachine(
     createMachineDefinition({
@@ -155,10 +156,11 @@ export const ListboxInput = forwardRef<
   );
   let [current, send] = useMachineLogger(
     useMachine(machine, {
-      input,
       button,
-      popover,
+      hiddenInput,
+      input,
       list,
+      popover,
     }),
     DEBUG
   );
@@ -198,10 +200,11 @@ export const ListboxInput = forwardRef<
       mouseMovedRef,
       onValueChange: onChange,
       refs: {
-        input,
         button,
-        popover,
+        hiddenInput,
+        input,
         list,
+        popover,
       },
       send,
       state: current,
@@ -360,9 +363,19 @@ export type ListboxInputProps = Omit<
 const ListboxHiddenInput: React.FC<React.InputHTMLAttributes<
   HTMLInputElement
 >> = props => {
-  let { state } = useListboxContext();
+  let {
+    state,
+    refs: { hiddenInput },
+  } = useListboxContext();
   return (
-    <input type="text" hidden {...props} value={state.context.value || ""} />
+    <input
+      // @ts-ignore
+      ref={hiddenInput}
+      type="text"
+      hidden
+      {...props}
+      value={state.context.value || ""}
+    />
   );
 };
 

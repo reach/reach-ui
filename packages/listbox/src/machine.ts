@@ -88,7 +88,17 @@ let navigate = assign<ListboxStateData, any>({
 });
 
 let navigateFromCurrentValue = assign<ListboxStateData, any>({
-  navigationValue: data => data.value,
+  navigationValue: data => {
+    // Before we navigate based on the current value, we need to make sure the
+    // current value is selectable. If not, we should instead navigate to the
+    // first selectable option.
+    let selected = findOptionFromValue(data.value, data.options);
+    if (selected && !selected.disabled) {
+      return data.value;
+    } else {
+      return data.options.find(option => !option.disabled)?.value || null;
+    }
+  },
 });
 
 function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
@@ -175,6 +185,38 @@ function optionIsSelectable(data: ListboxStateData, event: any) {
 
 function selectOption(data: ListboxStateData, event: any) {
   event.callback && event.callback(event.value);
+}
+
+function submitForm(data: ListboxStateData, event: any) {
+  if (event.type !== ListboxEvents.KeyDownEnter || event.disabled) {
+    return;
+  }
+
+  // So this one is a little weird, but here's what we're doing.
+  // When a user presses Enter in the context of a form, the form
+  // should submit. Now I know you're probably thinking:
+  //
+  //      "Aha! I've got it!"
+  //          > inputNode.form.submit()
+  //      ** cracks knuckles ** "Phew. My work here is done."
+  //
+  // But alas, we are not so lucky. What's really happening when a
+  // user presses enter in a normal form field is that the browser
+  // looks at the form the input is in, then looks for the first
+  // button or input in that form where its type property is `submit`,
+  // then it triggers a click event on that button. COOL, CARRY ON.
+  //
+  // If we were to fire inputNode.form.submit(), this would bypass any
+  // onSubmit handler in the form and just do what the browser
+  // normally does when you submit a form and trigger a page refresh.
+  // No bueno. So we do what the browser does and just go on a duck
+  // hunt for the first submit button in the form and we click that
+  // sucker.
+  let { hiddenInput } = event.refs;
+  if (hiddenInput && hiddenInput.form) {
+    let submitButton = hiddenInput.form.querySelector("button,[type='submit']");
+    submitButton && (submitButton as any).click();
+  }
 }
 
 let setTypeahead = assign<ListboxStateData, any>({
@@ -281,6 +323,7 @@ export const createMachineDefinition = ({
       input: null,
       list: null,
       popover: null,
+      hiddenInput: null,
     },
     options: [],
     navigationValue: null,
@@ -313,6 +356,9 @@ export const createMachineDefinition = ({
         [ListboxEvents.KeyDownNavigate]: {
           target: ListboxStates.NavigatingWithKeys,
           actions: [navigateFromCurrentValue, clearTypeaheadQuery],
+        },
+        [ListboxEvents.KeyDownEnter]: {
+          actions: [submitForm],
         },
       },
     },
@@ -614,6 +660,13 @@ function findOptionFromTypeahead(
   return found || null;
 }
 
+function findOptionFromValue(
+  value: string | null | undefined,
+  options: Descendant<HTMLElement, ListboxDescendantProps>[]
+) {
+  return value ? options.find(option => option.value === value) : undefined;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -629,6 +682,7 @@ export interface ListboxEventBase extends MachineEventWithRefs {
  */
 export type ListboxNodeRefs = {
   button: HTMLElement | null;
+  hiddenInput: HTMLInputElement | null;
   input: HTMLElement | null;
   list: HTMLElement | null;
   popover: HTMLElement | null;
