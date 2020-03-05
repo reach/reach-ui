@@ -52,7 +52,7 @@ const AccordionItemContext = createNamedContext<IAccordionItemContext>(
   {} as IAccordionItemContext
 );
 const useAccordionContext = () => useContext(AccordionContext);
-const useAccordionItemContext = () => useContext(AccordionItemContext);
+export const useAccordionItemContext = () => useContext(AccordionItemContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 
