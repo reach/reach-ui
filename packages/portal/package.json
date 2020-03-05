@@ -26,6 +26,7 @@
     "dist"
   ],
   "dependencies": {
+    "@reach/utils": "^0.8.5",
     "tslib": "^1.10.0"
   }
 }
