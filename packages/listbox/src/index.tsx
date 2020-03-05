@@ -196,7 +196,6 @@ export const ListboxInput = forwardRef<
       listboxValueLabel: valueLabel,
       mouseEventStartedRef,
       mouseMovedRef,
-      // TODO: Should we memoize onChange?
       onValueChange: onChange,
       refs: {
         input,
@@ -300,12 +299,6 @@ if (__DEV__) {
   ListboxInput.displayName = "ListboxInput";
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-
-    // TODO: Consider autoComplete support if possible (needs reseach)
-    // TODO: Consider autoFocus prop implementation, if possible (needs reseach)
-    // Not sure how this would work without some sort of App-wrapper provider
-    // that manages focus. Inputs get this out of the box, div's do not.
-
     form: PropTypes.string,
     name: PropTypes.string,
     required: PropTypes.bool,
@@ -357,7 +350,6 @@ export type ListboxInputProps = Omit<
      * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
      */
     defaultValue?: ListboxValue;
-    // TODO: Maybe? multiple: boolean
   };
 
 ////////////////////////////////////////////////////////////////////////////////
