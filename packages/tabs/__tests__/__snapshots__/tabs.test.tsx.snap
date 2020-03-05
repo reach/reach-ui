@@ -6,6 +6,7 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
     <div
       data-reach-tabs=""
       data-reach-tabs-orientation="vertical"
+      id="vertically-oriented"
     >
       <div
         aria-orientation="vertical"
@@ -13,34 +14,34 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
         role="tablist"
       >
         <button
-          aria-controls="tabs--17--panel--0"
+          aria-controls="vertically-oriented--panel--0"
           aria-selected="false"
           class="tab-1"
           data-reach-tab=""
-          id="tabs--17--tab--0"
+          id="vertically-oriented--tab--0"
           role="tab"
           tabindex="-1"
         >
           Tab One
         </button>
         <button
-          aria-controls="tabs--17--panel--1"
+          aria-controls="vertically-oriented--panel--1"
           aria-selected="true"
           class="tab-2"
           data-reach-tab=""
           data-selected=""
-          id="tabs--17--tab--1"
+          id="vertically-oriented--tab--1"
           role="tab"
           tabindex="0"
         >
           Tab Two
         </button>
         <button
-          aria-controls="tabs--17--panel--2"
+          aria-controls="vertically-oriented--panel--2"
           aria-selected="false"
           class="tab-3"
           data-reach-tab=""
-          id="tabs--17--tab--2"
+          id="vertically-oriented--tab--2"
           role="tab"
           tabindex="-1"
         >
@@ -51,10 +52,10 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tabs--17--tab--0"
+          aria-labelledby="vertically-oriented--tab--0"
           data-reach-tab-panel=""
           hidden=""
-          id="tabs--17--panel--0"
+          id="vertically-oriented--panel--0"
           role="tabpanel"
           tabindex="-1"
         >
@@ -66,9 +67,9 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
           </button>
         </div>
         <div
-          aria-labelledby="tabs--17--tab--1"
+          aria-labelledby="vertically-oriented--tab--1"
           data-reach-tab-panel=""
-          id="tabs--17--panel--1"
+          id="vertically-oriented--panel--1"
           role="tabpanel"
           tabindex="0"
         >
@@ -77,10 +78,10 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
           </h1>
         </div>
         <div
-          aria-labelledby="tabs--17--tab--2"
+          aria-labelledby="vertically-oriented--tab--2"
           data-reach-tab-panel=""
           hidden=""
-          id="tabs--17--panel--2"
+          id="vertically-oriented--panel--2"
           role="tabpanel"
           tabindex="-1"
         >
@@ -194,6 +195,7 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
     <div
       data-reach-tabs=""
       data-reach-tabs-orientation="vertical"
+      id="vertically-oriented"
     >
       <div
         aria-orientation="vertical"
@@ -201,34 +203,34 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="tabs--15--panel--0"
+          aria-controls="vertically-oriented--panel--0"
           aria-selected="true"
           class="tab-1"
           data-reach-tab=""
           data-selected=""
-          id="tabs--15--tab--0"
+          id="vertically-oriented--tab--0"
           role="tab"
           tabindex="0"
         >
           Tab One
         </button>
         <button
-          aria-controls="tabs--15--panel--1"
+          aria-controls="vertically-oriented--panel--1"
           aria-selected="false"
           class="tab-2"
           data-reach-tab=""
-          id="tabs--15--tab--1"
+          id="vertically-oriented--tab--1"
           role="tab"
           tabindex="-1"
         >
           Tab Two
         </button>
         <button
-          aria-controls="tabs--15--panel--2"
+          aria-controls="vertically-oriented--panel--2"
           aria-selected="false"
           class="tab-3"
           data-reach-tab=""
-          id="tabs--15--tab--2"
+          id="vertically-oriented--tab--2"
           role="tab"
           tabindex="-1"
         >
@@ -239,9 +241,9 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tabs--15--tab--0"
+          aria-labelledby="vertically-oriented--tab--0"
           data-reach-tab-panel=""
-          id="tabs--15--panel--0"
+          id="vertically-oriented--panel--0"
           role="tabpanel"
           tabindex="0"
         >
@@ -253,10 +255,10 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="tabs--15--tab--1"
+          aria-labelledby="vertically-oriented--tab--1"
           data-reach-tab-panel=""
           hidden=""
-          id="tabs--15--panel--1"
+          id="vertically-oriented--panel--1"
           role="tabpanel"
           tabindex="-1"
         >
@@ -265,10 +267,10 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
           </h1>
         </div>
         <div
-          aria-labelledby="tabs--15--tab--2"
+          aria-labelledby="vertically-oriented--tab--2"
           data-reach-tab-panel=""
           hidden=""
-          id="tabs--15--panel--2"
+          id="vertically-oriented--panel--2"
           role="tabpanel"
           tabindex="-1"
         >

@@ -135,7 +135,7 @@ function BasicTabs() {
 function VerticallyOrientedTabs() {
   return (
     <div>
-      <Tabs orientation="vertical">
+      <Tabs orientation="vertical" id="vertically-oriented">
         <TabList>
           <Tab className="tab-1">Tab One</Tab>
           <Tab className="tab-2">Tab Two</Tab>
