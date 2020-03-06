@@ -22,6 +22,7 @@ import "@reach/combobox/styles.css";
 import "@reach/slider/styles.css";
 import "@reach/checkbox/styles.css";
 import "@reach/accordion/styles.css";
+import "@reach/listbox/styles.css";
 import "../styles/app.scss";
 
 const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
@@ -225,6 +226,7 @@ function Nav({ media }) {
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
                 <NavLink to="/disclosure">Disclosure</NavLink>
+                <NavLink to="/listbox">Listbox</NavLink>
                 <NavLink to="/menu-button">Menu Button</NavLink>
                 <NavLink to="/portal">Portal</NavLink>
                 <NavLink to="/skip-nav">Skip Nav</NavLink>
