@@ -3,9 +3,6 @@
  *
  * See NOTES.md for some background info if you're interested!
  *
- * TODO: Test in a form
- * TODO: Finish prop types
- *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox
@@ -361,7 +358,7 @@ export type ListboxInputProps = Omit<
      */
     onChange?(newValue: ListboxValue): void;
     /**
-     * The current value of the listbox.
+     * The current value of a controlled listbox.
      *
      * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-value
      */
@@ -416,13 +413,14 @@ if (__DEV__) {
     ...ListboxInput.propTypes,
     arrow: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
     button: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+    children: PropTypes.node,
   };
 }
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-props
  */
-export type ListboxProps = ListboxInputProps & {
+export type ListboxProps = Omit<ListboxInputProps, "children"> & {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * Listbox button.
@@ -442,12 +440,15 @@ export type ListboxProps = ListboxInputProps & {
         value: ListboxValue | null;
         label: string | null;
       }) => React.ReactNode);
+  children: React.ReactNode;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * ListboxButton
+ *
+ * The interactive toggle button that triggers the popover for the listbox.
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
  */
@@ -512,7 +513,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         return listboxValueLabel;
       } else if (isFunction(children)) {
         return children({
-          isExpanded: expanded,
+          expanded,
           label: listboxValueLabel!,
           value: listboxValue,
         });
@@ -539,7 +540,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
       >
         {label}
         {arrow && (
-          <ListboxArrow>{!isBoolean(arrow) ? arrow : null}</ListboxArrow>
+          <ListboxArrow>{isBoolean(arrow) ? null : arrow}</ListboxArrow>
         )}
       </Comp>
     );
@@ -560,7 +561,7 @@ if (__DEV__) {
 export type ListboxButtonProps = {
   /**
    * Renders a text string or React node to represent an arrow inside the
-   * Listbox button.
+   * button.
    *
    * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-arrow
    */
@@ -609,7 +610,7 @@ export type ListboxButtonProps = {
     | ((props: {
         value: ListboxValue | null;
         label: string;
-        isExpanded: boolean;
+        expanded: boolean;
       }) => React.ReactNode);
 };
 
@@ -617,6 +618,8 @@ export type ListboxButtonProps = {
 
 /**
  * ListboxArrow
+ *
+ * A wrapper component for an arrow to display in the `ListboxButton`
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow
  */
@@ -633,6 +636,7 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
         {...props}
         ref={forwardedRef}
         data-reach-listbox-arrow=""
+        data-expanded={expanded ? "" : undefined}
       >
         {isFunction(children)
           ? children({ expanded })
@@ -666,6 +670,8 @@ export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
 
 /**
  * ListboxPopover
+ *
+ * The popover containing the list of options.
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover
  */
@@ -724,8 +730,8 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
 if (__DEV__) {
   ListboxPopover.displayName = "ListboxPopover";
   ListboxPopover.propTypes = {
-    portal: PropTypes.bool,
     children: PropTypes.node.isRequired,
+    portal: PropTypes.bool,
     position: PropTypes.func,
   };
 }
@@ -735,18 +741,18 @@ if (__DEV__) {
  */
 export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
   /**
+   * `ListboxPopover` expects to receive `ListboxList` as its children.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-children
+   */
+  children: React.ReactNode;
+  /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`
    *
    * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-portal
    */
   portal?: boolean;
-  /**
-   * ListboxPopover expects to receive ListboxList as its children.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-children
-   */
-  children: React.ReactNode;
   /**
    * The positioning function for the popover.
    *
@@ -759,6 +765,8 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
 
 /**
  * ListboxList
+ *
+ * The list containing all listbox options.
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist
  */
@@ -802,6 +810,8 @@ export type ListboxListProps = {};
 
 /**
  * ListboxOption
+ *
+ * A selectable option for the listbox.
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption
  */
@@ -972,7 +982,7 @@ export type ListboxOptionProps = {
   /**
    * The option's human-readable label. This prop is optional but highly
    * encouraged if your option has multiple text nodes that may or may not
-   * correlate with the intended value. It is also ueful if the inner text node
+   * correlate with the intended value. It is also useful if the inner text node
    * begins with a character other than a readable letter (like an emoji or
    * symbol) so that typeahead works as expected for the user.
    *
@@ -992,6 +1002,8 @@ export type ListboxOptionProps = {
 /**
  * ListboxGroup
  *
+ * A group of related listbox options.
+ *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
@@ -1006,6 +1018,7 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
           aria-labelledby={labelId}
           role="group"
           {...props}
+          data-reach-listbox-group=""
           ref={forwardedRef}
         >
           {label && <ListboxGroupLabel>{label}</ListboxGroupLabel>}

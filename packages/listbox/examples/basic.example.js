@@ -22,11 +22,11 @@ function Example() {
         <ListboxOption value="asada">
           Carne Asada <Taco />
         </ListboxOption>
-        <ListboxOption value="pollo" disabled>
+        <ListboxOption value="pollo" label="Pollo" disabled>
           Pollo <Taco /> <Tag>Sold Out!</Tag>
         </ListboxOption>
         <div style={{ background: "#ccc" }}>
-          <ListboxOption value="pastor">
+          <ListboxOption value="pastor" label="Pastor">
             Pastor <Taco /> <Tag>Fan favorite!</Tag>
           </ListboxOption>
         </div>

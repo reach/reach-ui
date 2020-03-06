@@ -167,6 +167,10 @@ function focusButton(data: ListboxStateData, event: any) {
   event.refs.button && event.refs.button.focus();
 }
 
+function listboxIsNotDisabled(data: ListboxStateData, event: any) {
+  return !event.disabled;
+}
+
 function optionIsNavigable(data: ListboxStateData, event: ListboxEvent) {
   if (event.type === ListboxEvents.Navigate) {
     if (event && event.disabled) {
@@ -336,18 +340,22 @@ export const createMachineDefinition = ({
         [ListboxEvents.ButtonMouseDown]: {
           target: ListboxStates.Navigating,
           actions: [navigateFromCurrentValue, focusButton],
+          cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownSpace]: {
           target: ListboxStates.NavigatingWithKeys,
           actions: [navigateFromCurrentValue, focusList],
+          cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownSearch]: {
           target: ListboxStates.Idle,
           actions: setTypeahead,
+          cond: listboxIsNotDisabled,
         },
         [ListboxEvents.UpdateAfterTypeahead]: {
           target: ListboxStates.Idle,
           actions: [setValueFromTypeahead],
+          cond: listboxIsNotDisabled,
         },
         [ListboxEvents.ClearTypeahead]: {
           target: ListboxStates.Idle,
@@ -356,9 +364,11 @@ export const createMachineDefinition = ({
         [ListboxEvents.KeyDownNavigate]: {
           target: ListboxStates.NavigatingWithKeys,
           actions: [navigateFromCurrentValue, clearTypeaheadQuery],
+          cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownEnter]: {
           actions: [submitForm],
+          cond: listboxIsNotDisabled,
         },
       },
     },
@@ -709,6 +719,7 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.ButtonMouseDown;
+        disabled: boolean;
       }
     | {
         type: ListboxEvents.ButtonMouseUp;
@@ -729,12 +740,12 @@ export type ListboxEvent = ListboxEventBase &
     | {
         type: ListboxEvents.KeyDownNavigate;
         value: ListboxValue | null;
-        shouldManageFocus?: boolean;
-        resetManagedFocus?(): void;
+        disabled: boolean;
       }
     | {
         type: ListboxEvents.KeyDownSearch;
         query: string;
+        disabled: boolean;
       }
     | {
         type: ListboxEvents.KeyDownEscape;
