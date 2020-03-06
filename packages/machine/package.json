@@ -1,6 +1,6 @@
 {
   "name": "@reach/machine",
-  "version": "0.1.0",
+  "version": "0.8.6",
   "description": "State machine utilities for the Reach UI library.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -15,8 +15,8 @@
     "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "dependencies": {
+    "@reach/utils": "^0.8.6",
     "@xstate/fsm": "^1.3.0",
-    "@reach/utils": "^0.8.5",
     "tslib": "^1.10.0"
   },
   "peerDependencies": {
