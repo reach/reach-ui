@@ -286,11 +286,15 @@ export const ListboxInput = forwardRef<
             : children}
         </div>
         {(disabled || form || name || required) && (
-          <ListboxHiddenInput
+          <input
+            ref={hiddenInput}
             disabled={disabled}
             form={form}
+            hidden
             name={name}
             required={required}
+            type="text"
+            value={current.context.value || ""}
           />
         )}
       </ListboxContext.Provider>
@@ -303,6 +307,7 @@ if (__DEV__) {
   ListboxInput.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
     defaultValue: PropTypes.string,
+    disabled: PropTypes.bool,
     form: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -321,7 +326,7 @@ export type ListboxInputProps = Omit<
 > &
   Pick<
     React.SelectHTMLAttributes<HTMLSelectElement>,
-    "autoComplete" | "autoFocus" | "form" | "name" | "required"
+    "form" | "name" | "required"
   > & {
     /**
      * The composed listbox expects to receive `ListboxButton` and
@@ -337,6 +342,18 @@ export type ListboxInputProps = Omit<
           valueLabel: string | null;
         }) => React.ReactNode);
     /**
+     * The default value of an uncontrolled listbox.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
+     */
+    defaultValue?: ListboxValue;
+    /**
+     * Whether or not the listbox is disabled.
+     *
+     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-disabled
+     */
+    disabled?: boolean;
+    /**
      * The callback that fires when the listbox value changes.
      *
      * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-onchange
@@ -349,41 +366,7 @@ export type ListboxInputProps = Omit<
      * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-value
      */
     value?: ListboxValue;
-    /**
-     * The default value of an uncontrolled listbox.
-     *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
-     */
-    defaultValue?: ListboxValue;
   };
-
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * ListboxHiddenInput
- */
-const ListboxHiddenInput: React.FC<React.InputHTMLAttributes<
-  HTMLInputElement
->> = props => {
-  let {
-    state,
-    refs: { hiddenInput },
-  } = useListboxContext();
-  return (
-    <input
-      // @ts-ignore
-      ref={hiddenInput}
-      type="text"
-      hidden
-      {...props}
-      value={state.context.value || ""}
-    />
-  );
-};
-
-if (__DEV__) {
-  ListboxHiddenInput.displayName = "ListboxHiddenInput";
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -392,6 +375,7 @@ if (__DEV__) {
  *
  * High-level listbox API
  *
+ * @example
  * <Listbox>
  *   <ListboxOption value="1">Option 1</ListboxOption>
  *   <ListboxOption value="2">Option 2</ListboxOption>
@@ -464,6 +448,8 @@ export type ListboxProps = ListboxInputProps & {
 
 /**
  * ListboxButton
+ *
+ * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
  */
 export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   function ListboxButton(
@@ -480,6 +466,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     forwardedRef
   ) {
     let {
+      disabled,
       ids: { button: buttonId, label: labelId, listbox: listboxId },
       mouseEventStartedRef,
       refs: { button: buttonRef },
@@ -498,7 +485,10 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         mouseEventStartedRef.current = true;
         event.persist();
         event.preventDefault();
-        send({ type: ListboxEvents.ButtonMouseDown });
+        send({
+          type: ListboxEvents.ButtonMouseDown,
+          disabled,
+        });
       }
     }
 
@@ -533,6 +523,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     return (
       <Comp
         aria-controls={listboxId}
+        aria-disabled={disabled || undefined}
         aria-expanded={expanded}
         aria-haspopup="listbox"
         aria-labelledby={[labelId, buttonId].filter(Boolean).join(" ")}
@@ -544,7 +535,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        tabIndex={tabIndex ?? 0}
+        tabIndex={disabled ? -1 : tabIndex ?? 0}
       >
         {label}
         {arrow && (
@@ -1095,6 +1086,7 @@ function isExpanded(state: ListboxStates) {
 
 function useKeyDown() {
   let {
+    disabled: listboxDisabled,
     onValueChange,
     state: {
       context: { navigationValue, typeaheadQuery },
@@ -1135,7 +1127,7 @@ function useKeyDown() {
             type: ListboxEvents.KeyDownEnter,
             value: navigationValue,
             callback: onValueChange,
-            disabled: !!navOption?.disabled,
+            disabled: !!(navOption?.disabled || listboxDisabled),
           });
           return;
         case " ":
@@ -1143,7 +1135,7 @@ function useKeyDown() {
             type: ListboxEvents.KeyDownSpace,
             value: navigationValue,
             callback: onValueChange,
-            disabled: !!navOption?.disabled,
+            disabled: !!(navOption?.disabled || listboxDisabled),
           });
           return;
         case "Escape":
@@ -1160,6 +1152,7 @@ function useKeyDown() {
             send({
               type: ListboxEvents.KeyDownSearch,
               query: key,
+              disabled: listboxDisabled,
             });
           }
           return;
@@ -1176,6 +1169,7 @@ function useKeyDown() {
         send({
           type: ListboxEvents.KeyDownNavigate,
           value: options[nextIndex].value,
+          disabled: listboxDisabled,
         });
       },
     })

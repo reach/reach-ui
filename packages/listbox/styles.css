@@ -71,6 +71,10 @@
   user-select: none;
 }
 
+[data-reach-listbox-button][aria-disabled="true"] {
+  opacity: 0.5;
+}
+
 [data-reach-listbox-arrow] {
   margin-left: 0.5rem;
   display: block;
