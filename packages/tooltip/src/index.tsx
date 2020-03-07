@@ -479,7 +479,7 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
       position = positionDefault,
       style,
       triggerRect,
-      ...rest
+      ...props
     },
     forwardedRef
   ) {
@@ -490,17 +490,18 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     return (
       <Fragment>
         <Comp
-          data-reach-tooltip
           role={useAriaLabel ? undefined : "tooltip"}
+          {...props}
+          ref={ref}
+          data-reach-tooltip=""
           id={useAriaLabel ? undefined : id}
-          children={label}
           style={{
             ...style,
             ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
           }}
-          ref={ref}
-          {...rest}
-        />
+        >
+          {label}
+        </Comp>
         {useAriaLabel && (
           <VisuallyHidden role="tooltip" id={id}>
             {ariaLabel}

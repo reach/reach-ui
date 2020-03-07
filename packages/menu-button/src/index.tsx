@@ -433,6 +433,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       <Comp
         role="menuitem"
         id={useMenuItemId(index)}
+        tabIndex={-1}
         {...props}
         ref={ref}
         data-reach-menu-item=""
@@ -445,7 +446,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        tabIndex={-1}
       />
     );
   }
@@ -649,15 +649,15 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       // according to https://www.w3.org/TR/wai-aria-practices/examples/menu-button/menu-button-actions-active-descendant.html
       // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
       <div
-        aria-labelledby={buttonId || undefined}
         aria-activedescendant={useMenuItemId(selectionIndex) || undefined}
+        aria-labelledby={buttonId || undefined}
         role="menu"
-        id={menuId}
+        tabIndex={-1}
         {...props}
         ref={ref}
         data-reach-menu-items=""
+        id={menuId}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        tabIndex={-1}
       >
         {children}
       </div>

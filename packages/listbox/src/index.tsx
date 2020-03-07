@@ -461,7 +461,6 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
       onKeyDown,
       onMouseDown,
       onMouseUp,
-      tabIndex,
       ...props
     },
     forwardedRef
@@ -529,6 +528,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         aria-haspopup="listbox"
         aria-labelledby={[labelId, buttonId].filter(Boolean).join(" ")}
         role="button"
+        tabIndex={disabled ? -1 : 0}
         {...props}
         ref={ref}
         data-reach-listbox-button=""
@@ -536,7 +536,6 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        tabIndex={disabled ? -1 : tabIndex ?? 0}
       >
         {label}
         {arrow && (
@@ -696,13 +695,13 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     let handleKeyDown = useKeyDown();
 
     let commonProps = {
+      hidden: !isExpanded(state as ListboxStates),
+      tabIndex: -1,
       ...props,
       ref,
       "data-reach-listbox-popover": "",
-      hidden: !isExpanded(state as ListboxStates),
       onBlur: wrapEvent(onBlur, handleBlur),
       onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
-      tabIndex: -1,
     };
 
     function handleBlur(event: React.FocusEvent) {
@@ -786,11 +785,11 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         aria-activedescendant={useOptionId(value)}
         aria-labelledby={labelId}
         role="listbox"
+        tabIndex={-1}
         {...props}
         ref={ref}
         data-reach-listbox-list=""
         id={listboxId}
-        tabIndex={-1}
       />
     );
   }
@@ -939,6 +938,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         aria-selected={isSelected}
         aria-disabled={disabled ? true : undefined}
         role="option"
+        tabIndex={-1}
         {...props}
         ref={ref}
         id={useOptionId(value)}
@@ -951,7 +951,6 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        tabIndex={-1}
       >
         {children}
       </Comp>

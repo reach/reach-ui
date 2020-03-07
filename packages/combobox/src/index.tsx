@@ -336,10 +336,10 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
             aria-haspopup="listbox"
             aria-owns={listboxId}
             aria-expanded={context.isVisible}
+            role="combobox"
             {...rest}
             data-reach-combobox=""
             ref={forwardedRef}
-            role="combobox"
           >
             {children}
           </Comp>
@@ -667,10 +667,10 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
 
     return (
       <Comp
+        role="listbox"
         {...props}
         ref={forwardedRef}
         data-reach-combobox-list=""
-        role="listbox"
         id={listboxId}
       />
     );
@@ -743,11 +743,11 @@ export const ComboboxOption: ComponentWithForwardedRef<
     <OptionContext.Provider value={{ value, index }}>
       <li
         aria-selected={isActive}
+        role="option"
         {...props}
         data-reach-combobox-option=""
         ref={ref}
         id={String(makeHash(value))}
-        role="option"
         data-highlighted={isActive ? "" : undefined}
         // Without this the menu will close from `onBlur`, but with it the
         // element can be `document.activeElement` and then our focus checks in

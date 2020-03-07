@@ -652,7 +652,6 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
       onFocus,
       style = {},
       onKeyDown,
-      tabIndex = 0,
       ...props
     },
     forwardedRef
@@ -680,14 +679,15 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
 
     return (
       <div
-        role="slider"
         aria-disabled={disabled}
-        aria-valuemin={sliderMin}
-        aria-valuetext={valueText}
-        aria-orientation={orientation}
-        aria-valuenow={value}
-        aria-valuemax={sliderMax}
         aria-labelledby={ariaLabelledBy}
+        aria-orientation={orientation}
+        aria-valuemax={sliderMax}
+        aria-valuemin={sliderMin}
+        aria-valuenow={value}
+        aria-valuetext={valueText}
+        role="slider"
+        tabIndex={disabled ? -1 : 0}
         {...props}
         {...dataAttributes}
         ref={ref}
@@ -705,7 +705,6 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
             : { left: handlePosition }),
           ...style,
         }}
-        tabIndex={disabled ? undefined : tabIndex}
       />
     );
   }
