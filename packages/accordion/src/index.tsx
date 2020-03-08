@@ -459,7 +459,6 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       onKeyDown,
       onMouseDown,
       onPointerDown,
-      tabIndex,
       ...props
     },
     forwardedRef
@@ -502,6 +501,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       <Comp
         aria-controls={panelId}
         aria-expanded={open}
+        tabIndex={disabled ? -1 : 0}
         {...props}
         ref={ref}
         data-reach-accordion-button=""
@@ -510,7 +510,6 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
         id={buttonId}
         onClick={wrapEvent(onClick, handleClick)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        tabIndex={disabled ? -1 : tabIndex}
       >
         {children}
       </Comp>
