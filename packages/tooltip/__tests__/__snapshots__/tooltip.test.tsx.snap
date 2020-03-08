@@ -12,7 +12,7 @@ exports[`<Tooltip /> hides on ESC: after mouse rest timeout 1`] = `
   </div>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -53,7 +53,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   </div>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -63,7 +63,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   </reach-portal>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -92,7 +92,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   </div>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -102,7 +102,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   </reach-portal>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -137,7 +137,7 @@ exports[`<Tooltip /> shows/hides on hover: after mouse rest timeout 1`] = `
   </div>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
@@ -196,7 +196,7 @@ exports[`<Tooltip /> shows/hides when trigger is activeElement: not visible 1`] 
   </div>
   <reach-portal>
     <div
-      data-reach-tooltip="true"
+      data-reach-tooltip=""
       id="tooltip--REACH_ID_"
       role="tooltip"
       style="left: 0px; top: 8px;"
