@@ -22,6 +22,7 @@ pids
 
 # editor specific
 .vscode
+.editorconfig
 
 # website
 /website-deploy-key
