@@ -39,7 +39,6 @@ import {
   isRightClick,
   isString,
   makeId,
-  stateToAttributeString,
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
@@ -271,7 +270,7 @@ export const ListboxInput = forwardRef<
           {...props}
           ref={ref}
           data-reach-listbox-input=""
-          data-state={stateToAttributeString(current.value)}
+          data-state={isExpanded(current.value) ? "expanded" : "closed"}
           data-value={current.context.value}
           id={id}
         >
@@ -501,7 +500,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
       mouseEventStartedRef.current = false;
     }
 
-    let expanded = isExpanded(state.value as ListboxStates);
+    let expanded = isExpanded(state.value);
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -627,7 +626,7 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
     let {
       state: { value: state },
     } = useListboxContext();
-    let expanded = isExpanded(state as ListboxStates);
+    let expanded = isExpanded(state);
     let defaultArrow = expanded ? "▲" : "▼";
     return (
       <span
@@ -695,7 +694,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     let handleKeyDown = useKeyDown();
 
     let commonProps = {
-      hidden: !isExpanded(state as ListboxStates),
+      hidden: !isExpanded(state),
       tabIndex: -1,
       ...props,
       ref,
@@ -825,6 +824,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       onMouseLeave,
       onMouseMove,
       onMouseUp,
+      onTouchStart,
       value,
       label: labelProp,
       ...props
@@ -892,6 +892,14 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       }
     }
 
+    function handleTouchStart() {
+      send({
+        type: ListboxEvents.Navigate,
+        value,
+        disabled: !!disabled,
+      });
+    }
+
     function handleMouseLeave() {
       send({ type: ListboxEvents.ClearNavSelection });
     }
@@ -951,6 +959,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+        onTouchStart={wrapEvent(onTouchStart, handleTouchStart)}
       >
         {children}
       </Comp>
@@ -1087,13 +1096,13 @@ export type ListboxGroupLabelProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function isExpanded(state: ListboxStates) {
+function isExpanded(state: string) {
   return [
     ListboxStates.Navigating,
     ListboxStates.NavigatingWithKeys,
     ListboxStates.Interacting,
     ListboxStates.Searching,
-  ].includes(state);
+  ].includes(state as ListboxStates);
 }
 
 function useKeyDown() {
