@@ -70,7 +70,6 @@ describe("<Dialog />", () => {
   //   const { container } = render(<BasicOpenDialog />);
   //   const results = await axe(container);
   //   expect(results).toHaveNoViolations();
-  //   cleanup();
   // });
 });
 

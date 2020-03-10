@@ -1,5 +1,5 @@
 import React from "react";
-import { render, cleanup } from "$test/utils";
+import { render } from "$test/utils";
 import { axe } from "jest-axe";
 import VisuallyHidden from "@reach/visually-hidden";
 
@@ -13,6 +13,5 @@ describe("<VisuallyHidden />", () => {
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-    cleanup();
   });
 });

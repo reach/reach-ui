@@ -19,7 +19,6 @@ describe("<Tooltip />", () => {
   //   );
   //   const results = await axe(container);
   //   expect(results).toHaveNoViolations();
-  //   cleanup();
   // });
 
   it("shows/hides on hover", () => {

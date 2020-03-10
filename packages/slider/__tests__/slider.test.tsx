@@ -1,7 +1,7 @@
 import React from "react";
 // import renderer from "react-test-renderer";
 // import { act } from "react-dom/test-utils";
-import { render, fireEvent, cleanup } from "$test/utils";
+import { render, fireEvent } from "$test/utils";
 import { axe } from "jest-axe";
 import {
   Slider,
@@ -24,7 +24,6 @@ describe("<Slider />", () => {
     const { container } = render(<BasicSlider />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-    cleanup();
   });
   it("should match the snapshot", () => {
     const { asFragment } = render(<BasicSlider />);

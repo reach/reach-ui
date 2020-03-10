@@ -10,5 +10,3 @@ beforeEach(() => {
   utils.checkStyles = jest.fn();
   autoId.useId = (fallback: string) => fallback || "REACH_ID_";
 });
-
-afterEach(() => {});

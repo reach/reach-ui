@@ -22,7 +22,6 @@ describe("<Combobox />", () => {
   //   const { container } = render(<BasicCombobox />);
   //   const results = await axe(container);
   //   expect(results).toHaveNoViolations();
-  //   cleanup();
   // });
 
   it("should match the snapshot", () => {
