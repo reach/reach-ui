@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-
+// Forked and simplified from https://github.com/jaredpalmer/tsdx
 import * as jest from "jest";
 import { paths } from "./constants";
 
@@ -23,7 +22,7 @@ const jestConfig = {
     "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$",
     "^.+\\.js$",
   ],
-  rootDir: paths.appRoot,
+  rootDir: paths.packageRoot,
   watchPlugins: [
     require.resolve("jest-watch-typeahead/filename"),
     require.resolve("jest-watch-typeahead/testname"),

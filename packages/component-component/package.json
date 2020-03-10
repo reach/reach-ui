@@ -10,9 +10,7 @@
     "directory": "packages/component-component"
   },
   "scripts": {
-    "build": "yarn clean && node ./build-package",
-    "clean": "rm -rf ./dist",
-    "compile": "node ./build-package"
+    "build": "node ./build-package"
   },
   "dependencies": {
     "prop-types": "^15.7.2"

@@ -1,3 +1,4 @@
+// Forked and simplified from https://github.com/jaredpalmer/tsdx
 import { DEFAULT_EXTENSIONS, createConfigItem } from "@babel/core";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
@@ -12,19 +13,12 @@ import sourceMaps from "rollup-plugin-sourcemaps";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import { paths } from "./constants";
-import { extractErrors } from "./errors/extractErrors";
 import {
   createProgressEstimator,
   external,
-  // getInputs,
-  // isDir,
-  // isFile,
-  isTruthy,
-  // jsOrTs,
   normalizeOpts,
   safePackageName,
   safeVariableName,
-  concatAllArray,
   logError,
   cleanDistFolder,
   parseArgs,
@@ -32,28 +26,17 @@ import {
 import { ScriptOpts, NormalizedOpts } from "./types";
 import * as fs from "fs-extra";
 
-const replacements = [{ original: "lodash", replacement: "lodash-es" }];
-
-const errorCodeOpts = {
-  errorMapFilePath: paths.appErrorsJson,
-};
-
 // shebang cache map thing because the transform only gets run once
 let shebang: any = {};
 
 export async function createRollupConfig(
   opts: ScriptOpts
 ): Promise<RollupOptions> {
-  const findAndRecordErrorCodes = await extractErrors({
-    ...errorCodeOpts,
-    ...opts,
-  });
-
   const shouldMinify =
     opts.minify !== undefined ? opts.minify : opts.env === "production";
 
   const outputName = [
-    `${paths.appDist}/${safePackageName(opts.name)}`,
+    `${paths.packageDist}/${safePackageName(opts.name)}`,
     opts.format,
     opts.env,
     shouldMinify ? "min" : "",
@@ -62,21 +45,20 @@ export async function createRollupConfig(
     .filter(Boolean)
     .join(".");
 
+  let tsconfig: string | undefined;
   let tsconfigJSON;
   try {
-    tsconfigJSON = await fs.readJSON(opts.tsconfig || paths.tsconfigJson);
-  } catch (e) {}
+    tsconfig = opts.tsconfig || paths.packageTsconfigBuildJson;
+    tsconfigJSON = await fs.readJSON(tsconfig);
+  } catch (e) {
+    tsconfig = undefined;
+  }
 
   return {
     // Tell Rollup the entry point to the package
     input: opts.input,
     // Tell Rollup which packages to ignore
-    external: (id: string) => {
-      if (id === "babel-plugin-transform-async-to-promises/helpers") {
-        return false;
-      }
-      return external(id);
-    },
+    external: (id: string) => external(id),
     // Rollup has treeshaking by default, but we can optimize it further...
     treeshake: {
       // We assume reading a property of an object never has side-effects.
@@ -115,12 +97,6 @@ export async function createRollupConfig(
       exports: "named",
     },
     plugins: [
-      !!opts.extractErrors && {
-        async transform(source: any) {
-          await findAndRecordErrorCodes(source);
-          return source;
-        },
-      },
       resolve({
         mainFields: [
           "module",
@@ -156,8 +132,11 @@ export async function createRollupConfig(
       },
       typescript({
         typescript: require("typescript"),
-        cacheRoot: `./.cache/build/${opts.format}/`,
-        tsconfig: opts.tsconfig,
+        cacheRoot: path.join(
+          paths.projectCache,
+          `build/${opts.name}/${opts.format}`
+        ),
+        tsconfig,
         tsconfigDefaults: {
           exclude: [
             // all TS test files, regardless whether co-located or in test/ etc
@@ -169,7 +148,7 @@ export async function createRollupConfig(
             "node_modules",
             "bower_components",
             "jspm_packages",
-            paths.appDist,
+            paths.packageDist,
           ],
           compilerOptions: {
             sourceMap: true,
@@ -191,9 +170,7 @@ export async function createRollupConfig(
         passPerPreset: true,
         custom: {
           targets: opts.target === "node" ? { node: "8" } : undefined,
-          extractErrors: opts.extractErrors,
           format: opts.format,
-          // defines: opts.defines,
         },
       }),
       opts.env !== undefined &&
@@ -201,9 +178,6 @@ export async function createRollupConfig(
           "process.env.NODE_ENV": JSON.stringify(opts.env),
         }),
       sourceMaps(),
-      // sizeSnapshot({
-      //   printInfo: false,
-      // }),
       shouldMinify &&
         terser({
           sourcemap: true,
@@ -233,100 +207,36 @@ export const babelPluginReach = babelPlugin.custom(() => ({
     };
   },
   config(config: any, { customOptions }: any) {
-    const defaultPlugins = createConfigItems(
-      "plugin",
-      [
-        // {
-        //   name: '@babel/plugin-transform-react-jsx',
-        //   pragma: customOptions.jsx || 'h',
-        //   pragmaFrag: customOptions.jsxFragment || 'Fragment',
-        // },
-        { name: "babel-plugin-annotate-pure-calls" },
-        { name: "babel-plugin-dev-expression" },
-        customOptions.format !== "cjs" && {
-          name: "babel-plugin-transform-rename-import",
-          replacements,
-        },
-        isTruthy(customOptions.defines) && {
-          name: "babel-plugin-transform-replace-expressions",
-          replace: customOptions.defines,
-        },
-        {
-          name: "babel-plugin-transform-async-to-promises",
-          inlineHelpers: true,
-          externalHelpers: true,
-        },
-        {
-          name: "@babel/plugin-proposal-class-properties",
-          loose: true,
-        },
-        // Adds syntax support for optional chaining (.?)
-        { name: "@babel/plugin-proposal-optional-chaining" },
-        // Adds syntax support for default value using ?? operator
-        { name: "@babel/plugin-proposal-nullish-coalescing-operator" },
-        {
-          name: "@babel/plugin-transform-regenerator",
-          async: false,
-        },
-        {
-          name: "babel-plugin-macros",
-        },
-        isTruthy(customOptions.extractErrors) && {
-          name: "./errors/transformErrorMessages",
-        },
-      ].filter(Boolean)
-    );
+    const defaultPlugins = createConfigItems("plugin", [
+      { name: "babel-plugin-annotate-pure-calls" },
+      { name: "babel-plugin-dev-expression" },
+      {
+        name: "@babel/plugin-proposal-class-properties",
+        loose: true,
+      },
+      { name: "@babel/plugin-proposal-optional-chaining" },
+      { name: "@babel/plugin-proposal-nullish-coalescing-operator" },
+      { name: "babel-plugin-macros" },
+    ]);
 
     const babelOptions = config.options || {};
     babelOptions.presets = babelOptions.presets || [];
 
-    const envIdx = babelOptions.presets.findIndex((preset: any) =>
-      preset.file.request.includes("@babel/preset-env")
+    const defaultPresets = createConfigItems("preset", [
+      {
+        name: "@babel/preset-env",
+        targets: customOptions.targets,
+        modules: false,
+        loose: true,
+        exclude: ["transform-async-to-generator", "transform-regenerator"],
+      },
+    ]);
+
+    babelOptions.presets = mergeConfigItems(
+      "preset",
+      defaultPresets,
+      babelOptions.presets
     );
-
-    // if they use preset-env, merge their options with ours
-    if (envIdx !== -1) {
-      const preset = babelOptions.presets[envIdx];
-      babelOptions.presets[envIdx] = createConfigItem(
-        [
-          preset.file.resolved,
-          merge(
-            {
-              loose: true,
-              targets: customOptions.targets,
-            },
-            preset.options,
-            {
-              modules: false,
-              exclude: merge(
-                ["transform-async-to-generator", "transform-regenerator"],
-                (preset.options && preset.options.exclude) || []
-              ),
-            }
-          ),
-        ],
-        {
-          type: `preset`,
-        }
-      );
-    } else {
-      // if no preset-env, add it & merge with their presets
-      const defaultPresets = createConfigItems("preset", [
-        {
-          name: "@babel/preset-env",
-          targets: customOptions.targets,
-          modules: false,
-          loose: true,
-          exclude: ["transform-async-to-generator", "transform-regenerator"],
-        },
-      ]);
-
-      babelOptions.presets = mergeConfigItems(
-        "preset",
-        defaultPresets,
-        babelOptions.presets
-      );
-    }
 
     // Merge babelrc & our plugins together
     babelOptions.plugins = mergeConfigItems(
@@ -342,12 +252,13 @@ export const babelPluginReach = babelPlugin.custom(() => ({
 async function buildAction() {
   const opts = await normalizeOpts(parseArgs());
   const buildConfigs = await createBuildConfigs(opts);
+
   await cleanDistFolder();
+
   const logger = await createProgressEstimator();
-  if (opts.format.includes("cjs")) {
-    const promise = writeCjsEntryFile(opts.name).catch(logError);
-    logger(promise, "Creating entry file");
-  }
+  const promise = writeCjsEntryFile(opts.name).catch(logError);
+  logger(promise, "Creating entry file");
+
   try {
     const promise = asyncro
       .map(buildConfigs, async (inputOptions: RollupOptions) => {
@@ -415,23 +326,19 @@ if (process.env.NODE_ENV === 'production') {
   ${baseLine}.cjs.development.js')
 }
 `;
-  return fs.outputFile(path.join(paths.appDist, "index.js"), contents);
+  return fs.outputFile(path.join(paths.packageDist, "index.js"), contents);
 }
 
 export async function createBuildConfigs(
   opts: NormalizedOpts
-): Promise<Array<RollupOptions>> {
-  const allInputs = concatAllArray(
-    opts.input.map((input: string) =>
-      createAllFormats(opts, input).map(
-        (options: ScriptOpts, index: number) => ({
-          ...options,
-          // We want to know if this is the first run for each entryfile
-          // for certain plugins (e.g. css)
-          writeMeta: index === 0,
-        })
-      )
-    )
+): Promise<RollupOptions[]> {
+  const allInputs = opts.input.flatMap((input: string) =>
+    createAllFormats(opts, input).map((options: ScriptOpts, index: number) => ({
+      ...options,
+      // We want to know if this is the first run for each entryfile
+      // for certain plugins (e.g. css)
+      writeMeta: index === 0,
+    }))
   );
 
   return await Promise.all(

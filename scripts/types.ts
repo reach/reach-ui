@@ -4,7 +4,6 @@ interface SharedOpts {
   // Path to tsconfig file
   tsconfig?: string;
   // Is error extraction running?
-  extractErrors?: boolean;
 }
 
 export type ModuleFormat = "cjs" | "umd" | "esm" | "system";
@@ -48,5 +47,3 @@ export interface ScriptOpts extends SharedOpts {
   // Only transpile, do not type check (makes compilation faster)
   transpileOnly?: boolean;
 }
-
-export type Many<T> = T | T[];

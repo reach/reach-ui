@@ -1,3 +1,4 @@
+// Forked and simplified from https://github.com/jaredpalmer/tsdx
 import chalk from "chalk";
 import execa from "execa";
 import ora from "ora";

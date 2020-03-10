@@ -5,7 +5,7 @@ import { camelCase } from "lodash";
 import mri from "mri";
 import glob from "tiny-glob/sync";
 import { paths } from "./constants";
-import { NormalizedOpts, ModuleFormat, Many } from "./types";
+import { NormalizedOpts } from "./types";
 
 const stderr = console.error.bind(console);
 
@@ -55,33 +55,6 @@ export function clearConsole() {
   );
 }
 
-let push = Array.prototype.push;
-
-/**
- * Concats an array of arrays into a single flat array.
- *
- * @param array
- */
-export function concatAllArray<T>(array: Many<T>[]) {
-  const ret: T[] = [];
-  for (let ii = 0; ii < array.length; ii++) {
-    const value = array[ii];
-    if (Array.isArray(value)) {
-      push.apply(ret, value);
-    } else if (value != null) {
-      throw new TypeError(
-        "concatAllArray: All items in the array must be an array or null, " +
-          'got "' +
-          value +
-          '" at index "' +
-          ii +
-          '" instead'
-      );
-    }
-  }
-  return ret;
-}
-
 export async function isFile(name: string) {
   try {
     const stats = await fs.stat(name);
@@ -126,11 +99,11 @@ export async function getInputs(
     .map(file => glob(file))
     .forEach(input => inputs.push(input));
 
-  return concatAllArray(inputs);
+  return inputs.flat();
 }
 
 export function getAppName(opts: any) {
-  return opts.name || path.basename(paths.appRoot);
+  return opts.name || path.basename(paths.packageRoot);
 }
 
 export async function normalizeOpts(opts: any): Promise<NormalizedOpts> {
@@ -138,12 +111,6 @@ export async function normalizeOpts(opts: any): Promise<NormalizedOpts> {
     ...opts,
     name: getAppName(opts),
     input: await getInputs(opts.entry),
-    format: opts.format.split(",").map((format: string) => {
-      if (format === "es") {
-        return "esm";
-      }
-      return format;
-    }) as [ModuleFormat, ...ModuleFormat[]],
   };
 }
 
@@ -184,9 +151,10 @@ export function logError(err: any) {
 }
 
 export async function cleanDistFolder() {
-  await fs.remove(paths.appDist);
+  await fs.remove(paths.packageDist);
 }
 
 export function parseArgs() {
-  return mri(process.argv.slice(2));
+  let { _, ...args } = mri(process.argv.slice(2));
+  return args;
 }

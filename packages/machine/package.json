@@ -10,9 +10,7 @@
     "directory": "packages/machine"
   },
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "clean": "rm -rf ./dist",
-    "compile": "cross-env NODE_ENV=production ts-node ../../scripts/build --format=cjs,esm --tsconfig tsconfig.build.json"
+    "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
     "@reach/utils": "^0.8.6",
