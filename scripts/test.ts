@@ -1,33 +1,6 @@
 // Forked and simplified from https://github.com/jaredpalmer/tsdx
 import * as jest from "jest";
-import { paths } from "./constants";
-
-const jestConfig = {
-  collectCoverageFrom: ["packages/**/src/**/*.{ts,tsx,js}"],
-  globals: {
-    __DEV__: "boolean",
-  },
-  transform: {
-    ".(ts|tsx)$": require.resolve("ts-jest/dist"),
-    ".(js|jsx)$": require.resolve("babel-jest"), // jest's default
-  },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  moduleNameMapper: {
-    "\\$test(.*)$": "<rootDir>/test/$1",
-  },
-  setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
-  testMatch: ["<rootDir>/**/*.(spec|test).{ts,tsx,js,jsx}"],
-  testURL: "http://localhost",
-  transformIgnorePatterns: [
-    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$",
-    "^.+\\.js$",
-  ],
-  rootDir: paths.packageRoot,
-  watchPlugins: [
-    require.resolve("jest-watch-typeahead/filename"),
-    require.resolve("jest-watch-typeahead/testname"),
-  ],
-};
+import jestConfig from "./config/jest";
 
 async function testAction() {
   // Do this as the first thing so that any code reading it knows the right env.
@@ -42,6 +15,19 @@ async function testAction() {
 
   const argv = process.argv.slice(2);
 
+  // Test individual package or packages with the --pkg argument
+  if (argv.includes("--pkg")) {
+    let i = argv.indexOf("--pkg");
+    argv.splice(
+      i,
+      2,
+      `packages/(${argv[i + 1]
+        .split(",")
+        .map(str => str.trim())
+        .join("|")})`
+    );
+  }
+
   argv.push(
     "--config",
     JSON.stringify({
@@ -49,7 +35,7 @@ async function testAction() {
     })
   );
 
-  const [, ...argsToPassToJestCli] = argv;
+  const [...argsToPassToJestCli] = argv;
   jest.run(argsToPassToJestCli);
 }
 

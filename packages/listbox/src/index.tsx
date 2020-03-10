@@ -1162,6 +1162,8 @@ function useKeyDown() {
           });
           return;
         case " ":
+          // Prevent browser from scrolling down
+          event.preventDefault();
           send({
             type: ListboxEvents.KeyDownSpace,
             value: navigationValue,
