@@ -39,7 +39,7 @@ describe("useId", () => {
 });
 
 function TestInput() {
-  let id = `name-${useId()}`;
+  let id = `name--${useId()}`;
   return (
     <div>
       <label htmlFor={id}>Name</label>
