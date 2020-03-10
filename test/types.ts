@@ -13,9 +13,7 @@ export type RenderOptions = Omit<TLRenderOptions, "queries"> & {
 export type RenderResult<
   P extends React.HTMLAttributes<T>,
   T extends HTMLElement
-> = TLRenderResult<
-  typeof queries & {
-    setProps(props: P): RenderResult<P, T>;
-    forceUpdate(): RenderResult<P, T>;
-  }
->;
+> = TLRenderResult<typeof queries> & {
+  setProps(props: P): RenderResult<P, T>;
+  forceUpdate(): RenderResult<P, T>;
+};

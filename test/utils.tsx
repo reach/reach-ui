@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { act } from "react-dom/test-utils";
 import { render as tlRender, MatcherFunction } from "@testing-library/react";
 export * from "@testing-library/react";
 import { RenderOptions, RenderResult } from "./types";
@@ -82,4 +83,4 @@ export function render<
 
 type Query = (f: MatcherFunction) => HTMLElement;
 
-export { RenderOptions, RenderResult };
+export { act, RenderOptions, RenderResult };

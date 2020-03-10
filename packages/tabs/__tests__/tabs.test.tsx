@@ -1,8 +1,16 @@
 import React from "react";
-import { render, fireEvent } from "$test/utils";
+import { render, fireEvent, cleanup } from "$test/utils";
+import { axe } from "jest-axe";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 describe("<Tabs />", () => {
+  it("should not have basic a11y issues", async () => {
+    const { container } = render(<BasicTabs />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+    cleanup();
+  });
+
   it("should match the snapshot", () => {
     const { asFragment } = render(<BasicTabs />);
     expect(asFragment()).toMatchSnapshot();
