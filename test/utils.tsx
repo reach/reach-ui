@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { act } from "react-dom/test-utils";
 import { render as tlRender, MatcherFunction } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 export * from "@testing-library/react";
 import { RenderOptions, RenderResult } from "./types";
 
@@ -83,4 +84,4 @@ export function render<
 
 type Query = (f: MatcherFunction) => HTMLElement;
 
-export { act, RenderOptions, RenderResult };
+export { act, userEvent, RenderOptions, RenderResult };

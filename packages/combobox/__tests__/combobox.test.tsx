@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { render, act, withMarkup } from "$test/utils";
+import { render, act, withMarkup, userEvent } from "$test/utils";
 // import { axe } from "jest-axe";
-import userEvent from "@testing-library/user-event";
 import {
   Combobox,
   ComboboxInput,

@@ -31,12 +31,18 @@ describe("<Tooltip />", () => {
 
     expect(baseElement).toMatchSnapshot("not visible");
 
-    act(() => void mouseOver(trigger));
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
+    act(() => {
+      mouseOver(trigger);
+      jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+    });
+
     expect(baseElement).toMatchSnapshot("after mouse rest timeout");
 
-    act(() => void mouseLeave(trigger));
-    act(() => void jest.advanceTimersByTime(LEAVE_TIMEOUT));
+    act(() => {
+      mouseLeave(trigger);
+      jest.advanceTimersByTime(LEAVE_TIMEOUT);
+    });
+
     expect(baseElement).toMatchSnapshot("after leave timeout");
   });
 
@@ -50,8 +56,11 @@ describe("<Tooltip />", () => {
     );
 
     const trigger = getByText("Trigger");
-    act(() => void mouseOver(trigger));
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
+    act(() => {
+      mouseOver(trigger);
+      jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+    });
+
     const tooltip = getByText("Content");
     expect(tooltip.tagName).toBe("SPAN");
   });
@@ -67,10 +76,14 @@ describe("<Tooltip />", () => {
     expect(baseElement).toMatchSnapshot("not visible");
 
     act(() => void focus(trigger));
+
     expect(baseElement).toMatchSnapshot("after focus");
 
-    act(() => void blur(trigger));
-    act(() => void jest.advanceTimersByTime(LEAVE_TIMEOUT));
+    act(() => {
+      blur(trigger);
+      jest.advanceTimersByTime(LEAVE_TIMEOUT);
+    });
+
     expect(baseElement).toMatchSnapshot("after blur");
   });
 
@@ -88,12 +101,17 @@ describe("<Tooltip />", () => {
     const firstTrigger = getByText("First Trigger");
     const secondTrigger = getByText("Second Trigger");
 
-    act(() => void mouseOver(firstTrigger));
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
+    act(() => {
+      mouseOver(firstTrigger);
+      jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+    });
     expect(baseElement).toMatchSnapshot("after mouse rest timeout");
 
-    act(() => void mouseLeave(firstTrigger));
-    act(() => void mouseOver(secondTrigger));
+    act(() => {
+      mouseLeave(firstTrigger);
+      mouseOver(secondTrigger);
+    });
+
     expect(baseElement).toMatchSnapshot("after switch without timeout");
   });
 
@@ -106,8 +124,11 @@ describe("<Tooltip />", () => {
 
     const trigger = getByText("Trigger");
 
-    act(() => void focus(trigger));
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
+    act(() => {
+      focus(trigger);
+      jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+    });
+
     expect(baseElement).toMatchSnapshot("after mouse rest timeout");
 
     act(() => void keyDown(trigger, { key: "Escape" }));
