@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { render, act, withMarkup } from "$test/utils";
+// import { axe } from "jest-axe";
 import userEvent from "@testing-library/user-event";
 import {
   Combobox,
@@ -15,6 +16,14 @@ describe("<Combobox />", () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
+
+  // TODO: Fails: ARIA attributes must conform to valid values (aria-valid-attr-value)
+  // it("should not have basic a11y issues", async () => {
+  //   const { container } = render(<BasicCombobox />);
+  //   const results = await axe(container);
+  //   expect(results).toHaveNoViolations();
+  //   cleanup();
+  // });
 
   it("should match the snapshot", () => {
     let { baseElement, getByTestId, getByRole } = render(<BasicCombobox />);
@@ -52,6 +61,7 @@ function BasicCombobox() {
       <h2>Clientside Search</h2>
       <Combobox id="holy-smokes">
         <ComboboxInput
+          aria-label="cool search"
           data-testid="input"
           name="awesome"
           onChange={handleChange}

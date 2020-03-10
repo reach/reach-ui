@@ -1,5 +1,6 @@
 import React from "react";
 import { render, fireEvent, act } from "$test/utils";
+//import { axe } from "jest-axe";
 import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 
 const { keyDown, mouseOver, mouseLeave, focus, blur } = fireEvent;
@@ -8,6 +9,18 @@ describe("<Tooltip />", () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
+
+  // See dialog test for notes
+  // it("should not have basic a11y issues", async () => {
+  //   const { container } = render(
+  //     <Tooltip label="Content">
+  //       <button>Trigger</button>
+  //     </Tooltip>
+  //   );
+  //   const results = await axe(container);
+  //   expect(results).toHaveNoViolations();
+  //   cleanup();
+  // });
 
   it("shows/hides on hover", () => {
     const { baseElement, getByText } = render(
