@@ -419,6 +419,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
         };
 
     const ctx: ISliderContext = {
+      ariaLabel,
       ariaLabelledBy,
       handleDimensions,
       handlePosition,
@@ -657,6 +658,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
     forwardedRef
   ) {
     const {
+      ariaLabel,
       ariaLabelledBy,
       disabled,
       handlePosition,
@@ -680,6 +682,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
     return (
       <div
         aria-disabled={disabled}
+        aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-orientation={orientation}
         aria-valuemax={sliderMax}
@@ -871,6 +874,7 @@ type HandleRef = React.RefObject<HTMLDivElement | null>;
 type SliderRef = React.RefObject<HTMLDivElement | null>;
 
 interface ISliderContext {
+  ariaLabel: string | undefined;
   ariaLabelledBy: string | undefined;
   handleDimensions: {
     width: number;

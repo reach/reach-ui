@@ -20,6 +20,7 @@ exports[`<Slider /> should match the snapshot 1`] = `
       />
       <div
         aria-disabled="false"
+        aria-label="basic slider"
         aria-orientation="horizontal"
         aria-valuemax="100"
         aria-valuemin="0"

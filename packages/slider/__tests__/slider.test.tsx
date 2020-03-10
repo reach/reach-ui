@@ -1,7 +1,8 @@
 import React from "react";
 // import renderer from "react-test-renderer";
 // import { act } from "react-dom/test-utils";
-import { render, fireEvent } from "$test/utils";
+import { render, fireEvent, cleanup } from "$test/utils";
+import { axe } from "jest-axe";
 import {
   Slider,
   SliderHandle,
@@ -19,15 +20,21 @@ const getCurrentValue = (el: HTMLElement) =>
   Number(el.getAttribute("aria-valuenow"));
 
 describe("<Slider />", () => {
+  it("should not have basic a11y issues", async () => {
+    const { container } = render(<BasicSlider />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+    cleanup();
+  });
   it("should match the snapshot", () => {
-    const { asFragment } = render(<Slider />);
+    const { asFragment } = render(<BasicSlider />);
     expect(asFragment()).toMatchSnapshot();
   });
   it("highlights markers as value is exceeded", () => {
     const min = 0;
     const max = 100;
     const { getByRole, getByTestId } = render(
-      <SliderInput min={min} max={max}>
+      <SliderInput aria-label="highlighter" min={min} max={max}>
         <SliderTrack>
           <SliderTrackHighlight />
           <SliderHandle />
@@ -60,7 +67,7 @@ describe("<Slider />", () => {
     const tenSteps = (max - min) / 10;
 
     const { getByRole } = render(
-      <SliderInput min={min} max={max}>
+      <SliderInput aria-label="mover" min={min} max={max}>
         <SliderTrack>
           <SliderTrackHighlight />
           <SliderHandle />
@@ -99,3 +106,7 @@ describe("<Slider />", () => {
     expect(getCurrentValue(handle)).toEqual(min + tenSteps);
   });
 });
+
+function BasicSlider() {
+  return <Slider aria-label="basic slider" />;
+}
