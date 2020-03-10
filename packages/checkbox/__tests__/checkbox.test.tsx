@@ -11,12 +11,13 @@ import { render, fireEvent, act } from "$test/utils";
 describe("<MixedCheckbox />", () => {
   it("should not have basic a11y issues", async () => {
     let { container, getByTestId } = render(<BasicMixedCheckbox />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
 
-    act(() => void fireEvent.click(getByTestId("checkbox")));
-    let newResults = await axe(container);
-    expect(newResults).toHaveNoViolations();
+    await act(async () => {
+      expect(await axe(container)).toHaveNoViolations();
+
+      fireEvent.click(getByTestId("checkbox"));
+      expect(await axe(container)).toHaveNoViolations();
+    });
   });
 
   // TODO: Write tests for mixed checkbox
@@ -25,14 +26,16 @@ describe("<MixedCheckbox />", () => {
 describe("<CustomCheckbox />", () => {
   it("should not have basic a11y issues", async () => {
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
 
-    act(() => void fireEvent.click(getByTestId("checkbox-1")));
-    expect(await axe(container)).toHaveNoViolations();
+    await act(async () => {
+      expect(await axe(container)).toHaveNoViolations();
 
-    act(() => void fireEvent.click(getByTestId("checkbox-2")));
-    expect(await axe(container)).toHaveNoViolations();
+      fireEvent.click(getByTestId("checkbox-1"));
+      expect(await axe(container)).toHaveNoViolations();
+
+      fireEvent.click(getByTestId("checkbox-2"));
+      expect(await axe(container)).toHaveNoViolations();
+    });
   });
 
   // TODO: Write tests for custom checkbox
