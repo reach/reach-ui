@@ -1,13 +1,27 @@
 import React from "react";
+import { render, act, fireEvent } from "$test/utils";
+import { axe } from "jest-axe";
 import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
 
 const MESSAGE_TIMEOUT = 5000;
 
-let name = "Basic (TS)";
+describe("<Alert />", () => {
+  it("should not have basic a11y issues", async () => {
+    let { container, getByTestId } = render(<AlertApp />);
+    let results = await axe(container);
+    expect(results).toHaveNoViolations();
 
-function Example() {
+    act(() => void fireEvent.click(getByTestId("add-alert")));
+    let newResults = await axe(container);
+    expect(newResults).toHaveNoViolations();
+  });
+
+  // TODO: Write alert tests
+});
+
+function AlertApp() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
   const interval = React.useRef<any>(null);
@@ -25,6 +39,7 @@ function Example() {
     <div>
       <h1>Cool Social App</h1>
       <button
+        data-testid="add-alert"
         onClick={() =>
           dispatch({
             type: "ADD_MESSAGE",
@@ -65,10 +80,6 @@ function Example() {
     </div>
   );
 }
-
-Example.story = { name };
-export const Comp = Example;
-export default { title: "Alert" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
