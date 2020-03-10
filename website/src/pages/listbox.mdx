@@ -224,6 +224,7 @@ return (
 | [`form`](#listbox-form)                 | `string`          | false    |
 | [`name`](#listbox-name)                 | `string`          | false    |
 | [`onChange`](#listbox-onchange)         | `func`            | false    |
+| [`portal`](#listbox-portal)             | `boolean`         | false    |
 | [`required`](#listbox-required)         | `boolean`         | false    |
 | [`value`](#listbox-value)               | `string`          | false    |
 
@@ -283,6 +284,12 @@ The name used for the listbo input's form value.
 `onChange?(newValue: string): void;`
 
 The callback that fires when the listbox value changes.
+
+##### Listbox `portal`
+
+`portal?: boolean`
+
+Whether or not the popover should be rendered inside a portal. Defaults to `true`.
 
 ##### Listbox `required`
 

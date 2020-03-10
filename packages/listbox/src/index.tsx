@@ -381,7 +381,10 @@ export type ListboxInputProps = Omit<
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-1
  */
 export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
-  function Listbox({ arrow = "▼", button, children, ...props }, forwardedRef) {
+  function Listbox(
+    { arrow = "▼", button, children, portal = true, ...props },
+    forwardedRef
+  ) {
     return (
       <ListboxInput {...props} _componentName="Listbox" ref={forwardedRef}>
         {({ value, valueLabel }) => (
@@ -396,7 +399,7 @@ export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
                   : undefined
               }
             />
-            <ListboxPopover>
+            <ListboxPopover portal={portal}>
               <ListboxList>{children}</ListboxList>
             </ListboxPopover>
           </Fragment>
@@ -440,6 +443,13 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
         label: string | null;
       }) => React.ReactNode);
   children: React.ReactNode;
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-portal
+   */
+  portal?: boolean;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
