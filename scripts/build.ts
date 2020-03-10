@@ -17,8 +17,6 @@ import {
   createProgressEstimator,
   external,
   normalizeOpts,
-  safePackageName,
-  safeVariableName,
   logError,
   cleanDistFolder,
   parseArgs,
@@ -36,7 +34,7 @@ export async function createRollupConfig(
     opts.minify !== undefined ? opts.minify : opts.env === "production";
 
   const outputName = [
-    `${paths.packageDist}/${safePackageName(opts.name)}`,
+    `${paths.packageDist}/${opts.name}`,
     opts.format,
     opts.env,
     shouldMinify ? "min" : "",
@@ -59,27 +57,6 @@ export async function createRollupConfig(
     input: opts.input,
     // Tell Rollup which packages to ignore
     external: (id: string) => external(id),
-    // Rollup has treeshaking by default, but we can optimize it further...
-    treeshake: {
-      // We assume reading a property of an object never has side-effects.
-      // This means we WILL remove getters and setters defined directly on objects.
-      // Any getters or setters defined on classes will not be effected.
-      //
-      // @example
-      //
-      // const foo = {
-      //  get bar() {
-      //    console.log('effect');
-      //    return 'bar';
-      //  }
-      // }
-      //
-      // const result = foo.bar;
-      // const illegalAccess = foo.quux.tooDeep;
-      //
-      // Punchline....Don't use getters and setters
-      propertyReadSideEffects: false,
-    },
     // Establish Rollup output
     output: {
       // Set filenames of the consumer's package
@@ -87,11 +64,12 @@ export async function createRollupConfig(
       // Pass through the file format
       format: opts.format,
       // Do not let Rollup call Object.freeze() on namespace import objects
-      // (i.e. import * as namespaceImportObject from...) that are accessed dynamically.
+      // (i.e. import * as namespaceImportObject from...) that are accessed
+      // dynamically.
       freeze: false,
       // Respect tsconfig esModuleInterop when setting __esModule.
       esModule: tsconfigJSON ? tsconfigJSON.esModuleInterop : false,
-      name: opts.name || safeVariableName(opts.name),
+      name: opts.name,
       sourcemap: true,
       globals: { react: "React", "react-native": "ReactNative" },
       exports: "named",
@@ -316,16 +294,13 @@ function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
 }
 
 export function writeCjsEntryFile(name: string) {
-  const baseLine = `module.exports = require('./${safePackageName(name)}`;
-  const contents = `
-'use strict'
+  const contents = `'use strict';
 
 if (process.env.NODE_ENV === 'production') {
-  ${baseLine}.cjs.production.min.js')
+  module.exports = require('./${name}.cjs.production.min.js');
 } else {
-  ${baseLine}.cjs.development.js')
-}
-`;
+  module.exports = require('./${name}.cjs.development.js');
+}`;
   return fs.outputFile(path.join(paths.packageDist, "index.js"), contents);
 }
 

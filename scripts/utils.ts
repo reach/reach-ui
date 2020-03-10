@@ -1,40 +1,13 @@
 import chalk from "chalk";
 import fs from "fs-extra";
 import path from "path";
-import { camelCase } from "lodash";
 import mri from "mri";
 import glob from "tiny-glob/sync";
+import createLogger from "progress-estimator";
 import { paths } from "./constants";
 import { NormalizedOpts } from "./types";
 
 const stderr = console.error.bind(console);
-
-// Remove the package name scope if it exists
-export function removeScope(name: string) {
-  return name.replace(/^@.*\//, "");
-}
-
-// UMD-safe package name
-export function safeVariableName(name: string) {
-  return camelCase(
-    removeScope(name)
-      .toLowerCase()
-      .replace(/((^[^a-zA-Z]+)|[^\w.-])|([^a-zA-Z0-9]+$)/g, "")
-  );
-}
-
-export function isTruthy(obj?: any) {
-  if (!obj) {
-    return false;
-  }
-  return obj.constructor !== Object || Object.keys(obj).length > 0;
-}
-
-export function safePackageName(name: string) {
-  return name
-    .toLowerCase()
-    .replace(/(^@.*\/)|((^[^a-zA-Z]+)|[^\w.-])|([^a-zA-Z0-9]+$)/g, "");
-}
 
 export function external(id: string) {
   return !id.startsWith(".") && !path.isAbsolute(id);
@@ -88,36 +61,32 @@ export async function isDir(name: string) {
 export async function getInputs(
   entries?: string | string[]
 ): Promise<string[]> {
-  let inputs: string[] = [];
-  let stub: any[] = [];
-  stub
+  return ([] as any[])
     .concat(
       entries && entries.length
         ? entries
         : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
     )
-    .map(file => glob(file))
-    .forEach(input => inputs.push(input));
-
-  return inputs.flat();
+    .flatMap(file => glob(file));
 }
 
-export function getAppName(opts: any) {
+export function getPackageName(opts: any) {
   return opts.name || path.basename(paths.packageRoot);
 }
 
 export async function normalizeOpts(opts: any): Promise<NormalizedOpts> {
   return {
     ...opts,
-    name: getAppName(opts),
+    name: getPackageName(opts),
     input: await getInputs(opts.entry),
   };
 }
 
 export async function createProgressEstimator() {
   await fs.ensureDir(paths.progressEstimatorCache);
-  return require("progress-estimator")({
-    // All configuration keys are optional, but it's recommended to specify a storage location.
+  return createLogger({
+    // All configuration keys are optional, but it's recommended to specify a
+    // storage location.
     storagePath: paths.progressEstimatorCache,
   });
 }

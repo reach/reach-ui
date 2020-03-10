@@ -10,7 +10,7 @@ import {
   getInputs,
   logError,
   parseArgs,
-  getAppName,
+  getPackageName,
 } from "./utils";
 import { createBuildConfigs, writeCjsEntryFile } from "./build";
 
@@ -20,7 +20,7 @@ async function watchAction() {
   if (!opts.noClean) {
     await cleanDistFolder();
   }
-  opts.name = opts.name || getAppName(opts);
+  opts.name = opts.name || getPackageName(opts);
   opts.input = await getInputs(opts.entry);
 
   await writeCjsEntryFile(opts.name);
@@ -50,7 +50,8 @@ async function watchAction() {
   }
 
   const spinner = ora().start();
-  await watch(
+
+  watch(
     (buildConfigs as RollupWatchOptions[]).map(inputOptions => ({
       watch: {
         silent: true,
@@ -62,7 +63,6 @@ async function watchAction() {
   ).on("event", async event => {
     // clear previous onSuccess/onFailure hook processes so they don't pile up
     await killHooks();
-
     if (event.code === "START") {
       if (!opts.verbose) {
         clearConsole();
@@ -79,7 +79,6 @@ async function watchAction() {
       console.log(`
 ${chalk.dim("Watching for changes")}
 `);
-
       try {
         if (firstTime && opts.onFirstSuccess) {
           firstTime = false;
