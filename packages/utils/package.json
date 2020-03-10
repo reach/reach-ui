@@ -12,7 +12,7 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "clean": "rm -rf ./dist",
-    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+    "compile": "cross-env NODE_ENV=production ts-node ../../scripts/build --format=cjs,esm --tsconfig tsconfig.build.json"
   },
   "peerDependencies": {
     "react": "^16.8.0",

@@ -19,6 +19,7 @@ pids
 
 # bundled files
 /packages/*/dist
+/packages/*/errors
 
 # editor specific
 .vscode
@@ -37,3 +38,4 @@ package-lock.json
 .pnp/
 .pnp.js
 .yarn-integrity
+/errors
