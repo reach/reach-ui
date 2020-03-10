@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { render, fireEvent } from "$test/utils";
+import { axe } from "jest-axe";
+import { render, fireEvent, act } from "$test/utils";
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -7,6 +8,16 @@ import {
 } from "@reach/alert-dialog";
 
 describe("<AlertDialog />", () => {
+  it("should not have basic a11y issues", async () => {
+    let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
+    let results = await axe(container);
+    expect(results).toHaveNoViolations();
+
+    act(() => void fireEvent.click(getByText("Show Dialog")));
+    let newResults = await axe(getByTestId("dialog"));
+    expect(newResults).toHaveNoViolations();
+  });
+
   it("should open the dialog", () => {
     const { baseElement, asFragment, getByText } = render(<BasicAlertDialog />);
     expect(asFragment()).toMatchSnapshot();
@@ -14,6 +25,7 @@ describe("<AlertDialog />", () => {
     fireEvent.click(openButton);
     expect(baseElement).toMatchSnapshot();
   });
+
   it("should have the correct label", () => {
     const { baseElement, getByText } = render(<BasicAlertDialog />);
     let openButton = getByText("Show Dialog");
@@ -37,7 +49,11 @@ function BasicAlertDialog() {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       {showDialog && (
-        <AlertDialog leastDestructiveRef={close} id="great-work">
+        <AlertDialog
+          leastDestructiveRef={close}
+          data-testid="dialog"
+          id="great-work"
+        >
           <AlertDialogLabel>Confirmation!</AlertDialogLabel>
           <AlertDialogDescription>
             Are you sure you want to have that milkshake?

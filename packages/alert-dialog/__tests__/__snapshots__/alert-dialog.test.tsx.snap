@@ -47,6 +47,7 @@ exports[`<AlertDialog /> should open the dialog 2`] = `
             data-reach-alert-dialog-content="true"
             data-reach-alert-dialong-content="true"
             data-reach-dialog-content=""
+            data-testid="dialog"
             role="alertdialog"
             tabindex="-1"
           >
