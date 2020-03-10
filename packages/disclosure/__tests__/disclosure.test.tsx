@@ -9,12 +9,11 @@ import {
 
 describe("<Disclosure />", () => {
   it("should not have basic a11y issues", async () => {
-    let { container, getByText } = render(<BasicDisclosure />);
-    let button = getByText("Click Button");
+    let { getByRole, container } = render(<BasicDisclosure />);
     let results = await axe(container);
     expect(results).toHaveNoViolations();
 
-    act(() => void fireEvent.click(button));
+    act(() => void fireEvent.click(getByRole("button")));
     let newResults = await axe(container);
     expect(newResults).toHaveNoViolations();
   });
@@ -29,6 +28,8 @@ describe("<Disclosure />", () => {
   // TODO: This fails for some reason despite working fine in the browser
   //       Tried keyDown, keyUp, and any number of options that should satisfy
   //       the requirements to no avail 🤷‍♂️
+  //       The click handler is called in the component on an HTML5 button, so
+  //       I'm not sure if we can/should test or not.
   // it("should toggle on spacebar", () => {
   //   let { getByRole, getByTestId } = render(<BasicDisclosure />);
   //   expect(getByTestId("panel")).not.toBeVisible();
