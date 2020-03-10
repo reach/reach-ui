@@ -94,7 +94,7 @@ describe("<Tooltip />", () => {
 
     const trigger = getByText("Trigger");
 
-    focus(trigger);
+    act(() => void focus(trigger));
     act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
     expect(baseElement).toMatchSnapshot("after mouse rest timeout");
 

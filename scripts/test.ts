@@ -49,8 +49,6 @@ async function testAction() {
     })
   );
 
-  // console.log(jest);
-
   const [, ...argsToPassToJestCli] = argv;
   jest.run(argsToPassToJestCli);
 }
