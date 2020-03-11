@@ -111,6 +111,7 @@
     "@types/jest": "^25.1.4",
     "@types/lodash": "^4.14.149",
     "@types/match-sorter": "^4.0.0",
+    "@types/mri": "^1.1.0",
     "@types/ms": "^0.7.31",
     "@types/node": "^13.9.0",
     "@types/ora": "^3.2.0",
