@@ -29,6 +29,7 @@ async function testAction() {
   }
 
   argv.push(
+    "--verbose",
     "--config",
     JSON.stringify({
       ...jestConfig,

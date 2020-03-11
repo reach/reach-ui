@@ -21,7 +21,7 @@ describe("<MenuButton />", () => {
     }
 
     expect(queryByTextWithMarkup("Create a Copy")).not.toBeTruthy();
-    act(clickButton);
+    act(() => void clickButton());
     expect(getByTextWithMarkup("Create a Copy")).toBeInTheDocument();
   });
 });
