@@ -15,6 +15,8 @@
  *       without JavaScript enabled and small-screen users.
  * TODO: Check positioning on mobile near collision points
  *       https://twitter.com/PipoPeperoni/status/1237597623508275200
+ * TODO: Test arrow key navigation in forms in Firefox
+ *       https://twitter.com/GassnerKendall/status/1237778370118598661
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
