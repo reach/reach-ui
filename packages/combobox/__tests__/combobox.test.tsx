@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, act, withMarkup, userEvent, cleanup } from "$test/utils";
+import { render, act, withMarkup, userEvent } from "$test/utils";
 import { axe } from "jest-axe";
 import {
   Combobox,
@@ -13,20 +13,20 @@ import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
   it("should not have basic a11y issues", async () => {
-    const { container } = render(<BasicCombobox />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
+    let { container } = render(<BasicCombobox />);
+    expect(await axe(container)).toHaveNoViolations();
   });
 
   it("should open a list on text entry", () => {
     jest.useFakeTimers();
     let optionToSelect = "Eagle Pass, Texas";
-
     let { getByTestId, getByText } = render(<BasicCombobox />);
     let getByTextWithMarkup = withMarkup(getByText);
     let input = getByTestId("input");
-    userEvent.type(input, "e");
-    act(() => void jest.advanceTimersByTime(100));
+    act(() => {
+      userEvent.type(input, "e");
+      jest.advanceTimersByTime(100);
+    });
     expect(getByTestId("list")).toBeInTheDocument();
     expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
   });

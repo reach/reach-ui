@@ -1,5 +1,5 @@
 import React from "react";
-import { render, act, fireEvent, userEvent } from "$test/utils";
+import { render, act, fireEvent } from "$test/utils";
 import { axe } from "jest-axe";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -28,8 +28,8 @@ describe("<Listbox />", () => {
     act(clickButton);
     expect(getPopover()).not.toBeVisible();
 
-    // Listbox doesn't use an HTML5 button, so we also need to test keyboard
-    // events
+    // TODO: Listbox doesn't use an HTML5 button, so we also need to test
+    //       keyboard events
   });
 });
 

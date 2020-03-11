@@ -25,7 +25,7 @@ import { RenderOptions, RenderResult } from "./types";
  * @param query The getter function returned from RTL's render method
  */
 export function withMarkup(query: Query) {
-  return (text: string): HTMLElement =>
+  return (text: string): HTMLElement | null =>
     query((content: string, node: HTMLElement) => {
       const hasText = (node: HTMLElement) => node.textContent === text;
       const childrenDontHaveText = Array.from(node.children).every(
@@ -82,6 +82,6 @@ export function render<
   return result;
 }
 
-type Query = (f: MatcherFunction) => HTMLElement;
+type Query = (f: MatcherFunction) => HTMLElement | null;
 
 export { act, userEvent, RenderOptions, RenderResult };
