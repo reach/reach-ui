@@ -20,7 +20,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
 
 import React, {
@@ -547,12 +547,29 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
 
     return (
       <Comp
-        aria-controls={listboxId}
+        // Applicable to all host language elements regardless of whether a
+        // `role` is applied.
+        // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
         aria-disabled={disabled || undefined}
-        aria-expanded={expanded}
+        // Set by the JavaScript when the listbox is displayed. Otherwise, is
+        // not present.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
+        aria-expanded={expanded ? true : undefined}
+        // Indicates that activating the button displays a listbox.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
         aria-haspopup="listbox"
+        // References the two elements whose labels are concatenated by the
+        // browser to label the button. The first element is a span containing
+        // perceivable label for the listbox component. The second element is
+        // the button itself; the button text is set to the name of the
+        // currently chosen element.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
         aria-labelledby={[labelId, buttonId].filter(Boolean).join(" ")}
+        // Identifies the element as a button widget.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
         role="button"
+        // Includes the element in the tab sequence.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
         tabIndex={disabled ? -1 : 0}
         {...props}
         ref={ref}
@@ -656,6 +673,8 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
     let defaultArrow = expanded ? "▲" : "▼";
     return (
       <span
+        // The arrow provides no semantic value and its inner content should be
+        // hidden from the accessibility tree
         aria-hidden
         {...props}
         ref={forwardedRef}
@@ -807,9 +826,24 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
 
     return (
       <Comp
+        // Tells assistive technologies which of the options, if any, is
+        // visually indicated as having keyboard focus. DOM focus remains on the
+        // `ul` element and the idref specified for `aria-activedescendant`
+        // refers to the `li` element that is visually styled as focused. When
+        // navigation keys, such as `Down Arrow`, are pressed, the JavaScript
+        // changes the value.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
         aria-activedescendant={useOptionId(value)}
+        // If the listbox is not part of another widget, then it has a visible
+        // label referenced by `aria-labelledby` on the element with role
+        // `listbox`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
         aria-labelledby={labelId}
+        // An element that contains or owns all the listbox options has role
+        // listbox.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
         role="listbox"
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
         tabIndex={-1}
         {...props}
         ref={ref}
@@ -969,10 +1003,18 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
 
     return (
       <Comp
+        // In a single-select listbox, the selected option has `aria-selected`
+        // set to `true`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
         aria-selected={isSelected}
+        // Applicable to all host language elements regardless of whether a
+        // `role` is applied.
+        // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
         aria-disabled={disabled ? true : undefined}
+        // Each option in the listbox has role `option` and is a DOM descendant
+        // of the element with role `listbox`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
         role="option"
-        tabIndex={-1}
         {...props}
         ref={ref}
         id={useOptionId(value)}
@@ -1049,7 +1091,11 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
     return (
       <ListboxGroupContext.Provider value={{ labelId }}>
         <div
+          // Refers to the element containing the option group label
+          // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
           aria-labelledby={labelId}
+          // Identifies a group of related options
+          // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
           role="group"
           {...props}
           data-reach-listbox-group=""
@@ -1101,7 +1147,9 @@ export const ListboxGroupLabel = forwardRefWithAs<
   let { labelId } = useListboxGroupContext();
   return (
     <Comp
-      role="none"
+      // See examples
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+      role="presentation"
       {...props}
       ref={forwardedRef}
       data-reach-listbox-group-label=""
