@@ -6,7 +6,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
  *
  * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
@@ -252,8 +252,18 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
 
     return (
       <button
-        aria-expanded={isOpen}
+        // When the menu is displayed, the element with role `button` has
+        // `aria-expanded` set to `true`. When the menu is hidden, it is
+        // recommended that `aria-expanded` is not present.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+        aria-expanded={isOpen ? true : undefined}
+        // The element with role `button` has `aria-haspopup` set to either
+        // `"menu"` or `true`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
         aria-haspopup
+        // Optionally, the element with role `button` has a value specified for
+        // `aria-controls` that refers to the element with role `menu`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
         aria-controls={menuId}
         {...props}
         ref={ref}
@@ -646,11 +656,20 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
 
     return (
       // TODO: Should probably file a but in jsx-a11y, but this is correct
-      // according to https://www.w3.org/TR/wai-aria-practices/examples/menu-button/menu-button-actions-active-descendant.html
+      // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
       // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
       <div
+        // Refers to the descendant menuitem element that is visually indicated
+        // as focused.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
         aria-activedescendant={useMenuItemId(selectionIndex) || undefined}
+        // Refers to the element that contains the accessible name for the
+        // `menu`. The menu is labeled by the menu button.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
         aria-labelledby={buttonId || undefined}
+        // The element that contains the menu items displayed by activating the
+        // button has role menu.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
         role="menu"
         tabIndex={-1}
         {...props}
