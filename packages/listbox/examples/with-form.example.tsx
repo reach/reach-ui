@@ -2,6 +2,9 @@ import React, { useRef, useState } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
 
+// TODO: Need to check out moving focus on iOS in a form
+// https://twitter.com/HipsterSmoothie/status/1237522273902313472
+
 let name = "With a Form (TS)";
 
 function Example() {

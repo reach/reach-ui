@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { render, act, withMarkup, userEvent } from "$test/utils";
-// import { axe } from "jest-axe";
+import { render, act, withMarkup, userEvent, cleanup } from "$test/utils";
+import { axe } from "jest-axe";
 import {
   Combobox,
   ComboboxInput,
@@ -12,27 +12,14 @@ import matchSorter from "match-sorter";
 import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
-  // TODO: Fails: ARIA attributes must conform to valid values (aria-valid-attr-value)
-  // it("should not have basic a11y issues", async () => {
-  //   const { container } = render(<BasicCombobox />);
-  //   const results = await axe(container);
-  //   expect(results).toHaveNoViolations();
-  // });
-
-  it("should match the snapshot", () => {
-    let { baseElement, getByTestId, getByRole } = render(<BasicCombobox />);
-    let input = getByTestId("input");
-    expect(baseElement).toMatchSnapshot("before text input");
-    userEvent.type(input, "e");
-    expect(baseElement).toMatchSnapshot("after text input");
-    expect(getByRole("combobox")).toHaveAttribute("aria-expanded", "true");
+  it("should not have basic a11y issues", async () => {
+    const { container } = render(<BasicCombobox />);
+    let results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 
   it("should open a list on text entry", () => {
+    jest.useFakeTimers();
     let optionToSelect = "Eagle Pass, Texas";
 
     let { getByTestId, getByText } = render(<BasicCombobox />);
