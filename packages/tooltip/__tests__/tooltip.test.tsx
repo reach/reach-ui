@@ -10,7 +10,7 @@ describe("<Tooltip />", () => {
     jest.useFakeTimers();
   });
 
-  // See dialog test for notes
+  // TODO: See dialog test for notes, similar issues here
   // it("should not have basic a11y issues", async () => {
   //   const { container } = render(
   //     <Tooltip label="Content">
