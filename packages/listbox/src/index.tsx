@@ -3,6 +3,17 @@
  *
  * See NOTES.md for some background info if you're interested!
  *
+ * TODO: OS-specific behavior (ie, Enter key on native select on Windows)
+ * TODO: Consider hack to implement focus controls in forms on iOS
+ *       https://github.com/angular/material/issues/8440
+ *       Instead of a hidden select, maybe use a visually hidden select with
+ *       aria-hidden. When that input gets focus, immediate send focus to the
+ *       ListboxButton, then toggle the hidden input's tabIndex to prevent
+ *       re-focusing it (this is just an idea, may not work, no idea how some
+ *       screen-reader would deal with it).
+ * TODO: Write examples showing fallback to a native select menu for users
+ *       without JavaScript enabled and small-screen users.
+ *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox
@@ -286,9 +297,10 @@ export const ListboxInput = forwardRef<
             ref={hiddenInput}
             disabled={disabled}
             form={form}
-            hidden
             name={name}
+            readOnly
             required={required}
+            tabIndex={-1}
             type="text"
             value={current.context.value || ""}
           />
