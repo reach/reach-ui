@@ -2,7 +2,7 @@
   --reach-skip-nav: 1;
 }
 
-[data-reach-skip-link] {
+[data-reach-skip-nav-link] {
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -13,7 +13,7 @@
   position: absolute;
 }
 
-[data-reach-skip-link]:focus {
+[data-reach-skip-nav-link]:focus {
   padding: 1rem;
   position: fixed;
   top: 10px;
