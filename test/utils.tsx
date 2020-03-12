@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { act } from "react-dom/test-utils";
 import { render as tlRender, MatcherFunction } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-export * from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import { RenderOptions, RenderResult } from "./types";
 
 /**
@@ -33,6 +33,16 @@ export function withMarkup(query: Query) {
       );
       return hasText(node) && childrenDontHaveText;
     });
+}
+
+/**
+ * Fire keydown followed immediately by keyup
+ * @param element
+ * @param key
+ */
+export function keyType(element: HTMLElement | Document, key: string) {
+  fireEvent.keyDown(element, { key });
+  fireEvent.keyUp(element, { key });
 }
 
 export function render<
@@ -84,4 +94,5 @@ export function render<
 
 type Query = (f: MatcherFunction) => HTMLElement | null;
 
+export * from "@testing-library/react";
 export { act, userEvent, RenderOptions, RenderResult };

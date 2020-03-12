@@ -15,7 +15,8 @@
  *       without JavaScript enabled and small-screen users.
  * TODO: Check positioning on mobile near collision points
  *       https://twitter.com/PipoPeperoni/status/1237597623508275200
- * TODO: Test arrow key navigation in forms in Firefox
+ * TODO: Test arrow key navigation in forms in Firefox.
+ *       Probably similar solution needed for iOS issue above.
  *       https://twitter.com/GassnerKendall/status/1237778370118598661
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
@@ -116,6 +117,7 @@ export const ListboxInput = forwardRef<
 >(function ListboxInput(
   {
     "aria-labelledby": ariaLabelledBy,
+    "aria-label": ariaLabel,
     children,
     defaultValue,
     disabled = false,
@@ -198,6 +200,7 @@ export const ListboxInput = forwardRef<
 
   let context: ListboxContextValue = useMemo(() => {
     return {
+      ariaLabel,
       disabled,
       ids: {
         label: ariaLabelledBy,
@@ -220,7 +223,16 @@ export const ListboxInput = forwardRef<
       send,
       state: current,
     };
-  }, [ariaLabelledBy, current, disabled, id, onChange, send, valueLabel]);
+  }, [
+    ariaLabel,
+    ariaLabelledBy,
+    current,
+    disabled,
+    id,
+    onChange,
+    send,
+    valueLabel,
+  ]);
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
@@ -480,6 +492,7 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
 export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   function ListboxButton(
     {
+      "aria-label": ariaLabel,
       arrow = false,
       as: Comp = "span",
       children,
@@ -492,7 +505,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   ) {
     let {
       disabled,
-      ids: { button: buttonId, label: labelId, listbox: listboxId },
+      ids: { button: buttonId, label: labelId },
       mouseEventStartedRef,
       refs: { button: buttonRef },
       state,
@@ -564,7 +577,12 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         // the button itself; the button text is set to the name of the
         // currently chosen element.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        aria-labelledby={[labelId, buttonId].filter(Boolean).join(" ")}
+        // If an `aria-label` is passed, we should skip `aria-labelledby` to
+        // avoid confusion.
+        aria-labelledby={
+          ariaLabel ? undefined : [labelId, buttonId].filter(Boolean).join(" ")
+        }
+        aria-label={ariaLabel}
         // Identifies the element as a button widget.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
         role="button"
@@ -816,6 +834,7 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
 export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
     let {
+      ariaLabel,
       ids: { listbox: listboxId, label: labelId },
       refs: { list: listRef },
       state: {
@@ -838,7 +857,10 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         // label referenced by `aria-labelledby` on the element with role
         // `listbox`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        aria-labelledby={labelId}
+        // If an `aria-label` is passed, we should skip `aria-labelledby` to
+        // avoid confusion.
+        aria-labelledby={ariaLabel ? undefined : labelId}
+        aria-label={ariaLabel}
         // An element that contains or owns all the listbox options has role
         // listbox.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
@@ -1296,6 +1318,7 @@ export interface ListboxDescendantProps {
 export type ListboxDescendant = Descendant<HTMLElement, ListboxDescendantProps>;
 
 export interface ListboxContextValue {
+  ariaLabel?: string;
   refs: MachineToReactRefMap<ListboxEvent>;
   disabled: boolean;
   ids: {
