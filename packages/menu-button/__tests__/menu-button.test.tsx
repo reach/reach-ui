@@ -1,23 +1,19 @@
 import React from "react";
-import { render, act, withMarkup, fireEvent } from "$test/utils";
+import { render, act, fireEvent } from "$test/utils";
 import { axe } from "jest-axe";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 
 describe("<MenuButton />", () => {
-  it("should match the snapshot", () => {
-    let { asFragment } = render(<BasicMenuButton />);
-    expect(asFragment()).toMatchSnapshot();
-  });
-
   it("should not have basic a11y issues", async () => {
     let { container } = render(<BasicMenuButton />);
     expect(await axe(container)).toHaveNoViolations();
   });
 
   it("should toggle on button click", () => {
-    let { getByRole, getByText, queryByText } = render(<BasicMenuButton />);
-    let getByTextWithMarkup = withMarkup(getByText);
-    let queryByTextWithMarkup = withMarkup(queryByText);
+    let { getByRole, baseElement } = render(<BasicMenuButton />);
+
+    let getPopover = () =>
+      baseElement.querySelector("[data-reach-menu-popover]");
 
     // Menu opens on mousedown, not click!
     function clickButton() {
@@ -25,9 +21,11 @@ describe("<MenuButton />", () => {
       fireEvent.mouseUp(getByRole("button"));
     }
 
-    expect(queryByTextWithMarkup("Create a Copy")).not.toBeTruthy();
+    expect(getPopover()).not.toBeVisible();
     act(() => void clickButton());
-    expect(getByTextWithMarkup("Create a Copy")).toBeInTheDocument();
+    expect(getPopover()).toBeVisible();
+    act(() => void clickButton());
+    expect(getPopover()).not.toBeVisible();
   });
 });
 
@@ -38,7 +36,6 @@ function BasicMenuButton() {
         Actions <span aria-hidden="true">▾</span>
       </MenuButton>
       <MenuList>
-        <input type="text" />
         <MenuItem onSelect={() => jest.fn()}>Download</MenuItem>
         <MenuItem onSelect={() => jest.fn()}>Create a Copy</MenuItem>
         <MenuItem onSelect={() => jest.fn()}>Mark as Draft</MenuItem>
