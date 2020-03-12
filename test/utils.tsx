@@ -1,9 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { act } from "react-dom/test-utils";
-import { render as tlRender, MatcherFunction } from "@testing-library/react";
+import {
+  render as tlRender,
+  MatcherFunction,
+  fireEvent,
+} from "@testing-library/react";
+import { fireEvent as fireDomEvent } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import { fireEvent } from "@testing-library/react";
 import { RenderOptions, RenderResult } from "./types";
 
 /**
@@ -95,4 +99,4 @@ export function render<
 type Query = (f: MatcherFunction) => HTMLElement | null;
 
 export * from "@testing-library/react";
-export { act, userEvent, RenderOptions, RenderResult };
+export { act, userEvent, fireDomEvent, RenderOptions, RenderResult };

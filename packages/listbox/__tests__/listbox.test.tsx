@@ -14,14 +14,14 @@ import VisuallyHidden from "@reach/visually-hidden";
 describe("<Listbox />", () => {
   it("should mount the component", () => {
     act(() => {
-      const { queryByRole } = render(<BasicListbox />);
+      let { queryByRole } = render(<BasicListbox />);
       expect(queryByRole("button")).toBeTruthy();
     });
   });
 
   it("should mount the composed component", () => {
     act(() => {
-      const { queryByRole } = render(
+      let { queryByRole } = render(
         <ListboxInput>
           <ListboxButton />
           <ListboxPopover>
@@ -39,13 +39,13 @@ describe("<Listbox />", () => {
 
   describe("a11y", () => {
     it("should not have basic a11y issues", async () => {
-      const { container } = render(<FancyListbox />);
-      const results = await axe(container);
+      let { container } = render(<FancyListbox />);
+      let results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it("renders a valid listbox", () => {
-      const { queryByRole, getByRole } = render(<BasicListbox />);
+      let { queryByRole, getByRole } = render(<BasicListbox />);
 
       // Since a closed listbox is hidden, it won't be visible to the
       // accessibility tree which means queryByRole will fail. Open the listbox
@@ -58,12 +58,12 @@ describe("<Listbox />", () => {
     });
 
     it("should have a tabbable button", () => {
-      const { getByRole } = render(<BasicListbox />);
+      let { getByRole } = render(<BasicListbox />);
       expect(getByRole("button")).toHaveAttribute("tabindex", "0");
     });
 
     //   TODO: it("should focus the list when open", () => {
-    //     const { getByRole } = render(<BasicListbox />);
+    //     let { getByRole } = render(<BasicListbox />);
 
     //     act(() => {
     //       fireMouseClick(getByRole("button"));
@@ -81,7 +81,7 @@ describe("<Listbox />", () => {
 
   describe("as a form input", () => {
     it("should not have a hidden input field when form props are not provided", () => {
-      const { container } = render(
+      let { container } = render(
         <Listbox>
           <ListboxOption value="asada">Carne Asada</ListboxOption>
           <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -92,7 +92,7 @@ describe("<Listbox />", () => {
     });
 
     it("should have a hidden input field when `name` prop is provided", () => {
-      const { container } = render(
+      let { container } = render(
         <Listbox name="taco">
           <ListboxOption value="asada">Carne Asada</ListboxOption>
           <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -103,7 +103,7 @@ describe("<Listbox />", () => {
     });
 
     it("should have a hidden input field when `form` prop is provided", () => {
-      const { container } = render(
+      let { container } = render(
         <div>
           <form id="my-form">
             <label>
@@ -123,7 +123,7 @@ describe("<Listbox />", () => {
     });
 
     it("should have a hidden required input field when `required` prop is provided", () => {
-      const { container } = render(
+      let { container } = render(
         <Listbox required>
           <ListboxOption value="asada">Carne Asada</ListboxOption>
           <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -152,7 +152,7 @@ describe("<Listbox />", () => {
       it(`should open the listbox when \`${
         key === " " ? "Spacebar" : key
       }\` pressed while idle`, () => {
-        const { getByRole, queryByRole } = render(<BasicListbox />);
+        let { getByRole, queryByRole } = render(<BasicListbox />);
         getByRole("button").focus();
 
         act(() => void fireEvent.keyDown(document.activeElement!, { key }));
@@ -163,7 +163,7 @@ describe("<Listbox />", () => {
     });
 
     it("should close when the clicked outside", () => {
-      const { getByTestId, getByRole, container } = render(
+      let { getByTestId, getByRole, container } = render(
         <div>
           <span data-testid="outside-el" tabIndex={0}>
             Hi
@@ -185,14 +185,12 @@ describe("<Listbox />", () => {
 
       act(() => void fireMouseClick(getByRole("button")));
       expect(getPopover()).toBeVisible();
-      act(() => void getByTestId("outside-el"));
-      // TODO: Fails, unsure why.
-      // expect(getPopover()).not.toBeVisible();
+      act(() => void fireEvent.mouseDown(getByTestId("outside-el")));
+      expect(getPopover()).not.toBeVisible();
     });
 
     it("should close on escape", () => {
-      const { container, getByRole } = render(<FancyListbox />);
-
+      let { container, getByRole } = render(<FancyListbox />);
       let getPopover = () =>
         container.querySelector("[data-reach-listbox-popover]");
 
@@ -204,7 +202,7 @@ describe("<Listbox />", () => {
 
     it("should update the value when the user types when idle", () => {
       jest.useFakeTimers();
-      const { getByRole, container } = render(
+      let { getByRole, container } = render(
         <Listbox name="taco" portal={false}>
           <ListboxOption value="pollo">Pollo</ListboxOption>
           <ListboxOption value="asada">Carne Asada</ListboxOption>
