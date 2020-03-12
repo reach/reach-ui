@@ -309,14 +309,16 @@ describe("<Listbox />", () => {
 
       act(() => void keyType(getByRole("listbox"), "c"));
       expect(getOptionByText("Carne Asada")).toHaveAttribute(
-        "data-highlighted"
+        "aria-selected",
+        "true"
       );
 
       // Immediate key event shouldn't change the value unless the user
       // continues typing out the next letter of a matching label.
       act(() => void keyType(getByRole("button"), "p"));
       expect(getOptionByText("Carne Asada")).toHaveAttribute(
-        "data-highlighted"
+        "aria-selected",
+        "true"
       );
 
       act(() => {
@@ -324,11 +326,14 @@ describe("<Listbox />", () => {
         act(() => void keyType(getByRole("button"), "p"));
       });
       // starts searching from the beginning of the list
-      expect(getOptionByText("Pollo")).toHaveAttribute("data-highlighted");
+      expect(getOptionByText("Pollo")).toHaveAttribute("aria-selected", "true");
 
       // continue spelling a word that matches another option
       act(() => void keyType(getByRole("button"), "a"));
-      expect(getOptionByText("Pastor")).toHaveAttribute("data-highlighted");
+      expect(getOptionByText("Pastor")).toHaveAttribute(
+        "aria-selected",
+        "true"
+      );
     });
 
     // TODO: it("should select an option on mouseup", () => {});
