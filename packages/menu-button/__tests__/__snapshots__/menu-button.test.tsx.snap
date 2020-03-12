@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MenuButton /> should match the snapshot 1`] = `
+<DocumentFragment>
+  <button
+    aria-controls="menu--REACH-ID"
+    aria-haspopup="true"
+    data-reach-menu-button=""
+    id="example-button"
+    type="button"
+  >
+    Actions 
+    <span
+      aria-hidden="true"
+    >
+      ▾
+    </span>
+  </button>
+</DocumentFragment>
+`;

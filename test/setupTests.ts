@@ -8,5 +8,5 @@ beforeEach(() => {
   const utils = require("@reach/utils");
   const autoId = require("@reach/auto-id");
   utils.checkStyles = jest.fn();
-  autoId.useId = (fallback: string) => fallback || "REACH_ID_";
+  autoId.useId = (fallback: string) => fallback || "REACH-ID";
 });

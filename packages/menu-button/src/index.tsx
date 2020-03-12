@@ -473,7 +473,7 @@ export type MenuItemImplProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-onselect
    */
-  onSelect: () => any;
+  onSelect(): void;
   index?: number;
   isLink?: boolean;
   valueText?: string;
@@ -745,7 +745,7 @@ export const MenuLink = forwardRefWithAs<
  */
 export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   to?: string;
-  onSelect?: () => any;
+  onSelect?(): void;
 };
 
 if (__DEV__) {
@@ -767,9 +767,9 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist
  */
 export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
-  function MenuList(props, forwardedRef) {
+  function MenuList({ portal = true, ...props }, forwardedRef) {
     return (
-      <MenuPopover>
+      <MenuPopover portal={portal}>
         <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
       </MenuPopover>
     );
@@ -780,6 +780,13 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-props
  */
 export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-portal
+   */
+  portal?: boolean;
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
@@ -808,7 +815,10 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
  */
 export const MenuPopover = forwardRef<any, MenuPopoverProps>(
-  function MenuPopover({ children, ...props }, forwardedRef) {
+  function MenuPopover(
+    { children, portal = true, position, ...props },
+    forwardedRef
+  ) {
     const {
       buttonRef,
       buttonClickedRef,
@@ -845,19 +855,25 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       };
     }, [buttonClickedRef, buttonRef, dispatch, isOpen, menuRef, popoverRef]);
 
-    return isOpen ? (
+    let commonProps = {
+      ref,
+      // TODO: remove in 1.0
+      "data-reach-menu": "",
+      "data-reach-menu-popover": "",
+      hidden: !isOpen,
+      children,
+      ...props,
+    };
+
+    return portal ? (
       <Popover
-        {...props}
-        ref={ref}
-        data-reach-menu="" // deprecate for naming consistency?
-        data-reach-menu-popover=""
-        // TODO: Fix in @reach/popover
-        // @ts-ignore
-        targetRef={buttonRef}
-      >
-        {children}
-      </Popover>
-    ) : null;
+        {...commonProps}
+        targetRef={buttonRef as any}
+        position={position}
+      />
+    ) : (
+      <div {...commonProps} />
+    );
   }
 );
 
@@ -871,6 +887,13 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-children
    */
   children: React.ReactNode;
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-portal
+   */
+  portal?: boolean;
   position?: Position;
 };
 

@@ -4,7 +4,7 @@ exports[`<Tooltip /> hides on ESC: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -13,7 +13,7 @@ exports[`<Tooltip /> hides on ESC: after mouse rest timeout 1`] = `
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -39,13 +39,13 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
 <body>
   <div>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       First Trigger
     </button>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       Second Trigger
@@ -54,7 +54,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -64,7 +64,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -78,13 +78,13 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
 <body>
   <div>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       First Trigger
     </button>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       Second Trigger
@@ -93,7 +93,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -103,7 +103,7 @@ exports[`<Tooltip /> shows without timeout when one tooltip is already visible: 
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -129,7 +129,7 @@ exports[`<Tooltip /> shows/hides on hover: after mouse rest timeout 1`] = `
 <body>
   <div>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -138,7 +138,7 @@ exports[`<Tooltip /> shows/hides on hover: after mouse rest timeout 1`] = `
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >
@@ -188,7 +188,7 @@ exports[`<Tooltip /> shows/hides when trigger is activeElement: not visible 1`] 
 <body>
   <div>
     <button
-      aria-describedby="tooltip--REACH_ID_"
+      aria-describedby="tooltip--REACH-ID"
       data-reach-tooltip-trigger=""
     >
       Trigger
@@ -197,7 +197,7 @@ exports[`<Tooltip /> shows/hides when trigger is activeElement: not visible 1`] 
   <reach-portal>
     <div
       data-reach-tooltip=""
-      id="tooltip--REACH_ID_"
+      id="tooltip--REACH-ID"
       role="tooltip"
       style="left: 0px; top: 8px;"
     >

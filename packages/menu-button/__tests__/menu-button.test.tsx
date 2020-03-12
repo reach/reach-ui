@@ -4,6 +4,11 @@ import { axe } from "jest-axe";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 
 describe("<MenuButton />", () => {
+  it("should match the snapshot", () => {
+    let { asFragment } = render(<BasicMenuButton />);
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   it("should not have basic a11y issues", async () => {
     let { container } = render(<BasicMenuButton />);
     expect(await axe(container)).toHaveNoViolations();
