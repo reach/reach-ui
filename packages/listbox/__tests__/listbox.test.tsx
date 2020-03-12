@@ -10,6 +10,7 @@ import {
   ListboxList,
 } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
+import { spy } from "sinon";
 
 describe("<Listbox />", () => {
   it("should mount the component", () => {
@@ -74,9 +75,21 @@ describe("<Listbox />", () => {
     //     expect(getByRole("listbox")).toHaveFocus();
     //   });
 
-    // TODO: it('sets `aria-expanded="true"` when the listbox is open', () => {})
-    // TODO: it('removes `aria-expanded` when the listbox is closed', () => {})
-    // TODO: it('sets `aria-haspopup` to `"listbox"` on the button', () => {})
+    it('sets `aria-expanded="true"` when the listbox is open', () => {
+      let { getByRole } = render(<BasicListbox />);
+      act(() => void fireMouseClick(getByRole("button")));
+      expect(getByRole("button")).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("removes `aria-expanded` when the listbox is closed", () => {
+      let { getByRole } = render(<BasicListbox />);
+      expect(getByRole("button")).not.toHaveAttribute("aria-expanded");
+    });
+
+    it('sets `aria-haspopup` to `"listbox"` on the button', () => {
+      let { getByRole } = render(<BasicListbox />);
+      expect(getByRole("button")).toHaveAttribute("aria-haspopup", "listbox");
+    });
   });
 
   describe("as a form input", () => {
@@ -162,7 +175,43 @@ describe("<Listbox />", () => {
       });
     });
 
-    it("should close when the clicked outside", () => {
+    it(`should submit a form when \`Enter\` pressed while idle`, () => {
+      let handleSubmit = spy();
+      let { getByTestId } = render(
+        <div>
+          <form id="my-form" onSubmit={handleSubmit}>
+            <label>
+              Name
+              <input type="text" name="name" />
+            </label>
+            <span id="taco-label">Favorite taco</span>
+            <ListboxInput name="taco" aria-labelledby="taco-label">
+              <ListboxButton data-testid="listbox-button" />
+              <ListboxPopover>
+                <ListboxList>
+                  <ListboxOption value="asada">Carne Asada</ListboxOption>
+                  <ListboxOption value="pollo">Pollo</ListboxOption>
+                  <ListboxOption value="lengua">Lengua</ListboxOption>
+                </ListboxList>
+              </ListboxPopover>
+            </ListboxInput>
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
+      );
+
+      getByTestId("listbox-button").focus();
+
+      act(
+        () =>
+          void fireEvent.keyDown(document.activeElement!, {
+            key: "Enter",
+          })
+      );
+      expect(handleSubmit.calledOnce).toBe(true);
+    });
+
+    it("should close when clicked outside", () => {
       let { getByTestId, getByRole, container } = render(
         <div>
           <span data-testid="outside-el" tabIndex={0}>
@@ -200,7 +249,7 @@ describe("<Listbox />", () => {
       expect(getPopover()).not.toBeVisible();
     });
 
-    it("should update the value when the user types when idle", () => {
+    it("should update the value when the user types while idle", () => {
       jest.useFakeTimers();
       let { getByRole, container } = render(
         <Listbox name="taco" portal={false}>
@@ -233,7 +282,55 @@ describe("<Listbox />", () => {
       act(() => void keyType(getByRole("button"), "a"));
       expect(input).toHaveValue("pastor");
     });
-    // TODO: it("should update the selection when the user types when expanded", () => {});
+
+    it("should update the selection when the user types while expanded", () => {
+      jest.useFakeTimers();
+      let { getByRole, getAllByText } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
+
+      /**
+       * getByText alone may fail because the button may have the same inner
+       * text as an option.
+       * @param text
+       */
+      function getOptionByText(text: string) {
+        return getAllByText(text).find(
+          element => element.getAttribute("role") === "option"
+        );
+      }
+
+      act(() => void fireMouseClick(getByRole("button")));
+
+      act(() => void keyType(getByRole("listbox"), "c"));
+      expect(getOptionByText("Carne Asada")).toHaveAttribute(
+        "data-highlighted"
+      );
+
+      // Immediate key event shouldn't change the value unless the user
+      // continues typing out the next letter of a matching label.
+      act(() => void keyType(getByRole("button"), "p"));
+      expect(getOptionByText("Carne Asada")).toHaveAttribute(
+        "data-highlighted"
+      );
+
+      act(() => {
+        jest.advanceTimersByTime(5000);
+        act(() => void keyType(getByRole("button"), "p"));
+      });
+      // starts searching from the beginning of the list
+      expect(getOptionByText("Pollo")).toHaveAttribute("data-highlighted");
+
+      // continue spelling a word that matches another option
+      act(() => void keyType(getByRole("button"), "a"));
+      expect(getOptionByText("Pastor")).toHaveAttribute("data-highlighted");
+    });
+
     // TODO: it("should select an option on mouseup", () => {});
     // TODO: it("should prevent scrolling on `Spacebar`", () => {});
     // TODO: it("should prevent scrolling on `ArrowDown`", () => {});
