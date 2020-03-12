@@ -567,7 +567,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         // Set by the JavaScript when the listbox is displayed. Otherwise, is
         // not present.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        aria-expanded={expanded ? true : undefined}
+        aria-expanded={expanded || undefined}
         // Indicates that activating the button displays a listbox.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
         aria-haspopup="listbox"
@@ -838,7 +838,8 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
       ids: { listbox: listboxId, label: labelId },
       refs: { list: listRef },
       state: {
-        context: { value },
+        context: { value, navigationValue },
+        value: state,
       },
     } = useListboxContext();
     let ref = useForkedRef(forwardedRef, listRef);
@@ -852,7 +853,9 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         // navigation keys, such as `Down Arrow`, are pressed, the JavaScript
         // changes the value.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-        aria-activedescendant={useOptionId(value)}
+        aria-activedescendant={useOptionId(
+          isExpanded(state) ? navigationValue : value
+        )}
         // If the listbox is not part of another widget, then it has a visible
         // label referenced by `aria-labelledby` on the element with role
         // `listbox`.
@@ -920,6 +923,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let {
       send,
       state: {
+        value: state,
         context: { value: listboxValue, navigationValue },
       },
       onValueChange,
@@ -1028,11 +1032,13 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         // In a single-select listbox, the selected option has `aria-selected`
         // set to `true`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        aria-selected={isSelected}
+        aria-selected={
+          (isExpanded(state) ? isHighlighted : isSelected) || undefined
+        }
         // Applicable to all host language elements regardless of whether a
         // `role` is applied.
         // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
-        aria-disabled={disabled ? true : undefined}
+        aria-disabled={disabled || undefined}
         // Each option in the listbox has role `option` and is a DOM descendant
         // of the element with role `listbox`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
@@ -1041,7 +1047,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         ref={ref}
         id={useOptionId(value)}
         data-reach-listbox-option=""
-        data-highlighted={isHighlighted ? "" : undefined}
+        data-current={isSelected ? "" : undefined}
         data-label={label}
         data-value={value}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
@@ -1301,7 +1307,7 @@ function useOptionId(value: ListboxValue | null) {
   let {
     ids: { input },
   } = useListboxContext();
-  return value ? makeId(`option-${value}`, input) : "";
+  return value ? makeId(`option-${value}`, input) : undefined;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -571,12 +571,16 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-listbox-option] {
+  /* styles for all listbox options */
 }
-[data-reach-listbox-option][data-highlighted] {
+[data-reach-listbox-option][data-current] {
+  /* styles for the option matching the current value of the input */
 }
 [data-reach-listbox-option][aria-selected="true"] {
+  /* styles for the option matching the user's navigation selection */
 }
 [data-reach-listbox-option][aria-disabled="true"] {
+  /* styles for disabled listbox options */
 }
 ```
 
