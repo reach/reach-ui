@@ -308,7 +308,7 @@ export const ListboxInput = forwardRef<
               })
             : children}
         </div>
-        {(disabled || form || name || required) && (
+        {(form || name || required) && (
           <input
             ref={hiddenInput}
             disabled={disabled}
