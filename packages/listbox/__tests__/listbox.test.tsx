@@ -1,5 +1,6 @@
 import React from "react";
 import { render, act, fireEvent, keyType } from "$test/utils";
+import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import {
   Listbox,
@@ -8,45 +9,66 @@ import {
   ListboxPopover,
   ListboxOption,
   ListboxList,
+  ListboxProps,
 } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { spy } from "sinon";
 
-describe("<Listbox />", () => {
-  it("should mount the component", () => {
-    act(() => {
-      let { queryByRole } = render(<BasicListbox />);
-      expect(queryByRole("button")).toBeTruthy();
-    });
-  });
+// NOTE: Render portal'd listboxes in an `act` call, as they update React state
+//       when mounted.
 
-  it("should mount the composed component", () => {
-    act(() => {
+describe("<Listbox />", () => {
+  describe("rendering", () => {
+    it("should mount the component", () => {
       let { queryByRole } = render(
-        <ListboxInput>
-          <ListboxButton />
-          <ListboxPopover>
-            <ListboxList>
-              <ListboxOption value="asada">Carne Asada</ListboxOption>
-              <ListboxOption value="pollo">Pollo</ListboxOption>
-              <ListboxOption value="lengua">Lengua</ListboxOption>
-            </ListboxList>
-          </ListboxPopover>
-        </ListboxInput>
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
       );
       expect(queryByRole("button")).toBeTruthy();
+    });
+
+    it("should mount the composed component", () => {
+      act(() => {
+        let { queryByRole } = render(
+          <ListboxInput>
+            <ListboxButton />
+            <ListboxPopover>
+              <ListboxList>
+                <ListboxOption value="asada">Carne Asada</ListboxOption>
+                <ListboxOption value="pollo">Pollo</ListboxOption>
+                <ListboxOption value="lengua">Lengua</ListboxOption>
+              </ListboxList>
+            </ListboxPopover>
+          </ListboxInput>
+        );
+        expect(queryByRole("button")).toBeTruthy();
+      });
     });
   });
 
   describe("a11y", () => {
     it("should not have basic a11y issues", async () => {
       let { container } = render(<FancyListbox />);
-      let results = await axe(container);
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
       expect(results).toHaveNoViolations();
     });
 
     it("renders a valid listbox", () => {
-      let { queryByRole, getByRole } = render(<BasicListbox />);
+      let { queryByRole, getByRole } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
 
       // Since a closed listbox is hidden, it won't be visible to the
       // accessibility tree which means queryByRole will fail. Open the listbox
@@ -59,12 +81,26 @@ describe("<Listbox />", () => {
     });
 
     it("should have a tabbable button", () => {
-      let { getByRole } = render(<BasicListbox />);
+      let { getByRole } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
       expect(getByRole("button")).toHaveAttribute("tabindex", "0");
     });
 
     //   TODO: it("should focus the list when open", () => {
-    //     let { getByRole } = render(<BasicListbox />);
+    //     let { getByRole } = render(
+    //       <Listbox portal={false}>
+    //         <ListboxOption value="pollo">Pollo</ListboxOption>
+    //         <ListboxOption value="asada">Carne Asada</ListboxOption>
+    //         <ListboxOption value="lengua">Lengua</ListboxOption>
+    //         <ListboxOption value="pastor">Pastor</ListboxOption>
+    //       </Listbox>
+    //     );
 
     //     act(() => {
     //       fireMouseClick(getByRole("button"));
@@ -76,75 +112,104 @@ describe("<Listbox />", () => {
     //   });
 
     it('sets `aria-expanded="true"` when the listbox is open', () => {
-      let { getByRole } = render(<BasicListbox />);
+      let { getByRole } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
       act(() => void fireMouseClick(getByRole("button")));
       expect(getByRole("button")).toHaveAttribute("aria-expanded", "true");
     });
 
     it("removes `aria-expanded` when the listbox is closed", () => {
-      let { getByRole } = render(<BasicListbox />);
+      let { getByRole } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
       expect(getByRole("button")).not.toHaveAttribute("aria-expanded");
     });
 
     it('sets `aria-haspopup` to `"listbox"` on the button', () => {
-      let { getByRole } = render(<BasicListbox />);
+      let { getByRole } = render(
+        <Listbox portal={false}>
+          <ListboxOption value="pollo">Pollo</ListboxOption>
+          <ListboxOption value="asada">Carne Asada</ListboxOption>
+          <ListboxOption value="lengua">Lengua</ListboxOption>
+          <ListboxOption value="pastor">Pastor</ListboxOption>
+        </Listbox>
+      );
       expect(getByRole("button")).toHaveAttribute("aria-haspopup", "listbox");
     });
   });
 
   describe("as a form input", () => {
     it("should not have a hidden input field when form props are not provided", () => {
-      let { container } = render(
-        <Listbox>
-          <ListboxOption value="asada">Carne Asada</ListboxOption>
-          <ListboxOption value="pollo">Pollo</ListboxOption>
-          <ListboxOption value="lengua">Lengua</ListboxOption>
-        </Listbox>
-      );
-      expect(container.querySelector("input")).not.toBeTruthy();
-    });
-
-    it("should have a hidden input field when `name` prop is provided", () => {
-      let { container } = render(
-        <Listbox name="taco">
-          <ListboxOption value="asada">Carne Asada</ListboxOption>
-          <ListboxOption value="pollo">Pollo</ListboxOption>
-          <ListboxOption value="lengua">Lengua</ListboxOption>
-        </Listbox>
-      );
-      expect(container.querySelector("input")).toBeTruthy();
-    });
-
-    it("should have a hidden input field when `form` prop is provided", () => {
-      let { container } = render(
-        <div>
-          <form id="my-form">
-            <label>
-              Name
-              <input type="text" name="name" />
-            </label>
-            <button>Submit</button>
-          </form>
-          <Listbox form="my-form">
+      act(() => {
+        let { container } = render(
+          <Listbox>
             <ListboxOption value="asada">Carne Asada</ListboxOption>
             <ListboxOption value="pollo">Pollo</ListboxOption>
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
-        </div>
-      );
-      expect(container.querySelector("input")).toBeTruthy();
+        );
+        expect(container.querySelector("input")).not.toBeTruthy();
+      });
+    });
+
+    it("should have a hidden input field when `name` prop is provided", () => {
+      act(() => {
+        let { container } = render(
+          <Listbox name="taco">
+            <ListboxOption value="asada">Carne Asada</ListboxOption>
+            <ListboxOption value="pollo">Pollo</ListboxOption>
+            <ListboxOption value="lengua">Lengua</ListboxOption>
+          </Listbox>
+        );
+        expect(container.querySelector("input")).toBeTruthy();
+      });
+    });
+
+    it("should have a hidden input field when `form` prop is provided", () => {
+      act(() => {
+        let { container } = render(
+          <div>
+            <form id="my-form">
+              <label>
+                Name
+                <input type="text" name="name" />
+              </label>
+              <button>Submit</button>
+            </form>
+            <Listbox form="my-form">
+              <ListboxOption value="asada">Carne Asada</ListboxOption>
+              <ListboxOption value="pollo">Pollo</ListboxOption>
+              <ListboxOption value="lengua">Lengua</ListboxOption>
+            </Listbox>
+          </div>
+        );
+        expect(container.querySelector("input")).toBeTruthy();
+      });
     });
 
     it("should have a hidden required input field when `required` prop is provided", () => {
-      let { container } = render(
-        <Listbox required>
-          <ListboxOption value="asada">Carne Asada</ListboxOption>
-          <ListboxOption value="pollo">Pollo</ListboxOption>
-          <ListboxOption value="lengua">Lengua</ListboxOption>
-        </Listbox>
-      );
-      expect(container.querySelector("input")).toBeTruthy();
-      expect(container.querySelector("input")).toHaveAttribute("required");
+      act(() => {
+        let { container } = render(
+          <Listbox required>
+            <ListboxOption value="asada">Carne Asada</ListboxOption>
+            <ListboxOption value="pollo">Pollo</ListboxOption>
+            <ListboxOption value="lengua">Lengua</ListboxOption>
+          </Listbox>
+        );
+        expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).toHaveAttribute("required");
+      });
     });
   });
 
@@ -155,8 +220,10 @@ describe("<Listbox />", () => {
         container.querySelector("[data-reach-listbox-popover]");
 
       expect(getPopover()).not.toBeVisible();
+
       act(() => void fireMouseClick(getByRole("button")));
       expect(getPopover()).toBeVisible();
+
       act(() => void fireMouseClick(getByRole("button")));
       expect(getPopover()).not.toBeVisible();
     });
@@ -165,11 +232,21 @@ describe("<Listbox />", () => {
       it(`should open the listbox when \`${
         key === " " ? "Spacebar" : key
       }\` pressed while idle`, () => {
-        let { getByRole, queryByRole } = render(<BasicListbox />);
-        getByRole("button").focus();
+        let { getByRole, queryByRole } = render(
+          <Listbox portal={false}>
+            <ListboxOption value="pollo">Pollo</ListboxOption>
+            <ListboxOption value="asada">Carne Asada</ListboxOption>
+            <ListboxOption value="lengua">Lengua</ListboxOption>
+            <ListboxOption value="pastor">Pastor</ListboxOption>
+          </Listbox>
+        );
 
-        act(() => void fireEvent.keyDown(document.activeElement!, { key }));
+        act(() => {
+          getByRole("button").focus();
+          fireEvent.keyDown(document.activeElement!, { key });
+        });
         expect(queryByRole("listbox", { hidden: false })).toBeTruthy();
+
         act(() => void fireEvent.keyUp(document.activeElement!, { key }));
         expect(queryByRole("listbox", { hidden: false })).toBeTruthy();
       });
@@ -179,7 +256,15 @@ describe("<Listbox />", () => {
       let handleSubmit = spy();
       let { getByTestId } = render(
         <div>
-          <form id="my-form" onSubmit={handleSubmit}>
+          <form
+            id="my-form"
+            onSubmit={event => {
+              // HTMLFormElement.prototype.submit is not implemented in jsdom
+              // preventDefault will stop the event and the error
+              event.preventDefault();
+              handleSubmit();
+            }}
+          >
             <label>
               Name
               <input type="text" name="name" />
@@ -187,7 +272,7 @@ describe("<Listbox />", () => {
             <span id="taco-label">Favorite taco</span>
             <ListboxInput name="taco" aria-labelledby="taco-label">
               <ListboxButton data-testid="listbox-button" />
-              <ListboxPopover>
+              <ListboxPopover portal={false}>
                 <ListboxList>
                   <ListboxOption value="asada">Carne Asada</ListboxOption>
                   <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -234,6 +319,7 @@ describe("<Listbox />", () => {
 
       act(() => void fireMouseClick(getByRole("button")));
       expect(getPopover()).toBeVisible();
+
       act(() => void fireEvent.mouseDown(getByTestId("outside-el")));
       expect(getPopover()).not.toBeVisible();
     });
@@ -245,6 +331,7 @@ describe("<Listbox />", () => {
 
       act(() => void fireMouseClick(getByRole("button")));
       expect(getPopover()).toBeVisible();
+
       act(() => void keyType(getByRole("button"), "Escape"));
       expect(getPopover()).not.toBeVisible();
     });
@@ -262,8 +349,10 @@ describe("<Listbox />", () => {
 
       let input = container.querySelector("input");
 
-      getByRole("button").focus();
-      act(() => void keyType(getByRole("button"), "c"));
+      act(() => {
+        getByRole("button").focus();
+        keyType(getByRole("button"), "c");
+      });
       expect(input).toHaveValue("asada");
 
       // Immediate key event shouldn't change the value unless the user continues
@@ -273,7 +362,7 @@ describe("<Listbox />", () => {
 
       act(() => {
         jest.advanceTimersByTime(5000);
-        act(() => void keyType(getByRole("button"), "p"));
+        keyType(getByRole("button"), "p");
       });
       // starts searching from the beginning of the list
       expect(input).toHaveValue("pollo");
@@ -305,9 +394,14 @@ describe("<Listbox />", () => {
         );
       }
 
-      act(() => void fireMouseClick(getByRole("button")));
+      act(() => {
+        fireMouseClick(getByRole("button"));
+      });
 
-      act(() => void keyType(getByRole("listbox"), "c"));
+      act(() => {
+        keyType(getByRole("listbox"), "c");
+      });
+
       expect(getOptionByText("Carne Asada")).toHaveAttribute(
         "aria-selected",
         "true"
@@ -346,22 +440,16 @@ describe("<Listbox />", () => {
   });
 });
 
-function BasicListbox() {
-  return (
-    <Listbox portal={false}>
-      <ListboxOption value="pollo">Pollo</ListboxOption>
-      <ListboxOption value="asada">Carne Asada</ListboxOption>
-      <ListboxOption value="lengua">Lengua</ListboxOption>
-      <ListboxOption value="pastor">Pastor</ListboxOption>
-    </Listbox>
-  );
-}
-
-function FancyListbox() {
+function FancyListbox(props: Partial<Omit<ListboxProps, "ref">>) {
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
-      <Listbox aria-labelledby="taco-label" defaultValue="asada" portal={false}>
+      <Listbox
+        aria-labelledby="taco-label"
+        defaultValue="asada"
+        portal={false}
+        {...props}
+      >
         <ListboxOption value="default">
           Choose a taco <Taco />
         </ListboxOption>

@@ -4,10 +4,6 @@ import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 
-// TODO: Whyyyyyy are we getting the `not wrapped in act(...)` warning?
-//       AFAICT, everything related to rendering and updating is wrapped in act.
-//       React testing experts, what the heck are we missing here?
-
 describe("<Tooltip />", () => {
   beforeEach(() => {
     jest.useFakeTimers();
