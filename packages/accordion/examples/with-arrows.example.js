@@ -51,7 +51,7 @@ export default { title: "Accordion" };
 
 function ArrowButton({ children, active, ...props }) {
   return (
-    <StyledButton {...props}>
+    <StyledHeader {...props}>
       <span
         style={{
           display: "flex",
@@ -59,10 +59,14 @@ function ArrowButton({ children, active, ...props }) {
           justifyContent: "space-between",
         }}
       >
-        <span>{children}</span>
-        <StyledIcon active={active} aria-hidden />
+        <StyledHeading>
+          <StyledButton>{children}</StyledButton>
+        </StyledHeading>
+        <StyledArrowWrapper>
+          <StyledIcon active={active} aria-hidden />
+        </StyledArrowWrapper>
       </span>
-    </StyledButton>
+    </StyledHeader>
   );
 }
 
@@ -86,15 +90,21 @@ const StyledButton = styled(AccordionButton)`
   display: block;
   width: 100%;
   appearance: none;
-  background: linear-gradient(to bottom, darkslategray, slategray);
+  background: 0;
   border: 0;
   text-align: inherit;
   font: inherit;
   font-size: 16px;
   font-weight: bolder;
-  color: white;
+  color: inherit;
   box-shadow: none;
   padding: 0.675em 0.875em;
+`;
+
+const StyledHeader = styled.div`
+  width: 100%;
+  background: linear-gradient(to bottom, darkslategray, slategray);
+  color: white;
 
   &[data-disabled] {
     color: rgba(255, 255, 255, 0.5);
@@ -116,8 +126,18 @@ const StyledItem = styled(AccordionItem)`
 
 const StyledAccordion = styled(Accordion)``;
 
+const StyledHeading = styled.h3`
+  display: block;
+  width: 100%;
+  font: inherit;
+  margin: 0;
+`;
+
+const StyledArrowWrapper = styled.div`
+  padding: 0.675em 0.875em;
+`;
+
 const StyledIcon = styled(ArrowIcon)`
-  margin-left: 1rem;
   width: 1rem;
   height: 1rem;
   transition: ${props => (props.active ? "600" : "500")}ms transform ease-out;

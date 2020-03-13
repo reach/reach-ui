@@ -2,10 +2,6 @@
   --reach-accordion: 1;
 }
 
-[data-reach-accordion-panel] {
-  outline: none;
-}
-
-[data-reach-accordion-button][data-disabled] {
+[data-reach-accordion-button][disabled] {
   cursor: not-allowed;
 }

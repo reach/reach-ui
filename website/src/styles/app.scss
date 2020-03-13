@@ -180,6 +180,18 @@ code {
   color: #fff;
 }
 
+.jsx-demo [data-reach-accordion-item] {
+  > h1,
+  > h2,
+  > h3,
+  > h4,
+  > h5,
+  > h6 {
+    margin: 0;
+    font: inherit;
+  }
+}
+
 pre > code {
   margin: 0;
 }

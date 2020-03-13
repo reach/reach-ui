@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import styled from "styled-components";
 import "@reach/accordion/styles.css";
@@ -15,7 +15,9 @@ function Example() {
     <Fragment>
       <StyledAccordion>
         <StyledItem>
-          <StyledButton>You can activate me</StyledButton>
+          <StyledHeader>
+            <StyledButton>You can activate me</StyledButton>
+          </StyledHeader>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -24,7 +26,9 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem disabled>
-          <StyledButton>You can't touch me</StyledButton>
+          <StyledHeader>
+            <StyledButton>You can't touch me</StyledButton>
+          </StyledHeader>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -33,7 +37,9 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem>
-          <StyledButton>You can definitely activate me</StyledButton>
+          <StyledHeader>
+            <StyledButton>You can definitely activate me</StyledButton>
+          </StyledHeader>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -42,7 +48,9 @@ function Example() {
           </StyledPanel>
         </StyledItem>
         <StyledItem>
-          <StyledButton>Read me now plz!</StyledButton>
+          <StyledHeader>
+            <StyledButton>Read me now plz!</StyledButton>
+          </StyledHeader>
           <StyledPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -60,6 +68,10 @@ export const Comp = Example;
 export default { title: "Accordion" };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+const StyledHeader = styled.h3`
+  margin: 0;
+`;
 
 const StyledButton = styled(AccordionButton)`
   display: block;

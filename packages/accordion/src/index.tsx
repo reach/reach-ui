@@ -5,7 +5,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/accordion
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/accordion
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  */
 
 import React, {
@@ -57,8 +57,8 @@ const useAccordionItemContext = () => useContext(AccordionItemContext);
 ////////////////////////////////////////////////////////////////////////////////
 
 export enum AccordionStates {
-  Open = "open",
-  Collapsed = "collapsed",
+  Open = "OPEN",
+  Collapsed = "COLLAPSED",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -374,25 +374,20 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
     const panelId = makeId("panel", itemId);
     const buttonId = makeId("button", itemId);
 
-    const open = Array.isArray(openPanels)
-      ? openPanels.includes(index)
-      : openPanels === index;
-
-    const dataAttributes = {
-      "data-state": open ? AccordionStates.Open : AccordionStates.Collapsed,
-      "data-disabled": disabled ? "true" : undefined,
-      "data-read-only": readOnly ? "true" : undefined,
-    };
+    const state =
+      (Array.isArray(openPanels)
+        ? openPanels.includes(index) && AccordionStates.Open
+        : openPanels === index && AccordionStates.Open) ||
+      AccordionStates.Collapsed;
 
     const context: IAccordionItemContext = {
-      open,
       disabled,
       buttonId,
       index,
       itemId,
       buttonRef,
       panelId,
-      dataAttributes,
+      state,
     };
 
     return (
@@ -401,7 +396,9 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
           {...props}
           ref={forwardedRef}
           data-reach-accordion-item=""
-          {...dataAttributes}
+          data-state={getDataState(state)}
+          data-disabled={disabled ? "" : undefined}
+          data-read-only={readOnly ? "" : undefined}
         >
           {children}
         </Comp>
@@ -459,6 +456,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       onKeyDown,
       onMouseDown,
       onPointerDown,
+      tabIndex,
       ...props
     },
     forwardedRef
@@ -466,13 +464,12 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
     let { onSelectPanel } = useAccordionContext();
 
     let {
-      open,
-      dataAttributes,
       disabled,
       buttonId,
       buttonRef: ownRef,
       index,
       panelId,
+      state,
     } = useAccordionItemContext();
 
     let ref = useForkedRef(forwardedRef, ownRef);
@@ -499,13 +496,48 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
 
     return (
       <Comp
+        // Each accordion header `button` is wrapped in an element with role
+        // `heading` that has a value set for `aria-level` that is appropriate
+        // for the information architecture of the page.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        // I believe this should be left for apps to handle, since headings
+        // are necessarily context-aware. An app can wrap a button inside any
+        // arbitrary tag(s).
+        // TODO: Revisit documentation and examples
+        // @example
+        // <div>
+        //   <h3>
+        //     <AccordionButton>Click Me</AccordionButton>
+        //   </h3>
+        //   <SomeComponent />
+        // </div>
+
+        // The title of each accordion header is contained in an element with
+        // role `button`. We use an HTML button by default, so we can omit
+        // this attribute.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        // role="button"
+
+        // The accordion header `button` element has `aria-controls` set to the
+        // ID of the element containing the accordion panel content.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
         aria-controls={panelId}
-        aria-expanded={open}
-        tabIndex={disabled ? -1 : 0}
+        // If the accordion panel associated with an accordion header is
+        // visible, the header `button` element has `aria-expanded` set to
+        // `true`. If the panel is not visible, `aria-expanded` is set to
+        // `false`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        aria-expanded={state === AccordionStates.Open}
+        tabIndex={disabled ? -1 : tabIndex}
         {...props}
         ref={ref}
         data-reach-accordion-button=""
-        {...dataAttributes}
+        // If the accordion panel associated with an accordion header is
+        // visible, and if the accordion does not permit the panel to be
+        // collapsed, the header `button` element has `aria-disabled` set to
+        // `true`. We can use `disabled` since we opt for an HTML5 `button`
+        // element.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
         disabled={disabled || undefined}
         id={buttonId}
         onClick={wrapEvent(onClick, handleClick)}
@@ -555,22 +587,31 @@ export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
     { as: Comp = "div", children, ...props },
     forwardedRef
   ) {
-    const {
-      dataAttributes,
-      panelId,
-      buttonId,
-      open,
-    } = useAccordionItemContext();
+    const { disabled, panelId, buttonId, state } = useAccordionItemContext();
 
     return (
       <Comp
-        hidden={!open}
+        hidden={state !== AccordionStates.Open}
+        // Optionally, each element that serves as a container for panel content
+        // has role `region` and `aria-labelledby` with a value that refers to
+        // the button that controls display of the panel.
+        // Role `region` is especially helpful to the perception of structure by
+        // screen reader users when panels contain heading elements or a nested
+        // accordion.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+
+        // Avoid using the region role in circumstances that create landmark
+        // region proliferation, e.g., in an accordion that contains more than
+        // approximately 6 panels that can be expanded at the same time.
+        // A user can override this with `role="none"` or `role="presentation"`
+        // TODO: Add to docs
         role="region"
         aria-labelledby={buttonId}
         {...props}
         ref={forwardedRef}
         data-reach-accordion-panel=""
-        {...dataAttributes}
+        data-disabled={disabled || undefined}
+        data-state={getDataState(state)}
         id={panelId}
         tabIndex={-1}
       >
@@ -600,6 +641,12 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function getDataState(state: AccordionStates) {
+  return state === AccordionStates.Open ? "open" : "collapsed";
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Types
 
 type DescendantProps = {
@@ -620,16 +667,11 @@ interface IAccordionContext {
 }
 
 interface IAccordionItemContext {
-  open: boolean;
   disabled: boolean;
   buttonId: string;
   index: number;
   itemId: string;
   buttonRef: ButtonRef;
   panelId: string;
-  dataAttributes: {
-    "data-state": AccordionStates;
-    "data-disabled": string | undefined;
-    "data-read-only": string | undefined;
-  };
+  state: AccordionStates;
 }

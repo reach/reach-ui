@@ -14,7 +14,7 @@ import "@reach/menu-button/styles.css";
 let name = "With Arbitrary Elements";
 
 /*
- * Per https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+ * Per https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  *
  * In some accordions, there are additional elements that are always visible
  * adjacent to the accordion header. For instance, a menubutton may accompany
@@ -81,24 +81,26 @@ function ExampleAccordionHeader({ children }) {
         padding: "4px 10px",
       }}
     >
-      <AccordionButton
-        style={{
-          appearance: "none",
-          background: 0,
-          border: 0,
-          boxShadow: "none",
-          color: "inherit",
-          display: "block",
-          textAlign: "inherit",
-          flexGrow: 1,
-          flexShrink: 0,
-          font: "inherit",
-          fontWeight: "bolder",
-          padding: "10px 0",
-        }}
-      >
-        {children}
-      </AccordionButton>
+      <h3 style={{ margin: 0, font: "inherit" }}>
+        <AccordionButton
+          style={{
+            appearance: "none",
+            background: 0,
+            border: 0,
+            boxShadow: "none",
+            color: "inherit",
+            display: "block",
+            textAlign: "inherit",
+            flexGrow: 1,
+            flexShrink: 0,
+            font: "inherit",
+            fontWeight: "bolder",
+            padding: "10px 0",
+          }}
+        >
+          {children}
+        </AccordionButton>
+      </h3>
       <MyMenuButton style={{ marginLeft: 10 }} />
     </div>
   );
