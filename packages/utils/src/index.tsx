@@ -18,6 +18,7 @@ import {
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
+  ThenArg,
 } from "./types";
 
 /**
@@ -534,4 +535,5 @@ export {
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
+  ThenArg,
 };

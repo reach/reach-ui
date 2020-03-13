@@ -3,6 +3,8 @@ import {
   RenderOptions as TLRenderOptions,
   RenderResult as TLRenderResult,
 } from "@testing-library/react";
+import { axe } from "jest-axe";
+import { ThenArg } from "@reach/utils";
 
 export type EventElement = Document | Element | Window;
 
@@ -17,3 +19,5 @@ export type RenderResult<
   setProps(props: P): RenderResult<P, T>;
   forceUpdate(): RenderResult<P, T>;
 };
+
+export type AxeResults = ThenArg<ReturnType<typeof axe>>;

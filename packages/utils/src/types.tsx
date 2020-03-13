@@ -86,6 +86,21 @@ export type ComponentWithForwardedRef<
     React.ComponentPropsWithRef<ElementType>
 >;
 
+/**
+ * Returns the type inferred by a promise's return value.
+ *
+ * @example
+ * async function getThing() {
+ *   // return type is a number
+ *   let result: number = await fetchValueSomewhere();
+ *   return result;
+ * }
+ *
+ * type Thing = ThenArg<ReturnType<typeof getThing>>;
+ * // number
+ */
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+
 export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
   // These types are a bit of a hack, but cover us in cases where the `as` prop
   // is not a JSX string type. Makes the compiler happy so 🤷‍♂️
