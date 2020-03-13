@@ -4,9 +4,11 @@ import { axe } from "jest-axe";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 
 describe("<SkipNavLink />", () => {
-  it("should not have basic a11y issues", async () => {
-    let { container } = render(<Layout />);
-    expect(await axe(container)).toHaveNoViolations();
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      let { container } = render(<Layout />);
+      expect(await axe(container)).toHaveNoViolations();
+    });
   });
 
   // TODO: Doesn't pass, not sure why
