@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { axe } from "jest-axe";
 import { render, fireEvent, act } from "$test/utils";
+import { AxeResults } from "$test/types";
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -8,36 +9,46 @@ import {
 } from "@reach/alert-dialog";
 
 describe("<AlertDialog />", () => {
-  it("should not have basic a11y issues", async () => {
-    let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
-
-    act(() => void fireEvent.click(getByText("Show Dialog")));
-    let newResults = await axe(getByTestId("dialog"));
-    expect(newResults).toHaveNoViolations();
+  describe("rendering", () => {
+    it("should render the correct labels", () => {
+      const { baseElement, getByText } = render(<BasicAlertDialog />);
+      let openButton = getByText("Show Dialog");
+      fireEvent.click(openButton);
+      let dialogLabel = baseElement.querySelector(
+        "[data-reach-alert-dialog-label]"
+      );
+      let dialogElement = baseElement.querySelector(
+        "[data-reach-alert-dialog-content]"
+      );
+      let dialogLabelId = dialogLabel?.id;
+      expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
+    });
   });
 
-  it("should open the dialog", () => {
-    const { baseElement, asFragment, getByText } = render(<BasicAlertDialog />);
-    expect(asFragment()).toMatchSnapshot();
-    let openButton = getByText("Show Dialog");
-    fireEvent.click(openButton);
-    expect(baseElement).toMatchSnapshot();
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
+
+      let newResults: AxeResults = null as any;
+      act(() => void fireEvent.click(getByText("Show Dialog")));
+      await act(async () => {
+        newResults = await axe(getByTestId("dialog"));
+      });
+      expect(newResults).toHaveNoViolations();
+    });
   });
 
-  it("should have the correct label", () => {
-    const { baseElement, getByText } = render(<BasicAlertDialog />);
-    let openButton = getByText("Show Dialog");
-    fireEvent.click(openButton);
-    let dialogLabel = baseElement.querySelector(
-      "[data-reach-alert-dialog-label]"
-    );
-    let dialogElement = baseElement.querySelector(
-      "[data-reach-alert-dialog-content]"
-    );
-    let dialogLabelId = dialogLabel?.id;
-    expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
+  describe("user events", () => {
+    it("should open the dialog when clicking the trigger", () => {
+      let { getByTestId, getByText } = render(<BasicAlertDialog />);
+      act(() => void fireEvent.click(getByText("Show Dialog")));
+      expect(getByTestId("dialog")).toBeInTheDocument();
+    });
   });
 });
 

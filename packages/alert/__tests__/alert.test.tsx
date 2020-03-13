@@ -1,5 +1,6 @@
 import React from "react";
 import { render, act, fireEvent } from "$test/utils";
+import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
@@ -8,17 +9,22 @@ import VisuallyHidden from "@reach/visually-hidden";
 const MESSAGE_TIMEOUT = 5000;
 
 describe("<Alert />", () => {
-  it("should not have basic a11y issues", async () => {
-    let { container, getByTestId } = render(<AlertApp />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      let { container, getByTestId } = render(<AlertApp />);
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
 
-    act(() => void fireEvent.click(getByTestId("add-alert")));
-    let newResults = await axe(container);
-    expect(newResults).toHaveNoViolations();
+      act(() => void fireEvent.click(getByTestId("add-alert")));
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
+    });
   });
-
-  // TODO: Write alert tests
 });
 
 function AlertApp() {
