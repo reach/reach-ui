@@ -18,7 +18,7 @@ exports[`<Component /> getSnapshotBeforeUpdate is not required 1`] = `
 </h1>
 `;
 
-exports[`<Component /> prefers \`render\` over \`children\` 1`] = `
+exports[`<Component /> rendering prefers \`render\` over \`children\` 1`] = `
 <div>
   <h1>
     Render with an actual "render" prop
@@ -26,7 +26,7 @@ exports[`<Component /> prefers \`render\` over \`children\` 1`] = `
 </div>
 `;
 
-exports[`<Component /> renders with children render prop 1`] = `
+exports[`<Component /> rendering renders with children render prop 1`] = `
 <div>
   <h1>
     Using children prop as render prop!
@@ -37,7 +37,7 @@ exports[`<Component /> renders with children render prop 1`] = `
 </div>
 `;
 
-exports[`<Component /> renders with normal children 1`] = `
+exports[`<Component /> rendering renders with normal children 1`] = `
 <div>
   <h1>
     Some regular children!
@@ -48,9 +48,9 @@ exports[`<Component /> renders with normal children 1`] = `
 </div>
 `;
 
-exports[`<Component /> renders without children 1`] = `null`;
+exports[`<Component /> rendering renders without children 1`] = `null`;
 
-exports[`<Component /> renders without figuritively exploding 1`] = `
+exports[`<Component /> rendering renders without figuritively exploding 1`] = `
 <div>
   Heyyyooooo
 </div>
