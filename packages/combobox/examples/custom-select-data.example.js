@@ -24,14 +24,13 @@ function Example() {
   return (
     <div>
       <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes">
-        <ComboboxInput
-          onChange={handleChange}
-          style={inputStyle}
-          onSelect={(item, data) =>
-            alert(`You selected item ${item} with index ${data.index}`)
-          }
-        />
+      <Combobox
+        id="holy-smokes"
+        onSelect={(item, data) =>
+          alert(`You selected item ${item} with index ${data.index}`)
+        }
+      >
+        <ComboboxInput onChange={handleChange} style={inputStyle} />
         {results && (
           <ComboboxPopover style={popupStyle}>
             <p>
