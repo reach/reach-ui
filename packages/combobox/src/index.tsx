@@ -298,6 +298,8 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 
     const persistSelectionRef = useRef();
 
+    const optionDataFunctions = useOptionDataFactory();
+
     const defaultData: StateData = {
       // The value the user has typed. We derive this also when the developer is
       // controlling the value of ComboboxInput.
@@ -320,6 +322,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     const context: InternalComboboxContextValue = {
       ariaLabel,
       ariaLabelledby,
+      ...optionDataFunctions,
       autocompletePropRef,
       buttonRef,
       comboboxId: id,
@@ -398,6 +401,40 @@ if (__DEV__) {
     openOnFocus: PropTypes.bool
   };
 }
+
+/**
+ * Uses a ref object which stores the index as a key and custom data as value
+ * for each ComboboxOption. Hides the ref so that we can only mutate it through
+ * the returned functions. 🙈
+ */
+const useOptionDataFactory = (): {
+  addOptionData: AddOptionData;
+  getOptionData: GetOptionData;
+  removeOptionData: RemoveOptionData;
+} => {
+  const optionData = useRef<OptionData>({});
+
+  const addOptionData = useCallback<AddOptionData>(
+    (index: number, data: any) => (optionData.current[index] = data),
+    []
+  );
+
+  const getOptionData = useCallback<GetOptionData>(
+    (index: number) => optionData.current[index],
+    []
+  );
+
+  const removeOptionData = useCallback<RemoveOptionData>(
+    (index: number) => delete optionData.current[index],
+    []
+  );
+
+  return {
+    addOptionData,
+    getOptionData,
+    removeOptionData
+  };
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -736,53 +773,57 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption
  */
-export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
-  function ComboboxOption(
-    { as: Comp = "li", children, value, data, onClick, ...props },
-    forwardedRef: React.Ref<any>
-  ) {
-    const {
-      onSelect,
-      data: { navigationValue },
-      transition
-    } = useContext(ComboboxContext);
-    let ownRef = useRef<HTMLElement | null>(null);
-    let ref = useForkedRef(forwardedRef, ownRef);
+export const ComboboxOption: ComponentWithForwardedRef<
+  "li",
+  ComboboxOptionProps
+> = forwardRef(function ComboboxOption(
+  { children, value, onClick, data, ...props },
+  forwardedRef: React.Ref<any>
+) {
+  const {
+    onSelect,
+    data: { navigationValue },
+    transition,
+    addOptionData,
+    removeOptionData
+  } = useContext(ComboboxContext);
 
-    let index = useDescendant({
-      context: ComboboxDescendantContext,
-      element: ownRef.current!,
-      value
-    });
+  let index = useDescendant({
+    context: ComboboxDescendantContext,
+    element: ownRef.current!,
+    value
+  });
 
-    const isActive = navigationValue === value;
+  const isActive = navigationValue === value;
 
-    const handleClick = () => {
-      onSelect && onSelect(value, data);
-      transition(SELECT_WITH_CLICK, { value });
-    };
+  useEffect(() => {
+    addOptionData(index, data);
 
-    return (
-      <OptionContext.Provider value={{ value, index }}>
-        <Comp
-          aria-selected={isActive}
-          role="option"
-          {...props}
-          data-reach-combobox-option=""
-          ref={ref}
-          id={String(makeHash(value))}
-          data-highlighted={isActive ? "" : undefined}
-          // Without this the menu will close from `onBlur`, but with it the
-          // element can be `document.activeElement` and then our focus checks in
-          // onBlur will work as intended
-          tabIndex={-1}
-          onClick={wrapEvent(onClick, handleClick)}
-          children={children || <ComboboxOptionText />}
-        />
-      </OptionContext.Provider>
-    );
-  }
-);
+    return () => removeOptionData(index);
+  }, [index, data, addOptionData, removeOptionData]);
+
+  const isActive = navigationValue === value;
+
+  return (
+    <OptionContext.Provider value={{ value, index }}>
+      <Comp
+        aria-selected={isActive}
+        role="option"
+        {...props}
+        data-reach-combobox-option=""
+        ref={ref}
+        id={String(makeHash(value))}
+        data-highlighted={isActive ? "" : undefined}
+        // Without this the menu will close from `onBlur`, but with it the
+        // element can be `document.activeElement` and then our focus checks in
+        // onBlur will work as intended
+        tabIndex={-1}
+        onClick={wrapEvent(onClick, handleClick)}
+        children={children || <ComboboxOptionText />}
+      />
+    </OptionContext.Provider>
+  );
+});
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-props
@@ -964,14 +1005,14 @@ function useKeyDown() {
     state,
     transition,
     autocompletePropRef,
-    persistSelectionRef
+    persistSelectionRef,
+    getOptionData
   } = useContext(ComboboxContext);
 
   const { descendants: options } = useContext(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
-
     function getNextOption() {
       let atBottom = index === options.length - 1;
       if (atBottom) {
@@ -1091,9 +1132,11 @@ function useKeyDown() {
         break;
       case "Enter":
         if (state === NAVIGATING && navigationValue !== null) {
+          let customData = getOptionData(index);
+
           // don't want to submit forms
           event.preventDefault();
-          onSelect && onSelect(navigationValue);
+          onSelect && onSelect(navigationValue, customData);
           transition(SELECT_WITH_KEYBOARD);
         }
         break;
@@ -1228,6 +1271,16 @@ type DescendantProps = {
   value: ComboboxValue;
 };
 
+type OptionIndex = number;
+
+type OptionData = Record<OptionIndex, any>;
+
+type AddOptionData = (index: OptionIndex, data: any) => void;
+
+type GetOptionData = (index: OptionIndex) => any | undefined;
+
+type RemoveOptionData = (index: OptionIndex) => void;
+
 interface ComboboxOptionContextValue {
   value: ComboboxValue;
   index: number;
@@ -1249,6 +1302,9 @@ interface InternalComboboxContextValue {
   popoverRef: React.MutableRefObject<any>;
   buttonRef: React.MutableRefObject<any>;
   onSelect(value?: ComboboxValue, data?: any): any;
+  getOptionData: GetOptionData;
+  addOptionData: AddOptionData;
+  removeOptionData: RemoveOptionData;
   state: State;
   transition: Transition;
 }
