@@ -9,7 +9,7 @@ import {
   ComboboxOption,
   ComboboxPopover,
   ComboboxInputProps,
-  useComboboxContext,
+  useComboboxContext
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import cities from "../examples/cities";
@@ -227,10 +227,42 @@ describe("<Combobox />", () => {
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
     });
   });
+
+  it("should pass custom data to a selected item", () => {
+    jest.useFakeTimers();
+    let mockedOnSelect = jest.fn();
+    let optionToSelect = "Eagle Pass, Texas";
+    let { getByTestId, getByText } = render(
+      <BasicCombobox onSelect={mockedOnSelect} />
+    );
+    let getByTextWithMarkup = withMarkup(getByText);
+    let input = getByTestId("input");
+    act(() => {
+      // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
+      // list (index=0)
+      userEvent.type(input, "Eagle Pass, T");
+      jest.advanceTimersByTime(100);
+    });
+    expect(getByTestId("list")).toBeInTheDocument();
+    expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
+
+    let selectedOptionIndex = 0;
+    let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
+    act(() => {
+      userEvent.click(firstComboboxOption);
+    });
+    expect(mockedOnSelect).toHaveBeenCalledWith(optionToSelect, {
+      index: selectedOptionIndex
+    });
+  });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-function BasicCombobox() {
+function BasicCombobox({
+  onSelect
+}: {
+  onSelect?: (item: string, data?: any) => void;
+}) {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
@@ -241,7 +273,7 @@ function BasicCombobox() {
   return (
     <div>
       <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes">
+      <Combobox id="holy-smokes" onSelect={onSelect}>
         <ComboboxInput
           aria-label="cool search"
           data-testid="input"
@@ -257,7 +289,11 @@ function BasicCombobox() {
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
+                  data-testid={`option-${index}`}
                   value={`${result.city}, ${result.state}`}
+                  data={{
+                    index
+                  }}
                 />
               ))}
             </ComboboxList>
@@ -274,7 +310,7 @@ function useCityMatch(term: string) {
   return term.trim() === ""
     ? null
     : matchSorter(cities, term, {
-        keys: [item => `${item.city}, ${item.state}`],
+        keys: [item => `${item.city}, ${item.state}`]
       });
 }
 

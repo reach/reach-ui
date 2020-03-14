@@ -26,7 +26,7 @@ import React, {
   useContext,
   useMemo,
   useReducer,
-  useState,
+  useState
 } from "react";
 import PropTypes from "prop-types";
 import {
@@ -40,13 +40,13 @@ import {
   useForkedRef,
   useUpdateEffect,
   wrapEvent,
-  noop,
+  noop
 } from "@reach/utils";
 import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
-  useDescendants,
+  useDescendants
 } from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
@@ -115,8 +115,8 @@ const stateChart: StateChart = {
         [INITIAL_CHANGE]: IDLE,
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
-        [OPEN_WITH_BUTTON]: SUGGESTING,
-      },
+        [OPEN_WITH_BUTTON]: SUGGESTING
+      }
     },
     [SUGGESTING]: {
       on: {
@@ -128,8 +128,8 @@ const stateChart: StateChart = {
         [BLUR]: IDLE,
         [SELECT_WITH_CLICK]: IDLE,
         [INTERACT]: INTERACTING,
-        [CLOSE_WITH_BUTTON]: IDLE,
-      },
+        [CLOSE_WITH_BUTTON]: IDLE
+      }
     },
     [NAVIGATING]: {
       on: {
@@ -142,8 +142,8 @@ const stateChart: StateChart = {
         [SELECT_WITH_CLICK]: IDLE,
         [SELECT_WITH_KEYBOARD]: IDLE,
         [CLOSE_WITH_BUTTON]: IDLE,
-        [INTERACT]: INTERACTING,
-      },
+        [INTERACT]: INTERACTING
+      }
     },
     [INTERACTING]: {
       on: {
@@ -154,10 +154,10 @@ const stateChart: StateChart = {
         [ESCAPE]: IDLE,
         [NAVIGATE]: NAVIGATING,
         [CLOSE_WITH_BUTTON]: IDLE,
-        [SELECT_WITH_CLICK]: IDLE,
-      },
-    },
-  },
+        [SELECT_WITH_CLICK]: IDLE
+      }
+    }
+  }
 };
 
 const reducer: Reducer = (data: StateData, event: MachineEvent) => {
@@ -168,49 +168,49 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
       return {
         ...nextState,
         navigationValue: null,
-        value: event.value,
+        value: event.value
       };
     case NAVIGATE:
     case OPEN_WITH_BUTTON:
       return {
         ...nextState,
-        navigationValue: findNavigationValue(nextState, event),
+        navigationValue: findNavigationValue(nextState, event)
       };
     case CLEAR:
       return {
         ...nextState,
         value: "",
-        navigationValue: null,
+        navigationValue: null
       };
     case BLUR:
     case ESCAPE:
       return {
         ...nextState,
-        navigationValue: null,
+        navigationValue: null
       };
     case SELECT_WITH_CLICK:
       return {
         ...nextState,
         value: event.value,
-        navigationValue: null,
+        navigationValue: null
       };
     case SELECT_WITH_KEYBOARD:
       return {
         ...nextState,
         value: data.navigationValue,
-        navigationValue: null,
+        navigationValue: null
       };
     case CLOSE_WITH_BUTTON:
       return {
         ...nextState,
-        navigationValue: null,
+        navigationValue: null
       };
     case INTERACT:
       return nextState;
     case FOCUS:
       return {
         ...nextState,
-        navigationValue: findNavigationValue(nextState, event),
+        navigationValue: findNavigationValue(nextState, event)
       };
 
     default:
@@ -303,7 +303,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       // controlling the value of ComboboxInput.
       value: "",
       // the value the user has navigated to with the keyboard
-      navigationValue: null,
+      navigationValue: null
     };
 
     const [state, data, transition] = useReducerMachine(
@@ -332,7 +332,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       persistSelectionRef,
       popoverRef,
       state,
-      transition,
+      transition
     };
 
     useEffect(() => checkStyles("combobox"), []);
@@ -371,7 +371,7 @@ export type ComboboxProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-onselect
    */
-  onSelect?(value: ComboboxValue): void;
+  onSelect?: (value: ComboboxValue, data?: any) => void;
   /**
    * If true, the popover opens when focus is on the text box.
    *
@@ -395,7 +395,7 @@ if (__DEV__) {
   Combobox.propTypes = {
     as: PropTypes.any,
     onSelect: PropTypes.func,
-    openOnFocus: PropTypes.bool,
+    openOnFocus: PropTypes.bool
   };
 }
 
@@ -441,7 +441,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       openOnFocus,
       isExpanded,
       ariaLabel,
-      ariaLabelledby,
+      ariaLabelledby
     } = useContext(ComboboxContext);
 
     let ref = useForkedRef(inputRef, forwardedRef);
@@ -628,7 +628,7 @@ export const ComboboxPopover = forwardRef<
     // results.length or whatever).
     hidden: !isExpanded,
     tabIndex: -1,
-    children,
+    children
   };
 
   return portal ? (
@@ -738,28 +738,27 @@ if (__DEV__) {
  */
 export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
   function ComboboxOption(
-    { as: Comp = "li", children, value, onClick, ...props },
+    { as: Comp = "li", children, value, data, onClick, ...props },
     forwardedRef: React.Ref<any>
   ) {
     const {
       onSelect,
       data: { navigationValue },
-      transition,
+      transition
     } = useContext(ComboboxContext);
-
     let ownRef = useRef<HTMLElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
 
     let index = useDescendant({
       context: ComboboxDescendantContext,
       element: ownRef.current!,
-      value,
+      value
     });
 
     const isActive = navigationValue === value;
 
     const handleClick = () => {
-      onSelect && onSelect(value);
+      onSelect && onSelect(value, data);
       transition(SELECT_WITH_CLICK, { value });
     };
 
@@ -810,6 +809,13 @@ export type ComboboxOptionProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-value
    */
   value: string;
+  /**
+   * Custom data that will be passed to the `onSelect` of the `Combobox` as a
+   * second argument.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-data
+   */
+  data?: any;
 };
 
 if (__DEV__) {
@@ -837,14 +843,14 @@ if (__DEV__) {
 export function ComboboxOptionText() {
   const { value } = useContext(OptionContext);
   const {
-    data: { value: contextValue },
+    data: { value: contextValue }
   } = useContext(ComboboxContext);
 
   const results = useMemo(
     () =>
       findAll({
         searchWords: escapeRegexp(contextValue || "").split(/\s+/),
-        textToHighlight: value,
+        textToHighlight: value
       }),
     [contextValue, value]
   );
@@ -958,7 +964,7 @@ function useKeyDown() {
     state,
     transition,
     autocompletePropRef,
-    persistSelectionRef,
+    persistSelectionRef
   } = useContext(ComboboxContext);
 
   const { descendants: options } = useContext(ComboboxDescendantContext);
@@ -1024,7 +1030,7 @@ function useKeyDown() {
         if (state === IDLE) {
           // Opening a closed list
           transition(NAVIGATE, {
-            persistSelection: persistSelectionRef.current,
+            persistSelection: persistSelectionRef.current
           });
         } else {
           let next = getNextOption();
@@ -1199,7 +1205,7 @@ export function useComboboxContext(): ComboboxContextValue {
   return useMemo(
     () => ({
       id: comboboxId,
-      isExpanded,
+      isExpanded
     }),
     [comboboxId, isExpanded]
   );
@@ -1241,6 +1247,8 @@ interface InternalComboboxContextValue {
   openOnFocus: boolean;
   persistSelectionRef: React.MutableRefObject<any>;
   popoverRef: React.MutableRefObject<any>;
+  buttonRef: React.MutableRefObject<any>;
+  onSelect(value?: ComboboxValue, data?: any): any;
   state: State;
   transition: Transition;
 }
