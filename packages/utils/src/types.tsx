@@ -82,8 +82,15 @@ export type ComponentWithForwardedRef<
   ComponentProps
 > = React.ForwardRefExoticComponent<
   ComponentProps &
-    React.HTMLProps<React.ElementType<ElementType>> &
-    React.ComponentPropsWithRef<ElementType>
+    // Need to omit data from html props to allow a custom prop type in components.
+    // Otherwise, it always falls back to the html element attribute data: string for
+    // attaching a url of an element. However, I have never seen this used before.
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+    Omit<
+      React.HTMLProps<React.ElementType<ElementType>> &
+        React.ComponentPropsWithRef<ElementType>,
+      "data"
+    >
 >;
 
 /**
