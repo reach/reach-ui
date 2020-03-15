@@ -82,10 +82,12 @@ export type ComponentWithForwardedRef<
   ComponentProps
 > = React.ForwardRefExoticComponent<
   ComponentProps &
-    // Need to omit data from html props to allow a custom prop type in components.
-    // Otherwise, it always falls back to the html element attribute data: string for
-    // attaching a url of an element. However, I have never seen this used before.
-    // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+    // Unfortunately, we need to omit "data" from the html attribute to allow a
+    // custom `data` prop type in components. Otherwise, TypeScript will always
+    // try to fall back to (data: string). The attribute can be used to attach a
+    // url to an element but I have never seen this used before and it's not
+    // even documented on mdn. Therefore, I believe it is fine for us to omit
+    // it. https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
     Omit<
       React.HTMLProps<React.ElementType<ElementType>> &
         React.ComponentPropsWithRef<ElementType>,
