@@ -10,6 +10,20 @@
  * CustomCheckbox uses our MixedCheckbox so you get the same benefits for
  * dealing with indeterminate state when you use either!
  *
+ * TODO: Consider using pseudo boxes instead of native input for events
+ *       The main benefit here is that we won't need to fight the browser for
+ *       focus, which will make it easier for apps to manage focus without
+ *       hacky workarounds like setTimeout.
+ *       This will probably yield a new API, as HTML labels won't work
+ *       seamlessly with this change. We would also no longer need to expose a
+ *       fully hidden input field directly that only exists holds a value for
+ *       forms.
+ *
+ *       <CustomCheckbox> // provider only, no wrapper
+ *         <CustomCheckboxInput /> // pseudo box + hidden input
+ *         <CustomCheckboxLabel /> // aria-label with click handler
+ *       </CustomCheckbox>
+ *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox/src/custom
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
