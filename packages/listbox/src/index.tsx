@@ -305,6 +305,7 @@ export const ListboxInput = forwardRef<
             ? children({
                 value: current.context.value,
                 valueLabel,
+                expanded: isExpanded(current.value),
               })
             : children}
         </div>
@@ -364,6 +365,7 @@ export type ListboxInputProps = Omit<
       | ((props: {
           value: ListboxValue | null;
           valueLabel: string | null;
+          expanded: boolean;
         }) => React.ReactNode);
     /**
      * The default value of an uncontrolled listbox.
