@@ -31,7 +31,7 @@ describe("<Slider />", () => {
   });
 
   describe("user events", () => {
-    it("highlights markers as value is exceeded", () => {
+    it("updates marker state as value is exceeded", () => {
       const min = 0;
       const max = 100;
       const { getByRole, getByTestId } = render(
@@ -48,10 +48,11 @@ describe("<Slider />", () => {
       );
 
       // markers get this attribute to style highlights
-      const highlightAtt = "data-reach-slider-marker-highlight";
       const handle = getByRole("slider");
 
-      expect(getByTestId("handle-2").getAttribute(highlightAtt)).toBe(null);
+      expect(getByTestId("handle-2").getAttribute("data-state")).toBe(
+        "over-value"
+      );
 
       fireEvent.keyDown(handle, { key: "PageUp", code: 33 });
       fireEvent.keyDown(handle, { key: "PageUp", code: 33 });
@@ -59,7 +60,9 @@ describe("<Slider />", () => {
       fireEvent.keyDown(handle, { key: "PageUp", code: 33 });
       fireEvent.keyDown(handle, { key: "PageUp", code: 33 });
 
-      expect(getByTestId("handle-2").getAttribute(highlightAtt)).not.toBe(null);
+      expect(getByTestId("handle-2").getAttribute("data-state")).toBe(
+        "under-value"
+      );
     });
 
     it("moves the handle", () => {
