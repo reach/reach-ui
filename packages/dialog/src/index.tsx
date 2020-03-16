@@ -7,7 +7,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/dialog
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/dialog
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";

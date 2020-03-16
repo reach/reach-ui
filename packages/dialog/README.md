@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/dialog.svg)](https://npm.im/@reach/dialog) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/dialog) | [Source](https://github.com/reach/reach-ui/tree/master/packages/dialog) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal)
+[Docs](https://reacttraining.com/reach-ui/dialog) | [Source](https://github.com/reach/reach-ui/tree/master/packages/dialog) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal)
 
 An accessible dialog or modal window.
 
