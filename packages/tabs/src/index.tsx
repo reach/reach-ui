@@ -12,7 +12,7 @@
  * `TabPanel` elements.
  *
  * TODO: Consider manual tab activation
- * https://www.w3.org/TR/wai-aria-practices-1.1/examples/tabs/tabs-2/tabs.html
+ * https://www.w3.org/TR/wai-aria-practices-1.2/examples/tabs/tabs-2/tabs.html
  *
  *
  * TODO: Consider `orientation` prop to account for keyboard behavior

@@ -20,7 +20,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/combobox
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#combobox
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
 
 Accessible combobox (autocomplete or autosuggest) component for React.
 
@@ -43,7 +43,7 @@ import {
   ComboboxPopover,
   ComboboxList,
   ComboboxOption,
-  ComboboxOptionText
+  ComboboxOptionText,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 ```
@@ -174,7 +174,7 @@ There is nothing special about managing state for a combobox, it's like managing
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );
@@ -327,7 +327,7 @@ You can even have other interactive elements inside the popover, it won't close 
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );
@@ -339,7 +339,7 @@ You can even have other interactive elements inside the popover, it won't close 
     fontWeight: "bold",
     textTransform: "uppercase",
     margin: 0,
-    padding: 5
+    padding: 5,
   };
 
   return <Example />;
@@ -379,7 +379,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
                   margin: 0,
                   color: "#454545",
                   padding: "0.25rem 1rem 0.75rem 1rem",
-                  fontStyle: "italic"
+                  fontStyle: "italic",
                 }}
               >
                 No results :(
@@ -398,7 +398,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`]
+              keys: [item => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );

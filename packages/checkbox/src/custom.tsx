@@ -26,7 +26,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox/src/custom
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */

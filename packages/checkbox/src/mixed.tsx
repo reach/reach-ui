@@ -28,7 +28,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox#mixedcheckbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox/src/mixed
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
 import React, { forwardRef, useEffect, useRef } from "react";
