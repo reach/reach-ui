@@ -26,7 +26,7 @@ function Example() {
       <div style={{ float: "right" }}>
         <ExampleAnimatedTooltip
           label="Notifications"
-          ariaLabel="3 Notifications"
+          aria-label="3 Notifications"
         >
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
@@ -49,7 +49,7 @@ function ExampleAnimatedTooltip({ children, ...rest }) {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { mass: 1, tension: 500, friction: 40 }
+    config: { mass: 1, tension: 500, friction: 40 },
   });
 
   return (

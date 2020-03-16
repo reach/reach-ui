@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/tooltip.svg)](https://npm.im/@reach/tooltip) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/tooltip) | [Source](https://github.com/reach/reach-ui/tree/master/packages/tooltip) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip)
+[Docs](https://reacttraining.com/reach-ui/tooltip) | [Source](https://github.com/reach/reach-ui/tree/master/packages/tooltip) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip)
 
 When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
 

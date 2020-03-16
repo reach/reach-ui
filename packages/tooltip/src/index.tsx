@@ -39,7 +39,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/tooltip
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tooltip
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
  */
 
 import React, {
@@ -173,7 +173,7 @@ let state = chart.initial;
 //
 // Maybe if default context could take a hook (instead of just a static value)
 // that was rendered at the root for us, that'd be cool! But it doesn't.
-const subscriptions: Function[] = [];
+let subscriptions: Function[] = [];
 
 function subscribe(fn: Function) {
   subscriptions.push(fn);
@@ -245,9 +245,9 @@ export function useTooltip<T extends HTMLElement>({
   ref?: React.Ref<any>;
   DEBUG_STYLE?: boolean;
 } & React.HTMLAttributes<T> = {}): [TriggerParams, TooltipParams, boolean] {
-  const id = String(useId(idProp));
+  let id = String(useId(idProp));
 
-  const [isVisible, setIsVisible] = useState(
+  let [isVisible, setIsVisible] = useState(
     DEBUG_STYLE
       ? true
       : id === null
@@ -256,10 +256,10 @@ export function useTooltip<T extends HTMLElement>({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  const ownRef = useRef<HTMLDivElement | null>(null);
+  let ownRef = useRef<HTMLDivElement | null>(null);
 
-  const ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
-  const triggerRect = useRect(ownRef, isVisible);
+  let ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
+  let triggerRect = useRect(ownRef, isVisible);
 
   useEffect(() => {
     return subscribe(() => {
@@ -277,7 +277,7 @@ export function useTooltip<T extends HTMLElement>({
   useEffect(() => checkStyles("tooltip"), []);
 
   useEffect(() => {
-    const ownerDocument = getOwnerDocument(ownRef.current) || document;
+    let ownerDocument = getOwnerDocument(ownRef.current) || document;
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&
@@ -290,45 +290,48 @@ export function useTooltip<T extends HTMLElement>({
     return () => ownerDocument.removeEventListener("keydown", listener);
   }, []);
 
-  const handleMouseEnter = () => {
+  function handleMouseEnter() {
     transition(MOUSE_ENTER, { id });
-  };
+  }
 
-  const handleMouseMove = () => {
+  function handleMouseMove() {
     transition(MOUSE_MOVE, { id });
-  };
+  }
 
-  const handleFocus = () => {
+  function handleFocus() {
     // @ts-ignore
     if (window.__REACH_DISABLE_TOOLTIPS) {
       return;
     }
     transition(FOCUS, { id });
-  };
+  }
 
-  const handleMouseLeave = () => {
+  function handleMouseLeave() {
     transition(MOUSE_LEAVE);
-  };
+  }
 
-  const handleBlur = () => {
+  function handleBlur() {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
     transition(BLUR);
-  };
+  }
 
-  const handleMouseDown = () => {
+  function handleMouseDown() {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
     transition(MOUSE_DOWN);
-  };
+  }
 
-  const handleKeyDown = (event: React.KeyboardEvent<T>) => {
+  function handleKeyDown(event: React.KeyboardEvent<T>) {
     if (event.key === "Enter" || event.key === " ") {
       transition(SELECT_WITH_KEYBOARD);
     }
-  };
+  }
 
-  const trigger: TriggerParams = {
+  let trigger: TriggerParams = {
+    // The element that triggers the tooltip references the tooltip element with
+    // `aria-describedby`.
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
     "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
     "data-reach-tooltip-trigger": "",
     ref,
@@ -341,7 +344,7 @@ export function useTooltip<T extends HTMLElement>({
     onMouseDown: wrapEvent(onMouseDown, handleMouseDown),
   };
 
-  const tooltip: TooltipParams = {
+  let tooltip: TooltipParams = {
     id,
     triggerRect,
     isVisible,
@@ -358,14 +361,23 @@ export function useTooltip<T extends HTMLElement>({
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltip
  */
 export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
-  { children, label, ariaLabel, id, DEBUG_STYLE, ...rest },
+  {
+    children,
+    label,
+    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+    ariaLabel,
+    "aria-label": realAriaLabel,
+    id,
+    DEBUG_STYLE,
+    ...rest
+  },
   forwardedRef
 ) {
-  const child = Children.only(children) as any;
+  let child = Children.only(children) as any;
 
   // We need to pass some properties from the child into useTooltip
   // to make sure users can maintain control over the trigger's ref and events
-  const [trigger, tooltip] = useTooltip({
+  let [trigger, tooltip] = useTooltip({
     id,
     onMouseEnter: child.props.onMouseEnter,
     onMouseMove: child.props.onMouseMove,
@@ -383,7 +395,7 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
       <TooltipPopup
         ref={forwardedRef}
         label={label}
-        ariaLabel={ariaLabel}
+        aria-label={realAriaLabel || ariaLabel}
         {...tooltip}
         {...rest}
       />
@@ -417,9 +429,11 @@ export default Tooltip;
 export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   function TooltipPopup(
     {
-      // own props
-      label, // could use children but want to encourage simple strings
+      // could use children but we want to encourage simple strings
+      label,
+      // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
       ariaLabel,
+      "aria-label": realAriaLabel,
       position,
 
       // hook spread props
@@ -434,7 +448,7 @@ export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
       <Portal>
         <TooltipContent
           label={label}
-          ariaLabel={ariaLabel}
+          aria-label={realAriaLabel || ariaLabel}
           position={position}
           isVisible={isVisible}
           id={makeId("tooltip", String(id))}
@@ -470,8 +484,9 @@ if (__DEV__) {
 const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
   function TooltipContent(
     {
-      // TODO: Consider just using `aria-label` for 1.0
+      // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
       ariaLabel,
+      "aria-label": realAriaLabel,
       as: Comp = "div",
       id,
       isVisible,
@@ -483,18 +498,26 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     },
     forwardedRef
   ) {
-    const useAriaLabel = ariaLabel != null;
-    const ownRef = useRef(null);
-    const ref = useForkedRef(forwardedRef, ownRef);
-    const tooltipRect = useRect(ownRef, isVisible);
+    // The element that serves as the tooltip container has role tooltip.
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
+    // When an app passes an `aria-label`, we actually want to implement
+    // `role="tooltip"` on a visually hidden element inside of the trigger.
+    // In these cases we want the screen reader user to know both the content in
+    // the tooltip, but also the content in the badge. For screen reader users,
+    // the only content announced to them is whatever is in the tooltip.
+    let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
+
+    let ownRef = useRef(null);
+    let ref = useForkedRef(forwardedRef, ownRef);
+    let tooltipRect = useRect(ownRef, isVisible);
     return (
       <Fragment>
         <Comp
-          role={useAriaLabel ? undefined : "tooltip"}
+          role={hasAriaLabel ? undefined : "tooltip"}
           {...props}
           ref={ref}
           data-reach-tooltip=""
-          id={useAriaLabel ? undefined : id}
+          id={hasAriaLabel ? undefined : id}
           style={{
             ...style,
             ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
@@ -502,9 +525,9 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
         >
           {label}
         </Comp>
-        {useAriaLabel && (
+        {hasAriaLabel && (
           <VisuallyHidden role="tooltip" id={id}>
-            {ariaLabel}
+            {realAriaLabel || ariaLabel}
           </VisuallyHidden>
         )}
       </Fragment>
@@ -535,19 +558,19 @@ function getStyles(
   triggerRect: PRect,
   tooltipRect: PRect
 ): React.CSSProperties {
-  const haventMeasuredTooltipYet = !tooltipRect;
+  let haventMeasuredTooltipYet = !tooltipRect;
   if (haventMeasuredTooltipYet) {
     return { visibility: "hidden" };
   }
   return position(triggerRect, tooltipRect);
 }
 
-const positionDefault: Position = (triggerRect, tooltipRect) => {
+let positionDefault: Position = (triggerRect, tooltipRect) => {
   if (!triggerRect || !tooltipRect) {
     return {};
   }
 
-  const collisions = {
+  let collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: window.innerWidth < triggerRect.left + tooltipRect.width,
     bottom:
@@ -555,8 +578,8 @@ const positionDefault: Position = (triggerRect, tooltipRect) => {
     left: triggerRect.left - tooltipRect.width < 0,
   };
 
-  const directionRight = collisions.right && !collisions.left;
-  const directionUp = collisions.bottom && !collisions.top;
+  let directionRight = collisions.right && !collisions.left;
+  let directionUp = collisions.bottom && !collisions.top;
 
   return {
     left: directionRight
@@ -587,8 +610,8 @@ const positionDefault: Position = (triggerRect, tooltipRect) => {
  * @param payload
  */
 const transition: Transition = (event, payload) => {
-  const stateDef = chart.states[state];
-  const nextState = stateDef && stateDef.on && stateDef.on[event];
+  let stateDef = chart.states[state];
+  let nextState = stateDef && stateDef.on && stateDef.on[event];
 
   // Really useful for debugging
   // console.log({ event, state, nextState, contextId: context.id });
@@ -606,7 +629,7 @@ const transition: Transition = (event, payload) => {
     context = payload;
   }
 
-  const nextDef = chart.states[nextState];
+  let nextDef = chart.states[nextState];
   if (nextDef && nextDef.enter) {
     nextDef.enter();
   }

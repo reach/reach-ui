@@ -21,7 +21,7 @@ function Example() {
       </ExampleTriangle>
 
       <div style={{ float: "right" }}>
-        <ExampleTriangle label="Notifications" ariaLabel="3 Notifications">
+        <ExampleTriangle label="Notifications" aria-label="3 Notifications">
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
             <span>3</span>
@@ -44,7 +44,7 @@ const centered = (triggerRect, tooltipRect) => {
   const maxLeft = window.innerWidth - tooltipRect.width - getScrollbarOffset();
   return {
     left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-    top: triggerRect.bottom + 8 + window.scrollY
+    top: triggerRect.bottom + 8 + window.scrollY,
   };
 };
 
@@ -71,7 +71,7 @@ function ExampleTriangle({ children, ...rest }) {
             height: 0,
             borderLeft: "10px solid transparent",
             borderRight: "10px solid transparent",
-            borderBottom: "10px solid black"
+            borderBottom: "10px solid black",
           }}
         />
       )}
@@ -83,7 +83,7 @@ function ExampleTriangle({ children, ...rest }) {
           color: "white",
           border: "none",
           borderRadius: "3px",
-          padding: "0.5em 1em"
+          padding: "0.5em 1em",
         }}
         position={centered}
       />

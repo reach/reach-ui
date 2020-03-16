@@ -5,7 +5,7 @@ import SEO from "../components/SEO";
 # Tooltip
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/tooltip
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tooltip
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
 
 When the user's mouse or focus rests on an element, a non-interactive popup is displayed near it.
 
@@ -34,7 +34,7 @@ function Example() {
       </Tooltip>
 
       <div style={{ float: "right" }}>
-        <Tooltip label="Notifications" ariaLabel="3 Notifications">
+        <Tooltip label="Notifications" aria-label="3 Notifications">
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
             <span>3</span>
@@ -74,7 +74,7 @@ function Example() {
 }
 ```
 
-Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screen reader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `ariaLabel` prop.
+Sometimes the button contains information that is relevant to the user, like a badge showing the count for notifications. In these cases we want the screen reader user to know both the content in the tooltip, but also the content in the badge. For screen reader users, the only content announced to them is whatever is in the tooltip. For these cases, use the `aria-label` prop.
 
 ```jsx
 // jsx-demo
@@ -84,7 +84,7 @@ function Example() {
       // What the tooltip renders
       label="Notifications"
       // What the screen reader announces
-      ariaLabel="3 Notifications"
+      aria-label="3 Notifications"
     >
       <button style={{ fontSize: 25 }}>🔔 3</button>
     </Tooltip>
@@ -105,7 +105,7 @@ function Example() {
         color: "white",
         border: "none",
         borderRadius: "4px",
-        padding: "0.5em 1em"
+        padding: "0.5em 1em",
       }}
     >
       <button style={{ fontSize: 25 }}>❤️</button>
@@ -149,11 +149,11 @@ You may want to drop down to this lower level API if you need animation or you w
     const maxLeft = window.innerWidth - tooltipRect.width - 2;
     return {
       left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-      top: triggerRect.bottom + 8 + window.scrollY
+      top: triggerRect.bottom + 8 + window.scrollY,
     };
   };
 
-  function TriangleTooltip({ children, label, ariaLabel }) {
+  function TriangleTooltip({ children, label, "aria-label": ariaLabel }) {
     // get the props from useTooltip
     const [trigger, tooltip] = useTooltip();
 
@@ -181,7 +181,7 @@ You may want to drop down to this lower level API if you need animation or you w
                 height: 0,
                 borderLeft: "10px solid transparent",
                 borderRight: "10px solid transparent",
-                borderBottom: "10px solid black"
+                borderBottom: "10px solid black",
               }}
             />
           </Portal>
@@ -189,13 +189,13 @@ You may want to drop down to this lower level API if you need animation or you w
         <TooltipPopup
           {...tooltip}
           label={label}
-          ariaLabel={ariaLabel}
+          aria-label={ariaLabel}
           style={{
             background: "black",
             color: "white",
             border: "none",
             borderRadius: "3px",
-            padding: "0.5em 1em"
+            padding: "0.5em 1em",
           }}
           position={centered}
         />
@@ -219,7 +219,7 @@ You may want to drop down to this lower level API if you need animation or you w
       <div style={{ float: "right" }}>
         <TriangleTooltip
           label="Notifications Really Long to Trigger Collision"
-          ariaLabel="3 Notifications"
+          aria-label="3 Notifications"
         >
           <button style={{ fontSize: 25 }}>
             <span>🔔</span>
@@ -251,7 +251,7 @@ function AnimatedTooltip({ children, ...rest }) {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
-    config: { mass: 1, tension: 500, friction: 40 }
+    config: { mass: 1, tension: 500, friction: 40 },
   });
 
   return (
