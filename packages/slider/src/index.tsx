@@ -15,7 +15,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/slider
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/slider
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#slider
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see          https://github.com/Stanko/aria-progress-range-slider
  * @see          http://www.oaa-accessibility.org/examplep/slider1/
  */
@@ -806,6 +806,7 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
         data-disabled={disabled ? "" : undefined}
         data-orientation={orientation}
         data-state={state}
+        data-value={value}
         children={children}
       />
     ) : null;

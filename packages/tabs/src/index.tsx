@@ -14,6 +14,7 @@
  * TODO: Consider manual tab activation
  * https://www.w3.org/TR/wai-aria-practices-1.1/examples/tabs/tabs-2/tabs.html
  *
+ *
  * TODO: Consider `orientation` prop to account for keyboard behavior
  *       - horizontal-top
  *       - horizontal-bottm
@@ -22,7 +23,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
 
 import React, {
@@ -314,6 +315,15 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   return (
     <Comp
+      // If the `tablist` element is vertically oriented, it has the property
+      // `aria-orientation` set to `"vertical"`. The default value of
+      // `aria-orientation` for a tablist element is `"horizontal"`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+      // aria-orientation={vertical ? "vertical" : undefined}
+
+      // The element that serves as the container for the set of tabs has role
+      // `tablist`
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
       role="tablist"
       {...props}
       data-reach-tab-list=""
@@ -404,9 +414,18 @@ export const Tab = forwardRefWithAs<
 
   return (
     <Comp
+      // Each element with role `tab` has the property `aria-controls` referring
+      // to its associated `tabpanel` element.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
       aria-controls={makeId(tabsId, "panel", index)}
       aria-disabled={disabled}
+      // The active tab element has the state `aria-selected` set to `true` and
+      // all other tab elements have it set to `false`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
       aria-selected={isSelected}
+      // Each element that serves as a tab has role `tab` and is contained
+      // within the element with role `tablist`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
       role="tab"
       tabIndex={isSelected ? 0 : -1}
       {...props}
@@ -486,7 +505,10 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel
  */
 export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
-  function TabPanel({ children, as: Comp = "div", ...props }, forwardedRef) {
+  function TabPanel(
+    { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
+    forwardedRef
+  ) {
     let { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
     let ownRef = useRef<HTMLElement | null>(null);
 
@@ -506,8 +528,13 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
 
     return (
       <Comp
+        // Each element with role `tabpanel` has the property `aria-labelledby`
+        // referring to its associated tab element.
         aria-labelledby={makeId(tabsId, "tab", index)}
         hidden={!isSelected}
+        // Each element that contains the content panel for a tab has role
+        // `tabpanel`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
         role="tabpanel"
         tabIndex={isSelected ? 0 : -1}
         {...props}

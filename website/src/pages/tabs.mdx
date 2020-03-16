@@ -16,7 +16,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/tabs
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#tabs
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
 
 An accessible tabs component.
 
@@ -143,7 +143,7 @@ function Example() {
       onChange={index => setTabIndex(index)}
       style={{
         color: "white",
-        background: backgroundColor
+        background: backgroundColor,
       }}
     >
       <TabList>
@@ -606,8 +606,8 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
     {
       label: "Burrito",
       content:
-        "Perhaps the greatest dish ever invented but bigger and with rice."
-    }
+        "Perhaps the greatest dish ever invented but bigger and with rice.",
+    },
   ];
 
   // you can just pass it in:
@@ -657,7 +657,7 @@ With a little composition we can animate the selected tab bar.
               // rect from the selected tab to set the styles of the bar
               transition: "all 300ms ease",
               left: selectedRect && selectedRect.left - tabsRect.left,
-              width: selectedRect && selectedRect.width
+              width: selectedRect && selectedRect.width,
             }}
           />
           {props.children[1]}
