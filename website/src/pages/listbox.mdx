@@ -352,15 +352,15 @@ Please see the [styling guide](/styling).
 
 ##### ListboxInput `children`
 
-`children: React.ReactNode | ((props: { value: string | null; valueLabel: string | null; }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { value: string | null; valueLabel: string | null; expanded: boolean; }) => React.ReactNode)`
 
 The composed listbox expects to receive `ListboxButton` and `ListboxPopover` as children. You can also pass in arbitrary wrapper elements if desired.
 
-If you want access to the listbox's current value and associated label, you can use a render function.
+If you want access to the listbox's current value and associated label, or its expanded state, you can use a render function.
 
 ```jsx
 <ListboxInput>
-  {({ value, valueLabel }) => (
+  {({ value, valueLabel, expanded }) => (
     <ListboxButton>
       <span data-value={value}>{valueLabel}</span>
     </ListboxButton>
