@@ -42,7 +42,6 @@ import {
   noop,
   useForkedRef,
   usePrevious,
-  useUpdateEffect,
   wrapEvent,
 } from "@reach/utils";
 
@@ -138,15 +137,6 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       // to the tooltip (like native OS tooltips).
       // @ts-ignore
       window.__REACH_DISABLE_TOOLTIPS = false;
-    }
-  }, [state.isOpen]);
-
-  // We want to focus the button by default when the menu moves from open to
-  // closed, but we don't want to focus the button on mount so we use an
-  // update-only effect.
-  useUpdateEffect(() => {
-    if (!state.isOpen) {
-      focus(buttonRef.current);
     }
   }, [state.isOpen]);
 
@@ -323,6 +313,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     forwardedRef
   ) {
     let {
+      buttonRef,
       dispatch,
       state: { selectionIndex },
     } = useMenuContext();
@@ -365,6 +356,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let isSelected = index === selectionIndex;
 
     function select() {
+      focus(buttonRef.current);
       onSelect && onSelect();
       dispatch({ type: CLICK_MENU_ITEM });
     }
@@ -377,8 +369,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     function handleDragStart(event: React.MouseEvent) {
       // Because we don't preventDefault on mousedown for links (we need the
-      // native click event), clicking and holding on a link triggers a dragstart
-      // which we don't want.
+      // native click event), clicking and holding on a link triggers a
+      // dragstart which we don't want.
       if (isLink) {
         event.preventDefault();
       }
@@ -611,9 +603,9 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
                 selected.element.click();
               } else {
                 event.preventDefault();
-                // Focus the button first by default when an item is selected. We
-                // fire the onSelect callback next so the app can manage focus if
-                // needed.
+                // Focus the button first by default when an item is selected.
+                // We fire the onSelect callback next so the app can manage
+                // focus if needed.
                 focus(buttonRef.current);
                 selected.onSelect && selected.onSelect();
                 dispatch({ type: CLICK_MENU_ITEM });
@@ -621,6 +613,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
             }
             break;
           case "Escape":
+            focus(buttonRef.current);
             dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
             break;
           case "Tab":
@@ -628,8 +621,8 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
             event.preventDefault();
             break;
           default:
-            // Check if a user is typing some char keys and respond by setting the
-            // query state.
+            // Check if a user is typing some char keys and respond by setting
+            // the query state.
             if (isString(key) && key.length === 1) {
               const query = typeaheadQuery + key.toLowerCase();
               dispatch({
