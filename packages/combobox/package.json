@@ -18,7 +18,6 @@
     "@reach/popover": "^0.9.0",
     "@reach/portal": "^0.9.0",
     "@reach/utils": "^0.9.0",
-    "escape-regexp": "0.0.1",
     "highlight-words-core": "1.2.2",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0"

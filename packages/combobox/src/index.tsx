@@ -49,7 +49,6 @@ import {
   useDescendants,
 } from "@reach/descendants";
 import { findAll } from "highlight-words-core";
-import escapeRegexp from "escape-regexp";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
 
@@ -1147,6 +1146,17 @@ const makeHash = (str: string) => {
   }
   return hash;
 };
+
+/**
+ * Escape regexp special characters in `str`
+ *
+ * @see https://github.com/component/escape-regexp/blob/5ce923c1510c9802b3da972c90b6861dd2829b6b/index.js
+ * @param str
+ */
+
+export function escapeRegexp(str: string) {
+  return String(str).replace(/([.*+?=^!:${}()|[\]/\\])/g, "\\$1");
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
