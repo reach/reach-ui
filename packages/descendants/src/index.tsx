@@ -352,7 +352,7 @@ export function useDescendantKeyDown<
         break;
       case "End":
         event.preventDefault();
-        let last = getFirstOption();
+        let last = getLastOption();
         callback(key === "option" ? last : last[key]);
         break;
     }

@@ -192,7 +192,7 @@ function selectOption(data: ListboxStateData, event: any) {
 }
 
 function submitForm(data: ListboxStateData, event: any) {
-  if (event.type !== ListboxEvents.KeyDownEnter || event.disabled) {
+  if (event.type !== ListboxEvents.KeyDownEnter) {
     return;
   }
 
@@ -297,6 +297,13 @@ let openEvents = {
   },
   [ListboxEvents.ButtonMouseDown]: {
     target: ListboxStates.Idle,
+    // When the user triggers a mouseDown event on the button, we call
+    // event.preventDefault() because the browser will naturally call mouseUp
+    // and click, which will reopen the button (which we don't want). As such,
+    // the click won't blur the open list or re-focus the trigger, so we call
+    // `focusButton` to do that manually. We could work around this with
+    // deferred transitions with xstate, but @xstate/fsm currently doesn't
+    // support that feature and this works good enough for the moment.
     actions: [focusButton],
   },
   [ListboxEvents.KeyDownEscape]: {
@@ -339,7 +346,7 @@ export const createMachineDefinition = ({
         ...commonEvents,
         [ListboxEvents.ButtonMouseDown]: {
           target: ListboxStates.Navigating,
-          actions: [navigateFromCurrentValue, focusButton],
+          actions: [navigateFromCurrentValue],
           cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownSpace]: {
@@ -479,7 +486,6 @@ export const createMachineDefinition = ({
       },
     },
     [ListboxStates.NavigatingWithKeys]: {
-      // entry: focusList,
       on: {
         ...commonEvents,
         ...openEvents,

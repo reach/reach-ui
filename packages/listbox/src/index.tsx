@@ -523,7 +523,6 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     function handleMouseDown(event: React.MouseEvent) {
       if (!isRightClick(event.nativeEvent)) {
         mouseEventStartedRef.current = true;
-        event.persist();
         event.preventDefault();
         send({
           type: ListboxEvents.ButtonMouseDown,
