@@ -6,6 +6,11 @@ import "@reach/listbox/styles.css";
 
 let name = "Move Focus on Item Select";
 
+// NOTE: This is NOT a good pattern. It is rarely a good idea to move focus
+// unless the event triggered by the user's action explicitly dictates that
+// focus should be moved. This example is for testing that focus indeed moves
+// in onChange as expected, since we're managing focus internally.
+
 function Example() {
   let inputRef = useRef(null);
   return (
@@ -16,9 +21,6 @@ function Example() {
         onChange={newValue => {
           inputRef.current.focus();
           action("value changed")(newValue);
-          requestAnimationFrame(() => {
-            // inputRef.current.focus();
-          });
         }}
       >
         <ListboxOption value="asada">
