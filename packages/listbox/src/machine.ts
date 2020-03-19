@@ -282,17 +282,17 @@ let openEvents = {
   },
   [ListboxEvents.OptionFinishClick]: {
     target: ListboxStates.Idle,
-    actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
+    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
     cond: optionIsSelectable,
   },
   [ListboxEvents.KeyDownEnter]: {
     target: ListboxStates.Idle,
-    actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
+    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
     cond: optionIsSelectable,
   },
   [ListboxEvents.KeyDownSpace]: {
     target: ListboxStates.Idle,
-    actions: [assignValue, selectOption, focusButton, clearTypeaheadQuery],
+    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
     cond: optionIsSelectable,
   },
   [ListboxEvents.ButtonMouseDown]: {
@@ -370,7 +370,7 @@ export const createMachineDefinition = ({
         },
         [ListboxEvents.KeyDownNavigate]: {
           target: ListboxStates.NavigatingWithKeys,
-          actions: [navigateFromCurrentValue, clearTypeaheadQuery],
+          actions: [navigateFromCurrentValue, clearTypeaheadQuery, focusList],
           cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownEnter]: {

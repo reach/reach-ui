@@ -534,6 +534,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     function handleMouseUp(event: React.MouseEvent) {
       if (mouseEventStartedRef.current) {
         if (!isRightClick(event.nativeEvent)) {
+          event.preventDefault();
           send({ type: ListboxEvents.ButtonMouseUp });
         }
       }
