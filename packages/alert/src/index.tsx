@@ -1,8 +1,13 @@
 /**
  * Welcome to @reach/alert!
  *
+ * An alert is an element that displays a brief, important message in a way that
+ * attracts the user's attention without interrupting the user's task.
+ * Dynamically rendered alerts are automatically announced by most screen
+ * readers, and in some operating systems, they may trigger an alert sound.
+ *
  * The approach here is to allow developers to render a visual <Alert> and then
- * we mirror that to a couple of aria live regions behind the scenes. This way,
+ * we mirror that to a couple of aria-live regions behind the scenes. This way,
  * most of the time, developers don't have to think about visual vs. aria
  * alerts.
  *
@@ -11,12 +16,11 @@
  * brand new React roots. We could use createPortal but then apps would need to
  * render the entire app tree in an <AlertProvider>, or maybe there's a way
  * with default context to do it, but we haven't explored that yet. So, we'll
- * see how this goes, and if it becomes a problem, we can introduce a portal
- * later.
+ * see how this goes. If it becomes a problem we can introduce a portal later.
  *
  * @see Docs     https://reacttraining.com/reach-ui/alert
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alert
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
@@ -143,6 +147,13 @@ function renderAlerts() {
         render(
           <VisuallyHidden>
             <div
+              // The status role is a type of live region and a container whose
+              // content is advisory information for the user that is not
+              // important enough to justify an alert, and is often presented as
+              // a status bar. When the role is added to an element, the browser
+              // will send out an accessible status event to assistive
+              // technology products which can then notify the user about it.
+              // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_status_role
               role={type === "assertive" ? "alert" : "status"}
               aria-live={type}
             >

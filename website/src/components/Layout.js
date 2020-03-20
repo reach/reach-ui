@@ -3,7 +3,7 @@ import React, {
   Fragment,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
@@ -22,6 +22,7 @@ import "@reach/combobox/styles.css";
 import "@reach/slider/styles.css";
 import "@reach/checkbox/styles.css";
 import "@reach/accordion/styles.css";
+import "@reach/listbox/styles.css";
 import "../styles/app.scss";
 
 const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
@@ -58,7 +59,7 @@ function Bar() {
       style={{
         height: 3,
         background: "white",
-        margin: "3px 0"
+        margin: "3px 0",
       }}
     />
   );
@@ -81,7 +82,7 @@ function HamburgerButton({ style = {}, children, ...props }) {
         fontSize: "80%",
         borderRadius: "50%",
         zIndex: 1,
-        ...style
+        ...style,
       }}
       {...props}
     >
@@ -106,7 +107,7 @@ function NavTag(props) {
         marginLeft: "0.5em",
         display: "inlineBlock",
         background: `rgba(255,255,255,0.15)`,
-        borderRadius: 3
+        borderRadius: 3,
       }}
       {...props}
     />
@@ -131,7 +132,7 @@ function Footer({ style = {}, ...props }) {
         textAlign: "center",
         fontSize: "80%",
         padding: 5,
-        ...style
+        ...style,
       }}
       {...props}
     >
@@ -180,7 +181,7 @@ function Nav({ media }) {
       <div
         id="nav"
         style={{
-          left: isOpen == null ? undefined : isOpen ? 0 : -250
+          left: isOpen == null ? undefined : isOpen ? 0 : -250,
         }}
         onFocus={() => setIsOpen(true)}
         onBlur={() => media.small && setIsOpen(false)}
@@ -190,7 +191,7 @@ function Nav({ media }) {
             display: "flex",
             flexDirection: "column",
             width: "100%",
-            minHeight: "100%"
+            minHeight: "100%",
           }}
         >
           <Header>
@@ -225,6 +226,7 @@ function Nav({ media }) {
                 <NavLink to="/combobox">Combobox</NavLink>
                 <NavLink to="/dialog">Dialog (Modal)</NavLink>
                 <NavLink to="/disclosure">Disclosure</NavLink>
+                <NavLink to="/listbox">Listbox</NavLink>
                 <NavLink to="/menu-button">Menu Button</NavLink>
                 <NavLink to="/portal">Portal</NavLink>
                 <NavLink to="/skip-nav">Skip Nav</NavLink>
@@ -273,7 +275,7 @@ function Layout({ children }) {
 }
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

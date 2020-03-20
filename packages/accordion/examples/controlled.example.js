@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 
 let name = "Controlled";
@@ -26,7 +26,9 @@ function Example() {
       </button>
       <Accordion index={activeItems} onChange={toggleItem}>
         <AccordionItem>
-          <AccordionButton>You can toggle me</AccordionButton>
+          <h3>
+            <AccordionButton>You can toggle me</AccordionButton>
+          </h3>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -35,7 +37,9 @@ function Example() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem disabled>
-          <AccordionButton>You can't toggle me</AccordionButton>
+          <h3>
+            <AccordionButton>You can't toggle me</AccordionButton>
+          </h3>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula
@@ -44,7 +48,9 @@ function Example() {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
-          <AccordionButton>You can also toggle me</AccordionButton>
+          <h3>
+            <AccordionButton>You can also toggle me</AccordionButton>
+          </h3>
           <AccordionPanel>
             Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
             consectetur pretium, lacus nunc consequat id viverra facilisi ligula

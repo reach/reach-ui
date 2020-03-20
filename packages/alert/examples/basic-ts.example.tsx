@@ -3,6 +3,8 @@ import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
 
+const MESSAGE_TIMEOUT = 5000;
+
 let name = "Basic (TS)";
 
 function Example() {
@@ -27,7 +29,7 @@ function Example() {
           dispatch({
             type: "ADD_MESSAGE",
             payload: `${messageCount +
-              1}. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`
+              1}. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
           })
         }
       >
@@ -54,7 +56,7 @@ function Example() {
               width: 10,
               height: 10,
               background: bestFriendIsOnline ? "green" : "red",
-              borderRadius: "50%"
+              borderRadius: "50%",
             }}
           />{" "}
           Best Friend {bestFriendIsOnline ? "Online" : "Offline"}
@@ -79,7 +81,7 @@ type ExState = {
 const initialState: ExState = {
   messages: [],
   messageCount: 0,
-  bestFriendIsOnline: false
+  bestFriendIsOnline: false,
 };
 
 function reducer(state: ExState, action: any): ExState {
@@ -88,35 +90,31 @@ function reducer(state: ExState, action: any): ExState {
       return {
         ...state,
         messageCount: state.messageCount + 1,
-        messages: [...state.messages, action.payload]
+        messages: [...state.messages, action.payload],
       };
     case "CLEAR_OLDEST_MESSAGE":
       return {
         ...state,
-        messages: state.messages.slice(1)
+        messages: state.messages.slice(1),
       };
     case "TOGGLE_BEST_FRIEND":
       return {
         ...state,
-        bestFriendIsOnline: !state.bestFriendIsOnline
+        bestFriendIsOnline: !state.bestFriendIsOnline,
       };
     default:
       return state;
   }
 }
 
-function useMessageTimeout(
-  messages: string[],
-  callback: Function,
-  time: number = 5000
-) {
+function useMessageTimeout(messages: string[], callback: Function) {
   const timeouts = React.useRef<any[]>([]);
   const lastMessageCount = usePrevious(messages.length);
   React.useEffect(() => {
     if (messages.length && (lastMessageCount as number) < messages.length) {
-      timeouts.current.push(window.setTimeout(callback, time));
+      timeouts.current.push(window.setTimeout(callback, MESSAGE_TIMEOUT));
     }
-  }, [messages, lastMessageCount, callback, time]);
+  }, [messages, lastMessageCount, callback]);
 
   React.useEffect(() => {
     const allTimeouts = timeouts.current;

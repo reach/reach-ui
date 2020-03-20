@@ -5,9 +5,9 @@
  * @see Source https://github.com/reach/reach-ui/tree/master/packages/window-size
  */
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { canUseDOM } from "@reach/utils";
+import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ export function useWindowSize() {
     width: hasWindow ? window.innerWidth : 0,
     height: hasWindow ? window.innerHeight : 0,
   });
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const resize = () =>
       setDimensions({
         width: window.innerWidth,

@@ -3,9 +3,15 @@
   --reach-menu-button: 1;
 }
 
-[data-reach-menu] {
+[data-reach-menu],
+[data-reach-menu-popover] {
   display: block;
   position: absolute;
+}
+
+[data-reach-menu][hidden],
+[data-reach-menu-popover][hidden] {
+  display: none;
 }
 
 [data-reach-menu-list],

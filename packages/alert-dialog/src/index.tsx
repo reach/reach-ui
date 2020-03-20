@@ -27,7 +27,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/alert-dialog
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert-dialog
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
  */
 
 import React, { forwardRef, useContext, useEffect, useRef } from "react";
@@ -47,9 +47,9 @@ import {
 import invariant from "invariant";
 import PropTypes from "prop-types";
 
-let AlertDialogContext = createNamedContext<IAlertDialogContext>(
+let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
   "AlertDialogContext",
-  {} as IAlertDialogContext
+  {} as AlertDialogContextValue
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ export const AlertDialogContent = forwardRef<
   HTMLDivElement,
   AlertDialogContentProps
 >(function AlertDialogContent({ children, ...props }, forwardRef) {
-  let { labelId, leastDestructiveRef, overlayRef } = useContext(
+  let { descriptionId, labelId, leastDestructiveRef, overlayRef } = useContext(
     AlertDialogContext
   );
   useEffect(() => {
@@ -145,8 +145,22 @@ export const AlertDialogContent = forwardRef<
   }, [labelId, leastDestructiveRef]);
   return (
     <DialogContent
+      // The element that contains all elements of the dialog, including the
+      // alert message and any dialog buttons, has role alertdialog.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
       role="alertdialog"
-      aria-labelledby={labelId}
+      // The element with role `alertdialog` has a value set for
+      // `aria-describedby` that refers to the element containing the alert
+      // message.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
+      aria-describedby={descriptionId}
+      // The element with role `alertdialog` has either:
+      //   - A value for `aria-labelledby` that refers to the element containing
+      //     the title of the dialog if the dialog has a visible label.
+      //   - A value for `aria-label` if the dialog does not have a visible
+      //     label.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
+      aria-labelledby={props["aria-label"] ? undefined : labelId}
       {...props}
       ref={forwardRef}
       // lol: remove in 1.0
@@ -300,7 +314,7 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-interface IAlertDialogContext {
+interface AlertDialogContextValue {
   labelId: string | undefined;
   descriptionId: string | undefined;
   overlayRef: React.MutableRefObject<HTMLDivElement | null>;

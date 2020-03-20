@@ -18,6 +18,7 @@ import {
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
+  ThenArg,
 } from "./types";
 
 /**
@@ -105,13 +106,26 @@ if (__DEV__) {
 export { checkStyles };
 
 /**
+ * Ponyfill for the global object in some environments.
+ *
+ * @link https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+ */
+export const ponyfillGlobal =
+  typeof window != "undefined" && window.Math == Math
+    ? window
+    : typeof self != "undefined" && self.Math == Math
+    ? self
+    : // eslint-disable-next-line no-new-func
+      Function("return this")();
+
+/**
  * Passes or assigns an arbitrary value to a ref function or object.
  *
  * @param ref
  * @param value
  */
 export function assignRef<RefValueType = any>(
-  ref: AssignableRef<RefValueType> | undefined,
+  ref: AssignableRef<RefValueType> | null | undefined,
   value: any
 ) {
   if (ref == null) return;
@@ -126,6 +140,11 @@ export function assignRef<RefValueType = any>(
   }
 }
 
+/**
+ * Checks true|"true" vs false|"false"
+ *
+ * @param value
+ */
 export function boolOrBoolString(value: any): value is "true" | true {
   return value === "true" ? true : isBoolean(value) ? value : false;
 }
@@ -138,6 +157,13 @@ export function canUseDOM() {
   );
 }
 
+/**
+ * Type-safe clone element
+ *
+ * @param element
+ * @param props
+ * @param children
+ */
 export function cloneValidElement<Props>(
   element: React.ReactElement<Props> | React.ReactNode,
   props?: Partial<Props> & React.Attributes,
@@ -155,121 +181,6 @@ export function createNamedContext<ContextValueType>(
   const Ctx = createContext<ContextValueType>(defaultValue);
   Ctx.displayName = name;
   return Ctx;
-}
-
-/**
- * Get the scrollbar offset distance.
- */
-export function getScrollbarOffset() {
-  try {
-    if (window.innerWidth > document.documentElement.clientWidth) {
-      return window.innerWidth - document.documentElement.clientWidth;
-    }
-  } catch (err) {}
-  return 0;
-}
-
-/**
- * Joins strings to format IDs for compound components.
- *
- * @param args
- */
-export function makeId(...args: (string | number | null | undefined)[]) {
-  return args.filter(val => val != null).join("--");
-}
-
-/**
- * No-op function.
- */
-export function noop(): void {}
-
-/**
- * React hook for creating a value exactly once.
- * @see https://github.com/Andarist/use-constant
- */
-export function useConstant<ValueType>(fn: () => ValueType): ValueType {
-  const ref = React.useRef<{ v: ValueType }>();
-  if (!ref.current) {
-    ref.current = { v: fn() };
-  }
-  return ref.current.v;
-}
-
-/**
- * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
- * dealing with components that need an explicit ref for DOM calculations but
- * also forwards refs assigned by an app.
- *
- * @param refs Refs to fork
- */
-export function useForkedRef<RefValueType = any>(
-  ...refs: (AssignableRef<RefValueType> | undefined)[]
-) {
-  return useMemo(() => {
-    if (refs.every(ref => ref == null)) {
-      return null;
-    }
-    return (node: any) => {
-      refs.forEach(ref => {
-        assignRef(ref, node);
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
-}
-
-/**
- * Returns the previous value of a reference after a component update.
- *
- * @param value
- */
-export function usePrevious<ValueType = any>(value: ValueType) {
-  const ref = useRef<ValueType | null>(null);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
-}
-
-/**
- * Call an effect after a component update, skipping the initial mount.
- *
- * @param effect Effect to call
- * @param deps Effect dependency list
- */
-export function useUpdateEffect(
-  effect: React.EffectCallback,
-  deps?: React.DependencyList
-) {
-  const mounted = useRef(false);
-  useEffect(() => {
-    if (mounted.current) {
-      effect();
-    } else {
-      mounted.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
-}
-
-/**
- * Wraps a lib-defined event handler and a user-defined event handler, returning
- * a single handler that allows a user to prevent lib-defined handlers from
- * firing.
- *
- * @param theirHandler User-supplied event handler
- * @param ourHandler Library-supplied event handler
- */
-export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
-  theirHandler: ((event: EventType) => any) | undefined,
-  ourHandler: (event: EventType) => any
-): (event: EventType) => any {
-  return event => {
-    theirHandler && theirHandler(event);
-    if (!event.defaultPrevented) {
-      return ourHandler(event);
-    }
-  };
 }
 
 /**
@@ -325,6 +236,12 @@ export function getElementComputedStyle(
   return y;
 }
 
+/**
+ * Get an element's owner document. Useful when components are used in iframes
+ * or other environments like dev tools.
+ *
+ * @param element
+ */
 export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
   element: T | null
 ) {
@@ -335,31 +252,100 @@ export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
     : null;
 }
 
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-export let ponyfillGlobal =
-  typeof window != "undefined" && window.Math == Math
-    ? window
-    : typeof self != "undefined" && self.Math == Math
-    ? self
-    : // eslint-disable-next-line no-new-func
-      Function("return this")();
+/**
+ * Get the scrollbar offset distance.
+ */
+export function getScrollbarOffset() {
+  try {
+    if (window.innerWidth > document.documentElement.clientWidth) {
+      return window.innerWidth - document.documentElement.clientWidth;
+    }
+  } catch (err) {}
+  return 0;
+}
 
+/**
+ * Checks whether or not a value is a boolean.
+ *
+ * @param value
+ */
 export function isBoolean(value: any): value is boolean {
   return typeof value === "boolean";
 }
 
+/**
+ * Checks whether or not a value is a function.
+ *
+ * @param value
+ */
 export function isFunction(value: any): value is Function {
   return !!(value && {}.toString.call(value) == "[object Function]");
 }
 
+/**
+ * Checks whether or not a value is a number.
+ *
+ * @param value
+ */
 export function isNumber(value: any): value is number {
   return typeof value === "number";
 }
 
+/**
+ * Detects right clicks
+ *
+ * @param nativeEvent
+ */
+export function isRightClick(nativeEvent: MouseEvent) {
+  return nativeEvent.which === 3 || nativeEvent.button === 2;
+}
+
+/**
+ * Checks whether or not a value is a string.
+ *
+ * @param value
+ */
 export function isString(value: any): value is string {
   return typeof value === "string";
 }
 
+/**
+ * Joins strings to format IDs for compound components.
+ *
+ * @param args
+ */
+export function makeId(...args: (string | number | null | undefined)[]) {
+  return args.filter(val => val != null).join("--");
+}
+
+/**
+ * No-op function.
+ */
+export function noop(): void {}
+
+/**
+ * Convert our state strings for HTML data attributes.
+ * No need for a fancy kebab-caser here, we know what our state strings are!
+ *
+ * @param state
+ */
+export function stateToAttributeString(state: any) {
+  return String(state)
+    .replace(/([\s_]+)/g, "-")
+    .toLowerCase();
+}
+
+/**
+ * Logs a warning in dev mode when a component switches from controlled to
+ * uncontrolled, or vice versa
+ *
+ * A single prop should typically be used to determine whether or not a
+ * component is controlled or not.
+ *
+ * @param controlPropValue
+ * @param controlPropName
+ * @param componentName
+ */
 export function useControlledSwitchWarning(
   controlPropValue: any,
   controlPropName: string,
@@ -387,6 +373,158 @@ export function useControlledSwitchWarning(
   useEffect(effect, [componentName, controlPropName, isControlled]);
 }
 
+/**
+ * React hook for creating a value exactly once.
+ * @see https://github.com/Andarist/use-constant
+ */
+export function useConstant<ValueType>(fn: () => ValueType): ValueType {
+  const ref = React.useRef<{ v: ValueType }>();
+  if (!ref.current) {
+    ref.current = { v: fn() };
+  }
+  return ref.current.v;
+}
+
+/**
+ * Detect when focus changes in our document.
+ *
+ * @param handleChange
+ * @param when
+ * @param ownerDocument
+ */
+export function useFocusChange(
+  handleChange: (
+    activeElement: Element | null,
+    previousActiveElement: Element | null,
+    event?: FocusEvent
+  ) => void = console.log,
+  when: "focus" | "blur" = "focus",
+  ownerDocument: Document = document
+) {
+  let lastActiveElement = useRef(ownerDocument.activeElement);
+
+  useEffect(() => {
+    lastActiveElement.current = ownerDocument.activeElement;
+
+    function onChange(event: FocusEvent) {
+      if (lastActiveElement.current !== ownerDocument.activeElement) {
+        handleChange(
+          ownerDocument.activeElement,
+          lastActiveElement.current,
+          event
+        );
+        lastActiveElement.current = ownerDocument.activeElement;
+      }
+    }
+
+    ownerDocument.addEventListener(when, onChange, true);
+
+    return () => {
+      ownerDocument.removeEventListener(when, onChange);
+    };
+  }, [when, handleChange, ownerDocument]);
+}
+
+/**
+ * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
+ * dealing with components that need an explicit ref for DOM calculations but
+ * also forwards refs assigned by an app.
+ *
+ * @param refs Refs to fork
+ */
+export function useForkedRef<RefValueType = any>(
+  ...refs: (AssignableRef<RefValueType> | null | undefined)[]
+) {
+  return useMemo(() => {
+    if (refs.every(ref => ref == null)) {
+      return null;
+    }
+    return (node: any) => {
+      refs.forEach(ref => {
+        assignRef(ref, node);
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, refs);
+}
+
+/**
+ * Returns the previous value of a reference after a component update.
+ *
+ * @param value
+ */
+export function usePrevious<ValueType = any>(value: ValueType) {
+  const ref = useRef<ValueType | null>(null);
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+/**
+ * Call an effect after a component update, skipping the initial mount.
+ *
+ * @param effect Effect to call
+ * @param deps Effect dependency list
+ */
+export function useUpdateEffect(
+  effect: React.EffectCallback,
+  deps?: React.DependencyList
+) {
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) {
+      effect();
+    } else {
+      mounted.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+}
+
+/**
+ * Just a lil state logger
+ *
+ * @param state
+ * @param DEBUG
+ */
+export function useStateLogger(state: string, DEBUG: boolean = false) {
+  let effect = noop;
+  if (__DEV__) {
+    if (DEBUG) {
+      effect = function() {
+        console.group("State Updated");
+        console.log(
+          "%c" + state,
+          "font-weight: normal; font-size: 120%; font-style: italic;"
+        );
+        console.groupEnd();
+      };
+    }
+  }
+  useEffect(effect, [state]);
+}
+
+/**
+ * Wraps a lib-defined event handler and a user-defined event handler, returning
+ * a single handler that allows a user to prevent lib-defined handlers from
+ * firing.
+ *
+ * @param theirHandler User-supplied event handler
+ * @param ourHandler Library-supplied event handler
+ */
+export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
+  theirHandler: ((event: EventType) => any) | undefined,
+  ourHandler: (event: EventType) => any
+): (event: EventType) => any {
+  return event => {
+    theirHandler && theirHandler(event);
+    if (!event.defaultPrevented) {
+      return ourHandler(event);
+    }
+  };
+}
+
 // Export types
 export {
   As,
@@ -397,4 +535,5 @@ export {
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
+  ThenArg,
 };

@@ -3,8 +3,9 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
+import { action } from "@storybook/addon-actions";
 import VisuallyHidden from "@reach/visually-hidden";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/accordion/styles.css";
@@ -13,7 +14,7 @@ import "@reach/menu-button/styles.css";
 let name = "With Arbitrary Elements";
 
 /*
- * Per https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+ * Per https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  *
  * In some accordions, there are additional elements that are always visible
  * adjacent to the accordion header. For instance, a menubutton may accompany
@@ -77,27 +78,29 @@ function ExampleAccordionHeader({ children }) {
         color: "#fff",
         display: "flex",
         justifyContent: "space-between",
-        padding: "4px 10px"
+        padding: "4px 10px",
       }}
     >
-      <AccordionButton
-        style={{
-          appearance: "none",
-          background: 0,
-          border: 0,
-          boxShadow: "none",
-          color: "inherit",
-          display: "block",
-          textAlign: "inherit",
-          flexGrow: 1,
-          flexShrink: 0,
-          font: "inherit",
-          fontWeight: "bolder",
-          padding: "10px 0"
-        }}
-      >
-        {children}
-      </AccordionButton>
+      <h3 style={{ margin: 0, font: "inherit" }}>
+        <AccordionButton
+          style={{
+            appearance: "none",
+            background: 0,
+            border: 0,
+            boxShadow: "none",
+            color: "inherit",
+            display: "block",
+            textAlign: "inherit",
+            flexGrow: 1,
+            flexShrink: 0,
+            font: "inherit",
+            fontWeight: "bolder",
+            padding: "10px 0",
+          }}
+        >
+          {children}
+        </AccordionButton>
+      </h3>
       <MyMenuButton style={{ marginLeft: 10 }} />
     </div>
   );
@@ -115,7 +118,7 @@ function MyMenuButton() {
           display: "block",
           height: 30,
           padding: 6,
-          width: 30
+          width: 30,
         }}
       >
         <VisuallyHidden>Actions</VisuallyHidden>
@@ -124,17 +127,15 @@ function MyMenuButton() {
             display: "block",
             fill: "#fff",
             height: "100%",
-            width: "100%"
+            width: "100%",
           }}
         />
       </MenuButton>
       <MenuList>
-        <MenuItem onSelect={() => console.log("Download")}>Download</MenuItem>
-        <MenuItem onSelect={() => console.log("Copy")}>Create a Copy</MenuItem>
-        <MenuItem onSelect={() => console.log("Mark as Draft")}>
-          Mark as Draft
-        </MenuItem>
-        <MenuItem onSelect={() => console.log("Delete")}>Delete</MenuItem>
+        <MenuItem onSelect={action("Download")}>Download</MenuItem>
+        <MenuItem onSelect={action("Copy")}>Create a Copy</MenuItem>
+        <MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
+        <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
       </MenuList>
     </Menu>
   );

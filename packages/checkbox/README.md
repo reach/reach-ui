@@ -2,6 +2,6 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/checkbox.svg)](https://npm.im/@reach/checkbox) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/checkbox) | [Source](https://github.com/reach/reach-ui/tree/master/packages/checkbox) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox)
+[Docs](https://reacttraining.com/reach-ui/checkbox) | [Source](https://github.com/reach/reach-ui/tree/master/packages/checkbox) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox)
 
 React components to build accessible custom checkboxes with support for indeterminate (mixed) state.

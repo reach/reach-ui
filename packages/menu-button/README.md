@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/menu-button.svg)](https://npm.im/@reach/menu-button) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/menu-button) | [Source](https://github.com/reach/reach-ui/tree/master/packages/menu-button) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton)
+[Docs](https://reacttraining.com/reach-ui/menu-button) | [Source](https://github.com/reach/reach-ui/tree/master/packages/menu-button) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton)
 
 An accessible dropdown menu for the common dropdown menu button design pattern.
 
@@ -12,7 +12,7 @@ import {
   MenuList,
   MenuButton,
   MenuItem,
-  MenuLink
+  MenuLink,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 

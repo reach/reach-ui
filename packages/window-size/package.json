@@ -1,6 +1,6 @@
 {
   "name": "@reach/window-size",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "Measure the window size in React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,12 +10,10 @@
     "directory": "packages/window-size"
   },
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "clean": "rm -rf ./dist",
-    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+    "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/utils": "^0.8.4",
+    "@reach/utils": "^0.9.0",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0"
   },

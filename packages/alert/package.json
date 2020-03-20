@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.8.4",
+  "version": "0.9.1",
   "description": "Screen-reader-friendly alert messages.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,13 +10,11 @@
     "directory": "packages/alert"
   },
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "clean": "rm -rf ./dist",
-    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+    "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/utils": "^0.8.4",
-    "@reach/visually-hidden": "^0.8.2",
+    "@reach/utils": "^0.9.0",
+    "@reach/visually-hidden": "^0.9.0",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0"
   },

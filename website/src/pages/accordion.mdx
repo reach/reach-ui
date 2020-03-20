@@ -15,7 +15,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/accordion
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
 
 An accordion is a vertically stacked group of collapsible sections. An accordion is composed of grouped buttons and panels. When a user selects an accordion button, its corresponding panel should switch between 'open' and 'collapsed' states.
 
@@ -51,7 +51,9 @@ function Example() {
   return (
     <Accordion>
       <AccordionItem>
-        <AccordionButton>Step 1: Do a thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 1: Do a thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Here are some detailed instructions about doing a thing. I am very
           complex and probably contain a lot of content, so a user can hide or
@@ -59,7 +61,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Step 2: Do another thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 2: Do another thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Here are some detailed instructions about doing yet another thing.
           There are a lot of things someone might want to do, so I am only going
@@ -72,6 +76,97 @@ function Example() {
 }
 ```
 
+### Accordion Headings
+
+With most accordion components, the `AccordionPanel` is treated as a semantic `region` of the document, similar to an HTML `section` or `main` tag. By default, we assign `role="region"` and to each `AccordionPanel`, along with `aria-labelledby` referencing the associated `AccordionButton` component.
+
+To improve the semantics of the markup further, the ARIA guidelines dictate that each accordion item's button should be wrapped in an element with `role="heading"`, or more simply, and HTML heading tag. Because headings are necessarily dependent on the context of their surrounding content, we do not wrap the `AccordionButton` inside of a heading tag by default. It is up to each developer to implement this detail in a way that makes sense for their application.
+
+You can abstract a solution in a variety of ways. Perhaps you write an `AccordionHeader` wrapper component that accepts a `headingLevel` prop:
+
+```jsx
+function AccordionHeader({ headingLevel = 2, props }) {
+  let Comp = "h" + headingLevel;
+  return (
+    <Comp>
+      <AccordionButton {...props} />
+    </Comp>
+  );
+}
+```
+
+You can also create a context-aware heading component so that the heading level increments appropriately as content is nested:
+
+```jsx
+// jsx-demo
+(() => {
+  const HeadingContext = createContext(2);
+
+  function MyAccordionSection(props) {
+    return (
+      <div>
+        <Heading>How to do a thing</Heading>
+        <p>
+          Below I am going to explain how you might do a thing, in two very
+          important steps.
+        </p>
+        <Accordion>
+          <ContextAwareAccordionItem>
+            <AccordionHeader>Step 1: Do a thing</AccordionHeader>
+            <AccordionPanel>
+              Here are some detailed instructions about doing a thing. I am very
+              complex and probably contain a lot of content, so a user can hide
+              or show me by clicking the button above.
+            </AccordionPanel>
+          </ContextAwareAccordionItem>
+          <AccordionItem>
+            <AccordionHeader>Step 2: Do another thing</AccordionHeader>
+            <AccordionPanel>
+              Here are some detailed instructions about doing yet another thing.
+              There are a lot of things someone might want to do, so I am only
+              going to talk about doing that other thing. I'll let my fellow
+              accordion items go into detail about even more things.
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    );
+  }
+
+  function AccordionHeader(props) {
+    return (
+      <Heading>
+        <AccordionButton {...props} />
+      </Heading>
+    );
+  }
+
+  function ContextAwareAccordionItem(props) {
+    return (
+      <Section>
+        <AccordionItem {...props} />
+      </Section>
+    );
+  }
+
+  function Heading(props) {
+    let Comp = "h" + Math.min(useContext(HeadingContext), 6);
+    return <Comp {...props} />;
+  }
+
+  function Section(props) {
+    let headingLevel = useContext(HeadingContext);
+    return (
+      <HeadingContext.Provider value={headingLevel + 1}>
+        {props.children}
+      </HeadingContext.Provider>
+    );
+  }
+
+  return <MyAccordionSection />;
+})();
+```
+
 ## Component API
 
 ### Accordion
@@ -81,11 +176,15 @@ The wrapper component for all other accordion components. Each accordion compone
 ```jsx
 <Accordion index={index} onChange={value => setIndex(value)}>
   <AccordionItem>
-    <AccordionButton>Step 1: Do a thing</AccordionButton>
+    <h3>
+      <AccordionButton>Step 1: Do a thing</AccordionButton>
+    </h3>
     <AccordionPanel>...</AccordionPanel>
   </AccordionItem>
   <AccordionItem>
-    <AccordionButton>Step 2: Do another thing</AccordionButton>
+    <h3>
+      <AccordionButton>Step 2: Do another thing</AccordionButton>
+    </h3>
     <AccordionPanel>...</AccordionPanel>
   </AccordionItem>
 </Accordion>
@@ -110,7 +209,9 @@ function Example() {
   return (
     <Accordion collapsible>
       <AccordionItem>
-        <AccordionButton>Step 1: Do a thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 1: Do a thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
           dui sem accumsan cras congue mi varius egestas interdum, molestie
@@ -118,7 +219,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Step 2: Do another thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 2: Do another thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
           aenean, natoque fermentum nostra tempus ornare nam diam est, neque
@@ -138,7 +241,9 @@ function Example() {
   return (
     <Accordion multiple>
       <AccordionItem>
-        <AccordionButton>Step 1: Do a thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 1: Do a thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
           dui sem accumsan cras congue mi varius egestas interdum, molestie
@@ -146,7 +251,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Step 2: Do another thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 2: Do another thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
           aenean, natoque fermentum nostra tempus ornare nam diam est, neque
@@ -166,7 +273,9 @@ function Example() {
   return (
     <Accordion collapsible multiple>
       <AccordionItem>
-        <AccordionButton>Step 1: Do a thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 1: Do a thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
           dui sem accumsan cras congue mi varius egestas interdum, molestie
@@ -174,7 +283,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Step 2: Do another thing</AccordionButton>
+        <h3>
+          <AccordionButton>Step 2: Do another thing</AccordionButton>
+        </h3>
         <AccordionPanel>
           Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
           aenean, natoque fermentum nostra tempus ornare nam diam est, neque
@@ -330,7 +441,7 @@ Whether or not multiple panels in an uncontrolled accordion can be opened at the
 
 ##### Accordion `onChange`
 
-`onChange?: (value: number | number[]) => void`
+`onChange?: (value: number) => void`
 
 The callback that is fired when an accordion item's open state is changed.
 
@@ -352,32 +463,37 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-item] {
+  /* styles for all accordion items */
 }
 [data-reach-accordion-item][data-state="open"] {
+  /* styles for all open accordion items */
 }
 [data-reach-accordion-item][data-state="collapsed"] {
+  /* styles for all collapsed accordion items */
 }
 [data-reach-accordion-item][data-disabled] {
+  /* styles for all disabled accordion items */
 }
 [data-reach-accordion-item][data-read-only] {
+  /* styles for all read-only accordion items */
 }
 ```
 
 #### AccordionItem Props
 
-| Prop                                  | Type                 | Required |
-| ------------------------------------- | -------------------- | -------- |
-| [`as`](#accordionitem-as)             | `string | Component` | false    |
-| [`children`](#accordionitem-children) | `node`               | true     |
-| [`disabled`](#accordionitem-disabled) | `boolean`            | false    |
+| Prop                                  | Type                    | Required |
+| ------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionitem-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionitem-children) | `node`                  | true     |
+| [`disabled`](#accordionitem-disabled) | `boolean`               | false    |
 
 ##### AccordionItem `as`
 
-`as: keyof JSX.IntrinsicElements | React.ComponentType`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
 A string representing an HTML element or a React component that will tell the `AccordionItem` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionItem `children`
 
@@ -418,31 +534,30 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-button] {
+  /* styles for buttons in all accordion items */
 }
-[data-reach-accordion-button][data-state="open"] {
+[data-reach-accordion-button][aria-expanded] {
+  /* styles for buttons in open accordion items */
 }
-[data-reach-accordion-button][data-state="collapsed"] {
-}
-[data-reach-accordion-button][data-disabled] {
-}
-[data-reach-accordion-button][data-read-only] {
+[data-reach-accordion-button][disabled] {
+  /* styles for all buttons in disabled accordion items */
 }
 ```
 
 #### AccordionButton Props
 
-| Prop                                    | Type                 | Required |
-| --------------------------------------- | -------------------- | -------- |
-| [`as`](#accordionbutton-as)             | `string | Component` | false    |
-| [`children`](#accordionbutton-children) | `node`               | true     |
+| Prop                                    | Type                    | Required |
+| --------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionbutton-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionbutton-children) | `node`                  | true     |
 
 ##### AccordionButton `as`
 
-`as: keyof JSX.IntrinsicElements | React.ComponentType`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
 A string representing an HTML element or a React component that will tell the `AccordionButton` what element to render. Defaults to `button`.
 
-> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionButton `children`
 
@@ -558,31 +673,33 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-panel] {
+  /* styles for all accordion panels */
 }
 [data-reach-accordion-panel][data-state="open"] {
+  /* styles for all open accordion panels */
 }
 [data-reach-accordion-panel][data-state="collapsed"] {
+  /* styles for all collapsed accordion panels */
 }
 [data-reach-accordion-panel][data-disabled] {
-}
-[data-reach-accordion-panel][data-read-only] {
+  /* styles for all disabled accordion panels */
 }
 ```
 
 #### AccordionPanel Props
 
-| Prop                                   | Type                 | Required |
-| -------------------------------------- | -------------------- | -------- |
-| [`as`](#accordionpanel-as)             | `string | Component` | false    |
-| [`children`](#accordionpanel-children) | `node`               | true     |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionpanel-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionpanel-children) | `node`                  | true     |
 
 ##### AccordionPanel `as`
 
-`as: keyof JSX.IntrinsicElements | React.ComponentType`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
 A string representing an HTML element or a React component that will tell the `AccordionPanel` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, like `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### AccordionPanel `children`
 

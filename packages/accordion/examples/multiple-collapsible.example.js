@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import "@reach/accordion/styles.css";
 
@@ -18,7 +18,9 @@ function Example() {
   return (
     <Accordion multiple collapsible>
       <AccordionItem>
-        <AccordionButton>Here's some important context</AccordionButton>
+        <h3>
+          <AccordionButton>Here's some important context</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -26,7 +28,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>You don't want to miss this</AccordionButton>
+        <h3>
+          <AccordionButton>You don't want to miss this</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -34,7 +38,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Really cool teaser here!</AccordionButton>
+        <h3>
+          <AccordionButton>Really cool teaser here!</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -42,7 +48,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>Don't forget me!</AccordionButton>
+        <h3>
+          <AccordionButton>Don't forget me!</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,

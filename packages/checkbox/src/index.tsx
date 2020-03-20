@@ -9,7 +9,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
 import {
@@ -18,7 +18,7 @@ import {
   CustomCheckboxInput,
   CustomCheckboxContainerProps,
   CustomCheckboxInputProps,
-  CustomCheckboxProps
+  CustomCheckboxProps,
 } from "./custom";
 
 import {
@@ -30,7 +30,7 @@ import {
   MixedCheckboxState,
   MixedCheckboxStates,
   MixedCheckboxProps,
-  useMixedCheckbox
+  useMixedCheckbox,
 } from "./mixed";
 
 export {
@@ -48,5 +48,5 @@ export {
   MixedCheckboxState,
   MixedCheckboxStates,
   MixedCheckboxProps,
-  useMixedCheckbox
+  useMixedCheckbox,
 };

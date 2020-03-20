@@ -5,7 +5,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/accordion
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/accordion
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#accordion
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  */
 
 import React, {
@@ -18,7 +18,6 @@ import React, {
   useState,
 } from "react";
 import {
-  boolOrBoolString,
   checkStyles,
   createNamedContext,
   forwardRefWithAs,
@@ -33,15 +32,17 @@ import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
+  useDescendantKeyDown,
   useDescendants,
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 import warning from "warning";
 
-const AccordionDescendantContext = createDescendantContext(
-  "AccordionDescendantContext"
-);
+const AccordionDescendantContext = createDescendantContext<
+  HTMLElement,
+  DescendantProps
+>("AccordionDescendantContext");
 const AccordionContext = createNamedContext<IAccordionContext>(
   "AccordionContext",
   {} as IAccordionContext
@@ -56,8 +57,8 @@ const useAccordionItemContext = () => useContext(AccordionItemContext);
 ////////////////////////////////////////////////////////////////////////////////
 
 export enum AccordionStates {
-  Open = "open",
-  Collapsed = "collapsed",
+  Open = "OPEN",
+  Collapsed = "COLLAPSED",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,9 +93,12 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const wasControlled = typeof controlledIndex !== "undefined";
     const { current: isControlled } = useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendants();
+    const [descendants, setDescendants] = useDescendants<
+      HTMLElement,
+      DescendantProps
+    >();
 
-    const id = useId(props.id) || "accordion";
+    const id = useId(props.id);
 
     // Define our default starting index
     const [openPanels, setOpenPanels] = useState<AccordionIndex>(() => {
@@ -149,7 +153,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     }
 
     const onSelectPanel = useCallback(
-      (index: AccordionIndex) => {
+      (index: number) => {
         onChange && onChange(index);
 
         if (!isControlled) {
@@ -259,7 +263,7 @@ export type AccordionProps = Omit<
    *
    * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
    */
-  onChange?(index?: AccordionIndex): void;
+  onChange?(index?: number): void;
   /**
    * Whether or not an uncontrolled accordion is read-only or controllable by a
    * user interaction.
@@ -358,9 +362,11 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   ) {
     const { accordionId, openPanels, readOnly } = useAccordionContext();
     const buttonRef: ButtonRef = useRef(null);
+
     const index = useDescendant({
       context: AccordionDescendantContext,
       element: buttonRef.current,
+      disabled,
     });
 
     // We need unique IDs for the panel and button to point to one another
@@ -368,25 +374,20 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
     const panelId = makeId("panel", itemId);
     const buttonId = makeId("button", itemId);
 
-    const open = Array.isArray(openPanels)
-      ? openPanels.includes(index)
-      : openPanels === index;
-
-    const dataAttributes = {
-      "data-state": open ? AccordionStates.Open : AccordionStates.Collapsed,
-      "data-disabled": disabled ? "true" : undefined,
-      "data-read-only": readOnly ? "true" : undefined,
-    };
+    const state =
+      (Array.isArray(openPanels)
+        ? openPanels.includes(index) && AccordionStates.Open
+        : openPanels === index && AccordionStates.Open) ||
+      AccordionStates.Collapsed;
 
     const context: IAccordionItemContext = {
-      open,
       disabled,
       buttonId,
       index,
       itemId,
       buttonRef,
       panelId,
-      dataAttributes,
+      state,
     };
 
     return (
@@ -395,7 +396,9 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
           {...props}
           ref={forwardedRef}
           data-reach-accordion-item=""
-          {...dataAttributes}
+          data-state={getDataState(state)}
+          data-disabled={disabled ? "" : undefined}
+          data-read-only={readOnly ? "" : undefined}
         >
           {children}
         </Comp>
@@ -458,31 +461,18 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
     },
     forwardedRef
   ) {
-    const { onSelectPanel } = useAccordionContext();
+    let { onSelectPanel } = useAccordionContext();
 
-    const {
-      open,
-      dataAttributes,
+    let {
       disabled,
       buttonId,
       buttonRef: ownRef,
       index,
       panelId,
+      state,
     } = useAccordionItemContext();
 
-    let { descendants } = useContext(AccordionDescendantContext);
-    let focusableButtons = useMemo(() => {
-      let nodes: HTMLElement[] = [];
-      for (let i = 0; i < descendants.length; i++) {
-        let element = descendants[i].element;
-        if (element && !boolOrBoolString(element.dataset.disabled)) {
-          nodes.push(element);
-        }
-      }
-      return nodes;
-    }, [descendants]);
-
-    const ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useForkedRef(forwardedRef, ownRef);
 
     function handleClick(event: React.MouseEvent) {
       event.preventDefault();
@@ -493,57 +483,65 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       onSelectPanel(index);
     }
 
-    function handleKeyDown(event: React.KeyboardEvent) {
-      const { key, ctrlKey } = event;
-      const focusIndex = focusableButtons.findIndex(
-        el => el === ownRef.current
-      );
-
-      const firstItem = focusableButtons[0];
-      const lastItem = focusableButtons[focusableButtons.length - 1];
-      const nextItem = focusableButtons[focusIndex + 1];
-      const prevItem = focusableButtons[focusIndex - 1];
-
-      // Bail if we aren't moving focus
-      if (
-        !(
-          key === "ArrowDown" ||
-          key === "ArrowUp" ||
-          (ctrlKey && key === "PageDown") ||
-          (ctrlKey && key === "PageUp") ||
-          key === "Home" ||
-          key === "End"
-        )
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-
-      if (key === "ArrowDown" || (ctrlKey && key === "PageDown")) {
-        nextItem ? nextItem.focus() : firstItem && firstItem.focus();
-      } else if (key === "ArrowUp" || (ctrlKey && key === "PageUp")) {
-        prevItem ? prevItem.focus() : lastItem && lastItem.focus();
-      } else if (key === "Home") {
-        firstItem && firstItem.focus();
-      } else if (key === "End") {
-        lastItem && lastItem.focus();
-      }
-    }
+    let handleKeyDown = useDescendantKeyDown(AccordionDescendantContext, {
+      currentIndex: index,
+      orientation: "vertical",
+      key: "element",
+      rotate: true,
+      callback(element: HTMLElement) {
+        element && element.focus();
+      },
+      filter: button => !button.disabled,
+    });
 
     return (
       <Comp
+        // Each accordion header `button` is wrapped in an element with role
+        // `heading` that has a value set for `aria-level` that is appropriate
+        // for the information architecture of the page.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        // I believe this should be left for apps to handle, since headings
+        // are necessarily context-aware. An app can wrap a button inside any
+        // arbitrary tag(s).
+        // TODO: Revisit documentation and examples
+        // @example
+        // <div>
+        //   <h3>
+        //     <AccordionButton>Click Me</AccordionButton>
+        //   </h3>
+        //   <SomeComponent />
+        // </div>
+
+        // The title of each accordion header is contained in an element with
+        // role `button`. We use an HTML button by default, so we can omit
+        // this attribute.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        // role="button"
+
+        // The accordion header `button` element has `aria-controls` set to the
+        // ID of the element containing the accordion panel content.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
         aria-controls={panelId}
-        aria-expanded={open}
+        // If the accordion panel associated with an accordion header is
+        // visible, the header `button` element has `aria-expanded` set to
+        // `true`. If the panel is not visible, `aria-expanded` is set to
+        // `false`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+        aria-expanded={state === AccordionStates.Open}
+        tabIndex={disabled ? -1 : tabIndex}
         {...props}
         ref={ref}
         data-reach-accordion-button=""
-        {...dataAttributes}
+        // If the accordion panel associated with an accordion header is
+        // visible, and if the accordion does not permit the panel to be
+        // collapsed, the header `button` element has `aria-disabled` set to
+        // `true`. We can use `disabled` since we opt for an HTML5 `button`
+        // element.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
         disabled={disabled || undefined}
         id={buttonId}
         onClick={wrapEvent(onClick, handleClick)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        tabIndex={disabled ? -1 : tabIndex}
       >
         {children}
       </Comp>
@@ -589,22 +587,31 @@ export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
     { as: Comp = "div", children, ...props },
     forwardedRef
   ) {
-    const {
-      dataAttributes,
-      panelId,
-      buttonId,
-      open,
-    } = useAccordionItemContext();
+    const { disabled, panelId, buttonId, state } = useAccordionItemContext();
 
     return (
       <Comp
-        hidden={!open}
+        hidden={state !== AccordionStates.Open}
+        // Optionally, each element that serves as a container for panel content
+        // has role `region` and `aria-labelledby` with a value that refers to
+        // the button that controls display of the panel.
+        // Role `region` is especially helpful to the perception of structure by
+        // screen reader users when panels contain heading elements or a nested
+        // accordion.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+
+        // Avoid using the region role in circumstances that create landmark
+        // region proliferation, e.g., in an accordion that contains more than
+        // approximately 6 panels that can be expanded at the same time.
+        // A user can override this with `role="none"` or `role="presentation"`
+        // TODO: Add to docs
         role="region"
         aria-labelledby={buttonId}
         {...props}
         ref={forwardedRef}
         data-reach-accordion-panel=""
-        {...dataAttributes}
+        data-disabled={disabled || undefined}
+        data-state={getDataState(state)}
         id={panelId}
         tabIndex={-1}
       >
@@ -634,7 +641,17 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function getDataState(state: AccordionStates) {
+  return state === AccordionStates.Open ? "open" : "collapsed";
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Types
+
+type DescendantProps = {
+  disabled: boolean;
+};
 
 type ResultBox<T> = { v: T };
 
@@ -643,23 +660,18 @@ type ButtonRef = React.MutableRefObject<any>;
 type AccordionIndex = number | number[];
 
 interface IAccordionContext {
-  accordionId: string;
+  accordionId: string | undefined;
   openPanels: AccordionIndex;
   onSelectPanel(index: AccordionIndex): void;
   readOnly: boolean;
 }
 
 interface IAccordionItemContext {
-  open: boolean;
   disabled: boolean;
   buttonId: string;
   index: number;
   itemId: string;
   buttonRef: ButtonRef;
   panelId: string;
-  dataAttributes: {
-    "data-state": AccordionStates;
-    "data-disabled": string | undefined;
-    "data-read-only": string | undefined;
-  };
+  state: AccordionStates;
 }

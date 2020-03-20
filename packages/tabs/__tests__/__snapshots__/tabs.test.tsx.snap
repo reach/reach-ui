@@ -95,100 +95,6 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
 </DocumentFragment>
 `;
 
-exports[`<Tabs /> focuses the correct tab with keyboard navigation 1`] = `
-<DocumentFragment>
-  <div>
-    <div
-      data-reach-tabs=""
-      data-reach-tabs-orientation="horizontal"
-    >
-      <div
-        aria-orientation="horizontal"
-        data-reach-tab-list=""
-        role="tablist"
-      >
-        <button
-          aria-controls="tabs--4--panel--0"
-          aria-selected="false"
-          class="tab-1"
-          data-reach-tab=""
-          id="tabs--4--tab--0"
-          role="tab"
-          tabindex="-1"
-        >
-          Tab One
-        </button>
-        <button
-          aria-controls="tabs--4--panel--1"
-          aria-selected="true"
-          class="tab-2"
-          data-reach-tab=""
-          data-selected=""
-          id="tabs--4--tab--1"
-          role="tab"
-          tabindex="0"
-        >
-          Tab Two
-        </button>
-        <button
-          aria-controls="tabs--4--panel--2"
-          aria-selected="false"
-          class="tab-3"
-          data-reach-tab=""
-          id="tabs--4--tab--2"
-          role="tab"
-          tabindex="-1"
-        >
-          Tab Three
-        </button>
-      </div>
-      <div
-        data-reach-tab-panels=""
-      >
-        <div
-          aria-labelledby="tabs--4--tab--0"
-          data-reach-tab-panel=""
-          hidden=""
-          id="tabs--4--panel--0"
-          role="tabpanel"
-          tabindex="-1"
-        >
-          <h1>
-            one!
-          </h1>
-          <button>
-            yo
-          </button>
-        </div>
-        <div
-          aria-labelledby="tabs--4--tab--1"
-          data-reach-tab-panel=""
-          id="tabs--4--panel--1"
-          role="tabpanel"
-          tabindex="0"
-        >
-          <h1>
-            two!
-          </h1>
-        </div>
-        <div
-          aria-labelledby="tabs--4--tab--2"
-          data-reach-tab-panel=""
-          hidden=""
-          id="tabs--4--panel--2"
-          role="tabpanel"
-          tabindex="-1"
-        >
-          <h1>
-            three!
-          </h1>
-        </div>
-      </div>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
 exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
 <DocumentFragment>
   <div>
@@ -284,7 +190,7 @@ exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
 </DocumentFragment>
 `;
 
-exports[`<Tabs /> should match the snapshot 1`] = `
+exports[`<Tabs /> user events focuses the correct tab with keyboard navigation 1`] = `
 <DocumentFragment>
   <div>
     <div
@@ -297,34 +203,34 @@ exports[`<Tabs /> should match the snapshot 1`] = `
         role="tablist"
       >
         <button
-          aria-controls="tabs--1--panel--0"
-          aria-selected="true"
+          aria-controls="tabs--REACH-ID--panel--0"
+          aria-selected="false"
           class="tab-1"
           data-reach-tab=""
-          data-selected=""
-          id="tabs--1--tab--0"
+          id="tabs--REACH-ID--tab--0"
           role="tab"
-          tabindex="0"
+          tabindex="-1"
         >
           Tab One
         </button>
         <button
-          aria-controls="tabs--1--panel--1"
-          aria-selected="false"
+          aria-controls="tabs--REACH-ID--panel--1"
+          aria-selected="true"
           class="tab-2"
           data-reach-tab=""
-          id="tabs--1--tab--1"
+          data-selected=""
+          id="tabs--REACH-ID--tab--1"
           role="tab"
-          tabindex="-1"
+          tabindex="0"
         >
           Tab Two
         </button>
         <button
-          aria-controls="tabs--1--panel--2"
+          aria-controls="tabs--REACH-ID--panel--2"
           aria-selected="false"
           class="tab-3"
           data-reach-tab=""
-          id="tabs--1--tab--2"
+          id="tabs--REACH-ID--tab--2"
           role="tab"
           tabindex="-1"
         >
@@ -335,11 +241,12 @@ exports[`<Tabs /> should match the snapshot 1`] = `
         data-reach-tab-panels=""
       >
         <div
-          aria-labelledby="tabs--1--tab--0"
+          aria-labelledby="tabs--REACH-ID--tab--0"
           data-reach-tab-panel=""
-          id="tabs--1--panel--0"
+          hidden=""
+          id="tabs--REACH-ID--panel--0"
           role="tabpanel"
-          tabindex="0"
+          tabindex="-1"
         >
           <h1>
             one!
@@ -349,22 +256,21 @@ exports[`<Tabs /> should match the snapshot 1`] = `
           </button>
         </div>
         <div
-          aria-labelledby="tabs--1--tab--1"
+          aria-labelledby="tabs--REACH-ID--tab--1"
           data-reach-tab-panel=""
-          hidden=""
-          id="tabs--1--panel--1"
+          id="tabs--REACH-ID--panel--1"
           role="tabpanel"
-          tabindex="-1"
+          tabindex="0"
         >
           <h1>
             two!
           </h1>
         </div>
         <div
-          aria-labelledby="tabs--1--tab--2"
+          aria-labelledby="tabs--REACH-ID--tab--2"
           data-reach-tab-panel=""
           hidden=""
-          id="tabs--1--panel--2"
+          id="tabs--REACH-ID--panel--2"
           role="tabpanel"
           tabindex="-1"
         >

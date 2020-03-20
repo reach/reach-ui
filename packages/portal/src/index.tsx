@@ -11,7 +11,8 @@
  * @see React  https://reactjs.org/docs/portals.html
  */
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useIsomorphicLayoutEffect } from "@reach/utils";
 import { createPortal } from "react-dom";
 
 /**
@@ -24,7 +25,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   let portalNode = useRef<HTMLElement | null>(null);
   let [, forceUpdate] = useState();
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // It's possible that the content we are portal has, itself, been portaled.
     // In that case, it's important to append to the correct document element.
     const ownerDocument = mountNode.current!.ownerDocument;
@@ -41,7 +42,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   return portalNode.current ? (
     createPortal(children, portalNode.current)
   ) : (
-    <div ref={mountNode} />
+    <span ref={mountNode} />
   );
 };
 

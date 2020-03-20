@@ -11,6 +11,8 @@ import "@reach/tabs/styles.css";
 
 let name = "Animated Bar";
 
+let HORIZONTAL_PADDING = 8;
+
 function Example() {
   return (
     <ExampleAnimatedTabs color="red" style={{ width: 400 }}>
@@ -61,7 +63,8 @@ function ExampleAnimatedTabs({ color, ...rest }) {
           background: color,
           transition: "all 300ms ease",
           left: activeRect && activeRect.left,
-          width: activeRect && activeRect.width,
+          // subtract both sides of horizontal padding to center the div
+          width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
           top: activeRect && activeRect.bottom - 2,
         }}
       />
@@ -79,8 +82,6 @@ function ExampleAnimatedTab(props) {
   // get the style changing function from context
   const setActiveRect = useContext(AnimatedContext);
 
-  console.log({ rect });
-
   // callup to set styles whenever we're active
   useLayoutEffect(() => {
     if (isSelected) {
@@ -89,6 +90,14 @@ function ExampleAnimatedTab(props) {
   }, [isSelected, rect, setActiveRect]);
 
   return (
-    <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
+    <Tab
+      ref={ref}
+      {...props}
+      style={{
+        ...props.style,
+        border: "none",
+        padding: `4px ${HORIZONTAL_PADDING}px`,
+      }}
+    />
   );
 }

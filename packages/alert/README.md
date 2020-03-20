@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/alert.svg)](https://npm.im/@reach/alert) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/alert) | [Source](https://github.com/reach/reach-ui/tree/master/packages/alert) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#alert)
+[Docs](https://reacttraining.com/reach-ui/alert) | [Source](https://github.com/reach/reach-ui/tree/master/packages/alert) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#alert)
 
 Screen-reader-friendly alert messages. In many apps developers add "alert" messages when network events or other things happen. Users with assistive technologies may not know about the message unless you develop for it.
 

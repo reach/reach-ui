@@ -5,8 +5,6 @@ import { axe, toHaveNoViolations } from "jest-axe";
 import { fireEvent, render, cleanup } from "$test/utils";
 import { Dialog } from "@reach/dialog";
 
-expect.extend(toHaveNoViolations);
-
 function getOverlay(container: Element) {
   return container.querySelector("[data-reach-dialog-overlay]");
 }
@@ -65,15 +63,14 @@ describe("<Dialog />", () => {
     expect(label).toHaveTextContent("I am the title now");
   });
 
-  /* it("has no detected a11y violations", async () => {
-    // This test is erroring right now, experimenting with axe-core + jest-axe
-    // Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Error:
-    // TODO: Fix this and figure out how this thing is supposed to work bc it would be super useful!
-    const { container } = render(<BasicOpenDialog />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-    cleanup();
-  }); */
+  // it("should not have basic a11y issues", async () => {
+  //   // This test is erroring right now, experimenting with axe-core + jest-axe
+  //   // Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Error:
+  //   // TODO: Fix this and figure out how this thing is supposed to work bc it would be super useful!
+  //   const { container } = render(<BasicOpenDialog />);
+  //   const results = await axe(container);
+  //   expect(results).toHaveNoViolations();
+  // });
 });
 
 function BasicOpenDialog() {

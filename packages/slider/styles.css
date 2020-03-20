@@ -2,20 +2,24 @@
   --reach-slider: 1;
 }
 
-[data-reach-slider] {
+[data-reach-slider-input] {
   padding: 20px;
 }
 
-[data-reach-slider-orientation="horizontal"] {
+[data-reach-slider-input][data-orientation="horizontal"] {
   width: 250px;
   height: 4px;
   padding-bottom: 30px;
 }
 
-[data-reach-slider-orientation="vertical"] {
+[data-reach-slider-input][data-orientation="vertical"] {
   width: 4px;
   height: 250px;
   padding-right: 30px;
+}
+
+[data-reach-slider-input][data-disabled] {
+  opacity: 0.5;
 }
 
 [data-reach-slider-track] {
@@ -23,12 +27,12 @@
   background: #f2f2f2;
 }
 
-[data-reach-slider-track-orientation="horizontal"] {
+[data-reach-slider-track][data-orientation="horizontal"] {
   width: 100%;
   height: inherit;
 }
 
-[data-reach-slider-track-orientation="vertical"] {
+[data-reach-slider-track][data-orientation="vertical"] {
   width: inherit;
   height: 100%;
 }
@@ -43,21 +47,21 @@
   transform-origin: center;
 }
 
-[data-reach-slider-handle-orientation="horizontal"] {
+[data-reach-slider-handle][aria-orientation="horizontal"] {
   top: 50%;
   transform: translateY(-50%);
 }
 
-[data-reach-slider-handle-orientation="horizontal"]:focus {
+[data-reach-slider-handle][aria-orientation="horizontal"]:focus {
   transform: translateY(-50%);
 }
 
-[data-reach-slider-handle-orientation="vertical"] {
+[data-reach-slider-handle][aria-orientation="vertical"] {
   left: 50%;
   transform: translateX(-50%);
 }
 
-[data-reach-slider-handle-orientation="vertical"]:focus {
+[data-reach-slider-handle][aria-orientation="vertical"]:focus {
   transform: translateX(-50%);
 }
 
@@ -66,11 +70,11 @@
   background: #1159a6;
 }
 
-[data-reach-slider-track-highlight-orientation="horizontal"] {
+[data-reach-slider-track-highlight][data-orientation="horizontal"] {
   height: 100%;
 }
 
-[data-reach-slider-track-highlight-orientation="vertical"] {
+[data-reach-slider-track-highlight][data-orientation="vertical"] {
   width: 100%;
 }
 
@@ -83,36 +87,17 @@
   transform-origin: center;
 }
 
-[data-reach-slider-marker-orientation="horizontal"] {
+[data-reach-slider-marker][data-orientation="horizontal"] {
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-[data-reach-slider-marker-orientation="vertical"] {
+[data-reach-slider-marker][data-orientation="vertical"] {
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-[data-reach-slider-marker-highlight] {
+[data-reach-slider-marker][data-state="at-value"],
+[data-reach-slider-marker][data-state="under-value"] {
   background: #1159a6;
-}
-
-[data-reach-slider-marker] > span {
-  position: absolute;
-  font-size: 12px;
-}
-
-[data-reach-slider-marker-orientation="horizontal"] > span {
-  top: calc(100% + 5px);
-  left: 50%;
-  text-align: center;
-  transform: translateX(-50%);
-}
-
-[data-reach-slider-marker-orientation="vertical"] > span {
-  left: calc(100% + 5px);
-  top: 50%;
-  text-align: right;
-  transform: translateY(-50%);
-  white-space: nowrap;
 }

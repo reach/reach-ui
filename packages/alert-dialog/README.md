@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/alert-dialog.svg)](https://npm.im/@reach/alert-dialog) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/alert-dialog) | [Source](https://github.com/reach/reach-ui/tree/master/packages/alert-dialog) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#alertdialog)
+[Docs](https://reacttraining.com/reach-ui/alert-dialog) | [Source](https://github.com/reach/reach-ui/tree/master/packages/alert-dialog) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog)
 
 A modal dialog that interrupts the user's workflow to get a response, usually some sort of confirmation. This is different than a typical Dialog in that it requires some user response, like "Save", or "Cancel", etc.
 

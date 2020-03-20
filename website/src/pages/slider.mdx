@@ -20,7 +20,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/slider
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#slider
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#slider
 
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
@@ -114,9 +114,9 @@ Please see the [styling guide](/styling).
 ```css
 [data-reach-slider] {
 }
-[data-reach-slider-disabled] {
+[data-reach-slider][data-disabled] {
 }
-[data-reach-slider-orientation="horizontal|vertical"] {
+[data-reach-slider][data-orientation="(horizontal|vertical)"] {
 }
 ```
 
@@ -259,9 +259,9 @@ Please see the [styling guide](/styling).
 ```css
 [data-reach-slider-track] {
 }
-[data-reach-slider-track-disabled] {
+[data-reach-slider-track][data-disabled] {
 }
-[data-reach-slider-track-orientation="horizontal|vertical"] {
+[data-reach-slider-track][data-orientation="(horizontal|vertical)"] {
 }
 ```
 
@@ -288,9 +288,9 @@ Please see the [styling guide](/styling).
 ```css
 [data-reach-slider-track-highlight] {
 }
-[data-reach-slider-track-highlight-disabled] {
+[data-reach-slider-track-highlight][data-disabled] {
 }
-[data-reach-slider-track-highlight-orientation="horizontal|vertical"] {
+[data-reach-slider-track-highlight][data-orientation="(horizontal|vertical)"] {
 }
 ```
 
@@ -305,13 +305,15 @@ Please see the [styling guide](/styling).
 ```css
 [data-reach-slider-marker] {
 }
-[data-reach-slider-marker-disabled] {
+[data-reach-slider-marker][data-disabled] {
 }
-[data-reach-slider-marker-orientation="horizontal|vertical"] {
+[data-reach-slider-marker][data-orientation="(horizontal|vertical)"] {
 }
-
-/* Applied to a marker when the slider value exceeds the marker value */
-[data-reach-slider-marker-highlight] {
+[data-reach-slider-marker][data-state="(under|at|over)-value"] {
+  /* marker is under, at, or over the slider value */
+}
+[data-reach-slider-marker][data-value="VALUE_REF"] {
+  /* marker is under, at, or over the slider value */
 }
 ```
 
@@ -338,8 +340,8 @@ Please see the [styling guide](/styling).
 ```css
 [data-reach-slider-handle] {
 }
-[data-reach-slider-handle-disabled] {
+[data-reach-slider-handle][aria-disabled] {
 }
-[data-reach-slider-handle-orientation="horizontal|vertical"] {
+[data-reach-slider-handle][aria-orientation="(horizontal|vertical)"] {
 }
 ```

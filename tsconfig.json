@@ -1,8 +1,10 @@
 {
   "extends": "./tsconfig.build.json",
+  "include": ["packages", "types", "scripts"],
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {
       "@reach/accordion": ["packages/accordion/src"],
       "@reach/alert": ["packages/alert/src"],
@@ -14,6 +16,8 @@
       "@reach/descendants": ["packages/descendants/src"],
       "@reach/dialog": ["packages/dialog/src"],
       "@reach/disclosure": ["packages/disclosure/src"],
+      "@reach/listbox": ["packages/listbox/src"],
+      "@reach/machine": ["packages/machine/src"],
       "@reach/menu-button": ["packages/menu-button/src"],
       "@reach/popover": ["packages/popover/src"],
       "@reach/portal": ["packages/portal/src"],

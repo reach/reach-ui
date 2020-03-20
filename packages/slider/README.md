@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/slider.svg)](https://npm.im/@reach/slider) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/slider) | [Source](https://github.com/reach/reach-ui/tree/master/packages/slider) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#slider)
+[Docs](https://reacttraining.com/reach-ui/slider) | [Source](https://github.com/reach/reach-ui/tree/master/packages/slider) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#slider)
 
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
@@ -13,7 +13,7 @@ import {
   SliderTrack,
   SliderTrackHighlight,
   SliderHandle,
-  SliderMarker
+  SliderMarker,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 

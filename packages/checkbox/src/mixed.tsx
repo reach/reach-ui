@@ -28,32 +28,28 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox#mixedcheckbox
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox/src/mixed
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#checkbox
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import {
-  DistributiveOmit,
-  isString,
   useForkedRef,
   useIsomorphicLayoutEffect,
   wrapEvent,
 } from "@reach/utils";
 import {
   assign,
-  createMachine,
-  EventObject as MachineEvent,
-  interpret,
+  MachineEventWithRefs,
   StateMachine,
-} from "@xstate/fsm";
+  useCreateMachine,
+  useMachine,
+  useMachineLogger,
+} from "@reach/machine";
 import PropTypes from "prop-types";
 import warning from "warning";
+
+// Used for development only, not recommended for production code!
+const DEBUG = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -152,56 +148,55 @@ const commonEvents = {
  * @param initial
  * @param props
  */
-export const createMixedCheckboxMachine = (
+export const createMachineDefinition = (
   initial: MixedCheckboxStates,
   props: {
     disabled: boolean;
     isControlled: boolean;
   }
-) =>
-  createMachine<MixedCheckboxData, MixedCheckboxEvent, MixedCheckboxState>({
-    id: "mixed-checkbox",
-    initial,
-    context: {
-      disabled: props.disabled,
-      isControlled: props.isControlled,
-      refs: {
-        input: null,
+): StateMachine.Config<MixedCheckboxData, MixedCheckboxEvent> => ({
+  id: "mixed-checkbox",
+  initial,
+  context: {
+    disabled: props.disabled,
+    isControlled: props.isControlled,
+    refs: {
+      input: null,
+    },
+  },
+  states: {
+    [MixedCheckboxStates.Unchecked]: {
+      entry: assignRefs,
+      on: {
+        [MixedCheckboxEvents.Toggle]: {
+          target: MixedCheckboxStates.Checked,
+          cond: checkToggleAllowed,
+        },
+        ...commonEvents,
       },
     },
-    states: {
-      [MixedCheckboxStates.Unchecked]: {
-        entry: assignRefs,
-        on: {
-          [MixedCheckboxEvents.Toggle]: {
-            target: MixedCheckboxStates.Checked,
-            cond: checkToggleAllowed,
-          },
-          ...commonEvents,
+    [MixedCheckboxStates.Checked]: {
+      entry: assignRefs,
+      on: {
+        [MixedCheckboxEvents.Toggle]: {
+          target: MixedCheckboxStates.Unchecked,
+          cond: checkToggleAllowed,
         },
-      },
-      [MixedCheckboxStates.Checked]: {
-        entry: assignRefs,
-        on: {
-          [MixedCheckboxEvents.Toggle]: {
-            target: MixedCheckboxStates.Unchecked,
-            cond: checkToggleAllowed,
-          },
-          ...commonEvents,
-        },
-      },
-      [MixedCheckboxStates.Mixed]: {
-        entry: assignRefs,
-        on: {
-          [MixedCheckboxEvents.Toggle]: {
-            target: MixedCheckboxStates.Checked,
-            cond: checkToggleAllowed,
-          },
-          ...commonEvents,
-        },
+        ...commonEvents,
       },
     },
-  });
+    [MixedCheckboxStates.Mixed]: {
+      entry: assignRefs,
+      on: {
+        [MixedCheckboxEvents.Toggle]: {
+          target: MixedCheckboxStates.Checked,
+          cond: checkToggleAllowed,
+        },
+        ...commonEvents,
+      },
+    },
+  },
+});
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -305,9 +300,8 @@ export function useMixedCheckbox(
 
   let isControlled = controlledChecked != null;
 
-  let machine = useConstant(() =>
-    createMixedCheckboxMachine(
-      // Derive initial state from props
+  let machine = useCreateMachine(
+    createMachineDefinition(
       checkedPropToStateValue(
         isControlled ? controlledChecked! : defaultChecked
       ),
@@ -317,9 +311,13 @@ export function useMixedCheckbox(
       }
     )
   );
-  let [current, send] = useMachine(machine, {
-    input: ref,
-  });
+
+  let [current, send] = useMachineLogger(
+    useMachine(machine, {
+      input: ref,
+    }),
+    DEBUG
+  );
 
   let props: UseMixedCheckboxProps = {
     "aria-checked": stateValueToAriaChecked(current.value),
@@ -514,100 +512,4 @@ export type MixedCheckboxNodeRefs = {
 /**
  * Input element ref object.
  */
-type MixedCheckboxInputRef = React.RefObject<HTMLInputElement | null>;
-
-////////////////////////////////////////////////////////////////////////////////
-// USE MACHINE HOOK
-////////////////////////////////////////////////////////////////////////////////
-
-/**
- * This `useMachine` works very similiarly to what you get from `@xstate/react`
- * with some additions.
- *  - A second argument `refs` is passed to send all of our refs into our
- *    machine's contextual data object.
- *  - We wrap the `send` function so that refs are updated included in all of
- *    our events so we can use their current value (generally DOM nodes)
- *    anywhere in our actions.
- *  - We initialize the machine inside the component rather than throwing an
- *    error if an outside initializer creates a value that doesn't match. This
- *    is useful as some components may need a different initial state or some
- *    initial data based on props. We should *generally* just update the state
- *    with an event via useEffect and depend on a static initial value, but this
- *    is difficuly if that initial value matters for SSR or to prevent some
- *    layout jank on the first paint. I don't think there's with this approach,
- *    but we'll see what happens.
- *
- * @param initialMachine
- * @param refs
- */
-function useMachine<
-  TC extends object,
-  TE extends MachineEventWithRefs = MachineEventWithRefs
->(
-  initialMachine: StateMachine.Machine<TC, TE, any>,
-  refs: MachineToReactRefMap<TE>
-): [
-  StateMachine.State<TC, TE, any>,
-  StateMachine.Service<TC, DistributiveOmit<TE, "refs">>["send"],
-  StateMachine.Service<TC, TE>
-] {
-  /*
-   * State machine should not change between renders, so let's store it in a
-   * ref. This should also help if we need to use a creator function to inject
-   * dynamic initial state values based on props.
-   */
-  let { current: machine } = useRef(initialMachine);
-  let service = useConstant(() => interpret(machine).start());
-  let [current, setCurrent] = useState(machine.initialState);
-
-  // Add refs to every event so we can use them to perform actions.
-  let send = useCallback(
-    (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
-      let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
-      let refValues = Object.keys(refs).reduce((value, name) => {
-        (value as any)[name] = refs[name].current;
-        return value;
-      }, {});
-      service.send({ ...event, refs: refValues } as TE);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  useEffect(() => {
-    service.subscribe(setCurrent);
-    return () => {
-      service.stop();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return [current, send, service];
-}
-
-function useConstant<T>(fn: () => T): T {
-  let ref = React.useRef<{ v: T }>();
-
-  if (!ref.current) {
-    ref.current = { v: fn() };
-  }
-
-  return ref.current.v;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
-/**
- * Events use in our `useMachine` always have a refs object and will inherit
- * this interface.
- */
-export interface MachineEventWithRefs extends MachineEvent {
-  refs: {
-    [key: string]: any;
-  };
-}
-
-export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
-  [K in keyof TE["refs"]]: React.RefObject<TE["refs"][K]>;
-};
+type MixedCheckboxInputRef = React.RefObject<MixedCheckboxNodeRefs["input"]>;

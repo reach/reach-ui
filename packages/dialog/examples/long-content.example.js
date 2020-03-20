@@ -17,7 +17,11 @@ function Example() {
           - scroll -
         </div>
       ))}
-      <Dialog aria-label="Announcement" isOpen={showDialog}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <button onClick={() => setShowDialog(false)}>Close Dialog</button>
         <p>Yikes!</p>
         <div style={{ height: 3000 }} />

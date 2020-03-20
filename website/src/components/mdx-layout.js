@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionButton,
   AccordionItem,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import Alert from "@reach/alert";
 import {
@@ -12,12 +12,12 @@ import {
   AlertDialogLabel,
   AlertDialogDescription,
   AlertDialogOverlay,
-  AlertDialogContent
+  AlertDialogContent,
 } from "@reach/alert-dialog";
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel
+  DisclosurePanel,
 } from "@reach/disclosure";
 import { useId } from "@reach/auto-id";
 import {
@@ -25,7 +25,7 @@ import {
   CustomCheckboxContainer,
   CustomCheckboxInput,
   MixedCheckbox,
-  useMixedCheckbox
+  useMixedCheckbox,
 } from "@reach/checkbox";
 import {
   Combobox,
@@ -33,8 +33,19 @@ import {
   ComboboxPopover,
   ComboboxList,
   ComboboxOption,
-  ComboboxOptionText
+  ComboboxOptionText,
 } from "@reach/combobox";
+import {
+  Listbox,
+  ListboxInput,
+  ListboxButton,
+  ListboxArrow,
+  ListboxPopover,
+  ListboxList,
+  ListboxOption,
+  ListboxGroup,
+  ListboxGroupLabel,
+} from "@reach/listbox";
 import Component from "@reach/component-component";
 import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 import {
@@ -44,7 +55,7 @@ import {
   MenuItem,
   MenuItems,
   MenuPopover,
-  MenuLink
+  MenuLink,
 } from "@reach/menu-button";
 import Portal from "@reach/portal";
 import Rect, { useRect } from "@reach/rect";
@@ -54,7 +65,7 @@ import {
   SliderTrack,
   SliderTrackHighlight,
   SliderHandle,
-  SliderMarker
+  SliderMarker,
 } from "@reach/slider";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
@@ -137,6 +148,15 @@ function MyPageLayout({ children }) {
                   DisclosureButton,
                   DisclosurePanel,
                   GatsbyLink,
+                  Listbox,
+                  ListboxInput,
+                  ListboxButton,
+                  ListboxArrow,
+                  ListboxPopover,
+                  ListboxList,
+                  ListboxOption,
+                  ListboxGroup,
+                  ListboxGroupLabel,
                   matchSorter,
                   Menu,
                   MenuButton,
@@ -170,12 +190,12 @@ function MyPageLayout({ children }) {
                   useTransition,
                   useWindowSize,
                   VisuallyHidden,
-                  WindowSize
+                  WindowSize,
                 }}
               />
             );
           },
-          table: Table
+          table: Table,
         }}
       >
         <main>

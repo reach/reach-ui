@@ -21,7 +21,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
-- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+- WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
 
 An accessible dropdown menu for the common dropdown menu button design pattern.
 
@@ -88,7 +88,7 @@ The wrapper component for the other components. No DOM element is rendered.
 
 ##### Menu `children`
 
-_Type_: `oneOfType(node, function)`
+`children: React.ReactNode | ((props: { isOpen: boolean; }) => React.ReactNode)`
 
 Requires two children: a `<MenuButton>` and a `<MenuList>`.
 
@@ -176,7 +176,7 @@ If you'd like to target when the menu is open use `aria-expanded`:
 | ------------------------------------------ | ---------------------- | -------- |
 | [`button` props](#menubutton-button-props) |                        |          |
 | [`children`](#menubutton-children)         | `node`                 | false    |
-| `onClick`                                  | `preventableEventFunc` | false    |
+| `onMouseDown`                              | `preventableEventFunc` | false    |
 | `onKeyDown`                                | `preventableEventFunc` | false    |
 
 ##### MenuButton `button` props
@@ -199,11 +199,15 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 ##### MenuButton `as`
 
-_Type_: ``
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `MenuButton` what underlying element to render. Defaults to `button`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users. While this prop is useful for passing custom implementations, such as styled or design-system components, using anything that renders the wrong semantic HTML element will require stubbing specific behaviors and attributes. This is highly discouraged.
 
 ##### MenuButton `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Accepts any renderable content.
 
@@ -239,10 +243,11 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 #### MenuList Props
 
-| Prop                                | Type   | Required |
-| ----------------------------------- | ------ | -------- |
-| [`div` props](#menuitems-div-props) |        |          |
-| [`children`](#menuitems-children)   | `node` | false    |
+| Prop                                | Type      | Required |
+| ----------------------------------- | --------- | -------- |
+| [`div` props](#menuitems-div-props) |           |          |
+| [`children`](#menuitems-children)   | `node`    | false    |
+| [`portal`](#menuitems-portal)       | `boolean` | false    |
 
 ##### MenuList `div` props
 
@@ -289,7 +294,7 @@ The stylesheet contains these rules to create the animation.
 
 ##### MenuList `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 Can contain only `MenuItem` or a `MenuLink`
 
@@ -299,6 +304,12 @@ Can contain only `MenuItem` or a `MenuLink`
   <MenuLink />
 </MenuList>
 ```
+
+##### MenuList `portal`
+
+`portal?: boolean`
+
+Whether or not the popover should be rendered inside a portal. Defaults to `true`.
 
 ### MenuPopover
 
@@ -326,13 +337,20 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 
 #### MenuPopover Props
 
-| Prop                                | Type   | Required |
-| ----------------------------------- | ------ | -------- |
-| [`children`](#menupopover-children) | `node` | true     |
+| Prop                                | Type      | Required |
+| ----------------------------------- | --------- | -------- |
+| [`children`](#menupopover-children) | `node`    | true     |
+| [`portal`](#menupopover-portal)     | `boolean` | false    |
 
 ##### MenuPopover `children` props
 
-_Type_: `node`
+`children: React.ReactNode`
+
+##### MenuPopover `portal`
+
+`portal?: boolean`
+
+Whether or not the popover should be rendered inside a portal. Defaults to `true`.
 
 ### MenuItems
 
@@ -445,9 +463,11 @@ function Example(props) {
 
 ##### MenuItem `as`
 
-_Type_: `any`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
-By default, `MenuItem` renders a div. You can pass another element or use this prop to render a styled component.
+A string representing an HTML element or a React component that will tell the `MenuItem` what underlying element to render. Defaults to `div`.
+
+You can pass another element or use this prop to render a styled component.
 
 ```jsx
 const StyledItem = styled.div`
@@ -483,7 +503,7 @@ function Example() {
 
 ##### MenuItem `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 You can put any type of content inside of a `<MenuItem>`.
 
@@ -515,7 +535,7 @@ function Example(props) {
 
 ##### MenuItem `onSelect`
 
-_Type_: `func`
+`onSelect(): void`
 
 Callback that fires when a `MenuItem` is selected.
 
@@ -581,16 +601,18 @@ All props are spread to the underlying element
 
 ##### MenuLink `as`
 
-_Type_: `any`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
-By default, `MenuLink` renders an anchor, but if you are using a router you can use `as={Link}`.
+A string representing an HTML element or a React component that will tell the `MenuLink` what underlying element to render. Defaults to `a`.
+
+While `MenuLink` should always render an HTML anchor tag, this is useful to pass a styled component or if you are using a router and need to use its `Link` component.
 
 ```jsx
-import { Link } from "@reach/router";
+import { Link } from "react-router";
 <Menu>
   <MenuButton>Products</MenuButton>
   <MenuList>
-    <MenuLink as={Link} href="/settings">
+    <MenuLink as={Link} to="/settings">
       Settings
     </MenuLink>
     <MenuLink href="https://reacttraining.com/workshops">Workshops</MenuLink>
@@ -602,13 +624,13 @@ import { Link } from "@reach/router";
 Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t it won't work because we will not be able to manage focus on the element the component renders.
 
 ```jsx
-import GatsbyLink from "gatsby/link";
+import { Link } from "gatsby";
 <MenuLink as={GatsbyLink} to="/somewhere" />;
 ```
 
 ##### MenuLink `children`
 
-_Type_: `node`
+`children: React.ReactNode`
 
 You can render any kind of content inside of a MenuLink.
 
@@ -621,7 +643,7 @@ You can render any kind of content inside of a MenuLink.
 
 ##### MenuLink `onSelect`
 
-_Type_: `func`
+`onSelect?(): void`
 
 Callback that fires when a `MenuLink` is selected.
 

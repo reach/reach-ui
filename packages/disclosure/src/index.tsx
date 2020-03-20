@@ -12,7 +12,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/disclosure
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/disclosure
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#disclosure
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
 
 import React, { forwardRef, useContext, useRef, useState } from "react";
@@ -180,6 +180,8 @@ export const DisclosureButton = forwardRefWithAs<
   "button"
 >(function DisclosureButton(
   {
+    // The element that shows and hides the content has role `button`.
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
     as: Comp = "button",
     children,
     onClick,
@@ -202,13 +204,21 @@ export const DisclosureButton = forwardRefWithAs<
 
   return (
     <Comp
+      // Optionally, the element with role `button` has a value specified for
+      // `aria-controls` that refers to the element that contains all the
+      // content that is shown or hidden.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
       aria-controls={panelId}
+      // When the content is visible, the element with role `button` has
+      // `aria-expanded` set to `true`. When the content area is hidden, it is
+      // set to `false`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
       aria-expanded={open}
       {...props}
-      ref={ref}
-      onClick={wrapEvent(onClick, handleClick)}
       data-reach-disclosure-button=""
       data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
+      ref={ref}
+      onClick={wrapEvent(onClick, handleClick)}
     >
       {children}
     </Comp>

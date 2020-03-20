@@ -2,9 +2,10 @@ import React from "react";
 import {
   Slider,
   SliderMarker,
-  SLIDER_ORIENTATION_VERTICAL
+  SLIDER_ORIENTATION_VERTICAL,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
+import "./examples.css";
 
 let name = "Vertical (TS)";
 

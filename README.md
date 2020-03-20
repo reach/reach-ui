@@ -83,7 +83,7 @@ yarn test --watch
 
 ## Development Plans
 
-The components to be built come from the the [Aria Practices Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices-1.1). Here is a table of the components and their status.
+The components to be built come from the the [Aria Practices Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices-1.2), with a few exceptions. Here is a table of the components and their status.
 
 ✅ - Released<br/>
 🛠 - Building<br/>
@@ -97,7 +97,8 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | ✅     | Combo Box      |
 | ✅     | Dialog (Modal) |
 | ✅     | Disclosure     |
-| 🛠      | Listbox        |
+| 🛠      | Hover Card     |
+| ✅     | Listbox        |
 | ✅     | Menu Button    |
 | 🛠      | Radio Group    |
 | ✅     | Slider         |

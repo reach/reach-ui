@@ -14,8 +14,7 @@ export type AssignableRef<ValueType> =
   | {
       bivarianceHack(instance: ValueType | null): void;
     }["bivarianceHack"]
-  | React.MutableRefObject<ValueType | null>
-  | null;
+  | React.MutableRefObject<ValueType | null>;
 
 /**
  * Type can be either a single `ValueType` or an array of `ValueType`
@@ -34,7 +33,9 @@ export type SingleOrArray<ValueType> = ValueType[] | ValueType;
  *
  * you might expect `Omit<B, 'a'>` to give you:
  *
- *    Omit<{ a: 'whatever'; b: number }, 'a'> | Omit<{ a: 'whatever'; b: string; c: number }, 'a'>
+ *    type B =
+ *      | Omit<{ a: "whatever"; b: number }, "a">
+        | Omit<{ a: "whatever"; b: string; c: number }, "a">;
  *
  * This is not the case, unfortunately, so we need to create our own version of
  * `Omit` that distributes over unions with a distributive conditional type. If
@@ -84,6 +85,21 @@ export type ComponentWithForwardedRef<
     React.HTMLProps<React.ElementType<ElementType>> &
     React.ComponentPropsWithRef<ElementType>
 >;
+
+/**
+ * Returns the type inferred by a promise's return value.
+ *
+ * @example
+ * async function getThing() {
+ *   // return type is a number
+ *   let result: number = await fetchValueSomewhere();
+ *   return result;
+ * }
+ *
+ * type Thing = ThenArg<ReturnType<typeof getThing>>;
+ * // number
+ */
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 
 export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
   // These types are a bit of a hack, but cover us in cases where the `as` prop

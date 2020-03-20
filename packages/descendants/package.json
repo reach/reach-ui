@@ -1,6 +1,6 @@
 {
   "name": "@reach/descendants",
-  "version": "0.8.4",
+  "version": "0.9.1",
   "description": "A descendant index solution for better accessibility support in compound components",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,12 +10,10 @@
     "directory": "packages/descendants"
   },
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "clean": "rm -rf ./dist",
-    "compile": "cross-env NODE_ENV=production tsdx build --format=cjs,esm --tsconfig tsconfig.build.json"
+    "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/utils": "^0.8.4",
+    "@reach/utils": "^0.9.0",
     "tslib": "^1.10.0"
   },
   "peerDependencies": {

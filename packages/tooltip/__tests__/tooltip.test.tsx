@@ -1,88 +1,181 @@
 import React from "react";
-import { render, fireEvent, act } from "$test/utils";
+import { render, fireEvent, act, screen } from "$test/utils";
+import { AxeResults } from "$test/types";
+import { axe } from "jest-axe";
 import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 
-const { keyDown, mouseOver, mouseLeave, focus, blur } = fireEvent;
-
-describe("rendering tooltip", () => {
+describe("<Tooltip />", () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
 
-  it("shows/hides on hover", () => {
-    const { baseElement, getByText } = render(
-      <Tooltip label="Content">
-        <button>Trigger</button>
-      </Tooltip>
-    );
-    const trigger = getByText("Trigger");
+  describe("rendering", () => {
+    it("renders as any HTML element", () => {
+      let tooltipText = "Look at me";
+      let { getByText } = render(
+        <p>
+          <Tooltip as="span" style={{ display: "block" }} label={tooltipText}>
+            <span>Trigger</span>
+          </Tooltip>
+        </p>
+      );
 
-    expect(baseElement).toMatchSnapshot("not visible");
+      let trigger = getByText("Trigger");
+      act(() => {
+        fireEvent.mouseOver(trigger);
+        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+      });
 
-    mouseOver(trigger);
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
+      let tooltip = getByText(tooltipText);
+      expect(tooltip.tagName).toBe("SPAN");
 
-    mouseLeave(trigger);
-    act(() => void jest.advanceTimersByTime(LEAVE_TIMEOUT));
-    expect(baseElement).toMatchSnapshot("after leave timeout");
+      act(() => void leaveTooltip(trigger));
+    });
   });
 
-  it("shows/hides when trigger is activeElement", () => {
-    const { baseElement, getByText } = render(
-      <Tooltip label="Content">
-        <button>Trigger</button>
-      </Tooltip>
-    );
-    const trigger = getByText("Trigger");
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      let { container, getByText } = render(
+        <div data-testid="tooltip">
+          <Tooltip label="Content">
+            <button>Trigger</button>
+          </Tooltip>
+        </div>
+      );
 
-    expect(baseElement).toMatchSnapshot("not visible");
+      let trigger = getByText("Trigger");
 
-    focus(trigger);
-    expect(baseElement).toMatchSnapshot("after focus");
+      // We need to use real timers to stop axe from timing out, then revert
+      // back to fake timers to continue our tests.
+      jest.useRealTimers();
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
+      jest.useFakeTimers();
 
-    blur(trigger);
-    act(() => void jest.advanceTimersByTime(LEAVE_TIMEOUT));
-    expect(baseElement).toMatchSnapshot("after blur");
+      act(() => {
+        fireEvent.mouseOver(trigger);
+        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+      });
+
+      jest.useRealTimers();
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
+      jest.useFakeTimers();
+
+      act(() => void leaveTooltip(trigger));
+    });
   });
 
-  it("shows without timeout when one tooltip is already visible", () => {
-    const { baseElement, getByText } = render(
-      <>
-        <Tooltip label="First">
-          <button>First Trigger</button>
+  describe("user events", () => {
+    it("shows/hides on hover", () => {
+      let tooltipText = "Look at me";
+
+      let { getByText, queryByText } = render(
+        <Tooltip label={tooltipText}>
+          <button>Trigger</button>
         </Tooltip>
-        <Tooltip label="Second">
-          <button>Second Trigger</button>
+      );
+
+      let trigger = getByText("Trigger");
+      expect(queryByText(tooltipText)).toBeFalsy();
+
+      act(() => {
+        fireEvent.mouseOver(trigger);
+        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+      });
+
+      expect(queryByText(tooltipText)).toBeTruthy();
+
+      act(() => void leaveTooltip(trigger));
+
+      expect(queryByText(tooltipText)).toBeFalsy();
+    });
+
+    it("shows/hides when trigger is focused/blurred", () => {
+      let tooltipText = "Look at me";
+      let { getByText, queryByText } = render(
+        <Tooltip label={tooltipText}>
+          <button>Trigger</button>
         </Tooltip>
-      </>
-    );
-    const firstTrigger = getByText("First Trigger");
-    const secondTrigger = getByText("Second Trigger");
+      );
 
-    mouseOver(firstTrigger);
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
+      let trigger = getByText("Trigger");
+      expect(queryByText(tooltipText)).toBeFalsy();
 
-    mouseLeave(firstTrigger);
-    mouseOver(secondTrigger);
-    expect(baseElement).toMatchSnapshot("after switch without timeout");
-  });
+      act(() => void fireEvent.focus(trigger));
+      expect(queryByText(tooltipText)).toBeTruthy();
 
-  it("hides on ESC", () => {
-    const { baseElement, getByText } = render(
-      <Tooltip label="Content">
-        <button>Trigger</button>
-      </Tooltip>
-    );
+      act(() => void blurTooltip(trigger));
+      expect(queryByText(tooltipText)).toBeFalsy();
+    });
 
-    const trigger = getByText("Trigger");
+    it("shows without timeout when one tooltip is already visible", () => {
+      let { getByText } = render(
+        <>
+          <Tooltip label="First">
+            <button>First Trigger</button>
+          </Tooltip>
+          <Tooltip label="Second">
+            <button>Second Trigger</button>
+          </Tooltip>
+        </>
+      );
 
-    focus(trigger);
-    act(() => void jest.advanceTimersByTime(MOUSE_REST_TIMEOUT));
-    expect(baseElement).toMatchSnapshot("after mouse rest timeout");
+      let firstTrigger = getByText("First Trigger");
+      let secondTrigger = getByText("Second Trigger");
 
-    keyDown(trigger, { key: "Escape" });
-    expect(baseElement).toMatchSnapshot("not visible after ESC");
+      act(() => {
+        fireEvent.mouseOver(firstTrigger);
+        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+      });
+
+      expect(screen.queryByText("First Trigger")).toBeTruthy();
+
+      act(() => {
+        fireEvent.mouseLeave(firstTrigger);
+        fireEvent.mouseOver(secondTrigger);
+      });
+
+      expect(screen.queryByText("Second Trigger")).toBeTruthy();
+
+      act(() => void leaveTooltip(secondTrigger));
+    });
+
+    it("hides on ESC", () => {
+      let tooltipText = "Look at me";
+      let { getByText, queryByText } = render(
+        <Tooltip label={tooltipText}>
+          <button>Trigger</button>
+        </Tooltip>
+      );
+
+      let trigger = getByText("Trigger");
+
+      act(() => {
+        fireEvent.focus(trigger);
+        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+      });
+      expect(queryByText(tooltipText)).toBeTruthy();
+
+      act(() => void fireEvent.keyDown(trigger, { key: "Escape" }));
+      expect(queryByText(tooltipText)).toBeFalsy();
+
+      act(() => void leaveTooltip(trigger));
+    });
   });
 });
+
+function leaveTooltip(element: HTMLElement) {
+  fireEvent.mouseLeave(element);
+  jest.advanceTimersByTime(LEAVE_TIMEOUT);
+}
+
+function blurTooltip(element: HTMLElement) {
+  fireEvent.blur(element);
+  jest.advanceTimersByTime(LEAVE_TIMEOUT);
+}

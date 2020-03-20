@@ -15,7 +15,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/slider
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/slider
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#slider
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see          https://github.com/Stanko/aria-progress-range-slider
  * @see          http://www.oaa-accessibility.org/examplep/slider1/
  */
@@ -25,7 +25,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -39,22 +38,28 @@ import {
   isFunction,
   makeId,
   useForkedRef,
+  useIsomorphicLayoutEffect,
   wrapEvent,
 } from "@reach/utils";
 
 export type SliderAlignment = "center" | "contain";
-export type SliderOrientation = "horizontal" | "vertical";
+export enum SliderOrientation {
+  Horizontal = "horizontal",
+  Vertical = "vertical",
+}
+export enum SliderHandleAlignment {
+  // Handle is centered directly over the current value marker
+  Center = "center",
+  // Handle is contained within the bounds of the track, offset slightly from
+  // the value's center mark to accommodate
+  Contain = "contain",
+}
 
-export const SLIDER_ORIENTATION_HORIZONTAL: SliderOrientation = "horizontal";
-
-export const SLIDER_ORIENTATION_VERTICAL: SliderOrientation = "vertical";
-
-// Handle is centered directly over the current value marker
-export const SLIDER_HANDLE_ALIGN_CENTER: SliderAlignment = "center";
-
-// Handle is contained within the bounds of the track, offset slightly from the
-// value's center mark to accommodate
-export const SLIDER_HANDLE_ALIGN_CONTAIN: SliderAlignment = "contain";
+// TODO: Remove in 1.0, maybe?
+export const SLIDER_ORIENTATION_HORIZONTAL = SliderOrientation.Horizontal;
+export const SLIDER_ORIENTATION_VERTICAL = SliderOrientation.Vertical;
+export const SLIDER_HANDLE_ALIGN_CENTER = SliderHandleAlignment.Center;
+export const SLIDER_HANDLE_ALIGN_CONTAIN = SliderHandleAlignment.Contain;
 
 const SliderContext = createNamedContext<ISliderContext>(
   "SliderContext",
@@ -69,15 +74,15 @@ const sliderPropTypes = {
   disabled: PropTypes.bool,
   getValueText: PropTypes.func,
   handleAlignment: PropTypes.oneOf([
-    SLIDER_HANDLE_ALIGN_CENTER,
-    SLIDER_HANDLE_ALIGN_CONTAIN,
+    SliderHandleAlignment.Center,
+    SliderHandleAlignment.Contain,
   ]),
   min: PropTypes.number,
   max: PropTypes.number,
   name: PropTypes.string,
   orientation: PropTypes.oneOf([
-    SLIDER_ORIENTATION_HORIZONTAL,
-    SLIDER_ORIENTATION_VERTICAL,
+    SliderOrientation.Horizontal,
+    SliderOrientation.Vertical,
   ]),
   onChange: PropTypes.func,
   step: PropTypes.number,
@@ -96,7 +101,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   forwardedRef
 ) {
   return (
-    <SliderInput ref={forwardedRef} {...props}>
+    <SliderInput ref={forwardedRef} data-reach-slider="" {...props}>
       <SliderTrack>
         <SliderTrackHighlight />
         <SliderHandle />
@@ -195,7 +200,7 @@ export type SliderProps = Omit<
    *
    * @see Docs https://reacttraining.com/reach-ui/slider#slider-orientation
    */
-  orientation?: "horizontal" | "vertical" | SliderOrientation;
+  orientation?: SliderOrientation;
   /**
    * The step attribute is a number that specifies the granularity that the
    * value must adhere to as it changes. Step sets minimum intervals of change,
@@ -237,7 +242,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       disabled = false,
       value: controlledValue,
       getValueText,
-      handleAlignment = SLIDER_HANDLE_ALIGN_CENTER,
+      handleAlignment = SliderHandleAlignment.Center,
       max = 100,
       min = 0,
       name,
@@ -246,7 +251,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       onPointerDown,
       onPointerMove,
       onPointerUp,
-      orientation = SLIDER_ORIENTATION_HORIZONTAL,
+      orientation = SliderOrientation.Horizontal,
       step: stepProp,
       children,
       ...rest
@@ -283,7 +288,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
     const _value = isControlled ? (controlledValue as number) : internalValue;
     const value = getAllowedValue(_value, min, max);
     const trackPercent = valueToPercent(value, min, max);
-    const isVertical = orientation === SLIDER_ORIENTATION_VERTICAL;
+    const isVertical = orientation === SliderOrientation.Vertical;
     const step = stepProp || 1;
 
     const handleSize = isVertical
@@ -291,7 +296,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       : handleDimensions.width;
 
     const handlePosition = `calc(${trackPercent}% - ${
-      handleAlignment === SLIDER_HANDLE_ALIGN_CENTER
+      handleAlignment === SliderHandleAlignment.Center
         ? `${handleSize}px / 2`
         : `${handleSize}px * ${trackPercent * 0.01}`
     })`;
@@ -333,6 +338,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       [isVertical, max, min, step]
     );
 
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
     const handleKeyDown = wrapEvent(onKeyDown, event => {
       let flag = false;
       let newValue;
@@ -340,28 +346,36 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       const keyStep = stepProp || (max - min) / 100;
 
       switch (event.key) {
+        // Decrease the value of the slider by one step.
         case "ArrowLeft":
         case "ArrowDown":
           newValue = value - keyStep;
           flag = true;
           break;
+        // Increase the value of the slider by one step
         case "ArrowRight":
         case "ArrowUp":
           newValue = value + keyStep;
           flag = true;
           break;
+        // Decrement the slider by an amount larger than the step change made by
+        // `ArrowDown`.
         case "PageDown":
           newValue = value - tenSteps;
           flag = true;
           break;
+        // Increment the slider by an amount larger than the step change made by
+        // `ArrowUp`.
         case "PageUp":
           newValue = value + tenSteps;
           flag = true;
           break;
+        // Set the slider to the first allowed value in its range.
         case "Home":
           newValue = min;
           flag = true;
           break;
+        // Set the slider to the last allowed value in its range.
         case "End":
           newValue = max;
           flag = true;
@@ -419,6 +433,7 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
         };
 
     const ctx: ISliderContext = {
+      ariaLabel,
       ariaLabelledBy,
       handleDimensions,
       handlePosition,
@@ -444,11 +459,6 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
       trackHighlightStyle,
       updateValue,
     };
-
-    const dataAttributes = makeDataAttributes("slider", {
-      disabled,
-      orientation,
-    });
 
     useEffect(() => {
       const ownerDocument = getOwnerDocument(sliderRef.current) || document;
@@ -479,10 +489,11 @@ export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
     return (
       <SliderContext.Provider value={ctx}>
         <div
-          aria-disabled={disabled}
           {...rest}
-          {...dataAttributes}
           ref={ref}
+          data-reach-slider-input=""
+          data-disabled={disabled ? "" : undefined}
+          data-orientation={orientation}
           tabIndex={-1}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
@@ -550,17 +561,14 @@ export const SliderTrack = forwardRef<HTMLDivElement, SliderTrackProps>(
     const { disabled, orientation, trackRef } = useSliderContext();
     const ref = useForkedRef(trackRef, forwardedRef);
 
-    const dataAttributes = makeDataAttributes("slider-track", {
-      orientation,
-      disabled,
-    });
-
     return (
       <div
         ref={ref}
         style={{ ...style, position: "relative" }}
-        {...dataAttributes}
         {...props}
+        data-reach-slider-track=""
+        data-disabled={disabled ? "" : undefined}
+        data-orientation={orientation}
       >
         {children}
       </div>
@@ -597,6 +605,8 @@ if (__DEV__) {
  * The (typically) highlighted portion of the track that represents the space
  * between the slider's `min` value and its current value.
  *
+ * TODO: Consider renaming to `SliderTrackProgress`
+ *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
  */
 export const SliderTrackHighlight = forwardRef<
@@ -606,17 +616,15 @@ export const SliderTrackHighlight = forwardRef<
   { children, style = {}, ...props },
   forwardedRef
 ) {
-  const { disabled, orientation, trackHighlightStyle } = useSliderContext();
-  const dataAttributes = makeDataAttributes("slider-track-highlight", {
-    orientation,
-    disabled,
-  });
+  let { disabled, orientation, trackHighlightStyle } = useSliderContext();
   return (
     <div
       ref={forwardedRef}
       style={{ position: "absolute", ...trackHighlightStyle, ...style }}
-      {...dataAttributes}
       {...props}
+      data-reach-slider-track-highlight=""
+      data-disabled={disabled ? "" : undefined}
+      data-orientation={orientation}
     />
   );
 });
@@ -652,12 +660,12 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
       onFocus,
       style = {},
       onKeyDown,
-      tabIndex = 0,
       ...props
     },
     forwardedRef
   ) {
     const {
+      ariaLabel,
       ariaLabelledBy,
       disabled,
       handlePosition,
@@ -673,23 +681,46 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
     } = useSliderContext();
 
     const ref = useForkedRef(handleRef, forwardedRef);
-    const dataAttributes = makeDataAttributes("slider-handle", {
-      orientation,
-      disabled,
-    });
 
     return (
       <div
-        role="slider"
-        aria-disabled={disabled}
-        aria-valuemin={sliderMin}
-        aria-valuetext={valueText}
+        aria-disabled={disabled || undefined}
+        // If the slider has a visible label, it is referenced by
+        // `aria-labelledby` on the slider element. Otherwise, the slider
+        // element has a label provided by `aria-label`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
+        // If the slider is vertically oriented, it has `aria-orientation` set
+        // to vertical. The default value of `aria-orientation` for a slider is
+        // horizontal.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
         aria-orientation={orientation}
-        aria-valuenow={value}
+        // The slider element has the `aria-valuemax` property set to a decimal
+        // value representing the maximum allowed value of the slider.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
         aria-valuemax={sliderMax}
-        aria-labelledby={ariaLabelledBy}
+        // The slider element has the `aria-valuemin` property set to a decimal
+        // value representing the minimum allowed value of the slider.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+        aria-valuemin={sliderMin}
+        // The slider element has the `aria-valuenow` property set to a decimal
+        // value representing the current value of the slider.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+        aria-valuenow={value}
+        // If the value of `aria-valuenow` is not user-friendly, e.g., the day
+        // of the week is represented by a number, the `aria-valuetext` property
+        // is set to a string that makes the slider value understandable, e.g.,
+        // "Monday".
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+        aria-valuetext={valueText}
+        // The element serving as the focusable slider control has role
+        // `slider`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+        role="slider"
+        tabIndex={disabled ? -1 : 0}
         {...props}
-        {...dataAttributes}
+        data-reach-slider-handle=""
         ref={ref}
         onBlur={wrapEvent(onBlur, () => {
           setHasFocus(false);
@@ -705,7 +736,6 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
             : { left: handlePosition }),
           ...style,
         }}
-        tabIndex={disabled ? undefined : tabIndex}
       />
     );
   }
@@ -747,19 +777,19 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
       value: sliderValue,
     } = useSliderContext();
 
-    const inRange = !(value < sliderMin || value > sliderMax);
-    const highlight = sliderValue >= value;
-    const dataAttributes = makeDataAttributes("slider-marker", {
-      orientation,
-      disabled,
-      highlight,
-    });
-
-    const absoluteStartPosition = `${valueToPercent(
+    let inRange = !(value < sliderMin || value > sliderMax);
+    let absoluteStartPosition = `${valueToPercent(
       value,
       sliderMin,
       sliderMax
     )}%`;
+
+    let state =
+      value < sliderValue
+        ? "under-value"
+        : value === sliderValue
+        ? "at-value"
+        : "over-value";
 
     return inRange ? (
       <div
@@ -771,8 +801,12 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
             : { left: absoluteStartPosition }),
           ...style,
         }}
-        {...dataAttributes}
         {...props}
+        data-reach-slider-marker=""
+        data-disabled={disabled ? "" : undefined}
+        data-orientation={orientation}
+        data-state={state}
+        data-value={value}
         children={children}
       />
     ) : null;
@@ -803,22 +837,6 @@ function getAllowedValue(val: number, min: number, max: number) {
   return val > max ? max : val < min ? min : val;
 }
 
-function makeDataAttributes(
-  component: string = "slider",
-  {
-    orientation,
-    highlight,
-    disabled,
-  }: { orientation: SliderOrientation; highlight?: boolean; disabled?: boolean }
-) {
-  return {
-    [`data-reach-${component}`]: "",
-    [`data-reach-${component}-disabled`]: disabled ? "" : undefined,
-    [`data-reach-${component}-orientation`]: orientation,
-    [`data-reach-${component}-highlight`]: highlight ? orientation : undefined,
-  };
-}
-
 function makeValuePrecise(value: number, step: number) {
   const stepDecimalPart = step.toString().split(".")[1];
   const stepPrecision = stepDecimalPart ? stepDecimalPart.length : 0;
@@ -844,7 +862,7 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     ? ref.current.getBoundingClientRect()
     : 0; */
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (ref.current) {
       const { height: _newHeight, width: _newWidth } = window.getComputedStyle(
         ref.current
@@ -872,6 +890,7 @@ type HandleRef = React.RefObject<HTMLDivElement | null>;
 type SliderRef = React.RefObject<HTMLDivElement | null>;
 
 interface ISliderContext {
+  ariaLabel: string | undefined;
   ariaLabelledBy: string | undefined;
   handleDimensions: {
     width: number;

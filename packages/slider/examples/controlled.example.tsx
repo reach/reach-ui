@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Slider, SliderMarker } from "@reach/slider";
 import "@reach/slider/styles.css";
+import "./examples.css";
 
 let name = "Controlled (TS)";
 
@@ -14,18 +15,18 @@ function Example() {
     {
       face: "🙁",
       value: 0,
-      label: "frowny face"
+      label: "frowny face",
     },
     {
       face: "😐",
       value: 60,
-      label: "neutral face"
+      label: "neutral face",
     },
     {
       face: "🙂",
       value: 120,
-      label: "smiley face"
-    }
+      label: "smiley face",
+    },
   ];
 
   useEffect(() => {

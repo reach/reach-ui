@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/tabs.svg)](https://npm.im/@reach/tabs) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/tabs) | [Source](https://github.com/reach/reach-ui/tree/master/packages/tabs) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.1/#tabs)
+[Docs](https://reacttraining.com/reach-ui/tabs) | [Source](https://github.com/reach/reach-ui/tree/master/packages/tabs) | [WAI-ARIA](https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel)
 
 An accessible tabs component.
 

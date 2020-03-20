@@ -54,7 +54,8 @@
  * server hydration and never again, SO BACK OFF ALRIGHT?
  */
 
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
+import { useIsomorphicLayoutEffect } from "@reach/utils";
 
 let serverHandoffComplete = false;
 let id = 0;
@@ -71,16 +72,16 @@ const genId = () => ++id;
  *
  * @see Docs https://reacttraining.com/reach-ui/auto-id
  */
-export const useId = (fallback?: string | null) => {
+export const useId = (idFromProps?: string | null) => {
   /*
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
    */
-  const initialId = fallback || (serverHandoffComplete ? genId() : null);
+  const initialId = idFromProps || (serverHandoffComplete ? genId() : null);
 
   const [id, setId] = useState(initialId);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (id === null) {
       /*
        * Patch the ID after render. We do this in `useLayoutEffect` to avoid any

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import {
   createNamedContext,
   noop,
-  useIsomorphicLayoutEffect as useLayoutEffect,
+  useIsomorphicLayoutEffect,
 } from "@reach/utils";
 
 export function createDescendantContext<ElementType, DescendantProps = {}>(
@@ -56,7 +56,7 @@ export function useDescendant<ElementType, DescendantProps>(
   );
 
   // Prevent any flashing
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!element) forceUpdate({});
     // @ts-ignore
     registerDescendant({ element, ...rest });
@@ -195,42 +195,45 @@ export function DescendantProvider<ElementType, DescendantProps>({
  *
  * Currently used in:
  *   - Tabs
+ *   - Accordion
  *
  * @param context
  * @param options
  */
-export function useDescendantKeyDown<ElementType, DescendantProps = {}>(
+export function useDescendantKeyDown<
+  ElementType,
+  DescendantProps = {},
+  K extends keyof Descendant<ElementType, DescendantProps> = keyof Descendant<
+    ElementType,
+    DescendantProps
+  >
+>(
   context: React.Context<IDescendantContext<ElementType, DescendantProps>>,
   options: {
     currentIndex: number | null | undefined;
-    key?: keyof Descendant<ElementType, DescendantProps>;
+    key?: K | "option";
     filter?: (descendant: Descendant<ElementType, DescendantProps>) => boolean;
     orientation?: "vertical" | "horizontal" | "both";
     rotate?: boolean;
     rtl?: boolean;
     callback(
-      nextOption: Descendant<ElementType, DescendantProps>[keyof Descendant<
-        ElementType,
-        DescendantProps
-      >]
+      nextOption:
+        | Descendant<ElementType, DescendantProps>
+        | Descendant<ElementType, DescendantProps>[K]
     ): void;
   }
 ) {
   let { descendants } = useContext(context);
   let {
-    currentIndex,
-    orientation = "vertical",
     callback,
+    currentIndex,
     filter,
+    key = "index" as K,
+    orientation = "vertical",
     rotate = true,
     rtl = false,
   } = options;
   let index = currentIndex ?? -1;
-
-  let key = (options.key || "index") as keyof Descendant<
-    ElementType,
-    DescendantProps
-  >;
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     if (
@@ -305,36 +308,52 @@ export function useDescendantKeyDown<ElementType, DescendantProps = {}>(
       case "ArrowDown":
         if (orientation === "vertical" || orientation === "both") {
           event.preventDefault();
-          callback(getNextOption()[key]);
+          let next = getNextOption();
+          callback(key === "option" ? next : next[key]);
         }
         break;
       case "ArrowUp":
         if (orientation === "vertical" || orientation === "both") {
           event.preventDefault();
-          callback(getPreviousOption()[key]);
+          let prev = getPreviousOption();
+          callback(key === "option" ? prev : prev[key]);
         }
         break;
       case "ArrowLeft":
         if (orientation === "horizontal" || orientation === "both") {
           event.preventDefault();
-          callback((rtl ? getNextOption() : getPreviousOption())[key]);
+          let nextOrPrev = (rtl ? getNextOption : getPreviousOption)();
+          callback(key === "option" ? nextOrPrev : nextOrPrev[key]);
         }
         break;
       case "ArrowRight":
         if (orientation === "horizontal" || orientation === "both") {
           event.preventDefault();
-          callback((rtl ? getPreviousOption() : getNextOption())[key]);
+          let prevOrNext = (rtl ? getPreviousOption : getNextOption)();
+          callback(key === "option" ? prevOrNext : prevOrNext[key]);
         }
         break;
       case "PageUp":
+        event.preventDefault();
+        let prevOrFirst = (event.ctrlKey
+          ? getPreviousOption
+          : getFirstOption)();
+        callback(key === "option" ? prevOrFirst : prevOrFirst[key]);
+        break;
       case "Home":
         event.preventDefault();
-        callback(getFirstOption()[key]);
+        let first = getFirstOption();
+        callback(key === "option" ? first : first[key]);
         break;
       case "PageDown":
+        event.preventDefault();
+        let nextOrLast = (event.ctrlKey ? getNextOption : getLastOption)();
+        callback(key === "option" ? nextOrLast : nextOrLast[key]);
+        break;
       case "End":
         event.preventDefault();
-        callback(getLastOption()[key]);
+        let last = getLastOption();
+        callback(key === "option" ? last : last[key]);
         break;
     }
   };

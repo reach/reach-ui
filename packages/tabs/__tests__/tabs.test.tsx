@@ -1,55 +1,62 @@
 import React from "react";
 import { render, fireEvent } from "$test/utils";
+import { axe } from "jest-axe";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 
 describe("<Tabs />", () => {
-  it("should match the snapshot", () => {
-    const { asFragment } = render(<BasicTabs />);
-    expect(asFragment()).toMatchSnapshot();
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      const { container } = render(<BasicTabs />);
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
   });
-  it("focuses the correct tab with keyboard navigation", () => {
-    const { getByText, getByRole, asFragment, container } = render(
-      <BasicTabs />
-    );
-    const firstTab = getByText("Tab One");
-    const tabList = getByRole("tablist");
 
-    function getTabPanelByButtonClass(buttonId: string) {
-      return container.querySelector(
-        `#${container
-          .querySelector(`.${buttonId}`)!
-          .getAttribute("aria-controls")}`
+  describe("user events", () => {
+    it("focuses the correct tab with keyboard navigation", () => {
+      const { getByText, getByRole, asFragment, container } = render(
+        <BasicTabs />
       );
-    }
+      const firstTab = getByText("Tab One");
+      const tabList = getByRole("tablist");
 
-    fireEvent.click(firstTab);
+      function getTabPanelByButtonClass(buttonId: string) {
+        return container.querySelector(
+          `#${container
+            .querySelector(`.${buttonId}`)!
+            .getAttribute("aria-controls")}`
+        );
+      }
 
-    fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-2"));
-    expect(getTabPanelByButtonClass("tab-2")).toBeVisible();
-    expect(getTabPanelByButtonClass("tab-1")).not.toBeVisible();
-    expect(asFragment()).toMatchSnapshot();
+      fireEvent.click(firstTab);
 
-    fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
-    expect(getTabPanelByButtonClass("tab-3")).toBeVisible();
-    expect(getTabPanelByButtonClass("tab-2")).not.toBeVisible();
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-2"));
+      expect(getTabPanelByButtonClass("tab-2")).toBeVisible();
+      expect(getTabPanelByButtonClass("tab-1")).not.toBeVisible();
+      expect(asFragment()).toMatchSnapshot();
 
-    fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-3"));
+      expect(getTabPanelByButtonClass("tab-3")).toBeVisible();
+      expect(getTabPanelByButtonClass("tab-2")).not.toBeVisible();
 
-    fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-1"));
 
-    fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
-    fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-3"));
 
-    fireEvent.keyDown(tabList, { key: "End", code: 35 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-3"));
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-1"));
 
-    fireEvent.keyDown(tabList, { key: "Home", code: 36 });
-    expect(document.activeElement).toBe(container.querySelector(".tab-1"));
+      fireEvent.keyDown(tabList, { key: "End", code: 35 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-3"));
+
+      fireEvent.keyDown(tabList, { key: "Home", code: 36 });
+      expect(document.activeElement).toBe(container.querySelector(".tab-1"));
+    });
   });
 
   it("should match the snapshot (vertical orientation)", () => {

@@ -99,7 +99,7 @@ function MenuItem({ index, activeIndex, onSelect, children }) {
     <div
       // and add an ID
       id={index}
-      data-active={isActive ? "" : undefined}
+      data-highlighted={isActive ? "" : undefined}
     >
       {children}
     </div>
@@ -194,7 +194,7 @@ function MenuItem({ index, activeIndex, onSelect, children }) {
   // index came from the clone
   const isActive = index === activeIndex;
   return (
-    <div id={index} data-active={isActive ? "" : undefined}>
+    <div id={index} data-highlighted={isActive ? "" : undefined}>
       {children}
     </div>
   );

@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
-import { render, fireEvent } from "$test/utils";
+import { axe } from "jest-axe";
+import { render, fireEvent, act } from "$test/utils";
+import { AxeResults } from "$test/types";
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -7,25 +9,46 @@ import {
 } from "@reach/alert-dialog";
 
 describe("<AlertDialog />", () => {
-  it("should open the dialog", () => {
-    const { baseElement, asFragment, getByText } = render(<BasicAlertDialog />);
-    expect(asFragment()).toMatchSnapshot();
-    let openButton = getByText("Show Dialog");
-    fireEvent.click(openButton);
-    expect(baseElement).toMatchSnapshot();
+  describe("rendering", () => {
+    it("should render the correct labels", () => {
+      const { baseElement, getByText } = render(<BasicAlertDialog />);
+      let openButton = getByText("Show Dialog");
+      fireEvent.click(openButton);
+      let dialogLabel = baseElement.querySelector(
+        "[data-reach-alert-dialog-label]"
+      );
+      let dialogElement = baseElement.querySelector(
+        "[data-reach-alert-dialog-content]"
+      );
+      let dialogLabelId = dialogLabel?.id;
+      expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
+    });
   });
-  it("should have the correct label", () => {
-    const { baseElement, getByText } = render(<BasicAlertDialog />);
-    let openButton = getByText("Show Dialog");
-    fireEvent.click(openButton);
-    let dialogLabel = baseElement.querySelector(
-      "[data-reach-alert-dialog-label]"
-    );
-    let dialogElement = baseElement.querySelector(
-      "[data-reach-alert-dialog-content]"
-    );
-    let dialogLabelId = dialogLabel?.id;
-    expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
+
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
+
+      let newResults: AxeResults = null as any;
+      act(() => void fireEvent.click(getByText("Show Dialog")));
+      await act(async () => {
+        newResults = await axe(getByTestId("dialog"));
+      });
+      expect(newResults).toHaveNoViolations();
+    });
+  });
+
+  describe("user events", () => {
+    it("should open the dialog when clicking the trigger", () => {
+      let { getByTestId, getByText } = render(<BasicAlertDialog />);
+      act(() => void fireEvent.click(getByText("Show Dialog")));
+      expect(getByTestId("dialog")).toBeInTheDocument();
+    });
   });
 });
 
@@ -37,7 +60,11 @@ function BasicAlertDialog() {
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       {showDialog && (
-        <AlertDialog leastDestructiveRef={close} id="great-work">
+        <AlertDialog
+          leastDestructiveRef={close}
+          data-testid="dialog"
+          id="great-work"
+        >
           <AlertDialogLabel>Confirmation!</AlertDialogLabel>
           <AlertDialogDescription>
             Are you sure you want to have that milkshake?

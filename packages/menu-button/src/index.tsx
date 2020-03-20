@@ -6,7 +6,7 @@
  *
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.1/#menubutton
+ * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
  *
  * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
@@ -29,6 +29,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantKeyDown,
 } from "@reach/descendants";
 import {
   checkStyles,
@@ -66,29 +67,21 @@ const MenuContext = createNamedContext<IMenuContext>(
 const useMenuContext = () => useContext(MenuContext);
 
 const initialState: MenuButtonState = {
-  /*
-   * The button ID is needed for aria controls and can be set directly and
-   * updated for top-level use via context. Otherwise a default is set by useId.
-   * TODO: Consider deprecating direct ID in 1.0 in favor of id at the top level
-   *       for passing deterministic IDs to descendent components.
-   */
+  // The button ID is needed for aria controls and can be set directly and
+  // updated for top-level use via context. Otherwise a default is set by useId.
+  // TODO: Consider deprecating direct ID in 1.0 in favor of id at the top level
+  //       for passing deterministic IDs to descendent components.
   buttonId: null,
 
-  /*
-   * Whether or not the menu is expanded
-   */
+  // Whether or not the menu is expanded
   isOpen: false,
 
-  /*
-   * When a user begins typing a character string, the selection will change if
-   * a matching item is found
-   */
+  // When a user begins typing a character string, the selection will change if
+  // a matching item is found
   typeaheadQuery: "",
 
-  /*
-   * The index of the current selected item. When the selection is cleared a
-   * value of -1 is used.
-   */
+  // The index of the current selected item. When the selection is cleared a
+  // value of -1 is used.
   selectionIndex: -1,
 };
 
@@ -110,7 +103,14 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     DescendantProps
   >();
   let [state, dispatch] = useReducer(reducer, initialState);
-  let menuId = useId(id);
+  let _id = useId(id);
+  let menuId = id || makeId("menu", _id);
+
+  // We use an event listener attached to the window to capture outside clicks
+  // that close the menu. We don't want the initial button click to trigger this
+  // when a menu is closed, so we can track this behavior in a ref for now.
+  // We shouldn't need this when we rewrite with state machine logic.
+  let buttonClickedRef = useRef(false);
 
   let context: IMenuContext = {
     buttonRef,
@@ -118,8 +118,27 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     menuId,
     menuRef,
     popoverRef,
+    buttonClickedRef,
     state,
   };
+
+  // When the menu is open, focus is placed on the menu itself so that
+  // keyboard navigation is still possible.
+  useEffect(() => {
+    if (state.isOpen) {
+      // @ts-ignore
+      window.__REACH_DISABLE_TOOLTIPS = true;
+      window.requestAnimationFrame(() => {
+        focus(menuRef.current);
+      });
+    } else {
+      // We want to ignore the immediate focus of a tooltip so it doesn't pop
+      // up again when the menu closes, only pops up when focus returns again
+      // to the tooltip (like native OS tooltips).
+      // @ts-ignore
+      window.__REACH_DISABLE_TOOLTIPS = false;
+    }
+  }, [state.isOpen]);
 
   useEffect(() => checkStyles("menu-button"), []);
 
@@ -170,6 +189,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   function MenuButton({ onKeyDown, onMouseDown, id, ...props }, forwardedRef) {
     let {
       buttonRef,
+      buttonClickedRef,
       menuId,
       state: { buttonId, isOpen },
       dispatch,
@@ -208,6 +228,9 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
+      if (!isOpen) {
+        buttonClickedRef.current = true;
+      }
       if (isRightClick(event.nativeEvent)) {
         return;
       } else if (isOpen) {
@@ -219,8 +242,19 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
 
     return (
       <button
-        aria-expanded={isOpen}
-        aria-haspopup="menu"
+        // When the menu is displayed, the element with role `button` has
+        // `aria-expanded` set to `true`. When the menu is hidden, it is
+        // recommended that `aria-expanded` is not present.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+        aria-expanded={isOpen ? true : undefined}
+        // The element with role `button` has `aria-haspopup` set to either
+        // `"menu"` or `true`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+        aria-haspopup
+        // Optionally, the element with role `button` has a value specified for
+        // `aria-controls` that refers to the element with role `menu`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+        aria-controls={menuId}
         {...props}
         ref={ref}
         data-reach-menu-button=""
@@ -267,7 +301,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       isLink = false,
       onClick,
       onDragStart,
-      onKeyDown,
       onMouseDown,
       onMouseEnter,
       onMouseLeave,
@@ -282,17 +315,14 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let {
       buttonRef,
       dispatch,
-      menuRef,
-      state: { isOpen, selectionIndex },
+      state: { selectionIndex },
     } = useMenuContext();
 
     let ownRef = useRef<HTMLElement | null>(null);
 
-    /*
-     * After the ref is mounted to the DOM node, we check to see if we have an
-     * explicit valueText prop before looking for the node's textContent for
-     * typeahead functionality.
-     */
+    // After the ref is mounted to the DOM node, we check to see if we have an
+    // explicit valueText prop before looking for the node's textContent for
+    // typeahead functionality.
     let [valueText, setValueText] = useState(valueTextProp || "");
     let setValueTextFromDom = useCallback(
       node => {
@@ -318,16 +348,14 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         context: MenuDescendantContext,
         element: ownRef.current!,
         key: valueText,
+        isLink,
+        onSelect,
       },
       indexProp
     );
     let isSelected = index === selectionIndex;
 
     function select() {
-      /*
-       * Focus the button first by default when an item is selected. We fire the
-       * onSelect callback next so the app can manage focus if needed.
-       */
       focus(buttonRef.current);
       onSelect && onSelect();
       dispatch({ type: CLICK_MENU_ITEM });
@@ -340,32 +368,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     function handleDragStart(event: React.MouseEvent) {
-      /*
-       * Because we don't preventDefault on mousedown for links (we need the
-       * native click event), clicking and holding on a link triggers a dragstart
-       * which we don't want.
-       */
+      // Because we don't preventDefault on mousedown for links (we need the
+      // native click event), clicking and holding on a link triggers a
+      // dragstart which we don't want.
       if (isLink) {
         event.preventDefault();
-      }
-    }
-
-    function handleKeyDown(event: React.KeyboardEvent) {
-      let { key } = event;
-      if (key === "Enter" || key === " ") {
-        /*
-         * For links, the Enter key will trigger a click by default, but for
-         * consistent behavior across menu items we'll trigger a click when the
-         * spacebar is pressed.
-         */
-        if (isLink) {
-          if (key === " " && ownRef.current) {
-            ownRef.current.click();
-          }
-        } else {
-          event.preventDefault();
-          select();
-        }
       }
     }
 
@@ -373,10 +380,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isRightClick(event.nativeEvent)) return;
 
       if (isLink) {
-        /*
-         * Signal that the mouse is down so we can react call the right function
-         * if the user is clicking on a link.
-         */
+        // Signal that the mouse is down so we can react call the right function
+        // if the user is clicking on a link.
         mouseEventStarted.current = true;
       } else {
         event.preventDefault();
@@ -404,11 +409,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isRightClick(event.nativeEvent)) return;
 
       if (isLink) {
-        /*
-         * If a mousedown event was initiated on a menu link followed by a
-         * mouseup event on the same link, we do nothing; a click event will
-         * come next and handle selection. Otherwise, we trigger a click event.
-         */
+        // If a mousedown event was initiated on a menu link followed by a
+        // mouseup event on the same link, we do nothing; a click event will
+        // come next and handle selection. Otherwise, we trigger a click event.
         if (mouseEventStarted.current) {
           mouseEventStarted.current = false;
         } else if (ownRef.current) {
@@ -419,10 +422,8 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       }
     }
 
-    /*
-     * Any time a mouseup event occurs anywhere in the document, we reset the
-     * mouseEventStarted ref so we can check it again when needed.
-     */
+    // Any time a mouseup event occurs anywhere in the document, we reset the
+    // mouseEventStarted ref so we can check it again when needed.
     useEffect(() => {
       let ownerDocument = getOwnerDocument(ownRef.current) || document;
       let listener = () => (mouseEventStarted.current = false);
@@ -430,45 +431,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       return () => ownerDocument.removeEventListener("mouseup", listener);
     }, []);
 
-    /**
-     * When a new selection is made the item should receive focus. When no item is
-     * selected, focus is placed on the menu itself so that keyboard navigation is
-     * still possible.
-     */
-    useEffect(() => {
-      if (isOpen) {
-        // @ts-ignore
-        window.__REACH_DISABLE_TOOLTIPS = true;
-
-        if (selectionIndex !== -1) {
-          /*
-           * We haven't measured the popover yet, so give it a frame otherwise
-           * we'll scroll to the bottom of the page >.<
-           */
-          if (index === selectionIndex) {
-            focus(ownRef.current);
-          }
-        } else {
-          /*
-           * Clear highlight when mousing over non-menu items, but focus the
-           * menu so the the keyboard will work after a mouseover.
-           */
-          focus(menuRef.current);
-        }
-      } else {
-        /*
-         * We want to ignore the immediate focus of a tooltip so it doesn't pop
-         * up again when the menu closes, only pops up when focus returns again
-         * to the tooltip (like native OS tooltips).
-         */
-        // @ts-ignore
-        window.__REACH_DISABLE_TOOLTIPS = false;
-      }
-    }, [index, isOpen, menuRef, selectionIndex]);
-
     return (
       <Comp
         role="menuitem"
+        id={useMenuItemId(index)}
+        tabIndex={-1}
         {...props}
         ref={ref}
         data-reach-menu-item=""
@@ -476,13 +443,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         data-valuetext={valueText}
         onClick={wrapEvent(onClick, handleClick)}
         onDragStart={wrapEvent(onDragStart, handleDragStart)}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
         onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        tabIndex={-1}
       />
     );
   }
@@ -500,7 +465,7 @@ export type MenuItemImplProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-onselect
    */
-  onSelect: () => any;
+  onSelect(): void;
   index?: number;
   isLink?: boolean;
   valueText?: string;
@@ -546,8 +511,9 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems
  */
 export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
-  function MenuItems({ children, onKeyDown, onBlur, ...props }, forwardedRef) {
+  function MenuItems({ children, id, onKeyDown, ...props }, forwardedRef) {
     const {
+      menuId,
       dispatch,
       buttonRef,
       menuRef,
@@ -579,24 +545,20 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
 
     useEffect(() => {
       if (selectionIndex > menuItems.length - 1) {
-        /*
-         * If for some reason our selection index is larger than our possible
-         * index range (let's say the last item is selected and the list
-         * dynamically updates), we need to select the last item in the list.
-         */
+        // If for some reason our selection index is larger than our possible
+        // index range (let's say the last item is selected and the list
+        // dynamically updates), we need to select the last item in the list.
         dispatch({
           type: SELECT_ITEM_AT_INDEX,
           payload: { index: menuItems.length - 1 },
         });
       } else if (
-        /*
-         * Checks if
-         *  - menu length has changed
-         *  - selection index has not changed BUT selected item has changed
-         *
-         * This prevents any dynamic adding/removing of menu items from actually
-         * changing a user's expected selection.
-         */
+        // Checks if
+        //  - menu length has changed
+        //  - selection index has not changed BUT selected item has changed
+        //
+        // This prevents any dynamic adding/removing of menu items from actually
+        // changing a user's expected selection.
         prevMenuItemsLength !== menuItems.length &&
         selectionIndex > -1 &&
         prevSelected &&
@@ -619,77 +581,95 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       selectionIndex,
     ]);
 
-    function handleKeyDown(event: React.KeyboardEvent) {
-      const { key } = event;
+    let handleKeyDown = wrapEvent(
+      function handleKeyDown(event: React.KeyboardEvent) {
+        let { key } = event;
 
-      if (!isOpen) {
-        return;
-      }
+        if (!isOpen) {
+          return;
+        }
 
-      switch (key) {
-        case "Escape":
-          dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
-          break;
-        case "Home":
-          // prevent window scroll
-          event.preventDefault();
-          dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index: 0 } });
-          break;
-        case "End":
-          // prevent window scroll
-          event.preventDefault();
+        switch (key) {
+          case "Enter":
+          case " ":
+            let selected = menuItems.find(
+              item => item.index === selectionIndex
+            );
+            // For links, the Enter key will trigger a click by default, but for
+            // consistent behavior across menu items we'll trigger a click when
+            // the spacebar is pressed.
+            if (selected) {
+              if (selected.isLink && selected.element) {
+                selected.element.click();
+              } else {
+                event.preventDefault();
+                // Focus the button first by default when an item is selected.
+                // We fire the onSelect callback next so the app can manage
+                // focus if needed.
+                focus(buttonRef.current);
+                selected.onSelect && selected.onSelect();
+                dispatch({ type: CLICK_MENU_ITEM });
+              }
+            }
+            break;
+          case "Escape":
+            focus(buttonRef.current);
+            dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+            break;
+          case "Tab":
+            // prevent leaving
+            event.preventDefault();
+            break;
+          default:
+            // Check if a user is typing some char keys and respond by setting
+            // the query state.
+            if (isString(key) && key.length === 1) {
+              const query = typeaheadQuery + key.toLowerCase();
+              dispatch({
+                type: SEARCH_FOR_ITEM,
+                payload: query,
+              });
+            }
+            break;
+        }
+      },
+      useDescendantKeyDown(MenuDescendantContext, {
+        currentIndex: selectionIndex,
+        orientation: "vertical",
+        rotate: false,
+        callback: (index: number) => {
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
-            payload: { index: menuItems.length - 1 },
+            payload: { index },
           });
-          break;
-        case "ArrowDown":
-          // prevent window scroll
-          event.preventDefault();
-          const nextIndex = Math.min(selectionIndex + 1, menuItems.length - 1);
-          dispatch({
-            type: SELECT_ITEM_AT_INDEX,
-            payload: { index: nextIndex },
-          });
-          break;
-        case "ArrowUp":
-          // prevent window scroll
-          event.preventDefault();
-          const prevIndex = Math.max(selectionIndex - 1, 0);
-          dispatch({
-            type: SELECT_ITEM_AT_INDEX,
-            payload: { index: prevIndex },
-          });
-          break;
-        case "Tab":
-          // prevent leaving
-          event.preventDefault();
-          break;
-        default:
-          /*
-           * Check if a user is typing some char keys and respond by setting the
-           * query state.
-           */
-          if (isString(key) && key.length === 1) {
-            const query = typeaheadQuery + key.toLowerCase();
-            dispatch({
-              type: SEARCH_FOR_ITEM,
-              payload: query,
-            });
-          }
-          break;
-      }
-    }
+        },
+        key: "index",
+      })
+    );
 
     return (
+      // TODO: Should probably file a but in jsx-a11y, but this is correct
+      // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+      // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
       <div
+        // Refers to the descendant menuitem element that is visually indicated
+        // as focused.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+        aria-activedescendant={useMenuItemId(selectionIndex) || undefined}
+        // Refers to the element that contains the accessible name for the
+        // `menu`. The menu is labeled by the menu button.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
         aria-labelledby={buttonId || undefined}
+        // The element that contains the menu items displayed by activating the
+        // button has role menu.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
         role="menu"
+        tabIndex={-1}
         {...props}
         ref={ref}
         data-reach-menu-items=""
+        id={menuId}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        tabIndex={-1}
       >
         {children}
       </div>
@@ -758,7 +738,7 @@ export const MenuLink = forwardRefWithAs<
  */
 export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   to?: string;
-  onSelect?: () => any;
+  onSelect?(): void;
 };
 
 if (__DEV__) {
@@ -780,9 +760,9 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist
  */
 export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
-  function MenuList(props, forwardedRef) {
+  function MenuList({ portal = true, ...props }, forwardedRef) {
     return (
-      <MenuPopover>
+      <MenuPopover portal={portal}>
         <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
       </MenuPopover>
     );
@@ -793,6 +773,13 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-props
  */
 export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-portal
+   */
+  portal?: boolean;
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
@@ -821,9 +808,13 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
  */
 export const MenuPopover = forwardRef<any, MenuPopoverProps>(
-  function MenuPopover({ children, onBlur, ...props }, forwardedRef) {
+  function MenuPopover(
+    { children, portal = true, position, ...props },
+    forwardedRef
+  ) {
     const {
       buttonRef,
+      buttonClickedRef,
       dispatch,
       menuRef,
       popoverRef,
@@ -832,40 +823,50 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
 
     const ref = useForkedRef(popoverRef, forwardedRef);
 
-    function handleBlur(event: React.FocusEvent) {
-      let { relatedTarget } = event;
-      let ownerDocument = getOwnerDocument(popoverRef.current) || document;
-      requestAnimationFrame(() => {
-        // We on want to close only if focus rests outside the menu
-        if (
-          ownerDocument.activeElement !== menuRef.current &&
-          ownerDocument.activeElement !== buttonRef.current &&
-          popoverRef.current
-        ) {
-          if (
-            !popoverRef.current.contains(
-              (relatedTarget as Element) || ownerDocument.activeElement
-            )
-          ) {
-            dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+    useEffect(() => {
+      function listener(event: MouseEvent) {
+        if (buttonClickedRef.current) {
+          buttonClickedRef.current = false;
+        } else {
+          let { relatedTarget, target } = event;
+
+          // We on want to close only if focus rests outside the menu
+          if (isOpen && popoverRef.current) {
+            if (
+              !popoverRef.current?.contains(
+                (relatedTarget || target) as Element
+              )
+            ) {
+              dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+            }
           }
         }
-      });
-    }
-    return isOpen ? (
+      }
+      window.addEventListener("mousedown", listener);
+      return () => {
+        window.removeEventListener("mousedown", listener);
+      };
+    }, [buttonClickedRef, buttonRef, dispatch, isOpen, menuRef, popoverRef]);
+
+    let commonProps = {
+      ref,
+      // TODO: remove in 1.0
+      "data-reach-menu": "",
+      "data-reach-menu-popover": "",
+      hidden: !isOpen,
+      children,
+      ...props,
+    };
+
+    return portal ? (
       <Popover
-        {...props}
-        ref={ref}
-        data-reach-menu="" // deprecate for naming consistency?
-        data-reach-menu-popover=""
-        onBlur={wrapEvent(onBlur, handleBlur)}
-        // TODO: Fix in @reach/popover
-        // @ts-ignore
-        targetRef={buttonRef}
-      >
-        {children}
-      </Popover>
-    ) : null;
+        {...commonProps}
+        targetRef={buttonRef as any}
+        position={position}
+      />
+    ) : (
+      <div {...commonProps} />
+    );
   }
 );
 
@@ -879,6 +880,13 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-children
    */
   children: React.ReactNode;
+  /**
+   * Whether or not the popover should be rendered inside a portal. Defaults to
+   * `true`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-portal
+   */
+  portal?: boolean;
   position?: Position;
 };
 
@@ -910,6 +918,13 @@ function findItemFromTypeahead(
   return found ? items.indexOf(found) : null;
 }
 
+function useMenuItemId(index: number | null) {
+  let { menuId } = useMenuContext();
+  return index != null && index > -1
+    ? makeId(`option-${index}`, menuId)
+    : undefined;
+}
+
 interface MenuButtonState {
   isOpen: boolean;
   selectionIndex: number;
@@ -936,9 +951,7 @@ function isRightClick(nativeEvent: MouseEvent) {
 function focus<T extends HTMLElement = HTMLElement>(
   element: T | undefined | null
 ) {
-  window.requestAnimationFrame(() => {
-    element && element.focus();
-  });
+  element && element.focus();
 }
 
 function reducer(
@@ -953,7 +966,6 @@ function reducer(
         selectionIndex: -1,
       };
     case CLOSE_MENU:
-      focus(action.payload.buttonRef.current);
       return {
         ...state,
         isOpen: false,
@@ -1002,13 +1014,14 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type DescendantProps = { key: string };
+type DescendantProps = { key: string; isLink: boolean; onSelect?(): any };
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;
 
 interface IMenuContext {
   buttonRef: ButtonRef;
+  buttonClickedRef: React.MutableRefObject<boolean>;
   dispatch: React.Dispatch<MenuButtonAction>;
   menuId: string | undefined;
   menuRef: MenuRef;

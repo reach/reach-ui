@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel
+  AccordionPanel,
 } from "@reach/accordion";
 import { action } from "@storybook/addon-actions";
 import "@reach/accordion/styles.css";
@@ -14,7 +14,9 @@ function Example() {
   return (
     <Accordion defaultIndex={2} onChange={action(`Selecting panel`)}>
       <AccordionItem>
-        <AccordionButton>You can activate me</AccordionButton>
+        <h3>
+          <AccordionButton>You can activate me</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -22,7 +24,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem disabled>
-        <AccordionButton>You can't touch me</AccordionButton>
+        <h3>
+          <AccordionButton>You can't touch me</AccordionButton>
+        </h3>
         <AccordionPanel>
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
           pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
@@ -30,7 +34,9 @@ function Example() {
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
-        <AccordionButton>You can definitely activate me</AccordionButton>
+        <h3>
+          <AccordionButton>You can definitely activate me</AccordionButton>
+        </h3>
         <AccordionPanel>
           <ExampleForm />
           Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
@@ -51,14 +57,14 @@ export default { title: "Accordion" };
 const initialFormState = {
   name: "",
   email: "",
-  comments: ""
+  comments: "",
 };
 
 function ExampleForm() {
   const [state, dispatch] = React.useReducer(
     (state, { fieldName, value }) => ({
       ...state,
-      [fieldName]: value
+      [fieldName]: value,
     }),
     initialFormState
   );
@@ -71,19 +77,19 @@ function ExampleForm() {
     display: "block",
     width: `100%`,
     border: `1px solid #c5c5c5`,
-    padding: `0.5rem 0.6rem`
+    padding: `0.5rem 0.6rem`,
   };
   const labelStyle = {
     display: "block",
     width: `calc(100% - 4rem)`,
-    margin: `2rem 2rem`
+    margin: `2rem 2rem`,
   };
   return (
     <form
       style={{
         display: "block",
         border: `1px solid #c5c5c5`,
-        margin: `1rem 0`
+        margin: `1rem 0`,
       }}
     >
       <label style={labelStyle}>
@@ -128,7 +134,7 @@ function ExampleForm() {
           MozAppearance: "none",
           WebkitAppearance: "none",
           border: "1px solid #c5c5c5",
-          background: "hsla(0, 0%, 0%, 0.05)"
+          background: "hsla(0, 0%, 0%, 0.05)",
         }}
       >
         Submit
