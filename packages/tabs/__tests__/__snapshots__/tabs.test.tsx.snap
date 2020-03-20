@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical orientation) 1`] = `
+exports[`<Tabs /> user events focuses the correct tab with keyboard navigation (vertical orientation) 1`] = `
 <DocumentFragment>
   <div>
     <div
@@ -72,101 +72,6 @@ exports[`<Tabs /> focuses the correct tab with keyboard navigation (vertical ori
           id="vertically-oriented--panel--1"
           role="tabpanel"
           tabindex="0"
-        >
-          <h1>
-            two!
-          </h1>
-        </div>
-        <div
-          aria-labelledby="vertically-oriented--tab--2"
-          data-reach-tab-panel=""
-          hidden=""
-          id="vertically-oriented--panel--2"
-          role="tabpanel"
-          tabindex="-1"
-        >
-          <h1>
-            three!
-          </h1>
-        </div>
-      </div>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`<Tabs /> should match the snapshot (vertical orientation) 1`] = `
-<DocumentFragment>
-  <div>
-    <div
-      data-reach-tabs=""
-      data-reach-tabs-orientation="vertical"
-      id="vertically-oriented"
-    >
-      <div
-        aria-orientation="vertical"
-        data-reach-tab-list=""
-        role="tablist"
-      >
-        <button
-          aria-controls="vertically-oriented--panel--0"
-          aria-selected="true"
-          class="tab-1"
-          data-reach-tab=""
-          data-selected=""
-          id="vertically-oriented--tab--0"
-          role="tab"
-          tabindex="0"
-        >
-          Tab One
-        </button>
-        <button
-          aria-controls="vertically-oriented--panel--1"
-          aria-selected="false"
-          class="tab-2"
-          data-reach-tab=""
-          id="vertically-oriented--tab--1"
-          role="tab"
-          tabindex="-1"
-        >
-          Tab Two
-        </button>
-        <button
-          aria-controls="vertically-oriented--panel--2"
-          aria-selected="false"
-          class="tab-3"
-          data-reach-tab=""
-          id="vertically-oriented--tab--2"
-          role="tab"
-          tabindex="-1"
-        >
-          Tab Three
-        </button>
-      </div>
-      <div
-        data-reach-tab-panels=""
-      >
-        <div
-          aria-labelledby="vertically-oriented--tab--0"
-          data-reach-tab-panel=""
-          id="vertically-oriented--panel--0"
-          role="tabpanel"
-          tabindex="0"
-        >
-          <h1>
-            one!
-          </h1>
-          <button>
-            yo
-          </button>
-        </div>
-        <div
-          aria-labelledby="vertically-oriented--tab--1"
-          data-reach-tab-panel=""
-          hidden=""
-          id="vertically-oriented--panel--1"
-          role="tabpanel"
-          tabindex="-1"
         >
           <h1>
             two!
