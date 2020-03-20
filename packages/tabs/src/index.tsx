@@ -14,13 +14,6 @@
  * TODO: Consider manual tab activation
  * https://www.w3.org/TR/wai-aria-practices-1.2/examples/tabs/tabs-2/tabs.html
  *
- *
- * TODO: Consider `orientation` prop to account for keyboard behavior
- *       - horizontal-top
- *       - horizontal-bottm
- *       - vertical-left
- *       - vertical-right
- *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
