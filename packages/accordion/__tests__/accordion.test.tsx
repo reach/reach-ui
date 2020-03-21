@@ -9,25 +9,19 @@ import {
   AccordionPanel,
 } from "@reach/accordion";
 
-const AccordionContent = () => (
-  <>
-    <AccordionItem>
-      <AccordionButton>Button One</AccordionButton>
-      <AccordionPanel>Panel One</AccordionPanel>
-    </AccordionItem>
-    <AccordionItem>
-      <AccordionButton>Button Two</AccordionButton>
-      <AccordionPanel>Panel Two</AccordionPanel>
-    </AccordionItem>
-  </>
-);
-
 describe("<Accordion />", () => {
   describe("a11y", () => {
     it("should not have basic a11y issues", async () => {
       let { container, getByText } = render(
         <Accordion>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
       let results: AxeResults = null as any;
@@ -48,7 +42,14 @@ describe("<Accordion />", () => {
     it("should open panel as specified by defaultIndex", () => {
       let { getByText } = render(
         <Accordion defaultIndex={1}>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
 
@@ -61,7 +62,14 @@ describe("<Accordion />", () => {
     it("should change panel on click", () => {
       let { getByText } = render(
         <Accordion>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
 
@@ -77,7 +85,14 @@ describe("<Accordion />", () => {
       let mockOnChange = jest.fn();
       let { getByText } = render(
         <Accordion onChange={mockOnChange}>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
 
@@ -88,7 +103,14 @@ describe("<Accordion />", () => {
     it("should allow collapsing when collapsible", () => {
       let { getByText } = render(
         <Accordion collapsible>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
 
@@ -105,7 +127,14 @@ describe("<Accordion />", () => {
     it("should allow multiple when multiple", () => {
       let { getByText } = render(
         <Accordion multiple>
-          <AccordionContent />
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
         </Accordion>
       );
 
