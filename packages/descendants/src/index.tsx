@@ -253,21 +253,16 @@ export function useDescendantKeyDown<
 
     // If we use a filter function, we need to re-index our descendants array
     // so that filtered descendent elements aren't selected.
-    let selectableDescendants = descendants;
-    if (filter) {
-      selectableDescendants = [];
-      let n = -1;
-      for (let i = 0; i < descendants.length; i++) {
-        let descendant = descendants[i];
-        if (filter(descendant)) {
-          selectableDescendants.push({ ...descendant, index: n++ });
+    let selectableDescendants = filter
+      ? descendants.filter(filter)
+      : descendants;
 
-          // Current index should map to the updated array vs. the original
-          // descendants array.
-          index = i === currentIndex ? n : index;
-        }
-      }
-      selectableDescendants = descendants.filter(filter);
+    // Current index should map to the updated array vs. the original
+    // descendants array.
+    if (filter) {
+      index = selectableDescendants.findIndex(
+        descendant => descendant.index === currentIndex
+      );
     }
 
     // We need some options for any of this to work!
