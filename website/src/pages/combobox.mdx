@@ -444,12 +444,23 @@ Parent component that sets up the proper aria roles and context for the rest of 
 
 #### Combobox Props
 
-| Prop                                   | Type      | Required |
-| -------------------------------------- | --------- | -------- |
-| [`openOnFocus`](#combobox-openonfocus) | `boolean` | false    |
-| [`onSelect`](#combobox-onselect)       | `func`    | false    |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#combobox-as)                   | `string` \| `Component` | false    |
+| [`openOnFocus`](#combobox-openonfocus) | `boolean`               | false    |
+| [`onSelect`](#combobox-onselect)       | `func`                  | false    |
+
+##### Combobox `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `div`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### Combobox `openOnFocus`
+
+`openOnFocus?: boolean`
 
 ```jsx
 <Combobox openOnFocus />
@@ -460,6 +471,8 @@ Defaults to `false`.
 If true, the popover opens when focus is on the text box.
 
 ##### Combobox `onSelect`
+
+`onSelect?(value: string): void`
 
 Called with the selection value when the user makes a selection from the list.
 
@@ -473,12 +486,23 @@ Wraps an `<input/>` with a couple extra props that work with the combobox.
 
 #### ComboboxInput Props
 
-| Prop                                          | Type      | Required |
-| --------------------------------------------- | --------- | -------- |
-| [selectOnClick](#comboboxinput-selectonclick) | `boolean` | false    |
-| [autocomplete](#comboboxinput-autocomplete)   | `boolean` | false    |
+| Prop                                          | Type                    | Required |
+| --------------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxinput-as)                     | `string` \| `Component` | false    |
+| [selectOnClick](#comboboxinput-selectonclick) | `boolean`               | false    |
+| [autocomplete](#comboboxinput-autocomplete)   | `boolean`               | false    |
+
+##### ComboboxInput `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `ComboboxInput` what element to render. Defaults to `input`.
+
+> **NOTE:** Recreating native `input` behavior and all of its nuance with a non-semantic element is _extremely difficult_ and may make the component inaccessible to many users. We do not recommend doing this.
 
 ##### ComboboxInput `selectOnClick`
+
+`selectOnClick?: boolean`
 
 ```jsx
 <ComboboxInput selectOnClick />
@@ -491,6 +515,8 @@ If true, when the user clicks inside the text box the current value will be sele
 However, if the user is likely to want to tweak the value, leave this `false`, like a google search--the user is likely wanting to edit their search, not replace it completely.
 
 ##### ComboboxInput `autocomplete`
+
+`autocomplete?: boolean`
 
 Defaults to `true`.
 
@@ -524,11 +550,22 @@ Contains the `ComboboxOption` elements and sets up the proper aria attributes fo
 
 #### ComboboxList Props
 
-| Prop                                                 | Type      |
-| ---------------------------------------------------- | --------- |
-| [`persistSelection`](#comboboxlist-persistselection) | `boolean` |
+| Prop                                                 | Type                    | Required |
+| ---------------------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxlist-as)                             | `string` \| `Component` | false    |
+| [`persistSelection`](#comboboxlist-persistselection) | `boolean`               | false    |
+
+##### ComboboxList `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `ComboboxList` what element to render. Defaults to `ul`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### ComboboxList `persistSelection`
+
+`persistSelection?: boolean`
 
 ```jsx
 <ComboboxList persistSelection />
@@ -544,12 +581,23 @@ An option that is suggested to the user as they interact with the combobox.
 
 #### ComboboxOption Props
 
-| Prop                                   | Type   |
-| -------------------------------------- | ------ |
-| [`value`](#comboboxoption-value)       | string |
-| [`children`](#comboboxoption-children) | node   |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxoption-as)             | `string` \| `Component` | false    |
+| [`value`](#comboboxoption-value)       | `string`                | true     |
+| [`children`](#comboboxoption-children) | `node`                  | false    |
+
+##### ComboboxOption `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `li`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### ComboboxOption `value`
+
+`value?: string`
 
 The value to match against when suggesting.
 
@@ -558,6 +606,8 @@ The value to match against when suggesting.
 ```
 
 ##### ComboboxOption `children`
+
+`children?: React.ReactNode`
 
 Optional. If omitted, the `value` will be used as the children like this:
 

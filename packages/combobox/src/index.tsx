@@ -31,7 +31,6 @@ import React, {
 import PropTypes from "prop-types";
 import {
   checkStyles,
-  ComponentWithForwardedRef,
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
@@ -354,7 +353,7 @@ export type ComboboxProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-onselect
    */
-  onSelect?: (value: string) => void;
+  onSelect?(value: ComboboxValue): void;
   /**
    * If true, the popover opens when focus is on the text box.
    *
@@ -705,56 +704,55 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption
  */
-export const ComboboxOption: ComponentWithForwardedRef<
-  "li",
-  ComboboxOptionProps
-> = forwardRef(function ComboboxOption(
-  { children, value, onClick, ...props },
-  forwardedRef: React.Ref<any>
-) {
-  const {
-    onSelect,
-    data: { navigationValue },
-    transition,
-  } = useContext(ComboboxContext);
+export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
+  function ComboboxOption(
+    { as: Comp = "li", children, value, onClick, ...props },
+    forwardedRef: React.Ref<any>
+  ) {
+    const {
+      onSelect,
+      data: { navigationValue },
+      transition,
+    } = useContext(ComboboxContext);
 
-  let ownRef = useRef<HTMLElement | null>(null);
-  let ref = useForkedRef(forwardedRef, ownRef);
+    let ownRef = useRef<HTMLElement | null>(null);
+    let ref = useForkedRef(forwardedRef, ownRef);
 
-  let index = useDescendant({
-    context: ComboboxDescendantContext,
-    element: ownRef.current!,
-    value,
-  });
+    let index = useDescendant({
+      context: ComboboxDescendantContext,
+      element: ownRef.current!,
+      value,
+    });
 
-  const isActive = navigationValue === value;
+    const isActive = navigationValue === value;
 
-  const handleClick = () => {
-    onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { value });
-  };
+    const handleClick = () => {
+      onSelect && onSelect(value);
+      transition(SELECT_WITH_CLICK, { value });
+    };
 
-  return (
-    <OptionContext.Provider value={{ value, index }}>
-      <li
-        aria-selected={isActive}
-        role="option"
-        {...props}
-        data-reach-combobox-option=""
-        ref={ref}
-        id={String(makeHash(value))}
-        data-highlighted={isActive ? "" : undefined}
-        // Without this the menu will close from `onBlur`, but with it the
-        // element can be `document.activeElement` and then our focus checks in
-        // onBlur will work as intended
-        tabIndex={-1}
-        onClick={wrapEvent(onClick, handleClick)}
-        // @ts-ignore
-        children={children || <ComboboxOptionText />}
-      />
-    </OptionContext.Provider>
-  );
-});
+    return (
+      <OptionContext.Provider value={{ value, index }}>
+        <Comp
+          aria-selected={isActive}
+          role="option"
+          {...props}
+          data-reach-combobox-option=""
+          ref={ref}
+          id={String(makeHash(value))}
+          data-highlighted={isActive ? "" : undefined}
+          // Without this the menu will close from `onBlur`, but with it the
+          // element can be `document.activeElement` and then our focus checks in
+          // onBlur will work as intended
+          tabIndex={-1}
+          onClick={wrapEvent(onClick, handleClick)}
+          // @ts-ignore
+          children={children || <ComboboxOptionText />}
+        />
+      </OptionContext.Provider>
+    );
+  }
+);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-props
