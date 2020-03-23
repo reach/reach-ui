@@ -228,6 +228,8 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
+      event.stopPropagation();
+
       if (!isOpen) {
         buttonClickedRef.current = true;
       }
