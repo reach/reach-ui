@@ -45,6 +45,23 @@ const overlayPropTypes = {
 export const DialogOverlay = forwardRef<HTMLDivElement, DialogProps>(
   function DialogOverlay({ isOpen = true, ...props }, forwardedRef) {
     useEffect(() => checkStyles("dialog"), []);
+
+    // We want to ignore the immediate focus of a tooltip so it doesn't pop
+    // up again when the menu closes, only pops up when focus returns again
+    // to the tooltip (like native OS tooltips).
+    useEffect(() => {
+      if (isOpen) {
+        // @ts-ignore
+        window.__REACH_DISABLE_TOOLTIPS = true;
+      } else {
+        window.requestAnimationFrame(() => {
+          // Wait a frame so that this doesn't fire before tooltip does
+          // @ts-ignore
+          window.__REACH_DISABLE_TOOLTIPS = false;
+        });
+      }
+    }, [isOpen]);
+
     return isOpen ? (
       <Portal data-reach-dialog-wrapper="">
         <DialogInner ref={forwardedRef} {...props} />
