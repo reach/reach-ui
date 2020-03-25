@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { fireEvent, render, act, userEvent } from "$test/utils";
+import { AxeResults } from "$test/types";
 import { Dialog } from "@reach/dialog";
 
 function getOverlay(container: Element) {
@@ -18,65 +19,68 @@ describe("<Dialog />", () => {
     clock.restore();
   });
 
-  it("does not render children when not open", () => {
-    const { baseElement, queryByTestId } = render(
-      <div data-testid="root">
-        <Dialog isOpen={false} aria-label="cool dialog">
-          <div data-testid="inner" />
-        </Dialog>
-      </div>
-    );
-    expect(queryByTestId("root")).toBeTruthy();
-    expect(queryByTestId("inner")).toBeNull();
-    expect(baseElement).toMatchSnapshot();
+  describe("rendering", () => {
+    it("does not render children when not open", () => {
+      const { baseElement, queryByTestId } = render(
+        <div data-testid="root">
+          <Dialog isOpen={false} aria-label="cool dialog">
+            <div data-testid="inner" />
+          </Dialog>
+        </div>
+      );
+      expect(queryByTestId("root")).toBeTruthy();
+      expect(queryByTestId("inner")).toBeNull();
+    });
   });
 
-  it("closes the dialog", () => {
-    const { baseElement, getByText, queryByTestId } = render(
-      <BasicOpenDialog />
-    );
-    expect(baseElement).toMatchSnapshot();
-    expect(queryByTestId("inner")).toBeTruthy();
-    fireEvent.click(getByText("Close Dialog"));
-
-    clock.tick(10);
-    expect(baseElement).toMatchSnapshot();
-    expect(queryByTestId("inner")).toBeNull();
-  });
-
-  it("closes the dialog when overlay is clicked", () => {
-    const { baseElement, queryByTestId } = render(<BasicOpenDialog />);
-    act(() => {
-      userEvent.click(getOverlay(baseElement) as Element);
+  describe("a11y", () => {
+    it("should not have basic a11y issues", async () => {
+      clock.restore();
+      const { container } = render(<BasicOpenDialog />);
+      let results: AxeResults = null as any;
+      await act(async () => {
+        results = await axe(container);
+      });
+      expect(results).toHaveNoViolations();
     });
 
-    expect(baseElement).toMatchSnapshot();
-    expect(queryByTestId("inner")).toBeNull();
+    it("can be labelled by another element", () => {
+      const { getByRole } = render(
+        <Dialog isOpen aria-labelledby="dialog-title">
+          <h1 id="dialog-title">I am the title now</h1>
+        </Dialog>
+      );
+
+      const dialog = getByRole("dialog");
+      expect(dialog).toHaveAttribute("aria-labelledby", "dialog-title");
+      const label = document.getElementById(
+        dialog.getAttribute("aria-labelledby")!
+      );
+      expect(label).toHaveTextContent("I am the title now");
+    });
   });
 
-  it("can be labelled by another element", () => {
-    const { getByRole } = render(
-      <Dialog isOpen aria-labelledby="dialog-title">
-        <h1 id="dialog-title">I am the title now</h1>
-      </Dialog>
-    );
+  describe("user events", () => {
+    it("closes the dialog", () => {
+      const { baseElement, getByText, queryByTestId } = render(
+        <BasicOpenDialog />
+      );
 
-    const dialog = getByRole("dialog");
-    expect(dialog).toHaveAttribute("aria-labelledby", "dialog-title");
-    const label = document.getElementById(
-      dialog.getAttribute("aria-labelledby")!
-    );
-    expect(label).toHaveTextContent("I am the title now");
+      expect(queryByTestId("inner")).toBeTruthy();
+      fireEvent.click(getByText("Close Dialog"));
+
+      clock.tick(10);
+      expect(queryByTestId("inner")).toBeNull();
+    });
+
+    it("closes the dialog when overlay is clicked", () => {
+      const { baseElement, queryByTestId } = render(<BasicOpenDialog />);
+      act(() => {
+        userEvent.click(getOverlay(baseElement) as Element);
+      });
+      expect(queryByTestId("inner")).toBeNull();
+    });
   });
-
-  // it("should not have basic a11y issues", async () => {
-  //   // This test is erroring right now, experimenting with axe-core + jest-axe
-  //   // Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Timeout - Async callback was not invoked within the 5000ms timeout specified by jest.setTimeout.Error:
-  //   // TODO: Fix this and figure out how this thing is supposed to work bc it would be super useful!
-  //   const { container } = render(<BasicOpenDialog />);
-  //   const results = await axe(container);
-  //   expect(results).toHaveNoViolations();
-  // });
 });
 
 function BasicOpenDialog() {
