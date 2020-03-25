@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
 import { axe, toHaveNoViolations } from "jest-axe";
-import { fireEvent, render, cleanup } from "$test/utils";
+import { fireEvent, render, act, userEvent } from "$test/utils";
 import { Dialog } from "@reach/dialog";
 
 function getOverlay(container: Element) {
@@ -39,11 +39,17 @@ describe("<Dialog />", () => {
     expect(queryByTestId("inner")).toBeTruthy();
     fireEvent.click(getByText("Close Dialog"));
 
-    // TODO: Test overlay click, it should close the dialog
-    // Not sure why clicking the overlay doesn't work in test env, works IRL 🤷‍♂️
-    // fireEvent.click(getOverlay(baseElement)!)
-
     clock.tick(10);
+    expect(baseElement).toMatchSnapshot();
+    expect(queryByTestId("inner")).toBeNull();
+  });
+
+  it("closes the dialog when overlay is clicked", () => {
+    const { baseElement, queryByTestId } = render(<BasicOpenDialog />);
+    act(() => {
+      userEvent.click(getOverlay(baseElement) as Element);
+    });
+
     expect(baseElement).toMatchSnapshot();
     expect(queryByTestId("inner")).toBeNull();
   });
@@ -78,7 +84,11 @@ function BasicOpenDialog() {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog aria-label="Announcement" isOpen={showDialog}>
+      <Dialog
+        aria-label="Announcement"
+        isOpen={showDialog}
+        onDismiss={() => setShowDialog(false)}
+      >
         <div data-testid="inner">
           <button onClick={() => setShowDialog(false)}>Close Dialog</button>
           <input data-testid="text" type="text" />

@@ -77,6 +77,18 @@ exports[`<Dialog /> closes the dialog 2`] = `
 </body>
 `;
 
+exports[`<Dialog /> closes the dialog when overlay is clicked 1`] = `
+<body>
+  <div>
+    <div>
+      <button>
+        Show Dialog
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
 exports[`<Dialog /> does not render children when not open 1`] = `
 <body>
   <div>
