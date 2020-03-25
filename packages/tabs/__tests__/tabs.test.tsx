@@ -14,9 +14,7 @@ describe("<Tabs />", () => {
 
   describe("user events", () => {
     it("focuses the correct tab with keyboard navigation", () => {
-      const { getByText, getByRole, asFragment, container } = render(
-        <BasicTabs />
-      );
+      const { getByText, getByRole, container } = render(<BasicTabs />);
       const firstTab = getByText("Tab One");
       const tabList = getByRole("tablist");
 
@@ -34,7 +32,6 @@ describe("<Tabs />", () => {
       expect(document.activeElement).toBe(container.querySelector(".tab-2"));
       expect(getTabPanelByButtonClass("tab-2")).toBeVisible();
       expect(getTabPanelByButtonClass("tab-1")).not.toBeVisible();
-      expect(asFragment()).toMatchSnapshot();
 
       fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
       expect(document.activeElement).toBe(container.querySelector(".tab-3"));
