@@ -112,6 +112,11 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // We shouldn't need this when we rewrite with state machine logic.
   let buttonClickedRef = useRef(false);
 
+  // We will put children callbacks in a ref to avoid triggering endless render
+  // loops when using render props if the app code doesn't useCallback
+  // https://github.com/reach/reach-ui/issues/523
+  let selectCallbacks = useRef([]);
+
   let context: IMenuContext = {
     buttonRef,
     dispatch,
@@ -119,6 +124,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     menuRef,
     popoverRef,
     buttonClickedRef,
+    selectCallbacks,
     state,
   };
 
@@ -315,6 +321,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let {
       buttonRef,
       dispatch,
+      selectCallbacks,
       state: { selectionIndex },
     } = useMenuContext();
 
@@ -343,17 +350,19 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let mouseEventStarted = useRef(false);
 
-    const index = useDescendant(
+    let index = useDescendant(
       {
         context: MenuDescendantContext,
         element: ownRef.current!,
         key: valueText,
         isLink,
-        onSelect,
       },
       indexProp
     );
     let isSelected = index === selectionIndex;
+
+    // Update the callback ref array on every render
+    selectCallbacks.current[index] = onSelect;
 
     function select() {
       focus(buttonRef.current);
@@ -517,6 +526,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       dispatch,
       buttonRef,
       menuRef,
+      selectCallbacks,
       state: { isOpen, buttonId, selectionIndex, typeaheadQuery },
     } = useMenuContext();
     const { descendants: menuItems } = useContext(MenuDescendantContext);
@@ -607,7 +617,8 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
                 // We fire the onSelect callback next so the app can manage
                 // focus if needed.
                 focus(buttonRef.current);
-                selected.onSelect && selected.onSelect();
+                selectCallbacks.current[selected.index] &&
+                  selectCallbacks.current[selected.index]();
                 dispatch({ type: CLICK_MENU_ITEM });
               }
             }
@@ -1014,7 +1025,7 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type DescendantProps = { key: string; isLink: boolean; onSelect?(): any };
+type DescendantProps = { key: string; isLink: boolean };
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;
@@ -1026,5 +1037,6 @@ interface IMenuContext {
   menuId: string | undefined;
   menuRef: MenuRef;
   popoverRef: PopoverRef;
+  selectCallbacks: React.MutableRefObject<(() => void)[]>;
   state: MenuButtonState;
 }

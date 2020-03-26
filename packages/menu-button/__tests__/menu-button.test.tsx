@@ -1,10 +1,42 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { render, act, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 
 describe("<MenuButton />", () => {
+  describe("rendering", () => {
+    it("should mount the component", () => {
+      let { queryByRole } = render(
+        <Menu>
+          <MenuButton>Actions</MenuButton>
+          <MenuList>
+            <MenuItem onSelect={jest.fn}>Download</MenuItem>
+            <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
+          </MenuList>
+        </Menu>
+      );
+      expect(queryByRole("button")).toBeTruthy();
+    });
+
+    it("should mount with render props", () => {
+      let { queryByRole } = render(
+        <Menu>
+          {props => (
+            <Fragment>
+              <MenuButton>{props.isOpen ? "Close" : "Open"} Actions</MenuButton>
+              <MenuList>
+                <MenuItem onSelect={jest.fn}>Download</MenuItem>
+                <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
+              </MenuList>
+            </Fragment>
+          )}
+        </Menu>
+      );
+      expect(queryByRole("button")).toBeTruthy();
+    });
+  });
+
   describe("a11y", () => {
     it("should not have basic a11y issues", async () => {
       let { container } = render(
