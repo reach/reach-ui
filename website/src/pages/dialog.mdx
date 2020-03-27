@@ -461,9 +461,9 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 
 ```jsx
 // jsx-demo
-const AnimatedDialogOverlay = animated(DialogOverlay);
-const AnimatedDialogContent = animated(DialogContent);
 function Example(props) {
+  const AnimatedDialogOverlay = animated(DialogOverlay);
+  const AnimatedDialogContent = animated(DialogContent);
   const [showDialog, setShowDialog] = React.useState(false);
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
