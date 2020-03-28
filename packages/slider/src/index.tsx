@@ -16,12 +16,14 @@
  * @see Docs     https://reacttraining.com/reach-ui/slider
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/slider
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
- * @see          https://github.com/Stanko/aria-progress-range-slider
- * @see          http://www.oaa-accessibility.org/examplep/slider1/
+ * @see Example  https://github.com/Stanko/aria-progress-range-slider
+ * @see Example  http://www.oaa-accessibility.org/examplep/slider1/
  */
 
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 import React, {
-  forwardRef,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -34,19 +36,29 @@ import { useId } from "@reach/auto-id";
 import {
   checkStyles,
   createNamedContext,
+  forwardRefWithAs,
   getOwnerDocument,
   isFunction,
   makeId,
+  useEventCallback,
   useForkedRef,
+  useControlledSwitchWarning,
+  useControlledState,
   useIsomorphicLayoutEffect,
   wrapEvent,
+  noop,
 } from "@reach/utils";
 
+// TODO: Remove in 1.0
 export type SliderAlignment = "center" | "contain";
+
 export enum SliderOrientation {
   Horizontal = "horizontal",
   Vertical = "vertical",
+  // TODO: Add support for RTL slider
 }
+
+// TODO: Remove in 1.0
 export enum SliderHandleAlignment {
   // Handle is centered directly over the current value marker
   Center = "center",
@@ -55,7 +67,7 @@ export enum SliderHandleAlignment {
   Contain = "contain",
 }
 
-// TODO: Remove in 1.0, maybe?
+// TODO: Remove in 1.0
 export const SLIDER_ORIENTATION_HORIZONTAL = SliderOrientation.Horizontal;
 export const SLIDER_ORIENTATION_VERTICAL = SliderOrientation.Vertical;
 export const SLIDER_HANDLE_ALIGN_CENTER = SliderHandleAlignment.Center;
@@ -72,6 +84,8 @@ const useSliderContext = () => useContext(SliderContext);
 const sliderPropTypes = {
   defaultValue: PropTypes.number,
   disabled: PropTypes.bool,
+  getAriaLabel: PropTypes.func,
+  getAriaValueText: PropTypes.func,
   getValueText: PropTypes.func,
   handleAlignment: PropTypes.oneOf([
     SliderHandleAlignment.Center,
@@ -96,12 +110,17 @@ const sliderPropTypes = {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slider
  */
-export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
+const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
   { children, ...props },
   forwardedRef
 ) {
   return (
-    <SliderInput ref={forwardedRef} data-reach-slider="" {...props}>
+    <SliderInput
+      {...props}
+      ref={forwardedRef}
+      data-reach-slider=""
+      _componentName="Slider"
+    >
       <SliderTrack>
         <SliderTrackHighlight />
         <SliderHandle />
@@ -114,10 +133,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slider-props
  */
-export type SliderProps = Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  "onChange" | "onPointerMove"
-> & {
+export type SliderProps = {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -143,9 +159,23 @@ export type SliderProps = Omit<
    */
   value?: number;
   /**
-   * A function used to set human readable value text based on the slider's
+   * A function used to set a human-readable name for the slider.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getarialabel
+   */
+  getAriaLabel?(value: number): string;
+  /**
+   * A function used to set a human-readable value text based on the slider's
    * current value.
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getvaluetext
+   *
+   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getariavaluetext
+   */
+  getAriaValueText?(value: number): string;
+  /**
+   * Deprecated. Use `getAriaValueText` instead.
+   *
+   * @deprecated
+   * @param value
    */
   getValueText?(value: number): string;
   /**
@@ -194,7 +224,17 @@ export type SliderProps = Omit<
       handlePosition?: string;
     }
   ): void;
-  onPointerMove?(event: PointerEvent): void;
+
+  // We use native DOM events for the slider since they are global
+  onMouseDown?(event: MouseEvent): void;
+  onMouseMove?(event: MouseEvent): void;
+  onMouseUp?(event: MouseEvent): void;
+  onPointerDown?(event: PointerEvent): void;
+  onPointerUp?(event: PointerEvent): void;
+  onTouchEnd?(event: TouchEvent): void;
+  onTouchMove?(event: TouchEvent): void;
+  onTouchStart?(event: TouchEvent): void;
+
   /**
    * Sets the slider to horizontal or vertical mode.
    *
@@ -219,6 +259,7 @@ if (__DEV__) {
   };
 }
 
+export { Slider };
 export default Slider;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -232,299 +273,437 @@ export default Slider;
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput
  */
-export const SliderInput = forwardRef<HTMLDivElement, SliderInputProps>(
-  function SliderInput(
-    {
-      "aria-label": ariaLabel,
-      "aria-labelledby": ariaLabelledBy,
-      "aria-valuetext": ariaValueText,
-      defaultValue,
-      disabled = false,
-      value: controlledValue,
-      getValueText,
-      handleAlignment = SliderHandleAlignment.Center,
-      max = 100,
-      min = 0,
-      name,
-      onChange,
-      onKeyDown,
-      onPointerDown,
-      onPointerMove,
-      onPointerUp,
-      orientation = SliderOrientation.Horizontal,
-      step: stepProp,
-      children,
-      ...rest
+const SliderInput = forwardRefWithAs<
+  SliderInputProps & { _componentName?: string }
+>(function SliderInput(
+  {
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy,
+    "aria-valuetext": ariaValueTextProp,
+    as: Comp = "div",
+    defaultValue,
+    disabled = false,
+    value: controlledValue,
+    getAriaLabel,
+    getAriaValueText,
+    getValueText: DEPRECATED_getValueText, // TODO: Remove in 1.0
+    handleAlignment = SliderHandleAlignment.Center,
+    max = 100,
+    min = 0,
+    name,
+    onChange,
+    onKeyDown,
+    onMouseDown,
+    onMouseMove,
+    onMouseUp,
+    onPointerDown,
+    onPointerUp,
+    onTouchEnd,
+    onTouchMove,
+    onTouchStart,
+    orientation = SliderOrientation.Horizontal,
+    step = 1,
+    children,
+    _componentName = "SliderInput",
+    ...rest
+  },
+  forwardedRef
+) {
+  useControlledSwitchWarning(controlledValue, "value", _componentName);
+
+  warning(
+    !DEPRECATED_getValueText,
+    "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
+  );
+
+  let touchId: TouchIdRef = useRef();
+
+  let id = useId(rest.id);
+
+  // Track whether or not the pointer is down without updating the component
+  let pointerDownRef = useRef(false);
+
+  let trackRef: TrackRef = useRef(null);
+  let handleRef: HandleRef = useRef(null);
+  let sliderRef: SliderRef = useRef(null);
+  let ref = useForkedRef(sliderRef, forwardedRef);
+
+  let [hasFocus, setHasFocus] = useState(false);
+
+  let { ref: x, ...handleDimensions } = useDimensions(handleRef);
+
+  let [_value, setValue] = useControlledState(
+    controlledValue,
+    defaultValue || min
+  );
+  let value = clamp(_value, min, max);
+  let trackPercent = valueToPercent(value, min, max);
+  let isVertical = orientation === SliderOrientation.Vertical;
+
+  let handleSize = isVertical
+    ? handleDimensions.height
+    : handleDimensions.width;
+
+  // TODO: Consider removing the `handleAlignment` prop
+  // We may want to use accept a `handlePosition` prop instead and let apps
+  // define their own positioning logic, similar to how we do for popovers.
+  let handlePosition = `calc(${trackPercent}% - ${
+    handleAlignment === SliderHandleAlignment.Center
+      ? `${handleSize}px / 2`
+      : `${handleSize}px * ${trackPercent * 0.01}`
+  })`;
+  let handlePositionRef = useRef(handlePosition);
+  useIsomorphicLayoutEffect(() => {
+    handlePositionRef.current = handlePosition;
+  }, [handlePosition]);
+
+  let onChangeRef = useRef(onChange);
+  useIsomorphicLayoutEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+  let updateValue = useCallback(
+    function updateValue(newValue) {
+      setValue(newValue);
+      if (onChangeRef.current) {
+        // Prevent onChange from recreating the function
+        // TODO: Reonsider the onChange callback API
+        onChangeRef.current(newValue, {
+          min,
+          max,
+          // Prevent handlePosition from recreating the function
+          handlePosition: handlePositionRef.current,
+        });
+      }
     },
-    forwardedRef
-  ) {
-    // Verify that the component is either controlled or uncontrolled throughout
-    // its lifecycle
-    const { current: isControlled } = useRef(controlledValue != null);
+    [max, min, setValue]
+  );
 
-    warning(
-      !(isControlled && controlledValue == null),
-      "Slider is changing from controlled to uncontrolled. Slider should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
-    );
-
-    warning(
-      !(!isControlled && controlledValue != null),
-      "Slider is changing from uncontrolled to controlled. Slider should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Slider for the lifetime of the component. Check the `value` prop being passed in."
-    );
-
-    const id = useId(rest.id);
-
-    const trackRef: TrackRef = useRef(null);
-    const handleRef: HandleRef = useRef(null);
-    const sliderRef: SliderRef = useRef(null);
-    const ref = useForkedRef(sliderRef, forwardedRef);
-
-    const [hasFocus, setHasFocus] = useState(false);
-    const [isPointerDown, setPointerDown] = useState(false);
-    const [internalValue, setValue] = useState(defaultValue || min);
-
-    const { ref: x, ...handleDimensions } = useDimensions(handleRef);
-
-    const _value = isControlled ? (controlledValue as number) : internalValue;
-    const value = getAllowedValue(_value, min, max);
-    const trackPercent = valueToPercent(value, min, max);
-    const isVertical = orientation === SliderOrientation.Vertical;
-    const step = stepProp || 1;
-
-    const handleSize = isVertical
-      ? handleDimensions.height
-      : handleDimensions.width;
-
-    const handlePosition = `calc(${trackPercent}% - ${
-      handleAlignment === SliderHandleAlignment.Center
-        ? `${handleSize}px / 2`
-        : `${handleSize}px * ${trackPercent * 0.01}`
-    })`;
-
-    const updateValue = useCallback(
-      function updateValue(newValue) {
-        if (!isControlled) {
-          setValue(newValue);
-        }
-        if (onChange) {
-          onChange(newValue, { min, max, handlePosition });
-        }
-      },
-      [handlePosition, isControlled, max, min, onChange]
-    );
-
-    const getNewValueFromPointer = useCallback(
-      (event: React.PointerEvent | PointerEvent) => {
-        if (trackRef.current) {
-          const {
-            left,
-            width,
-            bottom,
-            height,
-          } = trackRef.current.getBoundingClientRect();
-          const { clientX, clientY } = event;
-          let diff = isVertical ? bottom - clientY : clientX - left;
-          let percent = diff / (isVertical ? height : width);
-          let newValue = percentToValue(percent, min, max);
-
-          if (step) {
-            newValue = roundValueToStep(newValue, step);
-          }
-          newValue = getAllowedValue(newValue, min, max);
-          return newValue;
-        }
-        return null;
-      },
-      [isVertical, max, min, step]
-    );
-
-    // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
-    const handleKeyDown = wrapEvent(onKeyDown, event => {
-      let flag = false;
-      let newValue;
-      const tenSteps = (max - min) / 10;
-      const keyStep = stepProp || (max - min) / 100;
-
-      switch (event.key) {
-        // Decrease the value of the slider by one step.
-        case "ArrowLeft":
-        case "ArrowDown":
-          newValue = value - keyStep;
-          flag = true;
-          break;
-        // Increase the value of the slider by one step
-        case "ArrowRight":
-        case "ArrowUp":
-          newValue = value + keyStep;
-          flag = true;
-          break;
-        // Decrement the slider by an amount larger than the step change made by
-        // `ArrowDown`.
-        case "PageDown":
-          newValue = value - tenSteps;
-          flag = true;
-          break;
-        // Increment the slider by an amount larger than the step change made by
-        // `ArrowUp`.
-        case "PageUp":
-          newValue = value + tenSteps;
-          flag = true;
-          break;
-        // Set the slider to the first allowed value in its range.
-        case "Home":
-          newValue = min;
-          flag = true;
-          break;
-        // Set the slider to the last allowed value in its range.
-        case "End":
-          newValue = max;
-          flag = true;
-          break;
-        default:
-          return;
-      }
-
-      if (flag) {
-        event.preventDefault();
-        newValue = roundValueToStep(newValue, keyStep);
-        newValue = getAllowedValue(newValue, min, max);
-        updateValue(newValue);
-      }
-    });
-
-    const handlePointerDown = wrapEvent(onPointerDown, event => {
-      event.preventDefault();
-      if (disabled) {
-        if (isPointerDown) setPointerDown(false);
-        return;
-      }
-      if (sliderRef.current && handleRef.current) {
-        setPointerDown(true);
-        const newValue = getNewValueFromPointer(event);
-        sliderRef.current.setPointerCapture &&
-          sliderRef.current.setPointerCapture(event.pointerId);
-        if (newValue != null && newValue !== value) {
-          updateValue(newValue);
-        }
-        handleRef.current.focus();
-      }
-    });
-
-    const handlePointerUp = wrapEvent(onPointerUp, function(event) {
-      if (sliderRef.current && event.pointerId) {
-        sliderRef.current.releasePointerCapture &&
-          sliderRef.current.releasePointerCapture(event.pointerId);
-      }
-      setPointerDown(false);
-    });
-
-    const valueText = getValueText ? getValueText(value) : ariaValueText;
-
-    const trackHighlightStyle = isVertical
-      ? {
-          width: `100%`,
-          height: `${trackPercent}%`,
-          bottom: 0,
-        }
-      : {
-          width: `${trackPercent}%`,
-          height: `100%`,
-          left: 0,
-        };
-
-    const ctx: ISliderContext = {
-      ariaLabel,
-      ariaLabelledBy,
-      handleDimensions,
-      handlePosition,
-      handleRef,
-      hasFocus,
-      onKeyDown,
-      onPointerDown,
-      onPointerMove,
-      onPointerUp,
-      onHandleKeyDown: handleKeyDown,
-      setHasFocus,
-      sliderId: id,
-      sliderMax: max,
-      sliderMin: min,
-      value,
-      valueText,
-      disabled: !!disabled,
-      isVertical,
-      orientation,
-      sliderStep: step,
-      trackPercent,
-      trackRef,
-      trackHighlightStyle,
-      updateValue,
-    };
-
-    useEffect(() => {
-      const ownerDocument = getOwnerDocument(sliderRef.current) || document;
-      const handlePointerMove = wrapEvent(onPointerMove, event => {
-        const newValue = getNewValueFromPointer(event);
-        if (newValue !== value) {
-          updateValue(newValue);
-        }
+  let getNewValueFromEvent = useCallback(
+    (event: SomePointerEvent) => {
+      return getNewValue(getPointerPosition(event, touchId), trackRef.current, {
+        step,
+        orientation,
+        min,
+        max,
       });
+    },
+    [max, min, orientation, step]
+  );
 
-      if (isPointerDown) {
-        ownerDocument.addEventListener("pointermove", handlePointerMove);
-      }
+  // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
+  let handleKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+    let newValue: number;
+    let tenSteps = (max - min) / 10;
+    let keyStep = step || (max - min) / 100;
 
-      return () => {
-        ownerDocument.removeEventListener("pointermove", handlePointerMove);
-      };
-    }, [
-      getNewValueFromPointer,
-      isPointerDown,
-      onPointerMove,
-      updateValue,
-      value,
-    ]);
+    switch (event.key) {
+      // Decrease the value of the slider by one step.
+      case "ArrowLeft":
+      case "ArrowDown":
+        newValue = value - keyStep;
+        break;
+      // Increase the value of the slider by one step
+      case "ArrowRight":
+      case "ArrowUp":
+        newValue = value + keyStep;
+        break;
+      // Decrement the slider by an amount larger than the step change made by
+      // `ArrowDown`.
+      case "PageDown":
+        newValue = value - tenSteps;
+        break;
+      // Increment the slider by an amount larger than the step change made by
+      // `ArrowUp`.
+      case "PageUp":
+        newValue = value + tenSteps;
+        break;
+      // Set the slider to the first allowed value in its range.
+      case "Home":
+        newValue = min;
+        break;
+      // Set the slider to the last allowed value in its range.
+      case "End":
+        newValue = max;
+        break;
+      default:
+        return;
+    }
 
-    useEffect(() => checkStyles("slider"), []);
-
-    return (
-      <SliderContext.Provider value={ctx}>
-        <div
-          {...rest}
-          ref={ref}
-          data-reach-slider-input=""
-          data-disabled={disabled ? "" : undefined}
-          data-orientation={orientation}
-          tabIndex={-1}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-        >
-          {isFunction(children)
-            ? children({
-                hasFocus,
-                id,
-                max,
-                min,
-                value,
-                valueText,
-              })
-            : children}
-          {name && (
-            // If the slider is used in a form we'll need an input field to
-            // capture the value. We'll assume this when the component is given a
-            // form field name (A `name` prop doesn't really make sense in any
-            // other context).
-            <input
-              type="hidden"
-              value={value}
-              name={name}
-              id={id && makeId("input", id)}
-            />
-          )}
-        </div>
-      </SliderContext.Provider>
+    event.preventDefault();
+    newValue = clamp(
+      step ? roundValueToStep(newValue, step, min) : newValue,
+      min,
+      max
     );
-  }
-);
+    updateValue(newValue);
+  });
+
+  let ariaValueText = DEPRECATED_getValueText
+    ? DEPRECATED_getValueText(value)
+    : getAriaValueText
+    ? getAriaValueText(value)
+    : ariaValueTextProp;
+
+  let trackHighlightStyle = isVertical
+    ? {
+        width: `100%`,
+        height: `${trackPercent}%`,
+        bottom: 0,
+      }
+    : {
+        width: `${trackPercent}%`,
+        height: `100%`,
+        left: 0,
+      };
+
+  let ctx: ISliderContext = {
+    ariaLabel: getAriaLabel ? getAriaLabel(value) : ariaLabel,
+    ariaLabelledBy,
+    ariaValueText,
+    handleDimensions,
+    handleKeyDown,
+    handlePosition,
+    handleRef,
+    hasFocus,
+    onKeyDown,
+    setHasFocus,
+    sliderId: id,
+    sliderMax: max,
+    sliderMin: min,
+    value,
+    disabled: !!disabled,
+    isVertical,
+    orientation,
+    trackPercent,
+    trackRef,
+    trackHighlightStyle,
+    updateValue,
+  };
+
+  // Slide events!
+  // We will try to use pointer events if they are supported to leverage
+  // setPointerCapture and releasePointerCapture. We'll fall back to separate
+  // mouse and touch events.
+  // TODO: This could be more concise
+  let removeMoveEvents = useRef<() => void>(noop);
+  let removeStartEvents = useRef<() => void>(noop);
+  let removeEndEvents = useRef<() => void>(noop);
+
+  // Store our event handlers in refs so we aren't attaching/detaching events
+  // on every render if the user doesn't useCallback
+  let appEvents = useRef({
+    onMouseMove,
+    onMouseDown,
+    onMouseUp,
+    onTouchStart,
+    onTouchEnd,
+    onTouchMove,
+    onPointerDown,
+    onPointerUp,
+  });
+  useIsomorphicLayoutEffect(() => {
+    appEvents.current.onMouseMove = onMouseMove;
+    appEvents.current.onMouseDown = onMouseDown;
+    appEvents.current.onMouseUp = onMouseUp;
+    appEvents.current.onTouchStart = onTouchStart;
+    appEvents.current.onTouchEnd = onTouchEnd;
+    appEvents.current.onTouchMove = onTouchMove;
+    appEvents.current.onPointerDown = onPointerDown;
+    appEvents.current.onPointerUp = onPointerUp;
+  }, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
+
+  let handleSlideStart = useEventCallback((event: SomePointerEvent) => {
+    if (disabled) {
+      pointerDownRef.current = false;
+      return;
+    }
+
+    pointerDownRef.current = true;
+
+    if ((event as TouchEvent).changedTouches) {
+      // Prevent scrolling for touch events
+      event.preventDefault();
+      let touch = (event as TouchEvent).changedTouches?.[0];
+      if (touch != null) {
+        touchId.current = touch.identifier;
+      }
+    }
+
+    let newValue = getNewValueFromEvent(event);
+    if (newValue == null) {
+      return;
+    }
+    handleRef.current?.focus();
+    updateValue(newValue);
+
+    removeMoveEvents.current = addMoveListener();
+    removeEndEvents.current = addEndListener();
+  });
+
+  let setPointerCapture = useEventCallback((event: PointerEvent) => {
+    if (disabled) {
+      pointerDownRef.current = false;
+      return;
+    }
+    pointerDownRef.current = true;
+    sliderRef.current?.setPointerCapture(event.pointerId);
+  });
+
+  let releasePointerCapture = useEventCallback((event: PointerEvent) => {
+    sliderRef.current?.releasePointerCapture(event.pointerId);
+    pointerDownRef.current = false;
+  });
+
+  let handlePointerMove = useEventCallback((event: SomePointerEvent) => {
+    if (disabled || !pointerDownRef.current) {
+      pointerDownRef.current = false;
+      return;
+    }
+
+    let newValue = getNewValueFromEvent(event);
+    if (newValue == null) {
+      return;
+    }
+    updateValue(newValue);
+  });
+
+  let handleSlideStop = useEventCallback((event: SomePointerEvent) => {
+    pointerDownRef.current = false;
+
+    let newValue = getNewValueFromEvent(event);
+    if (newValue == null) {
+      return;
+    }
+
+    touchId.current = undefined;
+
+    removeMoveEvents.current();
+    removeEndEvents.current();
+  });
+
+  let addMoveListener = useCallback(() => {
+    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+    let touchListener = wrapEvent(
+      appEvents.current.onTouchMove,
+      handlePointerMove
+    );
+    let mouseListener = wrapEvent(
+      appEvents.current.onMouseMove,
+      handlePointerMove
+    );
+    ownerDocument.addEventListener("touchmove", touchListener);
+    ownerDocument.addEventListener("mousemove", mouseListener);
+    return () => {
+      ownerDocument.removeEventListener("touchmove", touchListener);
+      ownerDocument.removeEventListener("mousemove", mouseListener);
+    };
+  }, [handlePointerMove]);
+
+  let addEndListener = useCallback(() => {
+    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+    let pointerListener = wrapEvent(
+      appEvents.current.onPointerUp,
+      releasePointerCapture
+    );
+    let touchListener = wrapEvent(
+      appEvents.current.onTouchEnd,
+      handleSlideStop
+    );
+    let mouseListener = wrapEvent(appEvents.current.onMouseUp, handleSlideStop);
+    if ("PointerEvent" in window) {
+      ownerDocument.addEventListener("pointerup", pointerListener);
+    }
+    ownerDocument.addEventListener("touchend", touchListener);
+    ownerDocument.addEventListener("mouseup", mouseListener);
+    return () => {
+      if ("PointerEvent" in window) {
+        ownerDocument.removeEventListener("pointerup", pointerListener);
+      }
+      ownerDocument.removeEventListener("touchend", touchListener);
+      ownerDocument.removeEventListener("mouseup", mouseListener);
+    };
+  }, [handleSlideStop, releasePointerCapture]);
+
+  let addStartListener = useCallback(() => {
+    let touchListener = wrapEvent(
+      appEvents.current.onTouchStart,
+      handleSlideStart
+    );
+    let mouseListener = wrapEvent(
+      appEvents.current.onMouseDown,
+      handleSlideStart
+    );
+    let pointerListener = wrapEvent(
+      appEvents.current.onPointerDown,
+      setPointerCapture
+    );
+
+    // e.preventDefault is ignored by React's synthetic touchStart event, so
+    // we attach the listener directly to the DOM node
+    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
+    sliderRef.current!.addEventListener("touchstart", touchListener);
+    sliderRef.current!.addEventListener("mousedown", mouseListener);
+    if ("PointerEvent" in window) {
+      sliderRef.current!.addEventListener("pointerdown", pointerListener);
+    }
+    return () => {
+      sliderRef.current!.removeEventListener("touchstart", touchListener);
+      sliderRef.current!.removeEventListener("mousedown", mouseListener);
+      if ("PointerEvent" in window) {
+        sliderRef.current!.removeEventListener("pointerdown", pointerListener);
+      }
+    };
+  }, [setPointerCapture, handleSlideStart]);
+
+  useEffect(() => {
+    removeStartEvents.current = addStartListener();
+
+    return () => {
+      removeStartEvents.current();
+      removeEndEvents.current();
+      removeMoveEvents.current();
+    };
+  }, [addStartListener]);
+
+  useEffect(() => checkStyles("slider"), []);
+
+  return (
+    <SliderContext.Provider value={ctx}>
+      <Comp
+        {...rest}
+        ref={ref}
+        data-reach-slider-input=""
+        data-disabled={disabled ? "" : undefined}
+        data-orientation={orientation}
+        tabIndex={-1}
+      >
+        {isFunction(children)
+          ? children({
+              hasFocus,
+              id,
+              max,
+              min,
+              value,
+              ariaValueText,
+              valueText: ariaValueText, // TODO: Remove in 1.0
+            })
+          : children}
+        {name && (
+          // If the slider is used in a form we'll need an input field to
+          // capture the value. We'll assume this when the component is given a
+          // form field name (A `name` prop doesn't really make sense in any
+          // other context).
+          <input
+            type="hidden"
+            value={value}
+            name={name}
+            id={id && makeId("input", id)}
+          />
+        )}
+      </Comp>
+    </SliderContext.Provider>
+  );
+});
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput-props
@@ -549,6 +728,8 @@ if (__DEV__) {
   };
 }
 
+export { SliderInput };
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -556,30 +737,33 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack
  */
-export const SliderTrack = forwardRef<HTMLDivElement, SliderTrackProps>(
-  function SliderTrack({ children, style = {}, ...props }, forwardedRef) {
-    const { disabled, orientation, trackRef } = useSliderContext();
-    const ref = useForkedRef(trackRef, forwardedRef);
+const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
+  { as: Comp = "div", children, style = {}, ...props },
+  forwardedRef
+) {
+  const { disabled, orientation, trackRef } = useSliderContext();
+  const ref = useForkedRef(trackRef, forwardedRef);
 
-    return (
-      <div
-        ref={ref}
-        style={{ ...style, position: "relative" }}
-        {...props}
-        data-reach-slider-track=""
-        data-disabled={disabled ? "" : undefined}
-        data-orientation={orientation}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+  return (
+    <Comp
+      ref={ref}
+      style={{ ...style, position: "relative" }}
+      {...props}
+      data-reach-slider-track=""
+      data-disabled={disabled ? "" : undefined}
+      data-orientation={orientation}
+    >
+      {children}
+    </Comp>
+  );
+});
+
+const SliderTrack = memo(SliderTrackImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-props
  */
-export type SliderTrackProps = React.HTMLAttributes<HTMLDivElement> & {
+export type SliderTrackProps = {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
@@ -592,10 +776,13 @@ export type SliderTrackProps = React.HTMLAttributes<HTMLDivElement> & {
 
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
-  SliderTrack.propTypes = {
+  SliderTrackImpl.displayName = "SliderTrack";
+  SliderTrackImpl.propTypes = {
     children: PropTypes.node.isRequired,
   };
 }
+
+export { SliderTrack };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -609,25 +796,26 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
  */
-export const SliderTrackHighlight = forwardRef<
-  HTMLDivElement,
-  SliderTrackHighlightProps
->(function SliderTrackHighlight(
-  { children, style = {}, ...props },
-  forwardedRef
-) {
-  let { disabled, orientation, trackHighlightStyle } = useSliderContext();
-  return (
-    <div
-      ref={forwardedRef}
-      style={{ position: "absolute", ...trackHighlightStyle, ...style }}
-      {...props}
-      data-reach-slider-track-highlight=""
-      data-disabled={disabled ? "" : undefined}
-      data-orientation={orientation}
-    />
-  );
-});
+const SliderTrackHighlightImpl = forwardRefWithAs<SliderTrackHighlightProps>(
+  function SliderTrackHighlight(
+    { as: Comp = "div", children, style = {}, ...props },
+    forwardedRef
+  ) {
+    let { disabled, orientation, trackHighlightStyle } = useSliderContext();
+    return (
+      <Comp
+        ref={forwardedRef}
+        style={{ position: "absolute", ...trackHighlightStyle, ...style }}
+        {...props}
+        data-reach-slider-track-highlight=""
+        data-disabled={disabled ? "" : undefined}
+        data-orientation={orientation}
+      />
+    );
+  }
+);
+
+const SliderTrackHighlight = memo(SliderTrackHighlightImpl);
 
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
@@ -635,12 +823,15 @@ export const SliderTrackHighlight = forwardRef<
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight-props
  */
-export type SliderTrackHighlightProps = React.HTMLAttributes<HTMLDivElement>;
+export type SliderTrackHighlightProps = {};
 
 if (__DEV__) {
   SliderTrackHighlight.displayName = "SliderTrackHighlight";
-  SliderTrackHighlight.propTypes = {};
+  SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
+  SliderTrackHighlightImpl.propTypes = {};
 }
+
+export { SliderTrackHighlight };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -651,11 +842,12 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle
  */
-export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
+const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
   function SliderHandle(
     {
       // min,
       // max,
+      as: Comp = "div",
       onBlur,
       onFocus,
       style = {},
@@ -667,23 +859,23 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
     const {
       ariaLabel,
       ariaLabelledBy,
+      ariaValueText,
       disabled,
       handlePosition,
       handleRef,
       isVertical,
-      onHandleKeyDown,
+      handleKeyDown,
       orientation,
       setHasFocus,
       sliderMin,
       sliderMax,
       value,
-      valueText,
     } = useSliderContext();
 
     const ref = useForkedRef(handleRef, forwardedRef);
 
     return (
-      <div
+      <Comp
         aria-disabled={disabled || undefined}
         // If the slider has a visible label, it is referenced by
         // `aria-labelledby` on the slider element. Otherwise, the slider
@@ -713,7 +905,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
         // is set to a string that makes the slider value understandable, e.g.,
         // "Monday".
         // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-valuetext={valueText}
+        aria-valuetext={ariaValueText}
         // The element serving as the focusable slider control has role
         // `slider`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
@@ -728,7 +920,7 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
         onFocus={wrapEvent(onFocus, () => {
           setHasFocus(true);
         })}
-        onKeyDown={wrapEvent(onKeyDown, onHandleKeyDown)}
+        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         style={{
           position: "absolute",
           ...(isVertical
@@ -741,17 +933,22 @@ export const SliderHandle = forwardRef<HTMLDivElement, SliderHandleProps>(
   }
 );
 
+const SliderHandle = memo(SliderHandleImpl);
+
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle-props
  */
-export type SliderHandleProps = React.HTMLAttributes<HTMLDivElement>;
+export type SliderHandleProps = {};
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
-  SliderHandle.propTypes = {};
+  SliderHandleImpl.displayName = "SliderHandle";
+  SliderHandleImpl.propTypes = {};
 }
+
+export { SliderHandle };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -763,9 +960,9 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker
  */
-export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
+const SliderMarkerImpl = forwardRefWithAs<SliderMarkerProps>(
   function SliderMarker(
-    { children, style = {}, value, ...props },
+    { as: Comp = "div", children, style = {}, value, ...props },
     forwardedRef
   ) {
     const {
@@ -792,7 +989,7 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
         : "over-value";
 
     return inRange ? (
-      <div
+      <Comp
         ref={forwardedRef}
         style={{
           position: "absolute",
@@ -813,10 +1010,12 @@ export const SliderMarker = forwardRef<HTMLDivElement, SliderMarkerProps>(
   }
 );
 
+const SliderMarker = memo(SliderMarkerImpl);
+
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-props
  */
-export type SliderMarkerProps = React.HTMLAttributes<HTMLDivElement> & {
+export type SliderMarkerProps = {
   /**
    * The value to denote where the marker should appear along the track.
    *
@@ -827,28 +1026,104 @@ export type SliderMarkerProps = React.HTMLAttributes<HTMLDivElement> & {
 
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
-  SliderMarker.propTypes = {
+  SliderMarkerImpl.displayName = "SliderMarker";
+  SliderMarkerImpl.propTypes = {
     value: PropTypes.number.isRequired,
   };
 }
 
+export { SliderMarker };
+
 ////////////////////////////////////////////////////////////////////////////////
-function getAllowedValue(val: number, min: number, max: number) {
+
+function clamp(val: number, min: number, max: number) {
   return val > max ? max : val < min ? min : val;
 }
 
-function makeValuePrecise(value: number, step: number) {
-  const stepDecimalPart = step.toString().split(".")[1];
-  const stepPrecision = stepDecimalPart ? stepDecimalPart.length : 0;
-  return Number(value.toFixed(stepPrecision));
+/**
+ * This handles the case when num is very small (0.00000001), js will turn
+ * this into 1e-8. When num is bigger than 1 or less than -1 it won't get
+ * converted to this notation so it's fine.
+ *
+ * @param num
+ * @see https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Slider/Slider.js#L69
+ */
+function getDecimalPrecision(num: number) {
+  if (Math.abs(num) < 1) {
+    const parts = num.toExponential().split("e-");
+    const matissaDecimalPart = parts[0].split(".")[1];
+    return (
+      (matissaDecimalPart ? matissaDecimalPart.length : 0) +
+      parseInt(parts[1], 10)
+    );
+  }
+
+  const decimalPart = num.toString().split(".")[1];
+  return decimalPart ? decimalPart.length : 0;
 }
 
 function percentToValue(percent: number, min: number, max: number) {
   return (max - min) * percent + min;
 }
 
-function roundValueToStep(value: number, step: number) {
-  return makeValuePrecise(Math.round(value / step) * step, step);
+function roundValueToStep(value: number, step: number, min: number) {
+  let nearest = Math.round((value - min) / step) * step + min;
+  return Number(nearest.toFixed(getDecimalPrecision(step)));
+}
+
+function getPointerPosition(event: SomePointerEvent, touchId: TouchIdRef) {
+  if (touchId.current !== undefined && (event as TouchEvent).changedTouches) {
+    for (let i = 0; i < (event as TouchEvent).changedTouches.length; i += 1) {
+      const touch = (event as TouchEvent).changedTouches[i];
+      if (touch.identifier === touchId.current) {
+        return {
+          x: touch.clientX,
+          y: touch.clientY,
+        };
+      }
+    }
+
+    return false;
+  }
+
+  return {
+    x: (event as PointerEvent | MouseEvent).clientX,
+    y: (event as PointerEvent | MouseEvent).clientY,
+  };
+}
+
+function getNewValue(
+  handlePosition:
+    | {
+        x: number;
+        y: number;
+      }
+    | false,
+  track: HTMLElement | null,
+  props: {
+    orientation: SliderOrientation;
+    min: number;
+    max: number;
+    step?: number;
+  }
+) {
+  let { orientation, min, max, step } = props;
+
+  if (!track || !handlePosition) {
+    return null;
+  }
+
+  let { left, width, bottom, height } = track.getBoundingClientRect();
+  let isVertical = orientation === SliderOrientation.Vertical;
+  let diff = isVertical ? bottom - handlePosition.y : handlePosition.x - left;
+  let percent = diff / (isVertical ? height : width);
+  let newValue = percentToValue(percent, min, max);
+
+  return clamp(
+    step ? roundValueToStep(newValue, step, min) : newValue,
+    min,
+    max
+  );
 }
 
 function useDimensions(ref: React.RefObject<HTMLElement | null>) {
@@ -888,10 +1163,14 @@ function valueToPercent(value: number, min: number, max: number) {
 type TrackRef = React.RefObject<HTMLDivElement | null>;
 type HandleRef = React.RefObject<HTMLDivElement | null>;
 type SliderRef = React.RefObject<HTMLDivElement | null>;
+type TouchIdRef = React.MutableRefObject<number | undefined>;
+
+type SomePointerEvent = TouchEvent | MouseEvent;
 
 interface ISliderContext {
   ariaLabel: string | undefined;
   ariaLabelledBy: string | undefined;
+  ariaValueText: string | undefined;
   handleDimensions: {
     width: number;
     height: number;
@@ -900,20 +1179,15 @@ interface ISliderContext {
   handleRef: HandleRef;
   hasFocus: boolean;
   onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-  onPointerDown?: (event: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerMove?: (event: PointerEvent) => void;
-  onPointerUp?: (event: React.PointerEvent<HTMLDivElement>) => void;
-  onHandleKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  handleKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
   setHasFocus: React.Dispatch<React.SetStateAction<boolean>>;
   sliderId: string | undefined;
   sliderMax: number;
   sliderMin: number;
   value: number;
-  valueText: string | undefined;
   disabled: boolean;
   isVertical: boolean;
   orientation: SliderOrientation;
-  sliderStep: number;
   trackPercent: number;
   trackRef: TrackRef;
   trackHighlightStyle: React.CSSProperties;
@@ -921,11 +1195,12 @@ interface ISliderContext {
 }
 
 type SliderChildrenRender = (props: {
+  ariaValueText?: string | undefined;
   hasFocus?: boolean;
   id?: string | undefined;
   sliderId?: string | undefined;
   max?: number;
   min?: number;
   value?: number;
-  valueText?: string | undefined;
+  valueText?: string | undefined; // TODO: Remove in 1.0
 }) => JSX.Element;

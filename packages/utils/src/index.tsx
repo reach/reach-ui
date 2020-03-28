@@ -4,9 +4,11 @@ import React, {
   cloneElement,
   createContext,
   isValidElement,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import warning from "warning";
 import {
@@ -197,7 +199,7 @@ export function createNamedContext<ContextValueType>(
  *
  * @param Comp
  */
-export function forwardRefWithAs<Props, ComponentType extends As>(
+export function forwardRefWithAs<Props, ComponentType extends As = "div">(
   comp: (
     props: PropsFromAs<ComponentType, Props>,
     ref: React.RefObject<any>
@@ -336,6 +338,28 @@ export function stateToAttributeString(state: any) {
 }
 
 /**
+ * Check if a component is controlled or uncontrolled and return the correct
+ * state value and setter accordingly. If the component state is controlled by
+ * the app, the setter is a noop.
+ *
+ * @param controlPropValue
+ * @param defaultValue
+ */
+export function useControlledState<T = any>(
+  controlPropValue: T | undefined,
+  defaultValue: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  let isControlled = useRef(controlPropValue != null);
+  let [valueState, setValue] = useState(defaultValue);
+  let set: React.Dispatch<React.SetStateAction<T>> = useCallback(n => {
+    if (!isControlled.current) {
+      setValue(n);
+    }
+  }, []);
+  return [isControlled.current ? (controlPropValue as T) : valueState, set];
+}
+
+/**
  * Logs a warning in dev mode when a component switches from controlled to
  * uncontrolled, or vice versa
  *
@@ -383,6 +407,22 @@ export function useConstant<ValueType>(fn: () => ValueType): ValueType {
     ref.current = { v: fn() };
   }
   return ref.current.v;
+}
+
+/**
+ * @param callback
+ */
+export function useEventCallback<E extends Event | React.SyntheticEvent>(
+  callback: (event: E, ...args: any[]) => void
+) {
+  const ref = useRef(callback);
+  useIsomorphicLayoutEffect(() => {
+    ref.current = callback;
+  });
+  return useCallback(
+    (event: E, ...args: any[]) => ref.current(event, ...args),
+    []
+  );
 }
 
 /**

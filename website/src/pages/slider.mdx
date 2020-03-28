@@ -26,8 +26,6 @@ A UI input component where the user selects a value from within a given range. A
 
 Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderTrackHighlight`, `SliderMarker` and `SliderHandle` components as children.
 
-_Pointer Events_: Slider uses pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). As such, to override default behavior you will need to use pointer events rather than mouse or touch events. For example, if you wish to call `event.preventDefault` to override the slider handle's activation on a mouse click event, you'll want to reach for `onPointerDown` instead of `onMouseDown`. [If you need to support older browsers without native pointer events](https://caniuse.com/#feat=pointer) (or ensure compatibility with some inconsistent native behavior in MacOS Safari < 13 and Safari), we recommend [`pepjs`](https://github.com/jquery/PEP) as a polyfill.
-
 You can use `Slider` as a simple standalone component, or compose its parts with `SliderInput`.
 
 ```jsx
@@ -97,6 +95,21 @@ function ExampleComposed() {
 }
 ```
 
+## Slider Events
+
+Prior to v0.10.0, Slider used pointer events for unified event handling across different pointer types (mouse, touch, stylus, etc.). While we still use `onPointerUp` and `onPointerDown` to take advantage of `setPointerCapture` and `releasePointerCapture`, we have moved all other logic to `onMouseDown`, `onTouchStart`, `onMouseUp` and `onTouchEnd` to prevent the need for a polyfill.
+
+Another note on events: because the slider move and end events fire on the document (and because of [some quirks in Chrome related to `onTouchStart`](https://github.com/facebook/react/issues/9809#issuecomment-413978405)), the following event props on `Slider` and `SliderInput` use native DOM events rather than React's synthetic events in their respective handlers.
+
+- `onPointerDown`
+- `onPointerUp`
+- `onMouseDown`
+- `onMouseMove`
+- `onMouseUp`
+- `onTouchStart`
+- `onTouchMove`
+- `onTouchEnd`
+
 ## Component API
 
 ### Slider
@@ -120,31 +133,23 @@ Please see the [styling guide](/styling).
 }
 ```
 
-#### Controlled Slider
+#### Slider Props
 
-| Prop                                         | Type                        | Required | Default        |
-| -------------------------------------------- | --------------------------- | -------- | -------------- |
-| [children](#slider-children)                 | node                        | true     |                |
-| [defaultValue](#slider-defaultvalue)         | number                      | false    |                |
-| [disabled](#slider-disabled)                 | boolean                     | false    |                |
-| [getValueText](#slider-getvaluetext)         | func                        | false    |                |
-| [handleAlignment](#slider-handlealignment)   | `'center' | 'contain'`      | false    | `'center'`     |
-| [max](#slider-max)                           | number                      | false    | 100            |
-| [min](#slider-min)                           | number                      | false    | 0              |
-| [name](#slider-name)                         | string                      | false    |                |
-| [onChange](#slider-onchange)                 | func                        | false    |                |
-| [orientation](#slider-orientation)           | `'horizontal' | 'vertical'` | false    | `'horizontal'` |
-| [step](#slider-step)                         | number                      | false    |                |
-| [value](#slider-value)                       | number                      | false    |                |
-| [`getValueText`](#slider-getvaluetext)       | `func`                      | false    |                |
-| [`handleAlignment`](#slider-handlealignment) | `enum'`                     | false    | `'center'`     |
-| [`max`](#slider-max)                         | `number`                    | false    | 100            |
-| [`min`](#slider-min)                         | `number`                    | false    | 0              |
-| [`name`](#slider-name)                       | `string`                    | false    |                |
-| [`onChange`](#slider-onchange)               | `func`                      | false    |                |
-| [`orientation`](#slider-orientation)         | `enum`                      | false    | `'horizontal'` |
-| [`step`](#slider-step)                       | `number`                    | false    |                |
-| [`value`](#slider-value)                     | `number`                    | false    |                |
+| Prop                                           | Type                           | Required | Default        |
+| ---------------------------------------------- | ------------------------------ | -------- | -------------- |
+| [`children`](#slider-children)                 | `node`                         | true     |                |
+| [`defaultValue`](#slider-defaultvalue)         | `number`                       | false    |                |
+| [`disabled`](#slider-disabled)                 | `boolean`                      | false    |                |
+| [`getAriaLabel`](#slider-getarialabel)         | `func`                         | false    |                |
+| [`getAriaValueText`](#slider-getariavaluetext) | `func`                         | false    |                |
+| [`handleAlignment`](#slider-handlealignment)   | `"center"` \| `"contain"`      | false    | `"center"`     |
+| [`max`](#slider-max)                           | `number`                       | false    | `100`          |
+| [`min`](#slider-min)                           | `number`                       | false    | `0`            |
+| [`name`](#slider-name)                         | `string`                       | false    |                |
+| [`onChange`](#slider-onchange)                 | `func`                         | false    |                |
+| [`orientation`](#slider-orientation)           | `"horizontal"` \| `"vertical"` | false    | `"horizontal"` |
+| [`step`](#slider-step)                         | `number`                       | false    | `1`            |
+| [`value`](#slider-value)                       | `number`                       | false    |                |
 
 ##### Slider `children`
 
@@ -174,11 +179,17 @@ The defaultValue is used to set an initial value for an uncontrolled Slider.
 
 Whether or not the slider should be disabled from user interaction.
 
-##### Slider `getValueText`
+##### Slider `getAriaLabel`
 
-`getValueText?(value: number): string`
+`getAriaLabel?(value: number): string`
 
-A function used to set human readable value text based on the slider's current value.
+A function used to set a human-readable name for the slider.
+
+##### Slider `getAriaValueText`
+
+`getAriaValueText?(value: number): string`
+
+A function used to set a human-readable value text based on the slider's current value.
 
 ##### Slider `handleAlignment`
 

@@ -16,7 +16,7 @@ function Example() {
       if (audioRef.current) {
         setMax(Math.round(timeToMs(audioRef.current.duration)));
       }
-    }
+    },
   });
 
   function handleChange(newValue) {
@@ -38,7 +38,7 @@ function Example() {
         value={value}
         min={0}
         max={max}
-        getValueText={val => msToTime(val)}
+        getAriaValueText={val => msToTime(val)}
       ></Slider>
       {audio}
     </div>
