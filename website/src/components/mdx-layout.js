@@ -81,7 +81,11 @@ import { PreComponent } from "./MdxPre";
 import "../styles/app.scss";
 
 function Table(props) {
-  return <table className="u-full-width" {...props} />;
+  return (
+    <div style={{ maxWidth: "100%", overflowX: "auto" }}>
+      <table className="u-full-width" {...props} />
+    </div>
+  );
 }
 
 let firstLoad = true;
