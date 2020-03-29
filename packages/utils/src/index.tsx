@@ -58,6 +58,11 @@ export const useIsomorphicLayoutEffect = canUseDOM()
 let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
+ * Copy og Facebook's warning package.
+ */
+export { warning };
+
+/**
  * When in dev mode, checks that styles for a given @reach package are loaded.
  *
  * @param packageName Name of the package to check.
