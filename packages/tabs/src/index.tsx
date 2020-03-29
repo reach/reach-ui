@@ -14,13 +14,6 @@
  * TODO: Consider manual tab activation
  * https://www.w3.org/TR/wai-aria-practices-1.2/examples/tabs/tabs-2/tabs.html
  *
- *
- * TODO: Consider `orientation` prop to account for keyboard behavior
- *       - horizontal-top
- *       - horizontal-bottm
- *       - vertical-left
- *       - vertical-right
- *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
@@ -74,9 +67,16 @@ const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
 const TabsContext = createNamedContext("TabsContext", {} as TabsContextValue);
 const useTabsContext = () => useContext(TabsContext);
 
-export enum KeyboardActivation {
+export enum TabsKeyboardActivation {
   Auto = "auto",
   Manual = "manual",
+}
+
+export enum TabsOrientation {
+  HorizontalStart = "horizontal-start",
+  HorizontalEnd = "horizontal-end",
+  VerticalStart = "vertical-start",
+  VerticalEnd = "vertical-end",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,8 +93,9 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
     as: Comp = "div",
     children,
     defaultIndex,
+    orientation = TabsOrientation.HorizontalStart,
     index: controlledIndex = undefined,
-    keyboardActivation = KeyboardActivation.Auto,
+    keyboardActivation = TabsKeyboardActivation.Auto,
     onChange,
     readOnly = false,
     ...props
@@ -144,16 +145,17 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
         : (index: number) => {
             userInteractedRef.current = true;
             switch (keyboardActivation) {
-              case KeyboardActivation.Manual:
+              case TabsKeyboardActivation.Manual:
                 tabs[index].element?.focus();
                 return;
-              case KeyboardActivation.Auto:
+              case TabsKeyboardActivation.Auto:
               default:
                 onChange && onChange(index);
                 setSelectedIndex(index);
                 return;
             }
           },
+      orientation,
       selectedIndex,
       selectedPanelRef,
       setFocusedIndex,
@@ -165,6 +167,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
     id,
     keyboardActivation,
     onChange,
+    orientation,
     readOnly,
     selectedIndex,
     setSelectedIndex,
@@ -180,7 +183,13 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
       set={setTabs}
     >
       <TabsContext.Provider value={context}>
-        <Comp {...props} ref={ref} data-reach-tabs="" id={props.id}>
+        <Comp
+          {...props}
+          ref={ref}
+          data-reach-tabs=""
+          data-orientation={orientation}
+          id={props.id}
+        >
           {children}
         </Comp>
       </TabsContext.Provider>
@@ -217,7 +226,7 @@ export type TabsProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-keyboardactivation
    */
-  keyboardActivation?: KeyboardActivation;
+  keyboardActivation?: TabsKeyboardActivation;
   /**
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-readonly
    */
@@ -228,6 +237,34 @@ export type TabsProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-defaultindex
    */
   defaultIndex?: number;
+  /**
+   * Allows you to switch the orientation of the tabs relative to their tab
+   * panels. Defaults to `"horizontal-start"`.
+   *
+   * `horizontal-` and `vertical-` orientations will change how the arrow keys
+   * navigate between tabs. Arrow key navigation should logically follow the
+   * order in which tabs appear on the screen. For screen reader users, the
+   * `aria-orientation` attribute provides the appropriate context to direct
+   * which keys should navigate to the next tab (this is provided
+   * automatically).
+   *
+   * `-start` and `-end` props should be determined by the DOM order of rendered
+   * components. If the `TabList` component appears before `TabPanels`, the
+   * `horizontal-start` or `vertical-start` should be used. When the `TabList`
+   * component appears after `TabPanels`, use `horizontal-end` or
+   * `vertical-end`. For vertical tabs, this will change whether or not
+   * `ArrowLeft` or `ArrowRight` moves the user into the active panel.
+   *
+   * If you're familiar with the relatively new specs for CSS logical
+   * properties, you'll know why we opt to use `start` and `end` rather than
+   * `left`, `right`, `top` or `bottom`. The `Tabs` component supports writing
+   * modes other than left-to-right, and `Tabs` will adapt keyboard controls to
+   * the match user's writing mode and the given orientation.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-orientation
+   * @see MDN  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties
+   */
+  orientation?: TabsOrientation;
   /**
    * Calls back with the tab index whenever the user changes tabs, allowing your
    * app to synchronize with it.
@@ -242,6 +279,7 @@ if (__DEV__) {
   Tabs.propTypes = {
     children: PropTypes.node.isRequired,
     onChange: PropTypes.func,
+    orientation: PropTypes.oneOf(Object.values(TabsOrientation)),
     index: (props, name, compName, location, propName) => {
       let val = props[name];
       if (
@@ -286,6 +324,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     keyboardActivation,
     onFocusPanel,
     onSelectTabWithKeyboard,
+    orientation,
     selectedIndex,
     setSelectedIndex,
   } = useTabsContext();
@@ -309,17 +348,26 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   let handleKeyDown = useEventCallback(
     wrapEvent(
       function(event: React.KeyboardEvent) {
-        if (event.key === "ArrowDown") {
+        if (
+          (orientation === TabsOrientation.HorizontalStart &&
+            event.key === "ArrowDown") ||
+          (orientation === TabsOrientation.HorizontalEnd &&
+            event.key === "ArrowUp") ||
+          (orientation === TabsOrientation.VerticalStart &&
+            event.key === (isRTL.current ? "ArrowLeft" : "ArrowRight")) ||
+          (orientation === TabsOrientation.VerticalEnd &&
+            event.key === (isRTL.current ? "ArrowRight" : "ArrowLeft"))
+        ) {
           event.preventDefault();
           onFocusPanel();
         }
       },
       useDescendantKeyDown(TabsDescendantsContext, {
         currentIndex:
-          keyboardActivation === KeyboardActivation.Manual
+          keyboardActivation === TabsKeyboardActivation.Manual
             ? focusedIndex
             : selectedIndex,
-        orientation: "horizontal",
+        orientation: getAriaOrientation(orientation),
         rotate: true,
         callback: onSelectTabWithKeyboard,
         filter: tab => !tab.disabled,
@@ -345,16 +393,15 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
 
   return (
     <Comp
-      // If the `tablist` element is vertically oriented, it has the property
-      // `aria-orientation` set to `"vertical"`. The default value of
-      // `aria-orientation` for a tablist element is `"horizontal"`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      // aria-orientation={vertical ? "vertical" : undefined}
-
       // The element that serves as the container for the set of tabs has role
       // `tablist`
       // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
       role="tablist"
+      // If the `tablist` element is vertically oriented, it has the property
+      // `aria-orientation` set to `"vertical"`. The default value of
+      // `aria-orientation` for a tablist element is `"horizontal"`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+      aria-orientation={getAriaOrientation(orientation)}
       {...props}
       data-reach-tab-list=""
       ref={ref}
@@ -431,6 +478,7 @@ export const Tab = forwardRefWithAs<
   const {
     id: tabsId,
     onSelectTab,
+    orientation,
     selectedIndex,
     userInteractedRef,
     setFocusedIndex,
@@ -487,6 +535,7 @@ export const Tab = forwardRefWithAs<
       {...props}
       ref={ref}
       data-reach-tab=""
+      data-orientation={orientation}
       data-selected={isSelected ? "" : undefined}
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
@@ -632,6 +681,16 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+function getAriaOrientation(
+  orientation: TabsOrientation
+): "horizontal" | "vertical" {
+  return orientation.toLowerCase().includes("vertical")
+    ? "vertical"
+    : "horizontal";
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Types
 
 type TabDescendantProps = {
@@ -641,10 +700,11 @@ type TabDescendantProps = {
 interface TabsContextValue {
   id: string;
   isControlled: boolean;
-  keyboardActivation: KeyboardActivation;
+  keyboardActivation: TabsKeyboardActivation;
   onFocusPanel: () => void;
   onSelectTabWithKeyboard: (index: number) => void;
   onSelectTab: (index: number) => void;
+  orientation: TabsOrientation;
   focusedIndex: number;
   selectedIndex: number;
   selectedPanelRef: React.MutableRefObject<HTMLElement | null>;

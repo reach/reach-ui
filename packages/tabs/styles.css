@@ -2,9 +2,17 @@
   --reach-tabs: 1;
 }
 
+[data-reach-tabs][data-orientation^="vertical"] {
+  display: flex;
+}
+
 [data-reach-tab-list] {
   display: flex;
   background: hsla(0, 0%, 0%, 0.05);
+}
+
+[data-reach-tab-list][aria-orientation="vertical"] {
+  flex-direction: column;
 }
 
 [data-reach-tab] {
@@ -18,7 +26,6 @@
   cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
-  border-bottom: solid 1px transparent;
 }
 
 [data-reach-tab]:active {
@@ -31,5 +38,5 @@
 }
 
 [data-reach-tab][data-selected] {
-  border-bottom-color: inherit;
+  border-bottom: 1px solid currentColor;
 }
