@@ -8,7 +8,8 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  KeyboardActivation,
+  TabsKeyboardActivation,
+  TabsOrientation,
 } from "@reach/tabs";
 
 describe("<Tabs />", () => {
@@ -101,10 +102,65 @@ describe("<Tabs />", () => {
       expect(getByText("Tab 1")).toHaveFocus();
     });
 
+    it("focuses the correct tab with keyboard navigation (vertical orientation)", () => {
+      const { getByText, getByRole } = render(
+        <div>
+          <Tabs orientation={TabsOrientation.VerticalStart}>
+            <TabList>
+              <Tab>Tab 1</Tab>
+              <Tab>Tab 2</Tab>
+              <Tab>Tab 3</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <p>Panel 1</p>
+              </TabPanel>
+              <TabPanel>
+                <p>Panel 2</p>
+              </TabPanel>
+              <TabPanel>
+                <p>Panel 3</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </div>
+      );
+
+      let tabList = getByRole("tablist");
+
+      fireEvent.click(getByText("Tab 1"));
+
+      fireEvent.keyDown(tabList, { key: "ArrowDown", code: 40 });
+      expect(getByText("Tab 2")).toHaveFocus();
+      expect(getByText("Panel 2")).toBeVisible();
+      expect(getByText("Panel 1")).not.toBeVisible();
+
+      fireEvent.keyDown(tabList, { key: "ArrowDown", code: 40 });
+      expect(getByText("Tab 3")).toHaveFocus();
+      expect(getByText("Panel 3")).toBeVisible();
+      expect(getByText("Panel 2")).not.toBeVisible();
+
+      fireEvent.keyDown(tabList, { key: "ArrowDown", code: 40 });
+      expect(getByText("Tab 1")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "ArrowUp", code: 38 });
+      expect(getByText("Tab 3")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "ArrowUp", code: 38 });
+      fireEvent.keyDown(tabList, { key: "ArrowUp", code: 38 });
+      expect(getByText("Tab 1")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "End", code: 35 });
+      expect(getByText("Tab 3")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "Home", code: 36 });
+      expect(getByText("Tab 1")).toHaveFocus();
+    });
+
     it("focuses the correct tab with manual keyboard navigation", () => {
       const { getByRole } = render(
         <div>
-          <Tabs keyboardActivation={KeyboardActivation.Manual}>
+          <Tabs keyboardActivation={TabsKeyboardActivation.Manual}>
             <TabList>
               <Tab>Tab 1</Tab>
               <Tab>Tab 2</Tab>

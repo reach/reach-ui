@@ -85,15 +85,16 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                                             | Type                    | Required | Default |
-| ------------------------------------------------ | ----------------------- | -------- | ------- |
-| [`as`](#tabs-as)                                 | `string` \| `Component` | false    | `"div"` |
-| [`children`](#tabs-children)                     | `node`                  | true     |         |
-| [`defaultIndex`](#tabs-defaultindex)             | `number`                | false    |         |
-| [`index`](#tabs-index)                           | `number`                | false    |         |
-| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`  | false    | `"auto` |
-| [`onChange`](#tabs-onchange)                     | `func`                  | false    |         |
-| [`div` props](#tabs-div-props)                   |                         | false    |         |
+| Prop                                             | Type                                                                                 | Required | Default              |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------ | -------- | -------------------- |
+| [`as`](#tabs-as)                                 | `string` \| `Component`                                                              | false    | `"div"`              |
+| [`children`](#tabs-children)                     | `node`                                                                               | true     |                      |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                                                                             | false    |                      |
+| [`index`](#tabs-index)                           | `number`                                                                             | false    |                      |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`                                                               | false    | `"auto`              |
+| [`onChange`](#tabs-onchange)                     | `func`                                                                               | false    |                      |
+| [`orientation`](#tabs-orientation)               | `"horizontal-start"` \| `"horizontal-end"` \| `"vertical-start"` \| `"vertical-end"` | false    | `"horizontal-start"` |
+| [`div` props](#tabs-div-props)                   |                                                                                      | false    |                      |
 
 ##### Tabs `as`
 
@@ -256,6 +257,47 @@ function Example() {
   );
 }
 ```
+
+##### Tabs `orientation`
+
+`orientation?: "horizontal-start" | "horizontal-end" | "vertical-start" | "vertical-end"`
+
+Allows you to switch the orientation of the tabs relative to their tab panels. Defaults to `"horizontal-start"`.
+
+`horizontal-` and `vertical-` orientations will change how the arrow keys navigate between tabs. Arrow key navigation should logically follow the order in which tabs appear on the screen. For screen reader users, the `aria-orientation` attribute provides the appropriate context to direct which keys should navigate to the next tab (this is provided automatically).
+
+`-start` and `-end` props should be determined by the DOM order of rendered components. If the `TabList` component appears before `TabPanels`, the `horizontal-start` or `vertical-start` should be used. When the `TabList` component appears after `TabPanels`, use `horizontal-end` or `vertical-end`. For vertical tabs, this will change whether or not <kbd>ArrowLeft</kbd> or <kbd>ArrowRight</kbd> moves the user into the active panel.
+
+```jsx
+// jsx-demo
+function Example() {
+  // Try changing the orientation! If you change `start` to `end`, move the
+  // TabList below the tab panels.
+  return (
+    <Tabs orientation="horizontal-start">
+      <TabList>
+        <Tab>One</Tab>
+        <Tab>Two</Tab>
+        <Tab>Three</Tab>
+      </TabList>
+
+      <TabPanels>
+        <TabPanel>
+          <p>one!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>two!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>three!</p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+}
+```
+
+If you're familiar with the relatively new specs for CSS logical properties, you'll know why we opt to use `start` and `end` rather than `left`, `right`, `top` or `bottom`. The `Tabs` component supports writing modes other than left-to-right, and `Tabs` will adapt keyboard controls to the match user's writing mode and the given orientation.
 
 ##### Tabs `div` props
 
