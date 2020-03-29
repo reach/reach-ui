@@ -85,18 +85,25 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                               | Type          | Required |
-| ---------------------------------- | ------------- | -------- |
-| [children](#tabs-children)         | node          | true     |
-| [onChange](#tabs-onchange)         | function      | false    |
-| [defaultIndex](#tabs-defaultindex) | number        | false    |
-| [index](#tabs-index)               | number        | false    |
-| [as](#tabs-as)                     | ComponentType | false    |
-| [rest](#tabs-rest)                 | HTMLDivProps  | false    |
+| Prop                                             | Type                    | Required | Default |
+| ------------------------------------------------ | ----------------------- | -------- | ------- |
+| [`as`](#tabs-as)                                 | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tabs-children)                     | `node`                  | true     |         |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                | false    |         |
+| [`index`](#tabs-index)                           | `number`                | false    |         |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`  | false    | `"auto` |
+| [`onChange`](#tabs-onchange)                     | `func`                  | false    |         |
+| [`div` props](#tabs-div-props)                   |                         | false    |         |
 
-##### Tabs children
+##### Tabs `as`
 
-_Type_: `node`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+Tabs will render a `div` unless you specify a different element.
+
+##### Tabs `children`
+
+`children: React.ReactNode`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
@@ -126,44 +133,9 @@ function Example() {
 }
 ```
 
-##### Tabs onChange
+##### Tabs `defaultIndex`
 
-_Type_: `function`
-
-Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
-
-```jsx
-// jsx-demo
-function Example() {
-  const colors = ["firebrick", "goldenrod", "dodgerblue"];
-  const [tabIndex, setTabIndex] = useState(0);
-  const backgroundColor = colors[tabIndex];
-  return (
-    <Tabs
-      onChange={index => setTabIndex(index)}
-      style={{
-        color: "white",
-        background: backgroundColor,
-      }}
-    >
-      <TabList>
-        <Tab>Red</Tab>
-        <Tab>Yellow</Tab>
-        <Tab>Blue</Tab>
-      </TabList>
-      <TabPanels style={{ padding: 20 }}>
-        <TabPanel>The Primary Colors</TabPanel>
-        <TabPanel>Are 1, 2, 3</TabPanel>
-        <TabPanel>Red, yellow and blue.</TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
-}
-```
-
-##### Tabs defaultIndex
-
-_Type_: `number`
+`defaultIndex?: number`
 
 Starts the tabs at a specific index.
 
@@ -192,9 +164,9 @@ function Example() {
 }
 ```
 
-##### Tabs index
+##### Tabs `index`
 
-_Type_: `number`
+`index?: number`
 
 Like form inputs, a tab's state can be controlled by the owner. Make sure to include an `onChange` as well, or else the tabs will not be interactive.
 
@@ -244,17 +216,50 @@ function Example() {
 }
 ```
 
-##### Tabs as
+##### Tabs `keyboardActivation`
 
-_Type_: `ComponentType`
+`keyboardActivation?: "auto" | "manual`
 
-Tabs will render a `div` unless you specify a different element.
+Describes the activation mode when navigating a tablist with a keyboard. When set to `"auto"`, a tab panel is activated automatically when a tab is highlighted using arrow keys. When set to `"manual"`, the user must activate the tab panel with either the <kbd>Spacebar</kbd> or <kbd>Enter</kbd> keys. Defaults to `"auto"`.
 
-##### Tabs rest
+##### Tabs `onChange`
 
-_Type_: `rest`
+`onChange?: (index: number) => void`
 
-All other props are passed to the underlying `div` (or component passed to `as`).
+Calls back with the tab index whenever the user changes tabs, allowing your app to synchronize with it.
+
+```jsx
+// jsx-demo
+function Example() {
+  const colors = ["firebrick", "goldenrod", "dodgerblue"];
+  const [tabIndex, setTabIndex] = useState(0);
+  const backgroundColor = colors[tabIndex];
+  return (
+    <Tabs
+      onChange={index => setTabIndex(index)}
+      style={{
+        color: "white",
+        background: backgroundColor,
+      }}
+    >
+      <TabList>
+        <Tab>Red</Tab>
+        <Tab>Yellow</Tab>
+        <Tab>Blue</Tab>
+      </TabList>
+      <TabPanels style={{ padding: 20 }}>
+        <TabPanel>The Primary Colors</TabPanel>
+        <TabPanel>Are 1, 2, 3</TabPanel>
+        <TabPanel>Red, yellow and blue.</TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+}
+```
+
+##### Tabs `div` props
+
+All other props are passed to the underlying `div` (or another component passed to the `as` prop).
 
 ### TabList
 
@@ -278,13 +283,15 @@ Please see the [styling guide](/styling).
 
 #### TabList Props
 
-| Prop                          | Type           | Required |
-| ----------------------------- | -------------- | -------- |
-| [children](#tablist-children) | node           | false    |
-| [as](#tablist-as)             | ComponentType  | false    |
-| [rest](#tablist-rest)         | ForwardedProps | false    |
+| Prop                              | Type          | Required | Default |
+| --------------------------------- | ------------- | -------- | ------- |
+| [`as`](#tablist-as)               | ComponentType | false    | `"div"` |
+| [`children`](#tablist-children)   | node          | true     |         |
+| [`div` props](#tablist-div-props) |               |          |         |
 
-##### TabList children
+##### TabList `children`
+
+`children: React.ReactNode`
 
 `TabList` expects multiple `Tab` elements as children.
 
@@ -314,9 +321,9 @@ const TabPage = () => (
 );
 ```
 
-##### TabList as
+##### TabList `as`
 
-_Type_: `ComponentType`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
 Tabs will render a `div` unless you specify a different element.
 
@@ -324,9 +331,7 @@ Tabs will render a `div` unless you specify a different element.
 <TabList as={View} />
 ```
 
-##### TabList rest
-
-_Type_: `rest`
+##### TabList `div` props
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
@@ -352,13 +357,25 @@ Please see the [styling guide](/styling).
 
 #### TabPanels Props
 
-| Prop                            | Type          | Required |
-| ------------------------------- | ------------- | -------- |
-| [children](#tabpanels-children) | node          | false    |
-| [as](#tabpanels-as)             | ComponentType | false    |
-| rest                            | HTMLDivProps  | false    |
+| Prop                                | Type                    | Required | Default |
+| ----------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tabpanels-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tabpanels-children)   | `node`                  | true     |         |
+| [`div` props](#tabpanels-div-props) |                         |          |         |
 
-##### TabPanels children
+##### TabPanels `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+Tabs will render a `div` unless you specify a different element.
+
+```jsx
+<TabPanels as={View} />
+```
+
+##### TabPanels `children`
+
+`children: React.ReactNode`
 
 `TabPanels` expects multiple `TabPanel` elements as children.
 
@@ -390,19 +407,7 @@ const TabPage = () => (
 );
 ```
 
-##### TabPanels as
-
-_Type_: `ComponentType`
-
-Tabs will render a `div` unless you specify a different element.
-
-```jsx
-<TabPanels as={View} />
-```
-
-##### TabPanels rest
-
-_Type_: `rest`
+##### TabPanels `div` props
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 
@@ -430,20 +435,26 @@ Please see the [styling guide](/styling).
 
 #### Tab Props
 
-| Prop                      | Type          | Required |
-| ------------------------- | ------------- | -------- |
-| [children](#tab-children) | node          | false    |
-| [disabled](#tab-disabled) | boolean       | false    |
-| [as](#tab-as)             | ComponentType | false    |
-| rest                      | rest          | false    |
+| Prop                                | Type                    | Required | Default    |
+| ----------------------------------- | ----------------------- | -------- | ---------- |
+| [`as`](#tab-as)                     | `string` \| `Component` | false    | `"button"` |
+| [`children`](#tab-children)         | node                    | true     |            |
+| [`disabled`](#tab-disabled)         | boolean                 | false    | `false`    |
+| [`button` props](#tab-button-props) |                         |          |            |
 
-#### Tab Clone Props
+##### Tab `as`
 
-| Prop                          | Type    | Required |
-| ----------------------------- | ------- | -------- |
-| [isSelected](#tab-isselected) | boolean | false    |
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
 
-##### Tab children
+Tab will render a `button` unless you specify a different element.
+
+```jsx
+<Tab as={ReactNativeWebButton} />
+```
+
+##### Tab `children`
+
+`children: React.ReactNode`
 
 `Tab` can receive any type of children.
 
@@ -453,7 +464,9 @@ Please see the [styling guide](/styling).
 </Tab>
 ```
 
-##### Tab disabled
+##### Tab `disabled`
+
+`disabled?: boolean`
 
 Disables a tab when true. Clicking will not work and keyboard navigation will skip over it.
 
@@ -461,29 +474,15 @@ Disables a tab when true. Clicking will not work and keyboard navigation will sk
 <Tab disabled />
 ```
 
-##### Tab as
-
-_Type_: `ComponentType`
-
-Tab will render a `button` unless you specify a different element.
-
-```jsx
-<Tab as={ReactNativeWebButton} />
-```
-
-##### Tab rest
-
-_Type_: `rest`
+##### Tab `button` props
 
 All other props are passed to the underlying `button` (or component passed to `as`).
 
-##### Tab isSelected
-
-_Type_: `number` - cloned
+##### Tab `isSelected`
 
 Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in.
 
-> NOTE: We may deprecate this behavior in the future. We now prefer to use context to pass data down to descendants for `Tabs` for better composability. If you'd like your Tabs to be a bit more future proof, we suggest using a controlled `Tabs` component so that your app knows the state of your tabs.
+> NOTE: We will deprecate this behavior in the future. We now prefer to use context to pass data down to descendants for `Tabs` for better composability. If you'd like your Tabs to be a bit more future proof, we suggest using a controlled `Tabs` component so that your app knows the state of your tabs.
 
 ```jsx
 // jsx-demo
@@ -539,13 +538,25 @@ Please see the [styling guide](/styling).
 
 #### TabPanel Props
 
-| Prop                      | Type          | Required |
-| ------------------------- | ------------- | -------- |
-| [children](#tab-children) | node          | false    |
-| [as](#tab-as)             | ComponentType | false    |
-| rest                      | rest          | false    |
+| Prop                               | Type                    | Required | Default |
+| ---------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tabpanel-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tabpanel-children)   | `node`                  | false    |         |
+| [`div` props](#tabpanel-div-props) |                         |          |         |
 
-##### TabPanel children
+##### TabPanel `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+TabPanel will render a `div` unless you specify a different element.
+
+```jsx
+<Tab as={View} />
+```
+
+##### TabPanel `children`
+
+`children?: React.ReactNode`
 
 `TabPanel` can receive any type of children.
 
@@ -556,19 +567,7 @@ Please see the [styling guide](/styling).
 </TabPanel>
 ```
 
-##### TabPanel as
-
-_Type_: `ComponentType`
-
-TabPanel will render a `div` unless you specify a different element.
-
-```jsx
-<Tab as={View} />
-```
-
-##### TabPanel rest
-
-_Type_: `rest`
+##### TabPanel `div` props
 
 All other props are passed to the underlying `div` (or component passed to `as`).
 

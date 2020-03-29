@@ -8,7 +8,7 @@ let tabsStyle = {
   width: 400,
   boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)",
   borderRadius: "0.8rem",
-  overflow: "hidden"
+  overflow: "hidden",
 };
 
 function Example() {

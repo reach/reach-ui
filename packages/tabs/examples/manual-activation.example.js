@@ -1,31 +1,29 @@
 import React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import { action } from "@storybook/addon-actions";
 import "@reach/tabs/styles.css";
 
-let name = "Disabled Tabs";
-
-let tabsStyle = {
-  width: 400,
-  boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)",
-};
+let name = "With manual activation";
 
 function Example() {
   return (
-    <Tabs style={tabsStyle}>
+    <Tabs id="awesome" onChange={action("Change")} keyboardActivation="manual">
       <TabList>
-        <Tab disabled>One</Tab>
+        <Tab>One</Tab>
         <Tab>Two</Tab>
         <Tab>Three</Tab>
       </TabList>
-      <TabPanels style={{ padding: 10 }}>
+
+      <TabPanels>
         <TabPanel>
-          <p>This shouldn't ever render</p>
+          <h1>one!</h1>
+          <button>yo</button>
         </TabPanel>
         <TabPanel>
-          <p>This tab is fine</p>
+          <h1>two!</h1>
         </TabPanel>
         <TabPanel>
-          <p>This one is good too</p>
+          <h1>three!</h1>
         </TabPanel>
       </TabPanels>
     </Tabs>

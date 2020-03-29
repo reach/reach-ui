@@ -27,6 +27,7 @@
  */
 
 import React, {
+  memo,
   useContext,
   useEffect,
   useMemo,
@@ -35,7 +36,6 @@ import React, {
   Children,
 } from "react";
 import PropTypes from "prop-types";
-import warning from "warning";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -53,23 +53,15 @@ import {
   isNumber,
   makeId,
   noop,
+  useControlledSwitchWarning,
+  useControlledState,
+  useEventCallback,
   useForkedRef,
   useIsomorphicLayoutEffect,
   useUpdateEffect,
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
-
-interface ITabsContext {
-  id: string;
-  isControlled: boolean;
-  onFocusPanel: () => void;
-  onSelectTab: (index: number) => void;
-  selectedIndex: number;
-  selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
-  userInteractedRef: React.MutableRefObject<boolean>;
-}
 
 const TabsDescendantsContext = createDescendantContext<
   HTMLElement,
@@ -79,8 +71,13 @@ const TabsDescendantsContext = createDescendantContext<
 const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
   "TabPanelDescendantsContext"
 );
-const TabsContext = createNamedContext("TabsContext", {} as ITabsContext);
+const TabsContext = createNamedContext("TabsContext", {} as TabsContextValue);
 const useTabsContext = () => useContext(TabsContext);
+
+export enum KeyboardActivation {
+  Auto = "auto",
+  Manual = "manual",
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -97,6 +94,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
     children,
     defaultIndex,
     index: controlledIndex = undefined,
+    keyboardActivation = KeyboardActivation.Auto,
     onChange,
     readOnly = false,
     ...props
@@ -104,18 +102,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   ref
 ) {
   let isControlled = useRef(controlledIndex != null);
-  useEffect(() => {
-    if (__DEV__) {
-      warning(
-        !(isControlled.current && controlledIndex == null),
-        "Tabs is changing from controlled to uncontrolled. Tabs should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
-      );
-      warning(
-        !(!isControlled.current && controlledIndex != null),
-        "Tabs is changing from uncontrolled to controlled. Tabs should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Tabs for the lifetime of the component. Check the `index` prop being passed in."
-      );
-    }
-  }, [controlledIndex]);
+  useControlledSwitchWarning(controlledIndex, "index", "Tabs");
 
   let _id = useId(props.id);
   let id = props.id ?? makeId("tabs", _id);
@@ -127,20 +114,22 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   let userInteractedRef = useRef(false);
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
-  let [selectedIndex, setSelectedIndex] = useState(defaultIndex || 0);
+
+  let [selectedIndex, setSelectedIndex] = useControlledState(
+    controlledIndex,
+    defaultIndex ?? 0
+  );
+
+  let [focusedIndex, setFocusedIndex] = useState(-1);
   let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
 
-  const context: ITabsContext = useMemo(() => {
+  let context: TabsContextValue = useMemo(() => {
     return {
-      isControlled: isControlled.current,
-      selectedIndex: isControlled.current
-        ? (controlledIndex as number)
-        : selectedIndex,
+      focusedIndex,
       id,
-      userInteractedRef,
-      selectedPanelRef,
-      setSelectedIndex: isControlled.current ? noop : setSelectedIndex,
-      onFocusPanel: () => {
+      isControlled: isControlled.current,
+      keyboardActivation,
+      onFocusPanel() {
         selectedPanelRef.current?.focus();
       },
       onSelectTab: readOnly
@@ -148,12 +137,39 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
         : (index: number) => {
             userInteractedRef.current = true;
             onChange && onChange(index);
-            if (!isControlled.current) {
-              setSelectedIndex(index);
+            setSelectedIndex(index);
+          },
+      onSelectTabWithKeyboard: readOnly
+        ? noop
+        : (index: number) => {
+            userInteractedRef.current = true;
+            switch (keyboardActivation) {
+              case KeyboardActivation.Manual:
+                tabs[index].element?.focus();
+                return;
+              case KeyboardActivation.Auto:
+              default:
+                onChange && onChange(index);
+                setSelectedIndex(index);
+                return;
             }
           },
+      selectedIndex,
+      selectedPanelRef,
+      setFocusedIndex,
+      setSelectedIndex,
+      userInteractedRef,
     };
-  }, [controlledIndex, id, onChange, readOnly, selectedIndex]);
+  }, [
+    focusedIndex,
+    id,
+    keyboardActivation,
+    onChange,
+    readOnly,
+    selectedIndex,
+    setSelectedIndex,
+    tabs,
+  ]);
 
   useEffect(() => checkStyles("tabs"), []);
 
@@ -182,31 +198,41 @@ export type TabsProps = {
    * tabs on both the bottom and the top at the same time. You can have random
    * elements inside as well.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-children
    */
   children: React.ReactNode;
   /**
    * Like form inputs, a tab's state can be controlled by the owner. Make sure
    * to include an `onChange` as well, or else the tabs will not be interactive.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-index
    */
   index?: number;
   /**
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   * Describes the activation mode when navigating a tablist with a keyboard.
+   * When set to `"auto"`, a tab panel is activated automatically when a tab is
+   * highlighted using arrow keys. When set to `"manual"`, the user must
+   * activate the tab panel with either the `Spacebar` or `Enter` keys. Defaults
+   * to `"auto"`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-keyboardactivation
+   */
+  keyboardActivation?: KeyboardActivation;
+  /**
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-readonly
    */
   readOnly?: boolean;
   /**
    * Starts the tabs at a specific index.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-defaultindex
    */
   defaultIndex?: number;
   /**
    * Calls back with the tab index whenever the user changes tabs, allowing your
    * app to synchronize with it.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-onchange
    */
   onChange?: (index: number) => void;
 };
@@ -250,19 +276,21 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist
  */
-export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
+const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
   forwardedRef
 ) {
   const {
+    focusedIndex,
     isControlled,
-    onSelectTab,
+    keyboardActivation,
     onFocusPanel,
-    setSelectedIndex,
+    onSelectTabWithKeyboard,
     selectedIndex,
+    setSelectedIndex,
   } = useTabsContext();
 
-  let { descendants } = useContext(TabsDescendantsContext);
+  let { descendants: tabs } = useContext(TabsDescendantsContext);
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
   let isRTL = useRef(false);
@@ -278,21 +306,26 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
     }
   }, []);
 
-  let handleKeyDown = wrapEvent(
-    function(event: React.KeyboardEvent) {
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        onFocusPanel();
-      }
-    },
-    useDescendantKeyDown(TabsDescendantsContext, {
-      currentIndex: selectedIndex,
-      orientation: "horizontal",
-      rotate: true,
-      callback: onSelectTab,
-      filter: tab => !tab.disabled,
-      rtl: isRTL.current,
-    })
+  let handleKeyDown = useEventCallback(
+    wrapEvent(
+      function(event: React.KeyboardEvent) {
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          onFocusPanel();
+        }
+      },
+      useDescendantKeyDown(TabsDescendantsContext, {
+        currentIndex:
+          keyboardActivation === KeyboardActivation.Manual
+            ? focusedIndex
+            : selectedIndex,
+        orientation: "horizontal",
+        rotate: true,
+        callback: onSelectTabWithKeyboard,
+        filter: tab => !tab.disabled,
+        rtl: isRTL.current,
+      })
+    )
   );
 
   useIsomorphicLayoutEffect(() => {
@@ -302,16 +335,13 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
      * index is set), we need to override the selection to the next selectable
      * index value.
      */
-    if (
-      !isControlled &&
-      boolOrBoolString(descendants[selectedIndex]?.disabled)
-    ) {
-      let next = descendants.find(tab => !tab.disabled);
+    if (!isControlled && boolOrBoolString(tabs[selectedIndex]?.disabled)) {
+      let next = tabs.find(tab => !tab.disabled);
       if (next) {
         setSelectedIndex(next.index);
       }
     }
-  }, [descendants, isControlled, selectedIndex, setSelectedIndex]);
+  }, [tabs, isControlled, selectedIndex, setSelectedIndex]);
 
   return (
     <Comp
@@ -328,7 +358,7 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
       {...props}
       data-reach-tab-list=""
       ref={ref}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      onKeyDown={handleKeyDown}
     >
       {Children.map(children, (child, index) => {
         /*
@@ -346,6 +376,8 @@ export const TabList = forwardRefWithAs<TabListProps, "div">(function TabList(
   );
 });
 
+const TabList = memo(TabListImpl);
+
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist-props
  */
@@ -362,11 +394,14 @@ export type TabListProps = {
 
 if (__DEV__) {
   TabList.displayName = "TabList";
-  TabList.propTypes = {
+  TabListImpl.displayName = "TabList";
+  TabListImpl.propTypes = {
     as: PropTypes.any,
     children: PropTypes.node,
   };
 }
+
+export { TabList };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -382,7 +417,15 @@ export const Tab = forwardRefWithAs<
   TabProps & { isSelected?: boolean },
   "button"
 >(function Tab(
-  { children, isSelected: _, as: Comp = "button", disabled, ...props },
+  {
+    children,
+    isSelected: _,
+    as: Comp = "button",
+    disabled,
+    onBlur,
+    onFocus,
+    ...props
+  },
   forwardedRef
 ) {
   const {
@@ -390,6 +433,7 @@ export const Tab = forwardRefWithAs<
     onSelectTab,
     selectedIndex,
     userInteractedRef,
+    setFocusedIndex,
   } = useTabsContext();
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
@@ -411,6 +455,18 @@ export const Tab = forwardRefWithAs<
       ownRef.current.focus();
     }
   }, [isSelected]);
+
+  let handleFocus = useEventCallback(
+    wrapEvent(onFocus, () => {
+      setFocusedIndex(index);
+    })
+  );
+
+  let handleBlur = useEventCallback(
+    wrapEvent(onFocus, () => {
+      setFocusedIndex(-1);
+    })
+  );
 
   return (
     <Comp
@@ -435,6 +491,8 @@ export const Tab = forwardRefWithAs<
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
       {children}
     </Comp>
@@ -465,7 +523,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels
  */
-export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
+const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
     return (
@@ -482,6 +540,8 @@ export const TabPanels = forwardRefWithAs<TabPanelsProps, "div">(
   }
 );
 
+const TabPanels = memo(TabPanelsImpl);
+
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels-props
  */
@@ -489,11 +549,14 @@ export type TabPanelsProps = TabListProps & {};
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
-  TabPanels.propTypes = {
+  TabPanelsImpl.displayName = "TabPanels";
+  TabPanelsImpl.propTypes = {
     as: PropTypes.any,
     children: PropTypes.node,
   };
 }
+
+export { TabPanels };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -574,3 +637,18 @@ if (__DEV__) {
 type TabDescendantProps = {
   disabled: boolean;
 };
+
+interface TabsContextValue {
+  id: string;
+  isControlled: boolean;
+  keyboardActivation: KeyboardActivation;
+  onFocusPanel: () => void;
+  onSelectTabWithKeyboard: (index: number) => void;
+  onSelectTab: (index: number) => void;
+  focusedIndex: number;
+  selectedIndex: number;
+  selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
+  setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+  userInteractedRef: React.MutableRefObject<boolean>;
+}
