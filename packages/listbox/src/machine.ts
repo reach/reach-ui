@@ -1,20 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Descendant } from "@reach/descendants";
-import {
-  assign,
-  interpret,
-  MachineEventWithRefs,
-  MachineToReactRefMap,
-  StateMachine,
-} from "@reach/machine";
-import { DistributiveOmit, getOwnerDocument, useConstant } from "@reach/utils";
+import { assign, MachineEventWithRefs, StateMachine } from "@reach/machine";
+import { getOwnerDocument } from "@reach/utils";
 import {
   ListboxDescendant,
   ListboxDescendantProps,
   ListboxValue,
 } from "./index";
-
-let __DEBUG__ = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -325,7 +316,7 @@ export const createMachineDefinition = ({
 }: {
   value: ListboxValue | null;
 }): StateMachine.Config<ListboxStateData, ListboxEvent, ListboxState> => ({
-  id: "mixed-checkbox",
+  id: "listbox",
   initial: ListboxStates.Idle,
   context: {
     value,
@@ -598,68 +589,6 @@ export const createMachineDefinition = ({
   },
 });
 
-export function unwrapRefs<
-  TE extends MachineEventWithRefs = MachineEventWithRefs
->(refs: MachineToReactRefMap<TE>): TE["refs"] {
-  return Object.entries(refs).reduce((value, [name, ref]) => {
-    (value as any)[name] = ref.current;
-    return value;
-  }, {} as TE["refs"]);
-}
-
-export function useMachine<
-  TC extends object,
-  TE extends MachineEventWithRefs = MachineEventWithRefs
->(
-  initialMachine: StateMachine.Machine<TC, TE, any>,
-  refs: MachineToReactRefMap<TE>
-): [
-  StateMachine.State<TC, TE, any>,
-  StateMachine.Service<TC, DistributiveOmit<TE, "refs">>["send"],
-  StateMachine.Service<TC, TE>
-] {
-  /*
-   * State machine should not change between renders, so let's store it in a
-   * ref. This should also help if we need to use a creator function to inject
-   * dynamic initial state values based on props.
-   */
-  let { current: machine } = useRef(initialMachine);
-  let service = useConstant(() => interpret(machine).start());
-  let [current, setCurrent] = useState(machine.initialState);
-
-  // Add refs to every event so we can use them to perform actions.
-  let send = useCallback(
-    (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
-      let event = typeof rawEvent === "string" ? { type: rawEvent } : rawEvent;
-      let refValues = unwrapRefs(refs);
-      let eventToSend = { ...event, refs: refValues } as TE;
-
-      if (__DEV__ && __DEBUG__) {
-        console.group("Event Sent");
-        console.log(
-          "%c" + eventToSend.type,
-          "font-weight: normal; font-size: 120%; font-style: italic;"
-        );
-        console.log(eventToSend);
-        console.groupEnd();
-      }
-      service.send(eventToSend);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  useEffect(() => {
-    service.subscribe(setCurrent);
-    return () => {
-      service.stop();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return [current, send, service];
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 function findOptionFromTypeahead(
@@ -705,7 +634,7 @@ export type ListboxNodeRefs = {
 };
 
 /**
- * Event object for the checkbox state machine.
+ * Event object for the listbox state machine.
  */
 export type ListboxEvent = ListboxEventBase &
   (
@@ -794,7 +723,7 @@ export type ListboxEvent = ListboxEventBase &
   );
 
 /**
- * State object for the checkbox state machine.
+ * State object for the listbox state machine.
  */
 export type ListboxState = {
   value: ListboxStates;
