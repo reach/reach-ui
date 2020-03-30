@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import {
   createNamedContext,
   noop,
+  useConstant,
   useIsomorphicLayoutEffect,
 } from "@reach/utils";
 
@@ -14,7 +15,7 @@ export function createDescendantContext<ElementType, DescendantProps = {}>(
     registerDescendant: noop,
     unregisterDescendant: noop,
     ...initialValue,
-  } as IDescendantContext<ElementType, DescendantProps>);
+  } as DescendantContextValue<ElementType, DescendantProps>);
 }
 
 /**
@@ -41,14 +42,8 @@ export function createDescendantContext<ElementType, DescendantProps = {}>(
  * this is not the case, we can require an explicit index from the app.
  */
 export function useDescendant<ElementType, DescendantProps>(
-  {
-    context,
-    element,
-    ...rest
-  }: Omit<Descendant<ElementType, DescendantProps>, "index"> & {
-    context: React.Context<IDescendantContext<ElementType, DescendantProps>>;
-  },
-  indexProp?: number
+  context: React.Context<DescendantContextValue<ElementType, DescendantProps>>,
+  { element, ...rest }: Omit<Descendant<ElementType, DescendantProps>, "index">
 ) {
   let [, forceUpdate] = useState();
   let { registerDescendant, unregisterDescendant, descendants } = useContext(
@@ -64,11 +59,33 @@ export function useDescendant<ElementType, DescendantProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element, ...Object.values(rest)]);
 
-  return indexProp ?? descendants.findIndex(item => item.element === element);
+  return descendants.findIndex(item => item.element === element);
 }
 
-export function useDescendants<ElementType, DescendantProps = {}>() {
-  return useState<Descendant<ElementType, DescendantProps>[]>([]);
+export function useDescendants<ElementType, DescendantProps>(
+  ctx: React.Context<DescendantContextValue<ElementType, DescendantProps>>
+): [
+  React.FC<{ children: React.ReactNode }>,
+  Descendant<ElementType, DescendantProps>[],
+  React.Dispatch<
+    React.SetStateAction<Descendant<ElementType, DescendantProps>[]>
+  >
+] {
+  let [items, set] = useState<Descendant<ElementType, DescendantProps>[]>([]);
+  let provider = useConstant(
+    () =>
+      function(props: { children: React.ReactNode }) {
+        return (
+          <DescendantProvider
+            items={items}
+            set={set}
+            context={ctx}
+            {...props}
+          />
+        );
+      }
+  );
+  return [provider, items, set];
 }
 
 export function DescendantProvider<ElementType, DescendantProps>({
@@ -77,7 +94,7 @@ export function DescendantProvider<ElementType, DescendantProps>({
   items,
   set,
 }: {
-  context: React.Context<IDescendantContext<ElementType, DescendantProps>>;
+  context: React.Context<DescendantContextValue<ElementType, DescendantProps>>;
   children: React.ReactNode;
   items: Descendant<ElementType, DescendantProps>[];
   set: React.Dispatch<
@@ -173,7 +190,7 @@ export function DescendantProvider<ElementType, DescendantProps>({
     []
   );
 
-  const value: IDescendantContext<
+  const value: DescendantContextValue<
     ElementType,
     DescendantProps
   > = useMemo(() => {
@@ -208,7 +225,7 @@ export function useDescendantKeyDown<
     DescendantProps
   >
 >(
-  context: React.Context<IDescendantContext<ElementType, DescendantProps>>,
+  context: React.Context<DescendantContextValue<ElementType, DescendantProps>>,
   options: {
     currentIndex: number | null | undefined;
     key?: K | "option";
@@ -364,7 +381,7 @@ export type Descendant<ElementType, DescendantProps = {}> = DescendantProps & {
   index: number;
 };
 
-export interface IDescendantContext<ElementType, DescendantProps> {
+export interface DescendantContextValue<ElementType, DescendantProps> {
   descendants: Descendant<ElementType, DescendantProps>[];
   registerDescendant(
     descendant: Descendant<ElementType, DescendantProps>

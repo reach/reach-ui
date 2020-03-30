@@ -43,7 +43,6 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
-  DescendantProvider,
   useDescendant,
   useDescendants,
 } from "@reach/descendants";
@@ -159,7 +158,7 @@ const stateChart: StateChart = {
 };
 
 const reducer: Reducer = (data: StateData, event: MachineEvent) => {
-  const nextState = { ...data, lastEventType: event.type };
+  let nextState = { ...data, lastEventType: event.type };
   switch (event.type) {
     case CHANGE:
     case INITIAL_CHANGE:
@@ -268,14 +267,13 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     { onSelect, openOnFocus = false, children, as: Comp = "div", ...rest },
     forwardedRef
   ) {
-    let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
+    let [DescendantProvider] = useDescendants(ComboboxDescendantContext);
 
-    // Need this to focus it
-    const inputRef = useRef();
+    let inputRef = useRef();
 
-    const popoverRef = useRef();
+    let popoverRef = useRef();
 
-    const buttonRef = useRef();
+    let buttonRef = useRef();
 
     // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
     // the user's value while navigating (because it's always the user's value),
@@ -283,11 +281,11 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     // here, so we do something sneaky and write it to this ref on context so we
     // can use it anywhere else 😛. Another new trick for me and I'm excited
     // about this one too!
-    const autocompletePropRef = useRef();
+    let autocompletePropRef = useRef();
 
-    const persistSelectionRef = useRef();
+    let persistSelectionRef = useRef();
 
-    const defaultData: StateData = {
+    let defaultData: StateData = {
       // The value the user has typed. We derive this also when the developer is
       // controlling the value of ComboboxInput.
       value: "",
@@ -295,7 +293,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       navigationValue: null,
     };
 
-    const [state, data, transition] = useReducerMachine(
+    let [state, data, transition] = useReducerMachine(
       stateChart,
       reducer,
       defaultData
@@ -303,10 +301,10 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 
     useFocusManagement(data.lastEventType, inputRef);
 
-    const id = useId(rest.id);
-    const listboxId = id ? makeId("listbox", id) : "listbox";
+    let id = useId(rest.id);
+    let listboxId = id ? makeId("listbox", id) : "listbox";
 
-    const context: IComboboxContext = {
+    let context: IComboboxContext = {
       autocompletePropRef,
       buttonRef,
       data,
@@ -324,11 +322,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     useEffect(() => checkStyles("combobox"), []);
 
     return (
-      <DescendantProvider
-        context={ComboboxDescendantContext}
-        items={options}
-        set={setOptions}
-      >
+      <DescendantProvider>
         <ComboboxContext.Provider value={context}>
           <Comp {...rest} data-reach-combobox="" ref={forwardedRef}>
             {children}
@@ -433,7 +427,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = useCallback(
+    let handleValueChange = useCallback(
       (value: ComboboxValue) => {
         if (value.trim() === "") {
           transition(CLEAR);
@@ -467,7 +461,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     // user types, instead the developer controls it with the normal input
     // onChange prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-      const { value } = event.target;
+      let { value } = event.target;
       if (!isControlled) {
         handleValueChange(value);
       }
@@ -493,7 +487,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       }
     }
 
-    const inputValue =
+    let inputValue =
       autocomplete && (state === NAVIGATING || state === INTERACTING)
         ? // When idle, we don't have a navigationValue on ArrowUp/Down
           navigationValue || controlledValue || value
@@ -580,12 +574,12 @@ export const ComboboxPopover = forwardRef<
   { children, portal = true, onKeyDown, onBlur, ...props },
   forwardedRef: React.Ref<any>
 ) {
-  const { popoverRef, inputRef, isVisible } = useContext(ComboboxContext);
-  const ref = useForkedRef(popoverRef, forwardedRef);
-  const handleKeyDown = useKeyDown();
-  const handleBlur = useBlur();
+  let { popoverRef, inputRef, isVisible } = useContext(ComboboxContext);
+  let ref = useForkedRef(popoverRef, forwardedRef);
+  let handleKeyDown = useKeyDown();
+  let handleBlur = useBlur();
 
-  const sharedProps = {
+  let sharedProps = {
     "data-reach-combobox-popover": "",
     onKeyDown: wrapEvent<any>(onKeyDown, handleKeyDown),
     onBlur: wrapEvent<any>(onBlur, handleBlur),
@@ -653,7 +647,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
     },
     forwardedRef
   ) {
-    const { persistSelectionRef, listboxId } = useContext(ComboboxContext);
+    let { persistSelectionRef, listboxId } = useContext(ComboboxContext);
 
     if (persistSelection) {
       persistSelectionRef.current = true;
@@ -709,7 +703,7 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     { as: Comp = "li", children, value, onClick, ...props },
     forwardedRef: React.Ref<any>
   ) {
-    const {
+    let {
       onSelect,
       data: { navigationValue },
       transition,
@@ -718,15 +712,14 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     let ownRef = useRef<HTMLElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
 
-    let index = useDescendant({
-      context: ComboboxDescendantContext,
+    let index = useDescendant(ComboboxDescendantContext, {
       element: ownRef.current!,
       value,
     });
 
-    const isActive = navigationValue === value;
+    let isActive = navigationValue === value;
 
-    const handleClick = () => {
+    let handleClick = () => {
       onSelect && onSelect(value);
       transition(SELECT_WITH_CLICK, { value });
     };
@@ -804,12 +797,12 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoptiontext
  */
 export function ComboboxOptionText() {
-  const { value } = useContext(OptionContext);
-  const {
+  let { value } = useContext(OptionContext);
+  let {
     data: { value: contextValue },
   } = useContext(ComboboxContext);
 
-  const results = useMemo(
+  let results = useMemo(
     () =>
       findAll({
         searchWords: escapeRegexp(contextValue || "").split(/\s+/),
@@ -822,7 +815,7 @@ export function ComboboxOptionText() {
     <>
       {results.length
         ? results.map((result, index) => {
-            const str = value.slice(result.start, result.end);
+            let str = value.slice(result.start, result.end);
             return (
               <span
                 key={index}
@@ -852,14 +845,14 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
     { as: Comp = "button", onClick, onKeyDown, ...props },
     forwardedRef
   ) {
-    const { transition, state, buttonRef, listboxId, isVisible } = useContext(
+    let { transition, state, buttonRef, listboxId, isVisible } = useContext(
       ComboboxContext
     );
-    const ref = useForkedRef(buttonRef, forwardedRef);
+    let ref = useForkedRef(buttonRef, forwardedRef);
 
-    const handleKeyDown = useKeyDown();
+    let handleKeyDown = useKeyDown();
 
-    const handleClick = () => {
+    let handleClick = () => {
       if (state === IDLE) {
         transition(OPEN_WITH_BUTTON);
       } else {
@@ -921,7 +914,7 @@ function useFocusManagement(
  * HOOKS BTW?) This is probably the hairiest piece but it's not bad.
  */
 function useKeyDown() {
-  const {
+  let {
     data: { navigationValue },
     onSelect,
     state,
@@ -930,7 +923,7 @@ function useKeyDown() {
     persistSelectionRef,
   } = useContext(ComboboxContext);
 
-  const { descendants: options } = useContext(ComboboxDescendantContext);
+  let { descendants: options } = useContext(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
@@ -1065,7 +1058,7 @@ function useKeyDown() {
 }
 
 function useBlur() {
-  const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
+  let { state, transition, popoverRef, inputRef, buttonRef } = useContext(
     ComboboxContext
   );
 
@@ -1105,12 +1098,12 @@ function useReducerMachine(
   reducer: Reducer,
   initialData: Partial<StateData>
 ): [State, StateData, Transition] {
-  const [state, setState] = useState(chart.initial);
-  const [data, dispatch] = useReducer(reducer, initialData);
+  let [state, setState] = useState(chart.initial);
+  let [data, dispatch] = useReducer(reducer, initialData);
 
-  const transition: Transition = (event, payload = {}) => {
-    const currentState = chart.states[state];
-    const nextState = currentState && currentState.on[event];
+  let transition: Transition = (event, payload = {}) => {
+    let currentState = chart.states[state];
+    let nextState = currentState && currentState.on[event];
     if (nextState) {
       dispatch({ type: event, state, nextState: state, ...payload });
       setState(nextState);
@@ -1132,7 +1125,7 @@ function useReducerMachine(
  * @see https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
  * @param str
  */
-const makeHash = (str: string) => {
+function makeHash(str: string) {
   let hash = 0;
   if (str.length === 0) {
     return hash;
@@ -1143,7 +1136,7 @@ const makeHash = (str: string) => {
     hash = hash & hash;
   }
   return hash;
-};
+}
 
 /**
  * Escape regexp special characters in `str`

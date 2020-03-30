@@ -30,7 +30,6 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
-  DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
   useDescendants,
@@ -93,10 +92,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const wasControlled = typeof controlledIndex !== "undefined";
     const { current: isControlled } = useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendants<
-      HTMLElement,
-      DescendantProps
-    >();
+    const [DescendantProvider] = useDescendants(AccordionDescendantContext);
 
     const id = useId(props.id);
 
@@ -204,11 +200,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     useEffect(() => checkStyles("accordion"), []);
 
     return (
-      <DescendantProvider
-        context={AccordionDescendantContext}
-        items={descendants}
-        set={setDescendants}
-      >
+      <DescendantProvider>
         <AccordionContext.Provider value={context}>
           <div {...props} ref={forwardedRef} data-reach-accordion="">
             {children}
@@ -363,8 +355,7 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
     const { accordionId, openPanels, readOnly } = useAccordionContext();
     const buttonRef: ButtonRef = useRef(null);
 
-    const index = useDescendant({
-      context: AccordionDescendantContext,
+    const index = useDescendant(AccordionDescendantContext, {
       element: buttonRef.current,
       disabled,
     });

@@ -26,7 +26,6 @@ import Popover, { Position } from "@reach/popover";
 import {
   createDescendantContext,
   Descendant,
-  DescendantProvider,
   useDescendant,
   useDescendants,
   useDescendantKeyDown,
@@ -98,10 +97,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants<
-    HTMLElement,
-    DescendantProps
-  >();
+  let [DescendantProvider] = useDescendants(MenuDescendantContext);
   let [state, dispatch] = useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
@@ -149,11 +145,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   useEffect(() => checkStyles("menu-button"), []);
 
   return (
-    <DescendantProvider
-      context={MenuDescendantContext}
-      items={descendants}
-      set={setDescendants}
-    >
+    <DescendantProvider>
       <MenuContext.Provider value={context}>
         {isFunction(children) ? children({ isOpen: state.isOpen }) : children}
       </MenuContext.Provider>
@@ -303,7 +295,6 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
   function MenuItemImpl(
     {
       as: Comp,
-      index: indexProp,
       isLink = false,
       onClick,
       onDragStart,
@@ -350,15 +341,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let mouseEventStarted = useRef(false);
 
-    let index = useDescendant(
-      {
-        context: MenuDescendantContext,
-        element: ownRef.current!,
-        key: valueText,
-        isLink,
-      },
-      indexProp
-    );
+    let index = useDescendant(MenuDescendantContext, {
+      element: ownRef.current!,
+      key: valueText,
+      isLink,
+    });
     let isSelected = index === selectionIndex;
 
     // Update the callback ref array on every render

@@ -28,7 +28,6 @@ import React, {
 import PropTypes from "prop-types";
 import {
   createDescendantContext,
-  DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
   useDescendants,
@@ -121,7 +120,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [focusedIndex, setFocusedIndex] = useState(-1);
 
-  let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
+  let [DescendantProvider, tabs] = useDescendants(TabsDescendantsContext);
 
   let context: InternalTabsContextValue = useMemo(() => {
     return {
@@ -177,11 +176,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   useEffect(() => checkStyles("tabs"), []);
 
   return (
-    <DescendantProvider
-      context={TabsDescendantsContext}
-      items={tabs}
-      set={setTabs}
-    >
+    <DescendantProvider>
       <TabsContext.Provider value={context}>
         <Comp
           {...props}
@@ -468,9 +463,8 @@ export const Tab = forwardRefWithAs<
   } = useContext(TabsContext);
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
-  const index = useDescendant({
+  const index = useDescendant(TabsDescendantsContext, {
     element: ownRef.current!,
-    context: TabsDescendantsContext,
     disabled: !!disabled,
   });
 
@@ -571,14 +565,10 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let ownRef = useRef();
     let ref = useForkedRef(ownRef, forwardedRef);
-    let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
+    let [DescendantProvider] = useDescendants(TabPanelDescendantsContext);
 
     return (
-      <DescendantProvider
-        context={TabPanelDescendantsContext}
-        items={tabPanels}
-        set={setTabPanels}
-      >
+      <DescendantProvider>
         <Comp {...props} ref={ref} data-reach-tab-panels="">
           {children}
         </Comp>
@@ -624,9 +614,8 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     );
     let ownRef = useRef<HTMLElement | null>(null);
 
-    let index = useDescendant({
+    let index = useDescendant(TabPanelDescendantsContext, {
       element: ownRef.current!,
-      context: TabPanelDescendantsContext,
     });
     let isSelected = index === selectedIndex;
 
