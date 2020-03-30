@@ -12,6 +12,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#tab">Tab</TOCLink>
     <TOCLink href="#tabpanels">TabPanels</TOCLink>
     <TOCLink href="#tabpanel">TabPanel</TOCLink>
+    <TOCLink href="#usetabscontext">useTabsContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -104,7 +105,7 @@ Tabs will render a `div` unless you specify a different element.
 
 ##### Tabs `children`
 
-`children: React.ReactNode | ((props: TabsContextValue) => React.ReactNode)`
+`children: React.ReactNode | ((props: { focusedIndex: number; id: string; selectedIndex: number }) => React.ReactNode)`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
@@ -645,6 +646,56 @@ TabPanel will render a `div` unless you specify a different element.
 ##### TabPanel `div` props
 
 All other props are passed to the underlying `div` (or component passed to `as`).
+
+### useTabsContext
+
+`function useTabsContext(): { focusedIndex: number; id: string; selectedIndex: number }`
+
+A hook that exposes data for a given `Tabs` component to its descendants.
+
+```jsx
+// jsx-demo
+(() => {
+  function CustomTab({ index, ...props }) {
+    const { selectedIndex, focusedIndex } = useTabsContext();
+    return (
+      <Tab
+        style={{
+          borderBottom: `4px solid ${
+            selectedIndex === index
+              ? "red"
+              : focusedIndex === index
+              ? "blue"
+              : "black"
+          }`,
+        }}
+        {...props}
+      />
+    );
+  }
+
+  return (
+    <Tabs keyboardActivation="manual">
+      <TabList>
+        <CustomTab index={0}>Uno</CustomTab>
+        <CustomTab index={1}>Dos</CustomTab>
+        <CustomTab index={2}>Tres</CustomTab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>
+          <p>Uno</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Dos</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Tres</p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+})();
+```
 
 ## Demos
 

@@ -67,7 +67,14 @@ import {
   SliderHandle,
   SliderMarker,
 } from "@reach/slider";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  useTabsContext,
+} from "@reach/tabs";
 import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
 import VisuallyHidden from "@reach/visually-hidden";
 import WindowSize, { useWindowSize } from "@reach/window-size";
@@ -189,6 +196,7 @@ function MyPageLayout({ children }) {
                   useId,
                   useMixedCheckbox,
                   useRect,
+                  useTabsContext,
                   useThrottle,
                   useTooltip,
                   useTransition,

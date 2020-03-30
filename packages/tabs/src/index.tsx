@@ -682,6 +682,11 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * A hook that exposes data for a given `Tabs` component to its descendants.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/tabs#usetabscontext
+ */
 export function useTabsContext(): TabsContextValue {
   let { focusedIndex, id, selectedIndex } = useContext(TabsContext);
   return useMemo(
