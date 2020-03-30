@@ -7,7 +7,7 @@ let name = "Vertical-start oriented tabs";
 function Example() {
   return (
     <div>
-      <Tabs orientation="vertical-start">
+      <Tabs orientation="vertical">
         <TabList>
           <Tab>One</Tab>
           <Tab>Two</Tab>

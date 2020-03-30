@@ -56,6 +56,11 @@ import {
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
+const TabsGroupDescendantsContext = createDescendantContext<
+  HTMLElement,
+  TabsGroupDescendantProps
+>("TabsGroupDescendantsContext");
+
 const TabsDescendantsContext = createDescendantContext<
   HTMLElement,
   TabDescendantProps
@@ -73,10 +78,8 @@ export enum TabsKeyboardActivation {
 }
 
 export enum TabsOrientation {
-  HorizontalStart = "horizontal-start",
-  HorizontalEnd = "horizontal-end",
-  VerticalStart = "vertical-start",
-  VerticalEnd = "vertical-end",
+  Horizontal = "horizontal",
+  Vertical = "vertical",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +96,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
     as: Comp = "div",
     children,
     defaultIndex,
-    orientation = TabsOrientation.HorizontalStart,
+    orientation = TabsOrientation.Horizontal,
     index: controlledIndex = undefined,
     keyboardActivation = TabsKeyboardActivation.Auto,
     onChange,
@@ -108,13 +111,13 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   let _id = useId(props.id);
   let id = props.id ?? makeId("tabs", _id);
 
-  /*
-   * We only manage focus if the user caused the update vs. a new controlled
-   * index coming in.
-   */
+  // We only manage focus if the user caused the update vs. a new controlled
+  // index coming in.
   let userInteractedRef = useRef(false);
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
+
+  let blockOrder = useRef<"start" | "end">("start");
 
   let [selectedIndex, setSelectedIndex] = useControlledState(
     controlledIndex,
@@ -122,10 +125,21 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   );
 
   let [focusedIndex, setFocusedIndex] = useState(-1);
+
   let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
+
+  // In addition to tracking tab descendants, we can use this hook to register
+  // the TabList and TabPanels components to find out which one appears first
+  // in the DOM. This lets us determine the proper key that should move the user
+  // from a focused tab into the active panel.
+  let [tabsGroup, setTabsGroup] = useDescendants<
+    HTMLElement,
+    TabsGroupDescendantProps
+  >();
 
   let context: TabsContextValue = useMemo(() => {
     return {
+      blockOrder,
       focusedIndex,
       id,
       isControlled: isControlled.current,
@@ -178,21 +192,27 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   return (
     <DescendantProvider
-      context={TabsDescendantsContext}
-      items={tabs}
-      set={setTabs}
+      context={TabsGroupDescendantsContext}
+      items={tabsGroup}
+      set={setTabsGroup}
     >
-      <TabsContext.Provider value={context}>
-        <Comp
-          {...props}
-          ref={ref}
-          data-reach-tabs=""
-          data-orientation={orientation}
-          id={props.id}
-        >
-          {children}
-        </Comp>
-      </TabsContext.Provider>
+      <DescendantProvider
+        context={TabsDescendantsContext}
+        items={tabs}
+        set={setTabs}
+      >
+        <TabsContext.Provider value={context}>
+          <Comp
+            {...props}
+            ref={ref}
+            data-reach-tabs=""
+            data-orientation={orientation}
+            id={props.id}
+          >
+            {children}
+          </Comp>
+        </TabsContext.Provider>
+      </DescendantProvider>
     </DescendantProvider>
   );
 });
@@ -319,6 +339,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   forwardedRef
 ) {
   const {
+    blockOrder,
     focusedIndex,
     isControlled,
     keyboardActivation,
@@ -330,9 +351,17 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   } = useTabsContext();
 
   let { descendants: tabs } = useContext(TabsDescendantsContext);
+  let { descendants: tabsGroup } = useContext(TabsGroupDescendantsContext);
+
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
   let isRTL = useRef(false);
+
+  useDescendant({
+    element: ownRef.current!,
+    context: TabsGroupDescendantsContext,
+    type: "tablist",
+  });
 
   useEffect(() => {
     if (
@@ -345,17 +374,37 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     }
   }, []);
 
+  useEffect(() => {
+    if (tabsGroup[0]?.type === "panels") {
+      blockOrder.current = "end";
+    } else if (tabsGroup[0]?.type === "tablist") {
+      blockOrder.current = "start";
+    }
+  }, [blockOrder, tabsGroup]);
+
   let handleKeyDown = useEventCallback(
     wrapEvent(
       function(event: React.KeyboardEvent) {
+        // In the operation of screen readers like NVDA and JAWS, the
+        // `ArrowDown` key moves the user to the next element (focusable or
+        // otherwise) and reads it out. Without intervention, this would be the
+        // next tab in the tablist. Instead, we can intercept the `ArrowDown`
+        // key press and move focus programmatically to the open panel itself,
+        // making sure it isn't missed.
+        // https://inclusive-components.design/tabbed-interfaces/#aproblemreadingpanels
+        // We may need to re-think this with vertical tabs.
         if (
-          (orientation === TabsOrientation.HorizontalStart &&
+          (orientation === TabsOrientation.Horizontal &&
+            blockOrder.current === "start" &&
             event.key === "ArrowDown") ||
-          (orientation === TabsOrientation.HorizontalEnd &&
+          (orientation === TabsOrientation.Horizontal &&
+            blockOrder.current === "end" &&
             event.key === "ArrowUp") ||
-          (orientation === TabsOrientation.VerticalStart &&
+          (orientation === TabsOrientation.Vertical &&
+            blockOrder.current === "start" &&
             event.key === (isRTL.current ? "ArrowLeft" : "ArrowRight")) ||
-          (orientation === TabsOrientation.VerticalEnd &&
+          (orientation === TabsOrientation.Vertical &&
+            blockOrder.current === "end" &&
             event.key === (isRTL.current ? "ArrowRight" : "ArrowLeft"))
         ) {
           event.preventDefault();
@@ -574,14 +623,23 @@ if (__DEV__) {
  */
 const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
+    let ownRef = useRef();
+    let ref = useForkedRef(ownRef, forwardedRef);
     let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
+
+    useDescendant({
+      element: ownRef.current!,
+      context: TabsGroupDescendantsContext,
+      type: "panels",
+    });
+
     return (
       <DescendantProvider
         context={TabPanelDescendantsContext}
         items={tabPanels}
         set={setTabPanels}
       >
-        <Comp {...props} ref={forwardedRef} data-reach-tab-panels="">
+        <Comp {...props} ref={ref} data-reach-tab-panels="">
           {children}
         </Comp>
       </DescendantProvider>
@@ -697,7 +755,12 @@ type TabDescendantProps = {
   disabled: boolean;
 };
 
+type TabsGroupDescendantProps = {
+  type: "panels" | "tablist";
+};
+
 interface TabsContextValue {
+  blockOrder: React.MutableRefObject<"start" | "end">;
   id: string;
   isControlled: boolean;
   keyboardActivation: TabsKeyboardActivation;

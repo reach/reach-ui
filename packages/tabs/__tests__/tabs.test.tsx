@@ -105,7 +105,7 @@ describe("<Tabs />", () => {
     it("focuses the correct tab with keyboard navigation (vertical orientation)", () => {
       const { getByText, getByRole } = render(
         <div>
-          <Tabs orientation={TabsOrientation.VerticalStart}>
+          <Tabs orientation={TabsOrientation.Vertical}>
             <TabList>
               <Tab>Tab 1</Tab>
               <Tab>Tab 2</Tab>

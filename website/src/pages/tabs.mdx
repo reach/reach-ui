@@ -85,16 +85,16 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                                             | Type                                                                                 | Required | Default              |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------ | -------- | -------------------- |
-| [`as`](#tabs-as)                                 | `string` \| `Component`                                                              | false    | `"div"`              |
-| [`children`](#tabs-children)                     | `node`                                                                               | true     |                      |
-| [`defaultIndex`](#tabs-defaultindex)             | `number`                                                                             | false    |                      |
-| [`index`](#tabs-index)                           | `number`                                                                             | false    |                      |
-| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`                                                               | false    | `"auto`              |
-| [`onChange`](#tabs-onchange)                     | `func`                                                                               | false    |                      |
-| [`orientation`](#tabs-orientation)               | `"horizontal-start"` \| `"horizontal-end"` \| `"vertical-start"` \| `"vertical-end"` | false    | `"horizontal-start"` |
-| [`div` props](#tabs-div-props)                   |                                                                                      | false    |                      |
+| Prop                                             | Type                           | Required | Default        |
+| ------------------------------------------------ | ------------------------------ | -------- | -------------- |
+| [`as`](#tabs-as)                                 | `string` \| `Component`        | false    | `"div"`        |
+| [`children`](#tabs-children)                     | `node`                         | true     |                |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                       | false    |                |
+| [`index`](#tabs-index)                           | `number`                       | false    |                |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`         | false    | `"auto`        |
+| [`onChange`](#tabs-onchange)                     | `func`                         | false    |                |
+| [`orientation`](#tabs-orientation)               | `"horizontal"` \| `"vertical"` | false    | `"horizontal"` |
+| [`div` props](#tabs-div-props)                   |                                | false    |                |
 
 ##### Tabs `as`
 
@@ -260,21 +260,18 @@ function Example() {
 
 ##### Tabs `orientation`
 
-`orientation?: "horizontal-start" | "horizontal-end" | "vertical-start" | "vertical-end"`
+`orientation?: "horizontal" | "vertical"`
 
-Allows you to switch the orientation of the tabs relative to their tab panels. Defaults to `"horizontal-start"`.
+Allows you to switch the orientation of the tabs relative to their tab panels. Defaults to `"horizontal"`.
 
-`horizontal-` and `vertical-` orientations will change how the arrow keys navigate between tabs. Arrow key navigation should logically follow the order in which tabs appear on the screen. For screen reader users, the `aria-orientation` attribute provides the appropriate context to direct which keys should navigate to the next tab (this is provided automatically).
-
-`-start` and `-end` props should be determined by the DOM order of rendered components. If the `TabList` component appears before `TabPanels`, the `horizontal-start` or `vertical-start` should be used. When the `TabList` component appears after `TabPanels`, use `horizontal-end` or `vertical-end`. For vertical tabs, this will change whether or not <kbd>ArrowLeft</kbd> or <kbd>ArrowRight</kbd> moves the user into the active panel.
+Changing the orientation will change how the arrow keys navigate between tabs. Arrow key navigation should logically follow the order in which tabs appear on the screen. For screen reader users, the `aria-orientation` attribute provides the appropriate context to direct which keys should navigate to the next tab (this is provided automatically). As such, it's important to use this prop even if you have already styled your tabs for vertical layout.
 
 ```jsx
 // jsx-demo
 function Example() {
-  // Try changing the orientation! If you change `start` to `end`, move the
-  // TabList below the tab panels.
+  // Try changing the orientation!
   return (
-    <Tabs orientation="horizontal-start">
+    <Tabs orientation="vertical">
       <TabList>
         <Tab>One</Tab>
         <Tab>Two</Tab>
@@ -750,3 +747,17 @@ With a little composition we can animate the selected tab bar.
   );
 })();
 ```
+
+### Keyboard Accessibility
+
+| Key                                          | Action                                                                               |
+| -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| <kbd>Enter</kbd> / <kbd>Spacebar</kbd>       | Sets the focused tab to `active` when `keyboardActivation` is set to `"manual"`.     |
+| <kbd>ArrowUp</kbd> / <kbd>ArrowDown</kbd>    | Navigates between tabs when `orientation` is `"vertical"`. See below more details.   |
+| <kbd>ArrowLeft</kbd> / <kbd>ArrowRight</kbd> | Navigates between tabs when `orientation` is `"horizontal"`. See below more details. |
+| <kbd>Home</kbd> / <kbd>PageUp</kbd>          | Navigates to the last tab in the `TabList`.                                          |
+| <kbd>End</kbd> / <kbd>PageDown</kbd>         | Navigates to the first tab in the `TabList`.                                         |
+
+When focused on the active tab, an arrow key should move focus to its corresponding active tab panel depending on where it appears relative to the tab. For example, in horizontal tabs where the `TabList` appears above the `TabPanels`, the <kbd>ArrowDown</kbd> key focuses the active tab panel. For vertical tabs with in the same order, <kbd>ArrowRight</kbd> moves focus for left-to-right reading mode and <kbd>ArrowLeft</kbd> for right-to-left reading mode. The opposite arrow key for either orientation is used when the rendered DOM order is reversed.
+
+For this reason, it is recommended that you always reverse the order of the `TabList` and `TabPanels` components if you want to change their visual representation. This keeps keyboard navigation logical and keyboard users happy!

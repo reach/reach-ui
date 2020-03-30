@@ -768,9 +768,9 @@ This won't work because we actually do not call the `onClick` handler to activat
 
 As such, events for each component look more like this:
 
-- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys)
-- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys)
-- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Space</kbd> keys).
+- `MenuButton`: Activates `Menu` in `onMouseDown` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Spacebar</kbd> keys)
+- `MenuItem`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Spacebar</kbd> keys)
+- `MenuLink`: Selects itself in `onMouseUp` or `onKeyDown` (<kbd>Enter</kbd> or <kbd>Spacebar</kbd> keys).
   - For `MenuLink`, the `click` event is fired after the selection events. So if you only need to intercept the event that triggers the anchor link, you can still use `onClick`, but the rest of the event handlers called in `MenuLink` will still be which means the `Menu` will close and your `onSelect` handler will be triggered.
 
 ### Keyboard Accessibility
@@ -778,7 +778,7 @@ As such, events for each component look more like this:
 | Key                  | Action                                                                         |
 | -------------------- | ------------------------------------------------------------------------------ |
 | <kbd>Enter</kbd>     | Open/close while focused on the `MenuButton`; Selects an item when navigating. |
-| <kbd>Space</kbd>     | Open/close while focused on the `MenuButton`; Selects an item when navigating. |
+| <kbd>Spacebar</kbd>  | Open/close while focused on the `MenuButton`; Selects an item when navigating. |
 | <kbd>ArrowUp</kbd>   | Highlight previous item                                                        |
 | <kbd>ArrowDown</kbd> | Highlight next item                                                            |
 | <kbd>Home</kbd>      | Highlight first item                                                           |

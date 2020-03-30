@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  TabsOrientation,
-} from "@reach/tabs";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
 let name = "Wrappers Gone Wild (TS)";
@@ -14,7 +7,26 @@ let name = "Wrappers Gone Wild (TS)";
 function Example() {
   return (
     <div>
-      <Tabs orientation={TabsOrientation.HorizontalEnd} defaultIndex={1}>
+      <Tabs defaultIndex={1}>
+        <div>
+          <GroupedPanels />
+        </div>
+        <TabList>
+          <Tab>One</Tab>
+          <div style={{ display: "flex" }}>
+            <GroupedTabs />
+          </div>
+          <Tab>Four</Tab>
+        </TabList>
+      </Tabs>
+    </div>
+  );
+}
+
+function GroupedPanels() {
+  return (
+    <div>
+      <div>
         <TabPanels>
           <TabPanel>
             <h1>one!</h1>
@@ -30,19 +42,14 @@ function Example() {
               <h1>three!</h1>
               <p>Here's some example content.</p>
             </TabPanel>
-            <TabPanel>
-              <h1>four!</h1>
-            </TabPanel>
+            <div>
+              <TabPanel>
+                <h1>four!</h1>
+              </TabPanel>
+            </div>
           </div>
         </TabPanels>
-        <TabList>
-          <Tab>One</Tab>
-          <div style={{ display: "flex" }}>
-            <GroupedTabs />
-          </div>
-          <Tab>Four</Tab>
-        </TabList>
-      </Tabs>
+      </div>
     </div>
   );
 }

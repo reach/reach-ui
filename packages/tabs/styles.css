@@ -2,7 +2,7 @@
   --reach-tabs: 1;
 }
 
-[data-reach-tabs][data-orientation^="vertical"] {
+[data-reach-tabs][data-orientation="vertical"] {
   display: flex;
 }
 

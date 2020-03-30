@@ -14,7 +14,7 @@ let name = "Vertical-end oriented tabs (TS)";
 function Example() {
   return (
     <div>
-      <Tabs orientation={TabsOrientation.VerticalEnd}>
+      <Tabs orientation={TabsOrientation.Vertical}>
         <TabPanels>
           <TabPanel>
             <h1>one!</h1>

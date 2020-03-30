@@ -14,7 +14,7 @@ let name = "Vertical-start oriented tabs, RTL (TS)";
 function Example() {
   return (
     <div style={{ direction: "rtl" }}>
-      <Tabs orientation={TabsOrientation.VerticalStart}>
+      <Tabs orientation={TabsOrientation.Vertical}>
         <TabList>
           <Tab>First tab</Tab>
           <Tab>Second tab</Tab>
