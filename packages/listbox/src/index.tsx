@@ -40,6 +40,7 @@ import Popover, { PopoverProps, positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
   Descendant,
+  DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
   useDescendants,
@@ -133,7 +134,10 @@ export const ListboxInput = forwardRef<
   forwardedRef
 ) {
   let { current: isControlled } = useRef(valueProp != null);
-  let [DescendantProvider, options] = useDescendants(ListboxDescendantContext);
+  let [options, setOptions] = useDescendants<
+    HTMLElement,
+    ListboxDescendantProps
+  >();
 
   // We will track when a mouse has moved in a ref, then reset it to false each
   // time a popover closes. This is useful because we want the selected value of
@@ -283,7 +287,11 @@ export const ListboxInput = forwardRef<
   useEffect(() => checkStyles("listbox"), []);
 
   return (
-    <DescendantProvider>
+    <DescendantProvider
+      context={ListboxDescendantContext}
+      items={options}
+      set={setOptions}
+    >
       <ListboxContext.Provider value={context}>
         <div
           {...props}
@@ -929,7 +937,8 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let label = labelProp || labelState || "";
 
     let ownRef = useRef<HTMLElement | null>(null);
-    useDescendant(ListboxDescendantContext, {
+    useDescendant({
+      context: ListboxDescendantContext,
       element: ownRef.current!,
       value,
       label,

@@ -247,6 +247,7 @@ The `descendants` package provides these key tools:
 ```jsx
 import {
   createDescendantContext,
+  DescendantProvider,
   useDescendant,
   useDescendants,
 } from "@reach/descendants";
@@ -255,10 +256,14 @@ let DescendantContext = createDescendantContext("DescendantContext");
 let MenuContext = createContext();
 
 function Menu({ id, children }) {
-  let [DescendantProvider] = useDescendants(DescendantContext);
+  let [descendants, setDescendants] = useDescendants();
   let [activeIndex, setActiveIndex] = useState(-1);
   return (
-    <DescendantProvider>
+    <DescendantProvider
+      context={DescendantContext}
+      items={descendants}
+      set={setDescendants}
+    >
       <MenuContext.Provider
         value={{ buttonId: `button-${useId(id)}`, activeIndex, setActiveIndex }}
       >
@@ -287,19 +292,17 @@ function MenuList(props) {
 function MenuItem(props) {
   let { activeIndex, setActiveIndex } = useContext(MenuContext);
   let ref = useRef(null);
-  let index = useDescendant(
+  let index = useDescendant({
     // Tell the useDescendant hook to use a specific context
     // This is key in case you have a compound component that needs index
     // tracking in separate correlating descendant components (like `Tabs`)
-    DescendantContext,
-    {
-      // Assign the DOM node using a ref
-      element: ref.current,
-      // You can pass arbitrary data into a descendant object which can come
-      // in handy for features like typeahead!
-      key: props.label,
-    }
-  );
+    context: DescendantContext,
+    // Assign the DOM node using a ref
+    element: ref.current,
+    // You can pass arbitrary data into a descendant object which can come
+    // in handy for features like typeahead!
+    key: props.label,
+  });
 
   // Now we know the index, so let's use it!
   let isSelected = index === activeIndex;
