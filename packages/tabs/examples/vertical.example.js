@@ -1,20 +1,19 @@
 import React from "react";
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-  TabsOrientation,
-} from "@reach/tabs";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
-let name = "Vertical-end oriented tabs (TS)";
+let name = "Vertically oriented tabs";
 
 function Example() {
   return (
     <div>
-      <Tabs orientation={TabsOrientation.Vertical}>
+      <Tabs orientation="vertical">
+        <TabList>
+          <Tab>One</Tab>
+          <Tab>Two</Tab>
+          <Tab>Three</Tab>
+        </TabList>
+
         <TabPanels>
           <TabPanel>
             <h1>one!</h1>
@@ -30,12 +29,10 @@ function Example() {
             <p>Here's some example content.</p>
           </TabPanel>
         </TabPanels>
-        <TabList>
-          <Tab>One</Tab>
-          <Tab>Two</Tab>
-          <Tab>Three</Tab>
-        </TabList>
       </Tabs>
+      <div style={{ marginTop: 800 }}>
+        <p>Yo!</p>
+      </div>
     </div>
   );
 }

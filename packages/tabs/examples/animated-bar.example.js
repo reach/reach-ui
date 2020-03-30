@@ -5,7 +5,14 @@ import React, {
   useLayoutEffect,
   createContext,
 } from "react";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+import {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  useTabsContext,
+} from "@reach/tabs";
 import { useRect } from "@reach/rect";
 import "@reach/tabs/styles.css";
 
@@ -14,14 +21,19 @@ let name = "Animated Bar";
 let HORIZONTAL_PADDING = 8;
 
 function Example() {
+  // Assign index props
   return (
     <ExampleAnimatedTabs color="red" style={{ width: 400 }}>
       <TabList style={{ justifyContent: "space-around" }}>
-        <ExampleAnimatedTab style={{ flex: 1 }}>The First</ExampleAnimatedTab>
-        <ExampleAnimatedTab style={{ flex: 2 }}>
+        <ExampleAnimatedTab index={0} style={{ flex: 1 }}>
+          The First
+        </ExampleAnimatedTab>
+        <ExampleAnimatedTab index={1} style={{ flex: 2 }}>
           This has longer text
         </ExampleAnimatedTab>
-        <ExampleAnimatedTab style={{ flex: 1 }}>Three</ExampleAnimatedTab>
+        <ExampleAnimatedTab index={2} style={{ flex: 1 }}>
+          Three
+        </ExampleAnimatedTab>
       </TabList>
       <TabPanels style={{ padding: 10 }}>
         <TabPanel>
@@ -72,8 +84,10 @@ function ExampleAnimatedTabs({ color, ...rest }) {
   );
 }
 
-function ExampleAnimatedTab(props) {
-  const { isSelected } = props;
+function ExampleAnimatedTab({ index, ...props }) {
+  // get the currently selected index from useTabsContext
+  const { selectedIndex } = useTabsContext();
+  const isSelected = selectedIndex === index;
 
   // measure the size of our element, only listen to rect if active
   const ref = useRef();

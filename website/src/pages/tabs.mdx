@@ -104,7 +104,7 @@ Tabs will render a `div` unless you specify a different element.
 
 ##### Tabs `children`
 
-`children: React.ReactNode`
+`children: React.ReactNode | ((props: TabsContextValue) => React.ReactNode)`
 
 Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
 
@@ -129,6 +129,42 @@ function Example() {
         <Tab>Uno</Tab>
         <Tab>Dos</Tab>
       </TabList>
+    </Tabs>
+  );
+}
+```
+
+You can also pass a render function to access data relevant to nested components.
+
+```jsx
+function Example() {
+  return (
+    <Tabs keyboardActivation="manual">
+      {({ selectedIndex, focusedIndex }) => {
+        let getTabStyle = index => ({
+          borderBottom: `4px solid ${
+            selectedIndex === index
+              ? "red"
+              : focusedIndex === index
+              ? "blue"
+              : "black"
+          }`,
+        });
+        return (
+          <React.Fragment>
+            <TabList>
+              <Tab style={getTabStyle(0)}>Uno</Tab>
+              <Tab style={getTabStyle(1)}>Dos</Tab>
+              <Tab style={getTabStyle(2)}>Tres</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>Uno</TabPanel>
+              <TabPanel>Dos</TabPanel>
+              <TabPanel>Tres</TabPanel>
+            </TabPanels>
+          </React.Fragment>
+        );
+      }}
     </Tabs>
   );
 }
@@ -614,7 +650,7 @@ All other props are passed to the underlying `div` (or component passed to `as`)
 
 These demos show off how you can add quite a bit of behavior to your Tabs interfaces.
 
-### DataTabs
+### Data-driven tabs
 
 If you'd like to drive your tabs with data you can create a `DataTabs` component.
 
@@ -662,75 +698,76 @@ With a little composition we can animate the selected tab bar.
 (() => {
   const AnimatedContext = React.createContext();
 
-  function AnimatedTabs(props) {
-    // need to store the position of the selected Tab so we can
-    // animate the bar to its position
-    const [selectedRect, setSelectedRect] = useState(null);
+  function AnimatedTabs({ color, ...rest }) {
+    // some state to store the position we want to animate to
+    const [activeRect, setActiveRect] = useState(null);
 
-    // need to measure the parent element so we can measure
-    // the relative "left" for the bar
-    const tabsRef = useRef();
-    const tabsRect = useRect(tabsRef);
-
-    // Put the function to change the positions on context so the
-    // Tabs down the tree can easily access it
     return (
-      <AnimatedContext.Provider value={setSelectedRect}>
-        <Tabs
-          {...props}
-          ref={tabsRef}
-          style={{ ...props.style, position: "relative" }}
-        >
-          {props.children[0]}
-
-          {/* put the bar inbetween the TabList and TabPanels */}
-          <div
-            style={{
-              position: "absolute",
-              height: 2,
-              background: props.color,
-              marginTop: -2,
-
-              // Here is the actual animation part, we use the
-              // rect from the selected tab to set the styles of the bar
-              transition: "all 300ms ease",
-              left: selectedRect && selectedRect.left - tabsRect.left,
-              width: selectedRect && selectedRect.width,
-            }}
-          />
-          {props.children[1]}
-        </Tabs>
+      // put the function to change the styles on context so an active Tab
+      // can call it, then style it up
+      <AnimatedContext.Provider value={setActiveRect}>
+        {/* make sure to forward props since we're wrapping Tabs */}
+        <Tabs {...rest} style={{ ...rest.style, position: "relative" }} />
+        <div
+          style={{
+            position: "absolute",
+            height: 2,
+            background: color,
+            transition: "all 300ms ease",
+            left: activeRect && activeRect.left,
+            // subtract both sides of horizontal padding to center the div
+            width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
+            top: activeRect && activeRect.bottom - 2,
+          }}
+        />
       </AnimatedContext.Provider>
     );
   }
 
-  function AnimatedTab(props) {
-    const { isSelected } = props;
+  function AnimatedTab({ index, ...props }) {
+    // get the currently selected index from useTabsContext
+    const { selectedIndex } = useTabsContext();
+    const isSelected = selectedIndex === index;
 
-    // Each tab measures itself
+    // measure the size of our element, only listen to rect if active
     const ref = useRef();
     const rect = useRect(ref, isSelected);
 
-    // and calls up to the parent when it becomes selected
-    // we useLayoutEffect to avoid flicker
-    const setSelectedRect = useContext(AnimatedContext);
+    // get the style changing function from context
+    const setActiveRect = useContext(AnimatedContext);
+
+    // callup to set styles whenever we're active
     useLayoutEffect(() => {
-      if (isSelected) setSelectedRect(rect);
-    }, [isSelected, rect, setSelectedRect]);
+      if (isSelected) {
+        setActiveRect(rect);
+      }
+    }, [isSelected, rect, setActiveRect]);
 
     return (
-      <Tab ref={ref} {...props} style={{ ...props.style, border: "none" }} />
+      <Tab
+        ref={ref}
+        {...props}
+        style={{
+          ...props.style,
+          border: "none",
+          padding: `4px ${HORIZONTAL_PADDING}px`,
+        }}
+      />
     );
   }
-
-  // And that's it! It's not a small amount of code, but it's not a ton
-  // either, and it's all composed on top, instead of built in.
+.
   return (
     <AnimatedTabs color="red" style={{ width: 400 }}>
       <TabList style={{ justifyContent: "space-around" }}>
-        <AnimatedTab style={{ flex: 1 }}>The First</AnimatedTab>
-        <AnimatedTab style={{ flex: 2 }}>This has longer text</AnimatedTab>
-        <AnimatedTab style={{ flex: 1 }}>Three</AnimatedTab>
+        <AnimatedTab index={0} style={{ flex: 1 }}>
+          The First
+        </AnimatedTab>
+        <AnimatedTab index={1} style={{ flex: 2 }}>
+          This has longer text
+        </AnimatedTab>
+        <AnimatedTab index={2} style={{ flex: 1 }}>
+          Three
+        </AnimatedTab>
       </TabList>
       <TabPanels style={{ padding: 10 }}>
         <TabPanel>

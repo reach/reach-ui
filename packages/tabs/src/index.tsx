@@ -41,6 +41,7 @@ import {
   forwardRefWithAs,
   getElementComputedStyle,
   isNumber,
+  isFunction,
   makeId,
   noop,
   useControlledSwitchWarning,
@@ -61,8 +62,10 @@ const TabsDescendantsContext = createDescendantContext<
 const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
   "TabPanelDescendantsContext"
 );
-const TabsContext = createNamedContext("TabsContext", {} as TabsContextValue);
-const useTabsContext = () => useContext(TabsContext);
+const TabsContext = createNamedContext(
+  "TabsContext",
+  {} as InternalTabsContextValue
+);
 
 export enum TabsKeyboardActivation {
   Auto = "auto",
@@ -120,7 +123,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
 
-  let context: TabsContextValue = useMemo(() => {
+  let context: InternalTabsContextValue = useMemo(() => {
     return {
       focusedIndex,
       id,
@@ -187,7 +190,9 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
           data-orientation={orientation}
           id={props.id}
         >
-          {children}
+          {isFunction(children)
+            ? children({ focusedIndex, id, selectedIndex })
+            : children}
         </Comp>
       </TabsContext.Provider>
     </DescendantProvider>
@@ -204,9 +209,12 @@ export type TabsProps = {
    * tabs on both the bottom and the top at the same time. You can have random
    * elements inside as well.
    *
+   * You can also pass a render function to access data relevant to nested
+   * components.
+   *
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-children
    */
-  children: React.ReactNode;
+  children: React.ReactNode | ((props: TabsContextValue) => React.ReactNode);
   /**
    * Like form inputs, a tab's state can be controlled by the owner. Make sure
    * to include an `onChange` as well, or else the tabs will not be interactive.
@@ -324,7 +332,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     orientation,
     selectedIndex,
     setSelectedIndex,
-  } = useTabsContext();
+  } = useContext(TabsContext);
 
   let { descendants: tabs } = useContext(TabsDescendantsContext);
 
@@ -389,11 +397,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
       onKeyDown={handleKeyDown}
     >
       {Children.map(children, (child, index) => {
-        // TODO: Since refactoring to use context rather than depending on
-        // parent/child relationships, we need to update our recommendations for
-        // animations that break when we don't forward the `isSelected` prop
-        // to our tabs. We will remove this in 1.0 and update our docs
-        // accordingly.
+        // TODO: Remove in 1.0
         return cloneValidElement(child, {
           isSelected: index === selectedIndex,
         });
@@ -461,7 +465,7 @@ export const Tab = forwardRefWithAs<
     selectedIndex,
     userInteractedRef,
     setFocusedIndex,
-  } = useTabsContext();
+  } = useContext(TabsContext);
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
   const index = useDescendant({
@@ -531,8 +535,20 @@ export const Tab = forwardRefWithAs<
  * @see Docs https://reacttraining.com/reach-ui/tabs#tab-props
  */
 export type TabProps = {
+  /**
+   * `Tab` can receive any type of children.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tab-children
+   */
+  children?: React.ReactNode;
+  /**
+   * Disables a tab when true. Clicking will not work and keyboard navigation
+   * will skip over it.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/tabs#tab-disabled
+   */
   disabled?: boolean;
-} & TabPanelProps;
+};
 
 if (__DEV__) {
   Tab.displayName = "Tab";
@@ -603,7 +619,9 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
     forwardedRef
   ) {
-    let { selectedPanelRef, selectedIndex, id: tabsId } = useTabsContext();
+    let { selectedPanelRef, selectedIndex, id: tabsId } = useContext(
+      TabsContext
+    );
     let ownRef = useRef<HTMLElement | null>(null);
 
     let index = useDescendant({
@@ -663,13 +681,33 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+export function useTabsContext(): TabsContextValue {
+  let { focusedIndex, id, selectedIndex } = useContext(TabsContext);
+  return useMemo(
+    () => ({
+      focusedIndex,
+      id,
+      selectedIndex,
+    }),
+    [focusedIndex, id, selectedIndex]
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Types
 
 type TabDescendantProps = {
   disabled: boolean;
 };
 
-interface TabsContextValue {
+export type TabsContextValue = {
+  focusedIndex: number;
+  id: string;
+  selectedIndex: number;
+};
+
+type InternalTabsContextValue = {
   focusedIndex: number;
   id: string;
   isControlled: boolean;
@@ -684,4 +722,4 @@ interface TabsContextValue {
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   userInteractedRef: React.MutableRefObject<boolean>;
-}
+};

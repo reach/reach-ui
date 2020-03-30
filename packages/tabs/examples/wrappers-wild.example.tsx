@@ -8,9 +8,6 @@ function Example() {
   return (
     <div>
       <Tabs defaultIndex={1}>
-        <div>
-          <GroupedPanels />
-        </div>
         <TabList>
           <Tab>One</Tab>
           <div style={{ display: "flex" }}>
@@ -18,6 +15,9 @@ function Example() {
           </div>
           <Tab>Four</Tab>
         </TabList>
+        <div>
+          <GroupedPanels />
+        </div>
       </Tabs>
     </div>
   );
