@@ -11,9 +11,6 @@
  * should only render `Tab` elements, and `TabPanels` should only render
  * `TabPanel` elements.
  *
- * TODO: Consider manual tab activation
- * https://www.w3.org/TR/wai-aria-practices-1.2/examples/tabs/tabs-2/tabs.html
- *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
@@ -55,11 +52,6 @@ import {
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
-
-const TabsGroupDescendantsContext = createDescendantContext<
-  HTMLElement,
-  TabsGroupDescendantProps
->("TabsGroupDescendantsContext");
 
 const TabsDescendantsContext = createDescendantContext<
   HTMLElement,
@@ -117,7 +109,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let selectedPanelRef = useRef<HTMLElement | null>(null);
 
-  let blockOrder = useRef<"start" | "end">("start");
+  let isRTL = useRef(false);
 
   let [selectedIndex, setSelectedIndex] = useControlledState(
     controlledIndex,
@@ -128,21 +120,12 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
 
-  // In addition to tracking tab descendants, we can use this hook to register
-  // the TabList and TabPanels components to find out which one appears first
-  // in the DOM. This lets us determine the proper key that should move the user
-  // from a focused tab into the active panel.
-  let [tabsGroup, setTabsGroup] = useDescendants<
-    HTMLElement,
-    TabsGroupDescendantProps
-  >();
-
   let context: TabsContextValue = useMemo(() => {
     return {
-      blockOrder,
       focusedIndex,
       id,
       isControlled: isControlled.current,
+      isRTL,
       keyboardActivation,
       onFocusPanel() {
         selectedPanelRef.current?.focus();
@@ -192,27 +175,21 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   return (
     <DescendantProvider
-      context={TabsGroupDescendantsContext}
-      items={tabsGroup}
-      set={setTabsGroup}
+      context={TabsDescendantsContext}
+      items={tabs}
+      set={setTabs}
     >
-      <DescendantProvider
-        context={TabsDescendantsContext}
-        items={tabs}
-        set={setTabs}
-      >
-        <TabsContext.Provider value={context}>
-          <Comp
-            {...props}
-            ref={ref}
-            data-reach-tabs=""
-            data-orientation={orientation}
-            id={props.id}
-          >
-            {children}
-          </Comp>
-        </TabsContext.Provider>
-      </DescendantProvider>
+      <TabsContext.Provider value={context}>
+        <Comp
+          {...props}
+          ref={ref}
+          data-reach-tabs=""
+          data-orientation={orientation}
+          id={props.id}
+        >
+          {children}
+        </Comp>
+      </TabsContext.Provider>
     </DescendantProvider>
   );
 });
@@ -339,11 +316,10 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   forwardedRef
 ) {
   const {
-    blockOrder,
     focusedIndex,
     isControlled,
+    isRTL,
     keyboardActivation,
-    onFocusPanel,
     onSelectTabWithKeyboard,
     orientation,
     selectedIndex,
@@ -351,17 +327,9 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   } = useTabsContext();
 
   let { descendants: tabs } = useContext(TabsDescendantsContext);
-  let { descendants: tabsGroup } = useContext(TabsGroupDescendantsContext);
 
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
-  let isRTL = useRef(false);
-
-  useDescendant({
-    element: ownRef.current!,
-    context: TabsGroupDescendantsContext,
-    type: "tablist",
-  });
 
   useEffect(() => {
     if (
@@ -372,51 +340,17 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     ) {
       isRTL.current = true;
     }
-  }, []);
-
-  useEffect(() => {
-    if (tabsGroup[0]?.type === "panels") {
-      blockOrder.current = "end";
-    } else if (tabsGroup[0]?.type === "tablist") {
-      blockOrder.current = "start";
-    }
-  }, [blockOrder, tabsGroup]);
+  }, [isRTL]);
 
   let handleKeyDown = useEventCallback(
     wrapEvent(
-      function(event: React.KeyboardEvent) {
-        // In the operation of screen readers like NVDA and JAWS, the
-        // `ArrowDown` key moves the user to the next element (focusable or
-        // otherwise) and reads it out. Without intervention, this would be the
-        // next tab in the tablist. Instead, we can intercept the `ArrowDown`
-        // key press and move focus programmatically to the open panel itself,
-        // making sure it isn't missed.
-        // https://inclusive-components.design/tabbed-interfaces/#aproblemreadingpanels
-        // We may need to re-think this with vertical tabs.
-        if (
-          (orientation === TabsOrientation.Horizontal &&
-            blockOrder.current === "start" &&
-            event.key === "ArrowDown") ||
-          (orientation === TabsOrientation.Horizontal &&
-            blockOrder.current === "end" &&
-            event.key === "ArrowUp") ||
-          (orientation === TabsOrientation.Vertical &&
-            blockOrder.current === "start" &&
-            event.key === (isRTL.current ? "ArrowLeft" : "ArrowRight")) ||
-          (orientation === TabsOrientation.Vertical &&
-            blockOrder.current === "end" &&
-            event.key === (isRTL.current ? "ArrowRight" : "ArrowLeft"))
-        ) {
-          event.preventDefault();
-          onFocusPanel();
-        }
-      },
+      onKeyDown,
       useDescendantKeyDown(TabsDescendantsContext, {
         currentIndex:
           keyboardActivation === TabsKeyboardActivation.Manual
             ? focusedIndex
             : selectedIndex,
-        orientation: getAriaOrientation(orientation),
+        orientation,
         rotate: true,
         callback: onSelectTabWithKeyboard,
         filter: tab => !tab.disabled,
@@ -426,12 +360,10 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   );
 
   useIsomorphicLayoutEffect(() => {
-    /*
-     * In the event an uncontrolled component's selected index is disabled,
-     * (this should only happen if the first tab is disabled and no default
-     * index is set), we need to override the selection to the next selectable
-     * index value.
-     */
+    // In the event an uncontrolled component's selected index is disabled,
+    // (this should only happen if the first tab is disabled and no default
+    // index is set), we need to override the selection to the next selectable
+    // index value.
     if (!isControlled && boolOrBoolString(tabs[selectedIndex]?.disabled)) {
       let next = tabs.find(tab => !tab.disabled);
       if (next) {
@@ -450,20 +382,18 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
       // `aria-orientation` set to `"vertical"`. The default value of
       // `aria-orientation` for a tablist element is `"horizontal"`.
       // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      aria-orientation={getAriaOrientation(orientation)}
+      aria-orientation={orientation}
       {...props}
       data-reach-tab-list=""
       ref={ref}
       onKeyDown={handleKeyDown}
     >
       {Children.map(children, (child, index) => {
-        /*
-         * TODO: Since refactoring to use context rather than depending on
-         * parent/child relationships, we need to update our recommendations for
-         * animations that break when we don't forward the `isSelected` prop
-         * to our tabs. We will remove this in 1.0 and update our docs
-         * accordingly.
-         */
+        // TODO: Since refactoring to use context rather than depending on
+        // parent/child relationships, we need to update our recommendations for
+        // animations that break when we don't forward the `isSelected` prop
+        // to our tabs. We will remove this in 1.0 and update our docs
+        // accordingly.
         return cloneValidElement(child, {
           isSelected: index === selectedIndex,
         });
@@ -627,12 +557,6 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
     let ref = useForkedRef(ownRef, forwardedRef);
     let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
 
-    useDescendant({
-      element: ownRef.current!,
-      context: TabsGroupDescendantsContext,
-      type: "panels",
-    });
-
     return (
       <DescendantProvider
         context={TabPanelDescendantsContext}
@@ -739,36 +663,22 @@ if (__DEV__) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-function getAriaOrientation(
-  orientation: TabsOrientation
-): "horizontal" | "vertical" {
-  return orientation.toLowerCase().includes("vertical")
-    ? "vertical"
-    : "horizontal";
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Types
 
 type TabDescendantProps = {
   disabled: boolean;
 };
 
-type TabsGroupDescendantProps = {
-  type: "panels" | "tablist";
-};
-
 interface TabsContextValue {
-  blockOrder: React.MutableRefObject<"start" | "end">;
+  focusedIndex: number;
   id: string;
   isControlled: boolean;
+  isRTL: React.MutableRefObject<boolean>;
   keyboardActivation: TabsKeyboardActivation;
   onFocusPanel: () => void;
-  onSelectTabWithKeyboard: (index: number) => void;
   onSelectTab: (index: number) => void;
+  onSelectTabWithKeyboard: (index: number) => void;
   orientation: TabsOrientation;
-  focusedIndex: number;
   selectedIndex: number;
   selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;

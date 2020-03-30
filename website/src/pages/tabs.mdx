@@ -322,11 +322,11 @@ Please see the [styling guide](/styling).
 
 #### TabList Props
 
-| Prop                              | Type          | Required | Default |
-| --------------------------------- | ------------- | -------- | ------- |
-| [`as`](#tablist-as)               | ComponentType | false    | `"div"` |
-| [`children`](#tablist-children)   | node          | true     |         |
-| [`div` props](#tablist-div-props) |               |          |         |
+| Prop                              | Type                    | Required | Default |
+| --------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tablist-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tablist-children)   | node                    | true     |         |
+| [`div` props](#tablist-div-props) |                         |          |         |
 
 ##### TabList `children`
 
@@ -750,14 +750,10 @@ With a little composition we can animate the selected tab bar.
 
 ### Keyboard Accessibility
 
-| Key                                          | Action                                                                               |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ |
-| <kbd>Enter</kbd> / <kbd>Spacebar</kbd>       | Sets the focused tab to `active` when `keyboardActivation` is set to `"manual"`.     |
-| <kbd>ArrowUp</kbd> / <kbd>ArrowDown</kbd>    | Navigates between tabs when `orientation` is `"vertical"`. See below more details.   |
-| <kbd>ArrowLeft</kbd> / <kbd>ArrowRight</kbd> | Navigates between tabs when `orientation` is `"horizontal"`. See below more details. |
-| <kbd>Home</kbd> / <kbd>PageUp</kbd>          | Navigates to the last tab in the `TabList`.                                          |
-| <kbd>End</kbd> / <kbd>PageDown</kbd>         | Navigates to the first tab in the `TabList`.                                         |
-
-When focused on the active tab, an arrow key should move focus to its corresponding active tab panel depending on where it appears relative to the tab. For example, in horizontal tabs where the `TabList` appears above the `TabPanels`, the <kbd>ArrowDown</kbd> key focuses the active tab panel. For vertical tabs with in the same order, <kbd>ArrowRight</kbd> moves focus for left-to-right reading mode and <kbd>ArrowLeft</kbd> for right-to-left reading mode. The opposite arrow key for either orientation is used when the rendered DOM order is reversed.
-
-For this reason, it is recommended that you always reverse the order of the `TabList` and `TabPanels` components if you want to change their visual representation. This keeps keyboard navigation logical and keyboard users happy!
+| Key                                          | Action                                                                           |
+| -------------------------------------------- | -------------------------------------------------------------------------------- |
+| <kbd>Enter</kbd> / <kbd>Spacebar</kbd>       | Sets the focused tab to `active` when `keyboardActivation` is set to `"manual"`. |
+| <kbd>ArrowUp</kbd> / <kbd>ArrowDown</kbd>    | Navigates between tabs when `orientation` is `"vertical"`.                       |
+| <kbd>ArrowLeft</kbd> / <kbd>ArrowRight</kbd> | Navigates between tabs when `orientation` is `"horizontal"`.                     |
+| <kbd>Home</kbd> / <kbd>PageUp</kbd>          | Navigates to the last tab in the `TabList`.                                      |
+| <kbd>End</kbd> / <kbd>PageDown</kbd>         | Navigates to the first tab in the `TabList`.                                     |
