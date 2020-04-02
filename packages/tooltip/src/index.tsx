@@ -58,6 +58,7 @@ import {
   makeId,
   useForkedRef,
   wrapEvent,
+  warning,
 } from "@reach/utils";
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -365,15 +366,19 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
     children,
     label,
     // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-    ariaLabel,
-    "aria-label": realAriaLabel,
+    ariaLabel: DEPRECATED_ariaLabel,
     id,
     DEBUG_STYLE,
-    ...rest
+    ...props
   },
   forwardedRef
 ) {
   let child = Children.only(children) as any;
+
+  warning(
+    !DEPRECATED_ariaLabel,
+    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version. Please use `aria-label` instead."
+  );
 
   // We need to pass some properties from the child into useTooltip
   // to make sure users can maintain control over the trigger's ref and events
@@ -395,9 +400,9 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
       <TooltipPopup
         ref={forwardedRef}
         label={label}
-        aria-label={realAriaLabel || ariaLabel}
+        aria-label={DEPRECATED_ariaLabel}
         {...tooltip}
-        {...rest}
+        {...props}
       />
     </Fragment>
   );
@@ -432,29 +437,22 @@ export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
       // could use children but we want to encourage simple strings
       label,
       // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-      ariaLabel,
-      "aria-label": realAriaLabel,
-      position,
-
-      // hook spread props
+      ariaLabel: DEPRECATED_ariaLabel,
       isVisible,
       id,
-      triggerRect,
-      ...rest
+      ...props
     },
     forwardRef
   ) {
     return isVisible ? (
       <Portal>
         <TooltipContent
-          label={label}
-          aria-label={realAriaLabel || ariaLabel}
-          position={position}
-          isVisible={isVisible}
-          id={makeId("tooltip", String(id))}
-          triggerRect={triggerRect}
           ref={forwardRef}
-          {...rest}
+          label={label}
+          aria-label={DEPRECATED_ariaLabel}
+          isVisible={isVisible}
+          {...props}
+          id={makeId("tooltip", String(id))}
         />
       </Portal>
     ) : null;
