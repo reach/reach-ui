@@ -197,14 +197,6 @@ Any props not listed above will be spread onto the underlying button element. Yo
 </Menu>
 ```
 
-##### MenuButton `as`
-
-`as?: keyof JSX.IntrinsicElements | React.ComponentType`
-
-A string representing an HTML element or a React component that will tell the `MenuButton` what underlying element to render. Defaults to `button`.
-
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users. While this prop is useful for passing custom implementations, such as styled or design-system components, using anything that renders the wrong semantic HTML element will require stubbing specific behaviors and attributes. This is highly discouraged.
-
 ##### MenuButton `children`
 
 `children: React.ReactNode`
