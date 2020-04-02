@@ -746,7 +746,6 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
           // onBlur will work as intended
           tabIndex={-1}
           onClick={wrapEvent(onClick, handleClick)}
-          // @ts-ignore
           children={children || <ComboboxOptionText />}
         />
       </OptionContext.Provider>
@@ -1158,11 +1157,27 @@ export function escapeRegexp(str: string) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+export function useComboboxContext(): ComboboxContextValue {
+  let { isVisible: isExpanded } = useContext(ComboboxContext);
+  return useMemo(
+    () => ({
+      isExpanded,
+    }),
+    [isExpanded]
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 // Well alright, you made it all the way here to like 1100 lines of code (geez,
 // what the heck?). Have a great day :D
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+export type ComboboxContextValue = {
+  isExpanded: boolean;
+};
 
 type DescendantProps = {
   value: ComboboxValue;
