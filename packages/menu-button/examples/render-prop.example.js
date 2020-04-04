@@ -8,10 +8,10 @@ let name = "Render Prop";
 function Example() {
   return (
     <Menu>
-      {({ isOpen }) => (
+      {({ isExpanded }) => (
         <React.Fragment>
           <MenuButton>
-            {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+            {isExpanded ? "Close" : "Open"} <span aria-hidden="true">▾</span>
           </MenuButton>
           <MenuList>
             <MenuItem onSelect={action("Download")}>Download</MenuItem>

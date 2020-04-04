@@ -74,7 +74,7 @@ const initialState: MenuButtonState = {
   buttonId: null,
 
   // Whether or not the menu is expanded
-  isOpen: false,
+  isExpanded: false,
 
   // When a user begins typing a character string, the selection will change if
   // a matching item is found
@@ -131,7 +131,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // When the menu is open, focus is placed on the menu itself so that
   // keyboard navigation is still possible.
   useEffect(() => {
-    if (state.isOpen) {
+    if (state.isExpanded) {
       // @ts-ignore
       window.__REACH_DISABLE_TOOLTIPS = true;
       window.requestAnimationFrame(() => {
@@ -144,7 +144,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       // @ts-ignore
       window.__REACH_DISABLE_TOOLTIPS = false;
     }
-  }, [state.isOpen]);
+  }, [state.isExpanded]);
 
   useEffect(() => checkStyles("menu-button"), []);
 
@@ -155,7 +155,13 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       set={setDescendants}
     >
       <MenuContext.Provider value={context}>
-        {isFunction(children) ? children({ isOpen: state.isOpen }) : children}
+        {isFunction(children)
+          ? children({
+              isExpanded: state.isExpanded,
+              // TODO: Remove in 1.0
+              isOpen: state.isExpanded,
+            })
+          : children}
       </MenuContext.Provider>
     </DescendantProvider>
   );
@@ -170,7 +176,13 @@ export interface MenuProps {
    *
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menu-children
    */
-  children: React.ReactNode | ((props: { isOpen: boolean }) => React.ReactNode);
+  children:
+    | React.ReactNode
+    | ((props: {
+        isExpanded: boolean;
+        // TODO: Remove in 1.0
+        isOpen: boolean;
+      }) => React.ReactNode);
   id?: string;
 }
 
@@ -197,7 +209,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       buttonRef,
       buttonClickedRef,
       menuId,
-      state: { buttonId, isOpen },
+      state: { buttonId, isExpanded },
       dispatch,
     } = useMenuContext();
     let ref = useForkedRef(buttonRef, forwardedRef);
@@ -234,12 +246,12 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
     }
 
     function handleMouseDown(event: React.MouseEvent) {
-      if (!isOpen) {
+      if (!isExpanded) {
         buttonClickedRef.current = true;
       }
       if (isRightClick(event.nativeEvent)) {
         return;
-      } else if (isOpen) {
+      } else if (isExpanded) {
         dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
       } else {
         dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
@@ -252,7 +264,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
         // `aria-expanded` set to `true`. When the menu is hidden, it is
         // recommended that `aria-expanded` is not present.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        aria-expanded={isOpen ? true : undefined}
+        aria-expanded={isExpanded ? true : undefined}
         // The element with role `button` has `aria-haspopup` set to either
         // `"menu"` or `true`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
@@ -527,7 +539,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       buttonRef,
       menuRef,
       selectCallbacks,
-      state: { isOpen, buttonId, selectionIndex, typeaheadQuery },
+      state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
     } = useMenuContext();
     const { descendants: menuItems } = useContext(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
@@ -595,7 +607,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       function handleKeyDown(event: React.KeyboardEvent) {
         let { key } = event;
 
-        if (!isOpen) {
+        if (!isExpanded) {
           return;
         }
 
@@ -829,7 +841,7 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       dispatch,
       menuRef,
       popoverRef,
-      state: { isOpen },
+      state: { isExpanded },
     } = useMenuContext();
 
     const ref = useForkedRef(popoverRef, forwardedRef);
@@ -842,7 +854,7 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
           let { relatedTarget, target } = event;
 
           // We on want to close only if focus rests outside the menu
-          if (isOpen && popoverRef.current) {
+          if (isExpanded && popoverRef.current) {
             if (
               !popoverRef.current?.contains(
                 (relatedTarget || target) as Element
@@ -857,14 +869,21 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       return () => {
         window.removeEventListener("mousedown", listener);
       };
-    }, [buttonClickedRef, buttonRef, dispatch, isOpen, menuRef, popoverRef]);
+    }, [
+      buttonClickedRef,
+      buttonRef,
+      dispatch,
+      isExpanded,
+      menuRef,
+      popoverRef,
+    ]);
 
     let commonProps = {
       ref,
       // TODO: remove in 1.0
       "data-reach-menu": "",
       "data-reach-menu-popover": "",
-      hidden: !isOpen,
+      hidden: !isExpanded,
       children,
       ...props,
     };
@@ -937,7 +956,7 @@ function useMenuItemId(index: number | null) {
 }
 
 interface MenuButtonState {
-  isOpen: boolean;
+  isExpanded: boolean;
   selectionIndex: number;
   buttonId: null | string;
   typeaheadQuery: string;
@@ -973,19 +992,19 @@ function reducer(
     case CLICK_MENU_ITEM:
       return {
         ...state,
-        isOpen: false,
+        isExpanded: false,
         selectionIndex: -1,
       };
     case CLOSE_MENU:
       return {
         ...state,
-        isOpen: false,
+        isExpanded: false,
         selectionIndex: -1,
       };
     case OPEN_MENU_AT_FIRST_ITEM:
       return {
         ...state,
-        isOpen: true,
+        isExpanded: true,
         selectionIndex: 0,
       };
     case SELECT_ITEM_AT_INDEX:

@@ -24,7 +24,9 @@ describe("<MenuButton />", () => {
         <Menu>
           {props => (
             <Fragment>
-              <MenuButton>{props.isOpen ? "Close" : "Open"} Actions</MenuButton>
+              <MenuButton>
+                {props.isExpanded ? "Close" : "Open"} Actions
+              </MenuButton>
               <MenuList>
                 <MenuItem onSelect={jest.fn}>Download</MenuItem>
                 <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>

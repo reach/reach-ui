@@ -88,9 +88,9 @@ The wrapper component for the other components. No DOM element is rendered.
 
 ##### Menu `children`
 
-`children: React.ReactNode | ((props: { isOpen: boolean; }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { isExpanded: boolean }) => React.ReactNode)`
 
-Requires two children: a `<MenuButton>` and a `<MenuList>`.
+Requires two children: a `MenuButton` and a `MenuList`.
 
 ```jsx
 // jsx-demo
@@ -114,10 +114,10 @@ Alternatively, you can provide a render callback. This is helpful if you need to
 function Example() {
   return (
     <Menu>
-      {({ isOpen }) => (
+      {({ isExpanded }) => (
         <React.Fragment>
           <MenuButton>
-            {isOpen ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+            {isExpanded ? "Close" : "Open"} <span aria-hidden="true">▾</span>
           </MenuButton>
           <MenuList>
             <MenuItem>Download</MenuItem>
