@@ -34,6 +34,7 @@ import {
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
+  isFunction,
   makeId,
   useIsomorphicLayoutEffect,
   useForkedRef,
@@ -216,8 +217,9 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   }
 };
 
-const visibleStates: State[] = [SUGGESTING, NAVIGATING, INTERACTING];
-const isVisible = (state: State) => visibleStates.includes(state);
+function popoverIsExpanded(state: State) {
+  return [SUGGESTING, NAVIGATING, INTERACTING].includes(state);
+}
 
 /**
  * When we open a list, set the navigation value to the value in the input, if
@@ -245,7 +247,7 @@ const ComboboxDescendantContext = createDescendantContext<
 >("ComboboxDescendantContext");
 const ComboboxContext = createNamedContext(
   "ComboboxContext",
-  {} as IComboboxContext
+  {} as InternalComboboxContextValue
 );
 
 // Allows us to put the option's value on context so that ComboboxOptionText
@@ -253,7 +255,7 @@ const ComboboxContext = createNamedContext(
 // it.
 const OptionContext = createNamedContext(
   "OptionContext",
-  {} as IComboboxOptionContext
+  {} as ComboboxOptionContextValue
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -265,7 +267,7 @@ const OptionContext = createNamedContext(
  */
 export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   function Combobox(
-    { onSelect, openOnFocus = false, children, as: Comp = "div", ...rest },
+    { onSelect, openOnFocus = false, children, as: Comp = "div", ...props },
     forwardedRef
   ) {
     let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
@@ -303,15 +305,16 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 
     useFocusManagement(data.lastEventType, inputRef);
 
-    const id = useId(rest.id);
+    const id = useId(props.id);
     const listboxId = id ? makeId("listbox", id) : "listbox";
 
-    const context: IComboboxContext = {
+    const context: InternalComboboxContextValue = {
       autocompletePropRef,
       buttonRef,
+      comboboxId: id,
       data,
       inputRef,
-      isVisible: isVisible(state),
+      isExpanded: popoverIsExpanded(state),
       listboxId,
       onSelect: onSelect || noop,
       openOnFocus,
@@ -330,8 +333,10 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
         set={setOptions}
       >
         <ComboboxContext.Provider value={context}>
-          <Comp {...rest} data-reach-combobox="" ref={forwardedRef}>
-            {children}
+          <Comp {...props} data-reach-combobox="" ref={forwardedRef}>
+            {isFunction(children)
+              ? children({ id, isExpanded: popoverIsExpanded(state) })
+              : children}
           </Comp>
         </ComboboxContext.Provider>
       </DescendantProvider>
@@ -346,7 +351,9 @@ export type ComboboxProps = {
   /**
    * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-children
    */
-  children?: React.ReactNode;
+  children:
+    | React.ReactNode
+    | ((props: ComboboxContextValue) => React.ReactNode);
   /**
    * Called with the selection value when the user makes a selection from the
    * list.
@@ -411,7 +418,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       listboxId,
       autocompletePropRef,
       openOnFocus,
-      isVisible,
+      isExpanded,
     } = useContext(ComboboxContext);
 
     let ref = useForkedRef(inputRef, forwardedRef);
@@ -506,7 +513,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         }
         aria-autocomplete="both"
         aria-controls={listboxId}
-        aria-expanded={isVisible}
+        aria-expanded={isExpanded}
         aria-haspopup="listbox"
         role="combobox"
         {...props}
@@ -580,7 +587,7 @@ export const ComboboxPopover = forwardRef<
   { children, portal = true, onKeyDown, onBlur, ...props },
   forwardedRef: React.Ref<any>
 ) {
-  const { popoverRef, inputRef, isVisible } = useContext(ComboboxContext);
+  const { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
   const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
@@ -594,7 +601,7 @@ export const ComboboxPopover = forwardRef<
     // However, the developer can conditionally render the ComboboxPopover if
     // they do want to cause mount/unmount based on the app's own data (like
     // results.length or whatever).
-    hidden: !isVisible,
+    hidden: !isExpanded,
     tabIndex: -1,
     children,
   };
@@ -851,7 +858,7 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
     { as: Comp = "button", onClick, onKeyDown, ...props },
     forwardedRef
   ) {
-    const { transition, state, buttonRef, listboxId, isVisible } = useContext(
+    const { transition, state, buttonRef, listboxId, isExpanded } = useContext(
       ComboboxContext
     );
     const ref = useForkedRef(buttonRef, forwardedRef);
@@ -870,7 +877,7 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
       <Comp
         aria-controls={listboxId}
         aria-haspopup="listbox"
-        aria-expanded={isVisible}
+        aria-expanded={isExpanded}
         {...props}
         data-reach-combobox-button=""
         ref={ref}
@@ -1071,7 +1078,7 @@ function useBlur() {
   return function handleBlur() {
     let ownerDocument = getOwnerDocument(inputRef.current) || document;
     requestAnimationFrame(() => {
-      // we on want to close only if focus rests outside the combobox
+      // we on want to close only if focus propss outside the combobox
       if (
         ownerDocument.activeElement !== inputRef.current &&
         ownerDocument.activeElement !== buttonRef.current &&
@@ -1157,13 +1164,19 @@ export function escapeRegexp(str: string) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * A hook that exposes data for a given `Combobox` component to its descendants.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/combobox#usecomboboxcontext
+ */
 export function useComboboxContext(): ComboboxContextValue {
-  let { isVisible: isPopoverVisible } = useContext(ComboboxContext);
+  let { isExpanded, comboboxId } = useContext(ComboboxContext);
   return useMemo(
     () => ({
-      isPopoverVisible,
+      id: comboboxId,
+      isExpanded,
     }),
-    [isPopoverVisible]
+    [comboboxId, isExpanded]
   );
 }
 
@@ -1176,31 +1189,33 @@ export function useComboboxContext(): ComboboxContextValue {
 // Types
 
 export type ComboboxContextValue = {
-  isPopoverVisible: boolean;
+  id: string | undefined;
+  isExpanded: boolean;
 };
 
 type DescendantProps = {
   value: ComboboxValue;
 };
 
-interface IComboboxOptionContext {
+interface ComboboxOptionContextValue {
   value: ComboboxValue;
   index: number;
 }
 
-interface IComboboxContext {
+interface InternalComboboxContextValue {
+  autocompletePropRef: React.MutableRefObject<any>;
+  buttonRef: React.MutableRefObject<any>;
+  comboboxId: string | undefined;
   data: StateData;
   inputRef: React.MutableRefObject<any>;
-  popoverRef: React.MutableRefObject<any>;
-  buttonRef: React.MutableRefObject<any>;
+  isExpanded: boolean;
+  listboxId: string;
   onSelect(value?: ComboboxValue): any;
+  openOnFocus: boolean;
+  persistSelectionRef: React.MutableRefObject<any>;
+  popoverRef: React.MutableRefObject<any>;
   state: State;
   transition: Transition;
-  listboxId: string;
-  autocompletePropRef: React.MutableRefObject<any>;
-  persistSelectionRef: React.MutableRefObject<any>;
-  isVisible: boolean;
-  openOnFocus: boolean;
 }
 
 type Transition = (event: MachineEventType, payload?: any) => any;

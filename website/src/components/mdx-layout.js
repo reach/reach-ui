@@ -34,6 +34,7 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxOptionText,
+  useComboboxContext,
 } from "@reach/combobox";
 import {
   Listbox,
@@ -193,6 +194,7 @@ function MyPageLayout({ children }) {
                   Tabs,
                   Tooltip,
                   TooltipPopup,
+                  useComboboxContext,
                   useId,
                   useMixedCheckbox,
                   useRect,

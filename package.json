@@ -102,7 +102,6 @@
   },
   "devDependencies": {
     "@types/babel-traverse": "^6.25.5",
-    "@types/escape-regexp": "^0.0.0",
     "@types/eslint": "^6.1.8",
     "@types/execa": "^2.0.0",
     "@types/fs-extra": "^8.1.0",

@@ -16,6 +16,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#comboboxlist">ComboboxList</TOCLink>
     <TOCLink href="#comboboxoption">ComboboxOption</TOCLink>
     <TOCLink href="#comboboxoptiontext">ComboboxOptionText</TOCLink>
+    <TOCLink href="#usecomboboxcontext">useComboboxContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -447,6 +448,7 @@ Parent component that sets up the proper aria roles and context for the rest of 
 | Prop                                   | Type                    | Required |
 | -------------------------------------- | ----------------------- | -------- |
 | [`as`](#combobox-as)                   | `string` \| `Component` | false    |
+| [`children`](#combobox-children)       | `node` \| `func`        | false    |
 | [`openOnFocus`](#combobox-openonfocus) | `boolean`               | false    |
 | [`onSelect`](#combobox-onselect)       | `func`                  | false    |
 
@@ -457,6 +459,12 @@ Parent component that sets up the proper aria roles and context for the rest of 
 A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `div`.
 
 > **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+
+##### Combobox `children`
+
+`children: React.ReactNode | ((props: { id: string | undefined; isExpanded: boolean }) => React.ReactNode)`
+
+Combobox expects to receive `ComboboxInput` and `ComboboxPopover` as children. You can also pass a render function to expose data for `Combobox` to its descendants.
 
 ##### Combobox `openOnFocus`
 
@@ -651,3 +659,9 @@ And the user typed `Sea`, the out would be:
 [data-suggested-value] {
 }
 ```
+
+### useComboboxContext
+
+`function useComboboxContext(): { id: string | undefined; isExpanded: boolean }`
+
+A hook that exposes data for a given `Combobox` component to its descendants.

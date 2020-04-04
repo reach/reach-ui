@@ -13,7 +13,7 @@ import "@reach/combobox/styles.css";
 let name = "Using Popover Visibility Hook (TS)";
 
 const StyledComboboxInput = (props: ComboboxInputProps) => {
-  const { isPopoverVisible } = useComboboxContext();
+  const { isExpanded } = useComboboxContext();
 
   return (
     <ComboboxInput
@@ -22,7 +22,7 @@ const StyledComboboxInput = (props: ComboboxInputProps) => {
         width: 400,
         fontSize: "100%",
         padding: "0.33rem",
-        backgroundColor: isPopoverVisible ? "cornsilk" : "aliceblue",
+        backgroundColor: isExpanded ? "cornsilk" : "aliceblue",
       }}
     />
   );
