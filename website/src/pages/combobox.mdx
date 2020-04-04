@@ -51,17 +51,11 @@ import "@reach/combobox/styles.css";
 
 ## Accessibility
 
-Reach UI aims to handle most ARIA and accessibility concerns so that developers
-don't have to worry about it. Labeling is often the one thing Reach can't do for
-folks by default since there a many ways to accomplish it and some of those ways
-require app-level knowledge.
+Reach UI aims to handle most ARIA and accessibility concerns so that developers don't have to worry about it. Labeling is often the one thing Reach can't do for you by default since there are many ways to accomplish it, and some of those methods require app-level context.
 
-However, we still aim to make accessibility as easy as possible. Labels for the
-compound component can go on the parent unless there's a good reason to not provide
-this pattern for a specific component.
+However, we still aim to make accessibility as easy as possible. Labels for the compound `Combobox` component can go on the parent and we will forward the label to the correct nested component where it belongs.
 
-For instance, instead of adding `aria-label` to `<ComboboxInput>`, we can add it
-to `<Combobox>`. The same goes for `aria-labelledby`.
+For instance, instead of adding `aria-label` to `<ComboboxInput>`, we can add it to `<Combobox>`. The same goes for `aria-labelledby`.
 
 ```jsx
 <Combobox aria-label="choose a fruit">
@@ -75,13 +69,9 @@ to `<Combobox>`. The same goes for `aria-labelledby`.
 </Combobox>
 ```
 
-One benefit reaped from this pattern is that it alleviates the need for developers
-to know about precisely which `aria-*` attributes belong on which piece of a compound
-component—just pass all `aria-*` attributes to the parent and let Reach handle putting
-it in the proper place.
+One benefit reaped from this pattern is that it alleviates the need for developers to think about where the `aria-label` or `aria-labelledby` attributes belong in the component tree. Another benefit is that if the ARIA spec changes in the future (as it did from 1.1 to 1.2 for `Combobox`), Reach doesn't introduce a breaking API change to make accessibility improvements.
 
-Another benefit is that if the ARIA spec changes in the future (as it did from
-1.1 to 1.2 for Combobox) Reach doesn't have to introduce a breaking API change.
+> **NOTE:** You can still pass either `aria-label` or `aria-labelledby` directly to `ComboboxInput` if you'd prefer and those values will override either respective prop passed into `Combobox`, though we discourage this. It's helpful for the component's context to keep a reference to its label. We may remove this option in a future release.
 
 ## Examples
 
