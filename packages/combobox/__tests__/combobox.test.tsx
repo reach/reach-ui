@@ -8,6 +8,8 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxPopover,
+  ComboboxInputProps,
+  useComboboxContext,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import cities from "../examples/cities";
@@ -59,6 +61,47 @@ describe("<Combobox />", () => {
 
       expect(getByTestId("list").tagName).toBe("DIV");
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
+    });
+
+    it("renders when using the useComboboxContext hook", () => {
+      function CustomComboboxInput(props: ComboboxInputProps) {
+        const { isExpanded } = useComboboxContext();
+        return (
+          <ComboboxInput
+            {...props}
+            style={{ backgroundColor: isExpanded ? "cornsilk" : "aliceblue" }}
+          />
+        );
+      }
+
+      function MyCombobox() {
+        return (
+          <Combobox data-testid="box">
+            <CustomComboboxInput
+              data-testid="input"
+              aria-labelledby="choose-a-fruit"
+            />
+            <ComboboxPopover>
+              <ComboboxList data-testid="list">
+                <ComboboxOption value="Apple" />
+                <ComboboxOption value="Banana" />
+                <ComboboxOption value="Orange" />
+              </ComboboxList>
+            </ComboboxPopover>
+          </Combobox>
+        );
+      }
+
+      let { getByTestId, getAllByRole } = render(<MyCombobox />);
+
+      // Type to show the list
+      act(() => {
+        userEvent.type(getByTestId("input"), "a");
+        jest.advanceTimersByTime(100);
+      });
+
+      expect(getByTestId("list")).toBeTruthy();
+      expect(getAllByRole("option")[0]).toBeTruthy();
     });
   });
 
