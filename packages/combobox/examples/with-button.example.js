@@ -26,7 +26,7 @@ function Example() {
   return (
     <div>
       <h2>No Portal</h2>
-      <Combobox>
+      <Combobox aria-label="choose a city">
         <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
         <ComboboxButton>
           <VisuallyHidden>Toggle the list of cities</VisuallyHidden>

@@ -4,7 +4,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -24,7 +24,7 @@ function Example() {
   return (
     <div>
       <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes">
+      <Combobox id="holy-smokes" aria-label="choose a city">
         <ComboboxInput onChange={handleChange} style={inputStyle} />
         {results && (
           <ComboboxPopover style={popupStyle}>
@@ -59,7 +59,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [item => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
@@ -69,10 +69,10 @@ function useCityMatch(term) {
 const inputStyle = {
   width: 400,
   fontSize: "100%",
-  padding: "0.33rem"
+  padding: "0.33rem",
 };
 
 const popupStyle = {
   boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none"
+  border: "none",
 };
