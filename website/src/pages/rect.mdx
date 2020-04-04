@@ -32,9 +32,7 @@ import Rect, { useRect } from "@reach/rect";
 
 ### useRect
 
-```jsx
-rect = useRect(ref [, observe=true, onChange=undefined ])
-```
+`function useRect<T extends HTMLElement = HTMLElement>(nodeRef: React.RefObject<T>, observe: boolean = true, onChange?: (rect: DOMRect) => void): null | DOMRect`
 
 Hook that observes and returns the measurements (ClientRect) of a DOM element. Pass it the ref that placed on the element to be measured.
 
@@ -59,10 +57,10 @@ function Example() {
         style={{
           display: "inline-block",
           padding: 10,
-          border: "solid 1px"
+          border: "solid 1px",
         }}
         dangerouslySetInnerHTML={{
-          __html: "Edit this to change the size!"
+          __html: "Edit this to change the size!",
         }}
       />
     </div>
@@ -76,23 +74,23 @@ Render prop component for use in class components to observe element measurement
 
 #### Rect Props
 
-| Prop                       | Type |
-| -------------------------- | ---- |
-| [children](#rect-children) | func |
-| [observe](#rect-observe)   | bool |
-| [onChange](#rect-onchange) | func |
+| Prop                         | Type   | Required |
+| ---------------------------- | ------ | -------- |
+| [`children`](#rect-children) | `func` | true     |
+| [`observe`](#rect-observe)   | `bool` | false    |
+| [`onChange`](#rect-onchange) | `func` | false    |
 
-##### Rect children
+##### Rect `children`
 
-_Type_: `func: ({ ref, rect }) => node`
+`children(args: { rect: DOMRect | null; ref: React.Ref<any> }): JSX.Element`
 
 A function that calls back to you with a `ref` to place on an element and the `rect` measurements of the dom node.
 
 **Note**: On the first render `rect` will be `null` because we can't measure a node that has not yet been rendered. Make sure your code accounts for this.
 
-##### Rect observe
+##### Rect `observe`
 
-_Type_: `bool` default `true`
+`observe?: boolean`
 
 Tells `Rect` to observe the position of the node or not. While observing, the `children` render prop may call back very quickly (especially while scrolling) so it can be important for performance to avoid observing when you don't need to.
 
@@ -114,9 +112,9 @@ Pass `true` to observe, `false` to ignore.
 </Rect>
 ```
 
-##### Rect onChange
+##### Rect `onChange`
 
-_Type_: `func: (rect) => void`
+`onChange?(rect: DOMRect): void`
 
 Calls back whenever the `rect` of the element changes.
 
