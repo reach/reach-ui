@@ -48,6 +48,26 @@ describe("<Listbox />", () => {
         expect(queryByRole("button")).toBeTruthy();
       });
     });
+
+    it("should mount with render props", async () => {
+      let { queryByRole } = render(
+        <ListboxInput>
+          {() => (
+            <React.Fragment>
+              <ListboxButton />
+              <ListboxPopover>
+                <ListboxList>
+                  <ListboxOption value="asada">Carne Asada</ListboxOption>
+                  <ListboxOption value="pollo">Pollo</ListboxOption>
+                  <ListboxOption value="lengua">Lengua</ListboxOption>
+                </ListboxList>
+              </ListboxPopover>
+            </React.Fragment>
+          )}
+        </ListboxInput>
+      );
+      expect(queryByRole("button")).toBeTruthy();
+    });
   });
 
   describe("a11y", () => {

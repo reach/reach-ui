@@ -19,6 +19,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#listboxoption">ListboxOption</TOCLink>
     <TOCLink href="#listboxgroup">ListboxGroup</TOCLink>
     <TOCLink href="#listboxgrouplabel">ListboxGroupLabel</TOCLink>
+    <TOCLink href="#uselistboxcontext">useListboxContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -352,7 +353,7 @@ Please see the [styling guide](/styling).
 
 ##### ListboxInput `children`
 
-`children: React.ReactNode | ((props: { value: string | null; valueLabel: string | null; expanded: boolean; }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { value: string | null; valueLabel: string | null; isExpanded: boolean; }) => React.ReactNode)`
 
 The composed listbox expects to receive `ListboxButton` and `ListboxPopover` as children. You can also pass in arbitrary wrapper elements if desired.
 
@@ -360,7 +361,7 @@ If you want access to the listbox's current value and associated label, or its e
 
 ```jsx
 <ListboxInput>
-  {({ value, valueLabel, expanded }) => (
+  {({ value, valueLabel, isExpanded }) => (
     <ListboxButton>
       <span data-value={value}>{valueLabel}</span>
     </ListboxButton>
@@ -449,7 +450,7 @@ Renders a text string or React node to represent an arrow inside the button`.
 
 ##### ListboxButton `children`
 
-`children: React.ReactNode | ((props: { value: string | null; label: string; expanded: boolean; }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { value: string | null; label: string; isExpanded: boolean; }) => React.ReactNode)`
 
 A render function or React node to to render the button's inner content.
 
@@ -503,9 +504,9 @@ Please see the [styling guide](/styling).
 
 ##### ListboxArrow `children`
 
-`children: React.ReactNode | ((props: { expanded: boolean }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { isExpanded: boolean }) => React.ReactNode)`
 
-Children to render as the listbox button's arrow. This can be a render function that accepts the listbox's `expanded` state as an argument.
+Children to render as the listbox button's arrow. This can be a render function that accepts the listbox's `isExpanded` state as an argument.
 
 ### ListboxPopover
 
@@ -658,3 +659,9 @@ Please see the [styling guide](/styling).
 [data-reach-listbox-group-label] {
 }
 ```
+
+### useListboxContext
+
+`function useListboxContext(): { id: string | undefined; isExpanded: boolean; value: ListboxValue | null; valueLabel: string | null }`
+
+A hook that exposes data for a given `ListboxContext` component to its descendants.
