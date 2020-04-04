@@ -10,7 +10,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-let name = "Using Popover Visibility Hook (TS)";
+let name = "With useComboboxContext (TS)";
 
 const StyledComboboxInput = (props: ComboboxInputProps) => {
   const { isExpanded } = useComboboxContext();

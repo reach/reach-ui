@@ -17,6 +17,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#menuitems">MenuItems</TOCLink>
     <TOCLink href="#menuitem">MenuItem</TOCLink>
     <TOCLink href="#menulink">MenuLink</TOCLink>
+    <TOCLink href="#usemenubuttoncontext">useMenuButtonContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -647,11 +648,17 @@ You can render any kind of content inside of a MenuLink.
 
 Callback that fires when a `MenuLink` is selected.
 
+### useMenuButtonContext
+
+`function useMenuButtonContext(): { isExpanded: boolean }`
+
+A hook that exposes data for a given `Menu` component to its descendants.
+
 ## Notes
 
 ### Unmounting the Menu after an action
 
-If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `<MenuLink>` and Reach Router. In this case, the router will handle focus for you.
+If one of your menu items causes the `<Menu>` itself to unmount, it is your job to move focus to the changed content. One exception to this is if you're using `MenuLink` and Reach Router. In this case, the router will handle focus for you.
 
 Note the callbacks given to `setState` in the following demo app where focus is managed between screens. If you don't do this you'll drop keyboard and screen reader users off at the top of the document. It'll then be hard for them to know what changed and how to find it. Moving focus helps them stay where you want them the very same way visual design does.
 

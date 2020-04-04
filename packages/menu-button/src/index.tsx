@@ -16,6 +16,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -60,11 +61,10 @@ const MenuDescendantContext = createDescendantContext<
   HTMLElement,
   DescendantProps
 >("MenuDescendantContext");
-const MenuContext = createNamedContext<IMenuContext>(
+const MenuContext = createNamedContext<InternalMenuContextValue>(
   "MenuContext",
-  {} as IMenuContext
+  {} as InternalMenuContextValue
 );
-const useMenuContext = () => useContext(MenuContext);
 
 const initialState: MenuButtonState = {
   // The button ID is needed for aria controls and can be set directly and
@@ -117,7 +117,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // https://github.com/reach/reach-ui/issues/523
   let selectCallbacks = useRef([]);
 
-  let context: IMenuContext = {
+  let context: InternalMenuContextValue = {
     buttonRef,
     dispatch,
     menuId,
@@ -178,11 +178,12 @@ export interface MenuProps {
    */
   children:
     | React.ReactNode
-    | ((props: {
-        isExpanded: boolean;
-        // TODO: Remove in 1.0
-        isOpen: boolean;
-      }) => React.ReactNode);
+    | ((
+        props: MenuContextValue & {
+          // TODO: Remove in 1.0
+          isOpen: boolean;
+        }
+      ) => React.ReactNode);
   id?: string;
 }
 
@@ -211,7 +212,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
       menuId,
       state: { buttonId, isExpanded },
       dispatch,
-    } = useMenuContext();
+    } = useContext(MenuContext);
     let ref = useForkedRef(buttonRef, forwardedRef);
 
     useEffect(() => {
@@ -335,7 +336,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       dispatch,
       selectCallbacks,
       state: { selectionIndex },
-    } = useMenuContext();
+    } = useContext(MenuContext);
 
     let ownRef = useRef<HTMLElement | null>(null);
 
@@ -540,7 +541,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       menuRef,
       selectCallbacks,
       state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
-    } = useMenuContext();
+    } = useContext(MenuContext);
     const { descendants: menuItems } = useContext(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
@@ -842,7 +843,7 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       menuRef,
       popoverRef,
       state: { isExpanded },
-    } = useMenuContext();
+    } = useContext(MenuContext);
 
     const ref = useForkedRef(popoverRef, forwardedRef);
 
@@ -930,6 +931,20 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * A hook that exposes data for a given `Menu` component to its descendants.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/menu-button#usemenubuttoncontext
+ */
+export function useMenuButtonContext(): MenuContextValue {
+  let {
+    state: { isExpanded },
+  } = useContext(MenuContext);
+  return useMemo(() => ({ isExpanded }), [isExpanded]);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+/**
  * When a user's typed input matches the string displayed in a menu item, it is
  * expected that the matching menu item is selected. This is our matching
  * function.
@@ -949,7 +964,7 @@ function findItemFromTypeahead(
 }
 
 function useMenuItemId(index: number | null) {
-  let { menuId } = useMenuContext();
+  let { menuId } = useContext(MenuContext);
   return index != null && index > -1
     ? makeId(`option-${index}`, menuId)
     : undefined;
@@ -1049,7 +1064,7 @@ type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;
 
-interface IMenuContext {
+interface InternalMenuContextValue {
   buttonRef: ButtonRef;
   buttonClickedRef: React.MutableRefObject<boolean>;
   dispatch: React.Dispatch<MenuButtonAction>;
@@ -1059,3 +1074,8 @@ interface IMenuContext {
   selectCallbacks: React.MutableRefObject<(() => void)[]>;
   state: MenuButtonState;
 }
+
+export type MenuContextValue = {
+  isExpanded: boolean;
+  // id: string | undefined;
+};
