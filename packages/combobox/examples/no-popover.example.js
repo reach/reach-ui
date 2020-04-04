@@ -4,7 +4,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxPopover,
-  ComboboxOption
+  ComboboxOption,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -24,7 +24,7 @@ function Example() {
   return (
     <div>
       <h2>No Portal</h2>
-      <Combobox style={{ width: "400px" }}>
+      <Combobox style={{ width: "400px" }} aria-label="choose a city">
         <ComboboxInput onChange={handleChange} />
         {results && (
           <ComboboxPopover portal={false}>
@@ -44,7 +44,7 @@ function Example() {
                   margin: 0,
                   color: "#454545",
                   padding: "0.25rem 1rem 0.75rem 1rem",
-                  fontStyle: "italic"
+                  fontStyle: "italic",
                 }}
               >
                 No results :(
@@ -70,7 +70,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [item => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

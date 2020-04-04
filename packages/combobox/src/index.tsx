@@ -267,7 +267,15 @@ const OptionContext = createNamedContext(
  */
 export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   function Combobox(
-    { onSelect, openOnFocus = false, children, as: Comp = "div", ...props },
+    {
+      onSelect,
+      openOnFocus = false,
+      children,
+      as: Comp = "div",
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledby,
+      ...props
+    },
     forwardedRef
   ) {
     let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
@@ -309,6 +317,8 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     const listboxId = id ? makeId("listbox", id) : "listbox";
 
     const context: InternalComboboxContextValue = {
+      ariaLabel,
+      ariaLabelledby,
       autocompletePropRef,
       buttonRef,
       comboboxId: id,
@@ -367,6 +377,16 @@ export type ComboboxProps = {
    * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-openonfocus
    */
   openOnFocus?: boolean;
+  /**
+   * Defines a string value that labels the current element.
+   * @see Docs https://reacttraining.com/reach-ui/combobox#accessibility
+   */
+  "aria-label"?: string;
+  /**
+   * Identifies the element (or elements) that labels the current element.
+   * @see Docs https://reacttraining.com/reach-ui/combobox#accessibility
+   */
+  "aria-labelledby"?: string;
 };
 
 if (__DEV__) {
@@ -419,6 +439,8 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       autocompletePropRef,
       openOnFocus,
       isExpanded,
+      ariaLabel,
+      ariaLabelledby,
     } = useContext(ComboboxContext);
 
     let ref = useForkedRef(inputRef, forwardedRef);
@@ -515,6 +537,8 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         aria-controls={listboxId}
         aria-expanded={isExpanded}
         aria-haspopup="listbox"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel ? undefined : ariaLabelledby}
         role="combobox"
         {...props}
         data-reach-combobox-input=""
@@ -1203,6 +1227,8 @@ interface ComboboxOptionContextValue {
 }
 
 interface InternalComboboxContextValue {
+  ariaLabel?: string;
+  ariaLabelledby?: string;
   autocompletePropRef: React.MutableRefObject<any>;
   buttonRef: React.MutableRefObject<any>;
   comboboxId: string | undefined;

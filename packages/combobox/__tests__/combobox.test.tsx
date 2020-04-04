@@ -115,6 +115,101 @@ describe("<Combobox />", () => {
       });
       expect(results).toHaveNoViolations();
     });
+
+    it("should forward aria-label from Combobox to ComboboxInput", () => {
+      let { getByRole } = render(<ComboboxExample />);
+      let input = getByRole("combobox");
+
+      expect(input).toHaveAttribute("aria-label");
+      expect(input.getAttribute("aria-label")).toBe("choose a fruit");
+
+      function ComboboxExample() {
+        return (
+          <Combobox aria-label="choose a fruit">
+            <ComboboxInput />
+            <ComboboxPopover>
+              <ComboboxList>
+                <ComboboxOption value="Apple" />
+                <ComboboxOption value="Banana" />
+              </ComboboxList>
+            </ComboboxPopover>
+          </Combobox>
+        );
+      }
+    });
+
+    it("should forward aria-labelledby from Combobox to ComboboxInput", () => {
+      let { getByRole } = render(<ComboboxExample />);
+      let input = getByRole("combobox");
+
+      expect(input).toHaveAttribute("aria-labelledby");
+      expect(input.getAttribute("aria-labelledby")).toBe("choose-a-fruit");
+
+      function ComboboxExample() {
+        return (
+          <div>
+            <h1 id="choose-a-fruit">Choose a Fruit</h1>
+            <Combobox aria-labelledby="choose-a-fruit">
+              <ComboboxInput />
+              <ComboboxPopover>
+                <ComboboxList>
+                  <ComboboxOption value="Apple" />
+                  <ComboboxOption value="Banana" />
+                </ComboboxList>
+              </ComboboxPopover>
+            </Combobox>
+          </div>
+        );
+      }
+    });
+
+    it("aria-label set on ComboboxInput should take precedence", () => {
+      let { getByRole } = render(<ComboboxExample />);
+      let input = getByRole("combobox");
+
+      expect(input).toHaveAttribute("aria-label");
+      expect(input.getAttribute("aria-label")).toBe("label set on input");
+
+      function ComboboxExample() {
+        return (
+          <Combobox aria-label="label set on combobox">
+            <ComboboxInput aria-label="label set on input" />
+            <ComboboxPopover>
+              <ComboboxList>
+                <ComboboxOption value="Apple" />
+                <ComboboxOption value="Banana" />
+              </ComboboxList>
+            </ComboboxPopover>
+          </Combobox>
+        );
+      }
+    });
+
+    it("aria-labelledby set on ComboboxInput should take precedence", () => {
+      let { getByRole } = render(<ComboboxExample />);
+      let input = getByRole("combobox");
+
+      expect(input).toHaveAttribute("aria-labelledby");
+      expect(input.getAttribute("aria-labelledby")).toBe("used-for-label");
+
+      function ComboboxExample() {
+        return (
+          <div>
+            <p id="not-used-for-label">choose a fruit</p>
+            <p id="used-for-label">choose a fruit</p>
+            <Combobox aria-labelledby="not-used-for-label">
+              <ComboboxInput aria-labelledby="used-for-label" />
+              <ComboboxPopover>
+                <ComboboxList>
+                  <ComboboxOption value="Apple" />
+                  <ComboboxOption value="Banana" />
+                </ComboboxList>
+              </ComboboxPopover>
+            </Combobox>
+          </div>
+        );
+      }
+    });
   });
 
   describe("user events", () => {
