@@ -204,8 +204,11 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton
  */
-export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
-  function MenuButton({ onKeyDown, onMouseDown, id, ...props }, forwardedRef) {
+export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
+  function MenuButton(
+    { as: Comp = "button", onKeyDown, onMouseDown, id, ...props },
+    forwardedRef
+  ) {
     let {
       buttonRef,
       buttonClickedRef,
@@ -260,7 +263,7 @@ export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
     }
 
     return (
-      <button
+      <Comp
         // When the menu is displayed, the element with role `button` has
         // `aria-expanded` set to `true`. When the menu is hidden, it is
         // recommended that `aria-expanded` is not present.
@@ -532,8 +535,11 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems
  */
-export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
-  function MenuItems({ children, id, onKeyDown, ...props }, forwardedRef) {
+export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
+  function MenuItems(
+    { as: Comp = "div", children, id, onKeyDown, ...props },
+    forwardedRef
+  ) {
     const {
       menuId,
       dispatch,
@@ -675,7 +681,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
       // TODO: Should probably file a but in jsx-a11y, but this is correct
       // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
       // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
-      <div
+      <Comp
         // Refers to the descendant menuitem element that is visually indicated
         // as focused.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
@@ -696,7 +702,7 @@ export const MenuItems = forwardRef<HTMLDivElement, MenuItemsProps>(
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
       >
         {children}
-      </div>
+      </Comp>
     );
   }
 );
