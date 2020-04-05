@@ -2,20 +2,20 @@
   --reach-slider: 1;
 }
 
-[data-reach-slider-input] {
-  padding: 20px;
-}
-
 [data-reach-slider-input][data-orientation="horizontal"] {
   width: 350px;
+  max-width: 100%;
   height: 4px;
+  padding-top: 30px;
   padding-bottom: 30px;
-  /* max-width: calc(100% - 40px); */
 }
 
 [data-reach-slider-input][data-orientation="vertical"] {
   width: 4px;
   height: 250px;
+  max-height: 100%;
+  max-width: calc(100% - 60%);
+  padding-left: 30px;
   padding-right: 30px;
 }
 
