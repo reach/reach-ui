@@ -322,7 +322,7 @@ export function isString(value: any): value is string {
  * @param args
  */
 export function makeId(...args: (string | number | null | undefined)[]) {
-  return args.filter(val => val != null).join("--");
+  return args.filter((val) => val != null).join("--");
 }
 
 /**
@@ -356,7 +356,7 @@ export function useControlledState<T = any>(
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   let isControlled = useRef(controlPropValue != null);
   let [valueState, setValue] = useState(defaultValue);
-  let set: React.Dispatch<React.SetStateAction<T>> = useCallback(n => {
+  let set: React.Dispatch<React.SetStateAction<T>> = useCallback((n) => {
     if (!isControlled.current) {
       setValue(n);
     }
@@ -388,7 +388,7 @@ export function useControlledSwitchWarning(
   let { current: wasControlled } = useRef(isControlled);
   let effect = noop;
   if (__DEV__) {
-    effect = function() {
+    effect = function () {
       warning(
         !(!isControlled && wasControlled),
         `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
@@ -400,6 +400,11 @@ export function useControlledSwitchWarning(
     };
   }
   useEffect(effect, [componentName, controlPropName, isControlled]);
+}
+
+export function useCheckStyles(pkg: string) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => checkStyles(pkg), []);
 }
 
 /**
@@ -428,6 +433,57 @@ export function useEventCallback<E extends Event | React.SyntheticEvent>(
     (event: E, ...args: any[]) => ref.current(event, ...args),
     []
   );
+}
+
+/**
+ * @param callback
+ */
+export function useCallbackProp<F extends Function>(callback: F | undefined) {
+  const ref = useRef(callback);
+  useEffect(() => {
+    ref.current = callback;
+  });
+  return (useCallback(
+    (...args: any[]) => ref.current && ref.current(...args),
+    []
+  ) as unknown) as F;
+}
+
+/**
+ * Adds a DOM event listener
+ *
+ * @param eventName
+ * @param listener
+ * @param element
+ */
+export function useEventListener<K extends keyof WindowEventMap>(
+  eventName: K,
+  listener: (event: WindowEventMap[K]) => any,
+  element: HTMLElement | Document | Window | EventTarget = window
+) {
+  const savedHandler = useRef(listener);
+  useEffect(() => {
+    savedHandler.current = listener;
+  }, [listener]);
+
+  useEffect(() => {
+    const isSupported = element && element.addEventListener;
+    if (!isSupported) {
+      if (__DEV__) {
+        console.warn("Event listener not supported on the element provided");
+      }
+      return;
+    }
+
+    function eventListener(event: WindowEventMap[K]) {
+      savedHandler.current(event);
+    }
+
+    element.addEventListener(eventName, eventListener as any);
+    return () => {
+      element.removeEventListener(eventName, eventListener as any);
+    };
+  }, [eventName, element]);
 }
 
 /**
@@ -481,11 +537,11 @@ export function useForkedRef<RefValueType = any>(
   ...refs: (AssignableRef<RefValueType> | null | undefined)[]
 ) {
   return useMemo(() => {
-    if (refs.every(ref => ref == null)) {
+    if (refs.every((ref) => ref == null)) {
       return null;
     }
     return (node: any) => {
-      refs.forEach(ref => {
+      refs.forEach((ref) => {
         assignRef(ref, node);
       });
     };
@@ -537,7 +593,7 @@ export function useStateLogger(state: string, DEBUG: boolean = false) {
   let effect = noop;
   if (__DEV__) {
     if (DEBUG) {
-      effect = function() {
+      effect = function () {
         console.group("State Updated");
         console.log(
           "%c" + state,
@@ -562,7 +618,7 @@ export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
   theirHandler: ((event: EventType) => any) | undefined,
   ourHandler: (event: EventType) => any
 ): (event: EventType) => any {
-  return event => {
+  return (event) => {
     theirHandler && theirHandler(event);
     if (!event.defaultPrevented) {
       return ourHandler(event);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import VisuallyHidden from "@reach/visually-hidden";
+import { action } from "@storybook/addon-actions";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
@@ -14,7 +15,10 @@ function Example() {
       <Listbox
         aria-labelledby="taco-label"
         value={value}
-        onChange={value => setValue(value)}
+        onChange={(value) => {
+          setValue(value);
+          action("Value changed")(value);
+        }}
       >
         <ListboxOption value="default" label="Choose a taco">
           {taco} Choose a taco

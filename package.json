@@ -137,7 +137,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "husky": "^4.2.3",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.2",
     "pretty-quick": "^2.0.1"
   },
   "resolutions": {
@@ -204,7 +204,6 @@
     "packages/*/dist"
   ],
   "prettier": {
-    "singleQuote": false,
-    "trailingComma": "es5"
+    "singleQuote": false
   }
 }

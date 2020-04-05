@@ -46,7 +46,6 @@ import {
   useDescendants,
 } from "@reach/descendants";
 import {
-  checkStyles,
   createNamedContext,
   DistributiveOmit,
   forwardRefWithAs,
@@ -55,7 +54,10 @@ import {
   isRightClick,
   isString,
   makeId,
+  useCallbackProp,
+  useCheckStyles,
   useControlledSwitchWarning,
+  useEventListener,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
@@ -120,7 +122,7 @@ export const ListboxInput = forwardRef<
     disabled = false,
     form,
     name,
-    onChange,
+    onChange: onChangeProp,
     required,
     value: valueProp,
 
@@ -135,6 +137,8 @@ export const ListboxInput = forwardRef<
     HTMLElement,
     ListboxDescendantProps
   >();
+
+  let onChange = useCallbackProp(onChangeProp);
 
   // We will track when a mouse has moved in a ref, then reset it to false each
   // time a popover closes. This is useful because we want the selected value of
@@ -188,49 +192,61 @@ export const ListboxInput = forwardRef<
   // If a user needs the label for SSR to prevent hydration mismatch issues,
   // they need to control the state of the component and pass a label directly
   // to the button.
-  let valueLabel = useMemo(
-    () => getLabelFromValue(current.context.value, options),
-    [options, current.context.value]
-  );
+  let valueLabel = useMemo(() => {
+    let selected = options.find(
+      (option) => option.value === current.context.value
+    );
+    return selected ? selected.label : null;
+  }, [options, current.context.value]);
 
   // TODO: Remove duplication and memoize
-  let context: InternalListboxContextValue = {
-    ariaLabel,
-    disabled,
-    ids: {
-      label: ariaLabelledBy,
-      input: id,
-      listbox: makeId("listbox", id),
-      button: makeId("button", id),
-    },
-    listboxValue: current.context.value,
-    listboxValueLabel: valueLabel,
-    mouseEventStartedRef,
-    mouseMovedRef,
-    onValueChange: onChange,
-    refs: {
-      button,
-      hiddenInput,
-      input,
-      list,
-      popover,
-    },
-    send,
-    state: current,
-  };
-
-  useControlledSwitchWarning(valueProp, "value", _componentName);
+  let context: InternalListboxContextValue = useMemo(
+    () => ({
+      ariaLabel,
+      ariaLabelledBy,
+      disabled,
+      listboxId: id,
+      listboxValueLabel: valueLabel,
+      mouseEventStartedRef,
+      mouseMovedRef,
+      onValueChange: onChange,
+      refs: {
+        button,
+        hiddenInput,
+        input,
+        list,
+        popover,
+      },
+      send,
+      state: current,
+    }),
+    [
+      ariaLabel,
+      ariaLabelledBy,
+      current,
+      disabled,
+      id,
+      onChange,
+      send,
+      valueLabel,
+    ]
+  );
 
   // For uncontrolled listbox components where no `defaultValue` is provided, we
   // will update the value based on the value of the first selectable option.
   // We call the update directly because:
-  //   A) we only ever need to do this once, so we can guard with a mounted ref
+  //   A) we only ever need to do this once, so we can guard with a ref
   //   B) useLayoutEffect races useDecendant, so we might not have options yet
   //   C) useEffect will cause a flash
   let mounted = useRef(false);
-  if (!isControlled && !defaultValue && !mounted.current && options.length) {
+  if (
+    !isControlled && // the app is not controlling state
+    defaultValue == null && // there is no default value
+    !mounted.current && // we haven't done this already
+    options.length // we have some options
+  ) {
     mounted.current = true;
-    let first = options.find(option => !option.disabled);
+    let first = options.find((option) => !option.disabled);
     if (first && first.value) {
       send({
         type: ListboxEvents.ValueChange,
@@ -238,36 +254,6 @@ export const ListboxInput = forwardRef<
       });
     }
   }
-
-  // We need to get some data from props to pass to the state machine in the
-  // event that they change
-  if (isControlled && valueProp !== current.context.value) {
-    send({
-      type: ListboxEvents.ValueChange,
-      value: valueProp!,
-    });
-  }
-
-  useLayoutEffect(() => {
-    send({
-      type: ListboxEvents.GetDerivedData,
-      data: { options },
-    });
-  }, [options, send]);
-
-  useEffect(() => {
-    function listener(event: MouseEvent) {
-      let { target, relatedTarget } = event;
-      send({
-        type: ListboxEvents.OutsideMouseDown,
-        relatedTarget: relatedTarget || target,
-      });
-    }
-    window.addEventListener("mousedown", listener);
-    return () => {
-      window.removeEventListener("mousedown", listener);
-    };
-  }, [send]);
 
   const childrenProps = useMemo(
     () => ({
@@ -281,7 +267,33 @@ export const ListboxInput = forwardRef<
     [current.context.value, current.value, id, valueLabel]
   );
 
-  useEffect(() => checkStyles("listbox"), []);
+  useControlledSwitchWarning(valueProp, "value", _componentName);
+
+  // Even if the app controls state, we still need to update it internally to
+  // run the state machine transitions
+  useControlledStateSync(valueProp, current.context.value, () => {
+    send({
+      type: ListboxEvents.ValueChange,
+      value: valueProp!,
+    });
+  });
+
+  useLayoutEffect(() => {
+    send({
+      type: ListboxEvents.GetDerivedData,
+      data: { options },
+    });
+  }, [options, send]);
+
+  useEventListener("mousedown", (event) => {
+    let { target, relatedTarget } = event;
+    send({
+      type: ListboxEvents.OutsideMouseDown,
+      relatedTarget: relatedTarget || target,
+    });
+  });
+
+  useCheckStyles("listbox");
 
   return (
     <DescendantProvider
@@ -355,6 +367,7 @@ export type ListboxInputProps = Omit<
       | React.ReactNode
       | ((
           props: ListboxContextValue & {
+            // TODO: Remove in 1.0
             expanded: boolean;
           }
         ) => React.ReactNode);
@@ -497,8 +510,9 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     forwardedRef
   ) {
     let {
+      ariaLabelledBy,
       disabled,
-      ids: { button: buttonId, label: labelId },
+      listboxId,
       mouseEventStartedRef,
       refs: { button: buttonRef },
       state,
@@ -532,6 +546,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
       mouseEventStartedRef.current = false;
     }
 
+    let id = makeId("button", listboxId);
     let isExpanded = isListboxExpanded(state.value);
 
     // If the button has children, we just render them as the label
@@ -575,7 +590,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         // If an `aria-label` is passed, we should skip `aria-labelledby` to
         // avoid confusion.
         aria-labelledby={
-          ariaLabel ? undefined : [labelId, buttonId].filter(Boolean).join(" ")
+          ariaLabel ? undefined : [ariaLabelledBy, id].filter(Boolean).join(" ")
         }
         aria-label={ariaLabel}
         // Identifies the element as a button widget.
@@ -587,7 +602,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
         {...props}
         ref={ref}
         data-reach-listbox-button=""
-        id={buttonId}
+        id={id}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
@@ -685,7 +700,6 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
       state: { value: state },
     } = useContext(ListboxContext);
     let isExpanded = isListboxExpanded(state);
-    let defaultArrow = isExpanded ? "▲" : "▼";
     return (
       <span
         // The arrow provides no semantic value and its inner content should be
@@ -702,7 +716,7 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
               // TODO: Remove in 1.0
               expanded: isExpanded,
             })
-          : children || defaultArrow}
+          : children || "▼"}
       </span>
     );
   }
@@ -840,7 +854,8 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
     let {
       ariaLabel,
-      ids: { listbox: listboxId, label: labelId },
+      ariaLabelledBy,
+      listboxId,
       refs: { list: listRef },
       state: {
         context: { value, navigationValue },
@@ -867,7 +882,7 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
         // If an `aria-label` is passed, we should skip `aria-labelledby` to
         // avoid confusion.
-        aria-labelledby={ariaLabel ? undefined : labelId}
+        aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
         aria-label={ariaLabel}
         // An element that contains or owns all the listbox options has role
         // listbox.
@@ -878,7 +893,7 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         {...props}
         ref={ref}
         data-reach-listbox-list=""
-        id={listboxId}
+        id={makeId("listbox", listboxId)}
       />
     );
   }
@@ -954,7 +969,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let getLabelFromDomNode = useCallback(
       (node: HTMLElement) => {
         if (!labelProp) {
-          setLabel(prevState => {
+          setLabel((prevState) => {
             if (node.textContent && prevState !== node.textContent) {
               return node.textContent;
             }
@@ -1117,9 +1132,7 @@ export type ListboxOptionProps = {
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
   function ListboxGroup({ label, children, ...props }, forwardedRef) {
-    let {
-      ids: { listbox: listboxId },
-    } = useContext(ListboxContext);
+    let { listboxId } = useContext(ListboxContext);
     let labelId = makeId("label", useId(props.id), listboxId);
     return (
       <ListboxGroupContext.Provider value={{ labelId }}>
@@ -1210,28 +1223,23 @@ export type ListboxGroupLabelProps = {};
  */
 export function useListboxContext(): ListboxContextValue {
   let {
-    ids: { input },
-    state: { value, context },
+    listboxId,
+    listboxValueLabel,
+    state: { value },
   } = useContext(ListboxContext);
-  let { descendants: options } = useContext(ListboxDescendantContext);
   let isExpanded = isListboxExpanded(value);
   return useMemo(
     () => ({
-      id: input,
+      id: listboxId,
       isExpanded,
       value,
-      valueLabel: getLabelFromValue(context.value, options),
+      valueLabel: listboxValueLabel,
     }),
-    [context.value, input, isExpanded, options, value]
+    [listboxId, isExpanded, value, listboxValueLabel]
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-function getLabelFromValue(value: string | null, options: ListboxDescendant[]) {
-  let selected = options.find(option => option.value === value);
-  return selected ? selected.label : null;
-}
 
 function isListboxExpanded(state: string) {
   return [
@@ -1275,10 +1283,12 @@ function useKeyDown() {
   let index = options.findIndex(({ value }) => value === navigationValue);
 
   let handleKeyDown = wrapEvent(
-    function(event: React.KeyboardEvent) {
+    function (event: React.KeyboardEvent) {
       let { key } = event;
       let isSearching = isString(key) && key.length === 1;
-      let navOption = options.find(option => option.value === navigationValue);
+      let navOption = options.find(
+        (option) => option.value === navigationValue
+      );
       switch (key) {
         case "Enter":
           send({
@@ -1324,7 +1334,7 @@ function useKeyDown() {
       orientation: "vertical",
       key: "index",
       rotate: true,
-      filter: option => !option.disabled,
+      filter: (option) => !option.disabled,
       callback(nextIndex: number) {
         send({
           type: ListboxEvents.KeyDownNavigate,
@@ -1339,10 +1349,8 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  let {
-    ids: { input },
-  } = useContext(ListboxContext);
-  return value ? makeId(`option-${value}`, input) : undefined;
+  let { listboxId } = useContext(ListboxContext);
+  return value ? makeId(`option-${value}`, listboxId) : undefined;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1367,15 +1375,10 @@ export type ListboxContextValue = {
 
 interface InternalListboxContextValue {
   ariaLabel?: string;
+  ariaLabelledBy?: string;
   refs: MachineToReactRefMap<ListboxEvent>;
   disabled: boolean;
-  ids: {
-    label: string | undefined;
-    button: string;
-    input: string;
-    listbox: string;
-  };
-  listboxValue: ListboxValue | null;
+  listboxId: string;
   listboxValueLabel: string | null;
   mouseEventStartedRef: React.MutableRefObject<boolean>;
   mouseMovedRef: React.MutableRefObject<boolean>;
@@ -1389,4 +1392,15 @@ interface InternalListboxContextValue {
 
 interface ListboxGroupContextValue {
   labelId: string;
+}
+
+function useControlledStateSync<T>(
+  controlPropValue: T | undefined,
+  internalValue: T,
+  send: any
+) {
+  let { current: isControlled } = useRef(controlPropValue != null);
+  if (isControlled && controlPropValue !== internalValue) {
+    send();
+  }
 }
