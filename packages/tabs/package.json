@@ -1,6 +1,6 @@
 {
   "name": "@reach/tabs",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Accessible React Tabs Component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,9 +13,9 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.9.0",
-    "@reach/descendants": "^0.9.1",
-    "@reach/utils": "^0.9.0",
+    "@reach/auto-id": "^0.10.0",
+    "@reach/descendants": "^0.10.0",
+    "@reach/utils": "^0.10.0",
     "prop-types": "^15.7.2",
     "tslib": "^1.10.0"
   },
