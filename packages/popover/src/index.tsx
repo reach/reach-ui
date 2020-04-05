@@ -290,7 +290,7 @@ function useSimulateTabNavigationForReactTree<
     const elements =
       ownerDocument && popoverRef.current
         ? tabbable(ownerDocument).filter(
-            element => !popoverRef.current!.contains(element)
+            (element) => !popoverRef.current!.contains(element)
           )
         : null;
     return elements ? event.target === elements[elements.length - 1] : false;
@@ -307,7 +307,7 @@ function useSimulateTabNavigationForReactTree<
   function disableTabbablesInPopover() {
     const elements = popoverRef.current && tabbable(popoverRef.current);
     if (elements) {
-      elements.forEach(element => {
+      elements.forEach((element) => {
         restoreTabIndexTuplés.push([element, element.tabIndex]);
         element.tabIndex = -1;
       });
