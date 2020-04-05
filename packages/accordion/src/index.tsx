@@ -43,16 +43,13 @@ const AccordionDescendantContext = createDescendantContext<
   HTMLElement,
   DescendantProps
 >("AccordionDescendantContext");
-const AccordionContext = createNamedContext<IAccordionContext>(
+const AccordionContext = createNamedContext<InternalAccordionContextValue>(
   "AccordionContext",
-  {} as IAccordionContext
+  {} as InternalAccordionContextValue
 );
-const AccordionItemContext = createNamedContext<IAccordionItemContext>(
-  "AccordionItemContext",
-  {} as IAccordionItemContext
-);
-const useAccordionContext = () => useContext(AccordionContext);
-const useAccordionItemContext = () => useContext(AccordionItemContext);
+const AccordionItemContext = createNamedContext<
+  InternalAccordionItemContextValue
+>("AccordionItemContext", {} as InternalAccordionItemContextValue);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -127,7 +124,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
          * panels collapsed. Otherwise the first panel will be our default.
          */
         case collapsible:
-          return multiple ? [-1] : -1;
+          return multiple ? [] : -1;
         default:
           return multiple ? [0] : 0;
       }
@@ -191,7 +188,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       [collapsible, isControlled, multiple, onChange]
     );
 
-    const context: IAccordionContext = useMemo(
+    const context: InternalAccordionContextValue = useMemo(
       () => ({
         accordionId: id,
         openPanels: isControlled ? controlledIndex! : openPanels,
@@ -360,7 +357,7 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
     { as: Comp = "div", children, disabled = false, ...props },
     forwardedRef
   ) {
-    const { accordionId, openPanels, readOnly } = useAccordionContext();
+    const { accordionId, openPanels, readOnly } = useContext(AccordionContext);
     const buttonRef: ButtonRef = useRef(null);
 
     const index = useDescendant({
@@ -380,7 +377,7 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
         : openPanels === index && AccordionStates.Open) ||
       AccordionStates.Collapsed;
 
-    const context: IAccordionItemContext = {
+    const context: InternalAccordionItemContextValue = {
       disabled,
       buttonId,
       index,
@@ -461,7 +458,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
     },
     forwardedRef
   ) {
-    let { onSelectPanel } = useAccordionContext();
+    let { onSelectPanel } = useContext(AccordionContext);
 
     let {
       disabled,
@@ -470,7 +467,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       index,
       panelId,
       state,
-    } = useAccordionItemContext();
+    } = useContext(AccordionItemContext);
 
     let ref = useForkedRef(forwardedRef, ownRef);
 
@@ -587,7 +584,9 @@ export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
     { as: Comp = "div", children, ...props },
     forwardedRef
   ) {
-    const { disabled, panelId, buttonId, state } = useAccordionItemContext();
+    const { disabled, panelId, buttonId, state } = useContext(
+      AccordionItemContext
+    );
 
     return (
       <Comp
@@ -642,12 +641,58 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * A hook that exposes data for a given `Accordion` component to its
+ * descendants.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/accordion#useaccordioncontext
+ */
+export function useAccordionContext(): AccordionContextValue {
+  let { openPanels, accordionId } = useContext(AccordionContext);
+  return useMemo(
+    () => ({
+      id: accordionId,
+      openPanels: ([] as number[]).concat(openPanels as any).filter(i => i < 0),
+    }),
+    [accordionId, openPanels]
+  );
+}
+
+/**
+ * A hook that exposes data for a given `AccordionItem` component to its
+ * descendants.
+ *
+ * @see Docs https://reacttraining.com/reach-ui/accordion#useaccordionitemcontext
+ */
+export function useAccordionItemContext(): AccordionItemContextValue {
+  let { index, state } = useContext(AccordionItemContext);
+  return useMemo(
+    () => ({
+      index,
+      isExpanded: state === AccordionStates.Open,
+    }),
+    [index, state]
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 function getDataState(state: AccordionStates) {
   return state === AccordionStates.Open ? "open" : "collapsed";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
+
+export type AccordionContextValue = {
+  id: string | undefined;
+  openPanels: number[];
+};
+
+export type AccordionItemContextValue = {
+  index: number;
+  isExpanded: boolean;
+};
 
 type DescendantProps = {
   disabled: boolean;
@@ -659,14 +704,14 @@ type ButtonRef = React.MutableRefObject<any>;
 
 type AccordionIndex = number | number[];
 
-interface IAccordionContext {
+interface InternalAccordionContextValue {
   accordionId: string | undefined;
   openPanels: AccordionIndex;
   onSelectPanel(index: AccordionIndex): void;
   readOnly: boolean;
 }
 
-interface IAccordionItemContext {
+interface InternalAccordionItemContextValue {
   disabled: boolean;
   buttonId: string;
   index: number;

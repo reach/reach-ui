@@ -11,6 +11,8 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#accordionitem">AccordionItem</TOCLink>
     <TOCLink href="#accordionbutton">AccordionButton</TOCLink>
     <TOCLink href="#accordionpanel">AccordionPanel</TOCLink>
+    <TOCLink href="#useaccordioncontext">useAccordionContext</TOCLink>
+    <TOCLink href="#useAccordionitemcontext">useAccordionItemContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -706,3 +708,15 @@ A string representing an HTML element or a React component that will tell the `A
 `children: React.ReactNode`
 
 Inner collapsible content for the accordion item.
+
+### useAccordionContext
+
+`function useAccordionContext(): { id: string | undefined; openPanels: number[] }`
+
+A hook that exposes data for a given `Accordion` component to its descendants.
+
+### useAccordionItemContext
+
+`function useAccordionItemContext(): { index: number; isExpanded: boolean }`
+
+A hook that exposes data for a given `AccordionItem` component to its descendants.
