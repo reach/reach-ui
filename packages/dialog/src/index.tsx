@@ -28,6 +28,7 @@ const overlayPropTypes = {
   initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
   onDismiss: PropTypes.func,
+  ariaHideAncestors: PropTypes.bool,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +93,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
       onDismiss = noop,
       onMouseDown,
       onKeyDown,
+      ariaHideAncestors = true,
       ...props
     },
     forwardedRef
@@ -124,11 +126,11 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
       mouseDownTarget.current = event.target;
     }
 
-    useEffect(
-      () =>
-        overlayNode.current ? createAriaHider(overlayNode.current) : void null,
-      []
-    );
+    useEffect(() => {
+      if (overlayNode.current && ariaHideAncestors) {
+        createAriaHider(overlayNode.current);
+      }
+    }, [ariaHideAncestors]);
 
     return (
       <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
@@ -225,7 +227,14 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { isOpen, onDismiss = noop, initialFocusRef, allowPinchZoom, ...props },
+  {
+    isOpen,
+    onDismiss = noop,
+    initialFocusRef,
+    allowPinchZoom,
+    ariaHideAncestors = true,
+    ...props
+  },
   forwardedRef
 ) {
   return (
@@ -234,6 +243,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
       allowPinchZoom={allowPinchZoom}
       isOpen={isOpen}
       onDismiss={onDismiss}
+      ariaHideAncestors={ariaHideAncestors}
     >
       <DialogContent ref={forwardedRef} {...props} />
     </DialogOverlay>
@@ -266,6 +276,13 @@ export type DialogProps = {
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
+   * By default, all of the nodes at the document.body root hav aria-hidden set
+   * on them, except for the currently active dialog.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#aria-hiding-other-elements
+   */
+  ariaHideAncestors?: boolean;
+  /**
    * Accepts any renderable content.
    *
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
@@ -287,6 +304,7 @@ if (__DEV__) {
     onDismiss: PropTypes.func,
     "aria-label": ariaLabelType,
     "aria-labelledby": ariaLabelType,
+    ariaHideAncestors: PropTypes.bool,
   };
 }
 

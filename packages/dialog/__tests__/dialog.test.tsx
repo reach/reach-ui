@@ -4,7 +4,7 @@ import { useFakeTimers, SinonFakeTimers } from "sinon";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { fireEvent, render, act, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
-import { Dialog } from "@reach/dialog";
+import { Dialog, DialogProps } from "@reach/dialog";
 
 function getOverlay(container: Element) {
   return container.querySelector("[data-reach-dialog-overlay]");
@@ -58,6 +58,39 @@ describe("<Dialog />", () => {
       );
       expect(label).toHaveTextContent("I am the title now");
     });
+
+    it("ARIA hides ancestors by default", async () => {
+      const { findByTestId } = render(
+        <>
+          <div data-testid="sibling">Hidden</div>
+          <BasicOpenDialog />
+        </>
+      );
+      const sibling = await findByTestId("sibling");
+      expect(isAriaHidden(sibling)).toBe(true);
+    });
+
+    it("ARIA hides ancestors when ariaHideAncestors is true", async () => {
+      const { findByTestId } = render(
+        <>
+          <div data-testid="sibling">Hidden</div>
+          <BasicOpenDialog ariaHideAncestors={true} />
+        </>
+      );
+      const sibling = await findByTestId("sibling");
+      expect(isAriaHidden(sibling)).toBe(true);
+    });
+
+    it("doesn't ARIA hide ancestors when ariaHideAncestors is false", async () => {
+      const { findByTestId } = render(
+        <>
+          <div data-testid="sibling">Not hidden</div>
+          <BasicOpenDialog ariaHideAncestors={false} />
+        </>
+      );
+      const sibling = await findByTestId("sibling");
+      expect(isAriaHidden(sibling)).toBe(false);
+    });
   });
 
   describe("user events", () => {
@@ -83,7 +116,7 @@ describe("<Dialog />", () => {
   });
 });
 
-function BasicOpenDialog() {
+function BasicOpenDialog(props: DialogProps) {
   const [showDialog, setShowDialog] = useState(true);
   return (
     <div>
@@ -92,6 +125,7 @@ function BasicOpenDialog() {
         aria-label="Announcement"
         isOpen={showDialog}
         onDismiss={() => setShowDialog(false)}
+        {...props}
       >
         <div data-testid="inner">
           <button onClick={() => setShowDialog(false)}>Close Dialog</button>
@@ -101,4 +135,19 @@ function BasicOpenDialog() {
       </Dialog>
     </div>
   );
+}
+
+/**
+ * Checks the element and its ancestors for an aria-hidden attribute.
+ * If an aria-hidden is found, we assume it is set to true, which should be a
+ * reasonable assumption for the purposes of these tests.
+ */
+function isAriaHidden(el: HTMLElement | null) {
+  while (el) {
+    if (el.hasAttribute("aria-hidden")) {
+      return true;
+    }
+    el = el.parentElement;
+  }
+  return false;
 }
