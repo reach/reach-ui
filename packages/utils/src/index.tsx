@@ -217,6 +217,37 @@ export function forwardRefWithAs<Props, ComponentType extends As = "div">(
 }
 
 /**
+ * Get the size of the working document minus the scrollbar offset.
+ *
+ * @param element
+ */
+export function getDocumentDimensions(
+  element?: HTMLElement | null | undefined
+) {
+  if (!canUseDOM()) return { width: 0, height: 0 };
+  let doc = element ? getOwnerDocument(element)! : document;
+  let win = element ? getOwnerWindow(element)! : window;
+  return {
+    width: doc.documentElement.clientWidth || win.innerWidth,
+    height: doc.documentElement.clientHeight || win.innerHeight,
+  };
+}
+
+/**
+ * Get the scoll position of the global window object relative to a given node.
+ *
+ * @param element
+ */
+export function getScrollPosition(element?: HTMLElement | null | undefined) {
+  if (!canUseDOM()) return { scrollX: 0, scrollY: 0 };
+  let win = element ? getOwnerWindow(element)! : window;
+  return {
+    scrollX: win.scrollX,
+    scrollY: win.scrollY,
+  };
+}
+
+/**
  * Get a computed style value by property, backwards compatible with IE
  * @param element
  * @param styleProp
@@ -259,8 +290,17 @@ export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
     : null;
 }
 
+export function getOwnerWindow<T extends HTMLElement = HTMLElement>(
+  element: T | null
+) {
+  let doc = element ? getOwnerDocument(element) : null;
+  return doc ? doc.defaultView || window : null;
+}
+
 /**
  * Get the scrollbar offset distance.
+ *
+ * TODO: Remove in 1.0 (we used this in public examples)
  */
 export function getScrollbarOffset() {
   try {

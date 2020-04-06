@@ -55,6 +55,7 @@ import {
   checkStyles,
   forwardRefWithAs,
   getOwnerDocument,
+  getDocumentDimensions,
   makeId,
   useForkedRef,
   wrapEvent,
@@ -184,7 +185,7 @@ function subscribe(fn: Function) {
 }
 
 function notify() {
-  subscriptions.forEach(fn => fn(state, context));
+  subscriptions.forEach((fn) => fn(state, context));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -361,7 +362,7 @@ export function useTooltip<T extends HTMLElement>({
  *
  * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltip
  */
-export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function(
+export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   {
     children,
     label,
@@ -564,15 +565,15 @@ function getStyles(
 }
 
 let positionDefault: Position = (triggerRect, tooltipRect) => {
+  let { width: windowWidth, height: windowHeight } = getDocumentDimensions();
   if (!triggerRect || !tooltipRect) {
     return {};
   }
 
   let collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
-    right: window.innerWidth < triggerRect.left + tooltipRect.width,
-    bottom:
-      window.innerHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
+    right: windowWidth < triggerRect.left + tooltipRect.width,
+    bottom: windowHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
     left: triggerRect.left - tooltipRect.width < 0,
   };
 
@@ -584,14 +585,12 @@ let positionDefault: Position = (triggerRect, tooltipRect) => {
       ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
       : `${triggerRect.left + window.pageXOffset}px`,
     top: directionUp
-      ? `${triggerRect.top -
-          OFFSET -
-          tooltipRect.height +
-          window.pageYOffset}px`
-      : `${triggerRect.top +
-          OFFSET +
-          triggerRect.height +
-          window.pageYOffset}px`,
+      ? `${
+          triggerRect.top - OFFSET - tooltipRect.height + window.pageYOffset
+        }px`
+      : `${
+          triggerRect.top + OFFSET + triggerRect.height + window.pageYOffset
+        }px`,
   };
 };
 
