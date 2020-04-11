@@ -147,6 +147,7 @@ const stateChart: StateChart = {
     },
     [INTERACTING]: {
       on: {
+        [CLEAR]: IDLE,
         [CHANGE]: SUGGESTING,
         [FOCUS]: SUGGESTING,
         [BLUR]: IDLE,
