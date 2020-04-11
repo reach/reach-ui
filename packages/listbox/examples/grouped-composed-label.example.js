@@ -20,48 +20,55 @@ function GroupLabel({ icon, children, ...props }) {
 
 function Example() {
   let [value, setValue] = useState("default");
-  let taco = <span aria-hidden>🌮</span>;
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
       <Listbox
         aria-labelledby="taco-label"
         value={value}
-        onChange={value => setValue(value)}
+        onChange={(value) => setValue(value)}
       >
         <ListboxOption value="default" label="Choose a taco">
-          {taco} Choose a taco
+          <Taco /> Choose a taco
         </ListboxOption>
         <hr />
         <ListboxGroup>
           <GroupLabel icon="🍖">Meat</GroupLabel>
           <ListboxOption value="asada" label="Carne Asada">
-            {taco} Carne Asada
+            <Taco /> Carne Asada
           </ListboxOption>
           <ListboxOption value="pollo" label="Pollo">
-            {taco} Pollo
+            <Taco /> Pollo
           </ListboxOption>
           <ListboxOption value="pastor" label="Pastor">
-            {taco} Pastor
+            <Taco /> Pastor
           </ListboxOption>
           <ListboxOption value="lengua" label="Lengua">
-            {taco} Lengua
+            <Taco /> Lengua
           </ListboxOption>
         </ListboxGroup>
         <ListboxGroup>
           <GroupLabel icon="🥕">Veggie</GroupLabel>
           <ListboxOption value="hibiscus" label="Hibiscus">
-            {taco} Hibiscus
+            <Taco /> Hibiscus
           </ListboxOption>
           <ListboxOption value="portobello" label="Portobello">
-            {taco} Portobello
+            <Taco /> Portobello
           </ListboxOption>
           <ListboxOption value="fajita" label="Fajita">
-            {taco} Fajita
+            <Taco /> Fajita
           </ListboxOption>
         </ListboxGroup>
       </Listbox>
     </div>
+  );
+}
+
+function Taco() {
+  return (
+    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
+      🌮
+    </span>
   );
 }
 

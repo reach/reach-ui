@@ -12,7 +12,6 @@ function Example() {
   let [value, setValue] = useState("default");
   let [newOption, setNewOption] = useState("");
   let [newOptions, setNewOptions] = useState<Option[]>([]);
-  let taco = <span aria-hidden>🌮</span>;
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -35,13 +34,13 @@ function Example() {
       <Listbox
         aria-labelledby="taco-label"
         value={value}
-        onChange={value => {
+        onChange={(value) => {
           setValue(value);
           action("Value Change")(value);
         }}
       >
         <ListboxOption value="default" label="Choose a taco">
-          {taco} Choose a taco
+          <Taco /> Choose a taco
         </ListboxOption>
         <hr />
 
@@ -52,7 +51,7 @@ function Example() {
               <input
                 type="text"
                 value={newOption}
-                onChange={event => setNewOption(event.target.value)}
+                onChange={(event) => setNewOption(event.target.value)}
               />
             </label>
             <button type="submit">Add it!</button>
@@ -60,28 +59,36 @@ function Example() {
         </form>
         <hr />
         <ListboxOption value="asada" label="Carne Asada">
-          {taco} Carne Asada
+          <Taco /> Carne Asada
         </ListboxOption>
         <ListboxOption value="pollo" label="Pollo">
-          {taco} Pollo
+          <Taco /> Pollo
         </ListboxOption>
         <ListboxOption value="pastor" label="Pastor">
-          {taco} Pastor
+          <Taco /> Pastor
         </ListboxOption>
         <ListboxOption value="lengua" label="Lengua">
-          {taco} Lengua
+          <Taco /> Lengua
         </ListboxOption>
-        {newOptions.map(option => (
+        {newOptions.map((option) => (
           <ListboxOption
             key={option.value}
             value={option.value}
             label={option.label}
           >
-            {taco} {option.label}
+            <Taco /> {option.label}
           </ListboxOption>
         ))}
       </Listbox>
     </div>
+  );
+}
+
+function Taco() {
+  return (
+    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
+      🌮
+    </span>
   );
 }
 
@@ -91,7 +98,7 @@ function formatOption(string: string) {
     .trim()
     .toLowerCase()
     .split(" ")
-    .map(word => {
+    .map((word) => {
       return word.charAt(0).toUpperCase() + word.slice(1);
     })
     .join(" ");

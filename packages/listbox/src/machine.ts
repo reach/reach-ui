@@ -14,14 +14,14 @@ export enum ListboxStates {
   // Resting/closed state.
   Idle = "IDLE",
 
-  // The user is navigate the list with a pointer
+  // Listbox is open but the user is not yet navigating.
+  Open = "OPEN",
+
+  // The user is navigating the list
   Navigating = "NAVIGATING",
 
-  // The user is navigate the list with a keyboard
-  NavigatingWithKeys = "NAVIGATING_WITH_KEYS",
-
-  // The user is searching for an option with the keyboard
-  Searching = "SEARCHING",
+  // The user has moused-down but hasn't made a selection yet
+  Dragging = "DRAGGING",
 
   // The user is interacting with arbitrary elements inside the popover
   Interacting = "INTERACTING",
@@ -44,16 +44,18 @@ export enum ListboxEvents {
   KeyDownSearch = "KEY_DOWN_SEARCH",
   KeyDownTab = "KEY_DOWN_TAB",
   KeyDownShiftTab = "KEY_DOWN_SHIFT_TAB",
-  Navigate = "NAVIGATE",
+  OptionTouchStart = "OPTION_TOUCH_START",
+  OptionMouseMove = "OPTION_MOUSE_MOVE",
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
   OutsideMouseDown = "OUTSIDE_MOUSE_DOWN",
+  OutsideMouseUp = "OUTSIDE_MOUSE_UP",
 
   // Uncontrolled value changes come from specific events (click, key, etc.)
   // ValueChange > Value change may have come from somewhere else
   ValueChange = "VALUE_CHANGE",
 
-  OptionStartClick = "OPTION_START_CLICK",
-  OptionFinishClick = "OPTION_FINISH_CLICK",
+  OptionMouseDown = "OPTION_MOUSE_DOWN",
+  OptionMouseUp = "OPTION_MOUSE_UP",
   PopoverPointerDown = "POPOVER_POINTER_DOWN",
   PopoverPointerUp = "POPOVER_POINTER_UP",
   UpdateAfterTypeahead = "UPDATE_AFTER_TYPEAHEAD",
@@ -66,7 +68,7 @@ let clearNavigationValue = assign<ListboxStateData>({
   navigationValue: null,
 });
 
-let clearTypeaheadQuery = assign<ListboxStateData>({
+let clearTypeahead = assign<ListboxStateData>({
   typeaheadQuery: null,
 });
 
@@ -79,7 +81,7 @@ let navigate = assign<ListboxStateData, any>({
 });
 
 let navigateFromCurrentValue = assign<ListboxStateData, any>({
-  navigationValue: data => {
+  navigationValue: (data) => {
     // Before we navigate based on the current value, we need to make sure the
     // current value is selectable. If not, we should instead navigate to the
     // first selectable option.
@@ -87,7 +89,7 @@ let navigateFromCurrentValue = assign<ListboxStateData, any>({
     if (selected && !selected.disabled) {
       return data.value;
     } else {
-      return data.options.find(option => !option.disabled)?.value || null;
+      return data.options.find((option) => !option.disabled)?.value || null;
     }
   },
 });
@@ -111,7 +113,10 @@ function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
 }
 
 function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
-  if (event.type === ListboxEvents.OutsideMouseDown) {
+  if (
+    event.type === ListboxEvents.OutsideMouseDown ||
+    event.type === ListboxEvents.OutsideMouseUp
+  ) {
     let { button, popover } = event.refs;
     let { relatedTarget } = event;
 
@@ -133,15 +138,20 @@ function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
 }
 
 function optionIsActive(data: ListboxStateData, event: any) {
-  return !!data.options.find(option => option.value === data.navigationValue);
+  return !!data.options.find((option) => option.value === data.navigationValue);
 }
 
-function shouldNavigateWithKeys(data: ListboxStateData, event: any) {
-  let { popover } = event.refs;
+function shouldNavigate(data: ListboxStateData, event: any) {
+  let { popover, list } = event.refs;
   let { relatedTarget } = event;
-  // When a blur event happens, we want to move to NavigatingWithKeys state
-  // unless the user is interacting with elements inside the popover...
-  if (popover && relatedTarget && popover.contains(relatedTarget as Element)) {
+  // When a blur event happens, we want to move to Navigating state unless the
+  // user is interacting with elements inside the popover...
+  if (
+    popover &&
+    relatedTarget &&
+    popover.contains(relatedTarget as Element) &&
+    relatedTarget !== list
+  ) {
     return false;
   }
   // ...otherwise, just make sure the next option is selectable
@@ -163,7 +173,7 @@ function listboxIsNotDisabled(data: ListboxStateData, event: any) {
 }
 
 function optionIsNavigable(data: ListboxStateData, event: ListboxEvent) {
-  if (event.type === ListboxEvents.Navigate) {
+  if (event.type === ListboxEvents.OptionTouchStart) {
     if (event && event.disabled) {
       return false;
     }
@@ -220,10 +230,6 @@ let setTypeahead = assign<ListboxStateData, any>({
   },
 });
 
-let clearTypeahead = assign<ListboxStateData, any>({
-  typeaheadQuery: "",
-});
-
 let setValueFromTypeahead = assign<ListboxStateData, ListboxEvent>({
   value: (data, event) => {
     if (event.type === ListboxEvents.UpdateAfterTypeahead && event.query) {
@@ -267,42 +273,6 @@ let commonEvents = {
   },
 };
 
-let openEvents = {
-  [ListboxEvents.ClearNavSelection]: {
-    actions: [clearNavigationValue, focusList],
-  },
-  [ListboxEvents.OptionFinishClick]: {
-    target: ListboxStates.Idle,
-    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
-    cond: optionIsSelectable,
-  },
-  [ListboxEvents.KeyDownEnter]: {
-    target: ListboxStates.Idle,
-    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
-    cond: optionIsSelectable,
-  },
-  [ListboxEvents.KeyDownSpace]: {
-    target: ListboxStates.Idle,
-    actions: [assignValue, clearTypeaheadQuery, focusButton, selectOption],
-    cond: optionIsSelectable,
-  },
-  [ListboxEvents.ButtonMouseDown]: {
-    target: ListboxStates.Idle,
-    // When the user triggers a mouseDown event on the button, we call
-    // event.preventDefault() because the browser will naturally call mouseUp
-    // and click, which will reopen the button (which we don't want). As such,
-    // the click won't blur the open list or re-focus the trigger, so we call
-    // `focusButton` to do that manually. We could work around this with
-    // deferred transitions with xstate, but @xstate/fsm currently doesn't
-    // support that feature and this works good enough for the moment.
-    actions: [focusButton],
-  },
-  [ListboxEvents.KeyDownEscape]: {
-    target: ListboxStates.Idle,
-    actions: [focusButton],
-  },
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -336,12 +306,12 @@ export const createMachineDefinition = ({
       on: {
         ...commonEvents,
         [ListboxEvents.ButtonMouseDown]: {
-          target: ListboxStates.Navigating,
+          target: ListboxStates.Open,
           actions: [navigateFromCurrentValue],
           cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownSpace]: {
-          target: ListboxStates.NavigatingWithKeys,
+          target: ListboxStates.Navigating,
           actions: [navigateFromCurrentValue, focusList],
           cond: listboxIsNotDisabled,
         },
@@ -360,8 +330,8 @@ export const createMachineDefinition = ({
           actions: clearTypeahead,
         },
         [ListboxEvents.KeyDownNavigate]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: [navigateFromCurrentValue, clearTypeaheadQuery, focusList],
+          target: ListboxStates.Navigating,
+          actions: [navigateFromCurrentValue, clearTypeahead, focusList],
           cond: listboxIsNotDisabled,
         },
         [ListboxEvents.KeyDownEnter]: {
@@ -374,28 +344,144 @@ export const createMachineDefinition = ({
       entry: [clearNavigationValue],
       on: {
         ...commonEvents,
-        ...openEvents,
+        [ListboxEvents.ClearNavSelection]: {
+          actions: [clearNavigationValue, focusList],
+        },
+        [ListboxEvents.KeyDownEnter]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.KeyDownSpace]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.ButtonMouseDown]: {
+          target: ListboxStates.Idle,
+          // When the user triggers a mouseDown event on the button, we call
+          // event.preventDefault() because the browser will naturally send a
+          // mouseup event and click, which will reopen the button (which we
+          // don't want). As such, the click won't blur the open list or
+          // re-focus the trigger, so we call `focusButton` to do that manually.
+          // We could work around this with deferred transitions with xstate,
+          // but @xstate/fsm currently doesn't support that feature and this
+          // works good enough for the moment.
+          actions: [focusButton],
+        },
+        [ListboxEvents.KeyDownEscape]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.OptionMouseDown]: {
+          target: ListboxStates.Dragging,
+        },
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Dragging,
+            actions: clearTypeahead,
+            cond: optionIsActive,
+          },
+        ],
+        [ListboxEvents.OutsideMouseUp]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeahead,
+          },
+        ],
         [ListboxEvents.KeyDownEnter]: ListboxStates.Interacting,
         [ListboxEvents.Blur]: [
           {
             target: ListboxStates.Idle,
             cond: listboxLostFocus,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
           {
             target: ListboxStates.Navigating,
-            cond: shouldNavigateWithKeys,
+            cond: shouldNavigate,
           },
           {
             target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
         ],
+        [ListboxEvents.OptionTouchStart]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionMouseEnter]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead, focusList],
+        },
+      },
+    },
+    [ListboxStates.Open]: {
+      on: {
+        ...commonEvents,
+        [ListboxEvents.ClearNavSelection]: {
+          actions: [clearNavigationValue],
+        },
+        [ListboxEvents.KeyDownEnter]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.KeyDownSpace]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.ButtonMouseDown]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.KeyDownEscape]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.OptionMouseDown]: {
+          target: ListboxStates.Dragging,
+        },
         [ListboxEvents.OutsideMouseDown]: [
           {
             target: ListboxStates.Idle,
             cond: clickedOutsideOfListbox,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Dragging,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeahead,
+          },
+        ],
+        [ListboxEvents.OutsideMouseUp]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
           },
           {
             target: ListboxStates.Navigating,
@@ -403,69 +489,39 @@ export const createMachineDefinition = ({
           },
           {
             target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
         ],
-        [ListboxEvents.Navigate]: {
-          target: ListboxStates.Navigating,
-          actions: [navigate],
-          cond: optionIsNavigable,
-        },
-        [ListboxEvents.KeyDownNavigate]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: [navigate, clearTypeaheadQuery, focusList],
-        },
-      },
-    },
-    [ListboxStates.Navigating]: {
-      on: {
-        ...commonEvents,
-        ...openEvents,
         [ListboxEvents.Blur]: [
           {
             target: ListboxStates.Idle,
             cond: listboxLostFocus,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
           {
             target: ListboxStates.Navigating,
-            cond: shouldNavigateWithKeys,
+            cond: shouldNavigate,
           },
           {
             target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
-          },
-        ],
-        [ListboxEvents.OutsideMouseDown]: [
-          {
-            target: ListboxStates.Idle,
-            cond: clickedOutsideOfListbox,
-            actions: clearTypeaheadQuery,
-          },
-          {
-            target: ListboxStates.Navigating,
-            cond: optionIsActive,
-          },
-          {
-            target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
         ],
         [ListboxEvents.ButtonMouseUp]: {
           target: ListboxStates.Navigating,
           actions: [navigateFromCurrentValue, focusList],
         },
-        [ListboxEvents.Navigate]: {
+        [ListboxEvents.OptionTouchStart]: {
           target: ListboxStates.Navigating,
-          actions: [navigate],
+          actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
         },
         [ListboxEvents.KeyDownNavigate]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: [navigate, clearTypeaheadQuery, focusList],
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead, focusList],
         },
         [ListboxEvents.KeyDownSearch]: {
-          target: ListboxStates.NavigatingWithKeys,
+          target: ListboxStates.Navigating,
           actions: setTypeahead,
         },
         [ListboxEvents.UpdateAfterTypeahead]: {
@@ -474,108 +530,117 @@ export const createMachineDefinition = ({
         [ListboxEvents.ClearTypeahead]: {
           actions: clearTypeahead,
         },
-      },
-    },
-    [ListboxStates.NavigatingWithKeys]: {
-      on: {
-        ...commonEvents,
-        ...openEvents,
-        [ListboxEvents.Blur]: [
+        [ListboxEvents.OptionMouseMove]: [
           {
-            target: ListboxStates.Idle,
-            cond: listboxLostFocus,
-            actions: clearTypeaheadQuery,
+            target: ListboxStates.Dragging,
+            actions: [navigate],
+            cond: optionIsNavigable,
           },
           {
-            target: ListboxStates.NavigatingWithKeys,
-            cond: shouldNavigateWithKeys,
-          },
-          {
-            target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            target: ListboxStates.Dragging,
           },
         ],
+        [ListboxEvents.OptionMouseEnter]: {
+          target: ListboxStates.Dragging,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+      },
+    },
+    [ListboxStates.Dragging]: {
+      on: {
+        ...commonEvents,
+        [ListboxEvents.ClearNavSelection]: {
+          actions: [clearNavigationValue],
+        },
+        [ListboxEvents.KeyDownEnter]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.KeyDownSpace]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.ButtonMouseDown]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.KeyDownEscape]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.OptionMouseDown]: {
+          target: ListboxStates.Dragging,
+        },
         [ListboxEvents.OutsideMouseDown]: [
           {
             target: ListboxStates.Idle,
             cond: clickedOutsideOfListbox,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
           {
-            target: ListboxStates.NavigatingWithKeys,
+            target: ListboxStates.Navigating,
             cond: optionIsActive,
           },
           {
             target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
         ],
-        [ListboxEvents.Navigate]: {
-          target: ListboxStates.Navigating,
-          actions: [navigate],
-          cond: optionIsNavigable,
-        },
-        [ListboxEvents.KeyDownNavigate]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: [navigate, clearTypeaheadQuery, focusList],
-        },
-        [ListboxEvents.KeyDownSearch]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: setTypeahead,
-        },
-        [ListboxEvents.UpdateAfterTypeahead]: {
-          actions: [setNavSelectionFromTypeahead],
-        },
-        [ListboxEvents.ClearTypeahead]: {
-          actions: clearTypeahead,
-        },
-      },
-    },
-    [ListboxStates.Searching]: {
-      on: {
-        ...commonEvents,
-        ...openEvents,
+        [ListboxEvents.OutsideMouseUp]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+            actions: focusList,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: [clearTypeahead, focusList],
+          },
+        ],
         [ListboxEvents.Blur]: [
           {
             target: ListboxStates.Idle,
             cond: listboxLostFocus,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
           {
-            target: ListboxStates.Searching,
-            cond: shouldNavigateWithKeys,
-          },
-          {
-            target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
-          },
-        ],
-        [ListboxEvents.OutsideMouseDown]: [
-          {
-            target: ListboxStates.Idle,
-            cond: clickedOutsideOfListbox,
-            actions: clearTypeaheadQuery,
-          },
-          {
-            target: ListboxStates.Searching,
-            cond: optionIsActive,
+            target: ListboxStates.Navigating,
+            cond: shouldNavigate,
           },
           {
             target: ListboxStates.Interacting,
-            actions: clearTypeaheadQuery,
+            actions: clearTypeahead,
           },
         ],
-        [ListboxEvents.Navigate]: {
+
+        [ListboxEvents.ButtonMouseUp]: {
           target: ListboxStates.Navigating,
-          actions: [navigate, clearTypeaheadQuery],
+          actions: [navigateFromCurrentValue, focusList],
+        },
+        [ListboxEvents.OptionTouchStart]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionMouseEnter]: {
+          target: ListboxStates.Dragging,
+          actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
         },
         [ListboxEvents.KeyDownNavigate]: {
-          target: ListboxStates.NavigatingWithKeys,
-          actions: [navigate, clearTypeaheadQuery, focusList],
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead, focusList],
         },
         [ListboxEvents.KeyDownSearch]: {
-          target: ListboxStates.NavigatingWithKeys,
+          target: ListboxStates.Navigating,
           actions: setTypeahead,
         },
         [ListboxEvents.UpdateAfterTypeahead]: {
@@ -584,6 +649,140 @@ export const createMachineDefinition = ({
         [ListboxEvents.ClearTypeahead]: {
           actions: clearTypeahead,
         },
+        [ListboxEvents.OptionMouseMove]: [
+          {
+            target: ListboxStates.Navigating,
+            actions: [navigate],
+            cond: optionIsNavigable,
+          },
+          {
+            target: ListboxStates.Navigating,
+          },
+        ],
+        [ListboxEvents.OptionMouseUp]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.OutsideMouseUp]: [
+          {
+            target: ListboxStates.Idle,
+            actions: [assignValue, clearTypeahead, focusButton, selectOption],
+            cond: clickedOutsideOfListbox,
+          },
+        ],
+      },
+    },
+    [ListboxStates.Navigating]: {
+      on: {
+        ...commonEvents,
+        [ListboxEvents.ClearNavSelection]: {
+          actions: [clearNavigationValue, focusList],
+        },
+        [ListboxEvents.KeyDownEnter]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.KeyDownSpace]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.ButtonMouseDown]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.KeyDownEscape]: {
+          target: ListboxStates.Idle,
+          actions: [focusButton],
+        },
+        [ListboxEvents.OptionMouseDown]: {
+          target: ListboxStates.Dragging,
+        },
+        [ListboxEvents.OutsideMouseDown]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeahead,
+          },
+        ],
+        [ListboxEvents.OutsideMouseUp]: [
+          {
+            target: ListboxStates.Idle,
+            cond: clickedOutsideOfListbox,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: optionIsActive,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeahead,
+          },
+        ],
+        [ListboxEvents.Blur]: [
+          {
+            target: ListboxStates.Idle,
+            cond: listboxLostFocus,
+            actions: clearTypeahead,
+          },
+          {
+            target: ListboxStates.Navigating,
+            cond: shouldNavigate,
+          },
+          {
+            target: ListboxStates.Interacting,
+            actions: clearTypeahead,
+          },
+        ],
+        [ListboxEvents.ButtonMouseUp]: {
+          target: ListboxStates.Navigating,
+          actions: [navigateFromCurrentValue, focusList],
+        },
+        [ListboxEvents.OptionTouchStart]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionMouseEnter]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead],
+          cond: optionIsNavigable,
+        },
+        [ListboxEvents.KeyDownNavigate]: {
+          target: ListboxStates.Navigating,
+          actions: [navigate, clearTypeahead, focusList],
+        },
+        [ListboxEvents.KeyDownSearch]: {
+          target: ListboxStates.Navigating,
+          actions: setTypeahead,
+        },
+        [ListboxEvents.UpdateAfterTypeahead]: {
+          actions: [setNavSelectionFromTypeahead],
+        },
+        [ListboxEvents.ClearTypeahead]: {
+          actions: clearTypeahead,
+        },
+        [ListboxEvents.OptionMouseMove]: [
+          {
+            target: ListboxStates.Navigating,
+            actions: [navigate],
+            cond: optionIsNavigable,
+          },
+          {
+            target: ListboxStates.Navigating,
+          },
+        ],
       },
     },
   },
@@ -597,7 +796,7 @@ function findOptionFromTypeahead(
 ) {
   if (!string) return null;
   const found = options.find(
-    option =>
+    (option) =>
       !option.disabled &&
       option.label &&
       option.label.toLowerCase().startsWith(string.toLowerCase())
@@ -609,7 +808,7 @@ function findOptionFromValue(
   value: string | null | undefined,
   options: Descendant<HTMLElement, ListboxDescendantProps>[]
 ) {
-  return value ? options.find(option => option.value === value) : undefined;
+  return value ? options.find((option) => option.value === value) : undefined;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -647,6 +846,10 @@ export type ListboxEvent = ListboxEventBase &
         relatedTarget: EventTarget | null;
       }
     | {
+        type: ListboxEvents.OutsideMouseUp;
+        relatedTarget: EventTarget | null;
+      }
+    | {
         type: ListboxEvents.GetDerivedData;
         data: Omit<Partial<ListboxStateData>, "refs"> & {
           refs?: Partial<ListboxStateData["refs"]>;
@@ -663,7 +866,17 @@ export type ListboxEvent = ListboxEventBase &
         type: ListboxEvents.ClearNavSelection;
       }
     | {
-        type: ListboxEvents.Navigate;
+        type: ListboxEvents.OptionTouchStart;
+        value: ListboxValue;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.OptionMouseEnter;
+        value: ListboxValue;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.OptionMouseMove;
         value: ListboxValue;
         disabled: boolean;
       }
@@ -698,10 +911,10 @@ export type ListboxEvent = ListboxEventBase &
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
     | {
-        type: ListboxEvents.OptionStartClick;
+        type: ListboxEvents.OptionMouseDown;
       }
     | {
-        type: ListboxEvents.OptionFinishClick;
+        type: ListboxEvents.OptionMouseUp;
         value: ListboxValue | null | undefined;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
         disabled: boolean;

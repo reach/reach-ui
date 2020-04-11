@@ -13,33 +13,32 @@ let name = "Composed";
 
 function Example() {
   let [value, setValue] = useState("pollo");
-  let taco = <span aria-hidden>🌮</span>;
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
       <ListboxInput
         aria-labelledby="taco-label"
         value={value}
-        onChange={value => setValue(value)}
+        onChange={(value) => setValue(value)}
       >
         <ListboxButton arrow="▼" />
         <ListboxPopover>
           <ListboxList>
             <ListboxOption value="default" label="Choose a taco">
-              {taco} Choose a taco
+              <Taco /> Choose a taco
             </ListboxOption>
             <hr />
             <ListboxOption value="asada" label="Carne Asada">
-              {taco} Carne Asada
+              <Taco /> Carne Asada
             </ListboxOption>
             <ListboxOption value="pollo" label="Pollo">
-              {taco} Pollo
+              <Taco /> Pollo
             </ListboxOption>
             <ListboxOption value="pastor" label="Pastor">
-              {taco} Pastor
+              <Taco /> Pastor
             </ListboxOption>
             <ListboxOption value="lengua" label="Lengua">
-              {taco} Lengua
+              <Taco /> Lengua
             </ListboxOption>
           </ListboxList>
           <hr />
@@ -47,7 +46,9 @@ function Example() {
             <p>
               I really like tacos. I hope you enjoy them as well!
               <br />
-              {taco} {taco} {taco}
+              <Taco />
+              <Taco />
+              <Taco />
             </p>
             <button type="button">Useless Button</button>
             <button type="button">Silly Button</button>
@@ -55,6 +56,14 @@ function Example() {
         </ListboxPopover>
       </ListboxInput>
     </div>
+  );
+}
+
+function Taco() {
+  return (
+    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
+      🌮
+    </span>
   );
 }
 
