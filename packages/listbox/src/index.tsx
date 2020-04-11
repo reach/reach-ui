@@ -81,7 +81,7 @@ import {
 
 const DEBUG = __DEV__
   ? // set here if we want to debug during development
-    false
+    true
   : // leave this alone!
     false;
 
@@ -141,6 +141,8 @@ export const ListboxInput = forwardRef<
   let onChange = useCallbackProp(onChangeProp);
 
   // DOM refs
+  let selectedOption = useRef<ListboxNodeRefs["selectedOption"]>(null);
+  let highlightedOption = useRef<ListboxNodeRefs["highlightedOption"]>(null);
   let button = useRef<ListboxNodeRefs["button"]>(null);
   let hiddenInput = useRef<ListboxNodeRefs["hiddenInput"]>(null);
   let input = useRef<ListboxNodeRefs["input"]>(null);
@@ -159,6 +161,8 @@ export const ListboxInput = forwardRef<
       input,
       list,
       popover,
+      selectedOption,
+      highlightedOption,
     }),
     DEBUG
   );
@@ -198,6 +202,8 @@ export const ListboxInput = forwardRef<
         input,
         list,
         popover,
+        selectedOption,
+        highlightedOption,
       },
       send,
       state: current,
@@ -237,11 +243,13 @@ export const ListboxInput = forwardRef<
     }
   }
 
-  const childrenProps = useMemo(
+  const childrenProps: ListboxContextValue & { expanded: boolean } = useMemo(
     () => ({
       id,
       isExpanded: isListboxExpanded(current.value),
       value: current.context.value,
+      selectedOptionRef: selectedOption,
+      highlightedOptionRef: highlightedOption,
       valueLabel,
       // TODO: Remove in 1.0
       expanded: isListboxExpanded(current.value),
@@ -753,6 +761,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
       onBlur,
       onKeyDown,
       portal = true,
+      unstable_observableRefs,
       ...props
     },
     forwardedRef
@@ -791,6 +800,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
         {...commonProps}
         targetRef={buttonRef as any}
         position={position}
+        unstable_observableRefs={unstable_observableRefs}
       />
     ) : (
       <div {...commonProps} />
@@ -830,6 +840,7 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-position
    */
   position?: PopoverProps["position"];
+  unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -937,6 +948,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         value: state,
         context: { value: listboxValue, navigationValue },
       },
+      refs,
       onValueChange,
     } = useContext(ListboxContext);
 
@@ -957,7 +969,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     // typeahead functionality.
     let getLabelFromDomNode = useCallback(
       (node: HTMLElement) => {
-        if (!labelProp) {
+        if (!labelProp && node) {
           setLabel((prevState) => {
             if (node.textContent && prevState !== node.textContent) {
               return node.textContent;
@@ -968,10 +980,17 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       },
       [labelProp]
     );
-    let ref = useForkedRef(getLabelFromDomNode, forwardedRef, ownRef);
 
     let isHighlighted = navigationValue ? navigationValue === value : false;
     let isSelected = listboxValue === value;
+
+    let ref = useForkedRef(
+      getLabelFromDomNode,
+      forwardedRef,
+      ownRef,
+      isSelected ? refs.selectedOption : null,
+      isHighlighted ? refs.highlightedOption : null
+    );
 
     function handleMouseEnter() {
       send({
@@ -1205,6 +1224,7 @@ export function useListboxContext(): ListboxContextValue {
     listboxId,
     listboxValueLabel,
     state: { value },
+    refs: { selectedOption, highlightedOption },
   } = useContext(ListboxContext);
   let isExpanded = isListboxExpanded(value);
   console.log(value, isExpanded);
@@ -1212,10 +1232,19 @@ export function useListboxContext(): ListboxContextValue {
     () => ({
       id: listboxId,
       isExpanded,
+      selectedOptionRef: selectedOption,
+      highlightedOptionRef: highlightedOption,
       value,
       valueLabel: listboxValueLabel,
     }),
-    [listboxId, isExpanded, value, listboxValueLabel]
+    [
+      listboxId,
+      isExpanded,
+      value,
+      listboxValueLabel,
+      selectedOption,
+      highlightedOption,
+    ]
   );
 }
 
@@ -1356,6 +1385,8 @@ export type ListboxDescendant = Descendant<HTMLElement, ListboxDescendantProps>;
 export type ListboxContextValue = {
   id: string | undefined;
   isExpanded: boolean;
+  highlightedOptionRef: React.RefObject<ListboxNodeRefs["highlightedOption"]>;
+  selectedOptionRef: React.RefObject<ListboxNodeRefs["selectedOption"]>;
   value: ListboxValue | null;
   valueLabel: string | null;
 };

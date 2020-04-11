@@ -120,6 +120,8 @@ function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
     let { button, popover } = event.refs;
     let { relatedTarget } = event;
 
+    console.log(relatedTarget);
+
     // Close the popover IF:
     return !!(
       // clicked element is not the button
@@ -296,6 +298,8 @@ export const createMachineDefinition = ({
       list: null,
       popover: null,
       hiddenInput: null,
+      selectedOption: null,
+      highlightedOption: null,
     },
     options: [],
     navigationValue: null,
@@ -540,11 +544,6 @@ export const createMachineDefinition = ({
             target: ListboxStates.Dragging,
           },
         ],
-        [ListboxEvents.OptionMouseEnter]: {
-          target: ListboxStates.Dragging,
-          actions: [navigate, clearTypeahead],
-          cond: optionIsNavigable,
-        },
       },
     },
     [ListboxStates.Dragging]: {
@@ -664,13 +663,6 @@ export const createMachineDefinition = ({
           actions: [assignValue, clearTypeahead, focusButton, selectOption],
           cond: optionIsSelectable,
         },
-        [ListboxEvents.OutsideMouseUp]: [
-          {
-            target: ListboxStates.Idle,
-            actions: [assignValue, clearTypeahead, focusButton, selectOption],
-            cond: clickedOutsideOfListbox,
-          },
-        ],
       },
     },
     [ListboxStates.Navigating]: {
@@ -830,6 +822,8 @@ export type ListboxNodeRefs = {
   input: HTMLElement | null;
   list: HTMLElement | null;
   popover: HTMLElement | null;
+  selectedOption: HTMLElement | null;
+  highlightedOption: HTMLElement | null;
 };
 
 /**
