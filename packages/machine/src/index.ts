@@ -58,8 +58,7 @@ export function useMachine<
       let refValues = unwrapRefs(refs);
       service.send({ ...event, refs: refValues } as TE);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [refs, service]
   );
 
   useEffect(() => {
@@ -67,8 +66,7 @@ export function useMachine<
     return () => {
       service.stop();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [service]);
 
   return [current, send, service];
 }
@@ -100,38 +98,42 @@ export function useMachineLogger<
   TC extends object,
   TE extends MachineEventWithRefs = MachineEventWithRefs
 >(
-  [current, send, service]: [
+  [state, send, service]: [
     MachineState<TC, TE>,
     MachineSend<TC, TE>,
     MachineService<TC, TE>
   ],
   DEBUG?: boolean
 ): [MachineState<TC, TE>, MachineSend<TC, TE>, MachineService<TC, TE>] {
+  const previousState = useRef<MachineState<TC, TE>>();
   let eventRef = useRef<any>();
   let newSendRef = useRef<MachineSend<TC, TE>>(
     __DEV__ && DEBUG
       ? (event: any) => {
           eventRef.current = event;
           send(event);
+          console.group("Event Sent");
+          console.log("Event:", event);
+          console.groupEnd();
         }
       : send
   );
 
   useEffect(() => {
+    previousState.current = state;
+  }, [state]);
+
+  useEffect(() => {
     if (__DEV__) {
-      if (DEBUG) {
-        let event = eventRef.current;
-        if (event) {
-          console.group("Event Sent");
-          console.log("Event:", event);
-          console.log("State:", current);
-          console.groupEnd();
-        }
+      if (DEBUG && state !== previousState.current) {
+        console.group("State Updated");
+        console.log("State:", state);
+        console.groupEnd();
       }
     }
-  }, [DEBUG, current]);
+  }, [DEBUG, state]);
 
-  return [current, newSendRef.current, service];
+  return [state, newSendRef.current, service];
 }
 
 /**
