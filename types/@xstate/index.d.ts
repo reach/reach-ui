@@ -99,7 +99,7 @@ declare module "@xstate/fsm" {
       TEvent extends EventObject,
       TState extends Typestate<TContext>
     > {
-      config: StateMachine.Config<TContext, TEvent>;
+      config: StateMachine.Config<TContext, TEvent, TState>;
       initialState: State<TContext, TEvent, TState>;
       transition: (
         state: string | State<TContext, TEvent, TState>,
@@ -153,7 +153,7 @@ declare module "@xstate/fsm" {
     TEvent extends EventObject = EventObject,
     TState extends Typestate<TContext> = any
   >(
-    fsmConfig: StateMachine.Config<TContext, TEvent>,
+    fsmConfig: StateMachine.Config<TContext, TEvent, TState>,
     options?: {
       actions?: StateMachine.ActionMap<TContext, TEvent>;
     }
