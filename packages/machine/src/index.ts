@@ -105,7 +105,7 @@ export function useMachineLogger<
   ],
   DEBUG?: boolean
 ): [MachineState<TC, TE>, MachineSend<TC, TE>, MachineService<TC, TE>] {
-  const previousState = useRef<MachineState<TC, TE>>();
+  let previousState = useRef<string>();
   let eventRef = useRef<any>();
   let newSendRef = useRef<MachineSend<TC, TE>>(
     __DEV__ && DEBUG
@@ -120,18 +120,19 @@ export function useMachineLogger<
   );
 
   useEffect(() => {
-    previousState.current = state;
-  }, [state]);
-
-  useEffect(() => {
     if (__DEV__) {
-      if (DEBUG && state !== previousState.current) {
+      if (DEBUG && state.value !== previousState.current) {
         console.group("State Updated");
-        console.log("State:", state);
+        console.log("State:", {
+          previousValue: previousState.current,
+          ...state,
+        });
         console.groupEnd();
       }
     }
-  }, [DEBUG, state]);
+    previousState.current = state.value;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DEBUG, state.value]);
 
   return [state, newSendRef.current, service];
 }
