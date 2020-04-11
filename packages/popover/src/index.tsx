@@ -28,6 +28,14 @@ export type PopoverProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
+  /**
+   * Testing this API so we might accept additional nodes that apps can use to
+   * determine the position of the popover. One example where it may be useful
+   * is for positioning the popover of a listbox where the cursor rests on top
+   * of the selected option. Pretty sure this will change so don't use it
+   * anywehre in public yet!
+   */
+  unstable_observableRefs?: React.RefObject<PossibleNode>[];
 } & React.HTMLAttributes<HTMLDivElement>;
 
 if (__DEV__) {
@@ -46,7 +54,12 @@ export default Popover;
  */
 const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
   function PopoverImpl(
-    { targetRef, position = positionDefault, style, ...rest },
+    {
+      targetRef,
+      position = positionDefault,
+      unstable_observableRefs = [],
+      ...props
+    },
     forwardedRef
   ) {
     const popoverRef = useRef<HTMLDivElement>(null);
@@ -60,12 +73,17 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
       <div
         data-reach-popover=""
         ref={ref}
+        {...props}
         style={{
-          ...style,
           position: "absolute",
-          ...getStyles(position, targetRect, popoverRect),
+          ...getStyles(
+            position,
+            targetRect,
+            popoverRect,
+            ...unstable_observableRefs
+          ),
+          ...props.style,
         }}
-        {...rest}
       />
     );
   }
@@ -80,13 +98,18 @@ if (__DEV__) {
 function getStyles(
   position: Position,
   targetRect: PRect | null,
-  popoverRect: PRect | null
+  popoverRect: PRect | null,
+  ...unstable_observableRefs: React.RefObject<PossibleNode>[]
 ): React.CSSProperties {
   const needToMeasurePopup = !popoverRect;
   if (needToMeasurePopup) {
     return { visibility: "hidden" };
   }
-  return position(targetRect, popoverRect);
+  return position(
+    targetRect,
+    popoverRect,
+    ...unstable_observableRefs.map((ref) => ref.current)
+  );
 }
 
 function getTopPosition(targetRect: PRect, popoverRect: PRect) {
@@ -138,7 +161,7 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
   };
 };
 
-function getCollisions(
+export function getCollisions(
   targetRect: PRect,
   popoverRect: PRect,
   offsetLeft: number = 0,
@@ -156,8 +179,9 @@ function getCollisions(
   const directionRight = collisions.right && !collisions.left;
   const directionLeft = collisions.left && !collisions.right;
   const directionUp = collisions.bottom && !collisions.top;
+  const directionDown = collisions.top && !collisions.bottom;
 
-  return { directionRight, directionLeft, directionUp };
+  return { directionRight, directionLeft, directionUp, directionDown };
 }
 
 // Heads up, my jQuery past haunts this function. This hook scopes the tab
@@ -330,5 +354,8 @@ function useSimulateTabNavigationForReactTree<
 
 export type Position = (
   targetRect?: PRect | null,
-  popoverRect?: PRect | null
+  popoverRect?: PRect | null,
+  ...unstable_observableNodes: PossibleNode[]
 ) => React.CSSProperties;
+
+type PossibleNode = null | undefined | HTMLElement | SVGElement;
