@@ -142,7 +142,7 @@ function Example() {
   return (
     <Tabs keyboardActivation="manual">
       {({ selectedIndex, focusedIndex }) => {
-        let getTabStyle = index => ({
+        let getTabStyle = (index) => ({
           borderBottom: `4px solid ${
             selectedIndex === index
               ? "red"
@@ -213,11 +213,11 @@ Like form inputs, a tab's state can be controlled by the owner. Make sure to inc
 function Example() {
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleSliderChange = event => {
+  const handleSliderChange = (event) => {
     setTabIndex(parseInt(event.target.value, 10));
   };
 
-  const handleTabsChange = index => {
+  const handleTabsChange = (index) => {
     setTabIndex(index);
   };
 
@@ -274,7 +274,7 @@ function Example() {
   const backgroundColor = colors[tabIndex];
   return (
     <Tabs
-      onChange={index => setTabIndex(index)}
+      onChange={(index) => setTabIndex(index)}
       style={{
         color: "white",
         background: backgroundColor,
@@ -381,7 +381,7 @@ Please see the [styling guide](/styling).
 But, you can also wrap `Tab` as long as you forward the props (because data is passed from `TabList` to `Tab` via React context).
 
 ```jsx
-const RedTab = props => <Tab {...props} style={{ color: "red" }} />;
+const RedTab = (props) => <Tab {...props} style={{ color: "red" }} />;
 
 const TabPage = () => (
   <Tabs>
@@ -465,7 +465,7 @@ Tabs will render a `div` unless you specify a different element.
 But, you can also wrap `TabPanel` as long as you forward the props (because data is passed from `TabPanels` to `TabPanel` via React context`).
 
 ```jsx
-const BoldPanel = props => (
+const BoldPanel = (props) => (
   <TabPanel {...props} style={{ fontWeight: "bold" }} />
 );
 
@@ -806,7 +806,7 @@ With a little composition we can animate the selected tab bar.
       />
     );
   }
-.
+
   return (
     <AnimatedTabs color="red" style={{ width: 400 }}>
       <TabList style={{ justifyContent: "space-around" }}>
