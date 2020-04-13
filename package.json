@@ -154,12 +154,12 @@
   },
   "changelog": {
     "labels": {
-      "breaking-change": "🔨 Breaking Changes",
-      "bug": "🐛 Bugfixes",
-      "docs": "📝 Documentation",
-      "feature": "🚀 Features",
-      "enhancement": "✨ Enhancements",
-      "housekeeping": "🏡 Housekeeping"
+      "Type: Breaking Change": "🔨 Breaking Changes",
+      "Type: Bug": "🐛 Bugfixes",
+      "Type: Documentation": "📝 Documentation",
+      "Type: Feature": "🚀 Features",
+      "Type: Enhancement": "✨ Enhancements",
+      "Type: Housekeeping": "🏡 Housekeeping"
     }
   },
   "eslintConfig": {

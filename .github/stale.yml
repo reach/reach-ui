@@ -1,14 +1,17 @@
 # Number of days of inactivity before an issue becomes stale
 daysUntilStale: 30
 # Number of days of inactivity before a stale issue is closed
-daysUntilClose: 60
+daysUntilClose: 14
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - bug
-  - RFC
-  - in-progress
+  - "Status: In Progress"
+  - "Status: Investigation"
+  - "Type: Bug"
+  - "Type: Request for Comment"
+  - "Type: Regression"
+  - "Resolution: Won't Fix"
 # Label to use when marking an issue as stale
-staleLabel: stale
+staleLabel: "Resolution: Stale"
 # Comment to post when marking an issue as stale. Set to `false` to disable
 markComment: false
 # Comment to post when closing a stale issue. Set to `false` to disable
