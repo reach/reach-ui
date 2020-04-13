@@ -5,13 +5,17 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  DisclosureProps,
 } from "@reach/disclosure";
 
 describe("<Disclosure />", () => {
   describe("rendering", () => {
     it("uses the correct data attributes", () => {
-      let { getByText } = render(<BasicDisclosure />);
+      let { getByText } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Click Button")).toHaveAttribute(
         "data-reach-disclosure-button"
@@ -21,40 +25,71 @@ describe("<Disclosure />", () => {
       );
     });
 
-    it("does not render the content by default", () => {
-      let { getByText } = render(<BasicDisclosure />);
+    it("hides the panel content by default", () => {
+      let { getByText } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Panel body")).not.toBeVisible();
     });
 
-    it("renders the content when defaultOpen is true", () => {
-      let { getByText } = render(<BasicDisclosure defaultOpen={true} />);
+    it("shows the panel content when `defaultOpen` is `true`", () => {
+      let { getByText } = render(
+        <Disclosure defaultOpen>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Panel body")).toBeVisible();
     });
 
-    it("does not render the content when defaultOpen is false", () => {
-      let { getByText } = render(<BasicDisclosure defaultOpen={false} />);
+    it("hides the panel content when `defaultOpen` is `false`", () => {
+      let { getByText } = render(
+        <Disclosure defaultOpen={false}>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Panel body")).not.toBeVisible();
     });
 
-    it("renders the content when open is true", () => {
-      let { getByText } = render(<BasicDisclosure open={true} />);
+    it("shows the panel content when `open` is `true`", () => {
+      let { getByText } = render(
+        <Disclosure open>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Panel body")).toBeVisible();
     });
 
-    it("does not render the content when open is false", () => {
-      let { getByText } = render(<BasicDisclosure open={false} />);
+    it("hides the panel content when `open` is false", () => {
+      let { getByText } = render(
+        <Disclosure open={false}>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
+      expect(getByText("Panel body")).not.toBeVisible();
       expect(getByText("Panel body")).not.toBeVisible();
     });
   });
 
   describe("a11y", () => {
     it("should not have basic a11y issues", async () => {
-      let { getByRole, container } = render(<BasicDisclosure />);
+      let { getByRole, container } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
       let results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -63,18 +98,33 @@ describe("<Disclosure />", () => {
       expect(newResults).toHaveNoViolations();
     });
 
-    it("allows using a custom ID", () => {
-      let { getByText } = render(<BasicDisclosure id="my-id" />);
+    it("accepts a custom ID", () => {
+      let { getByText } = render(
+        <Disclosure id="my-id">
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
       expect(getByText("Panel body")).toHaveAttribute("id", "panel--my-id");
     });
 
     it("removes the panel from the navigation flow", () => {
-      let { getByText } = render(<BasicDisclosure />);
+      let { getByText } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
       expect(getByText("Panel body")).toHaveAttribute("tabindex", "-1");
     });
 
     it("sets the correct aria attributes when collapsed", () => {
-      let { getByText } = render(<BasicDisclosure />);
+      let { getByText } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
       let button = getByText("Click Button");
       let panel = getByText("Panel body");
 
@@ -86,7 +136,12 @@ describe("<Disclosure />", () => {
     });
 
     it("sets the correct aria attributes when open", () => {
-      let { getByText } = render(<BasicDisclosure open={true} />);
+      let { getByText } = render(
+        <Disclosure open>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
       let button = getByText("Click Button");
       let panel = getByText("Panel body");
 
@@ -100,7 +155,12 @@ describe("<Disclosure />", () => {
 
   describe("user events", () => {
     it("should toggle on click", () => {
-      let { getByRole, getByText } = render(<BasicDisclosure />);
+      let { getByText } = render(
+        <Disclosure>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       expect(getByText("Panel body")).not.toBeVisible();
 
@@ -111,7 +171,12 @@ describe("<Disclosure />", () => {
 
     it("calls onChange when the button is clicked", () => {
       let callback = jest.fn();
-      let { getByText } = render(<BasicDisclosure onChange={callback} />);
+      let { getByText } = render(
+        <Disclosure onChange={callback}>
+          <DisclosureButton>Click Button</DisclosureButton>
+          <DisclosurePanel>Panel body</DisclosurePanel>
+        </Disclosure>
+      );
 
       fireEvent.click(getByText("Click Button"));
 
@@ -144,12 +209,3 @@ describe("<Disclosure />", () => {
     // });
   });
 });
-
-function BasicDisclosure(props: Omit<DisclosureProps, "children">) {
-  return (
-    <Disclosure {...props}>
-      <DisclosureButton>Click Button</DisclosureButton>
-      <DisclosurePanel>Panel body</DisclosurePanel>
-    </Disclosure>
-  );
-}
