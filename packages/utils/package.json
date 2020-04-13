@@ -24,6 +24,7 @@
     "dist"
   ],
   "dependencies": {
+    "@types/warning": "^3.0.0",
     "tslib": "^1.10.0",
     "warning": "^4.0.3"
   }
