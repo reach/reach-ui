@@ -22,7 +22,7 @@ describe("<MenuButton />", () => {
     it("should mount with render props", () => {
       let { queryByRole } = render(
         <Menu>
-          {props => (
+          {(props) => (
             <Fragment>
               <MenuButton>
                 {props.isExpanded ? "Close" : "Open"} Actions
@@ -113,7 +113,7 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
+      act(() => void fireEvent.keyDown(getByRole("button"), { key: " " }));
       act(() => void fireEvent.keyDown(getByText("Download"), { key: " " }));
       expect(getByRole("button")).toHaveFocus();
     });
@@ -128,7 +128,7 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
+      act(() => void fireEvent.keyDown(getByRole("button"), { key: "Enter" }));
       act(() => {
         fireEvent.keyDown(getByText("Download"), {
           key: "Enter",
