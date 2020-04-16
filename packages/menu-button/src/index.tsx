@@ -53,6 +53,7 @@ const CLEAR_SELECTION_INDEX = "CLEAR_SELECTION_INDEX";
 const CLICK_MENU_ITEM = "CLICK_MENU_ITEM";
 const CLOSE_MENU = "CLOSE_MENU";
 const OPEN_MENU_AT_FIRST_ITEM = "OPEN_MENU_AT_FIRST_ITEM";
+const OPEN_MENU_CLEARED = "OPEN_MENU_CLEARED";
 const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
@@ -258,7 +259,7 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
       } else if (isExpanded) {
         dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
       } else {
-        dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
+        dispatch({ type: OPEN_MENU_CLEARED });
       }
     }
 
@@ -986,6 +987,7 @@ type MenuButtonAction =
   | { type: "CLICK_MENU_ITEM" }
   | { type: "CLOSE_MENU"; payload: { buttonRef: ButtonRef } }
   | { type: "OPEN_MENU_AT_FIRST_ITEM" }
+  | { type: "OPEN_MENU_CLEARED" }
   | {
       type: "SELECT_ITEM_AT_INDEX";
       payload: { max?: number; min?: number; index: number };
@@ -1026,6 +1028,12 @@ function reducer(
         ...state,
         isExpanded: true,
         selectionIndex: 0,
+      };
+    case OPEN_MENU_CLEARED:
+      return {
+        ...state,
+        isExpanded: true,
+        selectionIndex: -1,
       };
     case SELECT_ITEM_AT_INDEX:
       if (action.payload.index >= 0) {
