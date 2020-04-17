@@ -36,9 +36,84 @@ describe("<Accordion />", () => {
       });
       expect(results).toHaveNoViolations();
     });
+
+    it("accepts a custom ID", () => {
+      let { getByTestId } = render(
+        <Accordion data-testid="wrapper" id="test-id">
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      );
+
+      expect(getByTestId("wrapper")).toHaveAttribute("id", "test-id");
+    });
+
+    it("sets the correct state-related aria attributes on toggle", () => {
+      let { getByText } = render(
+        <Accordion defaultIndex={0}>
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      );
+
+      expect(getByText("Button One")).toHaveAttribute("aria-expanded", "true");
+      expect(getByText("Panel One")).toHaveAttribute("data-state", "open");
+
+      expect(getByText("Button Two")).toHaveAttribute("aria-expanded", "false");
+      expect(getByText("Panel Two")).toHaveAttribute("data-state", "collapsed");
+      expect(getByText("Panel Two")).toHaveAttribute("hidden");
+    });
   });
 
   describe("rendering", () => {
+    it("should open the first panel by default", () => {
+      let { getByText } = render(
+        <Accordion>
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      );
+
+      expect(getByText("Panel One")).toBeVisible();
+      expect(getByText("Panel Two")).not.toBeVisible();
+    });
+
+    it("should not open any panels by default when using collapsed", () => {
+      let { getByText } = render(
+        <Accordion collapsible={true}>
+          <AccordionItem>
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionButton>Button Two</AccordionButton>
+            <AccordionPanel>Panel Two</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      );
+
+      expect(getByText("Panel One")).not.toBeVisible();
+      expect(getByText("Panel Two")).not.toBeVisible();
+    });
+
     it("should open panel as specified by defaultIndex", () => {
       let { getByText } = render(
         <Accordion defaultIndex={1}>
@@ -55,6 +130,25 @@ describe("<Accordion />", () => {
 
       expect(getByText("Panel One")).not.toBeVisible();
       expect(getByText("Panel Two")).toBeVisible();
+    });
+
+    it("assigns the correct @reach data attributes", () => {
+      let { getByTestId, getByText } = render(
+        <Accordion data-testid="wrapper">
+          <AccordionItem data-testid="item1">
+            <AccordionButton>Button One</AccordionButton>
+            <AccordionPanel>Panel One</AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      );
+      expect(getByTestId("wrapper")).toHaveAttribute("data-reach-accordion");
+      expect(getByTestId("item1")).toHaveAttribute("data-reach-accordion-item");
+      expect(getByText("Button One")).toHaveAttribute(
+        "data-reach-accordion-button"
+      );
+      expect(getByText("Panel One")).toHaveAttribute(
+        "data-reach-accordion-panel"
+      );
     });
   });
 
