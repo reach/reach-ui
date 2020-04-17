@@ -92,6 +92,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
       onDismiss = noop,
       onMouseDown,
       onKeyDown,
+      unstable_lockFocusAcrossFrames = true,
       ...props
     },
     forwardedRef
@@ -131,7 +132,12 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
     );
 
     return (
-      <FocusLock autoFocus returnFocus onActivation={activateFocusLock}>
+      <FocusLock
+        autoFocus
+        returnFocus
+        onActivation={activateFocusLock}
+        crossFrame={unstable_lockFocusAcrossFrames}
+      >
         <RemoveScroll allowPinchZoom={allowPinchZoom}>
           <div
             {...props}
@@ -186,7 +192,7 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         {...props}
         ref={forwardedRef}
         data-reach-dialog-content=""
-        onClick={wrapEvent(onClick, event => {
+        onClick={wrapEvent(onClick, (event) => {
           event.stopPropagation();
         })}
       />
@@ -278,6 +284,24 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
    */
   initialFocusRef?: React.RefObject<any>;
+  /**
+   * By default, React Focus Lock prevents focus from being moved outside of the
+   * locked element even if the thing trying to take focus is in another frame.
+   * Normally this is what you want, as an iframe is typically going to be a
+   * part of your page content. But in some situations, like when using Code
+   * Sandbox, you can't use any of the controls or the editor in the sandbox
+   * while dialog is open because of the focus lock.
+   *
+   * This prop may have some negative side effects and unintended consequences,
+   * and it opens questions about how we might distinguish frames that *should*
+   * steal focus from those that shouldn't. Perhaps it's best for app devs to
+   * decide, and if they use this prop we should advise them to imperatively
+   * assign a -1 tabIndex to other iframes that are a part of the page content
+   * when the dialog is open.
+   *
+   * https://github.com/reach/reach-ui/issues/536
+   */
+  unstable_lockFocusAcrossFrames?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 if (__DEV__) {
@@ -309,7 +333,7 @@ function createAriaHider(dialogNode: HTMLElement) {
 
   Array.prototype.forEach.call(
     ownerDocument.querySelectorAll("body > *"),
-    node => {
+    (node) => {
       const portalNode = dialogNode.parentNode?.parentNode?.parentNode;
       if (node === portalNode) {
         return;
