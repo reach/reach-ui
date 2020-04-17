@@ -15,15 +15,6 @@
   "dependencies": {
     "prop-types": "^15.7.2"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/preset-react": "^7.8.3"
-  },
   "peerDependencies": {
     "react": "^16.4.0",
     "react-dom": "^16.4.0"

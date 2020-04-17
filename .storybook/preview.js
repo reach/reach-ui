@@ -1,6 +1,5 @@
 import { addDecorator, configure } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
-import "pepjs";
 import "./styles.css";
 
 configure(() => {
@@ -24,7 +23,7 @@ configure(() => {
     allExports[title] = {
       ...(allExports[title] || {}),
       default: { title },
-      [name]: Comp
+      [name]: Comp,
     };
   }
 
