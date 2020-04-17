@@ -16,7 +16,7 @@
     "@reach/observe-rect": "^1.1.0",
     "@reach/utils": "^0.10.0",
     "prop-types": "^15.7.2",
-    "tslib": "^1.10.0"
+    "tslib": "^1.11.1"
   },
   "peerDependencies": {
     "react": "^16.8.0",

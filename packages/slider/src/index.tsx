@@ -31,7 +31,6 @@ import React, {
   useState,
 } from "react";
 import PropTypes from "prop-types";
-import warning from "warning";
 import { useId } from "@reach/auto-id";
 import {
   checkStyles,
@@ -45,6 +44,7 @@ import {
   useControlledSwitchWarning,
   useControlledState,
   useIsomorphicLayoutEffect,
+  warning,
   wrapEvent,
   noop,
 } from "@reach/utils";

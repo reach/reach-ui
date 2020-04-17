@@ -35,6 +35,7 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import {
   useForkedRef,
   useIsomorphicLayoutEffect,
+  warning,
   wrapEvent,
 } from "@reach/utils";
 import {
@@ -46,7 +47,6 @@ import {
   useMachineLogger,
 } from "@reach/machine";
 import PropTypes from "prop-types";
-import warning from "warning";
 
 // Used for development only, not recommended for production code!
 const DEBUG = false;
@@ -91,7 +91,7 @@ function checkToggleAllowed(data: MixedCheckboxData) {
  * @param state
  */
 function getCheckSetCondition(state: string) {
-  return function(data: MixedCheckboxData, event: any) {
+  return function (data: MixedCheckboxData, event: any) {
     return data && data.isControlled && event.state === state;
   };
 }

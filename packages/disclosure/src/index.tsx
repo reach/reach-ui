@@ -21,11 +21,11 @@ import {
   forwardRefWithAs,
   makeId,
   useForkedRef,
+  warning,
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
-import warning from "warning";
 
 const DisclosureContext = createNamedContext<IDisclosureContext>(
   "DisclosureContext",

@@ -26,6 +26,7 @@ import {
   makeId,
   noop,
   useForkedRef,
+  warning,
   wrapEvent,
 } from "@reach/utils";
 import {
@@ -37,7 +38,6 @@ import {
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
-import warning from "warning";
 
 const AccordionDescendantContext = createDescendantContext<
   HTMLElement,
@@ -154,7 +154,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         onChange && onChange(index);
 
         if (!isControlled) {
-          setOpenPanels(prevOpenPanels => {
+          setOpenPanels((prevOpenPanels) => {
             /*
              * If we're dealing with an uncontrolled component, the index arg
              * in selectChange will always be a number rather than an array.
@@ -171,7 +171,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
                 // Other panels are open OR accordion is allowed to collapse
                 if (prevOpenPanels.length > 1 || collapsible) {
                   // Close the panel by filtering it from the array
-                  return prevOpenPanels.filter(i => i !== index);
+                  return prevOpenPanels.filter((i) => i !== index);
                 }
               } else {
                 // Open the panel by adding it to the array.
@@ -488,7 +488,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       callback(element: HTMLElement) {
         element && element.focus();
       },
-      filter: button => !button.disabled,
+      filter: (button) => !button.disabled,
     });
 
     return (
@@ -652,7 +652,9 @@ export function useAccordionContext(): AccordionContextValue {
   return useMemo(
     () => ({
       id: accordionId,
-      openPanels: ([] as number[]).concat(openPanels as any).filter(i => i < 0),
+      openPanels: ([] as number[])
+        .concat(openPanels as any)
+        .filter((i) => i < 0),
     }),
     [accordionId, openPanels]
   );

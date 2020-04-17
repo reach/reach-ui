@@ -58,7 +58,7 @@ export const useIsomorphicLayoutEffect = canUseDOM()
 let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
- * Copy og Facebook's warning package.
+ * Copy of Facebook's warning package.
  */
 export { warning };
 
