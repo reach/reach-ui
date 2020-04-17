@@ -38,8 +38,8 @@ describe("<Accordion />", () => {
     });
 
     it("accepts a custom ID", () => {
-      let { container } = render(
-        <Accordion id="test-id">
+      let { getByTestId } = render(
+        <Accordion data-testid="wrapper" id="test-id">
           <AccordionItem>
             <AccordionButton>Button One</AccordionButton>
             <AccordionPanel>Panel One</AccordionPanel>
@@ -51,12 +51,10 @@ describe("<Accordion />", () => {
         </Accordion>
       );
 
-      expect(container.querySelector("#test-id")).toHaveAttribute(
-        "data-reach-accordion"
-      );
+      expect(getByTestId("wrapper")).toHaveAttribute("id", "test-id");
     });
 
-    it("sets the correct aria attributes to the panels", () => {
+    it("sets the correct state-related aria attributes on toggle", () => {
       let { getByText } = render(
         <Accordion defaultIndex={0}>
           <AccordionItem>
@@ -134,22 +132,17 @@ describe("<Accordion />", () => {
       expect(getByText("Panel Two")).toBeVisible();
     });
 
-    it("uses the correct data attributes", () => {
-      let { getByText, container } = render(
-        <Accordion>
-          <AccordionItem>
+    it("assigns the correct @reach data attributes", () => {
+      let { getByTestId, getByText } = render(
+        <Accordion data-testid="wrapper">
+          <AccordionItem data-testid="item1">
             <AccordionButton>Button One</AccordionButton>
             <AccordionPanel>Panel One</AccordionPanel>
           </AccordionItem>
         </Accordion>
       );
-
-      expect(container.querySelector("[data-reach-accordion]")).toBeTruthy();
-
-      expect(
-        container.querySelector("[data-reach-accordion-item]")
-      ).toBeTruthy();
-
+      expect(getByTestId("wrapper")).toHaveAttribute("data-reach-accordion");
+      expect(getByTestId("item1")).toHaveAttribute("data-reach-accordion-item");
       expect(getByText("Button One")).toHaveAttribute(
         "data-reach-accordion-button"
       );
