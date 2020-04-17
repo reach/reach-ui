@@ -81,7 +81,7 @@ import {
 
 const DEBUG = __DEV__
   ? // set here if we want to debug during development
-    true
+    false
   : // leave this alone!
     false;
 
