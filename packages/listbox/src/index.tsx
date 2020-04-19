@@ -148,7 +148,7 @@ export const ListboxInput = forwardRef<
     })
   );
 
-  let [current, send] = useMachine(
+  let [state, send] = useMachine(
     machine,
     {
       button: buttonRef,
@@ -177,10 +177,12 @@ export const ListboxInput = forwardRef<
   // to the button.
   let valueLabel = useMemo(() => {
     let selected = options.find(
-      (option) => option.value === current.context.value
+      (option) => option.value === state.context.value
     );
     return selected ? selected.label : null;
-  }, [options, current.context.value]);
+  }, [options, state.context.value]);
+
+  let isExpanded = isListboxExpanded(state.value);
 
   // TODO: Remove duplication and memoize
   let context: InternalListboxContextValue = useMemo(
@@ -188,6 +190,7 @@ export const ListboxInput = forwardRef<
       ariaLabel,
       ariaLabelledBy,
       disabled,
+      isExpanded,
       listboxId: id,
       listboxValueLabel: valueLabel,
       onValueChange: onChange,
@@ -199,16 +202,17 @@ export const ListboxInput = forwardRef<
       selectedOptionRef,
       highlightedOptionRef,
       send,
-      state: current.value as ListboxStates,
-      stateData: current.context,
+      state: state.value as ListboxStates,
+      stateData: state.context,
     }),
     [
       ariaLabel,
       ariaLabelledBy,
-      current.value,
-      current.context,
+      state.value,
+      state.context,
       disabled,
       id,
+      isExpanded,
       onChange,
       send,
       valueLabel,
@@ -238,27 +242,25 @@ export const ListboxInput = forwardRef<
     }
   }
 
-  let isExpanded = isListboxExpanded(current.value);
-
   const childrenProps: ListboxContextValue & { expanded: boolean } = useMemo(
     () => ({
       id,
       isExpanded,
-      value: current.context.value,
+      value: state.context.value,
       selectedOptionRef: selectedOptionRef,
       highlightedOptionRef: highlightedOptionRef,
       valueLabel,
       // TODO: Remove in 1.0
-      expanded: isListboxExpanded(current.value),
+      expanded: isExpanded,
     }),
-    [current.context.value, current.value, id, isExpanded, valueLabel]
+    [state.context.value, id, isExpanded, valueLabel]
   );
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
   // Even if the app controls state, we still need to update it internally to
   // run the state machine transitions
-  useControlledStateSync(valueProp, current.context.value, () => {
+  useControlledStateSync(valueProp, state.context.value, () => {
     send({
       type: ListboxEvents.ValueChange,
       value: valueProp!,
@@ -321,8 +323,8 @@ export const ListboxInput = forwardRef<
           {...props}
           ref={ref}
           data-reach-listbox-input=""
-          data-state={isListboxExpanded(current.value) ? "expanded" : "closed"}
-          data-value={current.context.value}
+          data-state={isExpanded ? "expanded" : "closed"}
+          data-value={state.context.value}
           id={id}
         >
           {isFunction(children) ? children(childrenProps) : children}
@@ -337,7 +339,7 @@ export const ListboxInput = forwardRef<
             required={required}
             tabIndex={-1}
             type="text"
-            value={current.context.value || ""}
+            value={state.context.value || ""}
           />
         )}
       </ListboxContext.Provider>
@@ -528,8 +530,8 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
       ariaLabelledBy,
       buttonRef,
       disabled,
+      isExpanded,
       listboxId,
-      state,
       stateData,
       send,
       listboxValueLabel,
@@ -560,7 +562,6 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
     }
 
     let id = makeId("button", listboxId);
-    let isExpanded = isListboxExpanded(state);
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -711,8 +712,7 @@ export type ListboxButtonProps = {
  */
 const ListboxArrowImpl = forwardRef<HTMLSpanElement, ListboxArrowProps>(
   function ListboxArrow({ children, ...props }, forwardedRef) {
-    let { state } = useContext(ListboxContext);
-    let isExpanded = isListboxExpanded(state);
+    let { isExpanded } = useContext(ListboxContext);
     return (
       <span
         // The arrow provides no semantic value and its inner content should be
@@ -782,13 +782,15 @@ const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let { buttonRef, popoverRef, send, state } = useContext(ListboxContext);
+    let { buttonRef, popoverRef, send, isExpanded } = useContext(
+      ListboxContext
+    );
     let ref = useForkedRef(popoverRef, forwardedRef);
 
     let handleKeyDown = useKeyDown();
 
     let commonProps = {
-      hidden: !isListboxExpanded(state),
+      hidden: !isExpanded,
       tabIndex: -1,
       ...props,
       ref,
@@ -871,9 +873,9 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
     let {
       ariaLabel,
       ariaLabelledBy,
+      isExpanded,
       listboxId,
       listRef,
-      state,
       stateData: { value, navigationValue },
     } = useContext(ListboxContext);
     let ref = useForkedRef(forwardedRef, listRef);
@@ -888,7 +890,7 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
         // changes the value.
         // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
         aria-activedescendant={useOptionId(
-          isListboxExpanded(state) ? navigationValue : value
+          isExpanded ? navigationValue : value
         )}
         // If the listbox is not part of another widget, then it has a visible
         // label referenced by `aria-labelledby` on the element with role
@@ -955,12 +957,13 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     }
 
     let {
+      highlightedOptionRef,
+      isExpanded,
+      onValueChange,
+      selectedOptionRef,
       send,
       state,
       stateData: { value: listboxValue, navigationValue },
-      highlightedOptionRef,
-      selectedOptionRef,
-      onValueChange,
     } = useContext(ListboxContext);
 
     let [labelState, setLabel] = useState(labelProp);
@@ -1061,9 +1064,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         // In a single-select listbox, the selected option has `aria-selected`
         // set to `true`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        aria-selected={
-          (isListboxExpanded(state) ? isHighlighted : isSelected) || undefined
-        }
+        aria-selected={(isExpanded ? isHighlighted : isSelected) || undefined}
         // Applicable to all host language elements regardless of whether a
         // `role` is applied.
         // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
@@ -1235,11 +1236,10 @@ export function useListboxContext(): ListboxContextValue {
     highlightedOptionRef,
     listboxId,
     listboxValueLabel,
+    isExpanded,
     selectedOptionRef,
-    state,
     stateData: { value },
   } = useContext(ListboxContext);
-  let isExpanded = isListboxExpanded(state);
   return useMemo(
     () => ({
       id: listboxId,
@@ -1407,6 +1407,7 @@ interface InternalListboxContextValue {
   buttonRef: React.RefObject<ListboxNodeRefs["button"]>;
   hiddenInputRef: React.RefObject<ListboxNodeRefs["hiddenInput"]>;
   inputRef: React.RefObject<ListboxNodeRefs["input"]>;
+  isExpanded: boolean;
   listRef: React.RefObject<ListboxNodeRefs["list"]>;
   popoverRef: React.RefObject<ListboxNodeRefs["popover"]>;
   selectedOptionRef: React.RefObject<ListboxNodeRefs["selectedOption"]>;
