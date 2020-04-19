@@ -26,7 +26,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   let [, forceUpdate] = useState();
 
   useIsomorphicLayoutEffect(() => {
-    // It's possible that the content we are portal has, itself, been portaled.
+    // It's possible that the content of the portal has, itself, been portaled.
     // In that case, it's important to append to the correct document element.
     const ownerDocument = mountNode.current!.ownerDocument;
     portalNode.current = ownerDocument?.createElement(type)!;
