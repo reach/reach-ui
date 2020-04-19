@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   assign,
   createMachine,
@@ -9,6 +9,22 @@ import {
   Typestate,
 } from "@xstate/fsm";
 import { DistributiveOmit, isString, useConstant } from "@reach/utils";
+
+const getServiceState = <
+  TContext extends object,
+  TEvent extends MachineEvent = MachineEvent,
+  TState extends Typestate<TContext> = any
+>(
+  service: StateMachine.Service<TContext, TEvent, TState>
+): StateMachine.State<TContext, TEvent, TState> => {
+  let currentValue: StateMachine.State<TContext, TEvent, TState>;
+  service
+    .subscribe((state) => {
+      currentValue = state;
+    })
+    .unsubscribe();
+  return currentValue!;
+};
 
 /**
  * This `useMachine` works very similiarly to what you get from `@xstate/react`
@@ -36,20 +52,27 @@ export function useMachine<
   TS extends Typestate<TC> = any
 >(
   initialMachine: StateMachine.Machine<TC, TE, TS>,
-  refs: MachineToReactRefMap<TE>
+  refs: MachineToReactRefMap<TE>,
+  DEBUG?: boolean
 ): [
-  StateMachine.State<TC, TE, TS>,
+  Omit<StateMachine.State<TC, TE, TS>, "actions">,
   StateMachine.Service<TC, DistributiveOmit<TE, "refs">>["send"],
   StateMachine.Service<TC, TE>
 ] {
-  /*
-   * State machine should not change between renders, so let's store it in a
-   * ref. This should also help if we need to use a creator function to inject
-   * dynamic initial state values based on props.
-   */
-  let { current: machine } = useRef(initialMachine);
-  let service = useConstant(() => interpret(machine).start());
-  let [current, setCurrent] = useState(machine.initialState);
+  // State machine should not change between renders, so let's store it in a
+  // ref. This should also help if we need to use a creator function to inject
+  // dynamic initial state values based on props.
+  let machineRef = useRef(initialMachine);
+  let service = useConstant(() => interpret(machineRef.current).start());
+
+  let [state, setState] = useState(() => getServiceState(service));
+
+  // This function reference will change on every render if we just pass on
+  // current.matches, but it shouldn't change unless the current value is
+  // updated. This was causing some lagginess when profiling in Listbox but
+  // is probably an issue everywhere since the parent components that handle
+  // state logic at the top might re-create context on each render as a
+  // result of this change.
 
   // Add refs to every event so we can use them to perform actions.
   let send = useCallback(
@@ -57,18 +80,56 @@ export function useMachine<
       let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
       let refValues = unwrapRefs(refs);
       service.send({ ...event, refs: refValues } as TE);
+
+      if (__DEV__) {
+        if (DEBUG) {
+          console.group("Event Sent");
+          console.log("Event:", event);
+          console.groupEnd();
+        }
+      }
     },
-    [refs, service]
+    // We can disable the lint warning here. Refs will always be refs
+    // (TypeScript enforced!) and should not trigger a re-render. The state
+    // machine service persist for the life of the component.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [DEBUG]
   );
 
   useEffect(() => {
-    service.subscribe(setCurrent);
+    service.subscribe(function setStateIfChanged(newState) {
+      if (newState.changed) {
+        setState(newState);
+      }
+    });
     return () => {
       service.stop();
     };
   }, [service]);
 
-  return [current, send, service];
+  useEffect(() => {
+    if (__DEV__) {
+      if (DEBUG && state.changed) {
+        console.group("State Updated");
+        console.log("State:", state);
+        console.groupEnd();
+      }
+    }
+  }, [DEBUG, state]);
+
+  // We are going to pass along our state without the actions to avoid excess
+  // renders when the reference changes. We haven't really needed them at this
+  // point, but if we do we can maybe reconsider this approach.
+  const memoizedState = useMemo(
+    () => ({
+      ...state,
+      matches: (value: any) => value === state.value,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state.changed, state.context, state.value]
+  );
+
+  return [memoizedState, send, service];
 }
 
 /**
@@ -84,57 +145,6 @@ export function unwrapRefs<
     (value as any)[name] = ref.current;
     return value;
   }, {} as TE["refs"]);
-}
-
-/**
- * Wraps useMachine to log events as they are sent in dev mode.
- *
- * @param machineTuple The tuple returned by useMachine (current state, the send
- *                     function, and the machine service object)
- * @param DEBUG        Whether or not to activate logging (we can't call hooks
- *                     conditionally, fam)
- */
-export function useMachineLogger<
-  TC extends object,
-  TE extends MachineEventWithRefs = MachineEventWithRefs
->(
-  [state, send, service]: [
-    MachineState<TC, TE>,
-    MachineSend<TC, TE>,
-    MachineService<TC, TE>
-  ],
-  DEBUG?: boolean
-): [MachineState<TC, TE>, MachineSend<TC, TE>, MachineService<TC, TE>] {
-  let previousState = useRef<string>();
-  let eventRef = useRef<any>();
-  let newSendRef = useRef<MachineSend<TC, TE>>(
-    __DEV__ && DEBUG
-      ? (event: any) => {
-          eventRef.current = event;
-          send(event);
-          console.group("Event Sent");
-          console.log("Event:", event);
-          console.groupEnd();
-        }
-      : send
-  );
-
-  useEffect(() => {
-    if (__DEV__) {
-      if (DEBUG && state.value !== previousState.current) {
-        console.group("State Updated");
-        console.log("State:", {
-          previousValue: previousState.current,
-          ...state,
-        });
-        console.groupEnd();
-      }
-    }
-    previousState.current = state.value;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [DEBUG, state.value]);
-
-  return [state, newSendRef.current, service];
 }
 
 /**
