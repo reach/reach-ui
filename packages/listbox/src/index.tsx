@@ -27,6 +27,7 @@
 import React, {
   forwardRef,
   Fragment,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -57,18 +58,11 @@ import {
   useCallbackProp,
   useCheckStyles,
   useControlledSwitchWarning,
-  useEventListener,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
 } from "@reach/utils";
-import {
-  MachineToReactRefMap,
-  StateMachine,
-  useCreateMachine,
-  useMachine,
-  useMachineLogger,
-} from "@reach/machine";
+import { StateMachine, useCreateMachine, useMachine } from "@reach/machine";
 import {
   createMachineDefinition,
   ListboxEvents,
@@ -76,7 +70,6 @@ import {
   ListboxNodeRefs,
   ListboxStateData,
   ListboxEvent,
-  ListboxState,
 } from "./machine";
 
 const DEBUG = __DEV__
@@ -132,7 +125,7 @@ export const ListboxInput = forwardRef<
   },
   forwardedRef
 ) {
-  let { current: isControlled } = useRef(valueProp != null);
+  let isControlled = useRef(valueProp != null);
   let [options, setOptions] = useDescendants<
     HTMLElement,
     ListboxDescendantProps
@@ -141,29 +134,31 @@ export const ListboxInput = forwardRef<
   let onChange = useCallbackProp(onChangeProp);
 
   // DOM refs
-  let selectedOption = useRef<ListboxNodeRefs["selectedOption"]>(null);
-  let highlightedOption = useRef<ListboxNodeRefs["highlightedOption"]>(null);
-  let button = useRef<ListboxNodeRefs["button"]>(null);
-  let hiddenInput = useRef<ListboxNodeRefs["hiddenInput"]>(null);
-  let input = useRef<ListboxNodeRefs["input"]>(null);
-  let list = useRef<ListboxNodeRefs["list"]>(null);
-  let popover = useRef<ListboxNodeRefs["popover"]>(null);
+  let selectedOptionRef = useRef<ListboxNodeRefs["selectedOption"]>(null);
+  let highlightedOptionRef = useRef<ListboxNodeRefs["highlightedOption"]>(null);
+  let buttonRef = useRef<ListboxNodeRefs["button"]>(null);
+  let hiddenInputRef = useRef<ListboxNodeRefs["hiddenInput"]>(null);
+  let inputRef = useRef<ListboxNodeRefs["input"]>(null);
+  let listRef = useRef<ListboxNodeRefs["list"]>(null);
+  let popoverRef = useRef<ListboxNodeRefs["popover"]>(null);
 
   let machine = useCreateMachine(
     createMachineDefinition({
-      value: (isControlled ? valueProp! : defaultValue) || null,
+      value: (isControlled.current ? valueProp! : defaultValue) || null,
     })
   );
-  let [current, send] = useMachineLogger(
-    useMachine(machine, {
-      button,
-      hiddenInput,
-      input,
-      list,
-      popover,
-      selectedOption,
-      highlightedOption,
-    }),
+
+  let [current, send] = useMachine(
+    machine,
+    {
+      button: buttonRef,
+      hiddenInput: hiddenInputRef,
+      input: inputRef,
+      list: listRef,
+      popover: popoverRef,
+      selectedOption: selectedOptionRef,
+      highlightedOption: highlightedOptionRef,
+    },
     DEBUG
   );
 
@@ -171,7 +166,7 @@ export const ListboxInput = forwardRef<
   let _id = useId(props.id);
   let id = props.id || makeId("listbox-input", _id);
 
-  let ref = useForkedRef(input, forwardedRef);
+  let ref = useForkedRef(inputRef, forwardedRef);
 
   // If the button has children, we just render them as the label.
   // Otherwise we'll find the option with a value that matches the listbox value
@@ -196,22 +191,22 @@ export const ListboxInput = forwardRef<
       listboxId: id,
       listboxValueLabel: valueLabel,
       onValueChange: onChange,
-      refs: {
-        button,
-        hiddenInput,
-        input,
-        list,
-        popover,
-        selectedOption,
-        highlightedOption,
-      },
+      buttonRef,
+      hiddenInputRef,
+      inputRef,
+      listRef,
+      popoverRef,
+      selectedOptionRef,
+      highlightedOptionRef,
       send,
-      state: current,
+      state: current.value as ListboxStates,
+      stateData: current.context,
     }),
     [
       ariaLabel,
       ariaLabelledBy,
-      current,
+      current.value,
+      current.context,
       disabled,
       id,
       onChange,
@@ -228,7 +223,7 @@ export const ListboxInput = forwardRef<
   //   C) useEffect will cause a flash
   let mounted = useRef(false);
   if (
-    !isControlled && // the app is not controlling state
+    !isControlled.current && // the app is not controlling state
     defaultValue == null && // there is no default value
     !mounted.current && // we haven't done this already
     options.length // we have some options
@@ -243,18 +238,20 @@ export const ListboxInput = forwardRef<
     }
   }
 
+  let isExpanded = isListboxExpanded(current.value);
+
   const childrenProps: ListboxContextValue & { expanded: boolean } = useMemo(
     () => ({
       id,
-      isExpanded: isListboxExpanded(current.value),
+      isExpanded,
       value: current.context.value,
-      selectedOptionRef: selectedOption,
-      highlightedOptionRef: highlightedOption,
+      selectedOptionRef: selectedOptionRef,
+      highlightedOptionRef: highlightedOptionRef,
       valueLabel,
       // TODO: Remove in 1.0
       expanded: isListboxExpanded(current.value),
     }),
-    [current.context.value, current.value, id, valueLabel]
+    [current.context.value, current.value, id, isExpanded, valueLabel]
   );
 
   useControlledSwitchWarning(valueProp, "value", _componentName);
@@ -275,25 +272,41 @@ export const ListboxInput = forwardRef<
     });
   }, [options, send]);
 
-  useEventListener("mousedown", (event) => {
-    let { target, relatedTarget } = event;
-    if (!targetIsInPopover(target, popover.current)) {
-      send({
-        type: ListboxEvents.OutsideMouseDown,
-        relatedTarget: relatedTarget || target,
-      });
+  useEffect(() => {
+    function listener(event: MouseEvent) {
+      let { target, relatedTarget } = event;
+      if (!targetIsInPopover(target, popoverRef.current)) {
+        send({
+          type: ListboxEvents.OutsideMouseDown,
+          relatedTarget: relatedTarget || target,
+        });
+      }
     }
-  });
+    if (isExpanded) {
+      window.addEventListener("mousedown", listener);
+    }
+    return () => {
+      window.removeEventListener("mousedown", listener);
+    };
+  }, [send, isExpanded]);
 
-  useEventListener("mouseup", (event) => {
-    let { target, relatedTarget } = event;
-    if (!targetIsInPopover(target, popover.current)) {
-      send({
-        type: ListboxEvents.OutsideMouseUp,
-        relatedTarget: relatedTarget || target,
-      });
+  useEffect(() => {
+    function listener(event: MouseEvent) {
+      let { target, relatedTarget } = event;
+      if (!targetIsInPopover(target, popoverRef.current)) {
+        send({
+          type: ListboxEvents.OutsideMouseUp,
+          relatedTarget: relatedTarget || target,
+        });
+      }
     }
-  });
+    if (isExpanded) {
+      window.addEventListener("mouseup", listener);
+    }
+    return () => {
+      window.removeEventListener("mouseup", listener);
+    };
+  }, [send, isExpanded]);
 
   useCheckStyles("listbox");
 
@@ -316,7 +329,7 @@ export const ListboxInput = forwardRef<
         </div>
         {(form || name || required) && (
           <input
-            ref={hiddenInput}
+            ref={hiddenInputRef}
             disabled={disabled}
             form={form}
             name={name}
@@ -497,7 +510,7 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
  */
-export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
+const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
   function ListboxButton(
     {
       "aria-label": ariaLabel,
@@ -513,14 +526,15 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
   ) {
     let {
       ariaLabelledBy,
+      buttonRef,
       disabled,
       listboxId,
-      refs: { button: buttonRef },
       state,
+      stateData,
       send,
       listboxValueLabel,
     } = useContext(ListboxContext);
-    let listboxValue = state.context.value;
+    let listboxValue = stateData.value;
 
     let ref = useForkedRef(buttonRef, forwardedRef);
 
@@ -546,7 +560,7 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
     }
 
     let id = makeId("button", listboxId);
-    let isExpanded = isListboxExpanded(state.value);
+    let isExpanded = isListboxExpanded(state);
 
     // If the button has children, we just render them as the label
     // If a user needs the label on the server to prevent hydration mismatch
@@ -616,12 +630,14 @@ export const ListboxButton = forwardRefWithAs<ListboxButtonProps, "span">(
 );
 
 if (__DEV__) {
-  ListboxButton.displayName = "ListboxButton";
-  ListboxButton.propTypes = {
+  ListboxButtonImpl.displayName = "ListboxButton";
+  ListboxButtonImpl.propTypes = {
     arrow: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   };
 }
+
+export const ListboxButton = memo(ListboxButtonImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
@@ -693,11 +709,9 @@ export type ListboxButtonProps = {
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow
  */
-export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
+const ListboxArrowImpl = forwardRef<HTMLSpanElement, ListboxArrowProps>(
   function ListboxArrow({ children, ...props }, forwardedRef) {
-    let {
-      state: { value: state },
-    } = useContext(ListboxContext);
+    let { state } = useContext(ListboxContext);
     let isExpanded = isListboxExpanded(state);
     return (
       <span
@@ -722,11 +736,13 @@ export const ListboxArrow = forwardRef<HTMLSpanElement, ListboxArrowProps>(
 );
 
 if (__DEV__) {
-  ListboxArrow.displayName = "ListboxArrow";
-  ListboxArrow.propTypes = {
+  ListboxArrowImpl.displayName = "ListboxArrow";
+  ListboxArrowImpl.propTypes = {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   };
 }
+
+export const ListboxArrow = memo(ListboxArrowImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow-props
@@ -754,7 +770,7 @@ export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
  *
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover
  */
-export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
+const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
   function ListboxPopover(
     {
       position = positionMatchWidth,
@@ -766,11 +782,7 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let {
-      refs: { popover: popoverRef, button: buttonRef },
-      send,
-      state: { value: state },
-    } = useContext(ListboxContext);
+    let { buttonRef, popoverRef, send, state } = useContext(ListboxContext);
     let ref = useForkedRef(popoverRef, forwardedRef);
 
     let handleKeyDown = useKeyDown();
@@ -809,13 +821,15 @@ export const ListboxPopover = forwardRef<any, ListboxPopoverProps>(
 );
 
 if (__DEV__) {
-  ListboxPopover.displayName = "ListboxPopover";
-  ListboxPopover.propTypes = {
+  ListboxPopoverImpl.displayName = "ListboxPopover";
+  ListboxPopoverImpl.propTypes = {
     children: PropTypes.node.isRequired,
     portal: PropTypes.bool,
     position: PropTypes.func,
   };
 }
+
+export const ListboxPopover = memo(ListboxPopoverImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-props
@@ -858,11 +872,9 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
       ariaLabel,
       ariaLabelledBy,
       listboxId,
-      refs: { list: listRef },
-      state: {
-        context: { value, navigationValue },
-        value: state,
-      },
+      listRef,
+      state,
+      stateData: { value, navigationValue },
     } = useContext(ListboxContext);
     let ref = useForkedRef(forwardedRef, listRef);
 
@@ -944,11 +956,10 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
 
     let {
       send,
-      state: {
-        value: state,
-        context: { value: listboxValue, navigationValue },
-      },
-      refs,
+      state,
+      stateData: { value: listboxValue, navigationValue },
+      highlightedOptionRef,
+      selectedOptionRef,
       onValueChange,
     } = useContext(ListboxContext);
 
@@ -988,8 +999,8 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       getLabelFromDomNode,
       forwardedRef,
       ownRef,
-      isSelected ? refs.selectedOption : null,
-      isHighlighted ? refs.highlightedOption : null
+      isSelected ? selectedOptionRef : null,
+      isHighlighted ? highlightedOptionRef : null
     );
 
     function handleMouseEnter() {
@@ -1221,19 +1232,20 @@ export type ListboxGroupLabelProps = {};
  */
 export function useListboxContext(): ListboxContextValue {
   let {
+    highlightedOptionRef,
     listboxId,
     listboxValueLabel,
-    state: { value },
-    refs: { selectedOption, highlightedOption },
+    selectedOptionRef,
+    state,
+    stateData: { value },
   } = useContext(ListboxContext);
-  let isExpanded = isListboxExpanded(value);
-  console.log(value, isExpanded);
+  let isExpanded = isListboxExpanded(state);
   return useMemo(
     () => ({
       id: listboxId,
       isExpanded,
-      selectedOptionRef: selectedOption,
-      highlightedOptionRef: highlightedOption,
+      selectedOptionRef: selectedOptionRef,
+      highlightedOptionRef: highlightedOptionRef,
       value,
       valueLabel: listboxValueLabel,
     }),
@@ -1242,8 +1254,8 @@ export function useListboxContext(): ListboxContextValue {
       isExpanded,
       value,
       listboxValueLabel,
-      selectedOption,
-      highlightedOption,
+      selectedOptionRef,
+      highlightedOptionRef,
     ]
   );
 }
@@ -1263,9 +1275,7 @@ function useKeyDown() {
   let {
     disabled: listboxDisabled,
     onValueChange,
-    state: {
-      context: { navigationValue, typeaheadQuery },
-    },
+    stateData: { navigationValue, typeaheadQuery },
     send,
   } = useContext(ListboxContext);
 
@@ -1394,7 +1404,13 @@ export type ListboxContextValue = {
 interface InternalListboxContextValue {
   ariaLabel?: string;
   ariaLabelledBy?: string;
-  refs: MachineToReactRefMap<ListboxEvent>;
+  buttonRef: React.RefObject<ListboxNodeRefs["button"]>;
+  hiddenInputRef: React.RefObject<ListboxNodeRefs["hiddenInput"]>;
+  inputRef: React.RefObject<ListboxNodeRefs["input"]>;
+  listRef: React.RefObject<ListboxNodeRefs["list"]>;
+  popoverRef: React.RefObject<ListboxNodeRefs["popover"]>;
+  selectedOptionRef: React.RefObject<ListboxNodeRefs["selectedOption"]>;
+  highlightedOptionRef: React.RefObject<ListboxNodeRefs["highlightedOption"]>;
   disabled: boolean;
   listboxId: string;
   listboxValueLabel: string | null;
@@ -1403,7 +1419,8 @@ interface InternalListboxContextValue {
     ListboxStateData,
     DistributiveOmit<ListboxEvent, "refs">
   >["send"];
-  state: StateMachine.State<ListboxStateData, ListboxEvent, ListboxState>;
+  state: ListboxStates;
+  stateData: ListboxStateData;
 }
 
 interface ListboxGroupContextValue {

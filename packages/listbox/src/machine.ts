@@ -120,8 +120,6 @@ function clickedOutsideOfListbox(data: ListboxStateData, event: ListboxEvent) {
     let { button, popover } = event.refs;
     let { relatedTarget } = event;
 
-    console.log(relatedTarget);
-
     // Close the popover IF:
     return !!(
       // clicked element is not the button
@@ -263,10 +261,6 @@ let commonEvents = {
       return {
         ...ctx,
         ...event.data,
-        refs: {
-          ...ctx.refs,
-          ...(event.data.refs || {}),
-        },
       };
     }),
   },
@@ -292,15 +286,6 @@ export const createMachineDefinition = ({
   initial: ListboxStates.Idle,
   context: {
     value,
-    refs: {
-      button: null,
-      input: null,
-      list: null,
-      popover: null,
-      hiddenInput: null,
-      selectedOption: null,
-      highlightedOption: null,
-    },
     options: [],
     navigationValue: null,
     typeaheadQuery: null,
@@ -845,9 +830,7 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.GetDerivedData;
-        data: Omit<Partial<ListboxStateData>, "refs"> & {
-          refs?: Partial<ListboxStateData["refs"]>;
-        };
+        data: Partial<ListboxStateData>;
       }
     | {
         type: ListboxEvents.ButtonMouseDown;
@@ -939,7 +922,6 @@ export type ListboxState = {
 
 export type ListboxStateData = {
   navigationValue: ListboxValue | null;
-  refs: ListboxNodeRefs;
   typeaheadQuery: string | null;
   value: ListboxValue | null;
   options: ListboxDescendant[];
