@@ -72,11 +72,7 @@ import {
   ListboxEvent,
 } from "./machine";
 
-const DEBUG = __DEV__
-  ? // set here if we want to debug during development
-    false
-  : // leave this alone!
-    false;
+const DEBUG = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext
@@ -134,16 +130,18 @@ export const ListboxInput = forwardRef<
   let onChange = useCallbackProp(onChangeProp);
 
   // DOM refs
-  let selectedOptionRef = useRef<ListboxNodeRefs["selectedOption"]>(null);
-  let highlightedOptionRef = useRef<ListboxNodeRefs["highlightedOption"]>(null);
   let buttonRef = useRef<ListboxNodeRefs["button"]>(null);
-  let hiddenInputRef = useRef<ListboxNodeRefs["hiddenInput"]>(null);
+  let hiddenInputRef = useRef<HTMLInputElement>(null);
+  let highlightedOptionRef = useRef<ListboxNodeRefs["highlightedOption"]>(null);
   let inputRef = useRef<ListboxNodeRefs["input"]>(null);
   let listRef = useRef<ListboxNodeRefs["list"]>(null);
   let popoverRef = useRef<ListboxNodeRefs["popover"]>(null);
+  let selectedOptionRef = useRef<ListboxNodeRefs["selectedOption"]>(null);
 
   let machine = useCreateMachine(
     createMachineDefinition({
+      // The initial value of our machine should come from the `value` or
+      // `defaultValue` props if they exist.
       value: (isControlled.current ? valueProp! : defaultValue) || null,
     })
   );
@@ -153,11 +151,11 @@ export const ListboxInput = forwardRef<
     {
       button: buttonRef,
       hiddenInput: hiddenInputRef,
+      highlightedOption: highlightedOptionRef,
       input: inputRef,
       list: listRef,
       popover: popoverRef,
       selectedOption: selectedOptionRef,
-      highlightedOption: highlightedOptionRef,
     },
     DEBUG
   );
@@ -195,8 +193,6 @@ export const ListboxInput = forwardRef<
       listboxValueLabel: valueLabel,
       onValueChange: onChange,
       buttonRef,
-      hiddenInputRef,
-      inputRef,
       listRef,
       popoverRef,
       selectedOptionRef,
@@ -242,20 +238,6 @@ export const ListboxInput = forwardRef<
     }
   }
 
-  const childrenProps: ListboxContextValue & { expanded: boolean } = useMemo(
-    () => ({
-      id,
-      isExpanded,
-      value: state.context.value,
-      selectedOptionRef: selectedOptionRef,
-      highlightedOptionRef: highlightedOptionRef,
-      valueLabel,
-      // TODO: Remove in 1.0
-      expanded: isExpanded,
-    }),
-    [state.context.value, id, isExpanded, valueLabel]
-  );
-
   useControlledSwitchWarning(valueProp, "value", _componentName);
 
   // Even if the app controls state, we still need to update it internally to
@@ -275,7 +257,7 @@ export const ListboxInput = forwardRef<
   }, [options, send]);
 
   useEffect(() => {
-    function listener(event: MouseEvent) {
+    function handleMouseDown(event: MouseEvent) {
       let { target, relatedTarget } = event;
       if (!targetIsInPopover(target, popoverRef.current)) {
         send({
@@ -285,15 +267,15 @@ export const ListboxInput = forwardRef<
       }
     }
     if (isExpanded) {
-      window.addEventListener("mousedown", listener);
+      window.addEventListener("mousedown", handleMouseDown);
     }
     return () => {
-      window.removeEventListener("mousedown", listener);
+      window.removeEventListener("mousedown", handleMouseDown);
     };
   }, [send, isExpanded]);
 
   useEffect(() => {
-    function listener(event: MouseEvent) {
+    function handleMouseUp(event: MouseEvent) {
       let { target, relatedTarget } = event;
       if (!targetIsInPopover(target, popoverRef.current)) {
         send({
@@ -303,10 +285,10 @@ export const ListboxInput = forwardRef<
       }
     }
     if (isExpanded) {
-      window.addEventListener("mouseup", listener);
+      window.addEventListener("mouseup", handleMouseUp);
     }
     return () => {
-      window.removeEventListener("mouseup", listener);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [send, isExpanded]);
 
@@ -327,7 +309,18 @@ export const ListboxInput = forwardRef<
           data-value={state.context.value}
           id={id}
         >
-          {isFunction(children) ? children(childrenProps) : children}
+          {isFunction(children)
+            ? children({
+                id,
+                isExpanded,
+                value: state.context.value,
+                selectedOptionRef: selectedOptionRef,
+                highlightedOptionRef: highlightedOptionRef,
+                valueLabel,
+                // TODO: Remove in 1.0
+                expanded: isExpanded,
+              })
+            : children}
         </div>
         {(form || name || required) && (
           <input
@@ -1405,8 +1398,6 @@ interface InternalListboxContextValue {
   ariaLabel?: string;
   ariaLabelledBy?: string;
   buttonRef: React.RefObject<ListboxNodeRefs["button"]>;
-  hiddenInputRef: React.RefObject<ListboxNodeRefs["hiddenInput"]>;
-  inputRef: React.RefObject<ListboxNodeRefs["input"]>;
   isExpanded: boolean;
   listRef: React.RefObject<ListboxNodeRefs["list"]>;
   popoverRef: React.RefObject<ListboxNodeRefs["popover"]>;

@@ -68,6 +68,10 @@ describe("<Listbox />", () => {
       );
       expect(queryByRole("button")).toBeTruthy();
     });
+
+    // TODO: Write this test maybe?
+    // it("should not render on outside clicks when the listbox is closed", () => {
+    // })
   });
 
   describe("a11y", () => {
@@ -248,7 +252,7 @@ describe("<Listbox />", () => {
       expect(getPopover()).not.toBeVisible();
     });
 
-    [" ", "ArrowUp", "ArrowDown"].forEach(key => {
+    [" ", "ArrowUp", "ArrowDown"].forEach((key) => {
       it(`should open the listbox when \`${
         key === " " ? "Spacebar" : key
       }\` pressed while idle`, () => {
@@ -278,7 +282,7 @@ describe("<Listbox />", () => {
         <div>
           <form
             id="my-form"
-            onSubmit={event => {
+            onSubmit={(event) => {
               // HTMLFormElement.prototype.submit is not implemented in jsdom
               // preventDefault will stop the event and the error
               event.preventDefault();
@@ -410,7 +414,7 @@ describe("<Listbox />", () => {
        */
       function getOptionByText(text: string) {
         return getAllByText(text).find(
-          element => element.getAttribute("role") === "option"
+          (element) => element.getAttribute("role") === "option"
         );
       }
 
