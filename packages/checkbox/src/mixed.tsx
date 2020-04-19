@@ -44,7 +44,6 @@ import {
   StateMachine,
   useCreateMachine,
   useMachine,
-  useMachineLogger,
 } from "@reach/machine";
 import PropTypes from "prop-types";
 
@@ -312,12 +311,7 @@ export function useMixedCheckbox(
     )
   );
 
-  let [current, send] = useMachineLogger(
-    useMachine(machine, {
-      input: ref,
-    }),
-    DEBUG
-  );
+  let [current, send] = useMachine(machine, { input: ref }, DEBUG);
 
   let props: UseMixedCheckboxProps = {
     "aria-checked": stateValueToAriaChecked(current.value),
