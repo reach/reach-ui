@@ -86,16 +86,16 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                                             | Type                           | Required | Default        |
-| ------------------------------------------------ | ------------------------------ | -------- | -------------- |
-| [`as`](#tabs-as)                                 | `string` \| `Component`        | false    | `"div"`        |
-| [`children`](#tabs-children)                     | `node`                         | true     |                |
-| [`defaultIndex`](#tabs-defaultindex)             | `number`                       | false    |                |
-| [`index`](#tabs-index)                           | `number`                       | false    |                |
-| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`         | false    | `"auto`        |
-| [`onChange`](#tabs-onchange)                     | `func`                         | false    |                |
-| [`orientation`](#tabs-orientation)               | `"horizontal"` \| `"vertical"` | false    | `"horizontal"` |
-| [`div` props](#tabs-div-props)                   |                                | false    |                |
+| Prop                                             | Type                                  | Required | Default        |
+| ------------------------------------------------ | ------------------------------------- | -------- | -------------- |
+| [`as`](#tabs-as)                                 | `string` \| `Component`               | false    | `"div"`        |
+| [`children`](#tabs-children)                     | `node`                                | true     |                |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                              | false    |                |
+| [`index`](#tabs-index)                           | `number`                              | false    |                |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `enum` (`"auto"` \| `"manual"`)       | false    | `"auto`        |
+| [`onChange`](#tabs-onchange)                     | `func`                                | false    |                |
+| [`orientation`](#tabs-orientation)               | `enum` (`"horizontal"`\|`"vertical"`) | false    | `"horizontal"` |
+| [`div` props](#tabs-div-props)                   |                                       | false    |                |
 
 ##### Tabs `as`
 
@@ -256,9 +256,21 @@ function Example() {
 
 ##### Tabs `keyboardActivation`
 
-`keyboardActivation?: "auto" | "manual`
+`keyboardActivation?: TabsKeyboardActivation`
 
-Describes the activation mode when navigating a tablist with a keyboard. When set to `"auto"`, a tab panel is activated automatically when a tab is highlighted using arrow keys. When set to `"manual"`, the user must activate the tab panel with either the <kbd>Spacebar</kbd> or <kbd>Enter</kbd> keys. Defaults to `"auto"`.
+Describes the activation mode when navigating a tablist with a keyboard. When set to `"auto"` (`TabsKeyboardActivation.Auto`), a tab panel is activated automatically when a tab is highlighted using arrow keys. When set to `"manual"` (`TabsKeyboardActivation.Manual`), the user must activate the tab panel with either the <kbd>Spacebar</kbd> or <kbd>Enter</kbd> keys. Defaults to `"auto"`.
+
+> **NOTE:** TypeScript users should import and use the `TabsKeyboardActivation` enum when used in strict mode.
+
+```jsx
+import { TabsKeyboardActivation } from "@reach/tabs";
+
+function MyTabs() {
+  return (
+    <Tabs keyboardActivation={TabsKeyboardActivation.Manual}>{/* ... */}</Tabs>
+  );
+}
+```
 
 ##### Tabs `onChange`
 
@@ -297,9 +309,9 @@ function Example() {
 
 ##### Tabs `orientation`
 
-`orientation?: "horizontal" | "vertical"`
+`orientation?: TabsOrientation`
 
-Allows you to switch the orientation of the tabs relative to their tab panels. Defaults to `"horizontal"`.
+Allows you to switch the orientation of the tabs relative to their tab panels. This value can either be `"horizontal"` (`TabsOrientation.Horizontal`) or `"vertical"` (`TabsOrientation.Vertical`) Defaults to `"horizontal"`.
 
 Changing the orientation will change how the arrow keys navigate between tabs. Arrow key navigation should logically follow the order in which tabs appear on the screen. For screen reader users, the `aria-orientation` attribute provides the appropriate context to direct which keys should navigate to the next tab (this is provided automatically). As such, it's important to use this prop even if you have already styled your tabs for vertical layout.
 
@@ -332,6 +344,16 @@ function Example() {
 ```
 
 If you're familiar with the relatively new specs for CSS logical properties, you'll know why we opt to use `start` and `end` rather than `left`, `right`, `top` or `bottom`. The `Tabs` component supports writing modes other than left-to-right, and `Tabs` will adapt keyboard controls to the match user's writing mode and the given orientation.
+
+> **NOTE:** TypeScript users should import and use the `TabsOrientation` enum when used in strict mode.
+
+```jsx
+import { TabsOrientation } from "@reach/tabs";
+
+function MyTabs() {
+  return <Tabs orientation={TabsOrientation.Vertical}>{/* ... */}</Tabs>;
+}
+```
 
 ##### Tabs `div` props
 
