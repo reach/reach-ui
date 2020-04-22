@@ -244,27 +244,9 @@ export type TabsProps = {
   defaultIndex?: number;
   /**
    * Allows you to switch the orientation of the tabs relative to their tab
-   * panels. Defaults to `"horizontal-start"`.
-   *
-   * `horizontal-` and `vertical-` orientations will change how the arrow keys
-   * navigate between tabs. Arrow key navigation should logically follow the
-   * order in which tabs appear on the screen. For screen reader users, the
-   * `aria-orientation` attribute provides the appropriate context to direct
-   * which keys should navigate to the next tab (this is provided
-   * automatically).
-   *
-   * `-start` and `-end` props should be determined by the DOM order of rendered
-   * components. If the `TabList` component appears before `TabPanels`, the
-   * `horizontal-start` or `vertical-start` should be used. When the `TabList`
-   * component appears after `TabPanels`, use `horizontal-end` or
-   * `vertical-end`. For vertical tabs, this will change whether or not
-   * `ArrowLeft` or `ArrowRight` moves the user into the active panel.
-   *
-   * If you're familiar with the relatively new specs for CSS logical
-   * properties, you'll know why we opt to use `start` and `end` rather than
-   * `left`, `right`, `top` or `bottom`. The `Tabs` component supports writing
-   * modes other than left-to-right, and `Tabs` will adapt keyboard controls to
-   * the match user's writing mode and the given orientation.
+   * panels. This value can either be `"horizontal"`
+   * (`TabsOrientation.Horizontal`) or `"vertical"`
+   * (`TabsOrientation.Vertical`). Defaults to `"horizontal"`.
    *
    * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-orientation
    * @see MDN  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties
@@ -361,7 +343,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
         orientation,
         rotate: true,
         callback: onSelectTabWithKeyboard,
-        filter: tab => !tab.disabled,
+        filter: (tab) => !tab.disabled,
         rtl: isRTL.current,
       })
     )
@@ -373,7 +355,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     // index is set), we need to override the selection to the next selectable
     // index value.
     if (!isControlled && boolOrBoolString(tabs[selectedIndex]?.disabled)) {
-      let next = tabs.find(tab => !tab.disabled);
+      let next = tabs.find((tab) => !tab.disabled);
       if (next) {
         setSelectedIndex(next.index);
       }
