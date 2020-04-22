@@ -311,7 +311,7 @@ function Example() {
 
 `orientation?: TabsOrientation`
 
-Allows you to switch the orientation of the tabs relative to their tab panels. This value can either be `"horizontal"` (`TabsOrientation.Horizontal`) or `"vertical"` (`TabsOrientation.Vertical`) Defaults to `"horizontal"`.
+Allows you to switch the orientation of the tabs relative to their tab panels. This value can either be `"horizontal"` (`TabsOrientation.Horizontal`) or `"vertical"` (`TabsOrientation.Vertical`). Defaults to `"horizontal"`.
 
 Changing the orientation will change how the arrow keys navigate between tabs. Arrow key navigation should logically follow the order in which tabs appear on the screen. For screen reader users, the `aria-orientation` attribute provides the appropriate context to direct which keys should navigate to the next tab (this is provided automatically). As such, it's important to use this prop even if you have already styled your tabs for vertical layout.
 
@@ -342,8 +342,6 @@ function Example() {
   );
 }
 ```
-
-If you're familiar with the relatively new specs for CSS logical properties, you'll know why we opt to use `start` and `end` rather than `left`, `right`, `top` or `bottom`. The `Tabs` component supports writing modes other than left-to-right, and `Tabs` will adapt keyboard controls to the match user's writing mode and the given orientation.
 
 > **NOTE:** TypeScript users should import and use the `TabsOrientation` enum when used in strict mode.
 
@@ -769,6 +767,7 @@ With a little composition we can animate the selected tab bar.
 ```jsx
 // jsx-demo
 (() => {
+  const HORIZONTAL_PADDING = 8;
   const AnimatedContext = React.createContext();
 
   function AnimatedTabs({ color, ...rest }) {
