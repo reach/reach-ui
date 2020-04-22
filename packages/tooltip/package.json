@@ -1,6 +1,6 @@
 {
   "name": "@reach/tooltip",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Accessible tooltips",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,11 +13,11 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.10.0",
-    "@reach/portal": "^0.10.0",
-    "@reach/rect": "^0.10.0",
-    "@reach/utils": "^0.10.0",
-    "@reach/visually-hidden": "^0.10.0",
+    "@reach/auto-id": "^0.10.1",
+    "@reach/portal": "^0.10.1",
+    "@reach/rect": "^0.10.1",
+    "@reach/utils": "^0.10.1",
+    "@reach/visually-hidden": "^0.10.1",
     "prop-types": "^15.7.2",
     "tslib": "^1.11.1"
   },
