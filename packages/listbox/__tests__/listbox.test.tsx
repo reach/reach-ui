@@ -197,6 +197,10 @@ describe("<Listbox />", () => {
           </Listbox>
         );
         expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).toHaveAttribute(
+          "type",
+          "hidden"
+        );
       });
     });
 
@@ -218,7 +222,12 @@ describe("<Listbox />", () => {
             </Listbox>
           </div>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        // Be careful not to match the `input[type=text]` added in this test
+        expect(container.querySelector("input[type=hidden]")).toBeTruthy();
+        expect(container.querySelector("input[type=hidden]")).toHaveAttribute(
+          "form",
+          "my-form"
+        );
       });
     });
 
@@ -232,6 +241,10 @@ describe("<Listbox />", () => {
           </Listbox>
         );
         expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).toHaveAttribute(
+          "type",
+          "hidden"
+        );
         expect(container.querySelector("input")).toHaveAttribute("required");
       });
     });
