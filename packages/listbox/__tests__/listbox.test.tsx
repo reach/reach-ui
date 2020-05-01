@@ -196,11 +196,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
-        expect(container.querySelector("input")).toHaveAttribute(
-          "type",
-          "hidden"
-        );
+        expect(container.querySelector("input")).not.toBeVisible();
       });
     });
 
@@ -222,12 +218,8 @@ describe("<Listbox />", () => {
             </Listbox>
           </div>
         );
-        // Be careful not to match the `input[type=text]` added in this test
-        expect(container.querySelector("input[type=hidden]")).toBeTruthy();
-        expect(container.querySelector("input[type=hidden]")).toHaveAttribute(
-          "form",
-          "my-form"
-        );
+        // Make sure to get the second input (not the one added in the test)
+        expect(container.querySelectorAll("input")[1]).not.toBeVisible();
       });
     });
 
