@@ -232,11 +232,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
-        expect(container.querySelector("input")).toHaveAttribute(
-          "type",
-          "hidden"
-        );
+        expect(container.querySelector("input")).not.toBeVisible();
         expect(container.querySelector("input")).toHaveAttribute("required");
       });
     });
