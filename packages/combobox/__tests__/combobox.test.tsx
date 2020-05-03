@@ -9,7 +9,7 @@ import {
   ComboboxOption,
   ComboboxPopover,
   ComboboxInputProps,
-  useComboboxContext
+  useComboboxContext,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import cities from "../examples/cities";
@@ -252,14 +252,14 @@ describe("<Combobox />", () => {
       userEvent.click(firstComboboxOption);
     });
     expect(mockedOnSelect).toHaveBeenCalledWith(optionToSelect, {
-      index: selectedOptionIndex
+      index: selectedOptionIndex,
     });
   });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
 function BasicCombobox({
-  onSelect
+  onSelect,
 }: {
   onSelect?: (item: string, data?: any) => void;
 }) {
@@ -291,8 +291,8 @@ function BasicCombobox({
                   key={index}
                   data-testid={`option-${index}`}
                   value={`${result.city}, ${result.state}`}
-                  data={{
-                    index
+                  selectData={{
+                    index,
                   }}
                 />
               ))}
@@ -310,7 +310,7 @@ function useCityMatch(term: string) {
   return term.trim() === ""
     ? null
     : matchSorter(cities, term, {
-        keys: [item => `${item.city}, ${item.state}`]
+        keys: [(item) => `${item.city}, ${item.state}`],
       });
 }
 

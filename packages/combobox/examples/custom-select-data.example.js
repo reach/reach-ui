@@ -4,7 +4,7 @@ import {
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
-  ComboboxPopover
+  ComboboxPopover,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
 import { useThrottle } from "use-throttle";
@@ -17,7 +17,7 @@ function Example() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setTerm(event.target.value);
   };
 
@@ -27,7 +27,7 @@ function Example() {
       <Combobox
         id="holy-smokes"
         onSelect={(item, data) =>
-          alert(`You selected item ${item} with index ${data.index}`)
+          alert(`You selected city ${item} located in state ${data.state}`)
         }
       >
         <ComboboxInput onChange={handleChange} style={inputStyle} />
@@ -40,9 +40,9 @@ function Example() {
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
-                  value={`${result.city}, ${result.state}`}
-                  data={{
-                    index
+                  value={result.city}
+                  selectData={{
+                    state: result.state,
                   }}
                 />
               ))}
@@ -67,7 +67,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`]
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]
@@ -77,10 +77,10 @@ function useCityMatch(term) {
 const inputStyle = {
   width: 400,
   fontSize: "100%",
-  padding: "0.33rem"
+  padding: "0.33rem",
 };
 
 const popupStyle = {
   boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none"
+  border: "none",
 };
