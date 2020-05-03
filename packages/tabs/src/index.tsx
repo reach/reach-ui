@@ -455,6 +455,8 @@ export const Tab = forwardRefWithAs<
     context: TabsDescendantsContext,
     disabled: !!disabled,
   });
+  const htmlType =
+    Comp === "button" && props.type == null ? "button" : props.type;
 
   const isSelected = index === selectedIndex;
 
@@ -507,6 +509,7 @@ export const Tab = forwardRefWithAs<
       onClick={onSelect}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      type={htmlType}
     >
       {children}
     </Comp>
