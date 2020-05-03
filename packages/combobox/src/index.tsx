@@ -804,7 +804,7 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     }, [index, selectData, addOptionData, removeOptionData]);
 
     const handleClick = () => {
-      onSelect && onSelect(value);
+      onSelect && onSelect(value, selectData);
       transition(SELECT_WITH_CLICK, { value });
     };
 
