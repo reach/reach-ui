@@ -678,7 +678,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   function ComboboxList(
     {
       // when true, and the list opens again, the option with a matching value
-      // will be automatically highleted.
+      // will be automatically highlighted.
       persistSelection = false,
       as: Comp = "ul",
       ...props
