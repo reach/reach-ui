@@ -26,8 +26,10 @@ function Example() {
       <h2>Clientside Search</h2>
       <Combobox
         id="holy-smokes"
-        onSelect={(item, data) =>
-          alert(`You selected city ${item} located in state ${data.state}`)
+        onSelect={(_, data) =>
+          alert(
+            `${data.city} is located in state ${data.state} ${data.comment}`
+          )
         }
       >
         <ComboboxInput onChange={handleChange} style={inputStyle} />
@@ -40,9 +42,11 @@ function Example() {
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
-                  value={result.city}
+                  value={`${result.city}, ${result.state}`}
                   selectData={{
+                    city: result.city,
                     state: result.state,
+                    comment: "and beautiful!",
                   }}
                 />
               ))}
