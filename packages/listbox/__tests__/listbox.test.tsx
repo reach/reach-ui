@@ -196,7 +196,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).not.toBeVisible();
       });
     });
 
@@ -218,7 +218,8 @@ describe("<Listbox />", () => {
             </Listbox>
           </div>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        // Make sure to get the second input (not the one added in the test)
+        expect(container.querySelectorAll("input")[1]).not.toBeVisible();
       });
     });
 
@@ -231,7 +232,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).not.toBeVisible();
         expect(container.querySelector("input")).toHaveAttribute("required");
       });
     });
