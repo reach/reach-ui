@@ -24,6 +24,6 @@
     "dist"
   ],
   "dependencies": {
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   }
 }

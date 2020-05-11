@@ -17,7 +17,7 @@
     "@reach/descendants": "^0.10.1",
     "@reach/utils": "^0.10.1",
     "prop-types": "^15.7.2",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   },
   "peerDependencies": {
     "react": "^16.8.0",

@@ -18,7 +18,7 @@
     "@reach/utils": "^0.10.1",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   },
   "peerDependencies": {
     "react": "^16.8.0",
