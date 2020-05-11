@@ -1,6 +1,6 @@
 {
   "name": "@reach/machine",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "State machine utilities for the Reach UI library.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/utils": "^0.10.1",
+    "@reach/utils": "^0.10.2",
     "@xstate/fsm": "^1.4.0",
     "tslib": "^1.11.2"
   },
