@@ -331,7 +331,7 @@ export const ListboxInput = forwardRef<
             readOnly
             required={required}
             tabIndex={-1}
-            type="text"
+            type="hidden"
             value={state.context.value || ""}
           />
         )}
