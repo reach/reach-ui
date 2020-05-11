@@ -325,6 +325,7 @@ export const ListboxInput = forwardRef<
         {(form || name || required) && (
           <input
             ref={hiddenInputRef}
+            data-reach-listbox-hidden-input=""
             disabled={disabled}
             form={form}
             name={name}
