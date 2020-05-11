@@ -140,8 +140,8 @@
     "use-throttle": "^0.0.3"
   },
   "resolutions": {
-    "@types/react": "16.9.23",
-    "@types/react-dom": "16.9.6"
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8"
   },
   "workspaces": [
     "packages/*"
