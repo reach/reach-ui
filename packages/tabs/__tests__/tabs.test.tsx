@@ -32,25 +32,6 @@ describe("<Tabs />", () => {
 
       expect(getByText("Tab 1")).toHaveAttribute("type", "button");
     });
-
-    it("allows a custom button type", () => {
-      const { getByText } = render(
-        <div>
-          <Tabs>
-            <TabList>
-              <Tab type="submit">Tab 1</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <p>Panel 1</p>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </div>
-      );
-
-      expect(getByText("Tab 1")).toHaveAttribute("type", "submit");
-    });
   });
 
   describe("a11y", () => {
