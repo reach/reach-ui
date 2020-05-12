@@ -608,6 +608,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       TabsContext
     );
     let ownRef = useRef<HTMLElement | null>(null);
+    let isMountedRef = useRef<boolean>(false);
 
     let index = useDescendant({
       element: ownRef.current!,
@@ -623,12 +624,20 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       isSelected ? selectedPanelRef : null
     );
 
+    React.useEffect(() => {
+      isMountedRef.current = true;
+    }, []);
+
     return (
       <Comp
         // Each element with role `tabpanel` has the property `aria-labelledby`
         // referring to its associated tab element.
         aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={!isSelected}
+        // During the initial render `isSelected` would be `false`
+        // and hide the children, which prevents focusing via refs on mount.
+        // As a workaround, we wait for the component to mount, and then set the `hidden` attribute.
+        // I guess this is hackish, but it works.
+        hidden={isMountedRef.current ? !isSelected : false}
         // Each element that contains the content panel for a tab has role
         // `tabpanel`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
