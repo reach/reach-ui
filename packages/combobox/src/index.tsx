@@ -44,6 +44,7 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
@@ -242,10 +243,9 @@ function findNavigationValue(stateData: StateData, event: MachineEvent) {
   }
 }
 
-const ComboboxDescendantContext = createDescendantContext<
-  HTMLElement,
-  DescendantProps
->("ComboboxDescendantContext");
+const ComboboxDescendantContext = createDescendantContext<ComboboxDescendant>(
+  "ComboboxDescendantContext"
+);
 const ComboboxContext = createNamedContext(
   "ComboboxContext",
   {} as InternalComboboxContextValue
@@ -279,7 +279,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     },
     forwardedRef
   ) {
-    let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
+    let [options, setOptions] = useDescendants<ComboboxDescendant>();
 
     // Need this to focus it
     const inputRef = useRef();
@@ -750,11 +750,13 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     let ownRef = useRef<HTMLElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
 
-    let index = useDescendant({
-      context: ComboboxDescendantContext,
-      element: ownRef.current!,
-      value,
-    });
+    let index = useDescendant(
+      {
+        element: ownRef.current!,
+        value,
+      },
+      ComboboxDescendantContext
+    );
 
     const isActive = navigationValue === value;
 
@@ -1218,7 +1220,7 @@ export type ComboboxContextValue = {
   isExpanded: boolean;
 };
 
-type DescendantProps = {
+type ComboboxDescendant = Descendant<HTMLElement> & {
   value: ComboboxValue;
 };
 

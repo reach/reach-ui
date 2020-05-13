@@ -1,11 +1,6 @@
-import { Descendant } from "@reach/descendants";
 import { assign, MachineEventWithRefs, StateMachine } from "@reach/machine";
 import { getOwnerDocument } from "@reach/utils";
-import {
-  ListboxDescendant,
-  ListboxDescendantProps,
-  ListboxValue,
-} from "./index";
+import { ListboxDescendant, ListboxValue } from "./index";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -767,10 +762,7 @@ export const createMachineDefinition = ({
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function findOptionFromTypeahead(
-  options: Descendant<HTMLElement, ListboxDescendantProps>[],
-  string = ""
-) {
+function findOptionFromTypeahead(options: ListboxDescendant[], string = "") {
   if (!string) return null;
   const found = options.find(
     (option) =>
@@ -783,7 +775,7 @@ function findOptionFromTypeahead(
 
 function findOptionFromValue(
   value: string | null | undefined,
-  options: Descendant<HTMLElement, ListboxDescendantProps>[]
+  options: ListboxDescendant[]
 ) {
   return value ? options.find((option) => option.value === value) : undefined;
 }

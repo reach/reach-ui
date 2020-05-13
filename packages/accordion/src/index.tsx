@@ -31,6 +31,7 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -39,10 +40,9 @@ import {
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 
-const AccordionDescendantContext = createDescendantContext<
-  HTMLElement,
-  DescendantProps
->("AccordionDescendantContext");
+const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
+  "AccordionDescendantContext"
+);
 const AccordionContext = createNamedContext<InternalAccordionContextValue>(
   "AccordionContext",
   {} as InternalAccordionContextValue
@@ -90,10 +90,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const wasControlled = typeof controlledIndex !== "undefined";
     const { current: isControlled } = useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendants<
-      HTMLElement,
-      DescendantProps
-    >();
+    const [descendants, setDescendants] = useDescendants<AccordionDescendant>();
 
     const id = useId(props.id);
 
@@ -360,11 +357,13 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
     const { accordionId, openPanels, readOnly } = useContext(AccordionContext);
     const buttonRef: ButtonRef = useRef(null);
 
-    const index = useDescendant({
-      context: AccordionDescendantContext,
-      element: buttonRef.current,
-      disabled,
-    });
+    const index = useDescendant(
+      {
+        element: buttonRef.current,
+        disabled,
+      },
+      AccordionDescendantContext
+    );
 
     // We need unique IDs for the panel and button to point to one another
     const itemId = makeId(accordionId, index);
@@ -696,7 +695,7 @@ export type AccordionItemContextValue = {
   isExpanded: boolean;
 };
 
-type DescendantProps = {
+type AccordionDescendant = Descendant & {
   disabled: boolean;
 };
 

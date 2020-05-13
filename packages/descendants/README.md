@@ -256,6 +256,10 @@ let DescendantContext = createDescendantContext("DescendantContext");
 let MenuContext = createContext();
 
 function Menu({ id, children }) {
+  // We could be less explicit here and set this up in the DescendantProvider,
+  // but you may want to do something with `descendants` in your top-level
+  // component and we don't want to force creating an arbitrary child
+  // component just so we can consume the context.
   let [descendants, setDescendants] = useDescendants();
   let [activeIndex, setActiveIndex] = useState(-1);
   return (
@@ -289,20 +293,26 @@ function MenuList(props) {
   );
 }
 
-function MenuItem(props) {
+function MenuItem({ index: explicitIndex, ...props }) {
   let { activeIndex, setActiveIndex } = useContext(MenuContext);
   let ref = useRef(null);
-  let index = useDescendant({
-    // Tell the useDescendant hook to use a specific context
+  let index = useDescendant(
+    {
+      // Assign the DOM node using a ref
+      element: ref.current,
+      // You can pass arbitrary data into a descendant object which can come
+      // in handy for features like typeahead!
+      key: props.label,
+    },
+    // Tell the useDescendant hook to use a specific context.
     // This is key in case you have a compound component that needs index
     // tracking in separate correlating descendant components (like `Tabs`)
-    context: DescendantContext,
-    // Assign the DOM node using a ref
-    element: ref.current,
-    // You can pass arbitrary data into a descendant object which can come
-    // in handy for features like typeahead!
-    key: props.label,
-  });
+    DescendantContext,
+    // If you want to declare a specific index value, you can pass it as the
+    // third argument here. This is almost never needed but we provide it as an
+    // escape hatch for special circumstances.
+    explicitIndex
+  );
 
   // Now we know the index, so let's use it!
   let isSelected = index === activeIndex;
@@ -351,7 +361,7 @@ function CompSSR() {
     {/* The button needs to know which value is selected to render its label! */}
     <ListboxButton>{activeOption}</ListboxButton>
     <ListboxList>
-      {options.map(option => (
+      {options.map((option) => (
         <ListboxOption value={option} key={option} />
       ))}
     </ListboxList>

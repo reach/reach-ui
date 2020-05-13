@@ -58,10 +58,9 @@ const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
 
-const MenuDescendantContext = createDescendantContext<
-  HTMLElement,
-  DescendantProps
->("MenuDescendantContext");
+const MenuDescendantContext = createDescendantContext<MenuButtonDescendant>(
+  "MenuDescendantContext"
+);
 const MenuContext = createNamedContext<InternalMenuContextValue>(
   "MenuContext",
   {} as InternalMenuContextValue
@@ -99,10 +98,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants<
-    HTMLElement,
-    DescendantProps
-  >();
+  let [descendants, setDescendants] = useDescendants<MenuButtonDescendant>();
   let [state, dispatch] = useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
@@ -369,11 +365,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let index = useDescendant(
       {
-        context: MenuDescendantContext,
         element: ownRef.current!,
         key: valueText,
         isLink,
       },
+      MenuDescendantContext,
       indexProp
     );
     let isSelected = index === selectionIndex;
@@ -1072,7 +1068,11 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type DescendantProps = { key: string; isLink: boolean };
+type MenuButtonDescendant = Descendant<HTMLElement> & {
+  key: string;
+  isLink: boolean;
+};
+
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;

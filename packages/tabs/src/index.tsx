@@ -28,6 +28,7 @@ import React, {
 import PropTypes from "prop-types";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -54,12 +55,11 @@ import {
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
-const TabsDescendantsContext = createDescendantContext<
-  HTMLElement,
-  TabDescendantProps
->("TabsDescendantsContext");
+const TabsDescendantsContext = createDescendantContext<TabDescendant>(
+  "TabsDescendantsContext"
+);
 
-const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
+const TabPanelDescendantsContext = createDescendantContext<TabPanelDescendant>(
   "TabPanelDescendantsContext"
 );
 const TabsContext = createNamedContext(
@@ -121,7 +121,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [focusedIndex, setFocusedIndex] = useState(-1);
 
-  let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
+  let [tabs, setTabs] = useDescendants<TabDescendant>();
 
   let context: InternalTabsContextValue = useMemo(() => {
     return {
@@ -433,6 +433,7 @@ export const Tab = forwardRefWithAs<
     children,
     isSelected: _,
     as: Comp = "button",
+    index: indexProp,
     disabled,
     onBlur,
     onFocus,
@@ -450,11 +451,14 @@ export const Tab = forwardRefWithAs<
   } = useContext(TabsContext);
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
-  const index = useDescendant({
-    element: ownRef.current!,
-    context: TabsDescendantsContext,
-    disabled: !!disabled,
-  });
+  const index = useDescendant(
+    {
+      element: ownRef.current!,
+      disabled: !!disabled,
+    },
+    TabsDescendantsContext,
+    indexProp
+  );
   const htmlType =
     Comp === "button" && props.type == null ? "button" : props.type;
 
@@ -469,7 +473,7 @@ export const Tab = forwardRefWithAs<
       userInteractedRef.current = false;
       ownRef.current.focus();
     }
-  }, [isSelected]);
+  }, [isSelected, userInteractedRef]);
 
   let handleFocus = useEventCallback(
     wrapEvent(onFocus, () => {
@@ -533,6 +537,7 @@ export type TabProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tab-disabled
    */
   disabled?: boolean;
+  index?: number;
 };
 
 if (__DEV__) {
@@ -556,7 +561,7 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let ownRef = useRef();
     let ref = useForkedRef(ownRef, forwardedRef);
-    let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
+    let [tabPanels, setTabPanels] = useDescendants<TabPanelDescendant>();
 
     return (
       <DescendantProvider
@@ -609,10 +614,10 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     );
     let ownRef = useRef<HTMLElement | null>(null);
 
-    let index = useDescendant({
-      element: ownRef.current!,
-      context: TabPanelDescendantsContext,
-    });
+    let index = useDescendant(
+      { element: ownRef.current! },
+      TabPanelDescendantsContext
+    );
     let isSelected = index === selectedIndex;
 
     let id = makeId(tabsId, "panel", index);
@@ -687,9 +692,11 @@ export function useTabsContext(): TabsContextValue {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type TabDescendantProps = {
+type TabDescendant = Descendant<HTMLElement> & {
   disabled: boolean;
 };
+
+type TabPanelDescendant = Descendant<HTMLElement>;
 
 export type TabsContextValue = {
   focusedIndex: number;

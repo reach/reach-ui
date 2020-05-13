@@ -5,16 +5,18 @@ import {
   useIsomorphicLayoutEffect,
 } from "@reach/utils";
 
-export function createDescendantContext<ElementType, DescendantProps = {}>(
+export function createDescendantContext<DescendantType extends Descendant>(
   name: string,
   initialValue = {}
 ) {
-  return createNamedContext(name, {
-    descendants: [],
+  type T = DescendantContextValue<DescendantType>;
+  const descendants: DescendantType[] = [];
+  return createNamedContext<T>(name, {
+    descendants,
     registerDescendant: noop,
     unregisterDescendant: noop,
     ...initialValue,
-  } as IDescendantContext<ElementType, DescendantProps>);
+  });
 }
 
 /**
@@ -40,14 +42,9 @@ export function createDescendantContext<ElementType, DescendantProps = {}>(
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
  */
-export function useDescendant<ElementType, DescendantProps>(
-  {
-    context,
-    element,
-    ...rest
-  }: Omit<Descendant<ElementType, DescendantProps>, "index"> & {
-    context: React.Context<IDescendantContext<ElementType, DescendantProps>>;
-  },
+export function useDescendant<DescendantType extends Descendant>(
+  descendant: Omit<DescendantType, "index">,
+  context: React.Context<DescendantContextValue<DescendantType>>,
   indexProp?: number
 ) {
   let [, forceUpdate] = useState();
@@ -57,51 +54,65 @@ export function useDescendant<ElementType, DescendantProps>(
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
-    if (!element) forceUpdate({});
-    // @ts-ignore
-    registerDescendant({ element, ...rest });
-    return () => unregisterDescendant(element);
+    if (!descendant.element) forceUpdate({});
+    registerDescendant({ ...descendant, index: indexProp } as any);
+    return () => unregisterDescendant(descendant.element);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element, ...Object.values(rest)]);
+  }, [...Object.values(descendant)]);
 
-  return indexProp ?? descendants.findIndex(item => item.element === element);
+  return (
+    indexProp ??
+    descendants.findIndex((item) => item.element === descendant.element)
+  );
 }
 
-export function useDescendants<ElementType, DescendantProps = {}>() {
-  return useState<Descendant<ElementType, DescendantProps>[]>([]);
+export function useDescendants<DescendantType extends Descendant>() {
+  return useState<DescendantType[]>([]);
 }
 
-export function DescendantProvider<ElementType, DescendantProps>({
+export function DescendantProvider<DescendantType extends Descendant>({
   context: Ctx,
   children,
   items,
   set,
 }: {
-  context: React.Context<IDescendantContext<ElementType, DescendantProps>>;
+  context: React.Context<DescendantContextValue<DescendantType>>;
   children: React.ReactNode;
-  items: Descendant<ElementType, DescendantProps>[];
-  set: React.Dispatch<
-    React.SetStateAction<Descendant<ElementType, DescendantProps>[]>
-  >;
+  items: DescendantType[];
+  set: React.Dispatch<React.SetStateAction<DescendantType[]>>;
 }) {
   let registerDescendant = React.useCallback(
-    ({ element, ...rest }: Descendant<ElementType, DescendantProps>) => {
+    ({
+      element,
+      index: explicitIndex,
+      ...rest
+    }: Omit<DescendantType, "index"> & { index?: number | undefined }) => {
       if (!element) {
         return;
       }
 
-      set(items => {
-        let newItem: Descendant<ElementType, DescendantProps>;
-        let newItems: Descendant<ElementType, DescendantProps>[];
-        // If there are no items, register at index 0 and bail.
-        if (items.length === 0) {
-          newItem = {
-            element,
-            index: 0,
-            ...rest,
-          } as Descendant<ElementType, DescendantProps>;
-          newItems = [...items, newItem];
-        } else if (items.find(item => item.element === element)) {
+      set((items) => {
+        let newItems: DescendantType[];
+        if (explicitIndex != null) {
+          newItems = [
+            ...items,
+            {
+              ...rest,
+              element,
+              index: explicitIndex,
+            } as DescendantType,
+          ];
+        } else if (items.length === 0) {
+          // If there are no items, register at index 0 and bail.
+          newItems = [
+            ...items,
+            {
+              ...rest,
+              element,
+              index: 0,
+            } as DescendantType,
+          ];
+        } else if (items.find((item) => item.element === element)) {
           // If the element is already registered, just use the same array
           newItems = items;
         } else {
@@ -117,7 +128,7 @@ export function DescendantProvider<ElementType, DescendantProps>({
           // called in an effect every time the descendants state value changes,
           // we should be sure that this index is accurate when descendent
           // elements come or go from our component.
-          let index = items.findIndex(item => {
+          let index = items.findIndex((item) => {
             if (!item.element || !element) {
               return false;
             }
@@ -126,16 +137,16 @@ export function DescendantProvider<ElementType, DescendantProps>({
             // this point in the array so we know where to insert the new
             // element.
             return Boolean(
-              item.element.compareDocumentPosition(element) &
+              item.element.compareDocumentPosition(element as Node) &
                 Node.DOCUMENT_POSITION_PRECEDING
             );
           });
 
-          newItem = {
+          let newItem = {
+            ...rest,
             element,
             index,
-            ...rest,
-          } as Descendant<ElementType, DescendantProps>;
+          } as DescendantType;
 
           // If an index is not found we will push the element to the end.
           if (index === -1) {
@@ -159,12 +170,12 @@ export function DescendantProvider<ElementType, DescendantProps>({
   );
 
   let unregisterDescendant = useCallback(
-    (element: Descendant<ElementType>["element"]) => {
+    (element: DescendantType["element"]) => {
       if (!element) {
         return;
       }
 
-      set(items => items.filter(item => element !== item.element));
+      set((items) => items.filter((item) => element !== item.element));
     },
     // set is a state setter initialized by the useDescendants hook.
     // We can safely ignore the lint warning here because it will not change
@@ -173,18 +184,19 @@ export function DescendantProvider<ElementType, DescendantProps>({
     []
   );
 
-  const value: IDescendantContext<
-    ElementType,
-    DescendantProps
-  > = useMemo(() => {
-    return {
-      descendants: items,
-      registerDescendant,
-      unregisterDescendant,
-    };
-  }, [items, registerDescendant, unregisterDescendant]);
-
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
+  return (
+    <Ctx.Provider
+      value={useMemo(() => {
+        return {
+          descendants: items,
+          registerDescendant,
+          unregisterDescendant,
+        };
+      }, [items, registerDescendant, unregisterDescendant])}
+    >
+      {children}
+    </Ctx.Provider>
+  );
 }
 
 /**
@@ -201,26 +213,18 @@ export function DescendantProvider<ElementType, DescendantProps>({
  * @param options
  */
 export function useDescendantKeyDown<
-  ElementType,
-  DescendantProps = {},
-  K extends keyof Descendant<ElementType, DescendantProps> = keyof Descendant<
-    ElementType,
-    DescendantProps
-  >
+  DescendantType extends Descendant,
+  K extends keyof DescendantType = keyof DescendantType
 >(
-  context: React.Context<IDescendantContext<ElementType, DescendantProps>>,
+  context: React.Context<DescendantContextValue<DescendantType>>,
   options: {
     currentIndex: number | null | undefined;
     key?: K | "option";
-    filter?: (descendant: Descendant<ElementType, DescendantProps>) => boolean;
+    filter?: (descendant: DescendantType) => boolean;
     orientation?: "vertical" | "horizontal" | "both";
     rotate?: boolean;
     rtl?: boolean;
-    callback(
-      nextOption:
-        | Descendant<ElementType, DescendantProps>
-        | Descendant<ElementType, DescendantProps>[K]
-    ): void;
+    callback(nextOption: DescendantType | DescendantType[K]): void;
   }
 ) {
   let { descendants } = useContext(context);
@@ -261,7 +265,7 @@ export function useDescendantKeyDown<
     // descendants array.
     if (filter) {
       index = selectableDescendants.findIndex(
-        descendant => descendant.index === currentIndex
+        (descendant) => descendant.index === currentIndex
       );
     }
 
@@ -357,17 +361,15 @@ export function useDescendantKeyDown<
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type SomeHTMLElement<T> = T extends HTMLElement ? T : HTMLElement;
+type SomeElement<T> = T extends Element ? T : HTMLElement;
 
-export type Descendant<ElementType, DescendantProps = {}> = DescendantProps & {
-  element: SomeHTMLElement<ElementType> | null;
+export type Descendant<ElementType = HTMLElement> = {
+  element: SomeElement<ElementType> | null;
   index: number;
 };
 
-export interface IDescendantContext<ElementType, DescendantProps> {
-  descendants: Descendant<ElementType, DescendantProps>[];
-  registerDescendant(
-    descendant: Descendant<ElementType, DescendantProps>
-  ): void;
-  unregisterDescendant(element: SomeHTMLElement<ElementType> | null): void;
+export interface DescendantContextValue<DescendantType extends Descendant> {
+  descendants: DescendantType[];
+  registerDescendant(descendant: DescendantType): void;
+  unregisterDescendant(element: DescendantType["element"]): void;
 }
