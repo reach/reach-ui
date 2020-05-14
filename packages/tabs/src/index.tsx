@@ -32,6 +32,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
+  useDescendantsInit,
   useDescendants,
 } from "@reach/descendants";
 import {
@@ -121,7 +122,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [focusedIndex, setFocusedIndex] = useState(-1);
 
-  let [tabs, setTabs] = useDescendants<TabDescendant>();
+  let [tabs, setTabs] = useDescendantsInit<TabDescendant>();
 
   let context: InternalTabsContextValue = useMemo(() => {
     return {
@@ -315,8 +316,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     selectedIndex,
     setSelectedIndex,
   } = useContext(TabsContext);
-
-  let { descendants: tabs } = useContext(TabsDescendantsContext);
+  let tabs = useDescendants(TabsDescendantsContext);
 
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
@@ -561,7 +561,7 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let ownRef = useRef();
     let ref = useForkedRef(ownRef, forwardedRef);
-    let [tabPanels, setTabPanels] = useDescendants<TabPanelDescendant>();
+    let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
 
     return (
       <DescendantProvider

@@ -30,6 +30,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantsInit,
   useDescendantKeyDown,
 } from "@reach/descendants";
 import {
@@ -98,7 +99,9 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants<MenuButtonDescendant>();
+  let [descendants, setDescendants] = useDescendantsInit<
+    MenuButtonDescendant
+  >();
   let [state, dispatch] = useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
@@ -545,7 +548,7 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
       selectCallbacks,
       state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
     } = useContext(MenuContext);
-    const { descendants: menuItems } = useContext(MenuDescendantContext);
+    const menuItems = useDescendants(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
     useEffect(() => {

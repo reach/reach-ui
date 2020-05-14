@@ -45,6 +45,7 @@ import {
   useDescendant,
   useDescendantKeyDown,
   useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 import {
   createNamedContext,
@@ -121,7 +122,7 @@ export const ListboxInput = forwardRef<
   forwardedRef
 ) {
   let isControlled = useRef(valueProp != null);
-  let [options, setOptions] = useDescendants<ListboxDescendant>();
+  let [options, setOptions] = useDescendantsInit<ListboxDescendant>();
 
   let onChange = useCallbackProp(onChangeProp);
 
@@ -1270,8 +1271,7 @@ function useKeyDown() {
     stateData: { navigationValue, typeaheadQuery },
     send,
   } = useContext(ListboxContext);
-
-  let { descendants: options } = useContext(ListboxDescendantContext);
+  let options = useDescendants(ListboxDescendantContext);
 
   useEffect(() => {
     if (typeaheadQuery) {

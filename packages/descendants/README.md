@@ -260,7 +260,7 @@ function Menu({ id, children }) {
   // but you may want to do something with `descendants` in your top-level
   // component and we don't want to force creating an arbitrary child
   // component just so we can consume the context.
-  let [descendants, setDescendants] = useDescendants();
+  let [descendants, setDescendants] = useDescendantsInit();
   let [activeIndex, setActiveIndex] = useState(-1);
   return (
     <DescendantProvider
@@ -333,6 +333,12 @@ function MenuItem({ index: explicitIndex, ...props }) {
     />
   );
 }
+```
+
+You can also access the descendants object anywhere in the tree (below the top-level component) with `useDescendants`:
+
+```jsx
+let menuItems = useDescendants(DescendantContext);
 ```
 
 The key tradeoff here is that descendants won't be available on the first render, and as such any components that need this data for server-side rendering will need to manage their own state and pass descendant data from from the top of the tree. For example

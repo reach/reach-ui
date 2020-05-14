@@ -35,7 +35,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
-  useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -90,7 +90,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     const wasControlled = typeof controlledIndex !== "undefined";
     const { current: isControlled } = useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendants<AccordionDescendant>();
+    const [descendants, setDescendants] = useDescendantsInit<
+      AccordionDescendant
+    >();
 
     const id = useId(props.id);
 

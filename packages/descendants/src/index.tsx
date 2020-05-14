@@ -66,8 +66,14 @@ export function useDescendant<DescendantType extends Descendant>(
   );
 }
 
-export function useDescendants<DescendantType extends Descendant>() {
+export function useDescendantsInit<DescendantType extends Descendant>() {
   return useState<DescendantType[]>([]);
+}
+
+export function useDescendants<DescendantType extends Descendant>(
+  ctx: React.Context<DescendantContextValue<DescendantType>>
+) {
+  return React.useContext(ctx).descendants;
 }
 
 export function DescendantProvider<DescendantType extends Descendant>({

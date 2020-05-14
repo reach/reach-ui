@@ -48,6 +48,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
@@ -279,7 +280,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     },
     forwardedRef
   ) {
-    let [options, setOptions] = useDescendants<ComboboxDescendant>();
+    let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
 
     // Need this to focus it
     const inputRef = useRef();
@@ -963,7 +964,7 @@ function useKeyDown() {
     persistSelectionRef,
   } = useContext(ComboboxContext);
 
-  const { descendants: options } = useContext(ComboboxDescendantContext);
+  const options = useDescendants(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
