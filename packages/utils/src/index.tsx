@@ -425,10 +425,10 @@ export function useControlledSwitchWarning(
    * if this changes unexpectedly.
    */
   let isControlled = controlPropValue != null;
-  let { current: wasControlled } = useRef(isControlled);
-  let effect = noop;
-  if (__DEV__) {
-    effect = function () {
+  let isControlledRef = useRef(isControlled);
+  useEffect(() => {
+    const wasControlled = isControlledRef.current;
+    if (__DEV__) {
       warning(
         !(!isControlled && wasControlled),
         `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
@@ -437,9 +437,8 @@ export function useControlledSwitchWarning(
         !(!isControlled && wasControlled),
         `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
       );
-    };
-  }
-  useEffect(effect, [componentName, controlPropName, isControlled]);
+    }
+  }, [componentName, controlPropName, isControlled]);
 }
 
 export function useCheckStyles(pkg: string) {
@@ -630,20 +629,22 @@ export function useUpdateEffect(
  * @param DEBUG
  */
 export function useStateLogger(state: string, DEBUG: boolean = false) {
-  let effect = noop;
-  if (__DEV__) {
-    if (DEBUG) {
-      effect = function () {
+  let debugRef = useRef(DEBUG);
+  useEffect(() => {
+    debugRef.current = DEBUG;
+  }, [DEBUG]);
+  useEffect(() => {
+    if (__DEV__) {
+      if (debugRef.current) {
         console.group("State Updated");
         console.log(
           "%c" + state,
           "font-weight: normal; font-size: 120%; font-style: italic;"
         );
         console.groupEnd();
-      };
+      }
     }
-  }
-  useEffect(effect, [state]);
+  }, [state]);
 }
 
 /**
