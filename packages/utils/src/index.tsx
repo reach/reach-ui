@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals, eqeqeq,  */
+/* eslint-disable no-restricted-globals, eqeqeq  */
 
 import React, {
   cloneElement,
@@ -69,7 +69,7 @@ export { warning };
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
 // @ts-ignore
-let checkStyles = (packageName: string): void => void packageName;
+let checkStyles: (packageName: string) => void = noop;
 
 if (__DEV__) {
   // In CJS files, process.env.NODE_ENV is stripped from our build, but we need
@@ -80,7 +80,7 @@ if (__DEV__) {
       ? process
       : { env: { NODE_ENV: "development" } };
 
-  checkStyles = (packageName: string) => {
+  checkStyles = function checkStyles(packageName: string) {
     // only check once per package
     if (checkedPkgs[packageName]) return;
     checkedPkgs[packageName] = true;
@@ -415,20 +415,28 @@ export function useControlledState<T = any>(
  * @param controlPropName
  * @param componentName
  */
-export function useControlledSwitchWarning(
+let useControlledSwitchWarning: (
   controlPropValue: any,
   controlPropName: string,
   componentName: string
-) {
-  /*
-   * Determine whether or not the component is controlled and warn the developer
-   * if this changes unexpectedly.
-   */
-  let isControlled = controlPropValue != null;
-  let isControlledRef = useRef(isControlled);
-  useEffect(() => {
-    const wasControlled = isControlledRef.current;
-    if (__DEV__) {
+) => void = noop;
+
+if (__DEV__) {
+  useControlledSwitchWarning = function useControlledSwitchWarning(
+    controlPropValue,
+    controlPropName,
+    componentName
+  ) {
+    let controlledRef = useRef(controlPropValue != null);
+    const nameCache = useRef({ componentName, controlPropName });
+    useEffect(() => {
+      nameCache.current = { componentName, controlPropName };
+    }, [componentName, controlPropName]);
+
+    useEffect(() => {
+      let { componentName, controlPropName } = nameCache.current;
+      let isControlled = controlPropValue != null;
+      let { current: wasControlled } = controlledRef;
       warning(
         !(!isControlled && wasControlled),
         `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
@@ -437,14 +445,23 @@ export function useControlledSwitchWarning(
         !(!isControlled && wasControlled),
         `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
       );
-    }
-  }, [componentName, controlPropName, isControlled]);
+    }, [controlPropValue]);
+  };
 }
 
-export function useCheckStyles(pkg: string) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => checkStyles(pkg), []);
+export { useControlledSwitchWarning };
+
+let useCheckStyles: (packageName: string) => void = noop;
+
+if (__DEV__) {
+  useCheckStyles = function useCheckStyles(pkg: string) {
+    let name = useRef(pkg);
+    useEffect(() => void (name.current = pkg), [pkg]);
+    useEffect(() => checkStyles(name.current), []);
+  };
 }
+
+export { useCheckStyles };
 
 /**
  * React hook for creating a value exactly once.
@@ -628,13 +645,15 @@ export function useUpdateEffect(
  * @param state
  * @param DEBUG
  */
-export function useStateLogger(state: string, DEBUG: boolean = false) {
-  let debugRef = useRef(DEBUG);
-  useEffect(() => {
-    debugRef.current = DEBUG;
-  }, [DEBUG]);
-  useEffect(() => {
-    if (__DEV__) {
+let useStateLogger: (state: string, DEBUG: boolean) => void = noop;
+
+if (__DEV__) {
+  useStateLogger = function useStateLogger(state, DEBUG = false) {
+    let debugRef = useRef(DEBUG);
+    useEffect(() => {
+      debugRef.current = DEBUG;
+    }, [DEBUG]);
+    useEffect(() => {
       if (debugRef.current) {
         console.group("State Updated");
         console.log(
@@ -643,9 +662,11 @@ export function useStateLogger(state: string, DEBUG: boolean = false) {
         );
         console.groupEnd();
       }
-    }
-  }, [state]);
+    }, [state]);
+  };
 }
+
+export { useStateLogger };
 
 /**
  * Wraps a lib-defined event handler and a user-defined event handler, returning
