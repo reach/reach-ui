@@ -61,13 +61,16 @@ export async function isDir(name: string) {
 export async function getInputs(
   entries?: string | string[]
 ): Promise<string[]> {
-  return ([] as any[])
-    .concat(
-      entries && entries.length
-        ? entries
-        : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
-    )
-    .flatMap(file => glob(file));
+  const inputs = ([] as any[]).concat(
+    entries && entries.length
+      ? entries
+      : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
+  );
+  // We can't use `Array.flatMap` in CodeSandbox CI builds:
+  // https://github.com/reach/reach-ui/issues/586
+  return "flatMap" in Array
+    ? inputs.flatMap((file) => glob(file))
+    : [].concat.apply([], inputs).map((file) => glob(file));
 }
 
 export function getPackageName(opts: any) {
@@ -93,8 +96,9 @@ export async function createProgressEstimator() {
 
 export function logError(err: any) {
   const error = err.error || err;
-  const description = `${error.name ? error.name + ": " : ""}${error.message ||
-    error}`;
+  const description = `${error.name ? error.name + ": " : ""}${
+    error.message || error
+  }`;
   const message = error.plugin
     ? error.plugin === "rpt2"
       ? `(typescript) ${description}`
