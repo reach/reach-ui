@@ -66,11 +66,7 @@ export async function getInputs(
       ? entries
       : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
   );
-  // We can't use `Array.flatMap` in CodeSandbox CI builds:
-  // https://github.com/reach/reach-ui/issues/586
-  return "flatMap" in Array
-    ? inputs.flatMap((file) => glob(file))
-    : [].concat.apply([], inputs).map((file) => glob(file));
+  return flatten(inputs).map((file) => glob(file));
 }
 
 export function getPackageName(opts: any) {
@@ -130,4 +126,8 @@ export async function cleanDistFolder() {
 export function parseArgs() {
   let { _, ...args } = mri(process.argv.slice(2));
   return args;
+}
+
+export function flatten(arr: any[][]): any[] {
+  return arr.reduce((flat, next) => flat.concat(next), []);
 }
