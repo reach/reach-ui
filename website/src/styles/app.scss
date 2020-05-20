@@ -22,24 +22,6 @@
   --table-cell-border-color: #eee;
 }
 
-:root {
-  --font-family-sans: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --font-family-mono: "SFMono-Regular", Consolas, "Roboto Mono",
-    "Droid Sans Mono", "Liberation Mono", Menlo, Courier, monospace;
-  --error-color: #bf4a3f;
-  --primary-color: #1159a6;
-  --primary-color-bright: #007bff;
-  --primary-color-light: #3f94bf;
-  --body-color: #222;
-  --body-background: #fafafa;
-  --focus-outline-color: #1eaedb;
-  --input-background-color: #fff;
-  --input-border-color: #d1d1d1;
-  --rule-border-color: #e1e1e1;
-  --table-cell-border-color: #eee;
-}
-
 @keyframes slide-down {
   0% {
     opacity: 0;
