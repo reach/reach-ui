@@ -20,6 +20,7 @@ import {
   logError,
   cleanDistFolder,
   parseArgs,
+  flatten,
 } from "./utils";
 import { ScriptOpts, NormalizedOpts } from "./types";
 import * as fs from "fs-extra";
@@ -267,10 +268,10 @@ function createConfigItems(type: any, items: any[]) {
 function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
   const mergedItems: any[] = [];
 
-  configItemsToMerge.forEach(configItemToMerge => {
+  configItemsToMerge.forEach((configItemToMerge) => {
     configItemToMerge.forEach((item: any) => {
       const itemToMergeWithIndex = mergedItems.findIndex(
-        mergedItem => mergedItem.file.resolved === item.file.resolved
+        (mergedItem) => mergedItem.file.resolved === item.file.resolved
       );
 
       if (itemToMergeWithIndex === -1) {
@@ -307,13 +308,17 @@ if (process.env.NODE_ENV === 'production') {
 export async function createBuildConfigs(
   opts: NormalizedOpts
 ): Promise<RollupOptions[]> {
-  const allInputs = opts.input.flatMap((input: string) =>
-    createAllFormats(opts, input).map((options: ScriptOpts, index: number) => ({
-      ...options,
-      // We want to know if this is the first run for each entryfile
-      // for certain plugins (e.g. css)
-      writeMeta: index === 0,
-    }))
+  const allInputs = flatten(
+    flatten(opts.input as any).map((input: string) =>
+      createAllFormats(opts, input).map(
+        (options: ScriptOpts, index: number) => ({
+          ...options,
+          // We want to know if this is the first run for each entryfile
+          // for certain plugins (e.g. css)
+          writeMeta: index === 0,
+        })
+      )
+    )
   );
 
   return await Promise.all(
