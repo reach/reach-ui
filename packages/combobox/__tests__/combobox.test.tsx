@@ -228,7 +228,7 @@ describe("<Combobox />", () => {
     });
   });
 
-  it("should pass custom data to a selected item", () => {
+  it("should pass custom data to the onSelect", () => {
     jest.useFakeTimers();
     let mockedOnSelect = jest.fn();
     let optionToSelect = "Eagle Pass, Texas";
@@ -254,6 +254,35 @@ describe("<Combobox />", () => {
     expect(mockedOnSelect).toHaveBeenCalledWith(optionToSelect, {
       index: selectedOptionIndex,
     });
+  });
+
+  it("should pass a primitive custom data to the onSelect", () => {
+    jest.useFakeTimers();
+    let mockedOnSelect = jest.fn();
+    let optionToSelect = "Eagle Pass, Texas";
+    let { getByTestId, getByText } = render(
+      <ComboboxWithPrimitiveOnSelectData onSelect={mockedOnSelect} />
+    );
+    let getByTextWithMarkup = withMarkup(getByText);
+    let input = getByTestId("input");
+    act(() => {
+      // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
+      // list (index=0)
+      userEvent.type(input, "Eagle Pass, T");
+      jest.advanceTimersByTime(100);
+    });
+    expect(getByTestId("list")).toBeInTheDocument();
+    expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
+
+    let selectedOptionIndex = 0;
+    let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
+    act(() => {
+      userEvent.click(firstComboboxOption);
+    });
+    expect(mockedOnSelect).toHaveBeenCalledWith(
+      optionToSelect,
+      selectedOptionIndex
+    );
   });
 });
 
@@ -294,6 +323,52 @@ function BasicCombobox({
                   selectData={{
                     index,
                   }}
+                />
+              ))}
+            </ComboboxList>
+          </ComboboxPopover>
+        ) : (
+          <span>No Results!</span>
+        )}
+      </Combobox>
+    </div>
+  );
+}
+
+function ComboboxWithPrimitiveOnSelectData({
+  onSelect,
+}: {
+  onSelect?: (item: string, index?: number) => void;
+}) {
+  let [term, setTerm] = useState("");
+  let results = useCityMatch(term);
+
+  const handleChange = (event: any) => {
+    setTerm(event.target.value);
+  };
+
+  return (
+    <div>
+      <h2>Clientside Search</h2>
+      <Combobox id="holy-smokes" onSelect={onSelect}>
+        <ComboboxInput
+          aria-label="cool search"
+          data-testid="input"
+          name="awesome"
+          onChange={handleChange}
+        />
+        {results ? (
+          <ComboboxPopover portal={false}>
+            <p>
+              <button>Test focus</button>
+            </p>
+            <ComboboxList data-testid="list">
+              {results.slice(0, 10).map((result, index) => (
+                <ComboboxOption
+                  key={index}
+                  data-testid={`option-${index}`}
+                  value={`${result.city}, ${result.state}`}
+                  selectData={index}
                 />
               ))}
             </ComboboxList>
