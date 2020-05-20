@@ -8,7 +8,7 @@ https://reacttraining.com/reach-ui/
 
 ## Getting Started
 
-Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow their [install instructions](https://yarnpkg.com/docs/install) to get Yarn installed on your system.
+Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow their [install instructions](https://yarnpkg.com/getting-started/install) to get Yarn installed on your system.
 
 Then, run these commands:
 
