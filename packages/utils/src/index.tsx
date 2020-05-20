@@ -387,21 +387,21 @@ export function stateToAttributeString(state: any) {
  * state value and setter accordingly. If the component state is controlled by
  * the app, the setter is a noop.
  *
- * @param controlPropValue
+ * @param controlledValue
  * @param defaultValue
  */
 export function useControlledState<T = any>(
-  controlPropValue: T | undefined,
+  controlledValue: T | undefined,
   defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  let isControlled = useRef(controlPropValue != null);
+  let controlledRef = useRef(controlledValue != null);
   let [valueState, setValue] = useState(defaultValue);
   let set: React.Dispatch<React.SetStateAction<T>> = useCallback((n) => {
-    if (!isControlled.current) {
+    if (!controlledRef.current) {
       setValue(n);
     }
   }, []);
-  return [isControlled.current ? (controlPropValue as T) : valueState, set];
+  return [controlledRef.current ? (controlledValue as T) : valueState, set];
 }
 
 /**
@@ -411,41 +411,43 @@ export function useControlledState<T = any>(
  * A single prop should typically be used to determine whether or not a
  * component is controlled or not.
  *
- * @param controlPropValue
- * @param controlPropName
+ * @param controlledValue
+ * @param controlledPropName
  * @param componentName
  */
 let useControlledSwitchWarning: (
-  controlPropValue: any,
-  controlPropName: string,
+  controlledValue: any,
+  controlledPropName: string,
   componentName: string
 ) => void = noop;
 
 if (__DEV__) {
   useControlledSwitchWarning = function useControlledSwitchWarning(
-    controlPropValue,
-    controlPropName,
+    controlledValue,
+    controlledPropName,
     componentName
   ) {
-    let controlledRef = useRef(controlPropValue != null);
-    const nameCache = useRef({ componentName, controlPropName });
+    let controlledRef = useRef(controlledValue != null);
+    let nameCache = useRef({ componentName, controlledPropName });
     useEffect(() => {
-      nameCache.current = { componentName, controlPropName };
-    }, [componentName, controlPropName]);
+      nameCache.current = { componentName, controlledPropName };
+    }, [componentName, controlledPropName]);
 
     useEffect(() => {
-      let { componentName, controlPropName } = nameCache.current;
-      let isControlled = controlPropValue != null;
       let { current: wasControlled } = controlledRef;
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-    }, [controlPropValue]);
+      let { componentName, controlledPropName } = nameCache.current;
+      let isControlled = controlledValue != null;
+      if (wasControlled !== isControlled) {
+        console.error(
+          `A component is changing an ${
+            wasControlled ? "" : "un"
+          }controlled \`${controlledPropName}\` state of ${componentName} to be ${
+            wasControlled ? "un" : ""
+          }controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled ${componentName} element for the lifetime of the component.
+More info: https://fb.me/react-controlled-components`
+        );
+      }
+    }, [controlledValue]);
   };
 }
 
