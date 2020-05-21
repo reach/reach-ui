@@ -1,6 +1,6 @@
 {
   "name": "@reach/portal",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Declarative portals for React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "dist"
   ],
   "dependencies": {
-    "@reach/utils": "^0.10.2",
+    "@reach/utils": "^0.10.3",
     "tslib": "^1.11.2"
   }
 }

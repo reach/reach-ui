@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Accessible React Modal Dialog.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/portal": "^0.10.2",
-    "@reach/utils": "^0.10.2",
+    "@reach/portal": "^0.10.3",
+    "@reach/utils": "^0.10.3",
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.3.1",
     "react-remove-scroll": "^2.3.0",
