@@ -24,6 +24,7 @@
     "@reach/checkbox": "file:../packages/checkbox",
     "@reach/combobox": "file:../packages/combobox",
     "@reach/component-component": "file:../packages/component-component",
+    "@reach/descendants": "file:../packages/descendants",
     "@reach/dialog": "file:../packages/dialog",
     "@reach/disclosure": "file:../packages/disclosure",
     "@reach/listbox": "file:../packages/listbox",

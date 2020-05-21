@@ -73,7 +73,7 @@ export function useDescendantsInit<DescendantType extends Descendant>() {
 export function useDescendants<DescendantType extends Descendant>(
   ctx: React.Context<DescendantContextValue<DescendantType>>
 ) {
-  return React.useContext(ctx).descendants;
+  return useContext(ctx).descendants;
 }
 
 export function DescendantProvider<DescendantType extends Descendant>({
@@ -87,7 +87,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
   items: DescendantType[];
   set: React.Dispatch<React.SetStateAction<DescendantType[]>>;
 }) {
-  let registerDescendant = React.useCallback(
+  let registerDescendant = useCallback(
     ({
       element,
       index: explicitIndex,
