@@ -39,7 +39,7 @@
     "@reach/visually-hidden": "file:../packages/visually-hidden",
     "@reach/window-size": "file:../packages/window-size",
     "core-js": "^3.6.5",
-    "gatsby": "^2.20.28",
+    "gatsby": "^2.22.4",
     "gatsby-image": "^2.3.4",
     "gatsby-plugin-google-analytics": "^2.2.4",
     "gatsby-plugin-manifest": "^2.3.6",
