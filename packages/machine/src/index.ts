@@ -64,6 +64,7 @@ export function useMachine<
   // dynamic initial state values based on props.
   let machineRef = useRef(initialMachine);
   let service = useConstant(() => interpret(machineRef.current).start());
+  let lastEventType = useRef<TE["type"] | null>(null);
 
   let [state, setState] = useState(() => getServiceState(service));
 
@@ -79,7 +80,12 @@ export function useMachine<
     (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
       let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
       let refValues = unwrapRefs(refs);
-      service.send({ ...event, refs: refValues } as TE);
+      service.send({
+        ...event,
+        lastEventType: lastEventType.current,
+        refs: refValues,
+      } as TE);
+      lastEventType.current = event.type;
 
       if (__DEV__) {
         if (DEBUG) {
@@ -184,6 +190,7 @@ export interface MachineEventWithRefs extends MachineEvent {
   refs: {
     [key: string]: any;
   };
+  lastEventType?: MachineEventWithRefs["type"];
 }
 
 export type MachineToReactRefMap<TE extends MachineEventWithRefs> = {
