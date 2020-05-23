@@ -3,6 +3,7 @@ import {
   createNamedContext,
   noop,
   useIsomorphicLayoutEffect,
+  usePrevious,
 } from "@reach/utils";
 
 export function createDescendantContext<DescendantType extends Descendant>(
@@ -52,18 +53,44 @@ export function useDescendant<DescendantType extends Descendant>(
     context
   );
 
+  // This will initially return -1 because we haven't registered the descendant
+  // on the first render. After we register, this will then return the correct
+  // index on the following render and we will re-register descendants
+  // so that everything is up-to-date before the user interacts with a
+  // collection.
+  let index =
+    indexProp ??
+    descendants.findIndex((item) => item.element === descendant.element);
+
+  let previousDescendants = usePrevious(descendants);
+
+  // We also need to re-register descendants any time ANY of the other
+  // descendants have changed. My brain was melting when I wrote this and it
+  // feels a little off, but checking in render and using the result in the
+  // effect's dependency array works well enough.
+  let someDescendantsHaveChanged = descendants.some((descendant, index) => {
+    return descendant.element !== previousDescendants?.[index]?.element;
+  });
+
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
     if (!descendant.element) forceUpdate({});
-    registerDescendant({ ...descendant, index: indexProp } as any);
+    registerDescendant({
+      ...descendant,
+      index,
+    } as DescendantType);
     return () => unregisterDescendant(descendant.element);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...Object.values(descendant)]);
+  }, [
+    registerDescendant,
+    unregisterDescendant,
+    index,
+    someDescendantsHaveChanged,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ...Object.values(descendant),
+  ]);
 
-  return (
-    indexProp ??
-    descendants.findIndex((item) => item.element === descendant.element)
-  );
+  return index;
 }
 
 export function useDescendantsInit<DescendantType extends Descendant>() {
