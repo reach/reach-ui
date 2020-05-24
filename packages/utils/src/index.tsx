@@ -202,7 +202,7 @@ export function createNamedContext<ContextValueType>(
  * TODO: Eventually we should probably just try to get the type defs above
  * working across the board, but ain't nobody got time for that mess!
  *
- * @param Comp
+ * @param comp
  */
 export function forwardRefWithAs<Props, ComponentType extends As = "div">(
   comp: (
@@ -214,6 +214,17 @@ export function forwardRefWithAs<Props, ComponentType extends As = "div">(
     ComponentType,
     Props
   >;
+}
+
+/**
+ * Same deal as above
+ *
+ * @param comp
+ */
+export function memoWithAs<Props, ComponentType extends As = "div">(
+  comp: ComponentWithAs<ComponentType, Props>
+) {
+  return React.memo(comp) as ComponentWithAs<ComponentType, Props>;
 }
 
 /**

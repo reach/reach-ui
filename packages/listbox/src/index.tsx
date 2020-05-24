@@ -56,6 +56,7 @@ import {
   isRightClick,
   isString,
   makeId,
+  memoWithAs,
   useCallbackProp,
   useCheckStyles,
   useControlledSwitchWarning,
@@ -629,7 +630,7 @@ if (__DEV__) {
   };
 }
 
-export const ListboxButton = memo(ListboxButtonImpl);
+export const ListboxButton = memoWithAs(ListboxButtonImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
