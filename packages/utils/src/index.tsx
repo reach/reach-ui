@@ -208,7 +208,7 @@ export function forwardRefWithAs<Props, ComponentType extends As = "div">(
   comp: (
     props: PropsFromAs<ComponentType, Props>,
     ref: React.RefObject<any>
-  ) => React.ReactElement<Props, ComponentType> | null
+  ) => React.ReactElement
 ) {
   return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
     ComponentType,
