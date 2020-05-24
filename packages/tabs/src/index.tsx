@@ -45,6 +45,7 @@ import {
   isNumber,
   isFunction,
   makeId,
+  memoWithAs,
   noop,
   useControlledSwitchWarning,
   useControlledState,
@@ -388,7 +389,15 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   );
 });
 
-const TabList = memo(TabListImpl);
+if (__DEV__) {
+  TabListImpl.displayName = "TabList";
+  TabListImpl.propTypes = {
+    as: PropTypes.any,
+    children: PropTypes.node,
+  };
+}
+
+const TabList = memoWithAs(TabListImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist-props
@@ -406,11 +415,6 @@ export type TabListProps = {
 
 if (__DEV__) {
   TabList.displayName = "TabList";
-  TabListImpl.displayName = "TabList";
-  TabListImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
 }
 
 export { TabList };
@@ -577,7 +581,15 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   }
 );
 
-const TabPanels = memo(TabPanelsImpl);
+if (__DEV__) {
+  TabPanelsImpl.displayName = "TabPanels";
+  TabPanelsImpl.propTypes = {
+    as: PropTypes.any,
+    children: PropTypes.node,
+  };
+}
+
+const TabPanels = memoWithAs(TabPanelsImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels-props
@@ -586,11 +598,6 @@ export type TabPanelsProps = TabListProps & {};
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
-  TabPanelsImpl.displayName = "TabPanels";
-  TabPanelsImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
 }
 
 export { TabPanels };
