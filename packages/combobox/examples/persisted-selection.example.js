@@ -11,13 +11,13 @@ import { useThrottle } from "use-throttle";
 import cities from "./cities";
 import "@reach/combobox/styles.css";
 
-let name = "Basic";
+let name = "Persisted selection";
 
 function Example() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setTerm(event.target.value);
   };
 
@@ -31,7 +31,7 @@ function Example() {
             <p>
               <button>Hi</button>
             </p>
-            <ComboboxList>
+            <ComboboxList persistSelection>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
@@ -59,7 +59,7 @@ function useCityMatch(term) {
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`],
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

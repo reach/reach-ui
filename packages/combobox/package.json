@@ -15,6 +15,7 @@
   "dependencies": {
     "@reach/auto-id": "^0.10.3",
     "@reach/descendants": "^0.10.3",
+    "@reach/machine": "^0.10.3",
     "@reach/popover": "^0.10.3",
     "@reach/portal": "^0.10.3",
     "@reach/utils": "^0.10.3",

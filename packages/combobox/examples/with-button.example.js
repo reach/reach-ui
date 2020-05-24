@@ -34,7 +34,7 @@ function Example() {
         </ComboboxButton>
         {results && (
           <ComboboxPopover>
-            <ComboboxList>
+            <ComboboxList persistSelection>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
@@ -62,7 +62,7 @@ function useCityMatch(term) {
       throttledTerm.trim() === ""
         ? null
         : matchSorter(cities, throttledTerm, {
-            keys: [item => `${item.city}, ${item.state}`],
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     [throttledTerm]
   );

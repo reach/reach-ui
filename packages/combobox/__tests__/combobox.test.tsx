@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, act, withMarkup, userEvent } from "$test/utils";
+import { render, withMarkup, userEvent, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import {
@@ -27,13 +27,12 @@ describe("<Combobox />", () => {
           <div>
             <Combobox data-testid="box" as="span">
               <ComboboxInput
-                data-testid="input"
-                as="textarea"
                 onChange={(event: any) => setTerm(event.target.value)}
+                as="textarea"
               />
               {results ? (
                 <ComboboxPopover portal={false}>
-                  <ComboboxList data-testid="list" as="div">
+                  <ComboboxList as="div">
                     {showOpts(results, ({ result, index }) => (
                       <ComboboxOption
                         as="div"
@@ -49,22 +48,20 @@ describe("<Combobox />", () => {
         );
       }
 
-      let { getByTestId, getAllByRole } = render(<MyCombobox />);
+      let { getByTestId, getByRole, getAllByRole } = render(<MyCombobox />);
       expect(getByTestId("box").tagName).toBe("SPAN");
-      expect(getByTestId("input").tagName).toBe("TEXTAREA");
+      expect(getByRole("combobox").tagName).toBe("TEXTAREA");
 
       // Type to show the list
-      act(() => {
-        userEvent.type(getByTestId("input"), "e");
-        jest.advanceTimersByTime(100);
-      });
+      userEvent.type(getByRole("combobox"), "e");
+      jest.advanceTimersByTime(100);
 
-      expect(getByTestId("list").tagName).toBe("DIV");
+      expect(getByRole("listbox").tagName).toBe("DIV");
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
     });
 
     it("renders when using the useComboboxContext hook", () => {
-      function CustomComboboxInput(props: ComboboxInputProps) {
+      function CustomComboboxInput(props: any) {
         const { isExpanded } = useComboboxContext();
         return (
           <ComboboxInput
@@ -75,32 +72,36 @@ describe("<Combobox />", () => {
       }
 
       function MyCombobox() {
+        let [term, setTerm] = useState("");
+        let results =
+          term.trim() === ""
+            ? null
+            : matchSorter(["Apple", "Banana", "Orange"], term);
         return (
-          <Combobox data-testid="box">
+          <Combobox>
             <CustomComboboxInput
-              data-testid="input"
               aria-labelledby="choose-a-fruit"
+              onChange={(event: any) => setTerm(event.target.value)}
             />
-            <ComboboxPopover>
-              <ComboboxList data-testid="list">
-                <ComboboxOption value="Apple" />
-                <ComboboxOption value="Banana" />
-                <ComboboxOption value="Orange" />
-              </ComboboxList>
-            </ComboboxPopover>
+            {results && results.length && (
+              <ComboboxPopover>
+                <ComboboxList>
+                  {results.map((result, index) => (
+                    <ComboboxOption key={index} value={result} />
+                  ))}
+                </ComboboxList>
+              </ComboboxPopover>
+            )}
           </Combobox>
         );
       }
 
-      let { getByTestId, getAllByRole } = render(<MyCombobox />);
+      let { getByRole, getAllByRole } = render(<MyCombobox />);
 
-      // Type to show the list
-      act(() => {
-        userEvent.type(getByTestId("input"), "a");
-        jest.advanceTimersByTime(100);
-      });
+      userEvent.type(getByRole("combobox"), "a");
+      jest.advanceTimersByTime(100);
 
-      expect(getByTestId("list")).toBeTruthy();
+      expect(getByRole("listbox")).toBeTruthy();
       expect(getAllByRole("option")[0]).toBeTruthy();
     });
   });
@@ -110,9 +111,7 @@ describe("<Combobox />", () => {
       jest.useRealTimers();
       let { container } = render(<BasicCombobox />);
       let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
+      results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
@@ -216,16 +215,58 @@ describe("<Combobox />", () => {
     it("should open a list on text entry", () => {
       jest.useFakeTimers();
       let optionToSelect = "Eagle Pass, Texas";
-      let { getByTestId, getByText } = render(<BasicCombobox />);
+      let { getByRole, getByText } = render(<BasicCombobox />);
       let getByTextWithMarkup = withMarkup(getByText);
-      let input = getByTestId("input");
-      act(() => {
-        userEvent.type(input, "e");
-        jest.advanceTimersByTime(100);
-      });
-      expect(getByTestId("list")).toBeInTheDocument();
+      let input = getByRole("combobox");
+
+      userEvent.type(input, "e");
+      jest.advanceTimersByTime(100);
+
+      expect(getByRole("listbox")).toBeInTheDocument();
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
     });
+
+    // it("should persistSelection when a value is set", () => {
+    //   jest.useFakeTimers();
+    //   let { getByRole } = render(<MyCombobox />);
+
+    //   function MyCombobox() {
+    //     let [term, setTerm] = useState("");
+    //     let results =
+    //       term.trim() === ""
+    //         ? null
+    //         : matchSorter(["Apple", "Banana", "Orange"], term);
+    //     return (
+    //       <Combobox>
+    //         <ComboboxInput
+    //           aria-labelledby="choose-a-fruit"
+    //           onChange={(event: any) => setTerm(event.target.value)}
+    //         />
+    //         {results && results.length && (
+    //           <ComboboxPopover>
+    //             <ComboboxList>
+    //               {results.map((result, index) => (
+    //                 <ComboboxOption key={index} value={result} />
+    //               ))}
+    //             </ComboboxList>
+    //           </ComboboxPopover>
+    //         )}
+    //       </Combobox>
+    //     );
+    //   }
+
+    //   let input = getByRole("combobox");
+
+    //   // TODO: This test fails. No idea why. This sequence works fine IRL.
+    //   // Someone fix it for me plz.
+    //   userEvent.type(input, "A");
+    //   jest.advanceTimersByTime(100);
+    //   fireEvent.keyDown(input, { key: "ArrowDown", code: 40 });
+    //   fireEvent.keyDown(input, { key: "Enter", code: 13 });
+    //   jest.advanceTimersByTime(100);
+    //   expect(input).toHaveValue("Apple");
+    //   expect(true).toBeTruthy();
+    // });
   });
 });
 
@@ -244,7 +285,6 @@ function BasicCombobox() {
       <Combobox id="holy-smokes">
         <ComboboxInput
           aria-label="cool search"
-          data-testid="input"
           name="awesome"
           onChange={handleChange}
         />
@@ -253,7 +293,7 @@ function BasicCombobox() {
             <p>
               <button>Test focus</button>
             </p>
-            <ComboboxList data-testid="list">
+            <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
                   key={index}
@@ -274,7 +314,7 @@ function useCityMatch(term: string) {
   return term.trim() === ""
     ? null
     : matchSorter(cities, term, {
-        keys: [item => `${item.city}, ${item.state}`],
+        keys: [(item) => `${item.city}, ${item.state}`],
       });
 }
 

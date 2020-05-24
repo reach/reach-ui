@@ -25,8 +25,6 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useReducer,
-  useState,
 } from "react";
 import PropTypes from "prop-types";
 import {
@@ -41,7 +39,9 @@ import {
   useUpdateEffect,
   wrapEvent,
   noop,
+  DistributiveOmit,
 } from "@reach/utils";
+import { useCreateMachine, useMachine, StateMachine } from "@reach/machine";
 import {
   createDescendantContext,
   Descendant,
@@ -53,196 +53,15 @@ import {
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
+import {
+  createMachineDefinition,
+  ComboboxStateData,
+  ComboboxEvents,
+  ComboboxEvent,
+  ComboboxStates,
+} from "./machine";
 
-////////////////////////////////////////////////////////////////////////////////
-// States
-
-// Nothing going on, waiting for the user to type or use the arrow keys
-const IDLE = "IDLE";
-
-// The component is suggesting options as the user types
-const SUGGESTING = "SUGGESTING";
-
-// The user is using the keyboard to navigate the list, not typing
-const NAVIGATING = "NAVIGATING";
-
-// The user is interacting with arbitrary elements inside the popup that
-// are not ComboboxInputs
-const INTERACTING = "INTERACTING";
-
-////////////////////////////////////////////////////////////////////////////////
-// Events
-
-// User cleared the value w/ backspace, but input still has focus
-const CLEAR = "CLEAR";
-
-// User is typing
-const CHANGE = "CHANGE";
-
-// Initial input value change handler for syncing user state with state machine
-// Prevents initial change from sending the user to the NAVIGATING state
-// https://github.com/reach/reach-ui/issues/464
-const INITIAL_CHANGE = "INITIAL_CHANGE";
-
-// User is navigating w/ the keyboard
-const NAVIGATE = "NAVIGATE";
-
-// User can be navigating with keyboard and then click instead, we want the
-// value from the click, not the current nav item
-const SELECT_WITH_KEYBOARD = "SELECT_WITH_KEYBOARD";
-const SELECT_WITH_CLICK = "SELECT_WITH_CLICK";
-
-// Pretty self-explanatory, user can hit escape or blur to close the popover
-const ESCAPE = "ESCAPE";
-const BLUR = "BLUR";
-
-// The user left the input to interact with arbitrary elements inside the popup
-const INTERACT = "INTERACT";
-
-const FOCUS = "FOCUS";
-
-const OPEN_WITH_BUTTON = "OPEN_WITH_BUTTON";
-
-const CLOSE_WITH_BUTTON = "CLOSE_WITH_BUTTON";
-
-////////////////////////////////////////////////////////////////////////////////
-const stateChart: StateChart = {
-  initial: IDLE,
-  states: {
-    [IDLE]: {
-      on: {
-        [BLUR]: IDLE,
-        [CLEAR]: IDLE,
-        [CHANGE]: SUGGESTING,
-        [INITIAL_CHANGE]: IDLE,
-        [FOCUS]: SUGGESTING,
-        [NAVIGATE]: NAVIGATING,
-        [OPEN_WITH_BUTTON]: SUGGESTING,
-      },
-    },
-    [SUGGESTING]: {
-      on: {
-        [CHANGE]: SUGGESTING,
-        [FOCUS]: SUGGESTING,
-        [NAVIGATE]: NAVIGATING,
-        [CLEAR]: IDLE,
-        [ESCAPE]: IDLE,
-        [BLUR]: IDLE,
-        [SELECT_WITH_CLICK]: IDLE,
-        [INTERACT]: INTERACTING,
-        [CLOSE_WITH_BUTTON]: IDLE,
-      },
-    },
-    [NAVIGATING]: {
-      on: {
-        [CHANGE]: SUGGESTING,
-        [FOCUS]: SUGGESTING,
-        [CLEAR]: IDLE,
-        [BLUR]: IDLE,
-        [ESCAPE]: IDLE,
-        [NAVIGATE]: NAVIGATING,
-        [SELECT_WITH_CLICK]: IDLE,
-        [SELECT_WITH_KEYBOARD]: IDLE,
-        [CLOSE_WITH_BUTTON]: IDLE,
-        [INTERACT]: INTERACTING,
-      },
-    },
-    [INTERACTING]: {
-      on: {
-        [CLEAR]: IDLE,
-        [CHANGE]: SUGGESTING,
-        [FOCUS]: SUGGESTING,
-        [BLUR]: IDLE,
-        [ESCAPE]: IDLE,
-        [NAVIGATE]: NAVIGATING,
-        [CLOSE_WITH_BUTTON]: IDLE,
-        [SELECT_WITH_CLICK]: IDLE,
-      },
-    },
-  },
-};
-
-const reducer: Reducer = (data: StateData, event: MachineEvent) => {
-  const nextState = { ...data, lastEventType: event.type };
-  switch (event.type) {
-    case CHANGE:
-    case INITIAL_CHANGE:
-      return {
-        ...nextState,
-        navigationValue: null,
-        value: event.value,
-      };
-    case NAVIGATE:
-    case OPEN_WITH_BUTTON:
-      return {
-        ...nextState,
-        navigationValue: findNavigationValue(nextState, event),
-      };
-    case CLEAR:
-      return {
-        ...nextState,
-        value: "",
-        navigationValue: null,
-      };
-    case BLUR:
-    case ESCAPE:
-      return {
-        ...nextState,
-        navigationValue: null,
-      };
-    case SELECT_WITH_CLICK:
-      return {
-        ...nextState,
-        value: event.value,
-        navigationValue: null,
-      };
-    case SELECT_WITH_KEYBOARD:
-      return {
-        ...nextState,
-        value: data.navigationValue,
-        navigationValue: null,
-      };
-    case CLOSE_WITH_BUTTON:
-      return {
-        ...nextState,
-        navigationValue: null,
-      };
-    case INTERACT:
-      return nextState;
-    case FOCUS:
-      return {
-        ...nextState,
-        navigationValue: findNavigationValue(nextState, event),
-      };
-
-    default:
-      return nextState;
-  }
-};
-
-function popoverIsExpanded(state: State) {
-  return [SUGGESTING, NAVIGATING, INTERACTING].includes(state);
-}
-
-/**
- * When we open a list, set the navigation value to the value in the input, if
- * it's in the list, then it'll automatically be highlighted.
- *
- * @param stateData
- * @param event
- */
-function findNavigationValue(stateData: StateData, event: MachineEvent) {
-  // @ts-ignore
-  if (event.value) {
-    // @ts-ignore
-    return event.value;
-    // @ts-ignore
-  } else if (event.persistSelection) {
-    return stateData.value;
-  } else {
-    return null;
-  }
-}
+const DEBUG = false;
 
 const ComboboxDescendantContext = createDescendantContext<ComboboxDescendant>(
   "ComboboxDescendantContext"
@@ -282,43 +101,55 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   ) {
     let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
 
-    // Need this to focus it
-    const inputRef = useRef();
-
-    const popoverRef = useRef();
-
-    const buttonRef = useRef();
+    let inputRef = useRef<HTMLInputElement | null>(null);
+    let popoverRef = useRef<HTMLElement | null>(null);
+    let buttonRef = useRef<HTMLElement | null>(null);
 
     // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
     // the user's value while navigating (because it's always the user's value),
     // but we need to know this in useKeyDown which is far away from the prop
     // here, so we do something sneaky and write it to this ref on context so we
-    // can use it anywhere else 😛. Another new trick for me and I'm excited
-    // about this one too!
-    const autocompletePropRef = useRef();
+    // can use it anywhere else!
+    let autocompletePropRef = useRef();
 
-    const persistSelectionRef = useRef();
+    let persistSelectionRef = useRef(false);
 
-    const defaultData: StateData = {
-      // The value the user has typed. We derive this also when the developer is
-      // controlling the value of ComboboxInput.
-      value: "",
-      // the value the user has navigated to with the keyboard
-      navigationValue: null,
-    };
-
-    const [state, data, transition] = useReducerMachine(
-      stateChart,
-      reducer,
-      defaultData
+    let machine = useCreateMachine(
+      createMachineDefinition({
+        // The value the user has typed. We derive this also when the developer is
+        // controlling the value of ComboboxInput.
+        value: "",
+      })
     );
 
-    useFocusManagement(data.lastEventType, inputRef);
+    let [{ value, context: data }, send] = useMachine(
+      machine,
+      {
+        input: inputRef,
+      },
+      DEBUG
+    );
 
-    const id = useId(props.id);
-    const listboxId = id ? makeId("listbox", id) : "listbox";
+    // TODO: PR a fix in xstate/fsm types
+    let state = value as ComboboxStates;
 
-    const context: InternalComboboxContextValue = {
+    // useLayoutEffect so that the cursor goes to the end of the input instead
+    // of awkwardly at the beginning, unclear to me why 🤷‍♂️
+    // useIsomorphicLayoutEffect(() => {
+    //   if (
+    //     lastEventType === NAVIGATE ||
+    //     lastEventType === ESCAPE ||
+    //     lastEventType === SELECT_WITH_CLICK ||
+    //     lastEventType === OPEN_WITH_BUTTON
+    //   ) {
+    //     inputRef.current?.focus();
+    //   }
+    // }, [lastEventType]);
+
+    let id = useId(props.id);
+    let listboxId = id ? makeId("listbox", id) : "listbox";
+
+    let context: InternalComboboxContextValue = {
       ariaLabel,
       ariaLabelledby,
       autocompletePropRef,
@@ -333,7 +164,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       persistSelectionRef,
       popoverRef,
       state,
-      transition,
+      send,
     };
 
     useEffect(() => checkStyles("combobox"), []);
@@ -409,7 +240,7 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput
  */
-export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
+const ComboboxInputImpl = forwardRefWithAs<ComboboxInputProps, "input">(
   function ComboboxInput(
     {
       as: Comp = "input",
@@ -433,10 +264,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     }, [controlledValue]);
 
     let {
-      data: { navigationValue, value, lastEventType },
+      data: { navigationValue, value },
       inputRef,
       state,
-      transition,
+      send,
       listboxId,
       autocompletePropRef,
       openOnFocus,
@@ -464,20 +295,20 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = useCallback(
+    let handleValueChange = useCallback(
       (value: ComboboxValue) => {
         if (value.trim() === "") {
-          transition(CLEAR);
+          send(ComboboxEvents.Clear);
         } else if (
           value === initialControlledValue &&
           !controlledValueChangedRef.current
         ) {
-          transition(INITIAL_CHANGE, { value });
+          send({ type: ComboboxEvents.InitialChange, value });
         } else {
-          transition(CHANGE, { value });
+          send({ type: ComboboxEvents.Change, value });
         }
       },
-      [initialControlledValue, transition]
+      [initialControlledValue, send]
     );
 
     useEffect(() => {
@@ -498,7 +329,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     // user types, instead the developer controls it with the normal input
     // onChange prop
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-      const { value } = event.target;
+      let { value } = event.target;
       if (!isControlled) {
         handleValueChange(value);
       }
@@ -508,13 +339,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       if (selectOnClick) {
         selectOnClickRef.current = true;
       }
-
-      // If we select an option with click, useFocusManagement will focus the
-      // input, in those cases we don't want to cause the menu to open back up,
-      // so we guard behind these states.
-      if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
-        transition(FOCUS);
-      }
+      send({ type: ComboboxEvents.Focus, openOnFocus });
     }
 
     function handleClick() {
@@ -524,8 +349,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       }
     }
 
-    const inputValue =
-      autocomplete && (state === NAVIGATING || state === INTERACTING)
+    let inputValue =
+      autocomplete &&
+      (state === ComboboxStates.Navigating ||
+        state === ComboboxStates.Interacting)
         ? // When idle, we don't have a navigationValue on ArrowUp/Down
           navigationValue || controlledValue || value
         : controlledValue || value;
@@ -555,6 +382,12 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     );
   }
 );
+
+if (__DEV__) {
+  ComboboxInputImpl.displayName = "ComboboxInput";
+}
+
+export const ComboboxInput = React.memo(ComboboxInputImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-props
@@ -591,10 +424,6 @@ export type ComboboxInputProps = {
   value?: ComboboxValue;
 };
 
-if (__DEV__) {
-  ComboboxInput.displayName = "ComboboxInput";
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -606,19 +435,19 @@ if (__DEV__) {
  *
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover
  */
-export const ComboboxPopover = forwardRef<
+const ComboboxPopoverImpl = forwardRef<
   HTMLDivElement,
   ComboboxPopoverProps & Partial<PopoverProps>
 >(function ComboboxPopover(
   { children, portal = true, onKeyDown, onBlur, ...props },
   forwardedRef: React.Ref<any>
 ) {
-  const { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
-  const ref = useForkedRef(popoverRef, forwardedRef);
-  const handleKeyDown = useKeyDown();
-  const handleBlur = useBlur();
+  let { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
+  let ref = useForkedRef(popoverRef, forwardedRef);
+  let handleKeyDown = useKeyDown();
+  let handleBlur = useBlur();
 
-  const sharedProps = {
+  let sharedProps = {
     "data-reach-combobox-popover": "",
     onKeyDown: wrapEvent<any>(onKeyDown, handleKeyDown),
     onBlur: wrapEvent<any>(onBlur, handleBlur),
@@ -647,8 +476,10 @@ export const ComboboxPopover = forwardRef<
 });
 
 if (__DEV__) {
-  ComboboxPopover.displayName = "ComboboxPopover";
+  ComboboxPopoverImpl.displayName = "ComboboxPopover";
 }
+
+export const ComboboxPopover = React.memo(ComboboxPopoverImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-props
@@ -686,11 +517,11 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
     },
     forwardedRef
   ) {
-    const { persistSelectionRef, listboxId } = useContext(ComboboxContext);
+    let { persistSelectionRef, listboxId } = useContext(ComboboxContext);
 
-    if (persistSelection) {
-      persistSelectionRef.current = true;
-    }
+    React.useEffect(() => {
+      persistSelectionRef.current = persistSelection;
+    }, [persistSelectionRef, persistSelection]);
 
     return (
       <Comp
@@ -742,10 +573,10 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     { as: Comp = "li", children, value, onClick, ...props },
     forwardedRef: React.Ref<any>
   ) {
-    const {
+    let {
       onSelect,
       data: { navigationValue },
-      transition,
+      send,
     } = useContext(ComboboxContext);
 
     let ownRef = useRef<HTMLElement | null>(null);
@@ -759,12 +590,12 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
       ComboboxDescendantContext
     );
 
-    const isActive = navigationValue === value;
+    let isActive = navigationValue === value;
 
-    const handleClick = () => {
+    function handleClick() {
       onSelect && onSelect(value);
-      transition(SELECT_WITH_CLICK, { value });
-    };
+      send({ type: ComboboxEvents.SelectWithClick, value });
+    }
 
     return (
       <OptionContext.Provider value={{ value, index }}>
@@ -838,12 +669,12 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoptiontext
  */
 export function ComboboxOptionText() {
-  const { value } = useContext(OptionContext);
-  const {
+  let { value } = useContext(OptionContext);
+  let {
     data: { value: contextValue },
   } = useContext(ComboboxContext);
 
-  const results = useMemo(
+  let results = useMemo(
     () =>
       findAll({
         searchWords: escapeRegexp(contextValue || "").split(/\s+/),
@@ -856,7 +687,7 @@ export function ComboboxOptionText() {
     <>
       {results.length
         ? results.map((result, index) => {
-            const str = value.slice(result.start, result.end);
+            let str = value.slice(result.start, result.end);
             return (
               <span
                 key={index}
@@ -883,23 +714,66 @@ if (__DEV__) {
  */
 export const ComboboxButton = forwardRefWithAs<{}, "button">(
   function ComboboxButton(
-    { as: Comp = "button", onClick, onKeyDown, ...props },
+    {
+      as: Comp = "button",
+      onClick,
+      onKeyDown,
+      onMouseDown,
+      onTouchStart,
+      ...props
+    },
     forwardedRef
   ) {
-    const { transition, state, buttonRef, listboxId, isExpanded } = useContext(
-      ComboboxContext
-    );
-    const ref = useForkedRef(buttonRef, forwardedRef);
+    let {
+      send,
+      buttonRef,
+      listboxId,
+      isExpanded,
+      persistSelectionRef,
+      state,
+    } = useContext(ComboboxContext);
+    let ref = useForkedRef(buttonRef, forwardedRef);
 
-    const handleKeyDown = useKeyDown();
+    // When a user starts clicking the button, the blur event fires and closes
+    // the popover if it's open. When a click finishes, the next click event
+    // fires then reopens the menu. So we'll track the click in this pointer
+    // and only fire the ClickButton event when the click is intended.
+    let clickStarted = React.useRef(false);
 
-    const handleClick = () => {
-      if (state === IDLE) {
-        transition(OPEN_WITH_BUTTON);
-      } else {
-        transition(CLOSE_WITH_BUTTON);
+    function handleMouseDown() {
+      if (state !== ComboboxStates.Idle) {
+        clickStarted.current = true;
       }
-    };
+    }
+
+    let handleKeyDown = useKeyDown();
+
+    function handleClick() {
+      if (!clickStarted.current) {
+        send({
+          type: ComboboxEvents.ClickButton,
+          persistSelection: persistSelectionRef.current,
+        });
+      }
+      clickStarted.current = false;
+    }
+
+    useEffect(() => {
+      window.addEventListener("mouseup", handler);
+      window.addEventListener("touchend", handler);
+      function handler(event: any) {
+        if (
+          event.target !== buttonRef.current &&
+          !buttonRef.current?.contains(event.target)
+        ) {
+          clickStarted.current = false;
+        }
+      }
+      return () => {
+        window.removeEventListener("mouseup", handler);
+        window.removeEventListener("touchend", handler);
+      };
+    }, [buttonRef]);
 
     return (
       <Comp
@@ -911,6 +785,8 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
         ref={ref}
         onClick={wrapEvent(onClick, handleClick)}
         onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+        onTouchStart={wrapEvent(onTouchStart, handleMouseDown)}
       />
     );
   }
@@ -923,48 +799,20 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Move focus back to the input if we start navigating w/ the
- * keyboard after focus has moved to any focusable content in
- * the popup.
- *
- * @param lastEventType
- * @param inputRef
- */
-function useFocusManagement(
-  lastEventType: MachineEventType | undefined,
-  inputRef: React.MutableRefObject<any>
-) {
-  // useLayoutEffect so that the cursor goes to the end of the input instead
-  // of awkwardly at the beginning, unclear to me why 🤷‍♂️
-  //
-  // Should be safe to use here since we're just focusing an input.
-  useIsomorphicLayoutEffect(() => {
-    if (
-      lastEventType === NAVIGATE ||
-      lastEventType === ESCAPE ||
-      lastEventType === SELECT_WITH_CLICK ||
-      lastEventType === OPEN_WITH_BUTTON
-    ) {
-      inputRef.current.focus();
-    }
-  }, [inputRef, lastEventType]);
-}
-
-/**
  * We want the same events when the input or the popup have focus (HOW COOL ARE
  * HOOKS BTW?) This is probably the hairiest piece but it's not bad.
  */
 function useKeyDown() {
-  const {
+  let {
     data: { navigationValue },
     onSelect,
     state,
-    transition,
+    send,
     autocompletePropRef,
     persistSelectionRef,
   } = useContext(ComboboxContext);
 
-  const options = useDescendants(ComboboxDescendantContext);
+  let options = useDescendants(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
@@ -1024,14 +872,18 @@ function useKeyDown() {
           return;
         }
 
-        if (state === IDLE) {
+        if (state === ComboboxStates.Idle) {
           // Opening a closed list
-          transition(NAVIGATE, {
+          send({
+            type: ComboboxEvents.Navigate,
             persistSelection: persistSelectionRef.current,
           });
         } else {
           let next = getNextOption();
-          transition(NAVIGATE, { value: next ? next.value : null });
+          send({
+            type: ComboboxEvents.Navigate,
+            value: next ? next.value : null,
+          });
         }
         break;
 
@@ -1043,11 +895,17 @@ function useKeyDown() {
           return;
         }
 
-        if (state === IDLE) {
-          transition(NAVIGATE);
+        if (state === ComboboxStates.Idle) {
+          send({
+            type: ComboboxEvents.Navigate,
+            persistSelection: persistSelectionRef.current,
+          });
         } else {
           let prev = getPreviousOption();
-          transition(NAVIGATE, { value: prev ? prev.value : null });
+          send({
+            type: ComboboxEvents.Navigate,
+            value: prev ? prev.value : null,
+          });
         }
         break;
 
@@ -1059,10 +917,13 @@ function useKeyDown() {
           return;
         }
 
-        if (state === IDLE) {
-          transition(NAVIGATE);
+        if (state === ComboboxStates.Idle) {
+          send(ComboboxEvents.Navigate);
         } else {
-          transition(NAVIGATE, { value: getFirstOption().value });
+          send({
+            type: ComboboxEvents.Navigate,
+            value: getFirstOption().value,
+          });
         }
         break;
 
@@ -1074,24 +935,22 @@ function useKeyDown() {
           return;
         }
 
-        if (state === IDLE) {
-          transition(NAVIGATE);
+        if (state === ComboboxStates.Idle) {
+          send(ComboboxEvents.Navigate);
         } else {
-          transition(NAVIGATE, { value: getLastOption().value });
+          send({ type: ComboboxEvents.Navigate, value: getLastOption().value });
         }
         break;
 
       case "Escape":
-        if (state !== IDLE) {
-          transition(ESCAPE);
-        }
+        send(ComboboxEvents.Escape);
         break;
       case "Enter":
-        if (state === NAVIGATING && navigationValue !== null) {
+        if (state === ComboboxStates.Navigating && navigationValue !== null) {
           // don't want to submit forms
           event.preventDefault();
           onSelect && onSelect(navigationValue);
-          transition(SELECT_WITH_KEYBOARD);
+          send(ComboboxEvents.SelectWithKeyboard);
         }
         break;
     }
@@ -1099,7 +958,7 @@ function useKeyDown() {
 }
 
 function useBlur() {
-  const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
+  let { state, send, popoverRef, inputRef, buttonRef } = useContext(
     ComboboxContext
   );
 
@@ -1114,59 +973,38 @@ function useBlur() {
       ) {
         if (popoverRef.current.contains(ownerDocument.activeElement)) {
           // focus landed inside the combobox, keep it open
-          if (state !== INTERACTING) {
-            transition(INTERACT);
+          if (state !== ComboboxStates.Interacting) {
+            send(ComboboxEvents.Interact);
           }
         } else {
           // focus landed outside the combobox, close it.
-          transition(BLUR);
+          send(ComboboxEvents.Blur);
         }
       }
     });
   };
 }
 
-/**
- * This manages transitions between states with a built in reducer to manage
- * the data that goes with those transitions.
- *
- * @param chart
- * @param reducer
- * @param initialData
- */
-function useReducerMachine(
-  chart: StateChart,
-  reducer: Reducer,
-  initialData: Partial<StateData>
-): [State, StateData, Transition] {
-  const [state, setState] = useState(chart.initial);
-  const [data, dispatch] = useReducer(reducer, initialData);
-
-  const transition: Transition = (event, payload = {}) => {
-    const currentState = chart.states[state];
-    const nextState = currentState && currentState.on[event];
-    if (nextState) {
-      dispatch({ type: event, state, nextState: state, ...payload });
-      setState(nextState);
-      return;
-    }
-  };
-
-  return [state, data, transition];
+function popoverIsExpanded(state: ComboboxStates) {
+  return [
+    ComboboxStates.Suggesting,
+    ComboboxStates.Navigating,
+    ComboboxStates.Interacting,
+  ].includes(state);
 }
 
 /**
- * We don't want to track the active descendant with indexes because nothing is
+ * We don't want to track the active descendant with indices because nothing is
  * more annoying in a combobox than having it change values RIGHT AS YOU HIT
  * ENTER. That only happens if you use the index as your data, rather than
  * *your data as your data*. We use this to generate a unique ID based on the
- * value of each item.  This function is short, sweet, and good enough™ (I also
+ * value of each item. This function is short, sweet, and good enough™ (I also
  * don't know how it works, tbqh)
  *
  * @see https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
  * @param str
  */
-const makeHash = (str: string) => {
+function makeHash(str: string) {
   let hash = 0;
   if (str.length === 0) {
     return hash;
@@ -1177,7 +1015,7 @@ const makeHash = (str: string) => {
     hash = hash & hash;
   }
   return hash;
-};
+}
 
 /**
  * Escape regexp special characters in `str`
@@ -1185,8 +1023,7 @@ const makeHash = (str: string) => {
  * @see https://github.com/component/escape-regexp/blob/5ce923c1510c9802b3da972c90b6861dd2829b6b/index.js
  * @param str
  */
-
-export function escapeRegexp(str: string) {
+function escapeRegexp(str: string) {
   return String(str).replace(/([.*+?=^!:${}()|[\]/\\])/g, "\\$1");
 }
 
@@ -1221,7 +1058,7 @@ export type ComboboxContextValue = {
   isExpanded: boolean;
 };
 
-type ComboboxDescendant = Descendant<HTMLElement> & {
+export type ComboboxDescendant = Descendant<HTMLElement> & {
   value: ComboboxValue;
 };
 
@@ -1236,7 +1073,7 @@ interface InternalComboboxContextValue {
   autocompletePropRef: React.MutableRefObject<any>;
   buttonRef: React.MutableRefObject<any>;
   comboboxId: string | undefined;
-  data: StateData;
+  data: ComboboxStateData;
   inputRef: React.MutableRefObject<any>;
   isExpanded: boolean;
   listboxId: string;
@@ -1244,68 +1081,11 @@ interface InternalComboboxContextValue {
   openOnFocus: boolean;
   persistSelectionRef: React.MutableRefObject<any>;
   popoverRef: React.MutableRefObject<any>;
-  state: State;
-  transition: Transition;
+  send: StateMachine.Service<
+    ComboboxStateData,
+    DistributiveOmit<ComboboxEvent, "refs">
+  >["send"];
+  state: ComboboxStates;
 }
 
-type Transition = (event: MachineEventType, payload?: any) => any;
-
-type ComboboxValue = string;
-
-type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
-
-type MachineEventType =
-  | "CLEAR"
-  | "CHANGE"
-  | "INITIAL_CHANGE"
-  | "NAVIGATE"
-  | "SELECT_WITH_KEYBOARD"
-  | "SELECT_WITH_CLICK"
-  | "ESCAPE"
-  | "BLUR"
-  | "INTERACT"
-  | "FOCUS"
-  | "OPEN_WITH_BUTTON"
-  | "CLOSE_WITH_BUTTON";
-
-interface StateChart {
-  initial: State;
-  states: {
-    [key in State]?: {
-      on: {
-        [key in MachineEventType]?: State;
-      };
-    };
-  };
-}
-
-type StateData = {
-  lastEventType?: MachineEventType;
-  navigationValue?: ComboboxValue | null;
-  value?: ComboboxValue | null;
-};
-
-type MachineEvent =
-  | { type: "BLUR" }
-  | { type: "CHANGE"; value: ComboboxValue }
-  | { type: "INITIAL_CHANGE"; value: ComboboxValue }
-  | { type: "CLEAR" }
-  | { type: "CLOSE_WITH_BUTTON" }
-  | { type: "ESCAPE" }
-  | { type: "FOCUS" }
-  | { type: "INTERACT" }
-  | {
-      type: "NAVIGATE";
-      persistSelection?: React.MutableRefObject<any>;
-      value: ComboboxValue;
-    }
-  | { type: "OPEN_WITH_BUTTON" }
-  | {
-      type: "SELECT_WITH_CLICK";
-      value: ComboboxValue;
-    }
-  | {
-      type: "SELECT_WITH_KEYBOARD";
-    };
-
-type Reducer = (data: StateData, event: MachineEvent) => StateData;
+export type ComboboxValue = string;
