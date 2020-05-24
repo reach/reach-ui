@@ -34,6 +34,7 @@ import {
   getOwnerDocument,
   isFunction,
   makeId,
+  memoWithAs,
   useIsomorphicLayoutEffect,
   useForkedRef,
   useUpdateEffect,
@@ -387,7 +388,7 @@ if (__DEV__) {
   ComboboxInputImpl.displayName = "ComboboxInput";
 }
 
-export const ComboboxInput = React.memo(ComboboxInputImpl);
+export const ComboboxInput = memoWithAs(ComboboxInputImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-props

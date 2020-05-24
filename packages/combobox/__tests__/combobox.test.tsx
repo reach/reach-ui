@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { render, withMarkup, userEvent, fireEvent } from "$test/utils";
+import { render, withMarkup, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import {
@@ -8,7 +8,6 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxPopover,
-  ComboboxInputProps,
   useComboboxContext,
 } from "@reach/combobox";
 import matchSorter from "match-sorter";
