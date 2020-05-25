@@ -246,7 +246,7 @@ export const createMachineDefinition = ({
         [ComboboxEvents.SelectWithKeyboard]: {
           target: ComboboxStates.Idle,
           actions: [
-            (ctx, event) => {
+            function handleOptionSelectWithKeyboard(_, event) {
               if (event.type === ComboboxEvents.SelectWithKeyboard) {
                 // don't want to submit forms
                 event.event.preventDefault();
