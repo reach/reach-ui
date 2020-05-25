@@ -248,7 +248,6 @@ export const createMachineDefinition = ({
           actions: [
             (ctx, event) => {
               if (event.type === ComboboxEvents.SelectWithKeyboard) {
-                console.log(ctx.navigationValue);
                 // don't want to submit forms
                 event.event.preventDefault();
                 event.navigationValue && event.onSelect(event.navigationValue);
