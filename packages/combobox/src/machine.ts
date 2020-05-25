@@ -25,10 +25,6 @@ export enum ComboboxEvents {
   Clear = "CLEAR",
   // User is typing
   Change = "CHANGE",
-  // Initial input value change handler for syncing user state with state
-  // machine. Prevents initial change from sending the user to the Navigating
-  // state.
-  InitialChange = "INITIAL_CHANGE",
   // User is navigating w/ the keyboard
   Navigate = "NAVIGATE",
   // User can be navigating with keyboard and then click instead, we want the
@@ -125,14 +121,19 @@ export const createMachineDefinition = ({
   states: {
     [ComboboxStates.Idle]: {
       on: {
-        [ComboboxEvents.Change]: {
-          target: ComboboxStates.Suggesting,
-          actions: [clearNavigationValue, setValue],
-        },
-        [ComboboxEvents.InitialChange]: {
-          target: ComboboxStates.Idle,
-          actions: [clearNavigationValue, setValue],
-        },
+        [ComboboxEvents.Change]: [
+          {
+            target: ComboboxStates.Idle,
+            actions: [clearNavigationValue, setValue],
+            cond: (_, event) =>
+              event.value === event.initialControlledValue &&
+              !event.controlledValueChanged,
+          },
+          {
+            target: ComboboxStates.Suggesting,
+            actions: [clearNavigationValue, setValue],
+          },
+        ],
         [ComboboxEvents.Blur]: {
           target: ComboboxStates.Idle,
           actions: [clearNavigationValue],
@@ -244,7 +245,19 @@ export const createMachineDefinition = ({
         },
         [ComboboxEvents.SelectWithKeyboard]: {
           target: ComboboxStates.Idle,
-          actions: [setValueFromNavigationValue, clearNavigationValue],
+          actions: [
+            (ctx, event) => {
+              if (event.type === ComboboxEvents.SelectWithKeyboard) {
+                console.log(ctx.navigationValue);
+                // don't want to submit forms
+                event.event.preventDefault();
+                event.navigationValue && event.onSelect(event.navigationValue);
+              }
+            },
+            setValueFromNavigationValue,
+            clearNavigationValue,
+          ],
+          cond: (ctx) => ctx.navigationValue !== null,
         },
         [ComboboxEvents.ClickButton]: {
           target: ComboboxStates.Idle,
@@ -333,8 +346,12 @@ export type ComboboxNodeRefs = {
 export type ComboboxEvent = ComboboxEventBase &
   (
     | { type: ComboboxEvents.Blur }
-    | { type: ComboboxEvents.Change; value: ComboboxValue }
-    | { type: ComboboxEvents.InitialChange; value: ComboboxValue }
+    | {
+        type: ComboboxEvents.Change;
+        value: ComboboxValue;
+        controlledValueChanged: boolean;
+        initialControlledValue?: ComboboxValue | undefined;
+      }
     | { type: ComboboxEvents.Clear }
     | { type: ComboboxEvents.Escape }
     | { type: ComboboxEvents.Focus; openOnFocus?: boolean }
@@ -351,5 +368,8 @@ export type ComboboxEvent = ComboboxEventBase &
       }
     | {
         type: ComboboxEvents.SelectWithKeyboard;
+        event: KeyboardEvent;
+        onSelect(value: ComboboxValue): any;
+        navigationValue: ComboboxValue | null | undefined;
       }
   );

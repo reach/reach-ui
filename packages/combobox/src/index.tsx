@@ -300,13 +300,13 @@ const ComboboxInputImpl = forwardRefWithAs<ComboboxInputProps, "input">(
       (value: ComboboxValue) => {
         if (value.trim() === "") {
           send(ComboboxEvents.Clear);
-        } else if (
-          value === initialControlledValue &&
-          !controlledValueChangedRef.current
-        ) {
-          send({ type: ComboboxEvents.InitialChange, value });
         } else {
-          send({ type: ComboboxEvents.Change, value });
+          send({
+            type: ComboboxEvents.Change,
+            value,
+            controlledValueChanged: controlledValueChangedRef.current,
+            initialControlledValue,
+          });
         }
       },
       [initialControlledValue, send]
@@ -873,19 +873,11 @@ function useKeyDown() {
           return;
         }
 
-        if (state === ComboboxStates.Idle) {
-          // Opening a closed list
-          send({
-            type: ComboboxEvents.Navigate,
-            persistSelection: persistSelectionRef.current,
-          });
-        } else {
-          let next = getNextOption();
-          send({
-            type: ComboboxEvents.Navigate,
-            value: next ? next.value : null,
-          });
-        }
+        send({
+          type: ComboboxEvents.Navigate,
+          value: getNextOption()?.value || null,
+          persistSelection: persistSelectionRef.current,
+        });
         break;
 
       // A lot of duplicate code with ArrowDown up next, I'm already over it.
@@ -896,18 +888,11 @@ function useKeyDown() {
           return;
         }
 
-        if (state === ComboboxStates.Idle) {
-          send({
-            type: ComboboxEvents.Navigate,
-            persistSelection: persistSelectionRef.current,
-          });
-        } else {
-          let prev = getPreviousOption();
-          send({
-            type: ComboboxEvents.Navigate,
-            value: prev ? prev.value : null,
-          });
-        }
+        send({
+          type: ComboboxEvents.Navigate,
+          value: getPreviousOption()?.value || null,
+          persistSelection: persistSelectionRef.current,
+        });
         break;
 
       case "Home":
@@ -918,14 +903,10 @@ function useKeyDown() {
           return;
         }
 
-        if (state === ComboboxStates.Idle) {
-          send(ComboboxEvents.Navigate);
-        } else {
-          send({
-            type: ComboboxEvents.Navigate,
-            value: getFirstOption().value,
-          });
-        }
+        send({
+          type: ComboboxEvents.Navigate,
+          value: getFirstOption().value,
+        });
         break;
 
       case "End":
@@ -936,23 +917,22 @@ function useKeyDown() {
           return;
         }
 
-        if (state === ComboboxStates.Idle) {
-          send(ComboboxEvents.Navigate);
-        } else {
-          send({ type: ComboboxEvents.Navigate, value: getLastOption().value });
-        }
+        send({
+          type: ComboboxEvents.Navigate,
+          value: getLastOption().value,
+        });
         break;
 
       case "Escape":
         send(ComboboxEvents.Escape);
         break;
       case "Enter":
-        if (state === ComboboxStates.Navigating && navigationValue !== null) {
-          // don't want to submit forms
-          event.preventDefault();
-          onSelect && onSelect(navigationValue);
-          send(ComboboxEvents.SelectWithKeyboard);
-        }
+        send({
+          type: ComboboxEvents.SelectWithKeyboard,
+          event: event.nativeEvent,
+          onSelect,
+          navigationValue,
+        });
         break;
     }
   };
