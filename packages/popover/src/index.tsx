@@ -241,7 +241,11 @@ function useSimulateTabNavigationForReactTree<
       elements && triggerRef.current
         ? elements.indexOf(triggerRef.current)
         : -1;
-    return elements && elements[targetIndex + 1];
+    const elementAfterTrigger = elements && elements[targetIndex + 1];
+    return popoverRef.current &&
+      popoverRef.current.contains(elementAfterTrigger || null)
+      ? false
+      : elementAfterTrigger;
   }
 
   function tabbedFromTriggerToPopover() {
