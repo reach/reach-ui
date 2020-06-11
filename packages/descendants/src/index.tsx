@@ -1,10 +1,12 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   noop,
   useIsomorphicLayoutEffect,
   usePrevious,
 } from "@reach/utils";
+
+const { useCallback, useContext, useMemo, useState } = React;
 
 export function createDescendantContext<DescendantType extends Descendant>(
   name: string,

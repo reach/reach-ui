@@ -24,18 +24,8 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
 
-import React, {
-  forwardRef,
-  Fragment,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { PopoverProps, positionMatchWidth } from "@reach/popover";
 import {
@@ -75,6 +65,18 @@ import {
 } from "./machine";
 
 const DEBUG = false;
+
+const {
+  forwardRef,
+  Fragment,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext

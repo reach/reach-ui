@@ -22,11 +22,13 @@
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
-import React, { forwardRef, useEffect, useRef, useMemo } from "react";
+import * as React from "react";
 import { render } from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
 import { getOwnerDocument, usePrevious, useForkedRef } from "@reach/utils";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
+
+const { forwardRef, useEffect, useRef, useMemo } = React;
 
 /*
  * Singleton state is fine because you don't server render
@@ -140,7 +142,7 @@ function renderAlerts() {
     window.clearTimeout(renderTimer);
   }
   renderTimer = window.setTimeout(() => {
-    Object.keys(elements).forEach(elementType => {
+    Object.keys(elements).forEach((elementType) => {
       let type: RegionTypes = elementType as RegionTypes;
       let container = liveRegions[type]!;
       if (container) {
@@ -157,7 +159,7 @@ function renderAlerts() {
               role={type === "assertive" ? "alert" : "status"}
               aria-live={type}
             >
-              {Object.keys(elements[type]).map(key =>
+              {Object.keys(elements[type]).map((key) =>
                 React.cloneElement(elements[type][key], {
                   key,
                   ref: null,

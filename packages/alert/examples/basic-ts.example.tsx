@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -28,8 +28,9 @@ function Example() {
         onClick={() =>
           dispatch({
             type: "ADD_MESSAGE",
-            payload: `${messageCount +
-              1}. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
+            payload: `${
+              messageCount + 1
+            }. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
           })
         }
       >

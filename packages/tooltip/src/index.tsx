@@ -42,14 +42,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
  */
 
-import React, {
-  Children,
-  cloneElement,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import { useId } from "@reach/auto-id";
 import {
   checkStyles,
@@ -64,7 +57,9 @@ import {
 import Portal from "@reach/portal";
 import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
+
+const { Children, cloneElement, Fragment, useEffect, useRef, useState } = React;
 
 export const MOUSE_REST_TIMEOUT = 100;
 export const LEAVE_TIMEOUT = 500;

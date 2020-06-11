@@ -18,17 +18,8 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
 
-import React, {
-  forwardRef,
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import {
   checkStyles,
   createNamedContext,
@@ -53,6 +44,17 @@ import {
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
 import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
+
+const {
+  forwardRef,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+  useMemo,
+  useReducer,
+  useState,
+} = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States

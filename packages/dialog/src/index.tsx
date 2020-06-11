@@ -10,7 +10,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
 
-import React, { forwardRef, useCallback, useEffect, useRef } from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 import {
   checkStyles,
@@ -22,13 +22,14 @@ import {
 } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 const overlayPropTypes = {
   initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
   onDismiss: PropTypes.func,
 };
+const { forwardRef, useCallback, useEffect, useRef } = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 

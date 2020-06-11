@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import { render, act, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -23,7 +23,7 @@ describe("<MenuButton />", () => {
       let { queryByRole } = render(
         <Menu>
           {(props) => (
-            <Fragment>
+            <>
               <MenuButton>
                 {props.isExpanded ? "Close" : "Open"} Actions
               </MenuButton>
@@ -31,7 +31,7 @@ describe("<MenuButton />", () => {
                 <MenuItem onSelect={jest.fn}>Download</MenuItem>
                 <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
               </MenuList>
-            </Fragment>
+            </>
           )}
         </Menu>
       );

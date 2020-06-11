@@ -16,15 +16,8 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
 
-import React, {
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  Children,
-} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import {
   createDescendantContext,
   Descendant,
@@ -55,6 +48,8 @@ import {
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
+
+const { useContext, useEffect, useMemo, useRef, useState, Children } = React;
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(
   "TabsDescendantsContext"

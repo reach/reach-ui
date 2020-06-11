@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { render, act, withMarkup, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -20,7 +20,7 @@ describe("<Combobox />", () => {
       jest.useFakeTimers();
 
       function MyCombobox() {
-        let [term, setTerm] = useState("");
+        let [term, setTerm] = React.useState("");
         let results = useCityMatch(term);
 
         return (
@@ -231,7 +231,7 @@ describe("<Combobox />", () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 function BasicCombobox() {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
   const handleChange = (event: any) => {
@@ -274,7 +274,7 @@ function useCityMatch(term: string) {
   return term.trim() === ""
     ? null
     : matchSorter(cities, term, {
-        keys: [item => `${item.city}, ${item.state}`],
+        keys: [(item) => `${item.city}, ${item.state}`],
       });
 }
 

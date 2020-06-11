@@ -31,13 +31,7 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, {
-  forwardRef,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import {
   checkStyles,
   createNamedContext,
@@ -52,7 +46,9 @@ import {
   useMixedCheckbox,
   UseMixedCheckboxProps,
 } from "./mixed";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
+
+const { forwardRef, useContext, useEffect, useRef, useState } = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 

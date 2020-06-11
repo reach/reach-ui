@@ -15,7 +15,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
 
-import React, { forwardRef, useContext, useRef, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   forwardRefWithAs,
@@ -25,13 +25,14 @@ import {
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
 
 const DisclosureContext = createNamedContext<IDisclosureContext>(
   "DisclosureContext",
   {} as IDisclosureContext
 );
 const useDisclosureContext = () => useContext(DisclosureContext);
+const { forwardRef, useContext, useRef, useState } = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 

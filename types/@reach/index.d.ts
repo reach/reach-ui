@@ -1,5 +1,5 @@
 declare module "@reach/component-component" {
-  import React from "react";
+  import * as React from "react";
   interface ComponentProps<
     State extends object = {},
     Refs extends object = {}

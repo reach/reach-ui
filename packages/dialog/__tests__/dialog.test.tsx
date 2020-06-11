@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import * as React from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
 import { axe, toHaveNoViolations } from "jest-axe";
 import { fireEvent, render, act, userEvent } from "$test/utils";
@@ -84,7 +84,7 @@ describe("<Dialog />", () => {
 });
 
 function BasicOpenDialog() {
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = React.useState(true);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

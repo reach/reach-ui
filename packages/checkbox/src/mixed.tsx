@@ -31,7 +31,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
-import React, { forwardRef, useEffect, useRef } from "react";
+import * as React from "react";
 import {
   useForkedRef,
   useIsomorphicLayoutEffect,
@@ -45,7 +45,9 @@ import {
   useCreateMachine,
   useMachine,
 } from "@reach/machine";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
+
+const { forwardRef, useEffect, useRef } = React;
 
 // Used for development only, not recommended for production code!
 const DEBUG = false;

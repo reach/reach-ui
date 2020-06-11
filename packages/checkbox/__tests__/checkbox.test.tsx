@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { axe } from "jest-axe";
 import {
   MixedCheckbox,
@@ -42,7 +42,7 @@ describe("<CustomCheckbox />", () => {
 });
 
 function BasicMixedCheckbox() {
-  const [checked, setChecked] = useState<boolean | "mixed">(true);
+  const [checked, setChecked] = React.useState<boolean | "mixed">(true);
   return (
     <div>
       <MixedCheckbox
@@ -50,7 +50,7 @@ function BasicMixedCheckbox() {
         id="whatever-input"
         value="whatever"
         checked={checked}
-        onChange={event => {
+        onChange={(event) => {
           setChecked(event.target.checked);
         }}
       />
@@ -85,14 +85,14 @@ function MyCustomCheckbox({
   checked: checkedProp,
   ...props
 }: CustomCheckboxInputProps & { checked?: boolean | "mixed" }) {
-  const [checkedState, setChecked] = useState<typeof checkedProp>(
+  const [checkedState, setChecked] = React.useState<typeof checkedProp>(
     checkedProp || false
   );
   const checked = checkedProp != null ? checkedProp : checkedState;
   return (
     <CustomCheckboxContainer
       checked={checked}
-      onChange={event => setChecked(event.target.checked)}
+      onChange={(event) => setChecked(event.target.checked)}
       style={{
         background: "rgba(240, 240, 250, 0.8)",
         border: "2px solid rgba(0, 0, 0, 0.8)",

@@ -10,7 +10,7 @@
  * @see Source   https://github.com/reach/reach-ui/tree/master/packages/visually-hidden
  */
 
-import React, { forwardRef } from "react";
+import * as React from "react";
 
 /**
  * VisuallyHidden
@@ -18,7 +18,7 @@ import React, { forwardRef } from "react";
  * Provides text for screen readers that is visually hidden.
  * It is the logical opposite of the `aria-hidden` attribute.
  */
-const VisuallyHidden = forwardRef<
+const VisuallyHidden = React.forwardRef<
   HTMLSpanElement,
   React.HTMLAttributes<HTMLSpanElement>
 >(function VisuallyHidden(props, ref) {
@@ -37,7 +37,7 @@ const VisuallyHidden = forwardRef<
 
         // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
         whiteSpace: "nowrap",
-        wordWrap: "normal"
+        wordWrap: "normal",
       }}
       {...props}
     />

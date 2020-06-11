@@ -11,17 +11,8 @@
  * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
 
-import React, {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
 import {
@@ -46,6 +37,17 @@ import {
   usePrevious,
   wrapEvent,
 } from "@reach/utils";
+
+const {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions

@@ -30,7 +30,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
  */
 
-import React, { forwardRef, useContext, useEffect, useRef } from "react";
+import * as React from "react";
 import {
   DialogOverlay,
   DialogContent,
@@ -44,13 +44,18 @@ import {
   makeId,
   useForkedRef,
 } from "@reach/utils";
-import invariant from "invariant";
-import PropTypes from "prop-types";
+import * as invariant_ from "invariant";
+import * as PropTypes from "prop-types";
+
+// Issue in rollup: https://github.com/rollup/rollup/issues/2554
+const invariant: invariant.InvariantStatic = invariant_;
 
 let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
   "AlertDialogContext",
   {} as AlertDialogContextValue
 );
+
+const { forwardRef, useContext, useEffect, useRef } = React;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -208,7 +213,7 @@ if (__DEV__) {
  */
 export const AlertDialogLabel: React.FC<React.HTMLAttributes<
   HTMLDivElement
->> = props => {
+>> = (props) => {
   const { labelId } = useContext(AlertDialogContext);
   return <div {...props} id={labelId} data-reach-alert-dialog-label />;
 };
@@ -231,7 +236,7 @@ if (__DEV__) {
  */
 export const AlertDialogDescription: React.FC<React.HTMLAttributes<
   HTMLDivElement
->> = props => {
+>> = (props) => {
   const { descriptionId } = useContext(AlertDialogContext);
   return (
     <div {...props} id={descriptionId} data-reach-alert-dialog-description />

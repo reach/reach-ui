@@ -1,15 +1,6 @@
 /* eslint-disable no-restricted-globals, eqeqeq  */
 
-import React, {
-  cloneElement,
-  createContext,
-  isValidElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import warning from "warning";
 import {
   As,
@@ -22,6 +13,17 @@ import {
   SingleOrArray,
   ThenArg,
 } from "./types";
+
+const {
+  cloneElement,
+  createContext,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} = React;
 
 /**
  * React currently throws a warning when using useLayoutEffect on the server.

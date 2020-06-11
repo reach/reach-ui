@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import * as React from "react";
 import { checkStyles } from "@reach/utils";
 
 // The user may want to provide their own ID (maybe there are multiple nav
@@ -20,7 +20,7 @@ export const SkipNavLink: React.FC<SkipNavLinkProps> = ({
   ...props
 }) => {
   let id = contentId || defaultId;
-  useEffect(() => checkStyles("skip-nav"), []);
+  React.useEffect(() => checkStyles("skip-nav"), []);
   return (
     <a
       {...props}

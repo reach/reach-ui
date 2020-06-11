@@ -8,8 +8,8 @@
  * @see Source                https://github.com/reach/reach-ui/tree/master/packages/rect
  */
 
-import React, { useRef, useState } from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import observeRect from "@reach/observe-rect";
 import { useIsomorphicLayoutEffect } from "@reach/utils";
 
@@ -25,7 +25,7 @@ export const Rect: React.FC<RectProps> = ({
   observe = true,
   children,
 }) => {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = React.useRef<HTMLElement | null>(null);
   const rect = useRect(ref, observe, onChange);
   return children({ ref, rect });
 };
@@ -91,9 +91,9 @@ export function useRect<T extends HTMLElement = HTMLElement>(
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
-  let initialRectSet = useRef(false);
-  let [rect, setRect] = useState<DOMRect | null>(null);
-  let observerRef = useRef<any>(null);
+  let initialRectSet = React.useRef(false);
+  let [rect, setRect] = React.useState<DOMRect | null>(null);
+  let observerRef = React.useRef<any>(null);
   useIsomorphicLayoutEffect(() => {
     const cleanup = () => {
       observerRef.current && observerRef.current.unobserve();

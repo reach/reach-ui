@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { axe } from "jest-axe";
 import { render, fireEvent, act } from "$test/utils";
 import { AxeResults } from "$test/types";
@@ -54,8 +54,8 @@ describe("<AlertDialog />", () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 function BasicAlertDialog() {
-  const close = useRef(null);
-  const [showDialog, setShowDialog] = useState(false);
+  const close = React.useRef(null);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

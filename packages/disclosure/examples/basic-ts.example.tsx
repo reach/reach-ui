@@ -1,8 +1,8 @@
-import React from "react";
+import * as React from "react";
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel
+  DisclosurePanel,
 } from "@reach/disclosure";
 
 let name = "Basic (TS)";

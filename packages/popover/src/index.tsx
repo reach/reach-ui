@@ -2,18 +2,21 @@
  * Welcome to @reach/popover!
  */
 
-import React, { useRef, forwardRef, useEffect } from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
 import { getOwnerDocument, useForkedRef } from "@reach/utils";
-import tabbable from "tabbable";
+import * as tabbable_ from "tabbable";
+
+// Issue in rollup: https://github.com/rollup/rollup/issues/2554
+const tabbable = tabbable_;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Popover
  */
-const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
+const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(function Popover(
   props,
   ref
 ) {
@@ -52,7 +55,7 @@ export default Popover;
  * Popover is conditionally rendered so we can't start measuring until it shows
  * up, so useRect needs to live down here not up in Popover
  */
-const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
+const PopoverImpl = React.forwardRef<HTMLDivElement, PopoverProps>(
   function PopoverImpl(
     {
       targetRef,
@@ -62,7 +65,7 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
     },
     forwardedRef
   ) {
-    const popoverRef = useRef<HTMLDivElement>(null);
+    const popoverRef = React.useRef<HTMLDivElement>(null);
     const popoverRect = useRect(popoverRef);
     const targetRect = useRect(targetRef);
     const ref = useForkedRef(popoverRef, forwardedRef);
@@ -222,7 +225,7 @@ function useSimulateTabNavigationForReactTree<
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ownerDocument) {
       ownerDocument.addEventListener("keydown", handleKeyDown);
       return () => {

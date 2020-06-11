@@ -4,6 +4,7 @@
   "compilerOptions": {
     "allowJs": false,
     "baseUrl": ".",
+    "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {
       "@reach/accordion": ["packages/accordion/src"],

@@ -11,7 +11,7 @@
  * @see React  https://reactjs.org/docs/portals.html
  */
 
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { useIsomorphicLayoutEffect } from "@reach/utils";
 import { createPortal } from "react-dom";
 
@@ -21,9 +21,9 @@ import { createPortal } from "react-dom";
  * @see Docs https://reacttraining.com/reach-ui/portal#portal
  */
 const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
-  let mountNode = useRef<HTMLDivElement | null>(null);
-  let portalNode = useRef<HTMLElement | null>(null);
-  let [, forceUpdate] = useState();
+  let mountNode = React.useRef<HTMLDivElement | null>(null);
+  let portalNode = React.useRef<HTMLElement | null>(null);
+  let [, forceUpdate] = React.useState();
 
   useIsomorphicLayoutEffect(() => {
     // This ref may be null when a hot-loader replaces components on the page

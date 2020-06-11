@@ -22,15 +22,8 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import PropTypes from "prop-types";
+import * as React from "react";
+import * as PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import {
   checkStyles,
@@ -49,6 +42,8 @@ import {
   wrapEvent,
   noop,
 } from "@reach/utils";
+
+const { useCallback, useContext, useEffect, useRef, useState } = React;
 
 // TODO: Remove in 1.0
 export type SliderAlignment = "center" | "contain";

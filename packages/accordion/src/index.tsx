@@ -8,15 +8,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  */
 
-import React, {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import {
   checkStyles,
   createNamedContext,
@@ -38,7 +30,17 @@ import {
   useDescendantsInit,
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
-import PropTypes from "prop-types";
+import * as PropTypes from "prop-types";
+
+const {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} = React;
 
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
   "AccordionDescendantContext"

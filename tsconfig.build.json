@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "declaration": true,
     "emitDecoratorMetadata": false,
-    "esModuleInterop": true,
     "experimentalDecorators": false,
     "importHelpers": true,
     "jsx": "react",
