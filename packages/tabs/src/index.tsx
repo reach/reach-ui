@@ -17,7 +17,6 @@
  */
 
 import React, {
-  memo,
   useContext,
   useEffect,
   useMemo,
