@@ -51,6 +51,21 @@ export type DistributiveOmit<
   Key extends PropertyKey
 > = BaseType extends any ? Omit<BaseType, Key> : never;
 
+/**
+ * Returns the type inferred by a promise's return value.
+ *
+ * @example
+ * async function getThing() {
+ *   // return type is a number
+ *   let result: number = await fetchValueSomewhere();
+ *   return result;
+ * }
+ *
+ * type Thing = ThenArg<ReturnType<typeof getThing>>;
+ * // number
+ */
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.
 // I kind of hacked around until I got this to work using some other projects,
@@ -85,21 +100,6 @@ export type ComponentWithForwardedRef<
     React.HTMLProps<React.ElementType<ElementType>> &
     React.ComponentPropsWithRef<ElementType>
 >;
-
-/**
- * Returns the type inferred by a promise's return value.
- *
- * @example
- * async function getThing() {
- *   // return type is a number
- *   let result: number = await fetchValueSomewhere();
- *   return result;
- * }
- *
- * type Thing = ThenArg<ReturnType<typeof getThing>>;
- * // number
- */
-export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 
 export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
   // These types are a bit of a hack, but cover us in cases where the `as` prop
