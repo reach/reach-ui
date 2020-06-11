@@ -619,15 +619,32 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       TabsContext
     );
     let ownRef = useRef<HTMLElement | null>(null);
-    let isMountedRef = useRef<boolean>(false);
 
     let index = useDescendant(
       { element: ownRef.current! },
       TabPanelDescendantsContext
     );
-    let isSelected = index === selectedIndex;
 
     let id = makeId(tabsId, "panel", index);
+
+    // Because useDescendant will always return -1 on the first render,
+    // `isSelected` will briefly be false for all tabs. We set a tab panel's
+    // hidden attribute based `isSelected` being false, meaning that all tabs
+    // are initially hidden. This makes it impossible for consumers to do
+    // certain things, like focus an element inside the active tab panel when
+    // the page loads. So what we can do is track that a panel is "ready" to be
+    // hidden once effects are run (descendants work their magic in
+    // useLayoutEffect, so we can set our ref in useEffecct to run later). We
+    // can use a ref instead of state because we're always geting a re-render
+    // anyway thanks to descendants. This is a little more coupled to the
+    // implementation details of descendants than I'd like, but we'll add a test
+    // to (hopefully) catch any regressions.
+    let isSelected = index === selectedIndex;
+    let readyToHide = useRef(false);
+    let hidden = readyToHide.current ? !isSelected : false;
+    React.useEffect(() => {
+      readyToHide.current = true;
+    }, []);
 
     let ref = useForkedRef(
       forwardedRef,
@@ -635,20 +652,12 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       isSelected ? selectedPanelRef : null
     );
 
-    React.useEffect(() => {
-      isMountedRef.current = true;
-    }, []);
-
     return (
       <Comp
         // Each element with role `tabpanel` has the property `aria-labelledby`
         // referring to its associated tab element.
         aria-labelledby={makeId(tabsId, "tab", index)}
-        // During the initial render `isSelected` would be `false`
-        // and hide the children, which prevents focusing via refs on mount.
-        // As a workaround, we wait for the component to mount, and then set the `hidden` attribute.
-        // I guess this is hackish, but it works.
-        hidden={isMountedRef.current ? !isSelected : false}
+        hidden={hidden}
         // Each element that contains the content panel for a tab has role
         // `tabpanel`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel

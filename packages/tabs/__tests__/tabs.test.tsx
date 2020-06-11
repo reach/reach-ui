@@ -51,7 +51,9 @@ describe("<Tabs />", () => {
     });
 
     it("renders as a custom component", () => {
-      const Wrapper = (props: any) => <div data-testid="wrap" {...props} />;
+      const Wrapper = React.forwardRef<any, any>((props, ref) => (
+        <div ref={ref} data-testid="wrap" {...props} />
+      ));
       const { getByTestId } = render(
         <Tabs as={Wrapper}>
           <TabList>
@@ -106,7 +108,9 @@ describe("<Tabs />", () => {
         expect(getByTestId("list").tagName).toBe("UL");
       });
       it("renders as a custom component", () => {
-        const List = (props: any) => <ul data-testid="list" {...props} />;
+        const List = React.forwardRef<any, any>((props, ref) => (
+          <ul data-testid="list" ref={ref} {...props} />
+        ));
         const { getByTestId } = render(
           <Tabs>
             <TabList as={List}>
@@ -161,7 +165,9 @@ describe("<Tabs />", () => {
         expect(getByText("Tab 1").tagName).toBe("LI");
       });
       it("renders as a custom component", () => {
-        const ListItem = (props: any) => <li {...props} />;
+        const ListItem = React.forwardRef<any, any>((props, ref) => (
+          <li ref={ref} {...props} />
+        ));
         const { getByText } = render(
           <Tabs>
             <TabList as="ul">
@@ -214,7 +220,9 @@ describe("<Tabs />", () => {
         expect(getByText("Panel 1").tagName).toBe("P");
       });
       it("renders as a custom component", () => {
-        const Panel = (props: any) => <p {...props} />;
+        const Panel = React.forwardRef<any, any>((props, ref) => (
+          <p ref={ref} {...props} />
+        ));
         const { getByText } = render(
           <Tabs>
             <TabList>
@@ -246,6 +254,46 @@ describe("<Tabs />", () => {
         expect(style.borderStyle).toBe("dashed");
         expect(style.borderColor).toBe("red");
       });
+      it("is hidden or not based on selected state", () => {
+        const { getByText } = render(
+          <Tabs>
+            <TabList>
+              <Tab>Tab 1</Tab>
+              <Tab>Tab 2</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>Panel 1</TabPanel>
+              <TabPanel>Panel 2</TabPanel>
+            </TabPanels>
+          </Tabs>
+        );
+        expect(getByText("Panel 1")).toBeVisible();
+        expect(getByText("Panel 2")).not.toBeVisible();
+      });
+      it("can interact with elements on initial load", () => {
+        const Comp = () => {
+          let input = React.useRef<HTMLInputElement>(null);
+          React.useEffect(() => {
+            input.current!.focus();
+          }, []);
+          return (
+            <Tabs>
+              <TabList>
+                <Tab>Tab 1</Tab>
+                <Tab>Tab 2</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <input type="text" ref={input} />
+                </TabPanel>
+                <TabPanel>Panel 2</TabPanel>
+              </TabPanels>
+            </Tabs>
+          );
+        };
+        const { getByRole } = render(<Comp />);
+        expect(getByRole("textbox")).toHaveFocus();
+      });
     });
 
     describe("<TabPanels />", () => {
@@ -265,9 +313,9 @@ describe("<Tabs />", () => {
         expect(getByTestId("panels").tagName).toBe("SECTION");
       });
       it("renders as a custom component", () => {
-        const Panels = (props: any) => (
-          <section data-testid="panels" {...props} />
-        );
+        const Panels = React.forwardRef<any, any>((props, ref) => (
+          <section data-testid="panels" ref={ref} {...props} />
+        ));
         const { getByTestId } = render(
           <Tabs>
             <TabList>
