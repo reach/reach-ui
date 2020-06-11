@@ -281,7 +281,7 @@ if (__DEV__) {
             compName +
             "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
-      } else if (props[name] != null && !isNumber(props[name])) {
+      } else if (val != null && !isNumber(val)) {
         return new Error(
           `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
             Array.isArray(val) ? "array" : typeof val

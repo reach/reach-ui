@@ -101,15 +101,13 @@ function getStyles(
   popoverRect: PRect | null,
   ...unstable_observableRefs: React.RefObject<PossibleNode>[]
 ): React.CSSProperties {
-  const needToMeasurePopup = !popoverRect;
-  if (needToMeasurePopup) {
-    return { visibility: "hidden" };
-  }
-  return position(
-    targetRect,
-    popoverRect,
-    ...unstable_observableRefs.map((ref) => ref.current)
-  );
+  return popoverRect
+    ? position(
+        targetRect,
+        popoverRect,
+        ...unstable_observableRefs.map((ref) => ref.current)
+      )
+    : { visibility: "hidden" };
 }
 
 function getTopPosition(targetRect: PRect, popoverRect: PRect) {
