@@ -393,6 +393,10 @@ const SliderInput = forwardRefWithAs<
 
   // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
   let handleKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+
     let newValue: number;
     let tenSteps = (max - min) / 10;
     let keyStep = step || (max - min) / 100;

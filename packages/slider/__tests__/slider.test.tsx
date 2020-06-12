@@ -110,6 +110,25 @@ describe("<Slider />", () => {
       fireEvent.keyDown(handle, { key: "PageDown", code: 34 });
       expect(getCurrentValue(handle)).toEqual(min + tenSteps);
     });
+
+    it("does not move when disabled", () => {
+      const { getByRole } = render(
+        <SliderInput aria-label="mover" disabled>
+          <SliderTrack>
+            <SliderTrackHighlight />
+            <SliderHandle />
+          </SliderTrack>
+        </SliderInput>
+      );
+      const handle = getByRole("slider");
+
+      fireEvent.click(handle);
+
+      fireEvent.keyDown(handle, { key: "ArrowRight", code: 39 });
+      fireEvent.keyDown(handle, { key: "ArrowRight", code: 39 });
+
+      expect(getCurrentValue(handle)).toEqual(0);
+    });
   });
 });
 
