@@ -11,7 +11,7 @@
     "directory": "packages/checkbox"
   },
   "scripts": {
-    "build": "ts-node ../../scripts/build"
+    "build": "ts-node -P ../../tsconfig.json ../../scripts/build"
   },
   "dependencies": {
     "@reach/auto-id": "^0.10.3",

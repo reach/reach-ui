@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals, eqeqeq  */
 
 import * as React from "react";
-import warning from "warning";
+import * as warning from "warning";
 import {
   As,
   AssignableRef,

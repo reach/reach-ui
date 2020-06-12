@@ -10,7 +10,7 @@
     "directory": "packages/auto-id"
   },
   "scripts": {
-    "build": "ts-node ../../scripts/build"
+    "build": "ts-node -P ../../tsconfig.json ../../scripts/build"
   },
   "peerDependencies": {
     "react": "^16.8.0",
