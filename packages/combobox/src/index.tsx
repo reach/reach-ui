@@ -610,7 +610,14 @@ export const ComboboxPopover = forwardRef<
   HTMLDivElement,
   ComboboxPopoverProps & Partial<PopoverProps>
 >(function ComboboxPopover(
-  { children, portal = true, onKeyDown, onBlur, ...props },
+  {
+    children,
+    portal = true,
+    onKeyDown,
+    onBlur,
+    position = positionMatchWidth,
+    ...props
+  },
   forwardedRef: React.Ref<any>
 ) {
   const { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
@@ -635,9 +642,8 @@ export const ComboboxPopover = forwardRef<
   return portal ? (
     <Popover
       {...props}
-      // @ts-ignore
       ref={ref}
-      position={positionMatchWidth}
+      position={position}
       targetRef={inputRef}
       {...sharedProps}
     />
