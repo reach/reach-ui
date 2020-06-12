@@ -13,8 +13,8 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.10.3",
-    "@reach/utils": "^0.10.3",
+    "@reach/auto-id": "0.10.3",
+    "@reach/utils": "0.10.3",
     "tslib": "^1.11.2"
   },
   "peerDependencies": {

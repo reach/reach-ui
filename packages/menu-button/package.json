@@ -13,10 +13,10 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.10.3",
-    "@reach/descendants": "^0.10.3",
-    "@reach/popover": "^0.10.3",
-    "@reach/utils": "^0.10.3",
+    "@reach/auto-id": "0.10.3",
+    "@reach/descendants": "0.10.3",
+    "@reach/popover": "0.10.3",
+    "@reach/utils": "0.10.3",
     "prop-types": "^15.7.2",
     "tslib": "^1.11.2"
   },

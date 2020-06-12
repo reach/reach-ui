@@ -13,8 +13,8 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/observe-rect": "^1.1.0",
-    "@reach/utils": "^0.10.3",
+    "@reach/observe-rect": "1.1.0",
+    "@reach/utils": "0.10.3",
     "prop-types": "^15.7.2",
     "tslib": "^1.11.2"
   },

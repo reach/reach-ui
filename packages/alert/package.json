@@ -13,8 +13,8 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/utils": "^0.10.3",
-    "@reach/visually-hidden": "^0.10.2",
+    "@reach/utils": "0.10.3",
+    "@reach/visually-hidden": "0.10.2",
     "prop-types": "^15.7.2",
     "tslib": "^1.11.2"
   },
