@@ -16,9 +16,7 @@ import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
   describe("rendering", () => {
-    it("renders as any HTML element", () => {
-      jest.useFakeTimers();
-
+    it("renders as any HTML element", async () => {
       function MyCombobox() {
         let [term, setTerm] = useState("");
         let results = useCityMatch(term);
@@ -54,16 +52,13 @@ describe("<Combobox />", () => {
       expect(getByTestId("input").tagName).toBe("TEXTAREA");
 
       // Type to show the list
-      act(() => {
-        userEvent.type(getByTestId("input"), "e");
-        jest.advanceTimersByTime(100);
-      });
+      await userEvent.type(getByTestId("input"), "e");
 
       expect(getByTestId("list").tagName).toBe("DIV");
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
     });
 
-    it("renders when using the useComboboxContext hook", () => {
+    it("renders when using the useComboboxContext hook", async () => {
       function CustomComboboxInput(props: ComboboxInputProps) {
         const { isExpanded } = useComboboxContext();
         return (
@@ -95,10 +90,9 @@ describe("<Combobox />", () => {
       let { getByTestId, getAllByRole } = render(<MyCombobox />);
 
       // Type to show the list
-      act(() => {
-        userEvent.type(getByTestId("input"), "a");
-        jest.advanceTimersByTime(100);
-      });
+
+      await userEvent.type(getByTestId("input"), "a");
+      //jest.advanceTimersByTime(100);
 
       expect(getByTestId("list")).toBeTruthy();
       expect(getAllByRole("option")[0]).toBeTruthy();
@@ -213,16 +207,14 @@ describe("<Combobox />", () => {
   });
 
   describe("user events", () => {
-    it("should open a list on text entry", () => {
-      jest.useFakeTimers();
+    it("should open a list on text entry", async () => {
       let optionToSelect = "Eagle Pass, Texas";
       let { getByTestId, getByText } = render(<BasicCombobox />);
       let getByTextWithMarkup = withMarkup(getByText);
       let input = getByTestId("input");
-      act(() => {
-        userEvent.type(input, "e");
-        jest.advanceTimersByTime(100);
-      });
+
+      await userEvent.type(input, "e");
+
       expect(getByTestId("list")).toBeInTheDocument();
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
     });
@@ -274,7 +266,7 @@ function useCityMatch(term: string) {
   return term.trim() === ""
     ? null
     : matchSorter(cities, term, {
-        keys: [item => `${item.city}, ${item.state}`],
+        keys: [(item) => `${item.city}, ${item.state}`],
       });
 }
 

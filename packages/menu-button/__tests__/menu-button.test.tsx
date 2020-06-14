@@ -82,13 +82,13 @@ describe("<MenuButton />", () => {
         baseElement.querySelector("[data-reach-menu-popover]");
 
       expect(getPopover()).not.toBeVisible();
-      act(() => void clickButton(getByRole("button")));
+      clickButton(getByRole("button"));
       expect(getPopover()).toBeVisible();
-      act(() => void clickButton(getByRole("button")));
+      clickButton(getByRole("button"));
       expect(getPopover()).not.toBeVisible();
     });
 
-    it("should manage focus when user selects an item with click", () => {
+    it("should not re-focus the button when user selects an item with click", () => {
       let { getByRole, getByText } = render(
         <Menu>
           <MenuButton id="example-button">Actions</MenuButton>
@@ -98,9 +98,9 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => void clickButton(getByText("Download")));
-      expect(getByRole("button")).toHaveFocus();
+      clickButton(getByRole("button"));
+      clickButton(getByText("Download"));
+      expect(getByRole("button")).not.toHaveFocus();
     });
 
     it("should manage focus when user selects an item with `Space` key", () => {
@@ -113,8 +113,8 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void fireEvent.keyDown(getByRole("button"), { key: " " }));
-      act(() => void fireEvent.keyDown(getByText("Download"), { key: " " }));
+      fireEvent.keyDown(getByRole("button"), { key: " " });
+      fireEvent.keyDown(getByText("Download"), { key: " " });
       expect(getByRole("button")).toHaveFocus();
     });
 
@@ -128,12 +128,9 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void fireEvent.keyDown(getByRole("button"), { key: "Enter" }));
-      act(() => {
-        fireEvent.keyDown(getByText("Download"), {
-          key: "Enter",
-        });
-      });
+      fireEvent.keyDown(getByRole("button"), { key: "Enter" });
+      fireEvent.keyDown(getByText("Download"), { key: "Enter" });
+
       expect(getByRole("button")).toHaveFocus();
     });
 
@@ -147,16 +144,13 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => {
-        fireEvent.keyDown(getByText("Download"), {
-          key: "Escape",
-        });
-      });
+      clickButton(getByRole("button"));
+      fireEvent.keyDown(getByText("Download"), { key: "Escape" });
+
       expect(getByRole("button")).toHaveFocus();
     });
 
-    it("should NOT manage focus when user clicks outside element", () => {
+    it("should not manage focus when user clicks outside element", () => {
       let { getByRole, getByTestId } = render(
         <>
           <Menu>
@@ -169,8 +163,8 @@ describe("<MenuButton />", () => {
         </>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => void fireEvent.click(getByTestId("input")));
+      clickButton(getByRole("button"));
+      fireEvent.click(getByTestId("input"));
       expect(getByRole("button")).not.toHaveFocus();
     });
   });

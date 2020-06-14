@@ -20,7 +20,7 @@
     "@reach/utils": "0.10.3",
     "highlight-words-core": "1.2.2",
     "prop-types": "^15.7.2",
-    "tslib": "^1.11.2"
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

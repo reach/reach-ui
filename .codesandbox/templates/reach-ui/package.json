@@ -32,10 +32,10 @@
     "@reach/window-size": "latest",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-scripts": "3.3.0"
+    "react-scripts": "3.4.1"
   },
   "devDependencies": {
-    "typescript": "3.7.4"
+    "typescript": "3.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
