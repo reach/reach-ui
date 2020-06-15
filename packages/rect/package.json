@@ -1,6 +1,6 @@
 {
   "name": "@reach/rect",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Measure React elements position in the DOM",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@reach/observe-rect": "1.1.0",
-    "@reach/utils": "0.10.3",
+    "@reach/utils": "^0.10.4",
     "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   },
