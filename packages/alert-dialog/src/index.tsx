@@ -26,7 +26,7 @@
  * `AlertDialogContent` to `DialogContent`.
  *
  * @see Docs     https://reacttraining.com/reach-ui/alert-dialog
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert-dialog
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert-dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
  */
 
@@ -208,7 +208,7 @@ if (__DEV__) {
  */
 export const AlertDialogLabel: React.FC<React.HTMLAttributes<
   HTMLDivElement
->> = props => {
+>> = (props) => {
   const { labelId } = useContext(AlertDialogContext);
   return <div {...props} id={labelId} data-reach-alert-dialog-label />;
 };
@@ -231,7 +231,7 @@ if (__DEV__) {
  */
 export const AlertDialogDescription: React.FC<React.HTMLAttributes<
   HTMLDivElement
->> = props => {
+>> = (props) => {
   const { descriptionId } = useContext(AlertDialogContext);
   return (
     <div {...props} id={descriptionId} data-reach-alert-dialog-description />

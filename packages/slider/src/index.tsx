@@ -14,7 +14,7 @@
  *    languages if that's a thing
  *
  * @see Docs     https://reacttraining.com/reach-ui/slider
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/slider
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/slider
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see Example  https://github.com/Stanko/aria-progress-range-slider
  * @see Example  http://www.oaa-accessibility.org/examplep/slider1/
@@ -393,6 +393,10 @@ const SliderInput = forwardRefWithAs<
 
   // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
   let handleKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+
     let newValue: number;
     let tenSteps = (max - min) / 10;
     let keyStep = step || (max - min) / 100;

@@ -4,7 +4,7 @@
  * TODO: Animation examples
  *
  * @see Docs     https://reacttraining.com/reach-ui/accordion
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/accordion
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/accordion
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  */
 

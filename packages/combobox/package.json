@@ -1,6 +1,6 @@
 {
   "name": "@reach/combobox",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Accessible React Combobox (Autocomplete).",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,15 +13,15 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "^0.10.3",
-    "@reach/descendants": "^0.10.3",
-    "@reach/machine": "^0.10.3",
-    "@reach/popover": "^0.10.3",
-    "@reach/portal": "^0.10.3",
-    "@reach/utils": "^0.10.3",
+    "@reach/auto-id": "0.10.4",
+    "@reach/descendants": "0.10.4",
+    "@reach/machine": "0.10.4",
+    "@reach/popover": "0.10.4",
+    "@reach/portal": "0.10.4",
+    "@reach/utils": "0.10.4",
     "highlight-words-core": "1.2.2",
     "prop-types": "^15.7.2",
-    "tslib": "^1.11.2"
+    "tslib": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

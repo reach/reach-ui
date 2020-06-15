@@ -5,7 +5,7 @@
  *
  * @see getBoundingClientRect https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
  * @see Docs                  https://reacttraining.com/reach-ui/rect
- * @see Source                https://github.com/reach/reach-ui/tree/master/packages/rect
+ * @see Source                https://github.com/reach/reach-ui/tree/main/packages/rect
  */
 
 import React, { useRef, useState } from "react";

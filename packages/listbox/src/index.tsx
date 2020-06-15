@@ -20,7 +20,7 @@
  *       https://twitter.com/GassnerKendall/status/1237778370118598661
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
 

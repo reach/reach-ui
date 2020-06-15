@@ -15,9 +15,7 @@ import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
   describe("rendering", () => {
-    it("renders as any HTML element", () => {
-      jest.useFakeTimers();
-
+    it("renders as any HTML element", async () => {
       function MyCombobox() {
         let [term, setTerm] = useState("");
         let results = useCityMatch(term);
@@ -52,14 +50,13 @@ describe("<Combobox />", () => {
       expect(getByRole("combobox").tagName).toBe("TEXTAREA");
 
       // Type to show the list
-      userEvent.type(getByRole("combobox"), "e");
-      jest.advanceTimersByTime(100);
+      await userEvent.type(getByRole("combobox"), "e");
 
       expect(getByRole("listbox").tagName).toBe("DIV");
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
     });
 
-    it("renders when using the useComboboxContext hook", () => {
+    it("renders when using the useComboboxContext hook", async () => {
       function CustomComboboxInput(props: any) {
         const { isExpanded } = useComboboxContext();
         return (
@@ -97,8 +94,8 @@ describe("<Combobox />", () => {
 
       let { getByRole, getAllByRole } = render(<MyCombobox />);
 
-      userEvent.type(getByRole("combobox"), "a");
-      jest.advanceTimersByTime(100);
+      // Type to show the list
+      await userEvent.type(getByRole("combobox"), "a");
 
       expect(getByRole("listbox")).toBeTruthy();
       expect(getAllByRole("option")[0]).toBeTruthy();
@@ -211,15 +208,13 @@ describe("<Combobox />", () => {
   });
 
   describe("user events", () => {
-    it("should open a list on text entry", () => {
-      jest.useFakeTimers();
+    it("should open a list on text entry", async () => {
       let optionToSelect = "Eagle Pass, Texas";
       let { getByRole, getByText } = render(<BasicCombobox />);
       let getByTextWithMarkup = withMarkup(getByText);
       let input = getByRole("combobox");
 
-      userEvent.type(input, "e");
-      jest.advanceTimersByTime(100);
+      await userEvent.type(input, "e");
 
       expect(getByRole("listbox")).toBeInTheDocument();
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();

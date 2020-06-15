@@ -33,7 +33,7 @@ export function withMarkup(query: Query) {
     query((content: string, node: HTMLElement) => {
       const hasText = (node: HTMLElement) => node.textContent === text;
       const childrenDontHaveText = Array.from(node.children).every(
-        child => !hasText(child as HTMLElement)
+        (child) => !hasText(child as HTMLElement)
       );
       return hasText(node) && childrenDontHaveText;
     });
@@ -94,6 +94,19 @@ export function render<
   };
 
   return result;
+}
+
+/**
+ * When a user clicks with a mouse, mousedown, mouseup and then click events
+ * are fired. Some packages rely on mousedown and mouseup events where click
+ * might be assumed by most consumers. This helper fires all three events in
+ * order to make testing a bit more predictable.
+ * @param element
+ */
+export function fireClickAndMouseEvents(element: HTMLElement) {
+  fireEvent.mouseDown(element);
+  fireEvent.mouseUp(element);
+  fireEvent.click(element);
 }
 
 type Query = (f: MatcherFunction) => HTMLElement | null;

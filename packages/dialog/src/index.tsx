@@ -6,7 +6,7 @@
  * An accessible dialog or "modal" window.
  *
  * @see Docs     https://reacttraining.com/reach-ui/dialog
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/dialog
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
 

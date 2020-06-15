@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { render, act, fireEvent } from "$test/utils";
+import { render, act, fireEvent, fireClickAndMouseEvents } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
@@ -82,13 +82,14 @@ describe("<MenuButton />", () => {
         baseElement.querySelector("[data-reach-menu-popover]");
 
       expect(getPopover()).not.toBeVisible();
-      act(() => void clickButton(getByRole("button")));
+
+      fireClickAndMouseEvents(getByRole("button"));
       expect(getPopover()).toBeVisible();
-      act(() => void clickButton(getByRole("button")));
+      fireClickAndMouseEvents(getByRole("button"));
       expect(getPopover()).not.toBeVisible();
     });
 
-    it("should manage focus when user selects an item with click", () => {
+    it("should not re-focus the button when user selects an item with click", () => {
       let { getByRole, getByText } = render(
         <Menu>
           <MenuButton id="example-button">Actions</MenuButton>
@@ -98,9 +99,9 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => void clickButton(getByText("Download")));
-      expect(getByRole("button")).toHaveFocus();
+      fireClickAndMouseEvents(getByRole("button"));
+      fireClickAndMouseEvents(getByText("Download"));
+      expect(getByRole("button")).not.toHaveFocus();
     });
 
     it("should manage focus when user selects an item with `Space` key", () => {
@@ -113,8 +114,8 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void fireEvent.keyDown(getByRole("button"), { key: " " }));
-      act(() => void fireEvent.keyDown(getByText("Download"), { key: " " }));
+      fireEvent.keyDown(getByRole("button"), { key: " " });
+      fireEvent.keyDown(getByText("Download"), { key: " " });
       expect(getByRole("button")).toHaveFocus();
     });
 
@@ -128,12 +129,9 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void fireEvent.keyDown(getByRole("button"), { key: "Enter" }));
-      act(() => {
-        fireEvent.keyDown(getByText("Download"), {
-          key: "Enter",
-        });
-      });
+      fireEvent.keyDown(getByRole("button"), { key: "Enter" });
+      fireEvent.keyDown(getByText("Download"), { key: "Enter" });
+
       expect(getByRole("button")).toHaveFocus();
     });
 
@@ -147,16 +145,13 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => {
-        fireEvent.keyDown(getByText("Download"), {
-          key: "Escape",
-        });
-      });
+      fireClickAndMouseEvents(getByRole("button"));
+      fireEvent.keyDown(getByText("Download"), { key: "Escape" });
+
       expect(getByRole("button")).toHaveFocus();
     });
 
-    it("should NOT manage focus when user clicks outside element", () => {
+    it("should not manage focus when user clicks outside element", () => {
       let { getByRole, getByTestId } = render(
         <>
           <Menu>
@@ -169,18 +164,9 @@ describe("<MenuButton />", () => {
         </>
       );
 
-      act(() => void clickButton(getByRole("button")));
-      act(() => void fireEvent.click(getByTestId("input")));
+      fireClickAndMouseEvents(getByRole("button"));
+      fireEvent.click(getByTestId("input"));
       expect(getByRole("button")).not.toHaveFocus();
     });
   });
 });
-
-/**
- * Menu opens on mousedown, not click!
- * @param element
- */
-function clickButton(element: HTMLElement) {
-  fireEvent.mouseDown(element);
-  fireEvent.mouseUp(element);
-}

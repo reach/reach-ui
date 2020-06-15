@@ -14,7 +14,7 @@
  *      autocompleted text or the old value the user had typed?!
  *
  * @see Docs     https://reacttraining.com/reach-ui/combobox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/combobox
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/combobox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
 
@@ -440,7 +440,14 @@ const ComboboxPopoverImpl = forwardRef<
   HTMLDivElement,
   ComboboxPopoverProps & Partial<PopoverProps>
 >(function ComboboxPopover(
-  { children, portal = true, onKeyDown, onBlur, ...props },
+  {
+    children,
+    portal = true,
+    onKeyDown,
+    onBlur,
+    position = positionMatchWidth,
+    ...props
+  },
   forwardedRef: React.Ref<any>
 ) {
   let { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
@@ -465,9 +472,8 @@ const ComboboxPopoverImpl = forwardRef<
   return portal ? (
     <Popover
       {...props}
-      // @ts-ignore
       ref={ref}
-      position={positionMatchWidth}
+      position={position}
       targetRef={inputRef}
       {...sharedProps}
     />

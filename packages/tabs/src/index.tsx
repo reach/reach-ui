@@ -12,12 +12,11 @@
  * `TabPanel` elements.
  *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
 
 import React, {
-  memo,
   useContext,
   useEffect,
   useMemo,
@@ -281,7 +280,7 @@ if (__DEV__) {
             compName +
             "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
-      } else if (props[name] != null && !isNumber(props[name])) {
+      } else if (val != null && !isNumber(val)) {
         return new Error(
           `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
             Array.isArray(val) ? "array" : typeof val
@@ -625,9 +624,27 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
       { element: ownRef.current! },
       TabPanelDescendantsContext
     );
-    let isSelected = index === selectedIndex;
 
     let id = makeId(tabsId, "panel", index);
+
+    // Because useDescendant will always return -1 on the first render,
+    // `isSelected` will briefly be false for all tabs. We set a tab panel's
+    // hidden attribute based `isSelected` being false, meaning that all tabs
+    // are initially hidden. This makes it impossible for consumers to do
+    // certain things, like focus an element inside the active tab panel when
+    // the page loads. So what we can do is track that a panel is "ready" to be
+    // hidden once effects are run (descendants work their magic in
+    // useLayoutEffect, so we can set our ref in useEffecct to run later). We
+    // can use a ref instead of state because we're always geting a re-render
+    // anyway thanks to descendants. This is a little more coupled to the
+    // implementation details of descendants than I'd like, but we'll add a test
+    // to (hopefully) catch any regressions.
+    let isSelected = index === selectedIndex;
+    let readyToHide = useRef(false);
+    let hidden = readyToHide.current ? !isSelected : false;
+    React.useEffect(() => {
+      readyToHide.current = true;
+    }, []);
 
     let ref = useForkedRef(
       forwardedRef,
@@ -640,7 +657,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
         // Each element with role `tabpanel` has the property `aria-labelledby`
         // referring to its associated tab element.
         aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={!isSelected}
+        hidden={hidden}
         // Each element that contains the content panel for a tab has role
         // `tabpanel`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
