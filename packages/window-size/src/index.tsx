@@ -2,7 +2,7 @@
  * Measure the current window dimensions.
  *
  * @see Docs   https://reacttraining.com/reach-ui/window-size
- * @see Source https://github.com/reach/reach-ui/tree/master/packages/window-size
+ * @see Source https://github.com/reach/reach-ui/tree/main/packages/window-size
  */
 
 import React, { useRef, useState } from "react";

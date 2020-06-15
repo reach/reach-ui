@@ -18,7 +18,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/checkbox
+- Source: https://github.com/reach/reach-ui/tree/main/packages/checkbox
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
 
 `@reach/checkbox` provides two top-level components:
@@ -90,7 +90,7 @@ function Example() {
         <MixedCheckbox
           value="whatever"
           checked={checked}
-          onChange={event => {
+          onChange={(event) => {
             setChecked(event.target.checked);
           }}
         />
@@ -181,7 +181,7 @@ each sub-component directly.
     return (
       <CustomCheckboxContainer
         checked={props.checked != null ? props.checked : checked}
-        onChange={event => setChecked(event.target.checked)}
+        onChange={(event) => setChecked(event.target.checked)}
         style={getContainerStyle()}
       >
         <CustomCheckboxInput {...props} />
@@ -244,12 +244,12 @@ function Example() {
   // We can determine if all or some of the nested checkboxes are selected and
   // use that to determine the state of our parent checkbox.
   let allCondimentsChecked = Object.keys(favoriteCondiments).every(
-    condiment => favoriteCondiments[condiment] === true
+    (condiment) => favoriteCondiments[condiment] === true
   );
   let someCondimentsChecked = allCondimentsChecked
     ? false
     : Object.keys(favoriteCondiments).some(
-        condiment => favoriteCondiments[condiment] === true
+        (condiment) => favoriteCondiments[condiment] === true
       );
 
   let parentIsChecked = allCondimentsChecked
@@ -356,7 +356,7 @@ function Example({ disabled = false }) {
     // boolean | "mixed"
     checked,
     // (event: React.ChangeEvent<HTMLInputElement>) => void
-    onChange: event => setChecked(event.target.checked),
+    onChange: (event) => setChecked(event.target.checked),
     // boolean
     disabled,
   });

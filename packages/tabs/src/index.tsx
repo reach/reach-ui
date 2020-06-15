@@ -12,7 +12,7 @@
  * `TabPanel` elements.
  *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
 

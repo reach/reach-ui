@@ -20,7 +20,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/combobox
+- Source: https://github.com/reach/reach-ui/tree/main/packages/combobox
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
 
 Accessible combobox (autocomplete or autosuggest) component for React.
@@ -157,7 +157,7 @@ There is nothing special about managing state for a combobox, it's like managing
   function Example() {
     const [term, setTerm] = useState("");
     const results = useCityMatch(term);
-    const handleChange = event => setTerm(event.target.value);
+    const handleChange = (event) => setTerm(event.target.value);
 
     return (
       <div>
@@ -197,7 +197,7 @@ There is nothing special about managing state for a combobox, it's like managing
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [(item) => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );
@@ -217,7 +217,7 @@ This is the same demo as above, except this time we're going to a server to get 
   function Example() {
     const [searchTerm, setSearchTerm] = useState("");
     const cities = useCitySearch(searchTerm);
-    const handleSearchTermChange = event => {
+    const handleSearchTermChange = (event) => {
       setSearchTerm(event.target.value);
     };
 
@@ -231,7 +231,7 @@ This is the same demo as above, except this time we're going to a server to get 
           <ComboboxPopover className="shadow-popup">
             {cities.length > 0 ? (
               <ComboboxList>
-                {cities.map(city => {
+                {cities.map((city) => {
                   const str = `${city.city}, ${city.state}`;
                   return <ComboboxOption key={str} value={str} />;
                 })}
@@ -253,7 +253,7 @@ This is the same demo as above, except this time we're going to a server to get 
     useEffect(() => {
       if (searchTerm.trim() !== "") {
         let isFresh = true;
-        fetchCities(searchTerm).then(cities => {
+        fetchCities(searchTerm).then((cities) => {
           if (isFresh) setCities(cities);
         });
         return () => (isFresh = false);
@@ -269,8 +269,8 @@ This is the same demo as above, except this time we're going to a server to get 
       return Promise.resolve(cache[value]);
     }
     return fetch("https://city-search.now.sh/?" + value)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         cache[value] = result;
         return result;
       });
@@ -292,7 +292,7 @@ You can even have other interactive elements inside the popover, it won't close 
   function Example() {
     const [term, setTerm] = useState("");
     const results = useCityMatch(term);
-    const handleChange = event => setTerm(event.target.value);
+    const handleChange = (event) => setTerm(event.target.value);
 
     return (
       <div>
@@ -349,7 +349,7 @@ You can even have other interactive elements inside the popover, it won't close 
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [(item) => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );
@@ -378,7 +378,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
   function Example() {
     let [term, setTerm] = useState("");
     let results = useCityMatch(term);
-    const handleChange = event => setTerm(event.target.value);
+    const handleChange = (event) => setTerm(event.target.value);
 
     return (
       <Combobox className="pink">
@@ -420,7 +420,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
         term.trim() === ""
           ? null
           : matchSorter(cities, term, {
-              keys: [item => `${item.city}, ${item.state}`],
+              keys: [(item) => `${item.city}, ${item.state}`],
             }),
       [throttledTerm]
     );
@@ -506,7 +506,7 @@ If true, the popover opens when focus is on the text box.
 Called with the selection value when the user makes a selection from the list.
 
 ```jsx
-<Combobox onSelect={item => {}} />
+<Combobox onSelect={(item) => {}} />
 ```
 
 ### ComboboxInput

@@ -5,7 +5,7 @@
  * pattern.
  *
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/menu-button
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
  *
  * TODO: Fix flash when opening a menu button on a screen with another open menu

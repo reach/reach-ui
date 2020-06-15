@@ -19,7 +19,7 @@
  * see how this goes. If it becomes a problem we can introduce a portal later.
  *
  * @see Docs     https://reacttraining.com/reach-ui/alert
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/alert
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
 import React, { forwardRef, useEffect, useRef, useMemo } from "react";
@@ -140,7 +140,7 @@ function renderAlerts() {
     window.clearTimeout(renderTimer);
   }
   renderTimer = window.setTimeout(() => {
-    Object.keys(elements).forEach(elementType => {
+    Object.keys(elements).forEach((elementType) => {
       let type: RegionTypes = elementType as RegionTypes;
       let container = liveRegions[type]!;
       if (container) {
@@ -157,7 +157,7 @@ function renderAlerts() {
               role={type === "assertive" ? "alert" : "status"}
               aria-live={type}
             >
-              {Object.keys(elements[type]).map(key =>
+              {Object.keys(elements[type]).map((key) =>
                 React.cloneElement(elements[type][key], {
                   key,
                   ref: null,

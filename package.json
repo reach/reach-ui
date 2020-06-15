@@ -14,7 +14,7 @@
     "test:pkg": "cross-env CI=true ts-node ./scripts/test --pkg",
     "test:watch": "ts-node ./scripts/test packages",
     "test:coverage": "yarn test --coverage",
-    "build:changed": "lerna run build --since origin/master",
+    "build:changed": "lerna run build --since origin/main",
     "build": "lerna run build --stream",
     "ver": "lerna version --no-push",
     "changes": "dotenv lerna-changelog",

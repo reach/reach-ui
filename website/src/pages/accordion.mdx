@@ -16,7 +16,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/accordion
+- Source: https://github.com/reach/reach-ui/tree/main/packages/accordion
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
 
 An accordion is a vertically stacked group of collapsible sections. An accordion is composed of grouped buttons and panels. When a user selects an accordion button, its corresponding panel should switch between 'open' and 'collapsed' states.
@@ -176,7 +176,7 @@ You can also create a context-aware heading component so that the heading level 
 The wrapper component for all other accordion components. Each accordion component will consist of accordion items whose buttons are keyboard navigable using arrow keys.
 
 ```jsx
-<Accordion index={index} onChange={value => setIndex(value)}>
+<Accordion index={index} onChange={(value) => setIndex(value)}>
   <AccordionItem>
     <h3>
       <AccordionButton>Step 1: Do a thing</AccordionButton>
@@ -306,7 +306,7 @@ If you want to control the accordion's open panels, you can do so by passing [`i
 ```jsx
 const [index, setIndex] = useState(0);
 return (
-  <Accordion index={index} onChange={value => setIndex(value)}>
+  <Accordion index={index} onChange={(value) => setIndex(value)}>
     <AccordionItem {...items[0].props} />
     <AccordionItem {...items[1].props} />
     <AccordionItem {...items[2].props} />
@@ -320,7 +320,7 @@ In a controlled accordion, multiple items can be set to `open` by passing an arr
 const [indices, setIndices] = useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
-    setIndices(indices.filter(currentIndex => currentIndex !== toggledIndex));
+    setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
   } else {
     setIndices([...indices, toggledIndex].sort());
   }
@@ -420,7 +420,7 @@ The index or array of indices for open accordion panels. The `index` prop should
 const [indices, setIndices] = useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
-    setIndices(indices.filter(currentIndex => currentIndex !== toggledIndex));
+    setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
   } else {
     setIndices([...indices, toggledIndex].sort());
   }

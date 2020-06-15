@@ -11,7 +11,7 @@
  * same logical context, you may want to use @reach/accordion instead.
  *
  * @see Docs     https://reacttraining.com/reach-ui/disclosure
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/disclosure
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/disclosure
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
 

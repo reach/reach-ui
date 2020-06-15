@@ -25,7 +25,7 @@
  *       </CustomCheckbox>
  *
  * @see Docs     https://reacttraining.com/reach-ui/checkbox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/checkbox/src/custom
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/checkbox/src/custom
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 

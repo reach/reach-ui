@@ -21,7 +21,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/menu-button
+- Source: https://github.com/reach/reach-ui/tree/main/packages/menu-button
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
 
 An accessible dropdown menu for the common dropdown menu button design pattern.
@@ -448,7 +448,7 @@ function Example(props) {
       <MenuList>
         <MenuItem
           onFocus={() => {
-            setFocusCount(prevFocusCount => prevFocusCount + 1);
+            setFocusCount((prevFocusCount) => prevFocusCount + 1);
           }}
           onSelect={() => {}}
         >
@@ -757,7 +757,7 @@ You may want to pass your own click handler to a MenuButton, MenuItem or MenuLin
   <MenuButton>Actions</MenuButton>
   <MenuList>
     <MenuItem
-      onClick={event => {
+      onClick={(event) => {
         if (!userLoggedIn) {
           event.preventDefault();
           openDialog();

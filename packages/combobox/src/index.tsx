@@ -14,7 +14,7 @@
  *      autocompleted text or the old value the user had typed?!
  *
  * @see Docs     https://reacttraining.com/reach-ui/combobox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/combobox
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/combobox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
 

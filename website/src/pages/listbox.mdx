@@ -23,7 +23,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/listbox
+- Source: https://github.com/reach/reach-ui/tree/main/packages/listbox
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
 
 A listbox presents a list of selectable options in a popover, which is toggled on or off by a button. Visually and behaviorally it is similar to [`@reach/menu-button`](https://reacttraining.com/reach-ui/menu-button) except that `ListboxOption` components hold a value. In this sense they are more directly comparable to HTML select elements.
@@ -91,7 +91,7 @@ You can use `Listbox` as a simple standalone component, or compose its parts wit
         <ListboxInput
           aria-labelledby={labelId}
           value={value}
-          onChange={value => setValue(value)}
+          onChange={(value) => setValue(value)}
         >
           <ListboxButton arrow="▼" />
           <ListboxPopover>
@@ -468,7 +468,7 @@ return (
     <ListboxButton>{options[value]}</ListboxButton>
     <ListboxPopover>
       <ListboxList>
-        {Object.keys(options).map(option => (
+        {Object.keys(options).map((option) => (
           <ListboxOption key={option} value={option} label={options[option]}>
             {options[option]}
           </ListboxOption>

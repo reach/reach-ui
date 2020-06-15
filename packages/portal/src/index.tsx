@@ -7,7 +7,7 @@
  * hiding content (for popovers, dropdowns, and modals).
  *
  * @see Docs   https://reacttraining.com/reach-ui/portal
- * @see Source https://github.com/reach/reach-ui/tree/master/packages/portal
+ * @see Source https://github.com/reach/reach-ui/tree/main/packages/portal
  * @see React  https://reactjs.org/docs/portals.html
  */
 
