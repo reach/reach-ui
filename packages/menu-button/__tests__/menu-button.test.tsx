@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { render, act, fireEvent } from "$test/utils";
+import { render, act, fireEvent, fireClickAndMouseEvents } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
@@ -82,9 +82,10 @@ describe("<MenuButton />", () => {
         baseElement.querySelector("[data-reach-menu-popover]");
 
       expect(getPopover()).not.toBeVisible();
-      clickButton(getByRole("button"));
+
+      fireClickAndMouseEvents(getByRole("button"));
       expect(getPopover()).toBeVisible();
-      clickButton(getByRole("button"));
+      fireClickAndMouseEvents(getByRole("button"));
       expect(getPopover()).not.toBeVisible();
     });
 
@@ -98,8 +99,8 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      clickButton(getByRole("button"));
-      clickButton(getByText("Download"));
+      fireClickAndMouseEvents(getByRole("button"));
+      fireClickAndMouseEvents(getByText("Download"));
       expect(getByRole("button")).not.toHaveFocus();
     });
 
@@ -144,7 +145,7 @@ describe("<MenuButton />", () => {
         </Menu>
       );
 
-      clickButton(getByRole("button"));
+      fireClickAndMouseEvents(getByRole("button"));
       fireEvent.keyDown(getByText("Download"), { key: "Escape" });
 
       expect(getByRole("button")).toHaveFocus();
@@ -163,18 +164,9 @@ describe("<MenuButton />", () => {
         </>
       );
 
-      clickButton(getByRole("button"));
+      fireClickAndMouseEvents(getByRole("button"));
       fireEvent.click(getByTestId("input"));
       expect(getByRole("button")).not.toHaveFocus();
     });
   });
 });
-
-/**
- * Menu opens on mousedown, not click!
- * @param element
- */
-function clickButton(element: HTMLElement) {
-  fireEvent.mouseDown(element);
-  fireEvent.mouseUp(element);
-}
