@@ -65,7 +65,10 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  children(args: { rect: PRect | null; ref: React.Ref<any> }): JSX.Element;
+  children(args: {
+    rect: PRect | null;
+    ref: React.RefObject<any>;
+  }): JSX.Element;
 };
 
 if (__DEV__) {
@@ -86,8 +89,8 @@ if (__DEV__) {
  * @param observe
  * @param onChange
  */
-export function useRect<T extends HTMLElement = HTMLElement>(
-  nodeRef: React.RefObject<T>,
+export function useRect<T extends Element = HTMLElement>(
+  nodeRef: React.RefObject<T | undefined | null>,
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
@@ -114,12 +117,13 @@ export function useRect<T extends HTMLElement = HTMLElement>(
   }, [element]);
 
   useIsomorphicLayoutEffect(() => {
+    let observer: ReturnType<typeof observeRect>;
     if (!element) {
       console.warn("You need to place the ref");
       return cleanup;
     }
 
-    let observer = observeRect(element, (rect) => {
+    observer = observeRect(element, (rect) => {
       onChangeRef.current && onChangeRef.current(rect);
       setRect(rect);
     });
@@ -128,7 +132,7 @@ export function useRect<T extends HTMLElement = HTMLElement>(
     return cleanup;
 
     function cleanup() {
-      observer.unobserve();
+      observer && observer.unobserve();
     }
   }, [observe, element]);
 
