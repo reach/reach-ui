@@ -93,6 +93,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
       onMouseDown,
       onKeyDown,
       unstable_lockFocusAcrossFrames = true,
+      dangerouslyBypassFocusLock = false,
       ...props
     },
     forwardedRef
@@ -136,6 +137,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
         autoFocus
         returnFocus
         onActivation={activateFocusLock}
+        disabled={dangerouslyBypassFocusLock}
         crossFrame={unstable_lockFocusAcrossFrames}
       >
         <RemoveScroll allowPinchZoom={allowPinchZoom}>
@@ -302,6 +304,25 @@ export type DialogProps = {
    * https://github.com/reach/reach-ui/issues/536
    */
   unstable_lockFocusAcrossFrames?: boolean;
+  /**
+   * By default the dialog locks the focus inside it. Normally this is what you
+   * want. This prop is provided so that this feature can be disabled. This is
+   * however strongly discouraged.
+   *
+   * The reason it is provided is not to disable the focus lock entirely. It is
+   * rather because there are certain situations where you may need more control
+   * on how the focus-lock works. This should be complemented by setting up a
+   * focus-lock yourself that would allow more flexibility.
+   *
+   * If you do set this prop to `true`, make sure you set up your own. You can
+   * probably use the same focus-lock library that this dialog uses internally
+   * (https://github.com/theKashey/react-focus-lock). It has various settings to
+   * allow more customization.
+   *
+   * @see https://github.com/theKashey/react-focus-lock
+   * @see https://github.com/reach/reach-ui/issues/615
+   */
+  dangerouslyBypassFocusLock?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 if (__DEV__) {
