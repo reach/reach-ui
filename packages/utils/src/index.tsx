@@ -157,10 +157,10 @@ export function boolOrBoolString(value: any): value is "true" | true {
 }
 
 export function canUseDOM() {
-  return (
+  return !!(
     typeof window !== "undefined" &&
-    typeof window.document !== "undefined" &&
-    typeof window.document.createElement !== "undefined"
+    window.document &&
+    window.document.createElement
   );
 }
 
@@ -615,7 +615,7 @@ export function useForkedRef<RefValueType = any>(
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
+  }, [...refs]);
 }
 
 /**
