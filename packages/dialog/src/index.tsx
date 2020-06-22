@@ -233,13 +233,21 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { isOpen, onDismiss = noop, initialFocusRef, allowPinchZoom, ...props },
+  {
+    allowPinchZoom,
+    dangerouslyBypassFocusLock,
+    initialFocusRef,
+    isOpen,
+    onDismiss = noop,
+    ...props
+  },
   forwardedRef
 ) {
   return (
     <DialogOverlay
-      initialFocusRef={initialFocusRef}
       allowPinchZoom={allowPinchZoom}
+      dangerouslyBypassFocusLock={dangerouslyBypassFocusLock}
+      initialFocusRef={initialFocusRef}
       isOpen={isOpen}
       onDismiss={onDismiss}
     >
@@ -253,6 +261,40 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
  */
 export type DialogProps = {
   allowPinchZoom?: boolean;
+  /**
+   * Accepts any renderable content.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
+   */
+  children?: React.ReactNode;
+  /**
+   * By default the dialog locks the focus inside it. Normally this is what you
+   * want. This prop is provided so that this feature can be disabled. This,
+   * however, is strongly discouraged.
+   *
+   * The reason it is provided is not to disable the focus lock entirely.
+   * Rather, there are certain situations where you may need more control on how
+   * the focus lock works. This should be complemented by setting up a focus
+   * lock yourself that would allow more flexibility for your specific use case.
+   *
+   * If you do set this prop to `true`, make sure you set up your own
+   * `FocusLock` component. You can likely use
+   * [`react-focus-lock`](https://github.com/theKashey/react-focus-lock), which
+   * is what Reach uses internally by default. It has various settings to allow
+   * more customization, but it takes care of a lot of hard work that you
+   * probably don't want or need to do.
+   *
+   * @see https://github.com/theKashey/react-focus-lock
+   * @see https://github.com/reach/reach-ui/issues/615
+   */
+  dangerouslyBypassFocusLock?: boolean;
+  /**
+   * By default the first focusable element will receive focus when the dialog
+   * opens but you can provide a ref to focus instead.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
+   */
+  initialFocusRef?: React.RefObject<any>;
   /**
    * Controls whether the dialog is open or not.
    *
@@ -274,19 +316,6 @@ export type DialogProps = {
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
-   * Accepts any renderable content.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
-   */
-  children?: React.ReactNode;
-  /**
-   * By default the first focusable element will receive focus when the dialog
-   * opens but you can provide a ref to focus instead.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
-   */
-  initialFocusRef?: React.RefObject<any>;
-  /**
    * By default, React Focus Lock prevents focus from being moved outside of the
    * locked element even if the thing trying to take focus is in another frame.
    * Normally this is what you want, as an iframe is typically going to be a
@@ -304,25 +333,6 @@ export type DialogProps = {
    * https://github.com/reach/reach-ui/issues/536
    */
   unstable_lockFocusAcrossFrames?: boolean;
-  /**
-   * By default the dialog locks the focus inside it. Normally this is what you
-   * want. This prop is provided so that this feature can be disabled. This is
-   * however strongly discouraged.
-   *
-   * The reason it is provided is not to disable the focus lock entirely. It is
-   * rather because there are certain situations where you may need more control
-   * on how the focus-lock works. This should be complemented by setting up a
-   * focus-lock yourself that would allow more flexibility.
-   *
-   * If you do set this prop to `true`, make sure you set up your own. You can
-   * probably use the same focus-lock library that this dialog uses internally
-   * (https://github.com/theKashey/react-focus-lock). It has various settings to
-   * allow more customization.
-   *
-   * @see https://github.com/theKashey/react-focus-lock
-   * @see https://github.com/reach/reach-ui/issues/615
-   */
-  dangerouslyBypassFocusLock?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 if (__DEV__) {

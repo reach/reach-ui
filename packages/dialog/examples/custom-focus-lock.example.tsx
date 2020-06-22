@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 import FocusLock from "react-focus-lock";
 import Portal from "@reach/portal";
 
-let name = "With customized Focus Lock";
+let name = "With customized focus lock";
 
 const FRAME_OVERLAY_STYLES: React.CSSProperties = {
   position: "fixed",
@@ -26,7 +26,7 @@ const FRAME_STYLES: React.CSSProperties = {
   boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 16px",
 };
 
-function Frame({
+function FakeInaccessibleFrame({
   id,
   show,
   close,
@@ -68,10 +68,16 @@ function ExampleDialogContent({ openFrame }: { openFrame: () => void }) {
 }
 
 function ExampleSelectiveDisablingFocusLock() {
-  const [showFrame, setShowFrame] = React.useState(false);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showFrame, setShowFrame] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
+      <p>
+        This is not recommended generally, but sometimes the focus lock is too
+        aggressive or not quite tailored to your needs. Approach this with an
+        abundance of caution; your app <strong>will not be accessible</strong>{" "}
+        without a proper focus lock!
+      </p>
       <h3>Disable focus lock selectively while needed</h3>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
       <DialogOverlay
@@ -81,14 +87,17 @@ function ExampleSelectiveDisablingFocusLock() {
       >
         <ExampleDialogContent openFrame={() => setShowFrame(true)} />
       </DialogOverlay>
-      <Frame show={showFrame} close={() => setShowFrame(false)} />
+      <FakeInaccessibleFrame
+        show={showFrame}
+        close={() => setShowFrame(false)}
+      />
     </div>
   );
 }
 
 function ExampleCustomFocusLock() {
-  const [showFrame, setShowFrame] = React.useState(false);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showFrame, setShowFrame] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   return (
     <div>
       <h3>Setup our own focus lock</h3>
@@ -107,7 +116,7 @@ function ExampleCustomFocusLock() {
           <ExampleDialogContent openFrame={() => setShowFrame(true)} />
         </FocusLock>
       </DialogOverlay>
-      <Frame
+      <FakeInaccessibleFrame
         id="problematic-frame"
         show={showFrame}
         close={() => setShowFrame(false)}
