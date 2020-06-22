@@ -91,42 +91,51 @@ export function useRect<T extends HTMLElement = HTMLElement>(
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
+  let [element, setElement] = useState(nodeRef.current);
   let initialRectSet = useRef(false);
   let [rect, setRect] = useState<DOMRect | null>(null);
-  let observerRef = useRef<any>(null);
-  useIsomorphicLayoutEffect(() => {
-    const cleanup = () => {
-      observerRef.current && observerRef.current.unobserve();
-    };
+  let onChangeRef = useRef<typeof onChange>();
 
-    if (!nodeRef.current) {
+  useIsomorphicLayoutEffect(() => {
+    onChangeRef.current = onChange;
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (nodeRef.current !== element) {
+      setElement(nodeRef.current);
+    }
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (element && !initialRectSet.current) {
+      initialRectSet.current = true;
+      setRect(element.getBoundingClientRect());
+    }
+  }, [element]);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!element) {
       console.warn("You need to place the ref");
       return cleanup;
     }
 
-    if (!observerRef.current) {
-      observerRef.current = observeRect(nodeRef.current, (rect: DOMRect) => {
-        onChange && onChange(rect);
-        setRect(rect);
-      });
-    }
+    let observer = observeRect(element, (rect) => {
+      onChangeRef.current && onChangeRef.current(rect);
+      setRect(rect);
+    });
 
-    if (!initialRectSet.current) {
-      initialRectSet.current = true;
-      setRect(nodeRef.current.getBoundingClientRect());
-    }
-
-    observe && observerRef.current.observe();
+    observe && observer.observe();
     return cleanup;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observe, onChange]);
+
+    function cleanup() {
+      observer.unobserve();
+    }
+  }, [observe, element]);
 
   return rect;
 }
 
 export default Rect;
-
-export type PartialRect = Partial<PRect>;
 
 export type PRect = Partial<DOMRect> & {
   readonly bottom: number;
