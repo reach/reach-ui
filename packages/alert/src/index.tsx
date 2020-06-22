@@ -61,7 +61,7 @@ let renderTimer: number | null;
  * @see Docs https://reacttraining.com/reach-ui/alert
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { children, type = "polite", ...props },
+  { children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
   const ownRef = useRef(null);
@@ -75,7 +75,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [children, props]
   );
-  useMirrorEffects(type, child, ownRef);
+  useMirrorEffects(regionType, child, ownRef);
 
   return child;
 });
@@ -141,8 +141,8 @@ function renderAlerts() {
   }
   renderTimer = window.setTimeout(() => {
     Object.keys(elements).forEach((elementType) => {
-      let type: RegionTypes = elementType as RegionTypes;
-      let container = liveRegions[type]!;
+      let regionType: RegionTypes = elementType as RegionTypes;
+      let container = liveRegions[regionType]!;
       if (container) {
         render(
           <VisuallyHidden>
@@ -154,18 +154,18 @@ function renderAlerts() {
               // will send out an accessible status event to assistive
               // technology products which can then notify the user about it.
               // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_status_role
-              role={type === "assertive" ? "alert" : "status"}
-              aria-live={type}
+              role={regionType === "assertive" ? "alert" : "status"}
+              aria-live={regionType}
             >
-              {Object.keys(elements[type]).map((key) =>
-                React.cloneElement(elements[type][key], {
+              {Object.keys(elements[regionType]).map((key) =>
+                React.cloneElement(elements[regionType][key], {
                   key,
                   ref: null,
                 })
               )}
             </div>
           </VisuallyHidden>,
-          liveRegions[type]
+          liveRegions[regionType]
         );
       }
     });
@@ -173,28 +173,27 @@ function renderAlerts() {
 }
 
 function useMirrorEffects(
-  type: RegionTypes,
+  regionType: RegionTypes,
   element: JSX.Element,
   ref: React.RefObject<any>
 ) {
-  const prevType = usePrevious<RegionTypes>(type);
+  const prevType = usePrevious<RegionTypes>(regionType);
   const mirror = useRef<Mirror | null>(null);
   const mounted = useRef(false);
   useEffect(() => {
     const ownerDocument = getOwnerDocument(ref.current) || document;
     if (!mounted.current) {
       mounted.current = true;
-      mirror.current = createMirror(type, ownerDocument);
+      mirror.current = createMirror(regionType, ownerDocument);
       mirror.current.mount(element);
-    } else if (prevType !== type) {
+    } else if (prevType !== regionType) {
       mirror.current && mirror.current.unmount();
-      mirror.current = createMirror(type, ownerDocument);
+      mirror.current = createMirror(regionType, ownerDocument);
       mirror.current.mount(element);
     } else {
       mirror.current && mirror.current.update(element);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element, type, prevType]);
+  }, [element, regionType, prevType, ref]);
 
   useEffect(() => {
     return () => {
