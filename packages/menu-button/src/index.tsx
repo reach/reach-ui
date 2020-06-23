@@ -879,15 +879,9 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
         } else {
-          let { relatedTarget, target } = event;
-
           // We on want to close only if focus rests outside the menu
           if (isExpanded && popoverRef.current) {
-            if (
-              !popoverRef.current?.contains(
-                (relatedTarget || target) as Element
-              )
-            ) {
+            if (!popoverRef.current.contains(event.target as Element)) {
               dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
             }
           }
