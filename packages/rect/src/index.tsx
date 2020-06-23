@@ -95,7 +95,8 @@ export function useRect<T extends Element = HTMLElement>(
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
   let [element, setElement] = useState(nodeRef.current);
-  let initialRectSet = useRef(false);
+  let initialRectIsSet = useRef(false);
+  let initialRefIsSet = useRef(false);
   let [rect, setRect] = useState<DOMRect | null>(null);
   let onChangeRef = useRef<typeof onChange>();
 
@@ -110,22 +111,33 @@ export function useRect<T extends Element = HTMLElement>(
   });
 
   useIsomorphicLayoutEffect(() => {
-    if (element && !initialRectSet.current) {
-      initialRectSet.current = true;
+    if (element && !initialRectIsSet.current) {
+      initialRectIsSet.current = true;
       setRect(element.getBoundingClientRect());
     }
   }, [element]);
 
   useIsomorphicLayoutEffect(() => {
     let observer: ReturnType<typeof observeRect>;
-    if (!element) {
+    let elem = element;
+
+    // State initializes before refs are placed, meaning the element state will
+    // be undefined on the first render. We still want the rect on the first
+    // render, so initially we'll use the nodeRef that was passed instead of
+    // state for our measurements.
+    if (!initialRefIsSet.current) {
+      initialRefIsSet.current = true;
+      elem = nodeRef.current;
+    }
+
+    if (!elem) {
       if (__DEV__) {
         console.warn("You need to place the ref");
       }
       return cleanup;
     }
 
-    observer = observeRect(element, (rect) => {
+    observer = observeRect(elem, (rect) => {
       onChangeRef.current && onChangeRef.current(rect);
       setRect(rect);
     });
