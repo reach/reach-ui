@@ -65,7 +65,10 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  children(args: { rect: PRect | null; ref: React.Ref<any> }): JSX.Element;
+  children(args: {
+    rect: PRect | null;
+    ref: React.RefObject<any>;
+  }): JSX.Element;
 };
 
 if (__DEV__) {
@@ -86,47 +89,57 @@ if (__DEV__) {
  * @param observe
  * @param onChange
  */
-export function useRect<T extends HTMLElement = HTMLElement>(
-  nodeRef: React.RefObject<T>,
+export function useRect<T extends Element = HTMLElement>(
+  nodeRef: React.RefObject<T | undefined | null>,
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
+  let [element, setElement] = useState(nodeRef.current);
   let initialRectSet = useRef(false);
   let [rect, setRect] = useState<DOMRect | null>(null);
-  let observerRef = useRef<any>(null);
-  useIsomorphicLayoutEffect(() => {
-    const cleanup = () => {
-      observerRef.current && observerRef.current.unobserve();
-    };
+  let onChangeRef = useRef<typeof onChange>();
 
-    if (!nodeRef.current) {
+  useIsomorphicLayoutEffect(() => {
+    onChangeRef.current = onChange;
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (nodeRef.current !== element) {
+      setElement(nodeRef.current);
+    }
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (element && !initialRectSet.current) {
+      initialRectSet.current = true;
+      setRect(element.getBoundingClientRect());
+    }
+  }, [element]);
+
+  useIsomorphicLayoutEffect(() => {
+    let observer: ReturnType<typeof observeRect>;
+    if (!element) {
       console.warn("You need to place the ref");
       return cleanup;
     }
 
-    if (!observerRef.current) {
-      observerRef.current = observeRect(nodeRef.current, (rect: DOMRect) => {
-        onChange && onChange(rect);
-        setRect(rect);
-      });
-    }
+    observer = observeRect(element, (rect) => {
+      onChangeRef.current && onChangeRef.current(rect);
+      setRect(rect);
+    });
 
-    if (!initialRectSet.current) {
-      initialRectSet.current = true;
-      setRect(nodeRef.current.getBoundingClientRect());
-    }
-
-    observe && observerRef.current.observe();
+    observe && observer.observe();
     return cleanup;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observe, onChange]);
+
+    function cleanup() {
+      observer && observer.unobserve();
+    }
+  }, [observe, element]);
 
   return rect;
 }
 
 export default Rect;
-
-export type PartialRect = Partial<PRect>;
 
 export type PRect = Partial<DOMRect> & {
   readonly bottom: number;
