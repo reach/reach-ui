@@ -119,7 +119,9 @@ export function useRect<T extends Element = HTMLElement>(
   useIsomorphicLayoutEffect(() => {
     let observer: ReturnType<typeof observeRect>;
     if (!element) {
-      console.warn("You need to place the ref");
+      if (__DEV__) {
+        console.warn("You need to place the ref");
+      }
       return cleanup;
     }
 
