@@ -17,7 +17,10 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ElementByTag,
+  ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
+  ForwardRefWithAsRenderFunction,
   FunctionComponentWithAs,
   MemoExoticComponentWithAs,
   PropsFromAs,
@@ -203,12 +206,9 @@ export function createNamedContext<ContextValueType>(
  * the time time being.
  */
 export function forwardRefWithAs<Props, ComponentType extends As = "div">(
-  render: (
-    props: PropsFromAs<ComponentType, Props>,
-    ref: React.RefObject<any>
-  ) => React.ReactElement | null
+  render: ForwardRefWithAsRenderFunction<ComponentType, Props>
 ) {
-  return React.forwardRef(render as any) as ForwardRefExoticComponentWithAs<
+  return React.forwardRef(render) as ForwardRefExoticComponentWithAs<
     ComponentType,
     Props
   >;
@@ -708,6 +708,8 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ElementByTag,
+  ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
   FunctionComponentWithAs,
   MemoExoticComponentWithAs,

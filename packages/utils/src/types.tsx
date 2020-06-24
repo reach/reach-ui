@@ -176,8 +176,55 @@ export interface MemoExoticComponentWithAs<
   ComponentType extends As,
   ComponentProps
 > extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
-  readonly type: ComponentType;
+  readonly type: ComponentType extends React.ComponentType
+    ? ComponentType
+    : FunctionComponentWithAs<ComponentType, ComponentProps>;
 }
+
+export interface ForwardRefWithAsRenderFunction<
+  ComponentType extends As,
+  ComponentProps = {}
+> {
+  (
+    props: React.PropsWithChildren<PropsFromAs<ComponentType, ComponentProps>>,
+    ref:
+      | ((
+          instance:
+            | (ComponentType extends keyof ElementTagNameMap
+                ? ElementByTag<ComponentType>
+                : any)
+            | null
+        ) => void)
+      | React.MutableRefObject<
+          | (ComponentType extends keyof ElementTagNameMap
+              ? ElementByTag<ComponentType>
+              : any)
+          | null
+        >
+      | null
+  ): React.ReactElement | null;
+  displayName?: string;
+  // explicit rejected with `never` required due to
+  // https://github.com/microsoft/TypeScript/issues/36826
+  /**
+   * defaultProps are not supported on render functions
+   */
+  defaultProps?: never;
+  /**
+   * propTypes are not supported on render functions
+   */
+  propTypes?: never;
+}
+
+export type ElementTagNameMap = HTMLElementTagNameMap &
+  Pick<
+    SVGElementTagNameMap,
+    Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap>
+  >;
+
+export type ElementByTag<
+  TagName extends keyof ElementTagNameMap
+> = ElementTagNameMap[TagName];
 
 /*
 
