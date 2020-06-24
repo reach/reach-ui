@@ -1,6 +1,6 @@
 {
   "name": "@reach/listbox",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "Accessible React listbox input.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,11 +13,11 @@
     "build": "ts-node ../../scripts/build"
   },
   "dependencies": {
-    "@reach/auto-id": "0.10.4",
-    "@reach/descendants": "0.10.4",
-    "@reach/machine": "0.10.4",
-    "@reach/popover": "0.10.4",
-    "@reach/utils": "0.10.4",
+    "@reach/auto-id": "0.10.5",
+    "@reach/descendants": "0.10.5",
+    "@reach/machine": "0.10.5",
+    "@reach/popover": "0.10.5",
+    "@reach/utils": "0.10.5",
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
