@@ -102,9 +102,6 @@ export function useRect<T extends Element = HTMLElement>(
 
   useIsomorphicLayoutEffect(() => {
     onChangeRef.current = onChange;
-  });
-
-  useIsomorphicLayoutEffect(() => {
     if (nodeRef.current !== element) {
       setElement(nodeRef.current);
     }
