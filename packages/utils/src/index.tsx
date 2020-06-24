@@ -17,6 +17,9 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ForwardRefExoticComponentWithAs,
+  FunctionComponentWithAs,
+  MemoExoticComponentWithAs,
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
@@ -198,33 +201,29 @@ export function createNamedContext<ContextValueType>(
  * type song-and-dance every time we want to forward a ref into a component
  * that accepts an `as` prop, we abstract all of that mess to this function for
  * the time time being.
- *
- * TODO: Eventually we should probably just try to get the type defs above
- * working across the board, but ain't nobody got time for that mess!
- *
- * @param comp
  */
 export function forwardRefWithAs<Props, ComponentType extends As = "div">(
-  comp: (
+  render: (
     props: PropsFromAs<ComponentType, Props>,
     ref: React.RefObject<any>
   ) => React.ReactElement | null
 ) {
-  return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
+  return (React.forwardRef(
+    render as any
+  ) as unknown) as ForwardRefExoticComponentWithAs<ComponentType, Props>;
+}
+
+export function memoWithAs<Props, ComponentType extends As = "div">(
+  Component: FunctionComponentWithAs<ComponentType, Props>,
+  propsAreEqual?: (
+    prevProps: Readonly<React.PropsWithChildren<Props>>,
+    nextProps: Readonly<React.PropsWithChildren<Props>>
+  ) => boolean
+) {
+  return React.memo(Component, propsAreEqual) as MemoExoticComponentWithAs<
     ComponentType,
     Props
   >;
-}
-
-/**
- * Same deal as above
- *
- * @param comp
- */
-export function memoWithAs<Props, ComponentType extends As = "div">(
-  comp: ComponentWithAs<ComponentType, Props>
-) {
-  return React.memo(comp) as ComponentWithAs<ComponentType, Props>;
 }
 
 /**
@@ -708,6 +707,9 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ForwardRefExoticComponentWithAs,
+  FunctionComponentWithAs,
+  MemoExoticComponentWithAs,
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,

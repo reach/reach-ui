@@ -69,9 +69,7 @@ export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.
 // I kind of hacked around until I got this to work using some other projects,
-// as a rough guide, but it does seem to work so, err, that's cool? Yay TS! 🙃
-// P = additional props
-// T = type of component to render
+// as a rough guide, but it does seem to work so, err, that's cool?
 
 export type As<BaseProps = any> = React.ElementType<BaseProps>;
 
@@ -92,6 +90,7 @@ export type PropsFromAs<
 > = (PropsWithAs<ComponentType, ComponentProps> & { as: ComponentType }) &
   PropsWithAs<ComponentType, ComponentProps>;
 
+// TODO: Remove in 1.0
 export type ComponentWithForwardedRef<
   ElementType extends React.ElementType,
   ComponentProps
@@ -101,18 +100,83 @@ export type ComponentWithForwardedRef<
     React.ComponentPropsWithRef<ElementType>
 >;
 
-export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
-  // These types are a bit of a hack, but cover us in cases where the `as` prop
-  // is not a JSX string type. Makes the compiler happy so 🤷‍♂️
-  <TT extends As>(props: PropsWithAs<TT, ComponentProps>): ReactElement | null;
-  (props: PropsWithAs<ComponentType, ComponentProps>): ReactElement | null;
+export interface FunctionComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> {
+  /**
+   * Inherited from React.FunctionComponent with modifications to support `as`
+   */
+  <TT extends As>(
+    props: PropsWithAs<TT, ComponentProps>,
+    context?: any
+  ): React.ReactElement<any, any> | null;
+  (
+    props: PropsWithAs<ComponentType, ComponentProps>,
+    context?: any
+  ): React.ReactElement<any, any> | null;
 
+  /**
+   * Inherited from React.FunctionComponent
+   */
   displayName?: string;
   propTypes?: React.WeakValidationMap<
     PropsWithAs<ComponentType, ComponentProps>
   >;
   contextTypes?: React.ValidationMap<any>;
   defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
+}
+
+// TODO: Remove in 1.0
+export interface ComponentWithAs<ComponentType extends As, ComponentProps>
+  extends FunctionComponentWithAs<ComponentType, ComponentProps> {}
+
+interface ExoticComponentWithAs<ComponentType extends As, ComponentProps> {
+  /**
+   * **NOTE**: Exotic components are not callable.
+   * Inherited from React.ExoticComponent with modifications to support `as`
+   */
+  <TT extends As>(
+    props: PropsWithAs<TT, ComponentProps>
+  ): React.ReactElement | null;
+  (
+    props: PropsWithAs<ComponentType, ComponentProps>
+  ): React.ReactElement | null;
+
+  /**
+   * Inherited from React.ExoticComponent
+   */
+  readonly $$typeof: symbol;
+}
+
+interface NamedExoticComponentWithAs<ComponentType extends As, ComponentProps>
+  extends ExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.NamedExoticComponent
+   */
+  displayName?: string;
+}
+
+export interface ForwardRefExoticComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.ForwardRefExoticComponent
+   * Will show `ForwardRef(${Component.displayName || Component.name})` in devtools by default,
+   * but can be given its own specific name
+   */
+  defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
+  propTypes?: React.WeakValidationMap<
+    PropsWithAs<ComponentType, ComponentProps>
+  >;
+}
+
+export interface MemoExoticComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
+  readonly type: ComponentType;
 }
 
 /*
