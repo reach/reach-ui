@@ -208,9 +208,10 @@ export function forwardRefWithAs<Props, ComponentType extends As = "div">(
     ref: React.RefObject<any>
   ) => React.ReactElement | null
 ) {
-  return (React.forwardRef(
-    render as any
-  ) as unknown) as ForwardRefExoticComponentWithAs<ComponentType, Props>;
+  return React.forwardRef(render as any) as ForwardRefExoticComponentWithAs<
+    ComponentType,
+    Props
+  >;
 }
 
 export function memoWithAs<Props, ComponentType extends As = "div">(
