@@ -43,7 +43,7 @@ export type SkipNavLinkProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
    */
-  children?: string | JSX.Element;
+  children?: React.ReactNode;
   /**
    * An alternative ID for `SkipNavContent`. If used, the same value must be
    * provided to the `id` prop in `SkipNavContent`.
