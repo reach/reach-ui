@@ -6,6 +6,7 @@ import {
   ListboxGroupLabel,
   ListboxOption,
 } from "@reach/listbox";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Grouped with Composed Label";
@@ -61,14 +62,6 @@ function Example() {
         </ListboxGroup>
       </Listbox>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 

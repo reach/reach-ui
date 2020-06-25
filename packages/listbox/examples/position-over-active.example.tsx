@@ -11,6 +11,7 @@ import {
 import { Position, getCollisions } from "@reach/popover";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 // On MacOS, when a user opens a native select menu, the popover is positioned
@@ -99,17 +100,10 @@ function PositionedPopover({ ...props }: ListboxPopoverProps) {
     }
   }, [isExpanded, selectedOptionRef]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   let position = React.useCallback(getPosition(top), [top]);
 
   return <ListboxPopover {...props} ref={ref} position={position} />;
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
-  );
 }
 
 Example.story = { name };

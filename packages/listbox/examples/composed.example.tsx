@@ -7,6 +7,7 @@ import {
   ListboxList,
   ListboxPopover,
 } from "@reach/listbox";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Composed";
@@ -56,14 +57,6 @@ function Example() {
         </ListboxPopover>
       </ListboxInput>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 

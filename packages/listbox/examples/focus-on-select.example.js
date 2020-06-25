@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
+import { Tag, Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Move Focus on Item Select";
@@ -18,7 +19,7 @@ function Example() {
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
       <Listbox
         aria-labelledby="taco-label"
-        onChange={newValue => {
+        onChange={(newValue) => {
           inputRef.current.focus();
           action("value changed")(newValue);
         }}
@@ -46,34 +47,6 @@ function Example() {
         </label>
       </div>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
-  );
-}
-
-function Tag(props) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        lineHeight: 1,
-        fontSize: 11,
-        textTransform: "uppercase",
-        fontWeight: "bolder",
-        marginLeft: 6,
-        padding: 4,
-        background: "crimson",
-        borderRadius: 2,
-        color: "#fff",
-      }}
-      {...props}
-    />
   );
 }
 

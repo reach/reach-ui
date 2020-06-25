@@ -10,6 +10,7 @@ import {
 } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "With useListboxContext (TS)";
@@ -77,14 +78,6 @@ function Example() {
         </ListboxPopover>
       </ListboxInput>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 
