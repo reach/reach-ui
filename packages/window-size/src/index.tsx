@@ -31,7 +31,10 @@ export type WindowSizeProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-children
    */
-  children: (size: TWindowSize) => React.ReactElement<any>;
+  children: (size: {
+    width: number;
+    height: number;
+  }) => React.ReactElement<any, any>;
 };
 
 if (__DEV__) {
@@ -68,9 +71,7 @@ export function useWindowSize() {
   return dimensions;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
+// TODO: Remove in 1.0
 export type TWindowSize = {
   width: number;
   height: number;
