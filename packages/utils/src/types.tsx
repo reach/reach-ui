@@ -51,12 +51,25 @@ export type DistributiveOmit<
   Key extends PropertyKey
 > = BaseType extends any ? Omit<BaseType, Key> : never;
 
+/**
+ * Returns the type inferred by a promise's return value.
+ *
+ * @example
+ * async function getThing() {
+ *   // return type is a number
+ *   let result: number = await fetchValueSomewhere();
+ *   return result;
+ * }
+ *
+ * type Thing = ThenArg<ReturnType<typeof getThing>>;
+ * // number
+ */
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+
 ////////////////////////////////////////////////////////////////////////////////
 // The following types help us deal with the `as` prop.
 // I kind of hacked around until I got this to work using some other projects,
-// as a rough guide, but it does seem to work so, err, that's cool? Yay TS! 🙃
-// P = additional props
-// T = type of component to render
+// as a rough guide, but it does seem to work so, err, that's cool?
 
 export type As<BaseProps = any> = React.ElementType<BaseProps>;
 
@@ -77,6 +90,7 @@ export type PropsFromAs<
 > = (PropsWithAs<ComponentType, ComponentProps> & { as: ComponentType }) &
   PropsWithAs<ComponentType, ComponentProps>;
 
+// TODO: Remove in 1.0
 export type ComponentWithForwardedRef<
   ElementType extends React.ElementType,
   ComponentProps
@@ -86,27 +100,25 @@ export type ComponentWithForwardedRef<
     React.ComponentPropsWithRef<ElementType>
 >;
 
-/**
- * Returns the type inferred by a promise's return value.
- *
- * @example
- * async function getThing() {
- *   // return type is a number
- *   let result: number = await fetchValueSomewhere();
- *   return result;
- * }
- *
- * type Thing = ThenArg<ReturnType<typeof getThing>>;
- * // number
- */
-export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+export interface FunctionComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> {
+  /**
+   * Inherited from React.FunctionComponent with modifications to support `as`
+   */
+  <TT extends As>(
+    props: PropsWithAs<TT, ComponentProps>,
+    context?: any
+  ): React.ReactElement<any, any> | null;
+  (
+    props: PropsWithAs<ComponentType, ComponentProps>,
+    context?: any
+  ): React.ReactElement<any, any> | null;
 
-export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
-  // These types are a bit of a hack, but cover us in cases where the `as` prop
-  // is not a JSX string type. Makes the compiler happy so 🤷‍♂️
-  <TT extends As>(props: PropsWithAs<TT, ComponentProps>): ReactElement | null;
-  (props: PropsWithAs<ComponentType, ComponentProps>): ReactElement | null;
-
+  /**
+   * Inherited from React.FunctionComponent
+   */
   displayName?: string;
   propTypes?: React.WeakValidationMap<
     PropsWithAs<ComponentType, ComponentProps>
@@ -114,6 +126,105 @@ export interface ComponentWithAs<ComponentType extends As, ComponentProps> {
   contextTypes?: React.ValidationMap<any>;
   defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
 }
+
+// TODO: Remove in 1.0
+export interface ComponentWithAs<ComponentType extends As, ComponentProps>
+  extends FunctionComponentWithAs<ComponentType, ComponentProps> {}
+
+interface ExoticComponentWithAs<ComponentType extends As, ComponentProps> {
+  /**
+   * **NOTE**: Exotic components are not callable.
+   * Inherited from React.ExoticComponent with modifications to support `as`
+   */
+  <TT extends As>(
+    props: PropsWithAs<TT, ComponentProps>
+  ): React.ReactElement | null;
+  (
+    props: PropsWithAs<ComponentType, ComponentProps>
+  ): React.ReactElement | null;
+
+  /**
+   * Inherited from React.ExoticComponent
+   */
+  readonly $$typeof: symbol;
+}
+
+interface NamedExoticComponentWithAs<ComponentType extends As, ComponentProps>
+  extends ExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.NamedExoticComponent
+   */
+  displayName?: string;
+}
+
+export interface ForwardRefExoticComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.ForwardRefExoticComponent
+   * Will show `ForwardRef(${Component.displayName || Component.name})` in devtools by default,
+   * but can be given its own specific name
+   */
+  defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
+  propTypes?: React.WeakValidationMap<
+    PropsWithAs<ComponentType, ComponentProps>
+  >;
+}
+
+export interface MemoExoticComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
+  readonly type: ComponentType extends React.ComponentType
+    ? ComponentType
+    : FunctionComponentWithAs<ComponentType, ComponentProps>;
+}
+
+export interface ForwardRefWithAsRenderFunction<
+  ComponentType extends As,
+  ComponentProps = {}
+> {
+  (
+    props: React.PropsWithChildren<PropsFromAs<ComponentType, ComponentProps>>,
+    ref:
+      | ((
+          instance:
+            | (ComponentType extends keyof ElementTagNameMap
+                ? ElementByTag<ComponentType>
+                : any)
+            | null
+        ) => void)
+      | React.MutableRefObject<
+          | (ComponentType extends keyof ElementTagNameMap
+              ? ElementByTag<ComponentType>
+              : any)
+          | null
+        >
+      | null
+  ): React.ReactElement | null;
+  displayName?: string;
+  // explicit rejected with `never` required due to
+  // https://github.com/microsoft/TypeScript/issues/36826
+  /**
+   * defaultProps are not supported on render functions
+   */
+  defaultProps?: never;
+  /**
+   * propTypes are not supported on render functions
+   */
+  propTypes?: never;
+}
+
+export type ElementTagNameMap = HTMLElementTagNameMap &
+  Pick<
+    SVGElementTagNameMap,
+    Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap>
+  >;
+
+export type ElementByTag<
+  TagName extends keyof ElementTagNameMap
+> = ElementTagNameMap[TagName];
 
 /*
 

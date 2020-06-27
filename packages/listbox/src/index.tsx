@@ -20,7 +20,7 @@
  *       https://twitter.com/GassnerKendall/status/1237778370118598661
  *
  * @see Docs     https://reacttraining.com/reach-ui/listbox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/listbox
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
 
@@ -45,6 +45,7 @@ import {
   useDescendant,
   useDescendantKeyDown,
   useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 import {
   createNamedContext,
@@ -55,6 +56,7 @@ import {
   isRightClick,
   isString,
   makeId,
+  memoWithAs,
   useCallbackProp,
   useCheckStyles,
   useControlledSwitchWarning,
@@ -77,10 +79,9 @@ const DEBUG = false;
 ////////////////////////////////////////////////////////////////////////////////
 // ListboxContext
 
-const ListboxDescendantContext = createDescendantContext<
-  HTMLElement,
-  ListboxDescendantProps
->("ListboxDescendantContext");
+const ListboxDescendantContext = createDescendantContext<ListboxDescendant>(
+  "ListboxDescendantContext"
+);
 const ListboxContext = createNamedContext(
   "ListboxContext",
   {} as InternalListboxContextValue
@@ -122,10 +123,7 @@ export const ListboxInput = forwardRef<
   forwardedRef
 ) {
   let isControlled = useRef(valueProp != null);
-  let [options, setOptions] = useDescendants<
-    HTMLElement,
-    ListboxDescendantProps
-  >();
+  let [options, setOptions] = useDescendantsInit<ListboxDescendant>();
 
   let onChange = useCallbackProp(onChangeProp);
 
@@ -325,13 +323,14 @@ export const ListboxInput = forwardRef<
         {(form || name || required) && (
           <input
             ref={hiddenInputRef}
+            data-reach-listbox-hidden-input=""
             disabled={disabled}
             form={form}
             name={name}
             readOnly
             required={required}
             tabIndex={-1}
-            type="text"
+            type="hidden"
             value={state.context.value || ""}
           />
         )}
@@ -631,7 +630,7 @@ if (__DEV__) {
   };
 }
 
-export const ListboxButton = memo(ListboxButtonImpl);
+export const ListboxButton = memoWithAs(ListboxButtonImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
@@ -963,13 +962,15 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let label = labelProp || labelState || "";
 
     let ownRef = useRef<HTMLElement | null>(null);
-    useDescendant({
-      context: ListboxDescendantContext,
-      element: ownRef.current!,
-      value,
-      label,
-      disabled: !!disabled,
-    });
+    useDescendant(
+      {
+        element: ownRef.current!,
+        value,
+        label,
+        disabled: !!disabled,
+      },
+      ListboxDescendantContext
+    );
 
     // After the ref is mounted to the DOM node, we check to see if we have an
     // explicit label prop before looking for the node's textContent for
@@ -1271,8 +1272,7 @@ function useKeyDown() {
     stateData: { navigationValue, typeaheadQuery },
     send,
   } = useContext(ListboxContext);
-
-  let { descendants: options } = useContext(ListboxDescendantContext);
+  let options = useDescendants(ListboxDescendantContext);
 
   useEffect(() => {
     if (typeaheadQuery) {
@@ -1377,13 +1377,11 @@ function targetIsInPopover(
 
 export type ListboxValue = string;
 
-export interface ListboxDescendantProps {
+export type ListboxDescendant = Descendant<HTMLElement> & {
   value: ListboxValue;
   label: string;
   disabled: boolean;
-}
-
-export type ListboxDescendant = Descendant<HTMLElement, ListboxDescendantProps>;
+};
 
 export type ListboxContextValue = {
   id: string | undefined;

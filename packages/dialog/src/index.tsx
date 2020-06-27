@@ -6,7 +6,7 @@
  * An accessible dialog or "modal" window.
  *
  * @see Docs     https://reacttraining.com/reach-ui/dialog
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/dialog
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
 
@@ -25,8 +25,11 @@ import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
 
 const overlayPropTypes = {
-  initialFocusRef: () => null,
   allowPinchZoom: PropTypes.bool,
+  dangerouslyBypassFocusLock: PropTypes.bool,
+  dangerouslyBypassScrollLock: PropTypes.bool,
+  // TODO:
+  initialFocusRef: () => null,
   onDismiss: PropTypes.func,
 };
 
@@ -42,7 +45,7 @@ const overlayPropTypes = {
  *
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay
  */
-export const DialogOverlay = forwardRef<HTMLDivElement, DialogProps>(
+export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
   function DialogOverlay({ isOpen = true, ...props }, forwardedRef) {
     useEffect(() => checkStyles("dialog"), []);
 
@@ -78,20 +81,62 @@ if (__DEV__) {
   };
 }
 
+export type DialogOverlayProps = DialogProps & {
+  /**
+   * By default the dialog locks the focus inside it. Normally this is what you
+   * want. This prop is provided so that this feature can be disabled. This,
+   * however, is strongly discouraged.
+   *
+   * The reason it is provided is not to disable the focus lock entirely.
+   * Rather, there are certain situations where you may need more control on how
+   * the focus lock works. This should be complemented by setting up a focus
+   * lock yourself that would allow more flexibility for your specific use case.
+   *
+   * If you do set this prop to `true`, make sure you set up your own
+   * `FocusLock` component. You can likely use
+   * `react-focus-lock`, which is what Reach uses internally by default. It has
+   * various settings to allow more customization, but it takes care of a lot of
+   * hard work that you probably don't want or need to do.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-dangerouslybypassfocuslock
+   * @see https://github.com/theKashey/react-focus-lock
+   * @see https://github.com/reach/reach-ui/issues/615
+   */
+  dangerouslyBypassFocusLock?: boolean;
+  /**
+   * By default the dialog locks scrolling with `react-remove-scroll`, which
+   * also injecs some styles on the body element to remove the scrollbar while
+   * maintaining its gap to prevent jank when the dialog's open state is
+   * toggled. This is almost always what you want in a dialog, but in some cases
+   * you may have the need to customize this behavior further.
+   *
+   * This prop will disable `react-remove-scroll` and allow you to compose your
+   * own scroll lock component to meet your needs. Like the
+   * `dangerouslyBypassFocusLock` prop, this is generally discouraged and should
+   * only be used if a proper fallback for managing scroll behavior is provided.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-dangerouslybypassscrolllock
+   * @see https://github.com/theKashey/react-remove-scroll
+   */
+  dangerouslyBypassScrollLock?: boolean;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogInner
  */
-const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
+const DialogInner = forwardRef<HTMLDivElement, DialogOverlayProps>(
   function DialogInner(
     {
       allowPinchZoom,
+      dangerouslyBypassFocusLock = false,
+      dangerouslyBypassScrollLock = false,
       initialFocusRef,
       onClick,
       onDismiss = noop,
-      onMouseDown,
       onKeyDown,
+      onMouseDown,
       unstable_lockFocusAcrossFrames = true,
       ...props
     },
@@ -136,9 +181,13 @@ const DialogInner = forwardRef<HTMLDivElement, DialogProps>(
         autoFocus
         returnFocus
         onActivation={activateFocusLock}
+        disabled={dangerouslyBypassFocusLock}
         crossFrame={unstable_lockFocusAcrossFrames}
       >
-        <RemoveScroll allowPinchZoom={allowPinchZoom}>
+        <RemoveScroll
+          allowPinchZoom={allowPinchZoom}
+          enabled={!dangerouslyBypassScrollLock}
+        >
           <div
             {...props}
             ref={ref}
@@ -231,13 +280,19 @@ if (__DEV__) {
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { isOpen, onDismiss = noop, initialFocusRef, allowPinchZoom, ...props },
+  {
+    allowPinchZoom = false,
+    initialFocusRef,
+    isOpen,
+    onDismiss = noop,
+    ...props
+  },
   forwardedRef
 ) {
   return (
     <DialogOverlay
-      initialFocusRef={initialFocusRef}
       allowPinchZoom={allowPinchZoom}
+      initialFocusRef={initialFocusRef}
       isOpen={isOpen}
       onDismiss={onDismiss}
     >
@@ -250,9 +305,29 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
  * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-props
  */
 export type DialogProps = {
+  /**
+   * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
+   * Defaults to `false`.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-allowpinchzoom
+   */
   allowPinchZoom?: boolean;
   /**
-   * Controls whether the dialog is open or not.
+   * Accepts any renderable content.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
+   */
+  children?: React.ReactNode;
+
+  /**
+   * By default the first focusable element will receive focus when the dialog
+   * opens but you can provide a ref to focus instead.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-initialfocusref
+   */
+  initialFocusRef?: React.RefObject<any>;
+  /**
+   * Controls whether or not the dialog is open.
    *
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-isopen
    */
@@ -271,19 +346,6 @@ export type DialogProps = {
    * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-ondismiss
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
-  /**
-   * Accepts any renderable content.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
-   */
-  children?: React.ReactNode;
-  /**
-   * By default the first focusable element will receive focus when the dialog
-   * opens but you can provide a ref to focus instead.
-   *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-initialfocusref
-   */
-  initialFocusRef?: React.RefObject<any>;
   /**
    * By default, React Focus Lock prevents focus from being moved outside of the
    * locked element even if the thing trying to take focus is in another frame.

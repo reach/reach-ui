@@ -16,7 +16,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   </TOCList>
 </TOC>
 
-- Source: https://github.com/reach/reach-ui/tree/master/packages/tabs
+- Source: https://github.com/reach/reach-ui/tree/main/packages/tabs
 - WAI-ARIA: https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
 
 An accessible tabs component.
@@ -107,25 +107,18 @@ Tabs will render a `div` unless you specify a different element.
 
 `children: React.ReactNode | ((props: { focusedIndex: number; id: string; selectedIndex: number }) => React.ReactNode)`
 
-Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter, you can have tabs on the top or the bottom. In fact, you could have tabs on both the bottom and the top at the same time. You can have random elements inside as well.
+Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter; you can have tabs on the top or the bottom. You can have random elements inside as well.
 
 ```jsx
 // jsx-demo
 function Example() {
   return (
     <Tabs>
-      <TabList>
-        <Tab>Uno</Tab>
-        <Tab>Dos</Tab>
-      </TabList>
-
       <div>Random</div>
-
       <TabPanels>
         <TabPanel>Uno</TabPanel>
         <TabPanel>Dos</TabPanel>
       </TabPanels>
-
       <TabList>
         <Tab>Uno</Tab>
         <Tab>Dos</Tab>
@@ -770,28 +763,39 @@ With a little composition we can animate the selected tab bar.
   const HORIZONTAL_PADDING = 8;
   const AnimatedContext = React.createContext();
 
-  function AnimatedTabs({ color, ...rest }) {
+  function AnimatedTabs({ color, children, ...rest }) {
     // some state to store the position we want to animate to
     const [activeRect, setActiveRect] = useState(null);
+    const ref = useRef();
+    const rect = useRect(ref);
 
     return (
       // put the function to change the styles on context so an active Tab
       // can call it, then style it up
       <AnimatedContext.Provider value={setActiveRect}>
         {/* make sure to forward props since we're wrapping Tabs */}
-        <Tabs {...rest} style={{ ...rest.style, position: "relative" }} />
-        <div
-          style={{
-            position: "absolute",
-            height: 2,
-            background: color,
-            transition: "all 300ms ease",
-            left: activeRect && activeRect.left,
-            // subtract both sides of horizontal padding to center the div
-            width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
-            top: activeRect && activeRect.bottom - 2,
-          }}
-        />
+        <Tabs
+          {...rest}
+          ref={ref}
+          style={{ ...rest.style, position: "relative" }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              height: 2,
+              background: color,
+              transition: "all 300ms ease",
+              left:
+                (activeRect && activeRect.left) -
+                (rect && rect.left) +
+                HORIZONTAL_PADDING,
+              top: (activeRect && activeRect.bottom) - (rect && rect.top),
+              // subtract both sides of horizontal padding to center the div
+              width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
+            }}
+          />
+          {children}
+        </Tabs>
       </AnimatedContext.Provider>
     );
   }

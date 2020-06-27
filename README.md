@@ -8,7 +8,7 @@ https://reacttraining.com/reach-ui/
 
 ## Getting Started
 
-Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow their [install instructions](https://yarnpkg.com/docs/install) to get Yarn installed on your system.
+Reach UI is built and tested with [Yarn](https://yarnpkg.com). Please follow their [install instructions](https://yarnpkg.com/getting-started/install) to get Yarn installed on your system.
 
 Then, run these commands:
 
@@ -132,10 +132,10 @@ $ git log -p
 # delete the tag that lerna created and try again.
 
 # If everything looks good, push to GitHub along with the new tag:
-$ git push origin master --follow-tags
+$ git push origin main --follow-tags
 
 # Open up travis-ci.com/reach/reach-ui and watch the build. There will
-# be 2 builds, one for the push to the master branch and one for the
+# be 2 builds, one for the push to the main branch and one for the
 # new tag. The tag build will run the build and all the tests and then
 # automatically publish to npm if everything passes. If there's a
 # problem, we have to figure out how to fix manually.

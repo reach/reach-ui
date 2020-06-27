@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/window-size.svg)](https://npm.im/@reach/window-size) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/window-size) | [Source](https://github.com/reach/reach-ui/tree/master/packages/window-size)
+[Docs](https://reacttraining.com/reach-ui/window-size) | [Source](https://github.com/reach/reach-ui/tree/main/packages/window-size)
 
 Measure the current window dimensions.
 

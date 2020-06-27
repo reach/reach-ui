@@ -14,7 +14,7 @@
  *    languages if that's a thing
  *
  * @see Docs     https://reacttraining.com/reach-ui/slider
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/slider
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/slider
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see Example  https://github.com/Stanko/aria-progress-range-slider
  * @see Example  http://www.oaa-accessibility.org/examplep/slider1/
@@ -39,6 +39,7 @@ import {
   getOwnerDocument,
   isFunction,
   makeId,
+  memoWithAs,
   useEventCallback,
   useForkedRef,
   useControlledSwitchWarning,
@@ -392,6 +393,10 @@ const SliderInput = forwardRefWithAs<
 
   // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
   let handleKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+    if (disabled) {
+      return;
+    }
+
     let newValue: number;
     let tenSteps = (max - min) / 10;
     let keyStep = step || (max - min) / 100;
@@ -758,7 +763,14 @@ const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
   );
 });
 
-const SliderTrack = memo(SliderTrackImpl);
+if (__DEV__) {
+  SliderTrackImpl.displayName = "SliderTrack";
+  SliderTrackImpl.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
+}
+
+const SliderTrack = memoWithAs(SliderTrackImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-props
@@ -776,10 +788,6 @@ export type SliderTrackProps = {
 
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
-  SliderTrackImpl.displayName = "SliderTrack";
-  SliderTrackImpl.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
 }
 
 export { SliderTrack };
@@ -815,7 +823,12 @@ const SliderTrackHighlightImpl = forwardRefWithAs<SliderTrackHighlightProps>(
   }
 );
 
-const SliderTrackHighlight = memo(SliderTrackHighlightImpl);
+if (__DEV__) {
+  SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
+  SliderTrackHighlightImpl.propTypes = {};
+}
+
+const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
 
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
@@ -827,8 +840,6 @@ export type SliderTrackHighlightProps = {};
 
 if (__DEV__) {
   SliderTrackHighlight.displayName = "SliderTrackHighlight";
-  SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
-  SliderTrackHighlightImpl.propTypes = {};
 }
 
 export { SliderTrackHighlight };
@@ -933,7 +944,12 @@ const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
   }
 );
 
-const SliderHandle = memo(SliderHandleImpl);
+if (__DEV__) {
+  SliderHandleImpl.displayName = "SliderHandle";
+  SliderHandleImpl.propTypes = {};
+}
+
+const SliderHandle = memoWithAs(SliderHandleImpl);
 
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
@@ -944,8 +960,6 @@ export type SliderHandleProps = {};
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
-  SliderHandleImpl.displayName = "SliderHandle";
-  SliderHandleImpl.propTypes = {};
 }
 
 export { SliderHandle };
@@ -1010,7 +1024,14 @@ const SliderMarkerImpl = forwardRefWithAs<SliderMarkerProps>(
   }
 );
 
-const SliderMarker = memo(SliderMarkerImpl);
+if (__DEV__) {
+  SliderMarkerImpl.displayName = "SliderMarker";
+  SliderMarkerImpl.propTypes = {
+    value: PropTypes.number.isRequired,
+  };
+}
+
+const SliderMarker = memoWithAs(SliderMarkerImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-props
@@ -1026,10 +1047,6 @@ export type SliderMarkerProps = {
 
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
-  SliderMarkerImpl.displayName = "SliderMarker";
-  SliderMarkerImpl.propTypes = {
-    value: PropTypes.number.isRequired,
-  };
 }
 
 export { SliderMarker };

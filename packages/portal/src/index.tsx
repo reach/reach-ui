@@ -7,7 +7,7 @@
  * hiding content (for popovers, dropdowns, and modals).
  *
  * @see Docs   https://reacttraining.com/reach-ui/portal
- * @see Source https://github.com/reach/reach-ui/tree/master/packages/portal
+ * @see Source https://github.com/reach/reach-ui/tree/main/packages/portal
  * @see React  https://reactjs.org/docs/portals.html
  */
 
@@ -26,6 +26,8 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   let [, forceUpdate] = useState();
 
   useIsomorphicLayoutEffect(() => {
+    // This ref may be null when a hot-loader replaces components on the page
+    if (!mountNode.current) return;
     // It's possible that the content of the portal has, itself, been portaled.
     // In that case, it's important to append to the correct document element.
     const ownerDocument = mountNode.current!.ownerDocument;

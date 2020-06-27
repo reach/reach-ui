@@ -61,13 +61,12 @@ export async function isDir(name: string) {
 export async function getInputs(
   entries?: string | string[]
 ): Promise<string[]> {
-  return ([] as any[])
-    .concat(
-      entries && entries.length
-        ? entries
-        : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
-    )
-    .flatMap(file => glob(file));
+  const inputs = ([] as any[]).concat(
+    entries && entries.length
+      ? entries
+      : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
+  );
+  return flatten(inputs).map((file) => glob(file));
 }
 
 export function getPackageName(opts: any) {
@@ -93,8 +92,9 @@ export async function createProgressEstimator() {
 
 export function logError(err: any) {
   const error = err.error || err;
-  const description = `${error.name ? error.name + ": " : ""}${error.message ||
-    error}`;
+  const description = `${error.name ? error.name + ": " : ""}${
+    error.message || error
+  }`;
   const message = error.plugin
     ? error.plugin === "rpt2"
       ? `(typescript) ${description}`
@@ -126,4 +126,8 @@ export async function cleanDistFolder() {
 export function parseArgs() {
   let { _, ...args } = mri(process.argv.slice(2));
   return args;
+}
+
+export function flatten(arr: any[][]): any[] {
+  return arr.reduce((flat, next) => flat.concat(next), []);
 }

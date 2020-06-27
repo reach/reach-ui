@@ -14,7 +14,7 @@ function Example() {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
     leave: { opacity: 0, y: 10 },
-    config: config.stiff
+    config: config.stiff,
   });
   return (
     <div>
@@ -33,7 +33,7 @@ function Example() {
                     (value: any) => `translate3d(0px, ${value}px, 0px)`
                   ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
               >
                 <button onClick={() => setShowDialog(false)}>

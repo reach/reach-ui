@@ -12,12 +12,11 @@
  * `TabPanel` elements.
  *
  * @see Docs     https://reacttraining.com/reach-ui/tabs
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/tabs
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
 
 import React, {
-  memo,
   useContext,
   useEffect,
   useMemo,
@@ -28,9 +27,11 @@ import React, {
 import PropTypes from "prop-types";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
+  useDescendantsInit,
   useDescendants,
 } from "@reach/descendants";
 import {
@@ -43,6 +44,7 @@ import {
   isNumber,
   isFunction,
   makeId,
+  memoWithAs,
   noop,
   useControlledSwitchWarning,
   useControlledState,
@@ -54,12 +56,11 @@ import {
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 
-const TabsDescendantsContext = createDescendantContext<
-  HTMLElement,
-  TabDescendantProps
->("TabsDescendantsContext");
+const TabsDescendantsContext = createDescendantContext<TabDescendant>(
+  "TabsDescendantsContext"
+);
 
-const TabPanelDescendantsContext = createDescendantContext<HTMLElement>(
+const TabPanelDescendantsContext = createDescendantContext<TabPanelDescendant>(
   "TabPanelDescendantsContext"
 );
 const TabsContext = createNamedContext(
@@ -121,7 +122,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 
   let [focusedIndex, setFocusedIndex] = useState(-1);
 
-  let [tabs, setTabs] = useDescendants<HTMLElement, TabDescendantProps>();
+  let [tabs, setTabs] = useDescendantsInit<TabDescendant>();
 
   let context: InternalTabsContextValue = useMemo(() => {
     return {
@@ -279,7 +280,7 @@ if (__DEV__) {
             compName +
             "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
         );
-      } else if (props[name] != null && !isNumber(props[name])) {
+      } else if (val != null && !isNumber(val)) {
         return new Error(
           `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
             Array.isArray(val) ? "array" : typeof val
@@ -315,8 +316,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
     selectedIndex,
     setSelectedIndex,
   } = useContext(TabsContext);
-
-  let { descendants: tabs } = useContext(TabsDescendantsContext);
+  let tabs = useDescendants(TabsDescendantsContext);
 
   let ownRef = useRef<HTMLElement | null>(null);
   let ref = useForkedRef(forwardedRef, ownRef);
@@ -388,7 +388,15 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   );
 });
 
-const TabList = memo(TabListImpl);
+if (__DEV__) {
+  TabListImpl.displayName = "TabList";
+  TabListImpl.propTypes = {
+    as: PropTypes.any,
+    children: PropTypes.node,
+  };
+}
+
+const TabList = memoWithAs(TabListImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tablist-props
@@ -406,11 +414,6 @@ export type TabListProps = {
 
 if (__DEV__) {
   TabList.displayName = "TabList";
-  TabListImpl.displayName = "TabList";
-  TabListImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
 }
 
 export { TabList };
@@ -433,6 +436,7 @@ export const Tab = forwardRefWithAs<
     children,
     isSelected: _,
     as: Comp = "button",
+    index: indexProp,
     disabled,
     onBlur,
     onFocus,
@@ -450,11 +454,16 @@ export const Tab = forwardRefWithAs<
   } = useContext(TabsContext);
   const ownRef = useRef<HTMLElement | null>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
-  const index = useDescendant({
-    element: ownRef.current!,
-    context: TabsDescendantsContext,
-    disabled: !!disabled,
-  });
+  const index = useDescendant(
+    {
+      element: ownRef.current!,
+      disabled: !!disabled,
+    },
+    TabsDescendantsContext,
+    indexProp
+  );
+  const htmlType =
+    Comp === "button" && props.type == null ? "button" : props.type;
 
   const isSelected = index === selectedIndex;
 
@@ -467,7 +476,7 @@ export const Tab = forwardRefWithAs<
       userInteractedRef.current = false;
       ownRef.current.focus();
     }
-  }, [isSelected]);
+  }, [isSelected, userInteractedRef]);
 
   let handleFocus = useEventCallback(
     wrapEvent(onFocus, () => {
@@ -507,6 +516,7 @@ export const Tab = forwardRefWithAs<
       onClick={onSelect}
       onFocus={handleFocus}
       onBlur={handleBlur}
+      type={htmlType}
     >
       {children}
     </Comp>
@@ -530,6 +540,7 @@ export type TabProps = {
    * @see Docs https://reacttraining.com/reach-ui/tabs#tab-disabled
    */
   disabled?: boolean;
+  index?: number;
 };
 
 if (__DEV__) {
@@ -553,7 +564,7 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let ownRef = useRef();
     let ref = useForkedRef(ownRef, forwardedRef);
-    let [tabPanels, setTabPanels] = useDescendants<HTMLElement>();
+    let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
 
     return (
       <DescendantProvider
@@ -569,7 +580,15 @@ const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   }
 );
 
-const TabPanels = memo(TabPanelsImpl);
+if (__DEV__) {
+  TabPanelsImpl.displayName = "TabPanels";
+  TabPanelsImpl.propTypes = {
+    as: PropTypes.any,
+    children: PropTypes.node,
+  };
+}
+
+const TabPanels = memoWithAs(TabPanelsImpl);
 
 /**
  * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels-props
@@ -578,11 +597,6 @@ export type TabPanelsProps = TabListProps & {};
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
-  TabPanelsImpl.displayName = "TabPanels";
-  TabPanelsImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
 }
 
 export { TabPanels };
@@ -606,13 +620,31 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
     );
     let ownRef = useRef<HTMLElement | null>(null);
 
-    let index = useDescendant({
-      element: ownRef.current!,
-      context: TabPanelDescendantsContext,
-    });
-    let isSelected = index === selectedIndex;
+    let index = useDescendant(
+      { element: ownRef.current! },
+      TabPanelDescendantsContext
+    );
 
     let id = makeId(tabsId, "panel", index);
+
+    // Because useDescendant will always return -1 on the first render,
+    // `isSelected` will briefly be false for all tabs. We set a tab panel's
+    // hidden attribute based `isSelected` being false, meaning that all tabs
+    // are initially hidden. This makes it impossible for consumers to do
+    // certain things, like focus an element inside the active tab panel when
+    // the page loads. So what we can do is track that a panel is "ready" to be
+    // hidden once effects are run (descendants work their magic in
+    // useLayoutEffect, so we can set our ref in useEffecct to run later). We
+    // can use a ref instead of state because we're always geting a re-render
+    // anyway thanks to descendants. This is a little more coupled to the
+    // implementation details of descendants than I'd like, but we'll add a test
+    // to (hopefully) catch any regressions.
+    let isSelected = index === selectedIndex;
+    let readyToHide = useRef(false);
+    let hidden = readyToHide.current ? !isSelected : false;
+    React.useEffect(() => {
+      readyToHide.current = true;
+    }, []);
 
     let ref = useForkedRef(
       forwardedRef,
@@ -625,7 +657,7 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
         // Each element with role `tabpanel` has the property `aria-labelledby`
         // referring to its associated tab element.
         aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={!isSelected}
+        hidden={hidden}
         // Each element that contains the content panel for a tab has role
         // `tabpanel`.
         // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
@@ -684,9 +716,11 @@ export function useTabsContext(): TabsContextValue {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type TabDescendantProps = {
+type TabDescendant = Descendant<HTMLElement> & {
   disabled: boolean;
 };
+
+type TabPanelDescendant = Descendant<HTMLElement>;
 
 export type TabsContextValue = {
   focusedIndex: number;

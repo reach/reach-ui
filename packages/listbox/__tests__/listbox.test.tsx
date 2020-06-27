@@ -196,7 +196,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).not.toBeVisible();
       });
     });
 
@@ -207,7 +207,7 @@ describe("<Listbox />", () => {
             <form id="my-form">
               <label>
                 Name
-                <input type="text" name="name" />
+                <input type="text" name="name" data-ignore="" />
               </label>
               <button>Submit</button>
             </form>
@@ -218,7 +218,9 @@ describe("<Listbox />", () => {
             </Listbox>
           </div>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        expect(
+          container.querySelector("input:not([data-ignore])")
+        ).not.toBeVisible();
       });
     });
 
@@ -231,7 +233,7 @@ describe("<Listbox />", () => {
             <ListboxOption value="lengua">Lengua</ListboxOption>
           </Listbox>
         );
-        expect(container.querySelector("input")).toBeTruthy();
+        expect(container.querySelector("input")).not.toBeVisible();
         expect(container.querySelector("input")).toHaveAttribute("required");
       });
     });
@@ -240,16 +242,14 @@ describe("<Listbox />", () => {
   describe("user events", () => {
     it("should toggle on button click", () => {
       let { getByRole, container } = render(<FancyListbox />);
-      let getPopover = () =>
-        container.querySelector("[data-reach-listbox-popover]");
 
-      expect(getPopover()).not.toBeVisible();
+      expect(getPopover(container)).not.toBeVisible();
 
       act(() => void fireMouseClick(getByRole("button")));
-      expect(getPopover()).toBeVisible();
+      expect(getPopover(container)).toBeVisible();
 
       act(() => void fireMouseClick(getByRole("button")));
-      expect(getPopover()).not.toBeVisible();
+      expect(getPopover(container)).not.toBeVisible();
     });
 
     [" ", "ArrowUp", "ArrowDown"].forEach((key) => {
@@ -338,26 +338,21 @@ describe("<Listbox />", () => {
         </div>
       );
 
-      let getPopover = () =>
-        container.querySelector("[data-reach-listbox-popover]");
-
       act(() => void fireMouseClick(getByRole("button")));
-      expect(getPopover()).toBeVisible();
+      expect(getPopover(container)).toBeVisible();
 
       act(() => void fireEvent.mouseDown(getByTestId("outside-el")));
-      expect(getPopover()).not.toBeVisible();
+      expect(getPopover(container)).not.toBeVisible();
     });
 
     it("should close on escape", () => {
       let { container, getByRole } = render(<FancyListbox />);
-      let getPopover = () =>
-        container.querySelector("[data-reach-listbox-popover]");
 
       act(() => void fireMouseClick(getByRole("button")));
-      expect(getPopover()).toBeVisible();
+      expect(getPopover(container)).toBeVisible();
 
       act(() => void keyType(getByRole("button"), "Escape"));
-      expect(getPopover()).not.toBeVisible();
+      expect(getPopover(container)).not.toBeVisible();
     });
 
     it("should update the value when the user types while idle", () => {
@@ -532,4 +527,8 @@ function Tag(props: any) {
 function fireMouseClick(element: HTMLElement) {
   fireEvent.mouseDown(element);
   fireEvent.mouseUp(element);
+}
+
+function getPopover(container: HTMLElement) {
+  return container.querySelector("[data-reach-listbox-popover]");
 }

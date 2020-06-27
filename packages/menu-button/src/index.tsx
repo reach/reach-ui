@@ -5,7 +5,7 @@
  * pattern.
  *
  * @see Docs     https://reacttraining.com/reach-ui/menu-button
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/menu-button
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/menu-button
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
  *
  * TODO: Fix flash when opening a menu button on a screen with another open menu
@@ -30,6 +30,7 @@ import {
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantsInit,
   useDescendantKeyDown,
 } from "@reach/descendants";
 import {
@@ -58,10 +59,9 @@ const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
 const SET_BUTTON_ID = "SET_BUTTON_ID";
 
-const MenuDescendantContext = createDescendantContext<
-  HTMLElement,
-  DescendantProps
->("MenuDescendantContext");
+const MenuDescendantContext = createDescendantContext<MenuButtonDescendant>(
+  "MenuDescendantContext"
+);
 const MenuContext = createNamedContext<InternalMenuContextValue>(
   "MenuContext",
   {} as InternalMenuContextValue
@@ -99,9 +99,8 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
-  let [descendants, setDescendants] = useDescendants<
-    HTMLElement,
-    DescendantProps
+  let [descendants, setDescendants] = useDescendantsInit<
+    MenuButtonDescendant
   >();
   let [state, dispatch] = useReducer(reducer, initialState);
   let _id = useId(id);
@@ -118,6 +117,14 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // https://github.com/reach/reach-ui/issues/523
   let selectCallbacks = useRef([]);
 
+  // If the popover's position overlaps with an option when the popover
+  // initially opens, the mouseup event will trigger a select. To prevent that,
+  // we decide the menu button is only ready to make a selection if the pointer
+  // moves first, otherwise the user is just registering the initial button
+  // click rather than selecting an item. This is similar to a native select
+  // on most platforms, and our menu button popover works similarly.
+  let readyToSelect = useRef(false);
+
   let context: InternalMenuContextValue = {
     buttonRef,
     dispatch,
@@ -125,6 +132,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     menuRef,
     popoverRef,
     buttonClickedRef,
+    readyToSelect,
     selectCallbacks,
     state,
   };
@@ -338,8 +346,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     let {
       buttonRef,
       dispatch,
+      readyToSelect,
       selectCallbacks,
-      state: { selectionIndex },
+      state: { selectionIndex, isExpanded },
     } = useContext(MenuContext);
 
     let ownRef = useRef<HTMLElement | null>(null);
@@ -369,11 +378,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let index = useDescendant(
       {
-        context: MenuDescendantContext,
         element: ownRef.current!,
         key: valueText,
         isLink,
       },
+      MenuDescendantContext,
       indexProp
     );
     let isSelected = index === selectionIndex;
@@ -425,13 +434,18 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       dispatch({ type: CLEAR_SELECTION_INDEX });
     }
 
-    function handleMouseMove(event: React.MouseEvent) {
+    function handleMouseMove() {
+      readyToSelect.current = true;
       if (!isSelected && index != null) {
         dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
       }
     }
 
     function handleMouseUp(event: React.MouseEvent) {
+      if (!readyToSelect.current) {
+        readyToSelect.current = true;
+        return;
+      }
       if (isRightClick(event.nativeEvent)) return;
 
       if (isLink) {
@@ -447,6 +461,13 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         select();
       }
     }
+
+    // When the menu closes, reset readyToSelect for the next interaction.
+    useEffect(() => {
+      if (!isExpanded) {
+        readyToSelect.current = false;
+      }
+    }, [isExpanded, readyToSelect]);
 
     // Any time a mouseup event occurs anywhere in the document, we reset the
     // mouseEventStarted ref so we can check it again when needed.
@@ -549,7 +570,7 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
       selectCallbacks,
       state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
     } = useContext(MenuContext);
-    const { descendants: menuItems } = useContext(MenuDescendantContext);
+    const menuItems = useDescendants(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
     useEffect(() => {
@@ -858,15 +879,9 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
         } else {
-          let { relatedTarget, target } = event;
-
           // We on want to close only if focus rests outside the menu
           if (isExpanded && popoverRef.current) {
-            if (
-              !popoverRef.current?.contains(
-                (relatedTarget || target) as Element
-              )
-            ) {
+            if (!popoverRef.current.contains(event.target as Element)) {
               dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
             }
           }
@@ -1072,7 +1087,11 @@ function reducer(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type DescendantProps = { key: string; isLink: boolean };
+type MenuButtonDescendant = Descendant<HTMLElement> & {
+  key: string;
+  isLink: boolean;
+};
+
 type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;
@@ -1084,6 +1103,7 @@ interface InternalMenuContextValue {
   menuId: string | undefined;
   menuRef: MenuRef;
   popoverRef: PopoverRef;
+  readyToSelect: React.MutableRefObject<boolean>;
   selectCallbacks: React.MutableRefObject<(() => void)[]>;
   state: MenuButtonState;
 }

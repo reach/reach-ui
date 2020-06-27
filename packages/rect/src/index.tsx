@@ -5,7 +5,7 @@
  *
  * @see getBoundingClientRect https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
  * @see Docs                  https://reacttraining.com/reach-ui/rect
- * @see Source                https://github.com/reach/reach-ui/tree/master/packages/rect
+ * @see Source                https://github.com/reach/reach-ui/tree/main/packages/rect
  */
 
 import React, { useRef, useState } from "react";
@@ -65,7 +65,10 @@ export type RectProps = {
    *
    * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
    */
-  children(args: { rect: PRect | null; ref: React.Ref<any> }): JSX.Element;
+  children(args: {
+    rect: PRect | null;
+    ref: React.RefObject<any>;
+  }): JSX.Element;
 };
 
 if (__DEV__) {
@@ -86,47 +89,68 @@ if (__DEV__) {
  * @param observe
  * @param onChange
  */
-export function useRect<T extends HTMLElement = HTMLElement>(
-  nodeRef: React.RefObject<T>,
+export function useRect<T extends Element = HTMLElement>(
+  nodeRef: React.RefObject<T | undefined | null>,
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
-  let initialRectSet = useRef(false);
+  let [element, setElement] = useState(nodeRef.current);
+  let initialRectIsSet = useRef(false);
+  let initialRefIsSet = useRef(false);
   let [rect, setRect] = useState<DOMRect | null>(null);
-  let observerRef = useRef<any>(null);
-  useIsomorphicLayoutEffect(() => {
-    const cleanup = () => {
-      observerRef.current && observerRef.current.unobserve();
-    };
+  let onChangeRef = useRef<typeof onChange>();
 
-    if (!nodeRef.current) {
-      console.warn("You need to place the ref");
+  useIsomorphicLayoutEffect(() => {
+    onChangeRef.current = onChange;
+    if (nodeRef.current !== element) {
+      setElement(nodeRef.current);
+    }
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (element && !initialRectIsSet.current) {
+      initialRectIsSet.current = true;
+      setRect(element.getBoundingClientRect());
+    }
+  }, [element]);
+
+  useIsomorphicLayoutEffect(() => {
+    let observer: ReturnType<typeof observeRect>;
+    let elem = element;
+
+    // State initializes before refs are placed, meaning the element state will
+    // be undefined on the first render. We still want the rect on the first
+    // render, so initially we'll use the nodeRef that was passed instead of
+    // state for our measurements.
+    if (!initialRefIsSet.current) {
+      initialRefIsSet.current = true;
+      elem = nodeRef.current;
+    }
+
+    if (!elem) {
+      if (__DEV__) {
+        console.warn("You need to place the ref");
+      }
       return cleanup;
     }
 
-    if (!observerRef.current) {
-      observerRef.current = observeRect(nodeRef.current, (rect: DOMRect) => {
-        onChange && onChange(rect);
-        setRect(rect);
-      });
-    }
+    observer = observeRect(elem, (rect) => {
+      onChangeRef.current && onChangeRef.current(rect);
+      setRect(rect);
+    });
 
-    if (!initialRectSet.current) {
-      initialRectSet.current = true;
-      setRect(nodeRef.current.getBoundingClientRect());
-    }
-
-    observe && observerRef.current.observe();
+    observe && observer.observe();
     return cleanup;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [observe, onChange]);
+
+    function cleanup() {
+      observer && observer.unobserve();
+    }
+  }, [observe, element]);
 
   return rect;
 }
 
 export default Rect;
-
-export type PartialRect = Partial<PRect>;
 
 export type PRect = Partial<DOMRect> & {
   readonly bottom: number;

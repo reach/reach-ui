@@ -14,7 +14,7 @@
  *      autocompleted text or the old value the user had typed?!
  *
  * @see Docs     https://reacttraining.com/reach-ui/combobox
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/combobox
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/combobox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
 
@@ -44,9 +44,11 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
+  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
@@ -242,10 +244,9 @@ function findNavigationValue(stateData: StateData, event: MachineEvent) {
   }
 }
 
-const ComboboxDescendantContext = createDescendantContext<
-  HTMLElement,
-  DescendantProps
->("ComboboxDescendantContext");
+const ComboboxDescendantContext = createDescendantContext<ComboboxDescendant>(
+  "ComboboxDescendantContext"
+);
 const ComboboxContext = createNamedContext(
   "ComboboxContext",
   {} as InternalComboboxContextValue
@@ -279,7 +280,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     },
     forwardedRef
   ) {
-    let [options, setOptions] = useDescendants<HTMLElement, DescendantProps>();
+    let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
 
     // Need this to focus it
     const inputRef = useRef();
@@ -646,7 +647,14 @@ export const ComboboxPopover = forwardRef<
   HTMLDivElement,
   ComboboxPopoverProps & Partial<PopoverProps>
 >(function ComboboxPopover(
-  { children, portal = true, onKeyDown, onBlur, ...props },
+  {
+    children,
+    portal = true,
+    onKeyDown,
+    onBlur,
+    position = positionMatchWidth,
+    ...props
+  },
   forwardedRef: React.Ref<any>
 ) {
   const { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
@@ -671,9 +679,8 @@ export const ComboboxPopover = forwardRef<
   return portal ? (
     <Popover
       {...props}
-      // @ts-ignore
       ref={ref}
-      position={positionMatchWidth}
+      position={position}
       targetRef={inputRef}
       {...sharedProps}
     />
@@ -715,7 +722,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   function ComboboxList(
     {
       // when true, and the list opens again, the option with a matching value
-      // will be automatically highleted.
+      // will be automatically highlighted.
       persistSelection = false,
       as: Comp = "ul",
       ...props
@@ -789,11 +796,13 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     let ownRef = useRef<HTMLElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
 
-    let index = useDescendant({
-      context: ComboboxDescendantContext,
-      element: ownRef.current!,
-      value,
-    });
+    let index = useDescendant(
+      {
+        element: ownRef.current!,
+        value,
+      },
+      ComboboxDescendantContext
+    );
 
     const isActive = navigationValue === value;
 
@@ -1014,7 +1023,7 @@ function useKeyDown() {
     getOptionData,
   } = useContext(ComboboxContext);
 
-  const { descendants: options } = useContext(ComboboxDescendantContext);
+  const options = useDescendants(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
@@ -1272,7 +1281,7 @@ export type ComboboxContextValue = {
   isExpanded: boolean;
 };
 
-type DescendantProps = {
+type ComboboxDescendant = Descendant<HTMLElement> & {
   value: ComboboxValue;
 };
 

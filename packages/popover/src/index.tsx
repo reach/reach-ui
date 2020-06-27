@@ -101,15 +101,13 @@ function getStyles(
   popoverRect: PRect | null,
   ...unstable_observableRefs: React.RefObject<PossibleNode>[]
 ): React.CSSProperties {
-  const needToMeasurePopup = !popoverRect;
-  if (needToMeasurePopup) {
-    return { visibility: "hidden" };
-  }
-  return position(
-    targetRect,
-    popoverRect,
-    ...unstable_observableRefs.map((ref) => ref.current)
-  );
+  return popoverRect
+    ? position(
+        targetRect,
+        popoverRect,
+        ...unstable_observableRefs.map((ref) => ref.current)
+      )
+    : { visibility: "hidden" };
 }
 
 function getTopPosition(targetRect: PRect, popoverRect: PRect) {
@@ -241,7 +239,11 @@ function useSimulateTabNavigationForReactTree<
       elements && triggerRef.current
         ? elements.indexOf(triggerRef.current)
         : -1;
-    return elements && elements[targetIndex + 1];
+    const elementAfterTrigger = elements && elements[targetIndex + 1];
+    return popoverRef.current &&
+      popoverRef.current.contains(elementAfterTrigger || null)
+      ? false
+      : elementAfterTrigger;
   }
 
   function tabbedFromTriggerToPopover() {

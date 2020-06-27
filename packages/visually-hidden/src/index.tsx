@@ -7,7 +7,7 @@
  * @see https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
  * @see https://a11yproject.com/posts/how-to-hide-content/
  * @see Docs     https://reacttraining.com/reach-ui/visually-hidden
- * @see Source   https://github.com/reach/reach-ui/tree/master/packages/visually-hidden
+ * @see Source   https://github.com/reach/reach-ui/tree/main/packages/visually-hidden
  */
 
 import React, { forwardRef } from "react";
@@ -37,7 +37,7 @@ const VisuallyHidden = forwardRef<
 
         // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
         whiteSpace: "nowrap",
-        wordWrap: "normal"
+        wordWrap: "normal",
       }}
       {...props}
     />

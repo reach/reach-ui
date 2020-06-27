@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals, eqeqeq,  */
+/* eslint-disable no-restricted-globals, eqeqeq  */
 
 import React, {
   cloneElement,
@@ -17,6 +17,12 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ElementByTag,
+  ElementTagNameMap,
+  ForwardRefExoticComponentWithAs,
+  ForwardRefWithAsRenderFunction,
+  FunctionComponentWithAs,
+  MemoExoticComponentWithAs,
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
@@ -69,7 +75,7 @@ export { warning };
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
 // @ts-ignore
-let checkStyles = (packageName: string): void => void packageName;
+let checkStyles: (packageName: string) => void = noop;
 
 if (__DEV__) {
   // In CJS files, process.env.NODE_ENV is stripped from our build, but we need
@@ -80,7 +86,7 @@ if (__DEV__) {
       ? process
       : { env: { NODE_ENV: "development" } };
 
-  checkStyles = (packageName: string) => {
+  checkStyles = function checkStyles(packageName: string) {
     // only check once per package
     if (checkedPkgs[packageName]) return;
     checkedPkgs[packageName] = true;
@@ -157,10 +163,10 @@ export function boolOrBoolString(value: any): value is "true" | true {
 }
 
 export function canUseDOM() {
-  return (
+  return !!(
     typeof window !== "undefined" &&
-    typeof window.document !== "undefined" &&
-    typeof window.document.createElement !== "undefined"
+    window.document &&
+    window.document.createElement
   );
 }
 
@@ -198,19 +204,24 @@ export function createNamedContext<ContextValueType>(
  * type song-and-dance every time we want to forward a ref into a component
  * that accepts an `as` prop, we abstract all of that mess to this function for
  * the time time being.
- *
- * TODO: Eventually we should probably just try to get the type defs above
- * working across the board, but ain't nobody got time for that mess!
- *
- * @param Comp
  */
 export function forwardRefWithAs<Props, ComponentType extends As = "div">(
-  comp: (
-    props: PropsFromAs<ComponentType, Props>,
-    ref: React.RefObject<any>
-  ) => React.ReactElement | null
+  render: ForwardRefWithAsRenderFunction<ComponentType, Props>
 ) {
-  return (React.forwardRef(comp as any) as unknown) as ComponentWithAs<
+  return React.forwardRef(render) as ForwardRefExoticComponentWithAs<
+    ComponentType,
+    Props
+  >;
+}
+
+export function memoWithAs<Props, ComponentType extends As = "div">(
+  Component: FunctionComponentWithAs<ComponentType, Props>,
+  propsAreEqual?: (
+    prevProps: Readonly<React.PropsWithChildren<Props>>,
+    nextProps: Readonly<React.PropsWithChildren<Props>>
+  ) => boolean
+) {
+  return React.memo(Component, propsAreEqual) as MemoExoticComponentWithAs<
     ComponentType,
     Props
   >;
@@ -387,21 +398,21 @@ export function stateToAttributeString(state: any) {
  * state value and setter accordingly. If the component state is controlled by
  * the app, the setter is a noop.
  *
- * @param controlPropValue
+ * @param controlledValue
  * @param defaultValue
  */
 export function useControlledState<T = any>(
-  controlPropValue: T | undefined,
+  controlledValue: T | undefined,
   defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  let isControlled = useRef(controlPropValue != null);
+  let controlledRef = useRef(controlledValue != null);
   let [valueState, setValue] = useState(defaultValue);
   let set: React.Dispatch<React.SetStateAction<T>> = useCallback((n) => {
-    if (!isControlled.current) {
+    if (!controlledRef.current) {
       setValue(n);
     }
   }, []);
-  return [isControlled.current ? (controlPropValue as T) : valueState, set];
+  return [controlledRef.current ? (controlledValue as T) : valueState, set];
 }
 
 /**
@@ -411,41 +422,59 @@ export function useControlledState<T = any>(
  * A single prop should typically be used to determine whether or not a
  * component is controlled or not.
  *
- * @param controlPropValue
- * @param controlPropName
+ * @param controlledValue
+ * @param controlledPropName
  * @param componentName
  */
-export function useControlledSwitchWarning(
-  controlPropValue: any,
-  controlPropName: string,
+let useControlledSwitchWarning: (
+  controlledValue: any,
+  controlledPropName: string,
   componentName: string
-) {
-  /*
-   * Determine whether or not the component is controlled and warn the developer
-   * if this changes unexpectedly.
-   */
-  let isControlled = controlPropValue != null;
-  let { current: wasControlled } = useRef(isControlled);
-  let effect = noop;
-  if (__DEV__) {
-    effect = function () {
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from uncontrolled to be controlled. Reach UI components should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-      warning(
-        !(!isControlled && wasControlled),
-        `\`${componentName}\` is changing from controlled to be uncontrolled. Reach UI components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled \`${componentName}\` for the lifetime of the component. Check the \`${controlPropName}\` prop.`
-      );
-    };
-  }
-  useEffect(effect, [componentName, controlPropName, isControlled]);
+) => void = noop;
+
+if (__DEV__) {
+  useControlledSwitchWarning = function useControlledSwitchWarning(
+    controlledValue,
+    controlledPropName,
+    componentName
+  ) {
+    let controlledRef = useRef(controlledValue != null);
+    let nameCache = useRef({ componentName, controlledPropName });
+    useEffect(() => {
+      nameCache.current = { componentName, controlledPropName };
+    }, [componentName, controlledPropName]);
+
+    useEffect(() => {
+      let { current: wasControlled } = controlledRef;
+      let { componentName, controlledPropName } = nameCache.current;
+      let isControlled = controlledValue != null;
+      if (wasControlled !== isControlled) {
+        console.error(
+          `A component is changing an ${
+            wasControlled ? "" : "un"
+          }controlled \`${controlledPropName}\` state of ${componentName} to be ${
+            wasControlled ? "un" : ""
+          }controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled ${componentName} element for the lifetime of the component.
+More info: https://fb.me/react-controlled-components`
+        );
+      }
+    }, [controlledValue]);
+  };
 }
 
-export function useCheckStyles(pkg: string) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => checkStyles(pkg), []);
+export { useControlledSwitchWarning };
+
+let useCheckStyles: (packageName: string) => void = noop;
+
+if (__DEV__) {
+  useCheckStyles = function useCheckStyles(pkg: string) {
+    let name = useRef(pkg);
+    useEffect(() => void (name.current = pkg), [pkg]);
+    useEffect(() => checkStyles(name.current), []);
+  };
 }
+
+export { useCheckStyles };
 
 /**
  * React hook for creating a value exactly once.
@@ -586,7 +615,7 @@ export function useForkedRef<RefValueType = any>(
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
+  }, [...refs]);
 }
 
 /**
@@ -629,22 +658,28 @@ export function useUpdateEffect(
  * @param state
  * @param DEBUG
  */
-export function useStateLogger(state: string, DEBUG: boolean = false) {
-  let effect = noop;
-  if (__DEV__) {
-    if (DEBUG) {
-      effect = function () {
+let useStateLogger: (state: string, DEBUG: boolean) => void = noop;
+
+if (__DEV__) {
+  useStateLogger = function useStateLogger(state, DEBUG = false) {
+    let debugRef = useRef(DEBUG);
+    useEffect(() => {
+      debugRef.current = DEBUG;
+    }, [DEBUG]);
+    useEffect(() => {
+      if (debugRef.current) {
         console.group("State Updated");
         console.log(
           "%c" + state,
           "font-weight: normal; font-size: 120%; font-style: italic;"
         );
         console.groupEnd();
-      };
-    }
-  }
-  useEffect(effect, [state]);
+      }
+    }, [state]);
+  };
 }
+
+export { useStateLogger };
 
 /**
  * Wraps a lib-defined event handler and a user-defined event handler, returning
@@ -673,6 +708,11 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
+  ElementByTag,
+  ElementTagNameMap,
+  ForwardRefExoticComponentWithAs,
+  FunctionComponentWithAs,
+  MemoExoticComponentWithAs,
   PropsFromAs,
   PropsWithAs,
   SingleOrArray,
