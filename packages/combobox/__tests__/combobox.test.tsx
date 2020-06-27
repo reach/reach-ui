@@ -220,7 +220,7 @@ describe("<Combobox />", () => {
     });
   });
 
-  it("should pass custom data to the onSelect", () => {
+  it("should pass custom data to the onSelect", async () => {
     jest.useFakeTimers();
     let mockedOnSelect = jest.fn();
     let optionToSelect = "Eagle Pass, Texas";
@@ -229,26 +229,22 @@ describe("<Combobox />", () => {
     );
     let getByTextWithMarkup = withMarkup(getByText);
     let input = getByTestId("input");
-    act(() => {
-      // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
-      // list (index=0)
-      userEvent.type(input, "Eagle Pass, T");
-      jest.advanceTimersByTime(100);
-    });
+    // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
+    // list (index=0)
+    await userEvent.type(input, "Eagle Pass, T");
+    jest.advanceTimersByTime(100);
     expect(getByTestId("list")).toBeInTheDocument();
     expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
 
     let selectedOptionIndex = 0;
     let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
-    act(() => {
-      userEvent.click(firstComboboxOption);
-    });
+    await userEvent.click(firstComboboxOption);
     expect(mockedOnSelect).toHaveBeenCalledWith(optionToSelect, {
       index: selectedOptionIndex,
     });
   });
 
-  it("should pass a primitive custom data to the onSelect", () => {
+  it("should pass a primitive custom data to the onSelect", async () => {
     jest.useFakeTimers();
     let mockedOnSelect = jest.fn();
     let optionToSelect = "Eagle Pass, Texas";
@@ -257,20 +253,16 @@ describe("<Combobox />", () => {
     );
     let getByTextWithMarkup = withMarkup(getByText);
     let input = getByTestId("input");
-    act(() => {
-      // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
-      // list (index=0)
-      userEvent.type(input, "Eagle Pass, T");
-      jest.advanceTimersByTime(100);
-    });
+    // Let's make sure "Eagle Pass, Texas" is hoisted to the very top of the
+    // list (index=0)
+    await userEvent.type(input, "Eagle Pass, T");
+    jest.advanceTimersByTime(100);
     expect(getByTestId("list")).toBeInTheDocument();
     expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
 
     let selectedOptionIndex = 0;
     let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
-    act(() => {
-      userEvent.click(firstComboboxOption);
-    });
+    await userEvent.click(firstComboboxOption);
     expect(mockedOnSelect).toHaveBeenCalledWith(
       optionToSelect,
       selectedOptionIndex
