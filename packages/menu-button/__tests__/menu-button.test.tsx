@@ -168,5 +168,37 @@ describe("<MenuButton />", () => {
       fireEvent.click(getByTestId("input"));
       expect(getByRole("button")).not.toHaveFocus();
     });
+
+    it("should open and close on selection", () => {
+      const onSelect = jest.fn();
+      const { getByText, getByTestId } = render(
+        <Menu>
+          <MenuButton>MenuButton</MenuButton>
+          <MenuList data-testid="menu-test-id">
+            <MenuItem onSelect={onSelect}>First</MenuItem>
+            <MenuItem onSelect={onSelect}>Second</MenuItem>
+            <MenuItem onSelect={onSelect}>Third</MenuItem>
+          </MenuList>
+        </Menu>
+      );
+
+      const menu = getByTestId("menu-test-id");
+      expect(menu).not.toBeVisible();
+
+      const button = getByText("MenuButton");
+      click(button);
+      expect(menu).toBeVisible();
+
+      const item = getByText("First");
+      click(item);
+      expect(onSelect).toHaveBeenCalled();
+      expect(menu).not.toBeVisible();
+    });
   });
 });
+
+function click(element: HTMLElement) {
+  fireEvent.mouseDown(element);
+  fireEvent.mouseUp(element);
+  fireEvent.click(element);
+}
