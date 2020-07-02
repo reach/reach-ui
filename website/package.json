@@ -67,6 +67,9 @@
     "recondition": "^1.2.4",
     "use-throttle": "^0.0.3"
   },
+  "resolutions": {
+    "xstate": "4.10.0"
+  },
   "browserslist": [
     "last 2 versions",
     "> 2%",
