@@ -342,6 +342,7 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 | ----------------------------------- | --------- | -------- |
 | [`children`](#menupopover-children) | `node`    | true     |
 | [`portal`](#menupopover-portal)     | `boolean` | false    |
+| [`position`](#menupopover-position) | `func`    | false    |
 
 ##### MenuPopover `children` props
 
@@ -352,6 +353,14 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 `portal?: boolean`
 
 Whether or not the popover should be rendered inside a portal. Defaults to `true`.
+
+##### MenuPopover `position`
+
+`position?: (targetRect?: DOMRect | null, popoverRect?: DOMRect | null) => React.CSSProperties`
+
+A function used to determine the position of the popover in relation to the menu button. By default, the menu button will attempt to position the popover below the button aligned with its left edge. If this positioning results in collisions with any side of the window, the popover will be anchored to a different side to avoid those collisions if possible.
+
+The function accepts the DOMRect of the menu button element, and the DOMRect of the popover element as arguments, and returns a CSS properties object that is then applied to the popover as inline styles.
 
 ### MenuItems
 

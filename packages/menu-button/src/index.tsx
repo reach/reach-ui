@@ -939,6 +939,15 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
    * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-portal
    */
   portal?: boolean;
+  /**
+   * A function used to determine the position of the popover in relation to the
+   * menu button. By default, the menu button will attempt to position the
+   * popover below the button aligned with its left edge. If this positioning
+   * results in collisions with any side of the window, the popover will be
+   * anchored to a different side to avoid those collisions if possible.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-position
+   */
   position?: Position;
 };
 
