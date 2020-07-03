@@ -1,5 +1,5 @@
 /**
- * A MixedCheckbox simply renders an HTML input element where type="checked".
+ * A MixedCheckbox simply renders an HTML input element where type="checkbox".
  * Whereas the native element technically only has two states, there is a third
  * visual state of `indeterminate` that is designed to suggest that a user has
  * fulfilled some part of whatever the checkbox is meant to control. For
