@@ -13,7 +13,7 @@ git clone --depth 2 --branch master "git@github.com:reach/reach.tech.git" $tmp_d
 rm -rf "$tmp_dir/public"
 cd "$root_dir/website"
 yarn
-yarn build --prefix-paths
+yarn build
 mv public "$tmp_dir/public"
 
 # Commit all changes
