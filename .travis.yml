@@ -20,7 +20,7 @@ jobs:
   - stage: Deploy Website
     if: branch = website
     before_script: yarn build
-    script: echo "Deploying website to https://reacttraining.com/reach-ui/"
+    script: echo "Deploying website to https://reach.tech/"
     before_deploy:
     - openssl aes-256-cbc -K $encrypted_e12d3fc86b46_key -iv $encrypted_e12d3fc86b46_iv
       -in website-deploy-key.enc -out website-deploy-key -d

@@ -25,7 +25,7 @@
  * and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and
  * `AlertDialogContent` to `DialogContent`.
  *
- * @see Docs     https://reacttraining.com/reach-ui/alert-dialog
+ * @see Docs     https://reach.tech/alert-dialog
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert-dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
  */
@@ -63,7 +63,7 @@ let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
  *
  * Note: You must render an `AlertDialogContent` inside.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogoverlay
+ * @see Docs https://reach.tech/alert-dialog#alertdialogoverlay
  */
 export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
   function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardedRef) {
@@ -117,7 +117,7 @@ if (__DEV__) {
  * `AlertDialogOverlay`, otherwise you can use the high-level `AlertDialog`
  * component and pass the props to it.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent
+ * @see Docs https://reach.tech/alert-dialog#alertdialogcontent
  */
 export const AlertDialogContent = forwardRef<
   HTMLDivElement,
@@ -173,7 +173,7 @@ export const AlertDialogContent = forwardRef<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent-props
+ * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-props
  */
 export type AlertDialogContentProps = {
   /**
@@ -181,7 +181,7 @@ export type AlertDialogContentProps = {
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other
    * content might not be announced to the user by the screen reader.
    *
-   * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent-children
+   * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-children
    */
   children: React.ReactNode;
 } & DialogContentProps;
@@ -204,7 +204,7 @@ if (__DEV__) {
  * This is required. The `AlertDialog` will throw an error if no label is
  * rendered.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialoglabel
+ * @see Docs https://reach.tech/alert-dialog#alertdialoglabel
  */
 export const AlertDialogLabel: React.FC<React.HTMLAttributes<
   HTMLDivElement
@@ -226,7 +226,7 @@ if (__DEV__) {
  * about what you need from the user like "This action is permanent, are you
  * sure?" etc.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogdescription
+ * @see Docs https://reach.tech/alert-dialog#alertdialogdescription
  * @param props
  */
 export const AlertDialogDescription: React.FC<React.HTMLAttributes<
@@ -249,7 +249,7 @@ if (__DEV__) {
  *
  * High-level component to render an alert dialog.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialog
+ * @see Docs https://reach.tech/alert-dialog#alertdialog
  * @param props
  */
 export const AlertDialog: React.FC<AlertDialogProps> = ({
@@ -267,13 +267,13 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialog-props
+ * @see Docs https://reach.tech/alert-dialog#alertdialog-props
  */
 export type AlertDialogProps = {
   /**
    * Controls whether the dialog is open or not.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-isopen
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-isopen
    */
   isOpen?: boolean;
   /**
@@ -281,14 +281,14 @@ export type AlertDialogProps = {
    * this function will be called. If you want the modal to close,
    * you’ll need to set state.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-ondismiss
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-ondismiss
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
    * To prevent accidental data loss, an alert dialog should focus the least
    * destructive action button when it opens.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-leastdestructiveref
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-leastdestructiveref
    */
   leastDestructiveRef?: React.RefObject<HTMLElement>;
   /**
@@ -296,7 +296,7 @@ export type AlertDialogProps = {
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other
    * content might not be announced to the user by the screen reader.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-children
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-children
    */
   children: React.ReactNode;
 } & DialogProps;

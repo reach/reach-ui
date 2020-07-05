@@ -6,7 +6,7 @@
  * with a different DOM hierarchy to prevent parent styles from clipping or
  * hiding content (for popovers, dropdowns, and modals).
  *
- * @see Docs   https://reacttraining.com/reach-ui/portal
+ * @see Docs   https://reach.tech/portal
  * @see Source https://github.com/reach/reach-ui/tree/main/packages/portal
  * @see React  https://reactjs.org/docs/portals.html
  */
@@ -18,7 +18,7 @@ import { createPortal } from "react-dom";
 /**
  * Portal
  *
- * @see Docs https://reacttraining.com/reach-ui/portal#portal
+ * @see Docs https://reach.tech/portal#portal
  */
 const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   let mountNode = useRef<HTMLDivElement | null>(null);
@@ -49,19 +49,19 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/portal#portal-props
+ * @see Docs https://reach.tech/portal#portal-props
  */
 export type PortalProps = {
   /**
    * Regular React children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/portal#portal-children
+   * @see Docs https://reach.tech/portal#portal-children
    */
   children: React.ReactNode;
   /**
    * The DOM element type to render.
    *
-   * @see Docs https://reacttraining.com/reach-ui/portal#portal-type
+   * @see Docs https://reach.tech/portal#portal-type
    */
   type?: string;
 };

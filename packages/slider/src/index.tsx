@@ -13,7 +13,7 @@
  *  - We may want to research some use cases for reversed sliders in RTL
  *    languages if that's a thing
  *
- * @see Docs     https://reacttraining.com/reach-ui/slider
+ * @see Docs     https://reach.tech/slider
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/slider
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see Example  https://github.com/Stanko/aria-progress-range-slider
@@ -109,7 +109,7 @@ const sliderPropTypes = {
 /**
  * Slider
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slider
+ * @see Docs https://reach.tech/slider#slider
  */
 const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
   { children, ...props },
@@ -132,44 +132,44 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slider-props
+ * @see Docs https://reach.tech/slider#slider-props
  */
 export type SliderProps = {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-children
+   * @see Docs https://reach.tech/slider#slider-children
    */
   children?: React.ReactNode;
   /**
    * The defaultValue is used to set an initial value for an uncontrolled
    * Slider.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-defaultvalue
+   * @see Docs https://reach.tech/slider#slider-defaultvalue
    */
   defaultValue?: number;
   /**
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-disabled
+   * @see Docs https://reach.tech/slider#slider-disabled
    */
   disabled?: boolean;
   /**
    * Whether or not the slider should be disabled from user interaction.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-value
+   * @see Docs https://reach.tech/slider#slider-value
    */
   value?: number;
   /**
    * A function used to set a human-readable name for the slider.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getarialabel
+   * @see Docs https://reach.tech/slider#slider-getarialabel
    */
   getAriaLabel?(value: number): string;
   /**
    * A function used to set a human-readable value text based on the slider's
    * current value.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getariavaluetext
+   * @see Docs https://reach.tech/slider#slider-getariavaluetext
    */
   getAriaValueText?(value: number): string;
   /**
@@ -188,26 +188,26 @@ export type SliderProps = {
    * of the track, meaning its position will be slightly offset from the actual
    * value depending on where it sits on the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-handlealignment
+   * @see Docs https://reach.tech/slider#slider-handlealignment
    */
   handleAlignment?: "center" | "contain" | SliderAlignment;
   /**
    * The maximum value of the slider. Defaults to `100`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-max
+   * @see Docs https://reach.tech/slider#slider-max
    */
   max?: number;
   /**
    * The minimum value of the slider. Defaults to `0`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-min
+   * @see Docs https://reach.tech/slider#slider-min
    */
   min?: number;
   /**
    * If the slider is used as a form input, it should accept a `name` prop to
    * identify its value in context of the form.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-name
+   * @see Docs https://reach.tech/slider#slider-name
    */
   name?: string;
   /**
@@ -215,7 +215,7 @@ export type SliderProps = {
    * set, the Slider state becomes controlled and `onChange` must be used to
    * update the value in response to user interaction.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-onchange
+   * @see Docs https://reach.tech/slider#slider-onchange
    */
   onChange?(
     newValue: number,
@@ -239,7 +239,7 @@ export type SliderProps = {
   /**
    * Sets the slider to horizontal or vertical mode.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-orientation
+   * @see Docs https://reach.tech/slider#slider-orientation
    */
   orientation?: SliderOrientation;
   /**
@@ -247,7 +247,7 @@ export type SliderProps = {
    * value must adhere to as it changes. Step sets minimum intervals of change,
    * creating a "snap" effect when the handle is moved along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-step
+   * @see Docs https://reach.tech/slider#slider-step
    */
   step?: number;
 };
@@ -272,7 +272,7 @@ export default Slider;
  * if you need more control over styles or rendering the slider's inner
  * components.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput
+ * @see Docs https://reach.tech/slider#sliderinput
  */
 const SliderInput = forwardRefWithAs<
   SliderInputProps & { _componentName?: string }
@@ -711,7 +711,7 @@ const SliderInput = forwardRefWithAs<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput-props
+ * @see Docs https://reach.tech/slider#sliderinput-props
  */
 export type SliderInputProps = Omit<SliderProps, "children"> & {
   /**
@@ -720,7 +720,7 @@ export type SliderInputProps = Omit<SliderProps, "children"> & {
    * function/render prop as its child to expose some of its internal state
    * variables.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput-children
+   * @see Docs https://reach.tech/slider#sliderinput-children
    */
   children: React.ReactNode | SliderChildrenRender;
 };
@@ -740,7 +740,7 @@ export { SliderInput };
 /**
  * SliderTrack
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack
+ * @see Docs https://reach.tech/slider#slidertrack
  */
 const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
   { as: Comp = "div", children, style = {}, ...props },
@@ -773,7 +773,7 @@ if (__DEV__) {
 const SliderTrack = memoWithAs(SliderTrackImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-props
+ * @see Docs https://reach.tech/slider#slidertrack-props
  */
 export type SliderTrackProps = {
   /**
@@ -781,7 +781,7 @@ export type SliderTrackProps = {
    * function. All other Slider subcomponents should be passed as children
    * inside the `SliderTrack`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-children
+   * @see Docs https://reach.tech/slider#slidertrack-children
    */
   children: React.ReactNode;
 };
@@ -802,7 +802,7 @@ export { SliderTrack };
  *
  * TODO: Consider renaming to `SliderTrackProgress`
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
+ * @see Docs https://reach.tech/slider#slidertrackhighlight
  */
 const SliderTrackHighlightImpl = forwardRefWithAs<SliderTrackHighlightProps>(
   function SliderTrackHighlight(
@@ -834,7 +834,7 @@ const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  * `SliderTrackHighlight` will not accept or render any children.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight-props
+ * @see Docs https://reach.tech/slider#slidertrackhighlight-props
  */
 export type SliderTrackHighlightProps = {};
 
@@ -851,7 +851,7 @@ export { SliderTrackHighlight };
  *
  * The handle that the user drags along the track to set the slider value.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle
+ * @see Docs https://reach.tech/slider#sliderhandle
  */
 const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
   function SliderHandle(
@@ -954,7 +954,7 @@ const SliderHandle = memoWithAs(SliderHandleImpl);
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle-props
+ * @see Docs https://reach.tech/slider#sliderhandle-props
  */
 export type SliderHandleProps = {};
 
@@ -972,7 +972,7 @@ export { SliderHandle };
  * A fixed value marker. These can be used to illustrate a range of steps or
  * highlight important points along the slider track.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker
+ * @see Docs https://reach.tech/slider#slidermarker
  */
 const SliderMarkerImpl = forwardRefWithAs<SliderMarkerProps>(
   function SliderMarker(
@@ -1034,13 +1034,13 @@ if (__DEV__) {
 const SliderMarker = memoWithAs(SliderMarkerImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-props
+ * @see Docs https://reach.tech/slider#slidermarker-props
  */
 export type SliderMarkerProps = {
   /**
    * The value to denote where the marker should appear along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-value
+   * @see Docs https://reach.tech/slider#slidermarker-value
    */
   value: number;
 };

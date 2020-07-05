@@ -4,7 +4,7 @@
  * Measures DOM elements (aka. bounding client rect).
  *
  * @see getBoundingClientRect https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
- * @see Docs                  https://reacttraining.com/reach-ui/rect
+ * @see Docs                  https://reach.tech/rect
  * @see Source                https://github.com/reach/reach-ui/tree/main/packages/rect
  */
 
@@ -31,7 +31,7 @@ export const Rect: React.FC<RectProps> = ({
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/rect#rect-props
+ * @see Docs https://reach.tech/rect#rect-props
  */
 export type RectProps = {
   /**
@@ -46,13 +46,13 @@ export type RectProps = {
    *
    * Pass `true` to observe, `false` to ignore.
    *
-   * @see Docs https://reacttraining.com/reach-ui/rect#rect-observe
+   * @see Docs https://reach.tech/rect#rect-observe
    */
   observe?: boolean;
   /**
    * Calls back whenever the `rect` of the element changes.
    *
-   * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
+   * @see Docs https://reach.tech/rect#rect-onchange
    */
   onChange?: (rect: PRect) => void;
   /**
@@ -63,7 +63,7 @@ export type RectProps = {
    * measure a node that has not yet been rendered. Make sure your code accounts
    * for this.
    *
-   * @see Docs https://reacttraining.com/reach-ui/rect#rect-onchange
+   * @see Docs https://reach.tech/rect#rect-onchange
    */
   children(args: {
     rect: PRect | null;

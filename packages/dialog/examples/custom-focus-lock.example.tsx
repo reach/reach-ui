@@ -43,7 +43,7 @@ function FakeInaccessibleFrame({
         <iframe
           title="Wikipedia"
           style={FRAME_STYLES}
-          src="https://reacttraining.com/reach-ui/"
+          src="https://reach.tech/"
         />
       </div>
     </Portal>
