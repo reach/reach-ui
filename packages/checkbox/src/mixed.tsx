@@ -26,7 +26,7 @@
  * @reach/checkbox/custom package provides a customizable wrapper element that
  * can be styled to fit your needs.
  *
- * @see Docs     https://reacttraining.com/reach-ui/checkbox#mixedcheckbox
+ * @see Docs     https://reach.tech/checkbox#mixedcheckbox
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/checkbox/src/mixed
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
@@ -205,7 +205,7 @@ export const createMachineDefinition = (
  * Tri-state checkbox that accepts `checked` values of `true`, `false` or
  * `"mixed"`.
  *
- * @see Docs https://reacttraining.com/reach-ui/checkbox#mixedcheckbox-1
+ * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
 export const MixedCheckbox = forwardRef<
   HTMLInputElement,
@@ -279,7 +279,7 @@ export type UseMixedCheckboxProps = Required<
  * React hook to create a tri-state checkbox that accepts `checked` values of
  * `true`, `false` or `"mixed"`.
  *
- * @see Docs https://reacttraining.com/reach-ui/checkbox#usemixedcheckbox
+ * @see Docs https://reach.tech/checkbox#usemixedcheckbox
  *
  * @param ref
  * @param args

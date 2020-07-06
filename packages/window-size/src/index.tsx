@@ -1,7 +1,7 @@
 /**
  * Measure the current window dimensions.
  *
- * @see Docs   https://reacttraining.com/reach-ui/window-size
+ * @see Docs   https://reach.tech/window-size
  * @see Source https://github.com/reach/reach-ui/tree/main/packages/window-size
  */
 
@@ -14,7 +14,7 @@ import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
 /**
  * WindowSize
  *
- * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize
+ * @see Docs https://reach.tech/window-size#windowsize
  * @param props
  */
 export const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
@@ -23,13 +23,13 @@ export const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-props
+ * @see Docs https://reach.tech/window-size#windowsize-props
  */
 export type WindowSizeProps = {
   /**
    * A function that calls back to you with the window size.
    *
-   * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-children
+   * @see Docs https://reach.tech/window-size#windowsize-children
    */
   children: (size: {
     width: number;
@@ -51,7 +51,7 @@ export default WindowSize;
 /**
  * useWindowSize
  *
- * @see Docs https://reacttraining.com/reach-ui/window-size#usewindowsize
+ * @see Docs https://reach.tech/window-size#usewindowsize
  */
 export function useWindowSize() {
   let { current: hasWindow } = useRef(canUseDOM());

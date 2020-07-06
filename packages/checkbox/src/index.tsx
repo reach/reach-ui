@@ -7,7 +7,7 @@
  *   - MixedCheckbox
  *   - CustomCheckbox
  *
- * @see Docs     https://reacttraining.com/reach-ui/checkbox
+ * @see Docs     https://reach.tech/checkbox
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/checkbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */

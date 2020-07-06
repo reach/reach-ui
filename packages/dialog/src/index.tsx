@@ -5,7 +5,7 @@
  *
  * An accessible dialog or "modal" window.
  *
- * @see Docs     https://reacttraining.com/reach-ui/dialog
+ * @see Docs     https://reach.tech/dialog
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
@@ -43,7 +43,7 @@ const overlayPropTypes = {
  *
  * Note: You must render a `DialogContent` inside.
  *
- * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay
+ * @see Docs https://reach.tech/dialog#dialogoverlay
  */
 export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
   function DialogOverlay({ isOpen = true, ...props }, forwardedRef) {
@@ -98,7 +98,7 @@ export type DialogOverlayProps = DialogProps & {
    * various settings to allow more customization, but it takes care of a lot of
    * hard work that you probably don't want or need to do.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-dangerouslybypassfocuslock
+   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassfocuslock
    * @see https://github.com/theKashey/react-focus-lock
    * @see https://github.com/reach/reach-ui/issues/615
    */
@@ -115,7 +115,7 @@ export type DialogOverlayProps = DialogProps & {
    * `dangerouslyBypassFocusLock` prop, this is generally discouraged and should
    * only be used if a proper fallback for managing scroll behavior is provided.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogoverlay-dangerouslybypassscrolllock
+   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassscrolllock
    * @see https://github.com/theKashey/react-remove-scroll
    */
   dangerouslyBypassScrollLock?: boolean;
@@ -229,7 +229,7 @@ if (__DEV__) {
  * to it. Any props passed to `Dialog` component (besides `isOpen` and
  * `onDismiss`) will be spread onto `DialogContent`.
  *
- * @see Docs https://reacttraining.com/reach-ui/dialog#dialogcontent
+ * @see Docs https://reach.tech/dialog#dialogcontent
  */
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   function DialogContent({ onClick, onKeyDown, ...props }, forwardedRef) {
@@ -250,13 +250,13 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/dialog#dialogcontent-props
+ * @see Docs https://reach.tech/dialog#dialogcontent-props
  */
 export type DialogContentProps = {
   /**
    * Accepts any renderable content.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialogcontent-children
+   * @see Docs https://reach.tech/dialog#dialogcontent-children
    */
   children?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
@@ -277,7 +277,7 @@ if (__DEV__) {
  * High-level component to render a modal dialog window over the top of the page
  * (or another dialog).
  *
- * @see Docs https://reacttraining.com/reach-ui/dialog#dialog
+ * @see Docs https://reach.tech/dialog#dialog
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
   {
@@ -302,20 +302,20 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-props
+ * @see Docs https://reach.tech/dialog#dialog-props
  */
 export type DialogProps = {
   /**
    * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
    * Defaults to `false`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-allowpinchzoom
+   * @see Docs https://reach.tech/dialog#dialog-allowpinchzoom
    */
   allowPinchZoom?: boolean;
   /**
    * Accepts any renderable content.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-children
+   * @see Docs https://reach.tech/dialog#dialog-children
    */
   children?: React.ReactNode;
 
@@ -323,13 +323,13 @@ export type DialogProps = {
    * By default the first focusable element will receive focus when the dialog
    * opens but you can provide a ref to focus instead.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-initialfocusref
+   * @see Docs https://reach.tech/dialog#dialog-initialfocusref
    */
   initialFocusRef?: React.RefObject<any>;
   /**
    * Controls whether or not the dialog is open.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-isopen
+   * @see Docs https://reach.tech/dialog#dialog-isopen
    */
   isOpen?: boolean;
   /**
@@ -343,7 +343,7 @@ export type DialogProps = {
    * may want to alert the user they need to a make a choice on dismiss instead
    * of closing the dialog.
    *
-   * @see Docs https://reacttraining.com/reach-ui/dialog#dialog-ondismiss
+   * @see Docs https://reach.tech/dialog#dialog-ondismiss
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
