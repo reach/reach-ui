@@ -1,3 +1,4 @@
 *.yml
 node_modules
 packages/*/dist
+website/static
