@@ -10,7 +10,7 @@
  * If you have a group of disclosures that stack vertically and exist within the
  * same logical context, you may want to use @reach/accordion instead.
  *
- * @see Docs     https://reacttraining.com/reach-ui/disclosure
+ * @see Docs     https://reach.tech/disclosure
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/disclosure
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
@@ -49,7 +49,7 @@ export enum DisclosureStates {
  * panel components. A disclosure should only have one button and one panel
  * descendant.
  *
- * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-1
+ * @see Docs https://reach.tech/disclosure#disclosure-1
  *
  * @param props
  */
@@ -118,14 +118,14 @@ export type DisclosureProps = {
    * elements if desired, though it is not recommended to pass other arbitrary
    * components within a disclosure in most cases.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-children
+   * @see Docs https://reach.tech/disclosure#disclosure-children
    */
   children: React.ReactNode;
   /**
    * Whether or not an uncontrolled disclosure component should default to its
    * `open` state on the initial render.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-defaultopen
+   * @see Docs https://reach.tech/disclosure#disclosure-defaultopen
    */
   defaultOpen?: boolean;
   /**
@@ -138,20 +138,20 @@ export type DisclosureProps = {
    * for aria compliance. If no `id` is passed we will generate descendant IDs
    * for you.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-id
+   * @see Docs https://reach.tech/disclosure#disclosure-id
    */
   id?: React.ReactText;
   /**
    * The callback that is fired when a disclosure's open state is changed.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-onchange
+   * @see Docs https://reach.tech/disclosure#disclosure-onchange
    */
   onChange?(): void;
   /**
    * The controlled open state of the disclosure. The `open` prop should be used
    * along with `onChange` to create controlled disclosure components.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosure-open
+   * @see Docs https://reach.tech/disclosure#disclosure-open
    */
   open?: boolean;
 };
@@ -173,7 +173,7 @@ if (__DEV__) {
  *
  * The trigger button a user clicks to interact with a disclosure.
  *
- * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurebutton
+ * @see Docs https://reach.tech/disclosure#disclosurebutton
  */
 export const DisclosureButton = forwardRefWithAs<
   DisclosureButtonProps,
@@ -226,7 +226,7 @@ export const DisclosureButton = forwardRefWithAs<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurebutton-props
+ * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
 export type DisclosureButtonProps = {
   /**
@@ -235,7 +235,7 @@ export type DisclosureButtonProps = {
    * children of interactive elements.
    *
    * @see https://adrianroselli.com/2016/12/be-wary-of-nesting-roles.html
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurebutton-children
+   * @see Docs https://reach.tech/disclosure#disclosurebutton-children
    */
   children: React.ReactNode;
 };
@@ -256,7 +256,7 @@ if (__DEV__) {
  * The collapsible panel in which inner content for an disclosure item is
  * rendered.
  *
- * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurepanel
+ * @see Docs https://reach.tech/disclosure#disclosurepanel
  */
 export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
   function DisclosurePanel({ children, ...props }, forwardedRef) {
@@ -284,13 +284,13 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurepanel-props
+ * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
 type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Inner collapsible content for the disclosure item.
    *
-   * @see Docs https://reacttraining.com/reach-ui/disclosure#disclosurepanel-children
+   * @see Docs https://reach.tech/disclosure#disclosurepanel-children
    */
   children: React.ReactNode;
 };

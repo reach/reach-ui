@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/component-component.svg)](https://npm.im/@reach/component-component) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/component-component) | [Source](https://github.com/reach/reach-ui/tree/main/packages/component-component)
+[Docs](https://reach.tech/component-component) | [Source](https://github.com/reach/reach-ui/tree/main/packages/component-component)
 
 > NOTE: This component was developed in the days before React Hooks.
 > In most cases, you should probably build your function components using hooks and use a class

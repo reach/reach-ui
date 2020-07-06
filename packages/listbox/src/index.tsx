@@ -19,7 +19,7 @@
  *       Probably similar solution needed for iOS issue above.
  *       https://twitter.com/GassnerKendall/status/1237778370118598661
  *
- * @see Docs     https://reacttraining.com/reach-ui/listbox
+ * @see Docs     https://reach.tech/listbox
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/listbox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
@@ -98,7 +98,7 @@ const ListboxGroupContext = createNamedContext(
  *
  * The top-level component and context provider for the listbox.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput
+ * @see Docs https://reach.tech/listbox#listboxinput
  */
 export const ListboxInput = forwardRef<
   HTMLDivElement,
@@ -354,7 +354,7 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-props
+ * @see Docs https://reach.tech/listbox#listboxinput-props
  */
 export type ListboxInputProps = Omit<
   React.HTMLProps<HTMLDivElement>,
@@ -370,7 +370,7 @@ export type ListboxInputProps = Omit<
      * `ListboxPopover` as children. You can also pass in arbitrary wrapper
      * elements if desired.
      *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-children
+     * @see Docs https://reach.tech/listbox#listboxinput-children
      */
     children:
       | React.ReactNode
@@ -383,26 +383,26 @@ export type ListboxInputProps = Omit<
     /**
      * The default value of an uncontrolled listbox.
      *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-defaultvalue
+     * @see Docs https://reach.tech/listbox#listboxinput-defaultvalue
      */
     defaultValue?: ListboxValue;
     /**
      * Whether or not the listbox is disabled.
      *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-disabled
+     * @see Docs https://reach.tech/listbox#listboxinput-disabled
      */
     disabled?: boolean;
     /**
      * The callback that fires when the listbox value changes.
      *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-onchange
+     * @see Docs https://reach.tech/listbox#listboxinput-onchange
      * @param newValue
      */
     onChange?(newValue: ListboxValue): void;
     /**
      * The current value of a controlled listbox.
      *
-     * @see Docs https://reacttraining.com/reach-ui/listbox#listboxinput-value
+     * @see Docs https://reach.tech/listbox#listboxinput-value
      */
     value?: ListboxValue;
   };
@@ -421,7 +421,7 @@ export type ListboxInputProps = Omit<
  *   <ListboxOption value="3">Option 3</ListboxOption>
  * </Listbox>
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-1
+ * @see Docs https://reach.tech/listbox#listbox-1
  */
 export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
   function Listbox(
@@ -463,21 +463,21 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-props
+ * @see Docs https://reach.tech/listbox#listbox-props
  */
 export type ListboxProps = Omit<ListboxInputProps, "children"> & {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * Listbox button.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-arrow
+   * @see Docs https://reach.tech/listbox#listbox-arrow
    */
   arrow?: React.ReactNode | boolean;
   /**
    * A render function or React node to to render the Listbox button's inner
    * content. See the API for the ListboxButton children prop for details.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
+   * @see Docs https://reach.tech/listbox#listbox-button
    */
   button?:
     | React.ReactNode
@@ -490,7 +490,7 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-portal
+   * @see Docs https://reach.tech/listbox#listbox-portal
    */
   portal?: boolean;
 };
@@ -502,7 +502,7 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
  *
  * The interactive toggle button that triggers the popover for the listbox.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listbox-button
+ * @see Docs https://reach.tech/listbox#listbox-button
  */
 const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
   function ListboxButton(
@@ -633,14 +633,14 @@ if (__DEV__) {
 export const ListboxButton = memoWithAs(ListboxButtonImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-props
+ * @see Docs https://reach.tech/listbox#listboxbutton-props
  */
 export type ListboxButtonProps = {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * button.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxbutton-arrow
+   * @see Docs https://reach.tech/listbox#listboxbutton-arrow
    */
   arrow?: React.ReactNode | boolean;
   /**
@@ -700,7 +700,7 @@ export type ListboxButtonProps = {
  *
  * A wrapper component for an arrow to display in the `ListboxButton`
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow
+ * @see Docs https://reach.tech/listbox#listboxarrow
  */
 const ListboxArrowImpl = forwardRef<HTMLSpanElement, ListboxArrowProps>(
   function ListboxArrow({ children, ...props }, forwardedRef) {
@@ -737,7 +737,7 @@ if (__DEV__) {
 export const ListboxArrow = memo(ListboxArrowImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxarrow-props
+ * @see Docs https://reach.tech/listbox#listboxarrow-props
  */
 export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
   /**
@@ -760,7 +760,7 @@ export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
  *
  * The popover containing the list of options.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover
+ * @see Docs https://reach.tech/listbox#listboxpopover
  */
 const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
   function ListboxPopover(
@@ -826,26 +826,26 @@ if (__DEV__) {
 export const ListboxPopover = memo(ListboxPopoverImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-props
+ * @see Docs https://reach.tech/listbox#listboxpopover-props
  */
 export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
   /**
    * `ListboxPopover` expects to receive `ListboxList` as its children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-children
+   * @see Docs https://reach.tech/listbox#listboxpopover-children
    */
   children: React.ReactNode;
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-portal
+   * @see Docs https://reach.tech/listbox#listboxpopover-portal
    */
   portal?: boolean;
   /**
    * The positioning function for the popover.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxpopover-position
+   * @see Docs https://reach.tech/listbox#listboxpopover-position
    */
   position?: PopoverProps["position"];
   unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
@@ -858,7 +858,7 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
  *
  * The list containing all listbox options.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist
+ * @see Docs https://reach.tech/listbox#listboxlist
  */
 export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
@@ -913,7 +913,7 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxlist-props
+ * @see Docs https://reach.tech/listbox#listboxlist-props
  */
 export type ListboxListProps = {};
 
@@ -924,7 +924,7 @@ export type ListboxListProps = {};
  *
  * A selectable option for the listbox.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption
+ * @see Docs https://reach.tech/listbox#listboxoption
  */
 export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
   function ListboxOption(
@@ -1097,14 +1097,14 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-props
+ * @see Docs https://reach.tech/listbox#listboxoption-props
  */
 export type ListboxOptionProps = {
   /**
    * The option's value. This will be passed into a hidden input field for use
    * in forms.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-value
+   * @see Docs https://reach.tech/listbox#listboxoption-value
    */
   value: ListboxValue;
   /**
@@ -1114,13 +1114,13 @@ export type ListboxOptionProps = {
    * begins with a character other than a readable letter (like an emoji or
    * symbol) so that typeahead works as expected for the user.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-label
+   * @see Docs https://reach.tech/listbox#listboxoption-label
    */
   label?: string;
   /**
    * Whether or not the option is disabled from selection and navigation.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxoption-disabled
+   * @see Docs https://reach.tech/listbox#listboxoption-disabled
    */
   disabled?: boolean;
 };
@@ -1132,7 +1132,7 @@ export type ListboxOptionProps = {
  *
  * A group of related listbox options.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup
+ * @see Docs https://reach.tech/listbox#listboxgroup
  */
 export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
   function ListboxGroup({ label, children, ...props }, forwardedRef) {
@@ -1167,7 +1167,7 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
+ * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
 export type ListboxGroupProps = Omit<
   React.HTMLProps<HTMLDivElement>,
@@ -1178,7 +1178,7 @@ export type ListboxGroupProps = Omit<
    * group contains a `ListboxGroupLabel` component. The label should always
    * be human-readable.
    *
-   * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-label
+   * @see Docs https://reach.tech/listbox#listboxgroup-label
    */
   label?: React.ReactNode;
 };
@@ -1188,7 +1188,7 @@ export type ListboxGroupProps = Omit<
 /**
  * ListboxGroupLabel
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgrouplabel
+ * @see Docs https://reach.tech/listbox#listboxgrouplabel
  */
 export const ListboxGroupLabel = forwardRefWithAs<
   ListboxGroupLabelProps,
@@ -1214,7 +1214,7 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/listbox#listboxgroup-props
+ * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
 export type ListboxGroupLabelProps = {};
 
@@ -1223,7 +1223,7 @@ export type ListboxGroupLabelProps = {};
 /**
  * A hook that exposes data for a given `Listbox` component to its descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/listbox#uselistboxcontext
+ * @see Docs https://reach.tech/listbox#uselistboxcontext
  */
 export function useListboxContext(): ListboxContextValue {
   let {

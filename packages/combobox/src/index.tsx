@@ -13,7 +13,7 @@
  * ???: navigate w/ arrows, then hit backspace: should it delete the
  *      autocompleted text or the old value the user had typed?!
  *
- * @see Docs     https://reacttraining.com/reach-ui/combobox
+ * @see Docs     https://reach.tech/combobox
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/combobox
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
@@ -265,7 +265,7 @@ const OptionContext = createNamedContext(
 /**
  * Combobox
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#combobox
+ * @see Docs https://reach.tech/combobox#combobox
  */
 export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   function Combobox(
@@ -357,11 +357,11 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-props
+ * @see Docs https://reach.tech/combobox#combobox-props
  */
 export type ComboboxProps = {
   /**
-   * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-children
+   * @see Docs https://reach.tech/combobox#combobox-children
    */
   children:
     | React.ReactNode
@@ -370,23 +370,23 @@ export type ComboboxProps = {
    * Called with the selection value when the user makes a selection from the
    * list.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-onselect
+   * @see Docs https://reach.tech/combobox#combobox-onselect
    */
   onSelect?(value: ComboboxValue): void;
   /**
    * If true, the popover opens when focus is on the text box.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#combobox-openonfocus
+   * @see Docs https://reach.tech/combobox#combobox-openonfocus
    */
   openOnFocus?: boolean;
   /**
    * Defines a string value that labels the current element.
-   * @see Docs https://reacttraining.com/reach-ui/combobox#accessibility
+   * @see Docs https://reach.tech/combobox#accessibility
    */
   "aria-label"?: string;
   /**
    * Identifies the element (or elements) that labels the current element.
-   * @see Docs https://reacttraining.com/reach-ui/combobox#accessibility
+   * @see Docs https://reach.tech/combobox#accessibility
    */
   "aria-labelledby"?: string;
 };
@@ -407,7 +407,7 @@ if (__DEV__) {
  *
  * Wraps an `<input/>` with a couple extra props that work with the combobox.
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput
+ * @see Docs https://reach.tech/combobox#comboboxinput
  */
 export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
   function ComboboxInput(
@@ -557,7 +557,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-props
+ * @see Docs https://reach.tech/combobox#comboboxinput-props
  */
 export type ComboboxInputProps = {
   /**
@@ -569,7 +569,7 @@ export type ComboboxInputProps = {
    * false, like a google search--the user is likely wanting to edit their
    * search, not replace it completely.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-selectonclick
+   * @see Docs https://reach.tech/combobox#comboboxinput-selectonclick
    */
   selectOnClick?: boolean;
   /**
@@ -582,11 +582,11 @@ export type ComboboxInputProps = {
    * But if your input is more like a normal `<input type="text"/>`, then leave
    * the `true` default.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-autocomplete
+   * @see Docs https://reach.tech/combobox#comboboxinput-autocomplete
    */
   autocomplete?: boolean;
   /**
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxinput-value
+   * @see Docs https://reach.tech/combobox#comboboxinput-value
    */
   value?: ComboboxValue;
 };
@@ -604,7 +604,7 @@ if (__DEV__) {
  * more than the list in the popup, you need to render one of these around the
  * list. For example, maybe you want to render the number of results suggested.
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover
+ * @see Docs https://reach.tech/combobox#comboboxpopover
  */
 export const ComboboxPopover = forwardRef<
   HTMLDivElement,
@@ -657,7 +657,7 @@ if (__DEV__) {
 }
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-props
+ * @see Docs https://reach.tech/combobox#comboboxpopover-props
  */
 export type ComboboxPopoverProps = {
   /**
@@ -666,7 +666,7 @@ export type ComboboxPopoverProps = {
    * is mostly useful for styling the entire component together, like the pink
    * focus outline in the example earlier in this page.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxpopover-portal
+   * @see Docs https://reach.tech/combobox#comboboxpopover-portal
    */
   portal?: boolean;
 };
@@ -679,7 +679,7 @@ export type ComboboxPopoverProps = {
  * Contains the `ComboboxOption` elements and sets up the proper aria attributes
  * for the list.
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist
+ * @see Docs https://reach.tech/combobox#comboboxlist
  */
 export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   function ComboboxList(
@@ -711,7 +711,7 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist-props
+ * @see Docs https://reach.tech/combobox#comboboxlist-props
  */
 export type ComboboxListProps = {
   /**
@@ -725,7 +725,7 @@ export type ComboboxListProps = {
    * are from the list, your app will need to do that validation on blur or
    * submit of the form.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxlist-persistselection
+   * @see Docs https://reach.tech/combobox#comboboxlist-persistselection
    */
   persistSelection?: boolean;
 };
@@ -741,7 +741,7 @@ if (__DEV__) {
  *
  * An option that is suggested to the user as they interact with the combobox.
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption
+ * @see Docs https://reach.tech/combobox#comboboxoption
  */
 export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
   function ComboboxOption(
@@ -795,7 +795,7 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-props
+ * @see Docs https://reach.tech/combobox#comboboxoption-props
  */
 export type ComboboxOptionProps = {
   /**
@@ -810,13 +810,13 @@ export type ComboboxOptionProps = {
    *     🍎 <ComboboxOptionText />
    *   </ComboboxOption>
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-children
+   * @see Docs https://reach.tech/combobox#comboboxoption-children
    */
   children?: React.ReactNode;
   /**
    * The value to match against when suggesting.
    *
-   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-value
+   * @see Docs https://reach.tech/combobox#comboboxoption-value
    */
   value: string;
 };
@@ -841,7 +841,7 @@ if (__DEV__) {
  *     🌧 <ComboboxOptionText />
  *   </ComboboxOption>
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoptiontext
+ * @see Docs https://reach.tech/combobox#comboboxoptiontext
  */
 export function ComboboxOptionText() {
   const { value } = useContext(OptionContext);
@@ -1201,7 +1201,7 @@ export function escapeRegexp(str: string) {
 /**
  * A hook that exposes data for a given `Combobox` component to its descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/combobox#usecomboboxcontext
+ * @see Docs https://reach.tech/combobox#usecomboboxcontext
  */
 export function useComboboxContext(): ComboboxContextValue {
   let { isExpanded, comboboxId } = useContext(ComboboxContext);

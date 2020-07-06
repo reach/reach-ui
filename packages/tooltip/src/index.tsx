@@ -37,7 +37,7 @@
  *         tooltip for a little while longer in case their hand was
  *         obstructing the tooltip.
  *
- * @see Docs     https://reacttraining.com/reach-ui/tooltip
+ * @see Docs     https://reach.tech/tooltip
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tooltip
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
  */
@@ -360,7 +360,7 @@ export function useTooltip<T extends HTMLElement>({
 /**
  * Tooltip
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltip
+ * @see Docs https://reach.tech/tooltip#tooltip
  */
 export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   {
@@ -430,7 +430,7 @@ export default Tooltip;
 /**
  * TooltipPopup
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltippopup
+ * @see Docs https://reach.tech/tooltip#tooltippopup
  */
 export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   function TooltipPopup(
@@ -478,7 +478,7 @@ if (__DEV__) {
  *
  * We need a separate component so that useRect works inside the portal.
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltipcontent
+ * @see Docs https://reach.tech/tooltip#tooltipcontent
  */
 const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
   function TooltipContent(
