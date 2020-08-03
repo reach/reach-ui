@@ -485,7 +485,7 @@ export const Tab = forwardRefWithAs<
   );
 
   let handleBlur = useEventCallback(
-    wrapEvent(onFocus, () => {
+    wrapEvent(onBlur, () => {
       setFocusedIndex(-1);
     })
   );
