@@ -148,7 +148,7 @@ function useRect<T extends Element = HTMLElement>(
       elem = nodeRef.current;
     }
 
-    if (!elem) {
+    if (!elem && observe) {
       if (__DEV__) {
         console.warn("You need to place the ref");
       }
