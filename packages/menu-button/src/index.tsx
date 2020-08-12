@@ -1006,6 +1006,7 @@ function findItemFromTypeahead(
   const found = items.find(({ element, disabled }, index) => {
     if (!disabled)
       return element?.dataset?.valuetext?.toLowerCase().startsWith(string);
+    return false;
   });
   return found ? items.indexOf(found) : null;
 }
