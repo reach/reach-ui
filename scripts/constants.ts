@@ -9,6 +9,6 @@ export const paths = {
   projectCache: path.join(projectRoot, ".cache"),
   progressEstimatorCache: path.join(
     projectRoot,
-    "node_modules/.cache/.progress-estimator"
+    "node_modules/.cache/progress-estimator"
   ),
 };
