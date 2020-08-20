@@ -11,7 +11,7 @@
     "directory": "packages/checkbox"
   },
   "scripts": {
-    "build": "ts-node ../../scripts/build"
+    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "dependencies": {
     "@reach/auto-id": "0.10.5",

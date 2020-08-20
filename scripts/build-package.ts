@@ -2,6 +2,9 @@ import chalk from "chalk";
 import { logError, getPackageDirectoryMap } from "./utils";
 import { buildPackage } from "./build";
 
+// TODO: Detect internal dependencies and re-build them if they have changed
+// since the last build.
+
 (async function () {
   let args = process.argv.slice(2);
   if (!args || !args[0]) {
@@ -12,7 +15,9 @@ import { buildPackage } from "./build";
   }
 
   try {
-    let packageName = `@reach/${args[0]}`;
+    let packageName = args[0].startsWith("@reach/")
+      ? args[0]
+      : `@reach/${args[0]}`;
     let packageMap = await getPackageDirectoryMap();
     let packagePath = packageMap[packageName];
 
