@@ -77,16 +77,3 @@ First do the steps in "Getting Started", then:
 ```
 yarn test
 ```
-
-Or if you want to run the tests as you edit files:
-
-```
-yarn test --watch
-```
-
-Often you'll want to just test the component you're working on:
-
-```
-cd packages/<component-path>
-yarn test --watch
-```

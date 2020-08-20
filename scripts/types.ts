@@ -1,49 +1,44 @@
-interface SharedOpts {
-  // JS target
+import { CompilerOptions } from "typescript";
+
+export interface SharedOpts {
   target: "node" | "browser";
-  // Path to tsconfig file
   tsconfig?: string;
-  // Is error extraction running?
 }
 
 export type ModuleFormat = "cjs" | "umd" | "esm" | "system";
 
 export interface BuildOpts extends SharedOpts {
   name?: string;
-  entry?: string | string[];
-  format: "cjs,esm";
   target: "browser";
 }
 
-export interface WatchOpts extends BuildOpts {
-  verbose?: boolean;
-  noClean?: boolean;
-  // callback hooks
-  onFirstSuccess?: string;
-  onSuccess?: string;
-  onFailure?: string;
-}
+export interface WatchOpts extends BuildOpts {}
 
-export interface NormalizedOpts
-  extends Omit<WatchOpts, "name" | "input" | "format"> {
+export interface NormalizedOpts extends Omit<BuildOpts, "name" | "target"> {
   name: string;
   input: string[];
-  format: [ModuleFormat, ...ModuleFormat[]];
+  target?: "node" | "browser";
+  packageRoot: string;
+  packageDist: string;
+  packageSrc: string;
 }
 
-export interface ScriptOpts extends SharedOpts {
-  // Name of package
-  name: string;
-  // path to file
+export interface ScriptOpts extends Omit<NormalizedOpts, "input"> {
   input: string;
-  // Environment
   env: "development" | "production";
-  // Module format
   format: ModuleFormat;
-  // Is minifying?
   minify?: boolean;
-  // Is this the very first rollup config (and thus should one-off metadata be extracted)?
   writeMeta?: boolean;
-  // Only transpile, do not type check (makes compilation faster)
   transpileOnly?: boolean;
 }
+
+export type TSConfigJSON = {
+  files?: string[];
+  exclude?: string[];
+  include?: string[];
+  compileOnSave?: boolean;
+  extends?: string;
+  compilerOptions: CompilerOptions;
+};
+
+export type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
