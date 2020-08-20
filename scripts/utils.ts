@@ -127,7 +127,6 @@ export function dirIsParentOf(parent: string, dir: string) {
 }
 
 // 🌈🌈🌈 for our logs
-let currentChalk = 0;
 let CHALK_COLORS = [
   "magenta",
   "red",
@@ -136,8 +135,38 @@ let CHALK_COLORS = [
   "blue",
   "cyan",
 ] as const;
+
+let currentChalk = 0;
 export function rainbowChalk() {
   let c = chalk[CHALK_COLORS[currentChalk]];
   currentChalk = currentChalk >= CHALK_COLORS.length - 1 ? 0 : currentChalk + 1;
   return c;
+}
+
+export const log = (function () {
+  let logger = ((...msgs) => {
+    return fs.writeSync((process.stdout as any).fd, msgs.join("\n") + "\n");
+  }) as ColorLogger;
+  logger.bold = (...msgs) => logger(chalk.bold(...msgs));
+  // @ts-ignore
+  logger.rainbow = (...msgs) => logger(rainbowChalk()(...msgs));
+  logger.rainbow.bold = (...msgs) => logger(rainbowChalk().bold(...msgs));
+  for (let color of CHALK_COLORS) {
+    // @ts-ignore
+    logger[color] = (...msgs) => logger(chalk[color](...msgs));
+    logger[color].bold = (...msgs) => logger(chalk[color].bold(...msgs));
+  }
+  return logger;
+})();
+
+type LoggerFn = (...msgs: string[]) => any;
+type LoggerWithBold = LoggerFn & { bold: LoggerFn };
+interface ColorLogger extends LoggerWithBold {
+  magenta: LoggerWithBold;
+  red: LoggerWithBold;
+  yellow: LoggerWithBold;
+  green: LoggerWithBold;
+  blue: LoggerWithBold;
+  cyan: LoggerWithBold;
+  rainbow: LoggerWithBold;
 }

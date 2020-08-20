@@ -3,8 +3,8 @@ import { buildPackage } from "./build";
 import {
   cleanDistDirectories,
   getPackageDirectoryMap,
-  rainbowChalk,
   timeFromStart,
+  log,
 } from "./utils";
 
 (async function () {
@@ -18,9 +18,9 @@ import {
     if (!packagePath) {
       return;
     }
-    console.log(rainbowChalk().bold(`Building ${pkg.name}`));
+    log.rainbow.bold(`Building ${pkg.name}`);
     return await buildPackage(pkg.name, packagePath);
   });
 
-  console.log(`Finished build in ${timeFromStart(start)}`);
+  log.bold(`Finished build in ${timeFromStart(start)}`);
 })();
