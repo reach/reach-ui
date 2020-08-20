@@ -40,7 +40,7 @@ import WindowSize, { useWindowSize } from "@reach/window-size";
 function Example() {
   return (
     <WindowSize>
-      {size => (
+      {(size) => (
         <div>
           <p>Resize your window.</p>
           <pre>{JSON.stringify(size, null, 2)}</pre>
@@ -59,7 +59,7 @@ function Example() {
 
 ##### WindowSize `children`
 
-`children: (size: TWindowSize) => React.ReactElement<any>`
+`children: (size: { width: number; height: number }) => React.ReactElement<any, any>`
 
 A function that calls back to you with the window size.
 

@@ -2,6 +2,7 @@ import React, { StrictMode } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
+import { Tag, Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Basic (Strict Mode)";
@@ -37,34 +38,6 @@ function Example() {
         </ListboxOption>
       </Listbox>
     </StrictMode>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
-  );
-}
-
-function Tag(props: any) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        lineHeight: 1,
-        fontSize: 11,
-        textTransform: "uppercase",
-        fontWeight: "bolder",
-        marginLeft: 6,
-        padding: 4,
-        background: "crimson",
-        borderRadius: 2,
-        color: "#fff",
-      }}
-      {...props}
-    />
   );
 }
 

@@ -12,7 +12,7 @@ let defaultId = "reach-skip-nav";
  *
  * Renders a link that remains hidden until focused to skip to the main content.
  *
- * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink
+ * @see Docs https://reach.tech/skip-nav#skipnavlink
  */
 export const SkipNavLink: React.FC<SkipNavLinkProps> = ({
   children = "Skip to content",
@@ -35,20 +35,20 @@ export const SkipNavLink: React.FC<SkipNavLinkProps> = ({
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-props
+ * @see Docs https://reach.tech/skip-nav#skipnavlink-props
  */
 export type SkipNavLinkProps = {
   /**
    * Allows you to change the text for your preferred phrase or localization.
    *
-   * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-children
+   * @see Docs https://reach.tech/skip-nav#skipnavlink-children
    */
-  children?: string | JSX.Element;
+  children?: React.ReactNode;
   /**
    * An alternative ID for `SkipNavContent`. If used, the same value must be
    * provided to the `id` prop in `SkipNavContent`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavlink-contentid
+   * @see Docs https://reach.tech/skip-nav#skipnavlink-contentid
    */
   contentId?: string;
 } & Omit<React.HTMLAttributes<HTMLAnchorElement>, "href">;
@@ -64,7 +64,7 @@ if (__DEV__) {
  *
  * Renders a div as the target for the link.
  *
- * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent
+ * @see Docs https://reach.tech/skip-nav#skipnavcontent
  */
 export const SkipNavContent: React.FC<SkipNavContentProps> = ({
   id: idProp,
@@ -75,7 +75,7 @@ export const SkipNavContent: React.FC<SkipNavContentProps> = ({
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent-props
+ * @see Docs https://reach.tech/skip-nav#skipnavcontent-props
  */
 export type SkipNavContentProps = {
   /**
@@ -93,14 +93,14 @@ export type SkipNavContentProps = {
    *     <YourMainContent/>
    *   </SkipNavContent>
    *
-   * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent-children
+   * @see Docs https://reach.tech/skip-nav#skipnavcontent-children
    */
   children?: React.ReactNode;
   /**
    * An alternative ID. If used, the same value must be provided to the
    * `contentId` prop in `SkipNavLink`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/skip-nav#skipnavcontent-id
+   * @see Docs https://reach.tech/skip-nav#skipnavcontent-id
    */
   id?: string;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, "id">;

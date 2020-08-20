@@ -3,7 +3,7 @@
  *
  * TODO: Animation examples
  *
- * @see Docs     https://reacttraining.com/reach-ui/accordion
+ * @see Docs     https://reach.tech/accordion
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/accordion
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
  */
@@ -67,7 +67,7 @@ export enum AccordionStates {
  * component will consist of accordion items whose buttons are keyboard
  * navigable using arrow keys.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-1
+ * @see Docs https://reach.tech/accordion#accordion-1
  */
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   function Accordion(
@@ -216,7 +216,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-props
+ * @see Docs https://reach.tech/accordion#accordion-props
  */
 export type AccordionProps = Omit<
   React.HTMLProps<HTMLDivElement>,
@@ -225,7 +225,7 @@ export type AccordionProps = Omit<
   /**
    * `Accordion` can accept `AccordionItem` components as children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-children
+   * @see Docs https://reach.tech/accordion#accordion-children
    */
   children: React.ReactNode;
   /**
@@ -243,7 +243,7 @@ export type AccordionProps = Omit<
    * A default value for the open panel's index or indices in an uncontrolled
    * accordion component when it is initially rendered.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-defaultindex
+   * @see Docs https://reach.tech/accordion#accordion-defaultindex
    */
   defaultIndex?: AccordionIndex;
   /**
@@ -251,13 +251,13 @@ export type AccordionProps = Omit<
    * should be used along with `onChange` to create controlled accordion
    * components.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-index
+   * @see Docs https://reach.tech/accordion#accordion-index
    */
   index?: AccordionIndex;
   /**
    * The callback that is fired when an accordion item's open state is changed.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
+   * @see Docs https://reach.tech/accordion#accordion-onchange
    */
   onChange?(index?: number): void;
   /**
@@ -274,7 +274,7 @@ export type AccordionProps = Omit<
    *
    * TODO: Create example with @reach/alert.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordion-onchange
+   * @see Docs https://reach.tech/accordion#accordion-onchange
    */
   readOnly?: boolean;
   /**
@@ -349,7 +349,7 @@ if (__DEV__) {
  *
  * A group that wraps a an accordion's button and panel components.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem
+ * @see Docs https://reach.tech/accordion#accordionitem
  */
 export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   function AccordionItem(
@@ -406,7 +406,7 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-props
+ * @see Docs https://reach.tech/accordion#accordionitem-props
  */
 export type AccordionItemProps = {
   /**
@@ -416,13 +416,13 @@ export type AccordionItemProps = {
    * that is relevant to the section but not collapsible when the
    * `AccordionButton` is toggled.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-children
+   * @see Docs https://reach.tech/accordion#accordionitem-children
    */
   children: React.ReactNode;
   /**
    * Whether or not an accordion panel is disabled from user interaction.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordionitem-disabled
+   * @see Docs https://reach.tech/accordion#accordionitem-disabled
    */
   disabled?: boolean;
 };
@@ -443,7 +443,7 @@ if (__DEV__) {
  *
  * Must be a direct child of a `AccordionItem`.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton
+ * @see Docs https://reach.tech/accordion#accordionbutton
  */
 export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
   function AccordionButton(
@@ -548,7 +548,7 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton-props
+ * @see Docs https://reach.tech/accordion#accordionbutton-props
  */
 export type AccordionButtonProps = {
   /**
@@ -557,7 +557,7 @@ export type AccordionButtonProps = {
    * of interactive elements.
    *
    * @see https://github.com/w3c/html-aria/issues/54
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordionbutton-children
+   * @see Docs https://reach.tech/accordion#accordionbutton-children
    */
   children: React.ReactNode;
 };
@@ -578,7 +578,7 @@ if (__DEV__) {
  * The collapsible panel in which inner content for an accordion item is
  * rendered.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel
+ * @see Docs https://reach.tech/accordion#accordionpanel
  */
 export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
   function AccordionPanel(
@@ -622,13 +622,13 @@ export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel-props
+ * @see Docs https://reach.tech/accordion#accordionpanel-props
  */
 export type AccordionPanelProps = {
   /**
    * Inner collapsible content for the accordion item.
    *
-   * @see Docs https://reacttraining.com/reach-ui/accordion#accordionpanel-children
+   * @see Docs https://reach.tech/accordion#accordionpanel-children
    */
   children: React.ReactNode;
 };
@@ -646,7 +646,7 @@ if (__DEV__) {
  * A hook that exposes data for a given `Accordion` component to its
  * descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#useaccordioncontext
+ * @see Docs https://reach.tech/accordion#useaccordioncontext
  */
 export function useAccordionContext(): AccordionContextValue {
   let { openPanels, accordionId } = useContext(AccordionContext);
@@ -665,7 +665,7 @@ export function useAccordionContext(): AccordionContextValue {
  * A hook that exposes data for a given `AccordionItem` component to its
  * descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/accordion#useaccordionitemcontext
+ * @see Docs https://reach.tech/accordion#useaccordionitemcontext
  */
 export function useAccordionItemContext(): AccordionItemContextValue {
   let { index, state } = useContext(AccordionItemContext);

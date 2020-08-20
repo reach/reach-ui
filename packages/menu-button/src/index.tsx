@@ -4,7 +4,7 @@
  * An accessible dropdown menu for the common dropdown menu button design
  * pattern.
  *
- * @see Docs     https://reacttraining.com/reach-ui/menu-button
+ * @see Docs     https://reach.tech/menu-button
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/menu-button
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
  *
@@ -93,7 +93,7 @@ const initialState: MenuButtonState = {
  *
  * The wrapper component for the other components. No DOM element is rendered.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menu
+ * @see Docs https://reach.tech/menu-button#menu
  */
 export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = useRef(null);
@@ -177,13 +177,13 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menu-props
+ * @see Docs https://reach.tech/menu-button#menu-props
  */
 export interface MenuProps {
   /**
    * Requires two children: a `<MenuButton>` and a `<MenuList>`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menu-children
+   * @see Docs https://reach.tech/menu-button#menu-children
    */
   children:
     | React.ReactNode
@@ -211,7 +211,7 @@ if (__DEV__) {
  * Wraps a DOM `button` that toggles the opening and closing of the dropdown
  * menu. Must be rendered inside of a `<Menu>`.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton
+ * @see Docs https://reach.tech/menu-button#menubutton
  */
 export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
   function MenuButton(
@@ -299,13 +299,13 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton-props
+ * @see Docs https://reach.tech/menu-button#menubutton-props
  */
 export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   /**
    * Accepts any renderable content.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menubutton-children
+   * @see Docs https://reach.tech/menu-button#menubutton-children
    */
   children: React.ReactNode;
 };
@@ -504,13 +504,13 @@ export type MenuItemImplProps = {
   /**
    * You can put any type of content inside of a `<MenuItem>`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-children
+   * @see Docs https://reach.tech/menu-button#menuitem-children
    */
   children: React.ReactNode;
   /**
    * Callback that fires when a `MenuItem` is selected.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-onselect
+   * @see Docs https://reach.tech/menu-button#menuitem-onselect
    */
   onSelect(): void;
   index?: number;
@@ -525,7 +525,7 @@ export type MenuItemImplProps = {
  *
  * Handles menu selection. Must be a direct child of a `<MenuList>`.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem
+ * @see Docs https://reach.tech/menu-button#menuitem
  */
 export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
   function MenuItem({ as = "div", ...props }, forwardedRef) {
@@ -534,7 +534,7 @@ export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitem-props
+ * @see Docs https://reach.tech/menu-button#menuitem-props
  */
 export type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
 
@@ -555,7 +555,7 @@ if (__DEV__) {
  * control over the nested components and their rendered DOM nodes, or if you
  * need to nest arbitrary components between the outer wrapper and your list.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems
+ * @see Docs https://reach.tech/menu-button#menuitems
  */
 export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
   function MenuItems(
@@ -730,13 +730,13 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems-props
+ * @see Docs https://reach.tech/menu-button#menuitems-props
  */
 export type MenuItemsProps = {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menuitems-children
+   * @see Docs https://reach.tech/menu-button#menuitems-children
    */
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
@@ -759,7 +759,7 @@ if (__DEV__) {
  *
  * Must be a direct child of a `<MenuList>`.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink
+ * @see Docs https://reach.tech/menu-button#menulink
  */
 export const MenuLink = forwardRefWithAs<
   MenuLinkProps & { component?: any },
@@ -786,7 +786,7 @@ export const MenuLink = forwardRefWithAs<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menulink-props
+ * @see Docs https://reach.tech/menu-button#menulink-props
  */
 export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?(): void;
@@ -808,7 +808,7 @@ if (__DEV__) {
  * Wraps a DOM element that renders the menu items. Must be rendered inside of
  * a `<Menu>`.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist
+ * @see Docs https://reach.tech/menu-button#menulist
  */
 export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
   function MenuList({ portal = true, ...props }, forwardedRef) {
@@ -821,20 +821,20 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-props
+ * @see Docs https://reach.tech/menu-button#menulist-props
  */
 export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-portal
+   * @see Docs https://reach.tech/menu-button#menulist-portal
    */
   portal?: boolean;
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menulist-children
+   * @see Docs https://reach.tech/menu-button#menulist-children
    */
   children: React.ReactNode;
 };
@@ -856,7 +856,7 @@ if (__DEV__) {
  * components and their rendered DOM nodes, or if you need to nest arbitrary
  * components between the outer wrapper and your list.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover
+ * @see Docs https://reach.tech/menu-button#menupopover
  */
 export const MenuPopover = forwardRef<any, MenuPopoverProps>(
   function MenuPopover(
@@ -923,22 +923,31 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-props
+ * @see Docs https://reach.tech/menu-button#menupopover-props
  */
 export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Must contain a `MenuItems`
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-children
+   * @see Docs https://reach.tech/menu-button#menupopover-children
    */
   children: React.ReactNode;
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/menu-button#menupopover-portal
+   * @see Docs https://reach.tech/menu-button#menupopover-portal
    */
   portal?: boolean;
+  /**
+   * A function used to determine the position of the popover in relation to the
+   * menu button. By default, the menu button will attempt to position the
+   * popover below the button aligned with its left edge. If this positioning
+   * results in collisions with any side of the window, the popover will be
+   * anchored to a different side to avoid those collisions if possible.
+   *
+   * @see Docs https://reach.tech/menu-button#menupopover-position
+   */
   position?: Position;
 };
 
@@ -954,7 +963,7 @@ if (__DEV__) {
 /**
  * A hook that exposes data for a given `Menu` component to its descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/menu-button#usemenubuttoncontext
+ * @see Docs https://reach.tech/menu-button#usemenubuttoncontext
  */
 export function useMenuButtonContext(): MenuContextValue {
   let {

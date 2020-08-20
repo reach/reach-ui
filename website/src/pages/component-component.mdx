@@ -21,7 +21,7 @@ A dynamic, functional version of `React.Component`, a component component if you
         Generate Triad Colorscheme
       </button>
       <br />
-      {[1, 2, 3].map(n => (
+      {[1, 2, 3].map((n) => (
         <div
           key={n}
           style={{
@@ -31,7 +31,7 @@ A dynamic, functional version of `React.Component`, a component component if you
             height: "2em",
             borderRadius: "50%",
             background: `hsl(${state.hue + n * 120}, 50%, 50%)`,
-            transition: "background-color 200ms ease"
+            transition: "background-color 200ms ease",
           }}
         />
       ))}
@@ -58,19 +58,19 @@ import Component from "@reach/component-component";
 
 ### Props
 
-| Prop                                                  | Type   |
-| ----------------------------------------------------- | ------ |
-| [`initialState`](#initialstate)                       | object |
-| [`getInitialState`](#getinitialstate)                 | func   |
-| [`refs`](#refs)                                       | object |
-| [`getRefs`](#getrefs)                                 | func   |
-| [`didMount`](#didmount)                               | func   |
-| [`didUpdate`](#didupdate)                             | func   |
-| [`willUnmount`](willunmount)                          | func   |
-| [`getSnapshotBeforeUpdate`](#getsnapshotbeforeupdate) | func   |
-| [`shouldUpdate`](#shouldupdate)                       | func   |
-| [`children`](#children)                               | func   |
-| [`render`](#render)                                   | func   |
+| Prop                                                  | Type     |
+| ----------------------------------------------------- | -------- |
+| [`initialState`](#initialstate)                       | `object` |
+| [`getInitialState`](#getinitialstate)                 | `func`   |
+| [`refs`](#refs)                                       | `object` |
+| [`getRefs`](#getrefs)                                 | `func`   |
+| [`didMount`](#didmount)                               | `func`   |
+| [`didUpdate`](#didupdate)                             | `func`   |
+| [`willUnmount`](willunmount)                          | `func`   |
+| [`getSnapshotBeforeUpdate`](#getsnapshotbeforeupdate) | `func`   |
+| [`shouldUpdate`](#shouldupdate)                       | `func`   |
+| [`children`](#children)                               | `func`   |
+| [`render`](#render)                                   | `func`   |
 
 #### `initialState`
 
@@ -123,12 +123,12 @@ function Example() {
     <Component refs={{ input: null }}>
       {({ refs }) => (
         <form
-          onSubmit={event => {
+          onSubmit={(event) => {
             event.preventDefault();
             alert(refs.input.value);
           }}
         >
-          <input ref={node => (refs.input = node)} type="text" />{" "}
+          <input ref={(node) => (refs.input = node)} type="text" />{" "}
           <button type="submit">Go</button>
         </form>
       )}
@@ -148,7 +148,7 @@ Use this when any of your refs are computed.
   getRefs={() => {
     return {
       input: React.createRef(),
-      popupContainer: document.createElement("div")
+      popupContainer: document.createElement("div"),
     };
   }}
 />
@@ -167,14 +167,14 @@ Perhaps you want some async data but don't want to make an entirely new componen
   initialState={{ gists: null }}
   didMount={({ setState }) => {
     fetch("https://api.github.com/gists?per_page=5")
-      .then(res => res.json())
-      .then(gists => setState({ gists }));
+      .then((res) => res.json())
+      .then((gists) => setState({ gists }));
   }}
 >
   {({ state }) =>
     state.gists ? (
       <ul>
-        {state.gists.map(gist => (
+        {state.gists.map((gist) => (
           <li key={gist.id}>
             <a href={gist.html_url}>{gist.description || gist.id}</a>
           </li>
@@ -346,11 +346,11 @@ function Example() {
   return (
     <Component
       getRefs={() => ({
-        input: React.createRef()
+        input: React.createRef(),
       })}
       getInitialState={() => {
         return {
-          todos: ["This is kinda weird"]
+          todos: ["This is kinda weird"],
         };
       }}
     >
@@ -362,7 +362,7 @@ function Example() {
           <div style={{ fontFamily: "sans-serif" }}>
             <h4>Todo List</h4>
             <form
-              onSubmit={event => {
+              onSubmit={(event) => {
                 event.preventDefault();
                 let node = refs.input.current;
                 setState({ todos: state.todos.concat([node.value]) });

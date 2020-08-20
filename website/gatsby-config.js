@@ -1,5 +1,4 @@
 module.exports = {
-  pathPrefix: "/reach-ui/",
   siteMetadata: {
     title: "Reach UI",
     description:

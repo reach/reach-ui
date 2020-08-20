@@ -18,7 +18,7 @@
  * with default context to do it, but we haven't explored that yet. So, we'll
  * see how this goes. If it becomes a problem we can introduce a portal later.
  *
- * @see Docs     https://reacttraining.com/reach-ui/alert
+ * @see Docs     https://reach.tech/alert
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
@@ -58,7 +58,7 @@ let renderTimer: number | null;
  * messages when network events or other things happen. Users with assistive
  * technologies may not know about the message unless you develop for it.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert
+ * @see Docs https://reach.tech/alert
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   { children, type: regionType = "polite", ...props },
@@ -81,14 +81,14 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert#alert-props
+ * @see Docs https://reach.tech/alert#alert-props
  */
 export type AlertProps = {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
    *
-   * @see Docs https://reacttraining.com/reach-ui/alert#alert-type
+   * @see Docs https://reach.tech/alert#alert-type
    */
   type?: "assertive" | "polite";
   children: React.ReactNode;

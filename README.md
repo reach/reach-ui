@@ -4,7 +4,7 @@ Thanks for getting involved with Reach UI development!
 
 ## Looking for the documentation?
 
-https://reacttraining.com/reach-ui/
+https://reach.tech/
 
 ## Getting Started
 
@@ -153,7 +153,7 @@ Stuff I'd like to improve:
 
 ## Website
 
-The website is a Gatsby app in the `website` directory. It automatically deploys to https://reacttraining.com/reach-ui/ when the `website` branch is updated.
+The website is a Gatsby app in the `website` directory. It automatically deploys to https://reach.tech/ when the `website` branch is updated.
 
 ## Contributors
 

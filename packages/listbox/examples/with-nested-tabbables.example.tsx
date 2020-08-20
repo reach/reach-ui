@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "With nested tabbables";
@@ -81,14 +82,6 @@ function Example() {
         ))}
       </Listbox>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 

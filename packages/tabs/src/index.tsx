@@ -11,7 +11,7 @@
  * should only render `Tab` elements, and `TabPanels` should only render
  * `TabPanel` elements.
  *
- * @see Docs     https://reacttraining.com/reach-ui/tabs
+ * @see Docs     https://reach.tech/tabs
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tabs
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
  */
@@ -85,7 +85,7 @@ export enum TabsOrientation {
  *
  * The parent component of the tab interface.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabs
+ * @see Docs https://reach.tech/tabs#tabs
  */
 export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   {
@@ -201,7 +201,7 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-props
+ * @see Docs https://reach.tech/tabs#tabs-props
  */
 export type TabsProps = {
   /**
@@ -213,14 +213,14 @@ export type TabsProps = {
    * You can also pass a render function to access data relevant to nested
    * components.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-children
+   * @see Docs https://reach.tech/tabs#tabs-children
    */
   children: React.ReactNode | ((props: TabsContextValue) => React.ReactNode);
   /**
    * Like form inputs, a tab's state can be controlled by the owner. Make sure
    * to include an `onChange` as well, or else the tabs will not be interactive.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-index
+   * @see Docs https://reach.tech/tabs#tabs-index
    */
   index?: number;
   /**
@@ -230,17 +230,17 @@ export type TabsProps = {
    * activate the tab panel with either the `Spacebar` or `Enter` keys. Defaults
    * to `"auto"`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-keyboardactivation
+   * @see Docs https://reach.tech/tabs#tabs-keyboardactivation
    */
   keyboardActivation?: TabsKeyboardActivation;
   /**
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-readonly
+   * @see Docs https://reach.tech/tabs#tabs-readonly
    */
   readOnly?: boolean;
   /**
    * Starts the tabs at a specific index.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-defaultindex
+   * @see Docs https://reach.tech/tabs#tabs-defaultindex
    */
   defaultIndex?: number;
   /**
@@ -249,7 +249,7 @@ export type TabsProps = {
    * (`TabsOrientation.Horizontal`) or `"vertical"`
    * (`TabsOrientation.Vertical`). Defaults to `"horizontal"`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-orientation
+   * @see Docs https://reach.tech/tabs#tabs-orientation
    * @see MDN  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties
    */
   orientation?: TabsOrientation;
@@ -257,7 +257,7 @@ export type TabsProps = {
    * Calls back with the tab index whenever the user changes tabs, allowing your
    * app to synchronize with it.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabs-onchange
+   * @see Docs https://reach.tech/tabs#tabs-onchange
    */
   onChange?: (index: number) => void;
 };
@@ -300,7 +300,7 @@ if (__DEV__) {
  *
  * The parent component of the tabs.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#tablist
+ * @see Docs https://reach.tech/tabs#tablist
  */
 const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
@@ -399,7 +399,7 @@ if (__DEV__) {
 const TabList = memoWithAs(TabListImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/tabs#tablist-props
+ * @see Docs https://reach.tech/tabs#tablist-props
  */
 export type TabListProps = {
   /**
@@ -407,7 +407,7 @@ export type TabListProps = {
    *
    * `TabPanels` expects multiple `TabPanel` elements as children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tablist-children
+   * @see Docs https://reach.tech/tabs#tablist-children
    */
   children?: React.ReactNode;
 };
@@ -425,7 +425,7 @@ export { TabList };
  *
  * The interactive element that changes the selected panel.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#tab
+ * @see Docs https://reach.tech/tabs#tab
  */
 export const Tab = forwardRefWithAs<
   // TODO: Remove this when cloneElement is removed
@@ -524,20 +524,20 @@ export const Tab = forwardRefWithAs<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/tabs#tab-props
+ * @see Docs https://reach.tech/tabs#tab-props
  */
 export type TabProps = {
   /**
    * `Tab` can receive any type of children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tab-children
+   * @see Docs https://reach.tech/tabs#tab-children
    */
   children?: React.ReactNode;
   /**
    * Disables a tab when true. Clicking will not work and keyboard navigation
    * will skip over it.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tab-disabled
+   * @see Docs https://reach.tech/tabs#tab-disabled
    */
   disabled?: boolean;
   index?: number;
@@ -558,7 +558,7 @@ if (__DEV__) {
  *
  * The parent component of the panels.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels
+ * @see Docs https://reach.tech/tabs#tabpanels
  */
 const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
@@ -591,7 +591,7 @@ if (__DEV__) {
 const TabPanels = memoWithAs(TabPanelsImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanels-props
+ * @see Docs https://reach.tech/tabs#tabpanels-props
  */
 export type TabPanelsProps = TabListProps & {};
 
@@ -608,7 +608,7 @@ export { TabPanels };
  *
  * The panel that displays when it's corresponding tab is active.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel
+ * @see Docs https://reach.tech/tabs#tabpanel
  */
 export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
   function TabPanel(
@@ -675,13 +675,13 @@ export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
 );
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel-props
+ * @see Docs https://reach.tech/tabs#tabpanel-props
  */
 export type TabPanelProps = {
   /**
    * `TabPanel` can receive any type of children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/tabs#tabpanel-children
+   * @see Docs https://reach.tech/tabs#tabpanel-children
    */
   children?: React.ReactNode;
 };
@@ -699,7 +699,7 @@ if (__DEV__) {
 /**
  * A hook that exposes data for a given `Tabs` component to its descendants.
  *
- * @see Docs https://reacttraining.com/reach-ui/tabs#usetabscontext
+ * @see Docs https://reach.tech/tabs#usetabscontext
  */
 export function useTabsContext(): TabsContextValue {
   let { focusedIndex, id, selectedIndex } = useContext(TabsContext);

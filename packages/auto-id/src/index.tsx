@@ -70,7 +70,7 @@ const genId = () => ++id;
  * component mounts. Users may need to supply their own ID if they need
  * consistent values for SSR.
  *
- * @see Docs https://reacttraining.com/reach-ui/auto-id
+ * @see Docs https://reach.tech/auto-id
  */
 export const useId = (idFromProps?: string | null) => {
   /*

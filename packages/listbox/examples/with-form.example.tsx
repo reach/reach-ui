@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
+import { Taco } from "./common";
 
 // TODO: Need to check out moving focus on iOS in a form
 // https://twitter.com/HipsterSmoothie/status/1237522273902313472
@@ -18,7 +19,7 @@ function Example() {
       <hr />
       <form
         ref={formRef}
-        onSubmit={event => {
+        onSubmit={(event) => {
           event.preventDefault();
           let data = formToJSON(formRef.current);
           setFormData(data);
@@ -108,12 +109,4 @@ function formToJSON(form: any) {
     }
   }
   return output;
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
-  );
 }
