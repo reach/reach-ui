@@ -1,6 +1,6 @@
 {
   "name": "@reach/accordion",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Accessible React accordion component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,12 +10,12 @@
     "directory": "packages/accordion"
   },
   "scripts": {
-    "build": "ts-node ../../scripts/build"
+    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "dependencies": {
-    "@reach/auto-id": "0.10.5",
-    "@reach/descendants": "0.10.5",
-    "@reach/utils": "0.10.5",
+    "@reach/auto-id": "0.11.0",
+    "@reach/descendants": "0.11.0",
+    "@reach/utils": "0.11.0",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {

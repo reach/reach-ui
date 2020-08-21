@@ -1,93 +1,47 @@
 import chalk from "chalk";
-import fs from "fs-extra";
-import path from "path";
+import * as fs from "fs-extra";
+import * as path from "path";
 import mri from "mri";
-import glob from "tiny-glob/sync";
+import ms from "pretty-ms";
+import { loadPackages, LernaPackage } from "lerna-script";
 import createLogger from "progress-estimator";
+import { exec } from "child_process";
 import { paths } from "./constants";
-import { NormalizedOpts } from "./types";
+import { NormalizedOpts, TSConfigJSON } from "./types";
 
-const stderr = console.error.bind(console);
+let stderr = console.error.bind(console);
+let cachedProgressEstimator: ReturnType<typeof createLogger>;
 
-export function external(id: string) {
-  return !id.startsWith(".") && !path.isAbsolute(id);
-}
-
-// Make sure any symlinks in the project folder are resolved:
-// https://github.com/facebookincubator/create-react-app/issues/637
-export const appDirectory = fs.realpathSync(process.cwd());
-export function resolveApp(relativePath: string) {
-  return path.resolve(appDirectory, relativePath);
-}
-
-// Taken from Create React App, react-dev-utils/clearConsole
-// @see https://github.com/facebook/create-react-app/blob/master/packages/react-dev-utils/clearConsole.js
-export function clearConsole() {
-  process.stdout.write(
-    process.platform === "win32" ? "\x1B[2J\x1B[0f" : "\x1B[2J\x1B[3J\x1B[H"
-  );
-}
-
-export async function isFile(name: string) {
-  try {
-    const stats = await fs.stat(name);
-    return stats.isFile();
-  } catch (e) {
-    return false;
+export async function normalizeOpts<
+  O extends object & {
+    name: string;
+    packageRoot: string;
+    input: string | string[];
   }
-}
+>(opts: O): Promise<NormalizedOpts> {
+  let { name } = opts;
+  let packageSrc = path.join(opts.packageRoot, "src");
+  let packageDist = path.join(opts.packageRoot, "dist");
 
-export async function jsOrTs(filename: string) {
-  const extension = (await isFile(resolveApp(filename + ".ts")))
-    ? ".ts"
-    : (await isFile(resolveApp(filename + ".tsx")))
-    ? ".tsx"
-    : (await isFile(resolveApp(filename + ".jsx")))
-    ? ".jsx"
-    : ".js";
-
-  return resolveApp(`${filename}${extension}`);
-}
-
-export async function isDir(name: string) {
-  try {
-    const stats = await fs.stat(name);
-    return stats.isDirectory();
-  } catch (e) {
-    return false;
-  }
-}
-
-export async function getInputs(
-  entries?: string | string[]
-): Promise<string[]> {
-  const inputs = ([] as any[]).concat(
-    entries && entries.length
-      ? entries
-      : (await isDir(resolveApp("src"))) && (await jsOrTs("src/index"))
-  );
-  return flatten(inputs).map((file) => glob(file));
-}
-
-export function getPackageName(opts: any) {
-  return opts.name || path.basename(paths.packageRoot);
-}
-
-export async function normalizeOpts(opts: any): Promise<NormalizedOpts> {
   return {
     ...opts,
-    name: getPackageName(opts),
-    input: await getInputs(opts.entry),
+    name,
+    input: Array.isArray(opts.input) ? opts.input : [opts.input],
+    packageSrc,
+    packageDist,
   };
 }
 
 export async function createProgressEstimator() {
-  await fs.ensureDir(paths.progressEstimatorCache);
-  return createLogger({
-    // All configuration keys are optional, but it's recommended to specify a
-    // storage location.
-    storagePath: paths.progressEstimatorCache,
-  });
+  if (!cachedProgressEstimator) {
+    await fs.ensureDir(paths.progressEstimatorCache);
+    return (cachedProgressEstimator = createLogger({
+      // All configuration keys are optional, but it's recommended to specify a
+      // storage location.
+      storagePath: paths.progressEstimatorCache,
+    }));
+  }
+  return cachedProgressEstimator;
 }
 
 export function logError(err: any) {
@@ -119,10 +73,6 @@ export function logError(err: any) {
   stderr();
 }
 
-export async function cleanDistFolder() {
-  await fs.remove(paths.packageDist);
-}
-
 export function parseArgs() {
   let { _, ...args } = mri(process.argv.slice(2));
   return args;
@@ -130,4 +80,93 @@ export function parseArgs() {
 
 export function flatten(arr: any[][]): any[] {
   return arr.reduce((flat, next) => flat.concat(next), []);
+}
+
+export function getRootTsConfig(): TSConfigJSON {
+  return fs.readJSONSync(path.join(paths.projectRoot, "tsconfig.json"));
+}
+
+export async function getPackageDirectoryMap(pkgs?: LernaPackage[]) {
+  let packageMap: Record<string, string> = {};
+  let rootTsConfig = getRootTsConfig();
+
+  if (!pkgs) {
+    pkgs = await loadPackages();
+  }
+
+  for (let pkg of pkgs) {
+    if (
+      // Only concerned with internal published packages with the @reach scope
+      !pkg.name.startsWith("@reach")
+    ) {
+      continue;
+    }
+
+    packageMap[pkg.name] = rootTsConfig.compilerOptions.paths![pkg.name]![0];
+  }
+
+  return packageMap;
+}
+
+export function timeFromStart(start: number) {
+  return ms(Date.now() - start);
+}
+
+export async function cleanDistDirectories() {
+  return await new Promise((resolve, reject) => {
+    exec(
+      `rm -rf ${path.join(paths.projectRoot, "packages", "*", "dist")}`,
+      (err) => (err ? reject(err.message) : resolve("deleted"))
+    );
+  });
+}
+
+export function dirIsParentOf(parent: string, dir: string) {
+  const relative = path.relative(parent, dir);
+  return relative && !relative.startsWith("..") && !path.isAbsolute(relative);
+}
+
+// 🌈🌈🌈 for our logs
+let CHALK_COLORS = [
+  "magenta",
+  "red",
+  "yellow",
+  "green",
+  "blue",
+  "cyan",
+] as const;
+
+let currentChalk = 0;
+export function rainbowChalk() {
+  let c = chalk[CHALK_COLORS[currentChalk]];
+  currentChalk = currentChalk >= CHALK_COLORS.length - 1 ? 0 : currentChalk + 1;
+  return c;
+}
+
+export const log = (function () {
+  let logger = ((...msgs) => {
+    return fs.writeSync((process.stdout as any).fd, msgs.join("\n") + "\n");
+  }) as ColorLogger;
+  logger.bold = (...msgs) => logger(chalk.bold(...msgs));
+  // @ts-ignore
+  logger.rainbow = (...msgs) => logger(rainbowChalk()(...msgs));
+  logger.rainbow.bold = (...msgs) => logger(rainbowChalk().bold(...msgs));
+  for (let color of CHALK_COLORS) {
+    // @ts-ignore
+    logger[color] = (...msgs) => logger(chalk[color](...msgs));
+    logger[color].bold = (...msgs) => logger(chalk[color].bold(...msgs));
+  }
+  return logger;
+})();
+
+type LoggerFn = (...msgs: string[]) => any;
+type LoggerWithBold = LoggerFn & { bold: LoggerFn };
+interface ColorLogger extends LoggerWithBold {
+  magenta: LoggerWithBold;
+  red: LoggerWithBold;
+  yellow: LoggerWithBold;
+  green: LoggerWithBold;
+  blue: LoggerWithBold;
+  cyan: LoggerWithBold;
+  rainbow: LoggerWithBold;
 }

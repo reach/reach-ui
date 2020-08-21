@@ -1,4 +1,8 @@
-import { paths } from "../constants";
+import * as fs from "fs-extra";
+import * as path from "path";
+
+const appDirectory = fs.realpathSync(process.cwd());
+const rootDir = path.resolve(appDirectory, ".");
 
 export default {
   collectCoverageFrom: ["packages/**/src/**/*.{ts,tsx,js}"],
@@ -21,7 +25,7 @@ export default {
     "^.+\\.js$",
   ],
   // projects: ["<rootDir>", "<rootDir>/packages/*"],
-  rootDir: paths.packageRoot,
+  rootDir,
   watchPlugins: [
     require.resolve("jest-watch-typeahead/filename"),
     require.resolve("jest-watch-typeahead/testname"),

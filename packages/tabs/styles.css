@@ -20,6 +20,7 @@
   border: none;
   padding: 0.25em 0.5em;
   margin: 0;
+  border-bottom: 1px solid transparent;
   background: none;
   color: inherit;
   font: inherit;
@@ -38,5 +39,5 @@
 }
 
 [data-reach-tab][data-selected] {
-  border-bottom: 1px solid currentColor;
+  border-bottom-color: currentColor;
 }

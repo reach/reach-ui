@@ -1,6 +1,6 @@
 {
   "name": "@reach/utils",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Internal, shared utilities for Reach UI.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "directory": "packages/utils"
   },
   "scripts": {
-    "build": "ts-node ../../scripts/build"
+    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "peerDependencies": {
     "react": "^16.8.0",
