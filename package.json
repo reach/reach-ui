@@ -14,7 +14,7 @@
     "test:pkg": "cross-env CI=true ts-node ./scripts/test --pkg",
     "test:watch": "ts-node ./scripts/test packages",
     "test:coverage": "yarn test --coverage",
-    "build": "ts-node --max-old-space-size=4096 --transpile-only scripts/build-all",
+    "build": "node -r ts-node/register --max-old-space-size=3049 scripts/build-all",
     "build:pkg": "ts-node --transpile-only scripts/build-package",
     "ver": "lerna version --no-push --exact",
     "changes": "dotenv lerna-changelog",
