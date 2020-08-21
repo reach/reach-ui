@@ -534,6 +534,11 @@ export type MenuItemImplProps = {
   index?: number;
   isLink?: boolean;
   valueText?: string;
+  /**
+   * Whether or not the item is disabled from selection and navigation.
+   *
+   * @see Docs https://reach.tech/menu-button#menuitem-disabled
+   */
   disabled?: boolean;
 };
 
