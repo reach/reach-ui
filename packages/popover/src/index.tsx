@@ -29,6 +29,13 @@ export type PopoverProps = {
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
   /**
+   * Render the popover markup, but hide it – used by MenuButton so that it
+   * can have an `aria-controls` attribute even when its menu isn't open, and
+   * used inside `Popover` as a hint that we can tell `useRect` to stop
+   * observing for performance's sake.
+   */
+  hidden?: boolean;
+  /**
    * Testing this API so we might accept additional nodes that apps can use to
    * determine the position of the popover. One example where it may be useful
    * is for positioning the popover of a listbox where the cursor rests on top
@@ -58,13 +65,14 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
       targetRef,
       position = positionDefault,
       unstable_observableRefs = [],
+      hidden,
       ...props
     },
     forwardedRef
   ) {
     const popoverRef = useRef<HTMLDivElement>(null);
-    const popoverRect = useRect(popoverRef);
-    const targetRect = useRect(targetRef);
+    const popoverRect = useRect(popoverRef, !hidden);
+    const targetRect = useRect(targetRef, !hidden);
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     useSimulateTabNavigationForReactTree(targetRef, popoverRef);
@@ -73,6 +81,7 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
       <div
         data-reach-popover=""
         ref={ref}
+        hidden={hidden}
         {...props}
         style={{
           position: "absolute",
