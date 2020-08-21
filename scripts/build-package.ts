@@ -1,5 +1,4 @@
-import chalk from "chalk";
-import { logError, getPackageDirectoryMap } from "./utils";
+import { logError, getPackageDirectoryMap, log } from "./utils";
 import { buildPackage } from "./build";
 
 // TODO: Detect internal dependencies and re-build them if they have changed
@@ -8,7 +7,7 @@ import { buildPackage } from "./build";
 (async function () {
   let args = process.argv.slice(2);
   if (!args || !args[0]) {
-    chalk.redBright.bold(
+    log.red.bold(
       "You must pass a package name as an argument when building a single package."
     );
     process.exit(1);
@@ -22,7 +21,8 @@ import { buildPackage } from "./build";
     let packagePath = packageMap[packageName];
 
     if (!packagePath) {
-      throw Error("Invalid package passed as an argument");
+      log.red.bold("Invalid package passed as an argument.");
+      process.exit(1);
     }
 
     buildPackage(packageName, packagePath);
