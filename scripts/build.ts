@@ -4,73 +4,86 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import replace from "@rollup/plugin-replace";
 import resolve from "@rollup/plugin-node-resolve";
-import asyncro from "asyncro";
 import { merge } from "lodash";
 import path from "path";
-import { rollup, RollupOptions, OutputOptions } from "rollup";
+import { rollup, RollupOptions } from "rollup";
 import babelPlugin from "rollup-plugin-babel";
 import sourceMaps from "rollup-plugin-sourcemaps";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import { paths } from "./constants";
-import {
-  createProgressEstimator,
-  external,
-  normalizeOpts,
-  logError,
-  cleanDistFolder,
-  parseArgs,
-  flatten,
-} from "./utils";
 import { ScriptOpts, NormalizedOpts } from "./types";
 import * as fs from "fs-extra";
+import { getRootTsConfig, dirIsParentOf } from "./utils";
+import {
+  createProgressEstimator,
+  flatten,
+  logError,
+  normalizeOpts,
+  parseArgs,
+} from "./utils";
 
 // shebang cache map thing because the transform only gets run once
 let shebang: any = {};
 
-export async function createRollupConfig(
-  opts: ScriptOpts
-): Promise<RollupOptions> {
-  const shouldMinify =
-    opts.minify !== undefined ? opts.minify : opts.env === "production";
+let rootTsConfig = getRootTsConfig();
 
-  const outputName = [
-    `${paths.packageDist}/${opts.name}`,
-    opts.format,
-    opts.env,
+export async function createRollupConfig(
+  opts: ScriptOpts,
+  buildCount: number
+): Promise<RollupOptions> {
+  let {
+    input,
+    format,
+    name,
+    packageRoot,
+    packageDist: outDir,
+    env,
+    tsconfig,
+    target,
+  } = opts;
+
+  let shouldMinify =
+    opts.minify !== undefined
+      ? opts.minify
+      : env === "production" && format !== "esm";
+
+  let outputName = [
+    path.join(outDir, name),
+    format,
+    env,
     shouldMinify ? "min" : "",
     "js",
   ]
     .filter(Boolean)
     .join(".");
 
-  let tsconfig: string | undefined;
-  let tsconfigJSON;
-  try {
-    tsconfig = opts.tsconfig || paths.packageTsconfigBuildJson;
-    tsconfigJSON = await fs.readJSON(tsconfig);
-  } catch (e) {
-    tsconfig = undefined;
+  // Look for local tsconfig if passed to options
+  let tsconfigJSON = rootTsConfig;
+  if (tsconfig) {
+    try {
+      tsconfigJSON = fs.readJSONSync(tsconfig);
+      if (!tsconfigJSON) throw Error("oh no");
+    } catch (e) {
+      //
+    }
   }
 
   return {
-    // Tell Rollup the entry point to the package
-    input: opts.input,
-    // Tell Rollup which packages to ignore
-    external: (id: string) => external(id),
-    // Establish Rollup output
+    input,
+    external(id) {
+      return !id.startsWith(".") && !path.isAbsolute(id);
+    },
     output: {
-      // Set filenames of the consumer's package
       file: outputName,
-      // Pass through the file format
-      format: opts.format,
+      name,
+      format,
       // Do not let Rollup call Object.freeze() on namespace import objects
       // (i.e. import * as namespaceImportObject from...) that are accessed
       // dynamically.
       freeze: false,
       // Respect tsconfig esModuleInterop when setting __esModule.
-      esModule: tsconfigJSON ? tsconfigJSON.esModuleInterop : false,
-      name: opts.name,
+      esModule: tsconfigJSON?.compilerOptions?.esModuleInterop || false,
       sourcemap: true,
       globals: { react: "React", "react-native": "ReactNative" },
       exports: "named",
@@ -80,10 +93,10 @@ export async function createRollupConfig(
         mainFields: [
           "module",
           "main",
-          opts.target !== "node" ? "browser" : undefined,
+          target !== "node" ? "browser" : undefined,
         ].filter(Boolean) as string[],
       }),
-      opts.format === "umd" &&
+      format === "umd" &&
         commonjs({
           // use a regex to make sure to include eventual hoisted packages
           include: /\/node_modules\//,
@@ -111,10 +124,7 @@ export async function createRollupConfig(
       },
       typescript({
         typescript: require("typescript"),
-        cacheRoot: path.join(
-          paths.projectCache,
-          `build/${opts.name}/${opts.format}`
-        ),
+        cacheRoot: path.join(paths.projectCache, `build/${name}/${format}`),
         tsconfig,
         tsconfigDefaults: {
           exclude: [
@@ -127,48 +137,64 @@ export async function createRollupConfig(
             "node_modules",
             "bower_components",
             "jspm_packages",
-            paths.packageDist,
+            outDir,
           ],
           compilerOptions: {
             sourceMap: true,
-            declaration: true,
             jsx: "react",
           },
         },
         tsconfigOverride: {
+          allowJs: true,
+          include: [
+            path.resolve(packageRoot, "src"),
+            path.resolve(packageRoot, "types"),
+            path.resolve(paths.projectRoot, "types"),
+          ],
           compilerOptions: {
-            // TS -> esnext, then leave the rest to babel-preset-env
             target: "esnext",
+            outDir,
+
+            // We only need output type declarations once per package.
+            ...(buildCount > 0
+              ? {
+                  declaration: false,
+                  declarationMap: false,
+                }
+              : {
+                  declaration: true,
+                  declarationMap: false,
+                  declarationDir: outDir,
+                }),
           },
         },
-        check: !opts.transpileOnly,
+        useTsconfigDeclarationDir: true,
+        check: opts.transpileOnly !== undefined ? !opts.transpileOnly : false,
       }),
       babelPluginReach({
         exclude: "node_modules/**",
         extensions: [...DEFAULT_EXTENSIONS, "ts", "tsx"],
         passPerPreset: true,
         custom: {
-          targets: opts.target === "node" ? { node: "8" } : undefined,
-          format: opts.format,
+          targets: target === "node" ? { node: "8" } : undefined,
+          format,
         },
       }),
-      opts.env !== undefined &&
+      env !== undefined &&
         replace({
-          "process.env.NODE_ENV": JSON.stringify(opts.env),
+          "process.env.NODE_ENV": JSON.stringify(env),
         }),
       sourceMaps(),
       shouldMinify &&
         terser({
-          sourcemap: true,
-          output: { comments: false },
+          format: { comments: false },
           compress: {
             keep_infinity: true,
             pure_getters: true,
             passes: 10,
           },
           ecma: 5,
-          toplevel: opts.format === "cjs",
-          warnings: true,
+          toplevel: format === "cjs",
         }),
     ],
   };
@@ -186,7 +212,7 @@ export const babelPluginReach = babelPlugin.custom(() => ({
     };
   },
   config(config: any, { customOptions }: any) {
-    const defaultPlugins = createConfigItems("plugin", [
+    let defaultPlugins = createConfigItems("plugin", [
       { name: "babel-plugin-annotate-pure-calls" },
       { name: "babel-plugin-dev-expression" },
       {
@@ -198,16 +224,15 @@ export const babelPluginReach = babelPlugin.custom(() => ({
       { name: "babel-plugin-macros" },
     ]);
 
-    const babelOptions = config.options || {};
+    let babelOptions = config.options || {};
     babelOptions.presets = babelOptions.presets || [];
 
-    const defaultPresets = createConfigItems("preset", [
+    let defaultPresets = createConfigItems("preset", [
       {
         name: "@babel/preset-env",
         targets: customOptions.targets,
         modules: false,
         loose: true,
-        exclude: ["transform-async-to-generator", "transform-regenerator"],
       },
     ]);
 
@@ -228,34 +253,66 @@ export const babelPluginReach = babelPlugin.custom(() => ({
   },
 }));
 
-async function buildAction() {
-  const opts = await normalizeOpts(parseArgs());
-  const buildConfigs = await createBuildConfigs(opts);
+export async function buildPackage(packageName: string, packagePath: string) {
+  let inputDir = path.join(paths.projectRoot, packagePath);
+  let packageRoot = path.resolve(paths.projectRoot, packagePath, "..");
+  let input = [
+    // Prefer .tsx, fallback to .ts then .js
+    fs.existsSync(path.join(inputDir, "index.tsx"))
+      ? path.join(inputDir, "index.tsx")
+      : fs.existsSync(path.join(inputDir, "index.ts"))
+      ? path.join(inputDir, "index.ts")
+      : path.join(inputDir, "index.js"),
+  ];
+  let name = packageName.split("/")[1];
 
-  await cleanDistFolder();
+  return await buildAction({ name, input, packageRoot });
+}
 
-  const logger = await createProgressEstimator();
-  const promise = writeCjsEntryFile(opts.name).catch(logError);
-  logger(promise, "Creating entry file");
+export async function buildAction(packageDetails: {
+  name: string;
+  input: string[];
+  packageRoot: string;
+}) {
+  let opts = await normalizeOpts({ ...packageDetails, ...parseArgs() });
+  let buildConfigs = await createBuildConfigs(opts);
+  let logger = await createProgressEstimator();
 
   try {
-    const promise = asyncro
-      .map(buildConfigs, async (inputOptions: RollupOptions) => {
-        let bundle = await rollup(inputOptions);
-        await bundle.write(inputOptions.output as OutputOptions);
-      })
-      .catch((e: any) => {
-        throw e;
-      });
-    logger(promise, "Building modules");
-    await promise;
+    // 1. Write the entry file
+    await logger(
+      writeCjsEntryFile(opts.name, opts.packageDist).catch(logError),
+      "Creating entry file"
+    );
+
+    // 2. Build our modules
+    await logger(
+      new Promise((done) => {
+        buildConfigs.forEach(async (inputOptions, index, src) => {
+          let outputOptions = Array.isArray(inputOptions.output)
+            ? inputOptions.output!
+            : [inputOptions.output!].filter(Boolean);
+          let bundle = await rollup(inputOptions);
+          await Promise.all(outputOptions.map(bundle.write));
+
+          // Resolve after the last package is built.
+          if (index === src.length - 1) done();
+        });
+      }),
+      "Building modules"
+    );
+
+    // 3. Move misplaced TypeScript definition files
+    // https://github.com/ezolenko/rollup-plugin-typescript2/issues/136
+    await logger(
+      moveDeclarationFilesToDist(opts.packageRoot, opts.packageDist),
+      "Cleaning up TS definitions"
+    );
   } catch (error) {
     logError(error);
     process.exit(1);
   }
 }
-
-buildAction();
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -266,11 +323,11 @@ function createConfigItems(type: any, items: any[]) {
 }
 
 function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
-  const mergedItems: any[] = [];
+  let mergedItems: any[] = [];
 
   configItemsToMerge.forEach((configItemToMerge) => {
     configItemToMerge.forEach((item: any) => {
-      const itemToMergeWithIndex = mergedItems.findIndex(
+      let itemToMergeWithIndex = mergedItems.findIndex(
         (mergedItem) => mergedItem.file.resolved === item.file.resolved
       );
 
@@ -294,21 +351,22 @@ function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
   return mergedItems;
 }
 
-export function writeCjsEntryFile(name: string) {
-  const contents = `'use strict';
+export function writeCjsEntryFile(name: string, packageDist: string) {
+  let contents = `'use strict';
 
 if (process.env.NODE_ENV === 'production') {
   module.exports = require('./${name}.cjs.production.min.js');
 } else {
   module.exports = require('./${name}.cjs.development.js');
 }`;
-  return fs.outputFile(path.join(paths.packageDist, "index.js"), contents);
+
+  return fs.outputFile(path.join(packageDist, "index.js"), contents);
 }
 
 export async function createBuildConfigs(
   opts: NormalizedOpts
 ): Promise<RollupOptions[]> {
-  const allInputs = flatten(
+  let allInputs = flatten(
     flatten(opts.input as any).map((input: string) =>
       createAllFormats(opts, input).map(
         (options: ScriptOpts, index: number) => ({
@@ -322,8 +380,8 @@ export async function createBuildConfigs(
   );
 
   return await Promise.all(
-    allInputs.map(async (options: ScriptOpts) => {
-      return await createRollupConfig(options);
+    allInputs.map(async (options: ScriptOpts, index) => {
+      return await createRollupConfig(options, index);
     })
   );
 }
@@ -346,29 +404,45 @@ function createAllFormats(
       input,
     },
     { ...opts, format: "esm", input },
-    // {
-    //   ...opts,
-    //   format: "umd",
-    //   env: "development",
-    //   input,
-    // },
-    // {
-    //   ...opts,
-    //   format: "umd",
-    //   env: "production",
-    //   input,
-    // },
-    // {
-    //   ...opts,
-    //   format: "system",
-    //   env: "development",
-    //   input,
-    // },
-    // {
-    //   ...opts,
-    //   format: "system",
-    //   env: "production",
-    //   input,
-    // },
   ].filter(Boolean) as [ScriptOpts, ...ScriptOpts[]];
+}
+
+/**
+ * The Typescript rollup plugin let's tsc handle dumping the declaration file.
+ * Ocassionally its methods for determining where to dump it results in it
+ * ending up in a sub-directory rather than adjacent to the bundled code, which
+ * we don't want. Unclear exactly why, but this script moves it back after
+ * Rollup is done.
+ * @see https://github.com/ezolenko/rollup-plugin-typescript2/issues/136
+ * @param packageName
+ * @param packageRoot
+ * @param packageDist
+ */
+async function moveDeclarationFilesToDist(
+  packageRoot: string,
+  packageDist: string
+) {
+  try {
+    let packageRelativePath = path.relative(paths.packages, packageRoot);
+    let misplacedDeclarationFilesRoot = path.join(
+      packageDist,
+      packageRelativePath,
+      "src"
+    );
+
+    // Copy the type declarations and delete the leftover directory
+    await fs.copy(misplacedDeclarationFilesRoot, packageDist);
+    let relativeDirToDelete = path.resolve(misplacedDeclarationFilesRoot, "..");
+
+    // Make sure what we're deleting is nested inside the dist directory before
+    // we continue.
+    if (
+      relativeDirToDelete !== packageDist &&
+      dirIsParentOf(packageDist, relativeDirToDelete)
+    ) {
+      await fs.remove(relativeDirToDelete);
+    }
+  } catch (e) {
+    //
+  }
 }
