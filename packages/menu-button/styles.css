@@ -62,3 +62,8 @@
   color: white;
   outline: none;
 }
+[data-reach-menu-item][aria-disabled] {
+  outline: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
