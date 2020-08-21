@@ -4,13 +4,13 @@ import * as path from "path";
 import mri from "mri";
 import ms from "pretty-ms";
 import { loadPackages, LernaPackage } from "lerna-script";
-import createLogger, { ProgressEstimator } from "progress-estimator";
+import createLogger from "progress-estimator";
 import { exec } from "child_process";
 import { paths } from "./constants";
 import { NormalizedOpts, TSConfigJSON } from "./types";
 
 let stderr = console.error.bind(console);
-let cachedProgressEstimator: ProgressEstimator;
+let cachedProgressEstimator: ReturnType<typeof createLogger>;
 
 export async function normalizeOpts<
   O extends object & {
@@ -35,7 +35,7 @@ export async function normalizeOpts<
 export async function createProgressEstimator() {
   if (!cachedProgressEstimator) {
     await fs.ensureDir(paths.progressEstimatorCache);
-    return (cachedProgressEstimator = await createLogger({
+    return (cachedProgressEstimator = createLogger({
       // All configuration keys are optional, but it's recommended to specify a
       // storage location.
       storagePath: paths.progressEstimatorCache,

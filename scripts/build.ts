@@ -48,7 +48,7 @@ export async function createRollupConfig(
       ? opts.minify
       : env === "production" && format !== "esm";
 
-  const outputName = [
+  let outputName = [
     path.join(outDir, name),
     format,
     env,
@@ -187,8 +187,7 @@ export async function createRollupConfig(
       sourceMaps(),
       shouldMinify &&
         terser({
-          sourcemap: true,
-          output: { comments: false },
+          format: { comments: false },
           compress: {
             keep_infinity: true,
             pure_getters: true,
@@ -196,7 +195,6 @@ export async function createRollupConfig(
           },
           ecma: 5,
           toplevel: format === "cjs",
-          warnings: true,
         }),
     ],
   };
@@ -214,7 +212,7 @@ export const babelPluginReach = babelPlugin.custom(() => ({
     };
   },
   config(config: any, { customOptions }: any) {
-    const defaultPlugins = createConfigItems("plugin", [
+    let defaultPlugins = createConfigItems("plugin", [
       { name: "babel-plugin-annotate-pure-calls" },
       { name: "babel-plugin-dev-expression" },
       {
@@ -226,10 +224,10 @@ export const babelPluginReach = babelPlugin.custom(() => ({
       { name: "babel-plugin-macros" },
     ]);
 
-    const babelOptions = config.options || {};
+    let babelOptions = config.options || {};
     babelOptions.presets = babelOptions.presets || [];
 
-    const defaultPresets = createConfigItems("preset", [
+    let defaultPresets = createConfigItems("preset", [
       {
         name: "@babel/preset-env",
         targets: customOptions.targets,
@@ -259,6 +257,7 @@ export async function buildPackage(packageName: string, packagePath: string) {
   let inputDir = path.join(paths.projectRoot, packagePath);
   let packageRoot = path.resolve(paths.projectRoot, packagePath, "..");
   let input = [
+    // Prefer .tsx, fallback to .ts then .js
     fs.existsSync(path.join(inputDir, "index.tsx"))
       ? path.join(inputDir, "index.tsx")
       : fs.existsSync(path.join(inputDir, "index.ts"))
@@ -275,32 +274,40 @@ export async function buildAction(packageDetails: {
   input: string[];
   packageRoot: string;
 }) {
-  const opts = await normalizeOpts({ ...packageDetails, ...parseArgs() });
-  const buildConfigs = await createBuildConfigs(opts);
-  const logger = await createProgressEstimator();
-  const promise = writeCjsEntryFile(opts.name, opts.packageDist).catch(
-    logError
-  );
-  logger(promise, "Creating entry file");
+  let opts = await normalizeOpts({ ...packageDetails, ...parseArgs() });
+  let buildConfigs = await createBuildConfigs(opts);
+  let logger = await createProgressEstimator();
 
   try {
-    const promise = new Promise((done) => {
-      buildConfigs.forEach(async (inputOptions, index, src) => {
-        let outputOptions = Array.isArray(inputOptions.output)
-          ? inputOptions.output!
-          : [inputOptions.output!].filter(Boolean);
-        let bundle = await rollup(inputOptions);
-        await Promise.all(outputOptions.map(bundle.write));
+    // 1. Write the entry file
+    await logger(
+      writeCjsEntryFile(opts.name, opts.packageDist).catch(logError),
+      "Creating entry file"
+    );
 
-        // Resolve after the last package is built.
-        if (index === src.length - 1) done();
-      });
-    });
-    logger(promise, "Building modules");
-    await promise;
+    // 2. Build our modules
+    await logger(
+      new Promise((done) => {
+        buildConfigs.forEach(async (inputOptions, index, src) => {
+          let outputOptions = Array.isArray(inputOptions.output)
+            ? inputOptions.output!
+            : [inputOptions.output!].filter(Boolean);
+          let bundle = await rollup(inputOptions);
+          await Promise.all(outputOptions.map(bundle.write));
 
+          // Resolve after the last package is built.
+          if (index === src.length - 1) done();
+        });
+      }),
+      "Building modules"
+    );
+
+    // 3. Move misplaced TypeScript definition files
     // https://github.com/ezolenko/rollup-plugin-typescript2/issues/136
-    moveDeclarationFilesToDist(opts.name, opts.packageRoot, opts.packageDist);
+    await logger(
+      moveDeclarationFilesToDist(opts.packageRoot, opts.packageDist),
+      "Cleaning up TS definitions"
+    );
   } catch (error) {
     logError(error);
     process.exit(1);
@@ -316,11 +323,11 @@ function createConfigItems(type: any, items: any[]) {
 }
 
 function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
-  const mergedItems: any[] = [];
+  let mergedItems: any[] = [];
 
   configItemsToMerge.forEach((configItemToMerge) => {
     configItemToMerge.forEach((item: any) => {
-      const itemToMergeWithIndex = mergedItems.findIndex(
+      let itemToMergeWithIndex = mergedItems.findIndex(
         (mergedItem) => mergedItem.file.resolved === item.file.resolved
       );
 
@@ -345,7 +352,7 @@ function mergeConfigItems(type: any, ...configItemsToMerge: any[]) {
 }
 
 export function writeCjsEntryFile(name: string, packageDist: string) {
-  const contents = `'use strict';
+  let contents = `'use strict';
 
 if (process.env.NODE_ENV === 'production') {
   module.exports = require('./${name}.cjs.production.min.js');
@@ -359,7 +366,7 @@ if (process.env.NODE_ENV === 'production') {
 export async function createBuildConfigs(
   opts: NormalizedOpts
 ): Promise<RollupOptions[]> {
-  const allInputs = flatten(
+  let allInputs = flatten(
     flatten(opts.input as any).map((input: string) =>
       createAllFormats(opts, input).map(
         (options: ScriptOpts, index: number) => ({
@@ -412,7 +419,6 @@ function createAllFormats(
  * @param packageDist
  */
 async function moveDeclarationFilesToDist(
-  packageName: string,
   packageRoot: string,
   packageDist: string
 ) {
