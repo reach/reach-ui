@@ -3,11 +3,3 @@ declare module "@babel/core" {
   export const DEFAULT_EXTENSIONS: string[];
   export function createConfigItem(boop: any[], options: any): void;
 }
-
-declare module "@babel/helper-module-imports" {
-  export function addDefault(
-    path: string,
-    importedSource: string,
-    opts: any
-  ): any;
-}

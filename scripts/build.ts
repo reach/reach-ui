@@ -4,10 +4,9 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import replace from "@rollup/plugin-replace";
 import resolve from "@rollup/plugin-node-resolve";
-import asyncro from "asyncro";
 import { merge } from "lodash";
 import path from "path";
-import { rollup, RollupOptions, OutputOptions } from "rollup";
+import { rollup, RollupOptions } from "rollup";
 import babelPlugin from "rollup-plugin-babel";
 import sourceMaps from "rollup-plugin-sourcemaps";
 import { terser } from "rollup-plugin-terser";
@@ -236,7 +235,6 @@ export const babelPluginReach = babelPlugin.custom(() => ({
         targets: customOptions.targets,
         modules: false,
         loose: true,
-        exclude: ["transform-async-to-generator", "transform-regenerator"],
       },
     ]);
 
@@ -286,14 +284,18 @@ export async function buildAction(packageDetails: {
   logger(promise, "Creating entry file");
 
   try {
-    const promise = asyncro
-      .map(buildConfigs, async (inputOptions: RollupOptions) => {
+    const promise = new Promise((done) => {
+      buildConfigs.forEach(async (inputOptions, index, src) => {
+        let outputOptions = Array.isArray(inputOptions.output)
+          ? inputOptions.output!
+          : [inputOptions.output!].filter(Boolean);
         let bundle = await rollup(inputOptions);
-        await bundle.write(inputOptions.output as OutputOptions);
-      })
-      .catch((e: any) => {
-        throw e;
+        await Promise.all(outputOptions.map(bundle.write));
+
+        // Resolve after the last package is built.
+        if (index === src.length - 1) done();
       });
+    });
     logger(promise, "Building modules");
     await promise;
 
