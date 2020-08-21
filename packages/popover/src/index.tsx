@@ -32,7 +32,7 @@ export type PopoverProps = {
    * Render the popover markup, but hide it – used by MenuButton so that it
    * can have an `aria-controls` attribute even when its menu isn't open, and
    * used inside `Popover` as a hint that we can tell `useRect` to stop
-   * observing for performance's sake.
+   * observing for better performance.
    */
   hidden?: boolean;
   /**
@@ -65,14 +65,13 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
       targetRef,
       position = positionDefault,
       unstable_observableRefs = [],
-      hidden,
       ...props
     },
     forwardedRef
   ) {
     const popoverRef = useRef<HTMLDivElement>(null);
-    const popoverRect = useRect(popoverRef, !hidden);
-    const targetRect = useRect(targetRef, !hidden);
+    const popoverRect = useRect(popoverRef, !props.hidden);
+    const targetRect = useRect(targetRef, !props.hidden);
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     useSimulateTabNavigationForReactTree(targetRef, popoverRef);
@@ -81,7 +80,6 @@ const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
       <div
         data-reach-popover=""
         ref={ref}
-        hidden={hidden}
         {...props}
         style={{
           position: "absolute",
