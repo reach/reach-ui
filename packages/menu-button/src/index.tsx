@@ -227,8 +227,8 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
       dispatch,
     } = useContext(MenuContext);
     let ref = useForkedRef(buttonRef, forwardedRef);
-    const items = useDescendants(MenuDescendantContext);
-    const firstNonDisabledIndex = useMemo(
+    let items = useDescendants(MenuDescendantContext);
+    let firstNonDisabledIndex = useMemo(
       () => items.findIndex((item) => !item.disabled),
       [items]
     );
@@ -390,7 +390,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       {
         element: ownRef.current!,
         key: valueText,
-        disabled: disabled,
+        disabled,
         isLink,
       },
       MenuDescendantContext,
@@ -411,7 +411,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       if (isLink && !isRightClick(event.nativeEvent)) {
         if (disabled) {
           event.preventDefault();
-        } else select();
+        } else {
+          select();
+        }
       }
     }
 
@@ -471,7 +473,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
           ownRef.current.click();
         }
       } else {
-        if (!disabled) select();
+        if (!disabled) {
+          select();
+        }
       }
     }
 
@@ -498,7 +502,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         tabIndex={-1}
         {...props}
         ref={ref}
-        aria-disabled={disabled === true ? true : undefined}
+        aria-disabled={disabled || undefined}
         data-reach-menu-item=""
         data-selected={isSelected ? "" : undefined}
         data-valuetext={valueText}
@@ -1003,10 +1007,10 @@ function findItemFromTypeahead(
     return null;
   }
 
-  const found = items.find(({ element, disabled }, index) => {
-    if (!disabled)
-      return element?.dataset?.valuetext?.toLowerCase().startsWith(string);
-    return false;
+  const found = items.find((item) => {
+    return item.disabled
+      ? false
+      : item.element?.dataset?.valuetext?.toLowerCase().startsWith(string);
   });
   return found ? items.indexOf(found) : null;
 }
