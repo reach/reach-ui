@@ -36,9 +36,9 @@ export default { title: "MenuButton" };
 let memoryHistory = createHistory(createMemorySource("/"));
 
 function Home() {
-  const [disabled, setDisabled] = React.useState(true);
+  let [disabled, setDisabled] = React.useState(true);
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div>
       <Menu>
         <MenuButton>
           Actions <span aria-hidden="true">▾</span>
@@ -51,12 +51,9 @@ function Home() {
           <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
         </MenuList>
       </Menu>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <div>
-        <button onClick={() => setDisabled(!disabled)}>
-          {disabled ? "Enable" : "Disable"} the link
-        </button>
-      </div>
+      <button onClick={() => setDisabled(!disabled)}>
+        {disabled ? "Enable" : "Disable"} the link
+      </button>
     </div>
   );
 }
