@@ -354,8 +354,14 @@ export function isNumber(value: any): value is number {
  *
  * @param nativeEvent
  */
-export function isRightClick(nativeEvent: MouseEvent) {
-  return nativeEvent.which === 3 || nativeEvent.button === 2;
+export function isRightClick(
+  nativeEvent: MouseEvent | PointerEvent | TouchEvent
+) {
+  return "which" in nativeEvent
+    ? nativeEvent.which === 3
+    : "button" in nativeEvent
+    ? (nativeEvent as any).button === 2
+    : false;
 }
 
 /**
