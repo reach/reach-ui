@@ -519,7 +519,7 @@ const SliderInput = forwardRefWithAs<
   }, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
 
   let handleSlideStart = useEventCallback((event: SomePointerEvent) => {
-    if (isRightClick(event as MouseEvent)) return;
+    if (isRightClick(event)) return;
 
     if (disabled) {
       pointerDownRef.current = false;
@@ -549,6 +549,7 @@ const SliderInput = forwardRefWithAs<
   });
 
   let setPointerCapture = useEventCallback((event: PointerEvent) => {
+    if (isRightClick(event)) return;
     if (disabled) {
       pointerDownRef.current = false;
       return;
@@ -558,6 +559,7 @@ const SliderInput = forwardRefWithAs<
   });
 
   let releasePointerCapture = useEventCallback((event: PointerEvent) => {
+    if (isRightClick(event)) return;
     sliderRef.current?.releasePointerCapture(event.pointerId);
     pointerDownRef.current = false;
   });
@@ -576,6 +578,8 @@ const SliderInput = forwardRefWithAs<
   });
 
   let handleSlideStop = useEventCallback((event: SomePointerEvent) => {
+    if (isRightClick(event)) return;
+
     pointerDownRef.current = false;
 
     let newValue = getNewValueFromEvent(event);
