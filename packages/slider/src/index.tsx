@@ -48,6 +48,7 @@ import {
   warning,
   wrapEvent,
   noop,
+  isRightClick,
 } from "@reach/utils";
 
 // TODO: Remove in 1.0
@@ -518,6 +519,8 @@ const SliderInput = forwardRefWithAs<
   }, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
 
   let handleSlideStart = useEventCallback((event: SomePointerEvent) => {
+    if (isRightClick(event as MouseEvent)) return;
+
     if (disabled) {
       pointerDownRef.current = false;
       return;
