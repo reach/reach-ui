@@ -1,5 +1,6 @@
 {
   "include": ["packages", "types", "scripts"],
+  "exclude": ["packages/*/dist"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,

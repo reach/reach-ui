@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import {
   createNamedContext,
   noop,
+  useForceUpdate,
   useIsomorphicLayoutEffect,
   usePrevious,
 } from "@reach/utils";
@@ -48,7 +49,7 @@ export function useDescendant<DescendantType extends Descendant>(
   context: React.Context<DescendantContextValue<DescendantType>>,
   indexProp?: number
 ) {
-  let [, forceUpdate] = useState();
+  let forceUpdate = useForceUpdate();
   let { registerDescendant, unregisterDescendant, descendants } = useContext(
     context
   );
@@ -74,7 +75,7 @@ export function useDescendant<DescendantType extends Descendant>(
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
-    if (!descendant.element) forceUpdate({});
+    if (!descendant.element) forceUpdate();
     registerDescendant({
       ...descendant,
       index,
@@ -82,10 +83,11 @@ export function useDescendant<DescendantType extends Descendant>(
     return () => unregisterDescendant(descendant.element);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    registerDescendant,
-    unregisterDescendant,
+    forceUpdate,
     index,
+    registerDescendant,
     someDescendantsHaveChanged,
+    unregisterDescendant,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(descendant),
   ]);

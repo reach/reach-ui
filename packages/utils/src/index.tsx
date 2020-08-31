@@ -602,6 +602,16 @@ export function useFocusChange(
 }
 
 /**
+ * Forces a re-render, similar to `forceUpdate` in class components.
+ */
+export function useForceUpdate() {
+  let [, dispatch] = useState<{}>(Object.create(null));
+  return useCallback(() => {
+    dispatch(Object.create(null));
+  }, []);
+}
+
+/**
  * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
  * dealing with components that need an explicit ref for DOM calculations but
  * also forwards refs assigned by an app.
