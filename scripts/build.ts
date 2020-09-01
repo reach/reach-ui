@@ -159,9 +159,10 @@ export async function createRollupConfig(
             outDir,
             // In our root TS config we define path aliases for internal
             // packages that map to the /src directory. When we build, we need
-            // to re-map these paths to the output directory as /src is not
-            // published to NPM and import() calls in type files would break as
-            // a result.
+            // to re-map these paths to the actual package directory as /src is
+            // not published to NPM and import() calls in type files would break
+            // as a result. Unclear to me why simply removing `paths` altogether
+            // doesn't fix this, but this will do for now.
             // https://github.com/reach/reach-ui/issues/660
             paths: Object.keys(rootPathAliases).reduce<MapLike<string[]>>(
               function remapPathAliases(acc, cur) {
@@ -169,7 +170,7 @@ export async function createRollupConfig(
                 return {
                   ...acc,
                   [cur]: cur.startsWith("@reach")
-                    ? pathList.map((path) => path.replace("/src", ""))
+                    ? pathList.map(() => cur)
                     : pathList,
                 };
               },
