@@ -11,6 +11,7 @@ import babelPlugin from "rollup-plugin-babel";
 import sourceMaps from "rollup-plugin-sourcemaps";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
+import { MapLike } from "typescript";
 import { paths } from "./constants";
 import { ScriptOpts, NormalizedOpts } from "./types";
 import * as fs from "fs-extra";
@@ -68,6 +69,8 @@ export async function createRollupConfig(
       //
     }
   }
+
+  let rootPathAliases = rootTsConfig.compilerOptions.paths || {};
 
   return {
     input,
@@ -154,6 +157,25 @@ export async function createRollupConfig(
           compilerOptions: {
             target: "esnext",
             outDir,
+            // In our root TS config we define path aliases for internal
+            // packages that map to the /src directory. When we build, we need
+            // to re-map these paths to the actual package directory as /src is
+            // not published to NPM and import() calls in type files would break
+            // as a result. Unclear to me why simply removing `paths` altogether
+            // doesn't fix this, but this will do for now.
+            // https://github.com/reach/reach-ui/issues/660
+            paths: Object.keys(rootPathAliases).reduce<MapLike<string[]>>(
+              function remapPathAliases(acc, cur) {
+                let pathList = rootPathAliases[cur] || [];
+                return {
+                  ...acc,
+                  [cur]: cur.startsWith("@reach")
+                    ? pathList.map(() => cur)
+                    : pathList,
+                };
+              },
+              {}
+            ),
 
             // We only need output type declarations once per package.
             ...(buildCount > 0
@@ -169,7 +191,7 @@ export async function createRollupConfig(
           },
         },
         useTsconfigDeclarationDir: true,
-        check: opts.transpileOnly !== undefined ? !opts.transpileOnly : false,
+        // check: opts.transpileOnly !== undefined ? !opts.transpileOnly : false,
       }),
       babelPluginReach({
         exclude: "node_modules/**",

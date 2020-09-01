@@ -2,7 +2,7 @@ import React, {
   createContext,
   useContext,
   useLayoutEffect,
-  useReducer
+  useReducer,
 } from "react";
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
@@ -12,7 +12,7 @@ let name = "CustomCheckbox Group";
 let checkSmileys = {
   true: "😃",
   mixed: "😐",
-  false: "🙁"
+  false: "🙁",
 };
 
 function Example() {
@@ -53,7 +53,7 @@ function CheckboxGroup({ name, label, legend, children }) {
           padding: "1rem 1.5rem 1.5rem",
           width: 400,
           maxWidth: "100%",
-          borderRadius: 6
+          borderRadius: 6,
         }}
       >
         <CheckboxLegend>{legend}</CheckboxLegend>
@@ -61,16 +61,16 @@ function CheckboxGroup({ name, label, legend, children }) {
           id={`box-group-${name}`}
           value={name}
           checked={
-            Object.values(state.boxes).every(t => t)
+            Object.values(state.boxes).every((t) => t)
               ? true
-              : Object.values(state.boxes).some(t => t)
+              : Object.values(state.boxes).some((t) => t)
               ? "mixed"
               : false
           }
-          onChange={event =>
+          onChange={(event) =>
             dispatch({
               type: "CLICK_GROUP_BOX",
-              payload: { event }
+              payload: { event },
             })
           }
         >
@@ -80,7 +80,7 @@ function CheckboxGroup({ name, label, legend, children }) {
           style={{
             margin: "1rem 0 0",
             padding: "1rem 1.5rem",
-            borderRadius: 3
+            borderRadius: 3,
           }}
         >
           {children}
@@ -105,7 +105,7 @@ function SmileyCheckbox({ checked, children, id, ...props }) {
           border: "2px solid rgba(0, 0, 0, 0.8)",
           borderRadius: "3px",
           height: 26,
-          width: 26
+          width: 26,
         }}
         checked={checked}
         {...props}
@@ -113,7 +113,9 @@ function SmileyCheckbox({ checked, children, id, ...props }) {
         <span
           aria-hidden
           style={{
-            display: "block",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             fontSize: 16,
             height: 16,
             width: 16,
@@ -123,7 +125,7 @@ function SmileyCheckbox({ checked, children, id, ...props }) {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            pointerEvents: "none"
+            pointerEvents: "none",
           }}
         >
           {checkSmileys[String(checked)]}
@@ -143,7 +145,7 @@ function FriendCheckbox({ name, defaultChecked = false, children, ...props }) {
     if (!isRegistered) {
       dispatch({
         type: "REGISTER_BOX",
-        payload: { name, checked: defaultChecked }
+        payload: { name, checked: defaultChecked },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -155,10 +157,10 @@ function FriendCheckbox({ name, defaultChecked = false, children, ...props }) {
         id={`box-${name}`}
         name={name}
         checked={checked}
-        onChange={event =>
+        onChange={(event) =>
           dispatch({
             type: "CLICK_BOX",
-            payload: { name, event }
+            payload: { name, event },
           })
         }
         {...props}
@@ -176,7 +178,7 @@ function CheckboxLegend({ children }) {
         textTransform: "uppercase",
         fontSize: 12,
         letterSpacing: 1,
-        fontWeight: 800
+        fontWeight: 800,
       }}
     >
       {children}
@@ -194,16 +196,16 @@ function reducer(state, action = {}) {
         ...state,
         boxes: {
           ...state.boxes,
-          [payload.name]: payload.checked || false
-        }
+          [payload.name]: payload.checked || false,
+        },
       };
     case "CLICK_BOX":
       return {
         ...state,
         boxes: {
           ...state.boxes,
-          [payload.name]: event.target.checked
-        }
+          [payload.name]: event.target.checked,
+        },
       };
     case "CLICK_GROUP_BOX":
       groupChecked = event.target.checked;
@@ -213,10 +215,10 @@ function reducer(state, action = {}) {
           ...Object.keys(state.boxes).reduce((prev, cur) => {
             return {
               ...prev,
-              [cur]: !!groupChecked
+              [cur]: !!groupChecked,
             };
-          }, {})
-        }
+          }, {}),
+        },
       };
     default:
       return state;
