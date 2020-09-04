@@ -273,7 +273,7 @@ export type TabsProps = {
 if (__DEV__) {
   Tabs.displayName = "Tabs";
   Tabs.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
     onChange: PropTypes.func,
     orientation: PropTypes.oneOf(Object.values(TabsOrientation)),
     index: (props, name, compName, location, propName) => {
