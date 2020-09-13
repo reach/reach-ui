@@ -40,7 +40,7 @@ export type PopoverProps = {
    * determine the position of the popover. One example where it may be useful
    * is for positioning the popover of a listbox where the cursor rests on top
    * of the selected option. Pretty sure this will change so don't use it
-   * anywehre in public yet!
+   * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
 } & React.HTMLAttributes<HTMLDivElement>;
