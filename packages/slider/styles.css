@@ -3,7 +3,6 @@
 }
 
 [data-reach-slider-input][data-orientation="horizontal"] {
-  width: 350px;
   max-width: 100%;
   height: 4px;
   padding-top: 30px;
