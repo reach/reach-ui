@@ -22,7 +22,7 @@ import {
   makeId,
   useForkedRef,
   warning,
-  wrapEvent,
+  wrapEvent
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
@@ -31,13 +31,13 @@ const DisclosureContext = createNamedContext<IDisclosureContext>(
   "DisclosureContext",
   {} as IDisclosureContext
 );
-const useDisclosureContext = () => useContext(DisclosureContext);
+export const useDisclosureContext = () => useContext(DisclosureContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export enum DisclosureStates {
   Open = "open",
-  Collapsed = "collapsed",
+  Collapsed = "collapsed"
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     disclosureId: id,
     onSelect,
     open,
-    panelId,
+    panelId
   };
 
   if (isControlled && openProp !== open) {
@@ -162,7 +162,7 @@ if (__DEV__) {
     children: PropTypes.node.isRequired,
     defaultOpen: PropTypes.bool,
     onChange: PropTypes.func,
-    open: PropTypes.bool,
+    open: PropTypes.bool
   };
 }
 
@@ -244,7 +244,7 @@ if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
   DisclosureButton.propTypes = {
     as: PropTypes.any,
-    children: PropTypes.node,
+    children: PropTypes.node
   };
 }
 
@@ -286,7 +286,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
+export type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Inner collapsible content for the disclosure item.
    *
