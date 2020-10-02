@@ -197,7 +197,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
         return newItems.map((item, index) => ({ ...item, index }));
       });
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -212,7 +212,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
 
       set((items) => items.filter((item) => element !== item.element));
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
