@@ -260,7 +260,7 @@ function Menu({ id, children }) {
   // but you may want to do something with `descendants` in your top-level
   // component and we don't want to force creating an arbitrary child
   // component just so we can consume the context.
-  let [descendants, setDescendants] = useDescendantsInit();
+  let [descendants, setDescendants] = useDescendants();
   let [activeIndex, setActiveIndex] = useState(-1);
   return (
     <DescendantProvider
