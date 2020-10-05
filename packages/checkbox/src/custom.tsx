@@ -236,20 +236,27 @@ export const CustomCheckboxInput = forwardRef<
   } = useCustomCheckboxContext();
 
   let ref = useForkedRef(forwardedRef, inputRef);
+  let mounted = useRef(true);
 
   function handleBlur() {
     // window.requestAnimationFrame(() => send(CustomCheckboxEvents.Blur));
     window.requestAnimationFrame(() => {
-      setFocused(false);
+      if (mounted.current) {
+        setFocused(false);
+      }
     });
   }
 
   function handleFocus() {
     // window.requestAnimationFrame(() => send(CustomCheckboxEvents.Focus));
     window.requestAnimationFrame(() => {
-      setFocused(true);
+      if (mounted.current) {
+        setFocused(true);
+      }
     });
   }
+
+  useEffect(() => () => void (mounted.current = false), []);
 
   return (
     <input

@@ -132,7 +132,12 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
       isRTL,
       keyboardActivation,
       onFocusPanel() {
-        selectedPanelRef.current?.focus();
+        if (
+          selectedPanelRef.current &&
+          isFunction(selectedPanelRef.current.focus)
+        ) {
+          selectedPanelRef.current.focus();
+        }
       },
       onSelectTab: readOnly
         ? noop
@@ -147,7 +152,10 @@ export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
             userInteractedRef.current = true;
             switch (keyboardActivation) {
               case TabsKeyboardActivation.Manual:
-                tabs[index].element?.focus();
+                let tabElement = tabs[index] && tabs[index].element;
+                if (tabElement && isFunction(tabElement.focus)) {
+                  tabElement.focus();
+                }
                 return;
               case TabsKeyboardActivation.Auto:
               default:
@@ -265,7 +273,7 @@ export type TabsProps = {
 if (__DEV__) {
   Tabs.displayName = "Tabs";
   Tabs.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
     onChange: PropTypes.func,
     orientation: PropTypes.oneOf(Object.values(TabsOrientation)),
     index: (props, name, compName, location, propName) => {
@@ -474,7 +482,9 @@ export const Tab = forwardRefWithAs<
   useUpdateEffect(() => {
     if (isSelected && ownRef.current && userInteractedRef.current) {
       userInteractedRef.current = false;
-      ownRef.current.focus();
+      if (isFunction(ownRef.current.focus)) {
+        ownRef.current.focus();
+      }
     }
   }, [isSelected, userInteractedRef]);
 
@@ -485,7 +495,7 @@ export const Tab = forwardRefWithAs<
   );
 
   let handleBlur = useEventCallback(
-    wrapEvent(onFocus, () => {
+    wrapEvent(onBlur, () => {
       setFocusedIndex(-1);
     })
   );

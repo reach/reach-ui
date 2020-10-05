@@ -54,6 +54,7 @@ const CLEAR_SELECTION_INDEX = "CLEAR_SELECTION_INDEX";
 const CLICK_MENU_ITEM = "CLICK_MENU_ITEM";
 const CLOSE_MENU = "CLOSE_MENU";
 const OPEN_MENU_AT_FIRST_ITEM = "OPEN_MENU_AT_FIRST_ITEM";
+const OPEN_MENU_AT_INDEX = "OPEN_MENU_AT_INDEX";
 const OPEN_MENU_CLEARED = "OPEN_MENU_CLEARED";
 const SEARCH_FOR_ITEM = "SEARCH_FOR_ITEM";
 const SELECT_ITEM_AT_INDEX = "SELECT_ITEM_AT_INDEX";
@@ -226,7 +227,11 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
       dispatch,
     } = useContext(MenuContext);
     let ref = useForkedRef(buttonRef, forwardedRef);
-
+    let items = useDescendants(MenuDescendantContext);
+    let firstNonDisabledIndex = useMemo(
+      () => items.findIndex((item) => !item.disabled),
+      [items]
+    );
     useEffect(() => {
       let newButtonId =
         id != null
@@ -247,11 +252,17 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
         case "ArrowDown":
         case "ArrowUp":
           event.preventDefault(); // prevent scroll
-          dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
+          dispatch({
+            type: OPEN_MENU_AT_INDEX,
+            payload: { index: firstNonDisabledIndex },
+          });
           break;
         case "Enter":
         case " ":
-          dispatch({ type: OPEN_MENU_AT_FIRST_ITEM });
+          dispatch({
+            type: OPEN_MENU_AT_INDEX,
+            payload: { index: firstNonDisabledIndex },
+          });
           break;
         default:
           break;
@@ -338,6 +349,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       onMouseMove,
       onMouseUp,
       onSelect,
+      disabled,
       valueText: valueTextProp,
       ...props
     },
@@ -350,9 +362,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       selectCallbacks,
       state: { selectionIndex, isExpanded },
     } = useContext(MenuContext);
-
     let ownRef = useRef<HTMLElement | null>(null);
-
     // After the ref is mounted to the DOM node, we check to see if we have an
     // explicit valueText prop before looking for the node's textContent for
     // typeahead functionality.
@@ -380,12 +390,13 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       {
         element: ownRef.current!,
         key: valueText,
+        disabled,
         isLink,
       },
       MenuDescendantContext,
       indexProp
     );
-    let isSelected = index === selectionIndex;
+    let isSelected = index === selectionIndex && !disabled;
 
     // Update the callback ref array on every render
     selectCallbacks.current[index] = onSelect;
@@ -398,7 +409,11 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     function handleClick(event: React.MouseEvent) {
       if (isLink && !isRightClick(event.nativeEvent)) {
-        select();
+        if (disabled) {
+          event.preventDefault();
+        } else {
+          select();
+        }
       }
     }
 
@@ -424,7 +439,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     function handleMouseEnter(event: React.MouseEvent) {
-      if (!isSelected && index != null) {
+      if (!isSelected && index != null && !disabled) {
         dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
       }
     }
@@ -436,7 +451,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     function handleMouseMove() {
       readyToSelect.current = true;
-      if (!isSelected && index != null) {
+      if (!isSelected && index != null && !disabled) {
         dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
       }
     }
@@ -458,7 +473,9 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
           ownRef.current.click();
         }
       } else {
-        select();
+        if (!disabled) {
+          select();
+        }
       }
     }
 
@@ -485,6 +502,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         tabIndex={-1}
         {...props}
         ref={ref}
+        aria-disabled={disabled || undefined}
         data-reach-menu-item=""
         data-selected={isSelected ? "" : undefined}
         data-valuetext={valueText}
@@ -516,6 +534,12 @@ export type MenuItemImplProps = {
   index?: number;
   isLink?: boolean;
   valueText?: string;
+  /**
+   * Whether or not the item is disabled from selection and navigation.
+   *
+   * @see Docs https://reach.tech/menu-button#menuitem-disabled
+   */
+  disabled?: boolean;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -689,6 +713,7 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
         currentIndex: selectionIndex,
         orientation: "vertical",
         rotate: false,
+        filter: (item) => !item.disabled,
         callback: (index: number) => {
           dispatch({
             type: SELECT_ITEM_AT_INDEX,
@@ -980,16 +1005,18 @@ export function useMenuButtonContext(): MenuContextValue {
  * function.
  */
 function findItemFromTypeahead(
-  items: Descendant<HTMLElement>[],
+  items: MenuButtonDescendant[],
   string: string = ""
 ) {
   if (!string) {
     return null;
   }
 
-  const found = items.find(({ element }) =>
-    element?.dataset?.valuetext?.toLowerCase().startsWith(string)
-  );
+  const found = items.find((item) => {
+    return item.disabled
+      ? false
+      : item.element?.dataset?.valuetext?.toLowerCase().startsWith(string);
+  });
   return found ? items.indexOf(found) : null;
 }
 
@@ -1011,6 +1038,7 @@ type MenuButtonAction =
   | { type: "CLICK_MENU_ITEM" }
   | { type: "CLOSE_MENU"; payload: { buttonRef: ButtonRef } }
   | { type: "OPEN_MENU_AT_FIRST_ITEM" }
+  | { type: "OPEN_MENU_AT_INDEX"; payload: { index: number } }
   | { type: "OPEN_MENU_CLEARED" }
   | {
       type: "SELECT_ITEM_AT_INDEX";
@@ -1052,6 +1080,12 @@ function reducer(
         ...state,
         isExpanded: true,
         selectionIndex: 0,
+      };
+    case OPEN_MENU_AT_INDEX:
+      return {
+        ...state,
+        isExpanded: true,
+        selectionIndex: action.payload.index,
       };
     case OPEN_MENU_CLEARED:
       return {
@@ -1099,6 +1133,7 @@ function reducer(
 type MenuButtonDescendant = Descendant<HTMLElement> & {
   key: string;
   isLink: boolean;
+  disabled?: boolean;
 };
 
 type ButtonRef = React.RefObject<null | HTMLElement>;
