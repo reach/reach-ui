@@ -11,6 +11,7 @@ import {
   ComboboxInputProps,
   useComboboxContext,
 } from "@reach/combobox";
+import { Dialog } from "@reach/dialog";
 import matchSorter from "match-sorter";
 import cities from "../examples/cities";
 
@@ -219,9 +220,36 @@ describe("<Combobox />", () => {
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
     });
   });
+
+  describe("Combobox inside dialog", () => {
+    it("should not close the dialog when Esc key is pressed", async () => {
+      let { getByTestId, queryByTestId } = render(<BasicDialog />);
+      let input = getByTestId("input");
+
+      await userEvent.type(input, "e");
+
+      expect(getByTestId("list")).toBeInTheDocument();
+
+      await userEvent.type(input, "{esc}");
+
+      expect(queryByTestId("list")).not.toBeInTheDocument();
+      expect(getByTestId("input")).toBeInTheDocument();
+    });
+  });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
+function BasicDialog() {
+  const [showDialog, setShowDialog] = React.useState(true);
+  const close = () => setShowDialog(false);
+
+  return (
+    <Dialog aria-label="Test" isOpen={showDialog} onDismiss={close}>
+      <BasicCombobox />
+    </Dialog>
+  );
+}
+
 function BasicCombobox() {
   let [term, setTerm] = useState("");
   let results = useCityMatch(term);
