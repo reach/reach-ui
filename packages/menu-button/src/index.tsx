@@ -96,7 +96,11 @@ const initialState: MenuButtonState = {
  *
  * @see Docs https://reach.tech/menu-button#menu
  */
-export const Menu: React.FC<MenuProps> = ({ id, children }) => {
+export const Menu: React.FC<MenuProps> = ({
+  id,
+  children,
+  keepScrollPosition = false,
+}) => {
   let buttonRef = useRef(null);
   let menuRef = useRef(null);
   let popoverRef = useRef(null);
@@ -145,7 +149,13 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
       // @ts-ignore
       window.__REACH_DISABLE_TOOLTIPS = true;
       window.requestAnimationFrame(() => {
-        focus(menuRef.current);
+        if (keepScrollPosition) {
+          const scrollOptions = { left: window.scrollX, top: window.scrollY };
+          focus(menuRef.current);
+          window.scrollTo(scrollOptions);
+        } else {
+          focus(menuRef.current);
+        }
       });
     } else {
       // We want to ignore the immediate focus of a tooltip so it doesn't pop
@@ -195,6 +205,7 @@ export interface MenuProps {
         }
       ) => React.ReactNode);
   id?: string;
+  keepScrollPosition?: boolean;
 }
 
 if (__DEV__) {
