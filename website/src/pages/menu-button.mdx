@@ -83,9 +83,10 @@ The wrapper component for the other components. No DOM element is rendered.
 
 #### Menu Props
 
-| Prop                         | Type   | Required |
-| ---------------------------- | ------ | -------- |
-| [`children`](#menu-children) | `node` | false    |
+| Prop                                             | Type      | Required |
+| ------------------------------------------------ | --------- | -------- |
+| [`children`](#menu-children)                     | `node`    | false    |
+| [`keepScrollPosition`](#menu-keepscrollposition) | `boolean` | false    |
 
 ##### Menu `children`
 
@@ -130,6 +131,13 @@ function Example() {
   );
 }
 ```
+
+##### Menu `keepScrollPosition`
+
+`keepScrollPosition: boolean`
+
+When a menu is open the focus is trasferred to the menu itself. In the case the menu list element height is larger than the window height this focus will scroll the page making it jumpy.
+Passing `true` on this prop will still focus on the menu element but keeping the position of the scroll on the page.
 
 ### MenuButton
 
