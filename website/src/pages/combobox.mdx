@@ -268,7 +268,7 @@ This is the same demo as above, except this time we're going to a server to get 
     if (cache[value]) {
       return Promise.resolve(cache[value]);
     }
-    return fetch("https://city-search.now.sh/?" + value)
+    return fetch("https://city-search.chaance.vercel.app/api?" + value)
       .then((res) => res.json())
       .then((result) => {
         cache[value] = result;
