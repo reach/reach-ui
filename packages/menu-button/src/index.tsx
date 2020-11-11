@@ -900,30 +900,28 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     useEffect(() => {
-      function listener(event: MouseEvent) {
+      function listener(event: MouseEvent | TouchEvent) {
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
         } else {
           // We on want to close only if focus rests outside the menu
-          if (isExpanded && popoverRef.current) {
-            if (!popoverRef.current.contains(event.target as Element)) {
-              dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
-            }
+          if (
+            !popoverRef.current ||
+            popoverRef.current.contains(event.target as Element)
+          ) {
+            return;
           }
+
+          dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
         }
       }
-      window.addEventListener("mousedown", listener);
+      document.addEventListener("mousedown", listener);
+      document.addEventListener("touchstart", listener);
       return () => {
-        window.removeEventListener("mousedown", listener);
+        document.removeEventListener("mousedown", listener);
+        document.removeEventListener("touchstart", listener);
       };
-    }, [
-      buttonClickedRef,
-      buttonRef,
-      dispatch,
-      isExpanded,
-      menuRef,
-      popoverRef,
-    ]);
+    }, [buttonClickedRef, buttonRef, dispatch, menuRef, popoverRef]);
 
     let commonProps = {
       ref,
