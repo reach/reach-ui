@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "start-storybook -p 9001 -c .storybook",
+    "dev": "yarn start",
     "test": "cross-env CI=true ts-node ./scripts/test packages",
     "test:pkg": "cross-env CI=true ts-node ./scripts/test --pkg",
     "test:watch": "ts-node ./scripts/test packages",
