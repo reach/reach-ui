@@ -15,23 +15,23 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
 
-import React, { forwardRef, useContext, useRef, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   forwardRefWithAs,
   makeId,
   useForkedRef,
+  useStableCallback,
   warning,
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 
-const DisclosureContext = createNamedContext<IDisclosureContext>(
+const DisclosureContext = createNamedContext<DisclosureContextValue>(
   "DisclosureContext",
-  {} as IDisclosureContext
+  {} as DisclosureContextValue
 );
-const useDisclosureContext = () => useContext(DisclosureContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ export enum DisclosureStates {
 export const Disclosure: React.FC<DisclosureProps> = ({
   children,
   defaultOpen = false,
-  onChange,
+  onChange: onChangeProp,
   open: openProp,
   ...props
 }) => {
@@ -65,13 +65,13 @@ export const Disclosure: React.FC<DisclosureProps> = ({
    * controlled component and track any changes in a ref to show a warning.
    */
   const wasControlled = openProp != null;
-  const { current: isControlled } = useRef(wasControlled);
+  const { current: isControlled } = React.useRef(wasControlled);
 
   const id =
     useId(props.id != null ? String(props.id) : undefined) || "disclosure";
   const panelId = makeId("panel", id);
 
-  const [open, setOpen] = useState(
+  const [open, setOpen] = React.useState(
     isControlled ? (openProp as boolean) : defaultOpen
   );
 
@@ -82,19 +82,27 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     );
   }
 
-  function onSelect() {
-    onChange && onChange();
-    if (!isControlled) {
-      setOpen(!open);
-    }
-  }
+  const onChange = useStableCallback(onChangeProp);
 
-  const context: IDisclosureContext = {
-    disclosureId: id,
-    onSelect,
-    open,
-    panelId,
-  };
+  const onSelect = React.useCallback(
+    function onSelect() {
+      onChange();
+      if (!isControlled) {
+        setOpen((open) => !open);
+      }
+    },
+    [onChange, isControlled]
+  );
+
+  const context: DisclosureContextValue = React.useMemo(
+    () => ({
+      disclosureId: id,
+      onSelect,
+      open,
+      panelId,
+    }),
+    [onSelect, id, open, panelId]
+  );
 
   if (isControlled && openProp !== open) {
     /*
@@ -191,8 +199,8 @@ export const DisclosureButton = forwardRefWithAs<
   },
   forwardedRef
 ) {
-  const { onSelect, open, panelId } = useDisclosureContext();
-  const ownRef = useRef<HTMLElement | null>(null);
+  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+  const ownRef = React.useRef<HTMLElement | null>(null);
 
   const ref = useForkedRef(forwardedRef, ownRef);
 
@@ -258,12 +266,15 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurepanel
  */
-export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
-  function DisclosurePanel({ children, ...props }, forwardedRef) {
-    const { panelId, open } = useDisclosureContext();
+export const DisclosurePanel = forwardRefWithAs<DisclosurePanelProps, "div">(
+  function DisclosurePanel(
+    { as: Comp = "div", children, ...props },
+    forwardedRef
+  ) {
+    const { panelId, open } = React.useContext(DisclosureContext);
 
     return (
-      <div
+      <Comp
         ref={forwardedRef}
         hidden={!open}
         {...props}
@@ -273,7 +284,7 @@ export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
         tabIndex={-1}
       >
         {children}
-      </div>
+      </Comp>
     );
   }
 );
@@ -286,7 +297,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
+export type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * Inner collapsible content for the disclosure item.
    *
@@ -296,9 +307,29 @@ type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * A hook that exposes data for a given `Disclosure` component to its
+ * descendants.
+ *
+ * @see Docs https://reach.tech/disclosure#usedisclosurecontext
+ */
+export function useDisclosureContext() {
+  let { open, panelId, disclosureId } = React.useContext(DisclosureContext);
+  return React.useMemo(
+    () => ({
+      id: disclosureId,
+      panelId,
+      open,
+    }),
+    [disclosureId, open, panelId]
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Types
 
-interface IDisclosureContext {
+interface DisclosureContextValue {
   disclosureId: string;
   onSelect(): void;
   open: boolean;

@@ -13,6 +13,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#disclosure-1">Disclosure</TOCLink>
     <TOCLink href="#disclosurebutton">DisclosureButton</TOCLink>
     <TOCLink href="#disclosurepanel">DisclosurePanel</TOCLink>
+    <TOCLink href="#usedisclosurecontext">useDisclosureContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -245,3 +246,9 @@ Please see the [styling guide](/styling).
 `children: React.ReactNode`
 
 Inner collapsible content for the disclosure item.
+
+### useDisclosureContext
+
+`function useDisclosureContext(): { id: string | undefined; panelId: string; open: boolean }`
+
+A hook that exposes data for a given `Disclosure` component to its descendants.
