@@ -206,9 +206,18 @@ Please see the [styling guide](/styling).
 
 #### DisclosureButton Props
 
-| Prop                                     | Type   | Required |
-| ---------------------------------------- | ------ | -------- |
-| [`children`](#disclosurebutton-children) | `node` | true     |
+| Prop                                     | Type                    | Required |
+| ---------------------------------------- | ----------------------- | -------- |
+| [`as`](#disclosurebutton-as)             | `string` \| `Component` | false    |
+| [`children`](#disclosurebutton-children) | `node`                  | true     |
+
+##### DisclosureButton `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `DisclosureButton` what element to render. Defaults to `button`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### DisclosureButton `children`
 
@@ -237,9 +246,18 @@ Please see the [styling guide](/styling).
 
 #### DisclosurePanel Props
 
-| Prop                                    | Type   | Required |
-| --------------------------------------- | ------ | -------- |
-| [`children`](#disclosurepanel-children) | `node` | true     |
+| Prop                                    | Type                    | Required |
+| --------------------------------------- | ----------------------- | -------- |
+| [`as`](#disclosurepanel-as)             | `string` \| `Component` | false    |
+| [`children`](#disclosurepanel-children) | `node`                  | true     |
+
+##### DisclosurePanel `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `DisclosurePanel` what element to render. Defaults to `div`.
+
+> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
 
 ##### DisclosurePanel `children`
 

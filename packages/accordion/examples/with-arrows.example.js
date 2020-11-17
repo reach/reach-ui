@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import "@reach/accordion/styles.css";
 import {
   Accordion,
@@ -15,7 +15,7 @@ function Example() {
   return (
     <StyledAccordion
       index={activeItem}
-      onChange={index => setActiveItem(index)}
+      onChange={(index) => setActiveItem(index)}
     >
       <StyledItem>
         <ArrowButton active={activeItem === 0}>ABCs</ArrowButton>
@@ -140,8 +140,8 @@ const StyledArrowWrapper = styled.div`
 const StyledIcon = styled(ArrowIcon)`
   width: 1rem;
   height: 1rem;
-  transition: ${props => (props.active ? "600" : "500")}ms transform ease-out;
-  transform: rotate(${props => (props.active ? "2.5turn" : "0")});
+  transition: ${(props) => (props.active ? "600" : "500")}ms transform ease-out;
+  transform: rotate(${(props) => (props.active ? "2.5turn" : "0")});
   fill: #fff;
 
   @media (prefers-reduced-motion: reduce) {

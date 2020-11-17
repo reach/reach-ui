@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import {
   Accordion,
   AccordionItem,
@@ -12,7 +12,7 @@ let name = "With Styled Components (TS)";
 
 function Example() {
   return (
-    <Fragment>
+    <React.Fragment>
       <StyledAccordion>
         <StyledItem>
           <StyledHeader>
@@ -59,7 +59,7 @@ function Example() {
           </StyledPanel>
         </StyledItem>
       </StyledAccordion>
-    </Fragment>
+    </React.Fragment>
   );
 }
 

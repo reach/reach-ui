@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, forwardRef } from "react";
+import * as React from "react";
 import {
   Accordion,
   AccordionItem,
@@ -13,10 +13,10 @@ import "@reach/accordion/styles.css";
 let name = "Animated";
 
 function useDivHeight() {
-  const ref = useRef(null);
-  const [height, setHeight] = useState(0);
+  const ref = React.useRef(null);
+  const [height, setHeight] = React.useState(0);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const resizeObserver = new ResizeObserver(([entry]) => {
       requestAnimationFrame(() => {
         if (!entry) {
@@ -71,7 +71,7 @@ function Example() {
 
 const AnimatedAccordionPanel = animated(AccordionPanel);
 
-const AnimatedPanel = forwardRef(({ children }, forwardedRef) => {
+const AnimatedPanel = React.forwardRef(({ children }, forwardedRef) => {
   const { isExpanded } = useAccordionItemContext();
   const { ref, height } = useDivHeight();
   const animation = useSpring({
