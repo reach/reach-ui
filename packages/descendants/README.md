@@ -240,16 +240,17 @@ So now we need a way to define arbitrary components as a `MenuItem`. One workaro
 The `descendants` package provides these key tools:
 
 - `createDescendantContext`: Creates a special context object to deal with registering descendants in a tree (accepts a name string for better debugging)
-- `useDescendants`: A hook to create a state object containing a descendants array and setter function.
+- `useDescendantsInit`: A hook to create a state object containing a descendants array and setter function.
 - `DescendantProvider`: A provider that accepts the descendants array, the state setter, and the component's context object for use at the top of the component tree
 - `useDescendant`: A hook called in the body of a nested descendant component that registers its DOM node and returns its index relative to other descendants in the tree
+- `useDescendants`: A hook that accepts the descendant context and returns descendants registered to the passed context.
 
 ```jsx
 import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
-  useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 
 let DescendantContext = createDescendantContext("DescendantContext");
@@ -260,7 +261,7 @@ function Menu({ id, children }) {
   // but you may want to do something with `descendants` in your top-level
   // component and we don't want to force creating an arbitrary child
   // component just so we can consume the context.
-  let [descendants, setDescendants] = useDescendants();
+  let [descendants, setDescendants] = useDescendantsInit();
   let [activeIndex, setActiveIndex] = useState(-1);
   return (
     <DescendantProvider
@@ -335,7 +336,7 @@ function MenuItem({ index: explicitIndex, ...props }) {
 }
 ```
 
-You can also access the descendants object anywhere in the tree (below the top-level component) with `useDescendants`:
+You can also access the descendants array anywhere in the tree (below the top-level component) with `useDescendants`:
 
 ```jsx
 let menuItems = useDescendants(DescendantContext);
