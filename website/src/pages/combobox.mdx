@@ -155,7 +155,7 @@ There is nothing special about managing state for a combobox, it's like managing
 // jsx-demo
 (() => {
   function Example() {
-    const [term, setTerm] = useState("");
+    const [term, setTerm] = React.useState("");
     const results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -192,7 +192,7 @@ There is nothing special about managing state for a combobox, it's like managing
 
   function useCityMatch(term) {
     const throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
@@ -215,7 +215,7 @@ This is the same demo as above, except this time we're going to a server to get 
 // jsx-demo
 (() => {
   function Example() {
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = React.useState("");
     const cities = useCitySearch(searchTerm);
     const handleSearchTermChange = (event) => {
       setSearchTerm(event.target.value);
@@ -248,9 +248,9 @@ This is the same demo as above, except this time we're going to a server to get 
   }
 
   function useCitySearch(searchTerm) {
-    const [cities, setCities] = useState([]);
+    const [cities, setCities] = React.useState([]);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (searchTerm.trim() !== "") {
         let isFresh = true;
         fetchCities(searchTerm).then((cities) => {
@@ -290,7 +290,7 @@ You can even have other interactive elements inside the popover, it won't close 
 // jsx-demo
 (() => {
   function Example() {
-    const [term, setTerm] = useState("");
+    const [term, setTerm] = React.useState("");
     const results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -344,7 +344,7 @@ You can even have other interactive elements inside the popover, it won't close 
 
   function useCityMatch(term) {
     const throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
@@ -376,7 +376,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 // jsx-demo
 (() => {
   function Example() {
-    let [term, setTerm] = useState("");
+    let [term, setTerm] = React.useState("");
     let results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -415,7 +415,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 
   function useCityMatch(term) {
     let throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
