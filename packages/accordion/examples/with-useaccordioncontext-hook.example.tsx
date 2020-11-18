@@ -14,7 +14,7 @@ import "@reach/accordion/styles.css";
 let name = "With context hooks (TS)";
 
 function MyAccordionButton(
-  props: AccordionButtonProps & React.HTMLAttributes<HTMLButtonElement>
+  props: AccordionButtonProps & React.ComponentProps<"button">
 ) {
   let { id } = useAccordionContext();
   let { isExpanded } = useAccordionItemContext();

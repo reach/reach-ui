@@ -10,13 +10,13 @@
 
 import * as React from "react";
 import {
-  checkStyles,
   createNamedContext,
   forwardRefWithAs,
   isBoolean,
   isNumber,
   makeId,
   noop,
+  useCheckStyles,
   useForkedRef,
   warning,
   wrapEvent,
@@ -190,7 +190,7 @@ export const Accordion = forwardRefWithAs<AccordionProps, "div">(
       [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
     );
 
-    React.useEffect(() => checkStyles("accordion"), []);
+    useCheckStyles("accordion");
 
     return (
       <DescendantProvider
@@ -208,10 +208,14 @@ export const Accordion = forwardRefWithAs<AccordionProps, "div">(
   }
 );
 
+type AccordionDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof AccordionOwnProps
+>;
 /**
  * @see Docs https://reach.tech/accordion#accordion-props
  */
-export type AccordionProps = {
+export type AccordionOwnProps = {
   /**
    * `Accordion` can accept `AccordionItem` components as children.
    *
@@ -278,6 +282,7 @@ export type AccordionProps = {
    */
   multiple?: boolean;
 };
+export type AccordionProps = AccordionDOMProps & AccordionOwnProps;
 
 if (__DEV__) {
   Accordion.displayName = "Accordion";
@@ -397,10 +402,14 @@ export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   }
 );
 
+type AccordionItemDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof AccordionItemOwnProps
+>;
 /**
  * @see Docs https://reach.tech/accordion#accordionitem-props
  */
-export type AccordionItemProps = {
+export type AccordionItemOwnProps = {
   /**
    * An `AccordionItem` expects to receive an `AccordionButton` and
    * `AccordionPanel` components as its children, though you can also nest other
@@ -418,6 +427,7 @@ export type AccordionItemProps = {
    */
   disabled?: boolean;
 };
+export type AccordionItemProps = AccordionItemDOMProps & AccordionItemOwnProps;
 
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
@@ -539,10 +549,14 @@ export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
   }
 );
 
+type AccordionButtonDOMProps = Omit<
+  React.ComponentProps<"button">,
+  keyof AccordionButtonOwnProps
+>;
 /**
  * @see Docs https://reach.tech/accordion#accordionbutton-props
  */
-export type AccordionButtonProps = {
+export type AccordionButtonOwnProps = {
   /**
    * Typically a text string that serves as a label for the accordion, though
    * nested DOM nodes can be passed as well so long as they are valid children
@@ -553,6 +567,8 @@ export type AccordionButtonProps = {
    */
   children: React.ReactNode;
 };
+export type AccordionButtonProps = AccordionButtonDOMProps &
+  AccordionButtonOwnProps;
 
 if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
@@ -613,10 +629,14 @@ export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
   }
 );
 
+type AccordionPanelDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof AccordionPanelOwnProps
+>;
 /**
  * @see Docs https://reach.tech/accordion#accordionpanel-props
  */
-export type AccordionPanelProps = {
+export type AccordionPanelOwnProps = {
   /**
    * Inner collapsible content for the accordion item.
    *
@@ -624,6 +644,8 @@ export type AccordionPanelProps = {
    */
   children: React.ReactNode;
 };
+export type AccordionPanelProps = AccordionPanelDOMProps &
+  AccordionPanelOwnProps;
 
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";

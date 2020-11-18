@@ -304,7 +304,7 @@ function Example() {
 If you want to control the accordion's open panels, you can do so by passing [`index`](#accordion-index) and [`onChange`](#accordion-onchange) props. The index corresponds with the order of each accordion item as they appear within an accordion. The index value passed sets its corresponding panel to an `open` state.
 
 ```jsx
-const [index, setIndex] = useState(0);
+const [index, setIndex] = React.useState(0);
 return (
   <Accordion index={index} onChange={(value) => setIndex(value)}>
     <AccordionItem {...items[0].props} />
@@ -317,7 +317,7 @@ return (
 In a controlled accordion, multiple items can be set to `open` by passing an array of indices to the `index` prop.
 
 ```jsx
-const [indices, setIndices] = useState([0, 2]);
+const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
     setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
@@ -426,7 +426,7 @@ You can only pass an array of indices to `defaultIndex` if you also set `multipl
 The index or array of indices for open accordion panels. The `index` prop should be used along with `onChange` to create controlled accordion components.
 
 ```jsx
-const [indices, setIndices] = useState([0, 2]);
+const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
     setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
