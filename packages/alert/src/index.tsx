@@ -22,10 +22,15 @@
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
-import React, { forwardRef, useEffect, useRef, useMemo } from "react";
-import { render } from "react-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
-import { getOwnerDocument, usePrevious, useForkedRef } from "@reach/utils";
+import {
+  forwardRefWithAs,
+  getOwnerDocument,
+  usePrevious,
+  useForkedRef,
+} from "@reach/utils";
 import PropTypes from "prop-types";
 
 /*
@@ -60,17 +65,17 @@ let renderTimer: number | null;
  *
  * @see Docs https://reach.tech/alert
  */
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { children, type: regionType = "polite", ...props },
+export const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
+  { as: Comp = "div", children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
-  const ownRef = useRef(null);
+  const ownRef = React.useRef(null);
   const ref = useForkedRef(forwardedRef, ownRef);
-  const child = useMemo(
+  const child = React.useMemo(
     () => (
-      <div {...props} ref={ref} data-reach-alert>
+      <Comp {...props} ref={ref} data-reach-alert>
         {children}
-      </div>
+      </Comp>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [children, props]
@@ -80,10 +85,11 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return child;
 });
 
+type AlertDOMProps = Omit<React.ComponentProps<"div">, keyof AlertOwnProps>;
 /**
  * @see Docs https://reach.tech/alert#alert-props
  */
-export type AlertProps = {
+export type AlertOwnProps = {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
@@ -92,7 +98,8 @@ export type AlertProps = {
    */
   type?: "assertive" | "polite";
   children: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
+export type AlertProps = AlertDOMProps & AlertOwnProps;
 
 if (__DEV__) {
   Alert.displayName = "Alert";
@@ -144,7 +151,7 @@ function renderAlerts() {
       let regionType: RegionTypes = elementType as RegionTypes;
       let container = liveRegions[regionType]!;
       if (container) {
-        render(
+        ReactDOM.render(
           <VisuallyHidden>
             <div
               // The status role is a type of live region and a container whose
@@ -178,9 +185,9 @@ function useMirrorEffects(
   ref: React.RefObject<any>
 ) {
   const prevType = usePrevious<RegionTypes>(regionType);
-  const mirror = useRef<Mirror | null>(null);
-  const mounted = useRef(false);
-  useEffect(() => {
+  const mirror = React.useRef<Mirror | null>(null);
+  const mounted = React.useRef(false);
+  React.useEffect(() => {
     const ownerDocument = getOwnerDocument(ref.current) || document;
     if (!mounted.current) {
       mounted.current = true;
@@ -195,7 +202,7 @@ function useMirrorEffects(
     }
   }, [element, regionType, prevType, ref]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       mirror.current && mirror.current.unmount();
     };
