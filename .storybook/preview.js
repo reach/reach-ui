@@ -1,5 +1,4 @@
-import { addDecorator, configure } from "@storybook/react";
-import { withInfo } from "@storybook/addon-info";
+import { configure } from "@storybook/react";
 import "./styles.css";
 
 configure(() => {
@@ -31,5 +30,3 @@ configure(() => {
     return [...prev, allExports[cur]];
   }, []);
 }, module);
-
-addDecorator(withInfo);
