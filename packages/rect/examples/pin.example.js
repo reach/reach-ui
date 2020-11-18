@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import * as React from "react";
 import Rect from "@reach/rect";
 
 let name = "Pin element to another";
 
 function Example() {
-  const [pin, setPin] = useState(true);
+  const [pin, setPin] = React.useState(true);
   return (
     <div>
       <p>
@@ -20,14 +20,14 @@ function Example() {
               ref={ref}
               contentEditable
               dangerouslySetInnerHTML={{
-                __html: "Observing my rect, I'm also editable"
+                __html: "Observing my rect, I'm also editable",
               }}
               style={{
                 display: "inline-block",
                 padding: 10,
                 margin: 10,
                 border: "solid 1px",
-                background: "#f0f0f0"
+                background: "#f0f0f0",
               }}
             />{" "}
             {rect && (
@@ -43,7 +43,7 @@ function Example() {
                   // here we use the rect information
                   // to pin the div to the span
                   left: rect.left + rect.width + "px",
-                  top: rect.top + "px"
+                  top: rect.top + "px",
                 }}
               >
                 Pinned

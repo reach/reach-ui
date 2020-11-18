@@ -1,16 +1,8 @@
-import React, {
-  Component,
-  createContext,
-  Fragment,
-  useCallback,
-  useContext,
-  useReducer,
-  useLayoutEffect
-} from "react";
+import * as React from "react";
 import assign from "core-js/fn/object/assign";
 import Highlight, { Prism } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/github";
-// import CopyButton from "./CopyButton";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
 
 /*
  * We need to transpile code extracted from mdx before we try to eval it.
@@ -20,7 +12,7 @@ import theme from "prism-react-renderer/themes/github";
  */
 import { transform as bubleTransform } from "@philpl/buble";
 
-const CodeContext = createContext();
+const CodeContext = React.createContext();
 
 export function PreComponent({ children, scope, ...props }) {
   /*
@@ -48,10 +40,10 @@ export function PreComponent({ children, scope, ...props }) {
       <CodeProvider code={code} language={language} scope={scope} theme={theme}>
         <CodeBlock className="jsx-demo-code" />
         {isDemo && (
-          <Fragment>
+          <React.Fragment>
             <CodeError className="jsx-demo-error" />
             <CodePreview className="jsx-demo-preview" />
-          </Fragment>
+          </React.Fragment>
         )}
       </CodeProvider>
     </div>
@@ -73,12 +65,12 @@ function providerReducer(data, action = {}) {
     case SET_ERROR:
       return {
         state: ERROR,
-        context: context.toString()
+        context: context.toString(),
       };
     case SET_ELEMENT:
       return {
         state: READY,
-        context
+        context,
       };
     default:
       return data;
@@ -90,21 +82,21 @@ export function CodeProvider({
   code = "",
   language = "jsx",
   scope,
-  theme
+  theme,
 }) {
-  let [{ state, context }, dispatch] = useReducer(providerReducer, {
+  let [{ state, context }, dispatch] = React.useReducer(providerReducer, {
     state: null,
-    context: null
+    context: null,
   });
 
-  const transpile = useCallback(function(code, scope) {
+  const transpile = React.useCallback(function (code, scope) {
     const input = { code, scope };
 
     try {
       const element = generateElement(input, handleError);
       dispatch({
         type: SET_ELEMENT,
-        context: element
+        context: element,
       });
     } catch (error) {
       handleError(error);
@@ -126,7 +118,7 @@ export function CodeProvider({
         error: state === ERROR ? context : null,
         language,
         code,
-        theme
+        theme,
       }}
     >
       {children}
@@ -135,7 +127,7 @@ export function CodeProvider({
 }
 
 function CodeBlock({ style = {}, ...props }) {
-  let { code, language, theme } = useContext(CodeContext);
+  let { code, language, theme } = React.useContext(CodeContext);
 
   return (
     <div {...props}>
@@ -168,7 +160,7 @@ function CodeBlock({ style = {}, ...props }) {
               maxWidth: "100%",
               overflowX: "auto",
               margin: 0,
-              padding: 0
+              padding: 0,
             }}
           >
             {tokens.map((line, key) => {
@@ -192,7 +184,7 @@ function CodeBlock({ style = {}, ...props }) {
 }
 
 function CodeError({ ...props }) {
-  const { error } = useContext(CodeContext);
+  const { error } = React.useContext(CodeContext);
   return (
     error && (
       <div {...props}>
@@ -203,7 +195,7 @@ function CodeError({ ...props }) {
 }
 
 function CodePreview({ ...props }) {
-  const { element: Element } = useContext(CodeContext);
+  const { element: Element } = React.useContext(CodeContext);
   return (
     Element && (
       <div {...props}>
@@ -217,7 +209,7 @@ function CodePreview({ ...props }) {
 
 // If we need polyfills for the preview they can go here
 const _polyfills = {
-  assign
+  assign,
 };
 
 // https://github.com/FormidableLabs/react-live/blob/master/src/utils/transpile
@@ -225,7 +217,7 @@ function evalCode(code, scope) {
   const [scopeKeys, scopeValues] = Object.entries(scope).reduce(
     (acc, cur) => [
       [...acc[0], cur[0]],
-      [...acc[1], cur[1]]
+      [...acc[1], cur[1]],
     ],
     [[], []]
   );
@@ -246,7 +238,7 @@ function generateElement({ code = "", scope = {} }, errorCallback) {
 
 // Keep errors isolated and callback to our provider with the output
 function errorBoundary(Element, callback) {
-  return class ErrorBoundary extends Component {
+  return class ErrorBoundary extends React.Component {
     componentDidCatch(error) {
       callback(error);
     }
@@ -262,8 +254,8 @@ function transform(input) {
     objectAssign: "_polyfills.assign",
     transforms: {
       dangerousForOf: true,
-      dangerousTaggedTemplateString: true
-    }
+      dangerousTaggedTemplateString: true,
+    },
   });
   return code;
 }

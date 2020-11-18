@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import * as React from "react";
 import {
   ListboxInput,
   ListboxButton,
@@ -28,7 +28,7 @@ import "@reach/listbox/styles.css";
 let name = "Position popover over selection option";
 
 function Example() {
-  let buttonRef = useRef();
+  let buttonRef = React.useRef<any>();
   return (
     <div>
       <p>
@@ -72,13 +72,13 @@ function Example() {
 
 function PositionedPopover({ ...props }: ListboxPopoverProps) {
   let { selectedOptionRef, isExpanded } = useListboxContext();
-  let ref = useRef<HTMLElement>();
+  let ref = React.useRef<any>();
   let [top, setTop] = React.useState<null | number>(null);
 
   React.useEffect(() => {
     if (isExpanded) {
       // In our popover's position function, we get access to the observed
-      // popover rect. However, we also need to get the rect of the selected
+      // popover rect. Howev er, we also need to get the rect of the selected
       // option element and adjust the popover in response. Because the popover
       // rect is updating as it changes via useRect, this will create an endless
       // update loop. Since we only need these values when the popover is

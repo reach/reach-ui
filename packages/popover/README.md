@@ -3,12 +3,12 @@
 [![Stable release](https://img.shields.io/npm/v/@reach/popover.svg)](https://npm.im/@reach/popover) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
 ```jsx
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import Popover, { positionDefault } from "@reach/popover";
 
 function Example() {
-  const ref = useRef(null);
-  const [value, setValue] = useState("");
+  const ref = React.useRef(null);
+  const [value, setValue] = React.useState("");
   return (
     <div>
       <label>
@@ -16,7 +16,7 @@ function Example() {
         <input
           type="text"
           ref={ref}
-          onChange={event => setValue(event.target.value)}
+          onChange={(event) => setValue(event.target.value)}
         />
       </label>
 

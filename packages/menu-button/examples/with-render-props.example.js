@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { action } from "@storybook/addon-actions";
 import "@reach/menu-button/styles.css";
@@ -8,8 +8,8 @@ let name = "With Render Props";
 function Example() {
   return (
     <Menu>
-      {props => (
-        <Fragment>
+      {() => (
+        <React.Fragment>
           <MenuButton id="example-button">
             Actions <span aria-hidden="true">▾</span>
           </MenuButton>
@@ -21,7 +21,7 @@ function Example() {
             </MenuItem>
             <MenuItem onSelect={action("Delete")}>Delete</MenuItem>
           </MenuList>
-        </Fragment>
+        </React.Fragment>
       )}
     </Menu>
   );

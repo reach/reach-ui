@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useContext,
-  useLayoutEffect,
-  createContext,
-} from "react";
+import * as React from "react";
 import {
   Tabs,
   TabList,
@@ -56,11 +50,11 @@ export default { title: "Tabs" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const AnimatedContext = createContext();
+const AnimatedContext = React.createContext();
 
 function ExampleAnimatedTabs({ color, ...rest }) {
   // some state to store the position we want to animate to
-  const [activeRect, setActiveRect] = useState(null);
+  const [activeRect, setActiveRect] = React.useState(null);
 
   return (
     // put the function to change the styles on context so an active Tab
@@ -90,14 +84,14 @@ function ExampleAnimatedTab({ index, ...props }) {
   const isSelected = selectedIndex === index;
 
   // measure the size of our element, only listen to rect if active
-  const ref = useRef();
+  const ref = React.useRef();
   const rect = useRect(ref, isSelected);
 
   // get the style changing function from context
-  const setActiveRect = useContext(AnimatedContext);
+  const setActiveRect = React.useContext(AnimatedContext);
 
   // callup to set styles whenever we're active
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (isSelected) {
       setActiveRect(rect);
     }

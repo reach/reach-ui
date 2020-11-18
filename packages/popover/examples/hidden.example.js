@@ -1,12 +1,12 @@
-import React, { useRef, useState, useCallback } from "react";
+import * as React from "react";
 import Popover from "@reach/popover";
 
 let name = "Hidden";
 
 function Example() {
-  const ref = useRef(null);
-  const [open, setOpen] = useState(false);
-  const updateOpen = useCallback(
+  const ref = React.useRef(null);
+  const [open, setOpen] = React.useState(false);
+  const updateOpen = React.useCallback(
     (e) => {
       setOpen(e.target.checked);
     },

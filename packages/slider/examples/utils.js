@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 export function msToTime(ms) {
   let seconds = Math.floor((ms / 1000) % 60);
@@ -34,11 +34,11 @@ export function useAudio(elOrProps) {
     duration: 0,
     paused: true,
     muted: false,
-    volume: 1
+    volume: 1,
   });
   const ref = React.useRef(null);
   const wrapEvent = (userEvent, proxyEvent) => {
-    return event => {
+    return (event) => {
       try {
         proxyEvent && proxyEvent(event);
       } finally {
@@ -56,7 +56,7 @@ export function useAudio(elOrProps) {
     }
     setState({
       muted: el.muted,
-      volume: el.volume
+      volume: el.volume,
     });
   };
   const onDurationChange = () => {
@@ -67,7 +67,7 @@ export function useAudio(elOrProps) {
     const { duration, buffered } = el;
     setState({
       duration,
-      buffered: parseTimeRanges(buffered)
+      buffered: parseTimeRanges(buffered),
     });
   };
   const onTimeUpdate = () => {
@@ -95,7 +95,7 @@ export function useAudio(elOrProps) {
       onVolumeChange: wrapEvent(props.onVolumeChange, onVolumeChange),
       onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
       onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
-      onProgress: wrapEvent(props.onProgress, onProgress)
+      onProgress: wrapEvent(props.onProgress, onProgress),
     });
   } else {
     element = React.createElement("audio", {
@@ -107,7 +107,7 @@ export function useAudio(elOrProps) {
       onVolumeChange: wrapEvent(props.onVolumeChange, onVolumeChange),
       onDurationChange: wrapEvent(props.onDurationChange, onDurationChange),
       onTimeUpdate: wrapEvent(props.onTimeUpdate, onTimeUpdate),
-      onProgress: wrapEvent(props.onProgress, onProgress)
+      onProgress: wrapEvent(props.onProgress, onProgress),
     });
   }
 
@@ -146,7 +146,7 @@ export function useAudio(elOrProps) {
         return el.pause();
       }
     },
-    seek: time => {
+    seek: (time) => {
       const el = ref.current;
       if (!el || state.duration === undefined) {
         return;
@@ -154,7 +154,7 @@ export function useAudio(elOrProps) {
       time = Math.min(state.duration, Math.max(0, time));
       el.currentTime = time;
     },
-    volume: volume => {
+    volume: (volume) => {
       const el = ref.current;
       if (!el) {
         return;
@@ -176,7 +176,7 @@ export function useAudio(elOrProps) {
         return;
       }
       el.muted = false;
-    }
+    },
   };
 
   React.useEffect(() => {
@@ -195,7 +195,7 @@ export function useAudio(elOrProps) {
     setState({
       volume: el.volume,
       muted: el.muted,
-      paused: el.paused
+      paused: el.paused,
     });
 
     // Start media, if autoPlay requested.
@@ -211,8 +211,8 @@ export function useAudio(elOrProps) {
 function useSetState(initialState) {
   const [state, set] = React.useState(initialState);
   const setState = React.useCallback(
-    patch => {
-      set(prevState =>
+    (patch) => {
+      set((prevState) =>
         Object.assign(
           {},
           prevState,
@@ -230,7 +230,7 @@ function parseTimeRanges(ranges) {
   for (let i = 0; i < ranges.length; i++) {
     result.push({
       start: ranges.start(i),
-      end: ranges.end(i)
+      end: ranges.end(i),
     });
   }
   return result;

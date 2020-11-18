@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
@@ -8,7 +8,7 @@ function Example() {
   return (
     <Tabs keyboardActivation="manual">
       {({ selectedIndex, focusedIndex }) => {
-        let getTabStyle = index => ({
+        let getTabStyle = (index) => ({
           borderBottom: `4px solid ${
             selectedIndex === index
               ? "red"

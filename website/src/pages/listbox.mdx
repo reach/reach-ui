@@ -84,7 +84,7 @@ You can use `Listbox` as a simple standalone component, or compose its parts wit
 (() => {
   function ComposedExample() {
     let labelId = `taco-label--${useId()}`;
-    let [value, setValue] = useState("pollo");
+    let [value, setValue] = React.useState("pollo");
     return (
       <div>
         <VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
@@ -199,7 +199,7 @@ The wrapper component for the high-level listbox API.
 If you want to control the state of the listbox's value, you can do so by passing [`value`](#listboxinput-value) and [`onChange`](#listboxinput-onchange) props. The value corresponds with the value of the selected `ListboxOption`.
 
 ```jsx
-const [value, setValue] = useState("comedy");
+const [value, setValue] = React.useState("comedy");
 return (
   <div>
     <span id="my-label">Choose a movie genre</span>
@@ -462,7 +462,7 @@ It's important to note that the ListboxButton's default inner content cannot be 
 
 ```jsx
 let options = { one: "One option", two: "Another option" };
-let [value, setValue] = useState(options.one);
+let [value, setValue] = React.useState(options.one);
 return (
   <ListboxInput>
     <ListboxButton>{options[value]}</ListboxButton>

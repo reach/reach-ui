@@ -1,11 +1,11 @@
-import React, { useCallback, useRef } from "react";
+import * as React from "react";
 import { wrapEvent } from "@reach/utils";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import {
   SliderInput,
   SliderHandle,
   SliderTrack,
-  SliderTrackHighlight
+  SliderTrackHighlight,
 } from "@reach/slider";
 import "@reach/tooltip/styles.css";
 import "@reach/slider/styles.css";
@@ -13,7 +13,7 @@ import "@reach/slider/styles.css";
 let name = "With Tooltip";
 
 function Example() {
-  const handleRef = useRef();
+  const handleRef = React.useRef();
   const [trigger, tooltip] = useTooltip();
   const centered = (triggerRect, tooltipRect) => {
     const triggerCenter = triggerRect.left + triggerRect.width / 2;
@@ -21,19 +21,19 @@ function Example() {
     const maxLeft = window.innerWidth - tooltipRect.width - 2;
     return {
       left: Math.min(Math.max(2, left), maxLeft) + window.pageXOffset,
-      top: triggerRect.bottom + 8 + window.pageYOffset
+      top: triggerRect.bottom + 8 + window.pageYOffset,
     };
   };
 
   // We want to show the tooltip whenever the handle is focused, regardless
   // of what happens with mouse events.
-  const preventDefaultWhenFocused = useCallback(event => {
+  const preventDefaultWhenFocused = React.useCallback((event) => {
     if (document.activeElement === event.currentTarget) {
       event.preventDefault();
     }
   }, []);
 
-  const getEventHandler = handler =>
+  const getEventHandler = (handler) =>
     wrapEvent(preventDefaultWhenFocused, handler);
 
   return (

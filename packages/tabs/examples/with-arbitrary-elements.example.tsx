@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
@@ -6,7 +6,7 @@ let name = "With Arbitrary Elements";
 
 const tabsStyle = {
   width: 400,
-  boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)"
+  boxShadow: "1px 1px 5px hsla(0, 0%, 0%, 0.25)",
 };
 
 const tabListWrapperStyle = {
@@ -14,7 +14,7 @@ const tabListWrapperStyle = {
   alignItems: "center",
   justifyContent: "space-between",
   border: "1px solid darkslategray",
-  padding: "4px 0"
+  padding: "4px 0",
 };
 
 function Example() {

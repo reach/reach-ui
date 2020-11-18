@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -45,7 +45,7 @@ function ExampleLabel(props) {
         color: "orangered",
         textTransform: "uppercase",
         fontSize: "11px",
-        display: "block"
+        display: "block",
       }}
       {...props}
     />

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
 import { MDXProvider } from "@mdx-js/react";
 import {
   Accordion,
@@ -99,8 +99,8 @@ function Table(props) {
 let firstLoad = true;
 
 function MyPageLayout({ children }) {
-  let contentFocusRef = useRef(null);
-  useEffect(() => {
+  let contentFocusRef = React.useRef(null);
+  React.useEffect(() => {
     if (firstLoad) {
       firstLoad = false;
     } else if (contentFocusRef.current) {
@@ -125,7 +125,7 @@ function MyPageLayout({ children }) {
     <Layout>
       <MDXProvider
         components={{
-          pre: function(props) {
+          pre: function (props) {
             return (
               <PreComponent
                 {...props}

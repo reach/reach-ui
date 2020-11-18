@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
@@ -13,7 +13,7 @@ let name = "Move Focus on Item Select";
 // in onChange as expected, since we're managing focus internally.
 
 function Example() {
-  let inputRef = useRef(null);
+  let inputRef = React.useRef(null);
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>

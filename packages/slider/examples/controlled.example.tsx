@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import { Slider, SliderMarker } from "@reach/slider";
 import "@reach/slider/styles.css";
 import "./examples.css";
@@ -9,8 +9,8 @@ const MIN = 0;
 const MAX = 120;
 
 function Example() {
-  const [value, setValue] = useState(0);
-  const [status, setStatus] = useState("Give us some happiness!");
+  const [value, setValue] = React.useState(0);
+  const [status, setStatus] = React.useState("Give us some happiness!");
   const markers = [
     {
       face: "🙁",
@@ -29,7 +29,7 @@ function Example() {
     },
   ];
 
-  useEffect(() => {
+  React.useEffect(() => {
     const absVar = 0 - MIN;
     const absMin = MIN + absVar;
     const absMax = MAX + absVar;

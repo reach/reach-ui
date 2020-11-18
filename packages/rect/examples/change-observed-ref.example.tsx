@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { useRect } from "@reach/rect";
 
 let name = "Change the observed ref";

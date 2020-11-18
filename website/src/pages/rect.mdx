@@ -42,7 +42,7 @@ If `observe` is false, the element's rect will no longer be observed, pass it `t
 // jsx-demo
 function Example() {
   // your own ref
-  const ref = useRef();
+  const ref = React.useRef();
 
   // pass it in to be observered
   const rect = useRect(ref);

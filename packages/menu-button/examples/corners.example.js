@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -7,7 +7,7 @@ let name = "At the Corners";
 
 function Example() {
   return (
-    <Fragment>
+    <React.Fragment>
       <div
         style={{
           position: "relative",
@@ -32,7 +32,7 @@ function Example() {
           id="button-4"
         />
       </div>
-    </Fragment>
+    </React.Fragment>
   );
 }
 
