@@ -2,10 +2,10 @@
  * Welcome to @reach/popover!
  */
 
-import React, { useRef, forwardRef, useEffect } from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { getOwnerDocument, useForkedRef } from "@reach/utils";
+import { forwardRefWithAs, getOwnerDocument, useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ import tabbable from "tabbable";
 /**
  * Popover
  */
-const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
+const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
   props,
   ref
 ) {
@@ -24,7 +24,8 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
   );
 });
 
-export type PopoverProps = {
+type PopoverDOMProps = Omit<React.ComponentProps<"div">, keyof PopoverOwnProps>;
+export type PopoverOwnProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
@@ -43,7 +44,8 @@ export type PopoverProps = {
    * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
-} & React.HTMLAttributes<HTMLDivElement>;
+};
+export type PopoverProps = PopoverDOMProps & PopoverOwnProps;
 
 if (__DEV__) {
   Popover.displayName = "Popover";
@@ -59,42 +61,41 @@ export default Popover;
  * Popover is conditionally rendered so we can't start measuring until it shows
  * up, so useRect needs to live down here not up in Popover
  */
-const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
-  function PopoverImpl(
-    {
-      targetRef,
-      position = positionDefault,
-      unstable_observableRefs = [],
-      ...props
-    },
-    forwardedRef
-  ) {
-    const popoverRef = useRef<HTMLDivElement>(null);
-    const popoverRect = useRect(popoverRef, !props.hidden);
-    const targetRect = useRect(targetRef, !props.hidden);
-    const ref = useForkedRef(popoverRef, forwardedRef);
+const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
+  {
+    as: Comp = "div",
+    targetRef,
+    position = positionDefault,
+    unstable_observableRefs = [],
+    ...props
+  },
+  forwardedRef
+) {
+  const popoverRef = React.useRef<HTMLDivElement>(null);
+  const popoverRect = useRect(popoverRef, !props.hidden);
+  const targetRect = useRect(targetRef, !props.hidden);
+  const ref = useForkedRef(popoverRef, forwardedRef);
 
-    useSimulateTabNavigationForReactTree(targetRef, popoverRef);
+  useSimulateTabNavigationForReactTree(targetRef, popoverRef);
 
-    return (
-      <div
-        data-reach-popover=""
-        ref={ref}
-        {...props}
-        style={{
-          position: "absolute",
-          ...getStyles(
-            position,
-            targetRect,
-            popoverRect,
-            ...unstable_observableRefs
-          ),
-          ...props.style,
-        }}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      data-reach-popover=""
+      ref={ref}
+      {...props}
+      style={{
+        position: "absolute",
+        ...getStyles(
+          position,
+          targetRect,
+          popoverRect,
+          ...unstable_observableRefs
+        ),
+        ...props.style,
+      }}
+    />
+  );
+});
 
 if (__DEV__) {
   PopoverImpl.displayName = "PopoverImpl";
@@ -229,7 +230,7 @@ function useSimulateTabNavigationForReactTree<
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ownerDocument) {
       ownerDocument.addEventListener("keydown", handleKeyDown);
       return () => {
