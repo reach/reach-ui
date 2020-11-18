@@ -648,16 +648,17 @@ const SliderInput = forwardRefWithAs<
     // e.preventDefault is ignored by React's synthetic touchStart event, so
     // we attach the listener directly to the DOM node
     // https://github.com/facebook/react/issues/9809#issuecomment-413978405
-    sliderRef.current!.addEventListener("touchstart", touchListener);
-    sliderRef.current!.addEventListener("mousedown", mouseListener);
+    const sliderRefCurrent = sliderRef.current;
+    sliderRefCurrent!.addEventListener("touchstart", touchListener);
+    sliderRefCurrent!.addEventListener("mousedown", mouseListener);
     if ("PointerEvent" in window) {
-      sliderRef.current!.addEventListener("pointerdown", pointerListener);
+      sliderRefCurrent!.addEventListener("pointerdown", pointerListener);
     }
     return () => {
-      sliderRef.current!.removeEventListener("touchstart", touchListener);
-      sliderRef.current!.removeEventListener("mousedown", mouseListener);
+      sliderRefCurrent!.removeEventListener("touchstart", touchListener);
+      sliderRefCurrent!.removeEventListener("mousedown", mouseListener);
       if ("PointerEvent" in window) {
-        sliderRef.current!.removeEventListener("pointerdown", pointerListener);
+        sliderRefCurrent!.removeEventListener("pointerdown", pointerListener);
       }
     };
   }, [setPointerCapture, handleSlideStart]);
