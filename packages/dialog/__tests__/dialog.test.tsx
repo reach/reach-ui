@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+import * as React from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
-import { axe, toHaveNoViolations } from "jest-axe";
+import { axe } from "jest-axe";
 import { fireEvent, render, act, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { Dialog } from "@reach/dialog";
@@ -21,7 +20,7 @@ describe("<Dialog />", () => {
 
   describe("rendering", () => {
     it("does not render children when not open", () => {
-      const { baseElement, queryByTestId } = render(
+      const { queryByTestId } = render(
         <div data-testid="root">
           <Dialog isOpen={false} aria-label="cool dialog">
             <div data-testid="inner" />
@@ -62,9 +61,7 @@ describe("<Dialog />", () => {
 
   describe("user events", () => {
     it("closes the dialog", () => {
-      const { baseElement, getByText, queryByTestId } = render(
-        <BasicOpenDialog />
-      );
+      const { getByText, queryByTestId } = render(<BasicOpenDialog />);
 
       expect(queryByTestId("inner")).toBeTruthy();
       fireEvent.click(getByText("Close Dialog"));
@@ -84,7 +81,7 @@ describe("<Dialog />", () => {
 });
 
 function BasicOpenDialog() {
-  const [showDialog, setShowDialog] = useState(true);
+  const [showDialog, setShowDialog] = React.useState(true);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

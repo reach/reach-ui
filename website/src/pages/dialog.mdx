@@ -366,7 +366,7 @@ If you do set this prop to `true`, make sure you set up your own `FocusLock` com
 
 ```jsx
 function DialogWithCustomFocusLock() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   return (
@@ -398,7 +398,7 @@ This prop will disable `react-remove-scroll` and allow you to compose your own s
 
 ```jsx
 function DialogWithCustomScrollLock() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   return (

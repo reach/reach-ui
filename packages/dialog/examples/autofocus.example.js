@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
@@ -8,9 +8,9 @@ function Example() {
   // This is to force an update. Verifying that updates don't mess around with
   // react focus lock.
   // https://github.com/reach/reach-ui/issues/396
-  const [, forceUpdate] = useState(null);
-  const [showDialog, setShowDialog] = useState(false);
-  const button = useRef(null);
+  const [, forceUpdate] = React.useState(null);
+  const [showDialog, setShowDialog] = React.useState(false);
+  const button = React.useRef(null);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

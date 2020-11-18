@@ -1,16 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import * as React from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
 let name = "Destroy Trigger";
 
 function Example() {
-  const openButton = useRef(null);
-  const startOverButton = useRef(null);
-  const closeButton = useRef(null);
-  const [phase, setPhase] = useState(1);
+  const openButton = React.useRef(null);
+  const startOverButton = React.useRef(null);
+  const closeButton = React.useRef(null);
+  const [phase, setPhase] = React.useState(1);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (phase === 1) {
       openButton.current.focus();
     }

@@ -10,13 +10,14 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#dialog_modal
  */
 
-import React, { forwardRef, useCallback, useEffect, useRef } from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 import {
-  checkStyles,
+  forwardRefWithAs,
   getOwnerDocument,
   isString,
   noop,
+  useCheckStyles,
   useForkedRef,
   wrapEvent,
 } from "@reach/utils";
@@ -45,14 +46,17 @@ const overlayPropTypes = {
  *
  * @see Docs https://reach.tech/dialog#dialogoverlay
  */
-export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
-  function DialogOverlay({ isOpen = true, ...props }, forwardedRef) {
-    useEffect(() => checkStyles("dialog"), []);
+export const DialogOverlay = forwardRefWithAs<DialogOverlayProps, "div">(
+  function DialogOverlay(
+    { as: Comp = "div", isOpen = true, ...props },
+    forwardedRef
+  ) {
+    useCheckStyles("dialog");
 
     // We want to ignore the immediate focus of a tooltip so it doesn't pop
     // up again when the menu closes, only pops up when focus returns again
     // to the tooltip (like native OS tooltips).
-    useEffect(() => {
+    React.useEffect(() => {
       if (isOpen) {
         // @ts-ignore
         window.__REACH_DISABLE_TOOLTIPS = true;
@@ -67,7 +71,7 @@ export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
 
     return isOpen ? (
       <Portal data-reach-dialog-wrapper="">
-        <DialogInner ref={forwardedRef} {...props} />
+        <DialogInner ref={forwardedRef} as={Comp} {...props} />
       </Portal>
     ) : null;
   }
@@ -81,7 +85,11 @@ if (__DEV__) {
   };
 }
 
-export type DialogOverlayProps = DialogProps & {
+type DialogOverlayDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof DialogOverlayOwnProps
+>;
+export type DialogOverlayOwnProps = DialogOwnProps & {
   /**
    * By default the dialog locks the focus inside it. Normally this is what you
    * want. This prop is provided so that this feature can be disabled. This,
@@ -120,16 +128,18 @@ export type DialogOverlayProps = DialogProps & {
    */
   dangerouslyBypassScrollLock?: boolean;
 };
+export type DialogOverlayProps = DialogOverlayDOMProps & DialogOverlayOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogInner
  */
-const DialogInner = forwardRef<HTMLDivElement, DialogOverlayProps>(
+const DialogInner = forwardRefWithAs<DialogOverlayProps, "div">(
   function DialogInner(
     {
       allowPinchZoom,
+      as: Comp = "div",
       dangerouslyBypassFocusLock = false,
       dangerouslyBypassScrollLock = false,
       initialFocusRef,
@@ -142,11 +152,11 @@ const DialogInner = forwardRef<HTMLDivElement, DialogOverlayProps>(
     },
     forwardedRef
   ) {
-    const mouseDownTarget = useRef<EventTarget | null>(null);
-    const overlayNode = useRef<HTMLDivElement | null>(null);
+    const mouseDownTarget = React.useRef<EventTarget | null>(null);
+    const overlayNode = React.useRef<HTMLDivElement | null>(null);
     const ref = useForkedRef(overlayNode, forwardedRef);
 
-    const activateFocusLock = useCallback(() => {
+    const activateFocusLock = React.useCallback(() => {
       if (initialFocusRef && initialFocusRef.current) {
         initialFocusRef.current.focus();
       }
@@ -170,7 +180,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogOverlayProps>(
       mouseDownTarget.current = event.target;
     }
 
-    useEffect(
+    React.useEffect(
       () =>
         overlayNode.current ? createAriaHider(overlayNode.current) : void null,
       []
@@ -188,7 +198,7 @@ const DialogInner = forwardRef<HTMLDivElement, DialogOverlayProps>(
           allowPinchZoom={allowPinchZoom}
           enabled={!dangerouslyBypassScrollLock}
         >
-          <div
+          <Comp
             {...props}
             ref={ref}
             data-reach-dialog-overlay=""
@@ -231,10 +241,13 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialogcontent
  */
-export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
-  function DialogContent({ onClick, onKeyDown, ...props }, forwardedRef) {
+export const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
+  function DialogContent(
+    { as: Comp = "div", onClick, onKeyDown, ...props },
+    forwardedRef
+  ) {
     return (
-      <div
+      <Comp
         aria-modal="true"
         role="dialog"
         tabIndex={-1}
@@ -249,17 +262,23 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   }
 );
 
+type DialogContentDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof DialogContentOwnProps
+>;
+
 /**
  * @see Docs https://reach.tech/dialog#dialogcontent-props
  */
-export type DialogContentProps = {
+export type DialogContentOwnProps = {
   /**
    * Accepts any renderable content.
    *
    * @see Docs https://reach.tech/dialog#dialogcontent-children
    */
   children?: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
+export type DialogContentProps = DialogContentDOMProps & DialogContentOwnProps;
 
 if (__DEV__) {
   DialogContent.displayName = "DialogContent";
@@ -279,7 +298,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialog
  */
-export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
+export const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
   {
     allowPinchZoom = false,
     initialFocusRef,
@@ -301,10 +320,12 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
   );
 });
 
+type DialogDOMProps = Omit<React.ComponentProps<"div">, keyof DialogOwnProps>;
+
 /**
  * @see Docs https://reach.tech/dialog#dialog-props
  */
-export type DialogProps = {
+export type DialogOwnProps = {
   /**
    * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
    * Defaults to `false`.
@@ -364,7 +385,8 @@ export type DialogProps = {
    * https://github.com/reach/reach-ui/issues/536
    */
   unstable_lockFocusAcrossFrames?: boolean;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
+export type DialogProps = DialogDOMProps & DialogOwnProps;
 
 if (__DEV__) {
   Dialog.displayName = "Dialog";
@@ -379,6 +401,7 @@ if (__DEV__) {
 export default Dialog;
 
 ////////////////////////////////////////////////////////////////////////////////
+
 function createAriaHider(dialogNode: HTMLElement) {
   let originalValues: any[] = [];
   let rootNodes: HTMLElement[] = [];

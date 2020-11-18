@@ -1,13 +1,13 @@
-import React, { forwardRef, useRef, useState } from "react";
+import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
 let name = "With Wrapped Components";
 
 function Example() {
-  const overlayRef = useRef(null);
-  const contentRef = useRef(null);
-  const [showDialog, setShowDialog] = useState(false);
+  const overlayRef = React.useRef(null);
+  const contentRef = React.useRef(null);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
 
@@ -40,7 +40,10 @@ export default { title: "Dialog" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const FilteredDialogOverlay = forwardRef(function({ fakeProp, ...rest }, ref) {
+const FilteredDialogOverlay = React.forwardRef(function (
+  { fakeProp, ...rest },
+  ref
+) {
   return (
     <DialogOverlay
       {...rest}
@@ -50,7 +53,10 @@ const FilteredDialogOverlay = forwardRef(function({ fakeProp, ...rest }, ref) {
   );
 });
 
-const FilteredDialogContent = forwardRef(function({ fakeProp, ...rest }, ref) {
+const FilteredDialogContent = React.forwardRef(function (
+  { fakeProp, ...rest },
+  ref
+) {
   return (
     <DialogContent
       {...rest}

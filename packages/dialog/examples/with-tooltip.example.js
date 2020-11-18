@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Dialog } from "@reach/dialog";
 import { Tooltip } from "@reach/tooltip";
 import "@reach/dialog/styles.css";
@@ -7,7 +7,7 @@ import "@reach/tooltip/styles.css";
 let name = "With Tooltip";
 
 function Example() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <Tooltip label="Hamburger">
