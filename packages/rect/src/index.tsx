@@ -8,10 +8,10 @@
  * @see Source                https://github.com/reach/reach-ui/tree/main/packages/rect
  */
 
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import observeRect from "@reach/observe-rect";
-import { useIsomorphicLayoutEffect } from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +25,7 @@ export const Rect: React.FC<RectProps> = ({
   observe = true,
   children,
 }) => {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = React.useRef<HTMLElement | null>(null);
   const rect = useRect(ref, observe, onChange);
   return children({ ref, rect });
 };
@@ -94,27 +94,28 @@ export function useRect<T extends Element = HTMLElement>(
   observe: boolean = true,
   onChange?: (rect: DOMRect) => void
 ): null | DOMRect {
-  let [element, setElement] = useState(nodeRef.current);
-  let initialRectIsSet = useRef(false);
-  let initialRefIsSet = useRef(false);
-  let [rect, setRect] = useState<DOMRect | null>(null);
-  let onChangeRef = useRef<typeof onChange>();
+  let [element, setElement] = React.useState(nodeRef.current);
+  let initialRectIsSet = React.useRef(false);
+  let initialRefIsSet = React.useRef(false);
+  let [rect, setRect] = React.useState<DOMRect | null>(null);
+  let onChangeRef = React.useRef<typeof onChange>();
 
-  useIsomorphicLayoutEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
     onChangeRef.current = onChange;
     if (nodeRef.current !== element) {
       setElement(nodeRef.current);
     }
   });
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (element && !initialRectIsSet.current) {
       initialRectIsSet.current = true;
       setRect(element.getBoundingClientRect());
     }
   }, [element]);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     let observer: ReturnType<typeof observeRect>;
     let elem = element;
 
@@ -145,7 +146,7 @@ export function useRect<T extends Element = HTMLElement>(
     function cleanup() {
       observer && observer.unobserve();
     }
-  }, [observe, element]);
+  }, [observe, element, nodeRef]);
 
   return rect;
 }
