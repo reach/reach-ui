@@ -83,7 +83,7 @@ import { MixedCheckbox, useMixedCheckbox } from "@reach/checkbox";
 ```jsx
 // jsx-demo
 function Example() {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = React.useState(true);
   return (
     <div>
       <label>
@@ -175,7 +175,7 @@ each sub-component directly.
   }
 
   function MyCheckbox(props) {
-    const [checkedState, setChecked] = useState(props.checked || false);
+    const [checkedState, setChecked] = React.useState(props.checked || false);
     const checked = props.checked != null ? props.checked : checkedState;
 
     return (
@@ -235,7 +235,7 @@ Tri-state checkbox that accepts `checked` values of `true`, `false` or `"mixed"`
 ```jsx
 // jsx-demo
 function Example() {
-  let [favoriteCondiments, setFavoriteCondiments] = useState({
+  let [favoriteCondiments, setFavoriteCondiments] = React.useState({
     mayo: true,
     mustard: true,
     ketchup: false,
@@ -316,7 +316,7 @@ function Example() {
 
 #### MixedCheckbox Props
 
-`MixedCheckbox` inherits its props from the `React.InputHTMLAttributes<HTMLInputElement>` interface, with additional context documented below.
+`MixedCheckbox` inherits its props from the `React.ComponentProps<'input'>` type, with additional context documented below.
 
 [Check out the React documentation for additional information about form inputs in React.](https://reactjs.org/docs/forms.html)
 
@@ -346,8 +346,8 @@ You must create a ref and pass it along with additional arguments to return a pr
 ```jsx
 // jsx-demo
 function Example({ disabled = false }) {
-  const [checked, setChecked] = useState(true);
-  let inputRef = useRef(null);
+  const [checked, setChecked] = React.useState(true);
+  let inputRef = React.useRef(null);
   let [inputProps, stateData] = useMixedCheckbox(inputRef, {
     // boolean
     // A mixed checkbox may receive either `defaultChecked` or `checked`
@@ -621,7 +621,7 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckboxInput Props
 
-`CustomCheckboxInput` inherits its props from the `React.InputHTMLAttributes<HTMLInputElement>` interface, excluding:
+`CustomCheckboxInput` inherits its props from the `React.ComponentProps<'input'>` type, excluding:
 
 - [`checked`](#customcheckboxcontainer-checked)
 - [`defaultChecked`](#customcheckboxcontainer-defaultchecked)

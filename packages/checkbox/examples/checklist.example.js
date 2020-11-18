@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
@@ -9,52 +9,52 @@ function Example() {
     condiments: {
       mayo: true,
       mustard: true,
-      ketchup: false
+      ketchup: false,
     },
     veggies: {
       lettuce: true,
       tomato: true,
-      sprouts: false
+      sprouts: false,
     },
     meats: {
       turkey: false,
       ham: true,
-      pepperoni: false
-    }
+      pepperoni: false,
+    },
   });
 
-  const handleAll = event => {
+  const handleAll = (event) => {
     const { checked, value } = event.target;
     const allTypesChecked = Object.keys(toppings[value]).reduce(
       (state, topping) => ({
         ...state,
-        [topping]: checked
+        [topping]: checked,
       }),
       {}
     );
     setToppings({
       ...toppings,
       [value]: {
-        ...allTypesChecked
-      }
+        ...allTypesChecked,
+      },
     });
   };
 
-  const getHandler = type => event => {
+  const getHandler = (type) => (event) => {
     const { checked, value } = event.target;
     setToppings({
       ...toppings,
       [type]: {
         ...toppings[type],
-        [value]: checked
-      }
+        [value]: checked,
+      },
     });
   };
 
-  const allChecked = type =>
-    Object.values(toppings[type]).every(t => t)
+  const allChecked = (type) =>
+    Object.values(toppings[type]).every((t) => t)
       ? true
-      : Object.values(toppings[type]).some(t => t)
+      : Object.values(toppings[type]).some((t) => t)
       ? "mixed"
       : false;
 
@@ -72,7 +72,7 @@ function Example() {
                 marginRight: index === arr.length - 1 ? 0 : 10,
                 padding: "1rem 1.5rem 1.5rem",
                 width: 400,
-                maxWidth: "100%"
+                maxWidth: "100%",
               }}
             >
               <label>

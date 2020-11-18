@@ -31,8 +31,9 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#checkbox
  */
 
-import React, { forwardRef, useEffect, useRef } from "react";
+import * as React from "react";
 import {
+  forwardRefWithAs,
   useForkedRef,
   useIsomorphicLayoutEffect,
   warning,
@@ -207,14 +208,14 @@ export const createMachineDefinition = (
  *
  * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
-export const MixedCheckbox = forwardRef<
-  HTMLInputElement,
-  MixedCheckboxProps & { _componentName?: string }
+export const MixedCheckbox = forwardRefWithAs<
+  MixedCheckboxProps & { _componentName?: string },
+  "input"
 >(function MixedCheckbox(
-  { checked, defaultChecked, disabled, onChange, ...props },
+  { as: Comp = "input", checked, defaultChecked, disabled, onChange, ...props },
   forwardedRef
 ) {
-  let ownRef: MixedCheckboxInputRef = useRef(null);
+  let ownRef: MixedCheckboxInputRef = React.useRef(null);
   let ref = useForkedRef(forwardedRef, ownRef);
   let [inputProps] = useMixedCheckbox(
     ownRef,
@@ -230,20 +231,22 @@ export const MixedCheckbox = forwardRef<
   useControlledSwitchWarning(checked, "checked", "MixedCheckbox");
 
   return (
-    <input {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
+    <Comp {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
   );
 });
 
-export type MixedCheckboxProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "checked"
-> & {
+type MixedCheckboxDOMProps = Omit<
+  React.ComponentProps<"input">,
+  keyof MixedCheckboxOwnProps
+>;
+export type MixedCheckboxOwnProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
    */
   checked?: MixedOrBool;
 };
+export type MixedCheckboxProps = MixedCheckboxDOMProps & MixedCheckboxOwnProps;
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
@@ -268,7 +271,7 @@ type MixedCheckboxArgs = {
 
 export type UseMixedCheckboxProps = Required<
   Pick<
-    React.InputHTMLAttributes<HTMLInputElement>,
+    React.ComponentProps<"input">,
     "checked" | "disabled" | "onChange" | "onClick" | "type"
   >
 > & { "aria-checked": MixedOrBool };
@@ -357,7 +360,7 @@ export function useMixedCheckbox(
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (__DEV__ && !ref.current) {
       throw new Error(
         `A ref was not assigned to an input element in ${functionOrComponentName}.`
@@ -365,7 +368,7 @@ export function useMixedCheckbox(
     }
   }, [ref, functionOrComponentName]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isControlled) {
       send({
         type: MixedCheckboxEvents.Set,
@@ -377,7 +380,7 @@ export function useMixedCheckbox(
   // Prevent flashing before mixed marker is displayed and check on every render
   useIsomorphicLayoutEffect(syncDomNodeWithState);
 
-  useEffect(() => {
+  React.useEffect(() => {
     send({
       type: MixedCheckboxEvents.GetDerivedData,
       data: {
@@ -428,8 +431,8 @@ export function useControlledSwitchWarning(
    * if this changes unexpectedly.
    */
   let isControlled = controlPropValue != null;
-  let { current: wasControlled } = useRef(isControlled);
-  useEffect(() => {
+  let { current: wasControlled } = React.useRef(isControlled);
+  React.useEffect(() => {
     if (__DEV__) {
       warning(
         !(!isControlled && wasControlled),

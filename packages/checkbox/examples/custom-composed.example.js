@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from "react";
+import * as React from "react";
 import { CustomCheckboxContainer, CustomCheckboxInput } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 let name = "CustomCheckbox Composed";
 
 function MyCheckbox(props) {
-  const [checkedState, setChecked] = useState(props.checked || false);
+  const [checkedState, setChecked] = React.useState(props.checked || false);
   const checked = props.checked != null ? props.checked : checkedState;
   return (
     <CustomCheckboxContainer
       checked={props.checked != null ? props.checked : checked}
-      onChange={event => setChecked(event.target.checked)}
+      onChange={(event) => setChecked(event.target.checked)}
       style={{
         background: "rgba(240, 240, 250, 0.8)",
         border: "2px solid rgba(0, 0, 0, 0.8)",
