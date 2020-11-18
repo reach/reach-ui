@@ -32,23 +32,40 @@ import Rect, { useRect } from "@reach/rect";
 
 ### useRect
 
-`function useRect<T extends HTMLElement = HTMLElement>(nodeRef: React.RefObject<T>, observe: boolean = true, onChange?: (rect: DOMRect) => void): null | DOMRect`
+`function useRect<T extends Element>(nodeRef: React.RefObject<T>, options?: { observe?: boolean, onChange?: (rect: DOMRect) => void }): null | DOMRect`
 
-Hook that observes and returns the measurements (ClientRect) of a DOM element. Pass it the ref that placed on the element to be measured.
+Hook that observes and returns the measurements (ClientRect) of a DOM element. Pass it the ref that is placed on the element to be measured.
 
-If `observe` is false, the element's rect will no longer be observed, pass it `true` again and it will. This is mostly used for things like popovers and animations, so you can usually observe when you need to, and stop observing when you don't.
+#### useRect Options
+
+| Option                          | Type   | Required |
+| ------------------------------- | ------ | -------- |
+| [`observe`](#userect-observe)   | `bool` | false    |
+| [`onChange`](#userect-onchange) | `func` | false    |
+
+##### useRect `observe`
+
+Tells `useRect` whether or not to observe changes to the position of the node. Defaults to `true`.
+
+This is typically used for elements that pop over other elements. You generally don't need to observe all of the time—only when the popup is active.
+
+If `observe` is false, the element's `DOMRect` will no longer be observed.
 
 ```jsx
 // jsx-demo
 function Example() {
+  const [observe, setObserve] = React.useState(true);
   // your own ref
   const ref = React.useRef();
 
   // pass it in to be observered
-  const rect = useRect(ref);
+  const rect = useRect(ref, { observe });
 
   return (
     <div>
+      <button onClick={() => setObserve(!observe)}>
+        {observe ? "Stop" : "Start"} observing
+      </button>
       <pre>{JSON.stringify(rect, null, 2)}</pre>
       <div
         // and then place the ref
@@ -65,6 +82,24 @@ function Example() {
       />
     </div>
   );
+}
+```
+
+##### useRect `onChange`
+
+`onChange?(rect: DOMRect): void`
+
+Calls back whenever the `rect` of the element changes.
+
+```jsx
+function Example() {
+  const ref = React.useRef();
+  useRect(ref, {
+    onChange(rect) {
+      console.log(rect);
+    },
+  });
+  return <div ref={ref} />;
 }
 ```
 
@@ -92,11 +127,7 @@ A function that calls back to you with a `ref` to place on an element and the `r
 
 `observe?: boolean`
 
-Tells `Rect` to observe the position of the node or not. While observing, the `children` render prop may call back very quickly (especially while scrolling) so it can be important for performance to avoid observing when you don't need to.
-
-This is typically used for elements that pop over other elements (like a dropdown menu), so you don't need to observe all the time, only when the popup is active.
-
-Pass `true` to observe, `false` to ignore.
+Same as [`useRect`'s `observe` option](#userect-observe). While observing, the `children` render prop may call back very quickly (especially while scrolling), so it can be important for performance to avoid observing when you don't need to. Defaults to `true`.
 
 ```jsx
 <Rect observe={false}>
@@ -116,7 +147,7 @@ Pass `true` to observe, `false` to ignore.
 
 `onChange?(rect: DOMRect): void`
 
-Calls back whenever the `rect` of the element changes.
+Same as [`useRect`'s `onChange` option](#userect-onchange).
 
 ```jsx
 <Rect onChange={rect => console.log(rect)}/>
