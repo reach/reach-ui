@@ -152,7 +152,7 @@ function renderAlerts() {
       let container = liveRegions[regionType]!;
       if (container) {
         ReactDOM.render(
-          <VisuallyHidden>
+          <VisuallyHidden as="div">
             <div
               // The status role is a type of live region and a container whose
               // content is advisory information for the user that is not
