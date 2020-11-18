@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as React from "react";
 import {
   assign,
   createMachine,
@@ -62,11 +62,11 @@ export function useMachine<
   // State machine should not change between renders, so let's store it in a
   // ref. This should also help if we need to use a creator function to inject
   // dynamic initial state values based on props.
-  let machineRef = useRef(initialMachine);
+  let machineRef = React.useRef(initialMachine);
   let service = useConstant(() => interpret(machineRef.current).start());
-  let lastEventType = useRef<TE["type"] | null>(null);
+  let lastEventType = React.useRef<TE["type"] | null>(null);
 
-  let [state, setState] = useState(() => getServiceState(service));
+  let [state, setState] = React.useState(() => getServiceState(service));
 
   // This function reference will change on every render if we just pass on
   // current.matches, but it shouldn't change unless the current value is
@@ -76,7 +76,7 @@ export function useMachine<
   // result of this change.
 
   // Add refs to every event so we can use them to perform actions.
-  let send = useCallback(
+  let send = React.useCallback(
     (rawEvent: TE["type"] | DistributiveOmit<TE, "refs">) => {
       let event = isString(rawEvent) ? { type: rawEvent } : rawEvent;
       let refValues = unwrapRefs(refs);
@@ -102,7 +102,7 @@ export function useMachine<
     [DEBUG]
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     service.subscribe(function setStateIfChanged(newState) {
       if (newState.changed) {
         setState(newState);
@@ -113,7 +113,7 @@ export function useMachine<
     };
   }, [service]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (__DEV__) {
       if (DEBUG && state.changed) {
         console.group("State Updated");
@@ -126,7 +126,7 @@ export function useMachine<
   // We are going to pass along our state without the actions to avoid excess
   // renders when the reference changes. We haven't really needed them at this
   // point, but if we do we can maybe reconsider this approach.
-  const memoizedState = useMemo(
+  const memoizedState = React.useMemo(
     () => ({
       ...state,
       matches: (value: any) => value === state.value,
