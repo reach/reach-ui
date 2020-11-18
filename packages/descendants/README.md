@@ -75,7 +75,7 @@ The solution most people turn to is to bail out of the element API and turn to a
 />;
 
 function Menu({ items }) {
-  const [activeIndex, setActiveIndex] = useState();
+  const [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {items.map((item, index) => (
@@ -180,7 +180,7 @@ We can use `React.cloneElement` to keep (most of) the normal React composition. 
 
 ```jsx
 function Menu({ children }) {
-  const [activeIndex, setActiveIndex] = useState();
+  const [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {React.Children.map(children, (child, index) =>
@@ -262,7 +262,7 @@ function Menu({ id, children }) {
   // component and we don't want to force creating an arbitrary child
   // component just so we can consume the context.
   let [descendants, setDescendants] = useDescendantsInit();
-  let [activeIndex, setActiveIndex] = useState(-1);
+  let [activeIndex, setActiveIndex] = React.useState(-1);
   return (
     <DescendantProvider
       context={DescendantContext}
@@ -296,7 +296,7 @@ function MenuList(props) {
 
 function MenuItem({ index: explicitIndex, ...props }) {
   let { activeIndex, setActiveIndex } = useContext(MenuContext);
-  let ref = useRef(null);
+  let ref = React.useRef(null);
   let index = useDescendant(
     {
       // Assign the DOM node using a ref
@@ -363,7 +363,7 @@ function Comp() {
 function CompSSR() {
   // This limits composition, but now you have your data in one place at the top
   let options = ["Apple", "Orange", "Banana"];
-  let [activeOption, setActiveOption] = useState(options[0]);
+  let [activeOption, setActiveOption] = React.useState(options[0]);
   <Listbox onChange={setActiveOption} selected={activeOption}>
     {/* The button needs to know which value is selected to render its label! */}
     <ListboxButton>{activeOption}</ListboxButton>
@@ -378,7 +378,7 @@ function CompSSR() {
 function ComposableSSR() {
   // You can manage state at the top and still get back some composition, you'll
   // just have to deal with a bit of repitition
-  let [activeOption, setActiveOption] = useState("Apple");
+  let [activeOption, setActiveOption] = React.useState("Apple");
   <Listbox onChange={setActiveOption} selected={activeOption}>
     {/* The button needs to know which value is selected to render its label! */}
     <ListboxButton>{activeOption}</ListboxButton>
