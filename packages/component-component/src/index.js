@@ -1,7 +1,7 @@
-import React from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 
-let cleanProps = props => {
+let cleanProps = (props) => {
   let {
     initialState,
     getInitialState,
@@ -21,7 +21,7 @@ let cleanProps = props => {
 class Component extends React.Component {
   static defaultProps = {
     getInitialState: () => {},
-    getRefs: () => ({})
+    getRefs: () => ({}),
   };
 
   state = this.props.initialState || this.props.getInitialState(this.props);
@@ -35,14 +35,14 @@ class Component extends React.Component {
       props,
       _setState: setState,
       _forceUpdate: forceUpdate,
-      _refs: refs
+      _refs: refs,
     } = this;
     return {
       state,
       props: cleanProps(props),
       refs,
       setState,
-      forceUpdate
+      forceUpdate,
     };
   }
 
@@ -56,7 +56,7 @@ class Component extends React.Component {
         props: this.props,
         state: this.state,
         nextProps: cleanProps(nextProps),
-        nextState
+        nextState,
       });
     else return true;
   }
@@ -66,7 +66,7 @@ class Component extends React.Component {
       this.props.willUnmount({
         state: this.state,
         props: cleanProps(this.props),
-        refs: this._refs
+        refs: this._refs,
       });
   }
 
@@ -75,7 +75,7 @@ class Component extends React.Component {
       this.props.didUpdate(
         Object.assign(this.getArgs(), {
           prevProps: cleanProps(prevProps),
-          prevState
+          prevState,
         }),
         snapshot
       );
@@ -86,7 +86,7 @@ class Component extends React.Component {
       return this.props.getSnapshotBeforeUpdate(
         Object.assign(this.getArgs(), {
           prevProps: cleanProps(prevProps),
-          prevState
+          prevState,
         })
       );
     } else {
@@ -117,7 +117,7 @@ if (__DEV__) {
     getSnapshotBeforeUpdate: PropTypes.func,
     shouldUpdate: PropTypes.func,
     render: PropTypes.func,
-    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node])
+    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   };
 }
 
