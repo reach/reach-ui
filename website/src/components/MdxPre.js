@@ -1,5 +1,5 @@
 import * as React from "react";
-import assign from "core-js/fn/object/assign";
+import assign from "core-js/features/object/assign";
 import Highlight, { Prism } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/github";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
