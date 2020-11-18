@@ -42,21 +42,14 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
  */
 
-import React, {
-  Children,
-  cloneElement,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import { useId } from "@reach/auto-id";
 import {
-  checkStyles,
   forwardRefWithAs,
   getOwnerDocument,
   getDocumentDimensions,
   makeId,
+  useCheckStyles,
   useForkedRef,
   wrapEvent,
   warning,
@@ -249,7 +242,7 @@ export function useTooltip<T extends HTMLElement>({
 } & React.HTMLAttributes<T> = {}): [TriggerParams, TooltipParams, boolean] {
   let id = String(useId(idProp));
 
-  let [isVisible, setIsVisible] = useState(
+  let [isVisible, setIsVisible] = React.useState(
     DEBUG_STYLE
       ? true
       : id === null
@@ -258,12 +251,12 @@ export function useTooltip<T extends HTMLElement>({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  let ownRef = useRef<HTMLDivElement | null>(null);
+  let ownRef = React.useRef<HTMLDivElement | null>(null);
 
   let ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
   let triggerRect = useRect(ownRef, isVisible);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return subscribe(() => {
       if (
         context.id === id &&
@@ -276,9 +269,9 @@ export function useTooltip<T extends HTMLElement>({
     });
   }, [id]);
 
-  useEffect(() => checkStyles("tooltip"), []);
+  useCheckStyles("tooltip");
 
-  useEffect(() => {
+  React.useEffect(() => {
     let ownerDocument = getOwnerDocument(ownRef.current) || document;
     function listener(event: KeyboardEvent) {
       if (
@@ -374,7 +367,7 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   },
   forwardedRef
 ) {
-  let child = Children.only(children) as any;
+  let child = React.Children.only(children) as any;
 
   warning(
     !DEPRECATED_ariaLabel,
@@ -396,8 +389,8 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
     DEBUG_STYLE,
   });
   return (
-    <Fragment>
-      {cloneElement(child, trigger as any)}
+    <React.Fragment>
+      {React.cloneElement(child, trigger as any)}
       <TooltipPopup
         ref={forwardedRef}
         label={label}
@@ -405,14 +398,16 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
         {...tooltip}
         {...props}
       />
-    </Fragment>
+    </React.Fragment>
   );
 });
 
-export type TooltipProps = {
+type TooltipDOMProps = Omit<React.ComponentProps<"div">, keyof TooltipOwnProps>;
+export type TooltipOwnProps = {
   children: React.ReactNode;
   DEBUG_STYLE?: boolean;
-} & Omit<TooltipContentProps, "triggerRect" | "isVisible">;
+} & Omit<TooltipContentOwnProps, "triggerRect" | "isVisible">;
+export type TooltipProps = TooltipDOMProps & TooltipOwnProps;
 
 if (__DEV__) {
   Tooltip.displayName = "Tooltip";
@@ -460,9 +455,14 @@ export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   }
 );
 
-export type TooltipPopupProps = {
+type TooltipPopupDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof TooltipPopupOwnProps
+>;
+export type TooltipPopupOwnProps = {
   children?: React.ReactNode;
-} & TooltipContentProps;
+} & TooltipContentOwnProps;
+export type TooltipPopupProps = TooltipPopupDOMProps & TooltipPopupOwnProps;
 
 if (__DEV__) {
   TooltipPopup.displayName = "TooltipPopup";
@@ -506,11 +506,11 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     // the only content announced to them is whatever is in the tooltip.
     let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
-    let ownRef = useRef(null);
+    let ownRef = React.useRef(null);
     let ref = useForkedRef(forwardedRef, ownRef);
     let tooltipRect = useRect(ownRef, isVisible);
     return (
-      <Fragment>
+      <React.Fragment>
         <Comp
           role={hasAriaLabel ? undefined : "tooltip"}
           {...props}
@@ -529,18 +529,24 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
             {realAriaLabel || ariaLabel}
           </VisuallyHidden>
         )}
-      </Fragment>
+      </React.Fragment>
     );
   }
 );
 
-export type TooltipContentProps = {
+type TooltipContentDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof TooltipContentOwnProps
+>;
+export type TooltipContentOwnProps = {
   ariaLabel?: string;
   position?: Position;
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
 };
+export type TooltipContentProps = TooltipContentDOMProps &
+  TooltipContentOwnProps;
 
 if (__DEV__) {
   TooltipContent.displayName = "TooltipContent";
