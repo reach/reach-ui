@@ -24,17 +24,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
  */
 
-import React, {
-  forwardRef,
-  Fragment,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { PopoverProps, positionMatchWidth } from "@reach/popover";
@@ -57,11 +47,11 @@ import {
   isString,
   makeId,
   memoWithAs,
-  useCallbackProp,
   useCheckStyles,
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
+  useStableCallback,
   wrapEvent,
 } from "@reach/utils";
 import { StateMachine, useCreateMachine, useMachine } from "@reach/machine";
@@ -100,11 +90,12 @@ const ListboxGroupContext = createNamedContext(
  *
  * @see Docs https://reach.tech/listbox#listboxinput
  */
-export const ListboxInput = forwardRef<
-  HTMLDivElement,
-  ListboxInputProps & { _componentName?: string }
+export const ListboxInput = forwardRefWithAs<
+  ListboxInputProps & { _componentName?: string },
+  "div"
 >(function ListboxInput(
   {
+    as: Comp = "div",
     "aria-labelledby": ariaLabelledBy,
     "aria-label": ariaLabel,
     children,
@@ -122,19 +113,21 @@ export const ListboxInput = forwardRef<
   },
   forwardedRef
 ) {
-  let isControlled = useRef(valueProp != null);
+  let isControlled = React.useRef(valueProp != null);
   let [options, setOptions] = useDescendantsInit<ListboxDescendant>();
 
-  let onChange = useCallbackProp(onChangeProp);
+  let onChange = useStableCallback(onChangeProp);
 
   // DOM refs
-  let buttonRef = useRef<ListboxNodeRefs["button"]>(null);
-  let hiddenInputRef = useRef<HTMLInputElement>(null);
-  let highlightedOptionRef = useRef<ListboxNodeRefs["highlightedOption"]>(null);
-  let inputRef = useRef<ListboxNodeRefs["input"]>(null);
-  let listRef = useRef<ListboxNodeRefs["list"]>(null);
-  let popoverRef = useRef<ListboxNodeRefs["popover"]>(null);
-  let selectedOptionRef = useRef<ListboxNodeRefs["selectedOption"]>(null);
+  let buttonRef = React.useRef<ListboxNodeRefs["button"]>(null);
+  let hiddenInputRef = React.useRef<HTMLInputElement>(null);
+  let highlightedOptionRef = React.useRef<ListboxNodeRefs["highlightedOption"]>(
+    null
+  );
+  let inputRef = React.useRef<ListboxNodeRefs["input"]>(null);
+  let listRef = React.useRef<ListboxNodeRefs["list"]>(null);
+  let popoverRef = React.useRef<ListboxNodeRefs["popover"]>(null);
+  let selectedOptionRef = React.useRef<ListboxNodeRefs["selectedOption"]>(null);
 
   let machine = useCreateMachine(
     createMachineDefinition({
@@ -171,7 +164,7 @@ export const ListboxInput = forwardRef<
   // If a user needs the label for SSR to prevent hydration mismatch issues,
   // they need to control the state of the component and pass a label directly
   // to the button.
-  let valueLabel = useMemo(() => {
+  let valueLabel = React.useMemo(() => {
     let selected = options.find(
       (option) => option.value === state.context.value
     );
@@ -181,7 +174,7 @@ export const ListboxInput = forwardRef<
   let isExpanded = isListboxExpanded(state.value);
 
   // TODO: Remove duplication and memoize
-  let context: InternalListboxContextValue = useMemo(
+  let context: InternalListboxContextValue = React.useMemo(
     () => ({
       ariaLabel,
       ariaLabelledBy,
@@ -219,7 +212,7 @@ export const ListboxInput = forwardRef<
   //   A) we only ever need to do this once, so we can guard with a ref
   //   B) useLayoutEffect races useDecendant, so we might not have options yet
   //   C) useEffect will cause a flash
-  let mounted = useRef(false);
+  let mounted = React.useRef(false);
   if (
     !isControlled.current && // the app is not controlling state
     defaultValue == null && // there is no default value
@@ -254,10 +247,10 @@ export const ListboxInput = forwardRef<
     });
   }, [options, send]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     function handleMouseDown(event: MouseEvent) {
       let { target, relatedTarget } = event;
-      if (!targetIsInPopover(target, popoverRef.current)) {
+      if (!popoverContainsEventTarget(popoverRef.current, target)) {
         send({
           type: ListboxEvents.OutsideMouseDown,
           relatedTarget: relatedTarget || target,
@@ -272,10 +265,10 @@ export const ListboxInput = forwardRef<
     };
   }, [send, isExpanded]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     function handleMouseUp(event: MouseEvent) {
       let { target, relatedTarget } = event;
-      if (!targetIsInPopover(target, popoverRef.current)) {
+      if (!popoverContainsEventTarget(popoverRef.current, target)) {
         send({
           type: ListboxEvents.OutsideMouseUp,
           relatedTarget: relatedTarget || target,
@@ -299,7 +292,7 @@ export const ListboxInput = forwardRef<
       set={setOptions}
     >
       <ListboxContext.Provider value={context}>
-        <div
+        <Comp
           {...props}
           ref={ref}
           data-reach-listbox-input=""
@@ -319,7 +312,7 @@ export const ListboxInput = forwardRef<
                 expanded: isExpanded,
               })
             : children}
-        </div>
+        </Comp>
         {(form || name || required) && (
           <input
             ref={hiddenInputRef}
@@ -356,56 +349,60 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxinput-props
  */
-export type ListboxInputProps = Omit<
-  React.HTMLProps<HTMLDivElement>,
-  // WHY ARE THESE A THING ON A DIV, UGH
-  "autoComplete" | "autoFocus" | "form" | "name" | "onChange" | "defaultValue"
+type ListboxInputDOMProps = Omit<
+  React.ComponentProps<"div">,
+  | keyof ListboxInputOwnProps
+  | "autoComplete"
+  | "autoFocus"
+  | "form"
+  | "name"
+  | "onChange"
+  | "defaultValue"
 > &
-  Pick<
-    React.SelectHTMLAttributes<HTMLSelectElement>,
-    "form" | "name" | "required"
-  > & {
-    /**
-     * The composed listbox expects to receive `ListboxButton` and
-     * `ListboxPopover` as children. You can also pass in arbitrary wrapper
-     * elements if desired.
-     *
-     * @see Docs https://reach.tech/listbox#listboxinput-children
-     */
-    children:
-      | React.ReactNode
-      | ((
-          props: ListboxContextValue & {
-            // TODO: Remove in 1.0
-            expanded: boolean;
-          }
-        ) => React.ReactNode);
-    /**
-     * The default value of an uncontrolled listbox.
-     *
-     * @see Docs https://reach.tech/listbox#listboxinput-defaultvalue
-     */
-    defaultValue?: ListboxValue;
-    /**
-     * Whether or not the listbox is disabled.
-     *
-     * @see Docs https://reach.tech/listbox#listboxinput-disabled
-     */
-    disabled?: boolean;
-    /**
-     * The callback that fires when the listbox value changes.
-     *
-     * @see Docs https://reach.tech/listbox#listboxinput-onchange
-     * @param newValue
-     */
-    onChange?(newValue: ListboxValue): void;
-    /**
-     * The current value of a controlled listbox.
-     *
-     * @see Docs https://reach.tech/listbox#listboxinput-value
-     */
-    value?: ListboxValue;
-  };
+  Pick<React.ComponentProps<"select">, "form" | "name" | "required">;
+export type ListboxInputOwnProps = {
+  /**
+   * The composed listbox expects to receive `ListboxButton` and
+   * `ListboxPopover` as children. You can also pass in arbitrary wrapper
+   * elements if desired.
+   *
+   * @see Docs https://reach.tech/listbox#listboxinput-children
+   */
+  children:
+    | React.ReactNode
+    | ((
+        props: ListboxContextValue & {
+          // TODO: Remove in 1.0
+          expanded: boolean;
+        }
+      ) => React.ReactNode);
+  /**
+   * The default value of an uncontrolled listbox.
+   *
+   * @see Docs https://reach.tech/listbox#listboxinput-defaultvalue
+   */
+  defaultValue?: ListboxValue;
+  /**
+   * Whether or not the listbox is disabled.
+   *
+   * @see Docs https://reach.tech/listbox#listboxinput-disabled
+   */
+  disabled?: boolean;
+  /**
+   * The callback that fires when the listbox value changes.
+   *
+   * @see Docs https://reach.tech/listbox#listboxinput-onchange
+   * @param newValue
+   */
+  onChange?(newValue: ListboxValue): void;
+  /**
+   * The current value of a controlled listbox.
+   *
+   * @see Docs https://reach.tech/listbox#listboxinput-value
+   */
+  value?: ListboxValue;
+};
+export type ListboxInputProps = ListboxInputDOMProps & ListboxInputOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -423,34 +420,32 @@ export type ListboxInputProps = Omit<
  *
  * @see Docs https://reach.tech/listbox#listbox-1
  */
-export const Listbox = forwardRef<HTMLDivElement, ListboxProps>(
-  function Listbox(
-    { arrow = "▼", button, children, portal = true, ...props },
-    forwardedRef
-  ) {
-    return (
-      <ListboxInput {...props} _componentName="Listbox" ref={forwardedRef}>
-        {({ value, valueLabel }) => (
-          <Fragment>
-            <ListboxButton
-              arrow={arrow}
-              children={
-                button
-                  ? isFunction(button)
-                    ? button({ value, label: valueLabel })
-                    : button
-                  : undefined
-              }
-            />
-            <ListboxPopover portal={portal}>
-              <ListboxList>{children}</ListboxList>
-            </ListboxPopover>
-          </Fragment>
-        )}
-      </ListboxInput>
-    );
-  }
-);
+export const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
+  { arrow = "▼", button, children, portal = true, ...props },
+  forwardedRef
+) {
+  return (
+    <ListboxInput {...props} _componentName="Listbox" ref={forwardedRef}>
+      {({ value, valueLabel }) => (
+        <React.Fragment>
+          <ListboxButton
+            arrow={arrow}
+            children={
+              button
+                ? isFunction(button)
+                  ? button({ value, label: valueLabel })
+                  : button
+                : undefined
+            }
+          />
+          <ListboxPopover portal={portal}>
+            <ListboxList>{children}</ListboxList>
+          </ListboxPopover>
+        </React.Fragment>
+      )}
+    </ListboxInput>
+  );
+});
 
 if (__DEV__) {
   Listbox.displayName = "Listbox";
@@ -527,7 +522,7 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
       stateData,
       send,
       listboxValueLabel,
-    } = useContext(ListboxContext);
+    } = React.useContext(ListboxContext);
     let listboxValue = stateData.value;
 
     let ref = useForkedRef(buttonRef, forwardedRef);
@@ -559,7 +554,7 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
     // If a user needs the label on the server to prevent hydration mismatch
     // errors, they need to control the state of the component and pass a label
     // directly to the button.
-    let label: React.ReactNode = useMemo(() => {
+    let label: React.ReactNode = React.useMemo(() => {
       if (!children) {
         return listboxValueLabel;
       } else if (isFunction(children)) {
@@ -632,10 +627,14 @@ if (__DEV__) {
 
 export const ListboxButton = memoWithAs(ListboxButtonImpl);
 
+type ListboxButtonDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof ListboxButtonOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxbutton-props
  */
-export type ListboxButtonProps = {
+export type ListboxButtonOwnProps = {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * button.
@@ -666,7 +665,7 @@ export type ListboxButtonProps = {
    *
    * @example
    * let options = { one: 'One option', two: 'Another option' }
-   * let [value, setValue] = useState(options.one)
+   * let [value, setValue] = React.useState(options.one)
    * return (
    *   <ListboxInput>
    *     <ListboxButton>{options[value]}</ListboxButton>
@@ -692,6 +691,7 @@ export type ListboxButtonProps = {
         expanded: boolean;
       }) => React.ReactNode);
 };
+export type ListboxButtonProps = ListboxButtonDOMProps & ListboxButtonOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -702,11 +702,14 @@ export type ListboxButtonProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxarrow
  */
-const ListboxArrowImpl = forwardRef<HTMLSpanElement, ListboxArrowProps>(
-  function ListboxArrow({ children, ...props }, forwardedRef) {
-    let { isExpanded } = useContext(ListboxContext);
+const ListboxArrowImpl = forwardRefWithAs<ListboxArrowProps, "span">(
+  function ListboxArrow(
+    { as: Comp = "span", children, ...props },
+    forwardedRef
+  ) {
+    let { isExpanded } = React.useContext(ListboxContext);
     return (
-      <span
+      <Comp
         // The arrow provides no semantic value and its inner content should be
         // hidden from the accessibility tree
         aria-hidden
@@ -722,7 +725,7 @@ const ListboxArrowImpl = forwardRef<HTMLSpanElement, ListboxArrowProps>(
               expanded: isExpanded,
             })
           : children || "▼"}
-      </span>
+      </Comp>
     );
   }
 );
@@ -734,12 +737,16 @@ if (__DEV__) {
   };
 }
 
-export const ListboxArrow = memo(ListboxArrowImpl);
+export const ListboxArrow = memoWithAs(ListboxArrowImpl);
 
+type ListboxArrowDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof ListboxArrowOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxarrow-props
  */
-export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
+export type ListboxArrowOwnProps = {
   /**
    * Children to render as the listbox button's arrow. This can be a render
    * function that accepts the listbox's expanded state as an argument.
@@ -752,6 +759,7 @@ export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
         expanded: boolean;
       }) => React.ReactNode);
 };
+export type ListboxArrowProps = ListboxArrowDOMProps & ListboxArrowOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -762,9 +770,10 @@ export type ListboxArrowProps = React.HTMLProps<HTMLSpanElement> & {
  *
  * @see Docs https://reach.tech/listbox#listboxpopover
  */
-const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
+const ListboxPopoverImpl = forwardRefWithAs<ListboxPopoverProps, "div">(
   function ListboxPopover(
     {
+      as: Comp = "div",
       position = positionMatchWidth,
       onBlur,
       onKeyDown,
@@ -774,7 +783,7 @@ const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
     },
     forwardedRef
   ) {
-    let { buttonRef, popoverRef, send, isExpanded } = useContext(
+    let { buttonRef, popoverRef, send, isExpanded } = React.useContext(
       ListboxContext
     );
     let ref = useForkedRef(popoverRef, forwardedRef);
@@ -804,12 +813,13 @@ const ListboxPopoverImpl = forwardRef<any, ListboxPopoverProps>(
     return portal ? (
       <Popover
         {...commonProps}
+        as={Comp}
         targetRef={buttonRef as any}
         position={position}
         unstable_observableRefs={unstable_observableRefs}
       />
     ) : (
-      <div {...commonProps} />
+      <Comp {...commonProps} />
     );
   }
 );
@@ -823,12 +833,16 @@ if (__DEV__) {
   };
 }
 
-export const ListboxPopover = memo(ListboxPopoverImpl);
+export const ListboxPopover = memoWithAs(ListboxPopoverImpl);
 
+type ListboxPopoverDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof ListboxPopoverOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxpopover-props
  */
-export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
+export type ListboxPopoverOwnProps = {
   /**
    * `ListboxPopover` expects to receive `ListboxList` as its children.
    *
@@ -850,6 +864,8 @@ export type ListboxPopoverProps = React.HTMLProps<HTMLDivElement> & {
   position?: PopoverProps["position"];
   unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
 };
+export type ListboxPopoverProps = ListboxPopoverDOMProps &
+  ListboxPopoverOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -869,7 +885,7 @@ export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
       listboxId,
       listRef,
       stateData: { value, navigationValue },
-    } = useContext(ListboxContext);
+    } = React.useContext(ListboxContext);
     let ref = useForkedRef(forwardedRef, listRef);
 
     return (
@@ -912,10 +928,15 @@ if (__DEV__) {
   ListboxList.propTypes = {};
 }
 
+type ListboxListDOMProps = Omit<
+  React.ComponentProps<"ul">,
+  keyof ListboxListOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxlist-props
  */
-export type ListboxListProps = {};
+export type ListboxListOwnProps = {};
+export type ListboxListProps = ListboxListDOMProps & ListboxListOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -956,12 +977,12 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       send,
       state,
       stateData: { value: listboxValue, navigationValue },
-    } = useContext(ListboxContext);
+    } = React.useContext(ListboxContext);
 
-    let [labelState, setLabel] = useState(labelProp);
+    let [labelState, setLabel] = React.useState(labelProp);
     let label = labelProp || labelState || "";
 
-    let ownRef = useRef<HTMLElement | null>(null);
+    let ownRef = React.useRef<HTMLElement | null>(null);
     useDescendant(
       {
         element: ownRef.current!,
@@ -975,7 +996,7 @@ export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     // After the ref is mounted to the DOM node, we check to see if we have an
     // explicit label prop before looking for the node's textContent for
     // typeahead functionality.
-    let getLabelFromDomNode = useCallback(
+    let getLabelFromDomNode = React.useCallback(
       (node: HTMLElement) => {
         if (!labelProp && node) {
           setLabel((prevState) => {
@@ -1096,10 +1117,14 @@ if (__DEV__) {
   };
 }
 
+type ListboxOptionDOMProps = Omit<
+  React.ComponentProps<"li">,
+  keyof ListboxOptionOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxoption-props
  */
-export type ListboxOptionProps = {
+export type ListboxOptionOwnProps = {
   /**
    * The option's value. This will be passed into a hidden input field for use
    * in forms.
@@ -1124,6 +1149,7 @@ export type ListboxOptionProps = {
    */
   disabled?: boolean;
 };
+export type ListboxOptionProps = ListboxOptionDOMProps & ListboxOptionOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1134,13 +1160,16 @@ export type ListboxOptionProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxgroup
  */
-export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
-  function ListboxGroup({ label, children, ...props }, forwardedRef) {
-    let { listboxId } = useContext(ListboxContext);
+export const ListboxGroup = forwardRefWithAs<ListboxGroupProps, "div">(
+  function ListboxGroup(
+    { as: Comp = "div", label, children, ...props },
+    forwardedRef
+  ) {
+    let { listboxId } = React.useContext(ListboxContext);
     let labelId = makeId("label", useId(props.id), listboxId);
     return (
       <ListboxGroupContext.Provider value={{ labelId }}>
-        <div
+        <Comp
           // Refers to the element containing the option group label
           // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
           aria-labelledby={labelId}
@@ -1153,7 +1182,7 @@ export const ListboxGroup = forwardRef<HTMLDivElement, ListboxGroupProps>(
         >
           {label && <ListboxGroupLabel>{label}</ListboxGroupLabel>}
           {children}
-        </div>
+        </Comp>
       </ListboxGroupContext.Provider>
     );
   }
@@ -1166,13 +1195,14 @@ if (__DEV__) {
   };
 }
 
+type ListboxGroupDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof ListboxGroupOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-export type ListboxGroupProps = Omit<
-  React.HTMLProps<HTMLDivElement>,
-  "label"
-> & {
+export type ListboxGroupOwnProps = {
   /**
    * The text label to use for the listbox group. This can be omitted if a
    * group contains a `ListboxGroupLabel` component. The label should always
@@ -1182,6 +1212,7 @@ export type ListboxGroupProps = Omit<
    */
   label?: React.ReactNode;
 };
+export type ListboxGroupProps = ListboxGroupDOMProps & ListboxGroupOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1194,7 +1225,7 @@ export const ListboxGroupLabel = forwardRefWithAs<
   ListboxGroupLabelProps,
   "span"
 >(function ListboxGroupLabel({ as: Comp = "span", ...props }, forwardedRef) {
-  let { labelId } = useContext(ListboxGroupContext);
+  let { labelId } = React.useContext(ListboxGroupContext);
   return (
     <Comp
       // See examples
@@ -1213,10 +1244,16 @@ if (__DEV__) {
   ListboxGroupLabel.propTypes = {};
 }
 
+type ListboxGroupLabelDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof ListboxGroupLabelOwnProps
+>;
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-export type ListboxGroupLabelProps = {};
+export type ListboxGroupLabelOwnProps = {};
+export type ListboxGroupLabelProps = ListboxGroupLabelDOMProps &
+  ListboxGroupLabelOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1233,8 +1270,8 @@ export function useListboxContext(): ListboxContextValue {
     isExpanded,
     selectedOptionRef,
     stateData: { value },
-  } = useContext(ListboxContext);
-  return useMemo(
+  } = React.useContext(ListboxContext);
+  return React.useMemo(
     () => ({
       id: listboxId,
       isExpanded,
@@ -1271,10 +1308,10 @@ function useKeyDown() {
     onValueChange,
     stateData: { navigationValue, typeaheadQuery },
     send,
-  } = useContext(ListboxContext);
+  } = React.useContext(ListboxContext);
   let options = useDescendants(ListboxDescendantContext);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeaheadQuery) {
       send({
         type: ListboxEvents.UpdateAfterTypeahead,
@@ -1361,15 +1398,15 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  let { listboxId } = useContext(ListboxContext);
+  let { listboxId } = React.useContext(ListboxContext);
   return value ? makeId(`option-${value}`, listboxId) : undefined;
 }
 
-function targetIsInPopover(
-  element: HTMLElement | EventTarget | null,
-  popover: HTMLElement | null
+function popoverContainsEventTarget(
+  popover: HTMLElement | null,
+  target: HTMLElement | EventTarget | null
 ) {
-  return !!(element === popover || popover?.contains(element as HTMLElement));
+  return !!(popover && popover.contains(target as HTMLElement));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1422,7 +1459,7 @@ function useControlledStateSync<T>(
   internalValue: T,
   send: any
 ) {
-  let { current: isControlled } = useRef(controlPropValue != null);
+  let { current: isControlled } = React.useRef(controlPropValue != null);
   if (isControlled && controlPropValue !== internalValue) {
     send();
   }
