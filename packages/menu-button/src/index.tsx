@@ -11,16 +11,7 @@
  * TODO: Fix flash when opening a menu button on a screen with another open menu
  */
 
-import React, {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import Popover, { Position } from "@reach/popover";
@@ -34,7 +25,6 @@ import {
   useDescendantKeyDown,
 } from "@reach/descendants";
 import {
-  checkStyles,
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
@@ -42,6 +32,7 @@ import {
   isString,
   makeId,
   noop,
+  useCheckStyles,
   useForkedRef,
   usePrevious,
   wrapEvent,
@@ -97,13 +88,13 @@ const initialState: MenuButtonState = {
  * @see Docs https://reach.tech/menu-button#menu
  */
 export const Menu: React.FC<MenuProps> = ({ id, children }) => {
-  let buttonRef = useRef(null);
-  let menuRef = useRef(null);
-  let popoverRef = useRef(null);
+  let buttonRef = React.useRef(null);
+  let menuRef = React.useRef(null);
+  let popoverRef = React.useRef(null);
   let [descendants, setDescendants] = useDescendantsInit<
     MenuButtonDescendant
   >();
-  let [state, dispatch] = useReducer(reducer, initialState);
+  let [state, dispatch] = React.useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
 
@@ -111,12 +102,12 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // that close the menu. We don't want the initial button click to trigger this
   // when a menu is closed, so we can track this behavior in a ref for now.
   // We shouldn't need this when we rewrite with state machine logic.
-  let buttonClickedRef = useRef(false);
+  let buttonClickedRef = React.useRef(false);
 
   // We will put children callbacks in a ref to avoid triggering endless render
   // loops when using render props if the app code doesn't useCallback
   // https://github.com/reach/reach-ui/issues/523
-  let selectCallbacks = useRef([]);
+  let selectCallbacks = React.useRef([]);
 
   // If the popover's position overlaps with an option when the popover
   // initially opens, the mouseup event will trigger a select. To prevent that,
@@ -124,7 +115,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // moves first, otherwise the user is just registering the initial button
   // click rather than selecting an item. This is similar to a native select
   // on most platforms, and our menu button popover works similarly.
-  let readyToSelect = useRef(false);
+  let readyToSelect = React.useRef(false);
 
   let context: InternalMenuContextValue = {
     buttonRef,
@@ -140,7 +131,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
 
   // When the menu is open, focus is placed on the menu itself so that
   // keyboard navigation is still possible.
-  useEffect(() => {
+  React.useEffect(() => {
     if (state.isExpanded) {
       // @ts-ignore
       window.__REACH_DISABLE_TOOLTIPS = true;
@@ -156,7 +147,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
     }
   }, [state.isExpanded]);
 
-  useEffect(() => checkStyles("menu-button"), []);
+  useCheckStyles("menu-button");
 
   return (
     <DescendantProvider
@@ -225,14 +216,14 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
       menuId,
       state: { buttonId, isExpanded },
       dispatch,
-    } = useContext(MenuContext);
+    } = React.useContext(MenuContext);
     let ref = useForkedRef(buttonRef, forwardedRef);
     let items = useDescendants(MenuDescendantContext);
-    let firstNonDisabledIndex = useMemo(
+    let firstNonDisabledIndex = React.useMemo(
       () => items.findIndex((item) => !item.disabled),
       [items]
     );
-    useEffect(() => {
+    React.useEffect(() => {
       let newButtonId =
         id != null
           ? id
@@ -309,10 +300,14 @@ export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
   }
 );
 
+type MenuButtonDOMProps = Omit<
+  React.ComponentProps<"button">,
+  keyof MenuButtonOwnProps
+>;
 /**
  * @see Docs https://reach.tech/menu-button#menubutton-props
  */
-export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+export type MenuButtonOwnProps = {
   /**
    * Accepts any renderable content.
    *
@@ -320,6 +315,7 @@ export type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
    */
   children: React.ReactNode;
 };
+export type MenuButtonProps = MenuButtonDOMProps & MenuButtonOwnProps;
 
 if (__DEV__) {
   MenuButton.displayName = "MenuButton";
@@ -361,13 +357,13 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       readyToSelect,
       selectCallbacks,
       state: { selectionIndex, isExpanded },
-    } = useContext(MenuContext);
-    let ownRef = useRef<HTMLElement | null>(null);
+    } = React.useContext(MenuContext);
+    let ownRef = React.useRef<HTMLElement | null>(null);
     // After the ref is mounted to the DOM node, we check to see if we have an
     // explicit valueText prop before looking for the node's textContent for
     // typeahead functionality.
-    let [valueText, setValueText] = useState(valueTextProp || "");
-    let setValueTextFromDom = useCallback(
+    let [valueText, setValueText] = React.useState(valueTextProp || "");
+    let setValueTextFromDom = React.useCallback(
       (node) => {
         if (node) {
           ownRef.current = node;
@@ -384,7 +380,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     let ref = useForkedRef(forwardedRef, setValueTextFromDom);
 
-    let mouseEventStarted = useRef(false);
+    let mouseEventStarted = React.useRef(false);
 
     let index = useDescendant(
       {
@@ -480,7 +476,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     }
 
     // When the menu closes, reset readyToSelect for the next interaction.
-    useEffect(() => {
+    React.useEffect(() => {
       if (!isExpanded) {
         readyToSelect.current = false;
       }
@@ -488,7 +484,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
 
     // Any time a mouseup event occurs anywhere in the document, we reset the
     // mouseEventStarted ref so we can check it again when needed.
-    useEffect(() => {
+    React.useEffect(() => {
       let ownerDocument = getOwnerDocument(ownRef.current) || document;
       let listener = () => (mouseEventStarted.current = false);
       ownerDocument.addEventListener("mouseup", listener);
@@ -557,10 +553,15 @@ export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
   }
 );
 
+type MenuItemDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof MenuItemOwnProps
+>;
 /**
  * @see Docs https://reach.tech/menu-button#menuitem-props
  */
-export type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
+export type MenuItemOwnProps = Omit<MenuItemImplProps, "isLink">;
+export type MenuItemProps = MenuItemDOMProps & MenuItemOwnProps;
 
 if (__DEV__) {
   MenuItem.displayName = "MenuItem";
@@ -593,11 +594,11 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
       menuRef,
       selectCallbacks,
       state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
-    } = useContext(MenuContext);
+    } = React.useContext(MenuContext);
     const menuItems = useDescendants(MenuDescendantContext);
     const ref = useForkedRef(menuRef, forwardedRef);
 
-    useEffect(() => {
+    React.useEffect(() => {
       // Respond to user char key input with typeahead
       const match = findItemFromTypeahead(menuItems, typeaheadQuery);
       if (typeaheadQuery && match != null) {
@@ -618,7 +619,7 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
     const prevSelected = usePrevious(menuItems[selectionIndex]);
     const prevSelectionIndex = usePrevious(selectionIndex);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (selectionIndex > menuItems.length - 1) {
         // If for some reason our selection index is larger than our possible
         // index range (let's say the last item is selected and the list
@@ -754,17 +755,22 @@ export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
   }
 );
 
+type MenuItemsDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof MenuItemsOwnProps
+>;
 /**
  * @see Docs https://reach.tech/menu-button#menuitems-props
  */
-export type MenuItemsProps = {
+export type MenuItemsOwnProps = {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
    * @see Docs https://reach.tech/menu-button#menuitems-children
    */
   children: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
+export type MenuItemsProps = MenuItemsDOMProps & MenuItemsOwnProps;
 
 if (__DEV__) {
   MenuItems.displayName = "MenuItems";
@@ -810,12 +816,17 @@ export const MenuLink = forwardRefWithAs<
   );
 });
 
+type MenuLinkDOMProps = Omit<React.ComponentProps<"a">, keyof MenuLinkOwnProps>;
 /**
  * @see Docs https://reach.tech/menu-button#menulink-props
  */
-export type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
+export type MenuLinkOwnProps = Omit<
+  MenuItemImplProps,
+  "isLink" | "onSelect"
+> & {
   onSelect?(): void;
 };
+export type MenuLinkProps = MenuLinkDOMProps & MenuLinkOwnProps;
 
 if (__DEV__) {
   MenuLink.displayName = "MenuLink";
@@ -835,7 +846,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menulist
  */
-export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
+export const MenuList = forwardRefWithAs<MenuListProps, "div">(
   function MenuList({ portal = true, ...props }, forwardedRef) {
     return (
       <MenuPopover portal={portal}>
@@ -845,10 +856,14 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
   }
 );
 
+type MenuListDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof MenuListOwnProps
+>;
 /**
  * @see Docs https://reach.tech/menu-button#menulist-props
  */
-export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
+export type MenuListOwnProps = {
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
@@ -863,6 +878,7 @@ export type MenuListProps = React.HTMLAttributes<HTMLDivElement> & {
    */
   children: React.ReactNode;
 };
+export type MenuListProps = MenuListDOMProps & MenuListOwnProps;
 
 if (__DEV__) {
   MenuList.displayName = "MenuList";
@@ -883,9 +899,9 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menupopover
  */
-export const MenuPopover = forwardRef<any, MenuPopoverProps>(
+export const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
   function MenuPopover(
-    { children, portal = true, position, ...props },
+    { as: Comp = "div", children, portal = true, position, ...props },
     forwardedRef
   ) {
     const {
@@ -895,17 +911,16 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
       menuRef,
       popoverRef,
       state: { isExpanded },
-    } = useContext(MenuContext);
+    } = React.useContext(MenuContext);
 
     const ref = useForkedRef(popoverRef, forwardedRef);
 
-    useEffect(() => {
+    React.useEffect(() => {
       function listener(event: MouseEvent | TouchEvent) {
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
         } else if (
-          popoverRef.current &&
-          !popoverRef.current.contains(event.target as Element)
+          !popoverContainsEventTarget(popoverRef.current, event.target)
         ) {
           // We on want to close only if focus rests outside the menu
           dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
@@ -932,19 +947,24 @@ export const MenuPopover = forwardRef<any, MenuPopoverProps>(
     return portal ? (
       <Popover
         {...commonProps}
+        as={Comp}
         targetRef={buttonRef as any}
         position={position}
       />
     ) : (
-      <div {...commonProps} />
+      <Comp {...commonProps} />
     );
   }
 );
 
+type MenuPopoverDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof MenuPopoverOwnProps
+>;
 /**
  * @see Docs https://reach.tech/menu-button#menupopover-props
  */
-export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
+export type MenuPopoverOwnProps = {
   /**
    * Must contain a `MenuItems`
    *
@@ -969,6 +989,7 @@ export type MenuPopoverProps = React.HTMLAttributes<HTMLDivElement> & {
    */
   position?: Position;
 };
+export type MenuPopoverProps = MenuPopoverDOMProps & MenuPopoverOwnProps;
 
 if (__DEV__) {
   MenuPopover.displayName = "MenuPopover";
@@ -987,8 +1008,8 @@ if (__DEV__) {
 export function useMenuButtonContext(): MenuContextValue {
   let {
     state: { isExpanded },
-  } = useContext(MenuContext);
-  return useMemo(() => ({ isExpanded }), [isExpanded]);
+  } = React.useContext(MenuContext);
+  return React.useMemo(() => ({ isExpanded }), [isExpanded]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1015,7 +1036,7 @@ function findItemFromTypeahead(
 }
 
 function useMenuItemId(index: number | null) {
-  let { menuId } = useContext(MenuContext);
+  let { menuId } = React.useContext(MenuContext);
   return index != null && index > -1
     ? makeId(`option-${index}`, menuId)
     : undefined;
@@ -1050,6 +1071,13 @@ function focus<T extends HTMLElement = HTMLElement>(
   element: T | undefined | null
 ) {
   element && element.focus();
+}
+
+function popoverContainsEventTarget(
+  popover: HTMLElement | null,
+  target: HTMLElement | EventTarget | null
+) {
+  return !!(popover && popover.contains(target as HTMLElement));
 }
 
 function reducer(
