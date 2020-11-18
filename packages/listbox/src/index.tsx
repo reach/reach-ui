@@ -103,7 +103,7 @@ export const ListboxInput = forwardRefWithAs<
     disabled = false,
     form,
     name,
-    onChange: onChangeProp,
+    onChange,
     required,
     value: valueProp,
 
@@ -116,7 +116,7 @@ export const ListboxInput = forwardRefWithAs<
   let isControlled = React.useRef(valueProp != null);
   let [options, setOptions] = useDescendantsInit<ListboxDescendant>();
 
-  let onChange = useStableCallback(onChangeProp);
+  let stableOnChange = useStableCallback(onChange);
 
   // DOM refs
   let buttonRef = React.useRef<ListboxNodeRefs["button"]>(null);
@@ -182,7 +182,7 @@ export const ListboxInput = forwardRefWithAs<
       isExpanded,
       listboxId: id,
       listboxValueLabel: valueLabel,
-      onValueChange: onChange,
+      onValueChange: stableOnChange,
       buttonRef,
       listRef,
       popoverRef,
@@ -200,7 +200,7 @@ export const ListboxInput = forwardRefWithAs<
       disabled,
       id,
       isExpanded,
-      onChange,
+      stableOnChange,
       send,
       valueLabel,
     ]

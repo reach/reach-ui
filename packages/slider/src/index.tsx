@@ -40,6 +40,7 @@ import {
   useEventCallback,
   useForkedRef,
   useIsomorphicLayoutEffect,
+  useStableCallback,
   warning,
   wrapEvent,
 } from "@reach/utils";
@@ -632,6 +633,13 @@ const SliderInput = forwardRefWithAs<
   }, [handleSlideStop, releasePointerCapture]);
 
   let addStartListener = React.useCallback(() => {
+    // e.preventDefault is ignored by React's synthetic touchStart event, so
+    // we attach the listener directly to the DOM node
+    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
+    const sliderElement = sliderRef.current;
+    if (!sliderElement) {
+      return noop;
+    }
     let touchListener = wrapEvent(
       appEvents.current.onTouchStart,
       handleSlideStart
@@ -644,21 +652,16 @@ const SliderInput = forwardRefWithAs<
       appEvents.current.onPointerDown,
       setPointerCapture
     );
-
-    // e.preventDefault is ignored by React's synthetic touchStart event, so
-    // we attach the listener directly to the DOM node
-    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
-    const sliderRefCurrent = sliderRef.current;
-    sliderRefCurrent!.addEventListener("touchstart", touchListener);
-    sliderRefCurrent!.addEventListener("mousedown", mouseListener);
+    sliderElement.addEventListener("touchstart", touchListener);
+    sliderElement.addEventListener("mousedown", mouseListener);
     if ("PointerEvent" in window) {
-      sliderRefCurrent!.addEventListener("pointerdown", pointerListener);
+      sliderElement.addEventListener("pointerdown", pointerListener);
     }
     return () => {
-      sliderRefCurrent!.removeEventListener("touchstart", touchListener);
-      sliderRefCurrent!.removeEventListener("mousedown", mouseListener);
+      sliderElement.removeEventListener("touchstart", touchListener);
+      sliderElement.removeEventListener("mousedown", mouseListener);
       if ("PointerEvent" in window) {
-        sliderRefCurrent!.removeEventListener("pointerdown", pointerListener);
+        sliderElement.removeEventListener("pointerdown", pointerListener);
       }
     };
   }, [setPointerCapture, handleSlideStart]);

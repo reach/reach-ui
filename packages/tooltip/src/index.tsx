@@ -371,7 +371,7 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
 
   warning(
     !DEPRECATED_ariaLabel,
-    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version. Please use `aria-label` instead."
+    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
   );
 
   // We need to pass some properties from the child into useTooltip

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals, eqeqeq  */
 
 import * as React from "react";
-import warning from "warning";
+import fbWarning from "warning";
 import {
   As,
   AssignableRef,
@@ -56,8 +56,15 @@ let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
  * Copy of Facebook's warning package.
+ *
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical paths.
+ * Removing the logging code for production environments will keep the same
+ * logic and follow the same code paths.
+ *
+ * @see https://github.com/BerkeleyTrue/warning/blob/master/warning.js
  */
-export { warning };
+export const warning = fbWarning;
 
 /**
  * When in dev mode, checks that styles for a given @reach package are loaded.
@@ -65,7 +72,6 @@ export { warning };
  * @param packageName Name of the package to check.
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
-// @ts-ignore
 let checkStyles: (packageName: string) => void = noop;
 
 if (__DEV__) {
@@ -637,10 +643,9 @@ export function usePrevious<ValueType = any>(value: ValueType) {
  * passed as a dependency.
  */
 export function useStableCallback<T extends (...args: any[]) => any>(
-  callback?: T
+  callback: T | null | undefined
 ): T {
   const callbackRef = React.useRef(callback);
-
   React.useEffect(() => {
     callbackRef.current = callback;
   });
@@ -648,7 +653,7 @@ export function useStableCallback<T extends (...args: any[]) => any>(
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return React.useCallback(
     ((...args) => {
-      callbackRef.current?.(...args);
+      callbackRef.current && callbackRef.current(...args);
     }) as T,
     []
   );

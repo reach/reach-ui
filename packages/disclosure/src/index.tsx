@@ -56,7 +56,7 @@ export enum DisclosureStates {
 export const Disclosure: React.FC<DisclosureProps> = ({
   children,
   defaultOpen = false,
-  onChange: onChangeProp,
+  onChange,
   open: openProp,
   ...props
 }) => {
@@ -82,16 +82,16 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     );
   }
 
-  const onChange = useStableCallback(onChangeProp);
+  const stableOnChange = useStableCallback(onChange);
 
   const onSelect = React.useCallback(
     function onSelect() {
-      onChange();
+      stableOnChange();
       if (!isControlled) {
         setOpen((open) => !open);
       }
     },
-    [onChange, isControlled]
+    [stableOnChange, isControlled]
   );
 
   const context: DisclosureContextValue = React.useMemo(
