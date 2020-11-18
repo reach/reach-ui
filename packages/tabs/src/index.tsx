@@ -432,14 +432,13 @@ export { TabList };
  *
  * @see Docs https://reach.tech/tabs#tab
  */
-export const Tab = forwardRefWithAs<
-  // TODO: Remove this when cloneElement is removed
-  TabProps & { isSelected?: boolean },
-  "button"
->(function Tab(
+export const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
   {
-    children,
+    // TODO: Remove in 1.0
+    // @ts-ignore
     isSelected: _,
+
+    children,
     as: Comp = "button",
     index: indexProp,
     disabled,
@@ -530,7 +529,7 @@ export const Tab = forwardRefWithAs<
   );
 });
 
-type TabDOMProps = Omit<React.ComponentProps<"div">, keyof TabOwnProps>;
+export type TabDOMProps = Omit<React.ComponentProps<"div">, keyof TabOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tab-props
  */
@@ -550,7 +549,10 @@ export type TabOwnProps = {
   disabled?: boolean;
   index?: number;
 };
-export type TabProps = TabDOMProps & TabOwnProps;
+
+// This should be TabDOMProps & TabOwnProps, but TS is hanging up on that union
+// for some reason and I cannot for the life of me figure out why 🤦‍♂️
+export type TabProps = TabOwnProps;
 
 if (__DEV__) {
   Tab.displayName = "Tab";
@@ -703,7 +705,7 @@ export type TabPanelOwnProps = {
    */
   children?: React.ReactNode;
 };
-export type TabPanelOwnProps = TabPanelDOMProps & TabPanelOwnProps;
+export type TabPanelProps = TabPanelDOMProps & TabPanelOwnProps;
 
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
