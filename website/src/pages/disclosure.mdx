@@ -85,7 +85,7 @@ It is important to note that the `Disclosure` component doesn't actually render 
 If you want to control the disclosure's value, you can do so by passing [`open`](#disclosure-open) and [`onChange`](#disclosure-onchange) props.
 
 ```jsx
-const [isOpen, setOpen] = useState(false);
+const [isOpen, setOpen] = React.useState(false);
 return (
   <Disclosure open={isOpen} onChange={() => setOpen(!isOpen)}>
     <DisclosureButton />
@@ -174,7 +174,7 @@ The callback that is fired when a disclosure's open state is changed.
 The controlled open state of the disclosure. The `open` prop should be used along with `onChange` to create controlled disclosure components.
 
 ```jsx
-const [open, setOpen] = useState(false);
+const [open, setOpen] = React.useState(false);
 return (
   <Disclosure open={open} onChange={() => setOpen(!open)}>
     <DisclosureButton>I have a secret</DisclosureButton>

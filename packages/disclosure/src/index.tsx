@@ -119,7 +119,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-export type DisclosureProps = {
+export type DisclosureOwnProps = {
   /**
    * `Disclosure` expects to receive accept `DisclosureButton` and
    * `DisclosurePanel` components as children. It can also accept wrapper
@@ -163,6 +163,7 @@ export type DisclosureProps = {
    */
   open?: boolean;
 };
+export type DisclosureProps = DisclosureOwnProps;
 
 if (__DEV__) {
   Disclosure.displayName = "Disclosure";
@@ -233,10 +234,14 @@ export const DisclosureButton = forwardRefWithAs<
   );
 });
 
+type DisclosureButtonDOMProps = Omit<
+  React.ComponentProps<"button">,
+  keyof DisclosureButtonOwnProps
+>;
 /**
  * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
-export type DisclosureButtonProps = {
+export type DisclosureButtonOwnProps = {
   /**
    * Typically a text string that serves as a label for the disclosure button,
    * though nested DOM nodes can be passed as well so long as they are valid
@@ -247,6 +252,8 @@ export type DisclosureButtonProps = {
    */
   children: React.ReactNode;
 };
+export type DisclosureButtonProps = DisclosureButtonDOMProps &
+  DisclosureButtonOwnProps;
 
 if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
@@ -297,7 +304,11 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-export type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
+type DisclosurePanelDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof DisclosurePanelOwnProps
+>;
+export type DisclosurePanelOwnProps = {
   /**
    * Inner collapsible content for the disclosure item.
    *
@@ -305,6 +316,8 @@ export type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
    */
   children: React.ReactNode;
 };
+export type DisclosurePanelProps = DisclosurePanelDOMProps &
+  DisclosurePanelOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
