@@ -40,7 +40,6 @@ import {
   useEventCallback,
   useForkedRef,
   useIsomorphicLayoutEffect,
-  useStableCallback,
   warning,
   wrapEvent,
 } from "@reach/utils";

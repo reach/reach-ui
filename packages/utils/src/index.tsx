@@ -645,7 +645,7 @@ export function usePrevious<ValueType = any>(value: ValueType) {
 export function useStableCallback<T extends (...args: any[]) => any>(
   callback: T | null | undefined
 ): T {
-  const callbackRef = React.useRef(callback);
+  let callbackRef = React.useRef(callback);
   React.useEffect(() => {
     callbackRef.current = callback;
   });

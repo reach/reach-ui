@@ -51,7 +51,6 @@ import {
   useControlledSwitchWarning,
   useForkedRef,
   useIsomorphicLayoutEffect as useLayoutEffect,
-  useStableCallback,
   wrapEvent,
 } from "@reach/utils";
 import { StateMachine, useCreateMachine, useMachine } from "@reach/machine";
@@ -1463,4 +1462,29 @@ function useControlledStateSync<T>(
   if (isControlled && controlPropValue !== internalValue) {
     send();
   }
+}
+
+/**
+ * Importing this from @reach/utils is breaking the docs site. Unsure why as of
+ * yet. Including here in the mean time.
+ *
+ * Converts a callback to a ref to avoid triggering re-renders when passed as a
+ * prop and exposed as a stable function to avoid executing effects when passed
+ * as a dependency.
+ */
+function useStableCallback<T extends (...args: any[]) => any>(
+  callback: T | null | undefined
+): T {
+  let callbackRef = React.useRef(callback);
+  React.useEffect(() => {
+    callbackRef.current = callback;
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return React.useCallback(
+    ((...args) => {
+      callbackRef.current && callbackRef.current(...args);
+    }) as T,
+    []
+  );
 }
