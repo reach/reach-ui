@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Disclosure"
@@ -96,13 +98,13 @@ return (
 
 #### Disclosure Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [`children`](#disclosure-children)       | `node`               | true     |
-| [`defaultOpen`](#disclosure-defaultopen) | `boolean`            | false    |
-| [`id`](#disclosure-id)                   | `string` \| `number` | false    |
-| [`onChange`](#disclosure-onchange)       | `func`               | false    |
-| [`open`](#disclosure-open)               | `boolean`            | false    |
+| Prop                                     | Type                       | Required |
+| ---------------------------------------- | -------------------------- | -------- |
+| [`children`](#disclosure-children)       | `node`                     | true     |
+| [`defaultOpen`](#disclosure-defaultopen) | `boolean`                  | false    |
+| [`id`](#disclosure-id)                   | `string` <Pipe /> `number` | false    |
+| [`onChange`](#disclosure-onchange)       | `func`                     | false    |
+| [`open`](#disclosure-open)               | `boolean`                  | false    |
 
 ##### Disclosure `children`
 
@@ -206,10 +208,10 @@ Please see the [styling guide](/styling).
 
 #### DisclosureButton Props
 
-| Prop                                     | Type                    | Required |
-| ---------------------------------------- | ----------------------- | -------- |
-| [`as`](#disclosurebutton-as)             | `string` \| `Component` | false    |
-| [`children`](#disclosurebutton-children) | `node`                  | true     |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [`as`](#disclosurebutton-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#disclosurebutton-children) | `node`                        | true     |
 
 ##### DisclosureButton `as`
 
@@ -217,7 +219,7 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `DisclosureButton` what element to render. Defaults to `button`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### DisclosureButton `children`
 
@@ -246,10 +248,10 @@ Please see the [styling guide](/styling).
 
 #### DisclosurePanel Props
 
-| Prop                                    | Type                    | Required |
-| --------------------------------------- | ----------------------- | -------- |
-| [`as`](#disclosurepanel-as)             | `string` \| `Component` | false    |
-| [`children`](#disclosurepanel-children) | `node`                  | true     |
+| Prop                                    | Type                          | Required |
+| --------------------------------------- | ----------------------------- | -------- |
+| [`as`](#disclosurepanel-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#disclosurepanel-children) | `node`                        | true     |
 
 ##### DisclosurePanel `as`
 
@@ -257,7 +259,7 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `DisclosurePanel` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### DisclosurePanel `children`
 

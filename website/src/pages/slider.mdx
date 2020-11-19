@@ -1,5 +1,6 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Slider (range)"
@@ -135,21 +136,21 @@ Please see the [styling guide](/styling).
 
 #### Slider Props
 
-| Prop                                           | Type                           | Required | Default        |
-| ---------------------------------------------- | ------------------------------ | -------- | -------------- |
-| [`children`](#slider-children)                 | `node`                         | true     |                |
-| [`defaultValue`](#slider-defaultvalue)         | `number`                       | false    |                |
-| [`disabled`](#slider-disabled)                 | `boolean`                      | false    |                |
-| [`getAriaLabel`](#slider-getarialabel)         | `func`                         | false    |                |
-| [`getAriaValueText`](#slider-getariavaluetext) | `func`                         | false    |                |
-| [`handleAlignment`](#slider-handlealignment)   | `"center"` \| `"contain"`      | false    | `"center"`     |
-| [`max`](#slider-max)                           | `number`                       | false    | `100`          |
-| [`min`](#slider-min)                           | `number`                       | false    | `0`            |
-| [`name`](#slider-name)                         | `string`                       | false    |                |
-| [`onChange`](#slider-onchange)                 | `func`                         | false    |                |
-| [`orientation`](#slider-orientation)           | `"horizontal"` \| `"vertical"` | false    | `"horizontal"` |
-| [`step`](#slider-step)                         | `number`                       | false    | `1`            |
-| [`value`](#slider-value)                       | `number`                       | false    |                |
+| Prop                                           | Type                                 | Required | Default        |
+| ---------------------------------------------- | ------------------------------------ | -------- | -------------- |
+| [`children`](#slider-children)                 | `node`                               | true     |                |
+| [`defaultValue`](#slider-defaultvalue)         | `number`                             | false    |                |
+| [`disabled`](#slider-disabled)                 | `boolean`                            | false    |                |
+| [`getAriaLabel`](#slider-getarialabel)         | `func`                               | false    |                |
+| [`getAriaValueText`](#slider-getariavaluetext) | `func`                               | false    |                |
+| [`handleAlignment`](#slider-handlealignment)   | `"center"` <Pipe /> `"contain"`      | false    | `"center"`     |
+| [`max`](#slider-max)                           | `number`                             | false    | `100`          |
+| [`min`](#slider-min)                           | `number`                             | false    | `0`            |
+| [`name`](#slider-name)                         | `string`                             | false    |                |
+| [`onChange`](#slider-onchange)                 | `func`                               | false    |                |
+| [`orientation`](#slider-orientation)           | `"horizontal"` <Pipe /> `"vertical"` | false    | `"horizontal"` |
+| [`step`](#slider-step)                         | `number`                             | false    | `1`            |
+| [`value`](#slider-value)                       | `number`                             | false    |                |
 
 ##### Slider `children`
 

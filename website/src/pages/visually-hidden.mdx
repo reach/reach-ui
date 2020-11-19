@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { AsPropWarning } from "../components/AsPropWarning";
 
 <SEO
   title="Visually Hidden"
@@ -44,10 +45,10 @@ import VisuallyHidden from "@reach/visually-hidden";
 
 #### VisuallyHidden Props
 
-| Prop                                   | Type                    | Required |
-| -------------------------------------- | ----------------------- | -------- |
-| [`as`](#visuallyhidden-as)             | `string` \| `Component` | false    |
-| [`children`](#visuallyhidden-children) | `node`                  | true     |
+| Prop                                   | Type                          | Required |
+| -------------------------------------- | ----------------------------- | -------- |
+| [`as`](#visuallyhidden-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#visuallyhidden-children) | `node`                        | true     |
 
 ##### VisuallyHidden `as`
 
@@ -55,7 +56,7 @@ import VisuallyHidden from "@reach/visually-hidden";
 
 A string representing an HTML element or a React component that will tell the `VisuallyHidden` what element to render. Defaults to `span`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### VisuallyHidden `children`
 

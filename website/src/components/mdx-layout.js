@@ -85,16 +85,9 @@ import { useTransition, animated } from "react-spring/web.cjs";
 import { Phased } from "recondition";
 import { useThrottle } from "use-throttle";
 import Layout from "./Layout";
+import { Table, Caption } from "./Table";
 import { PreComponent } from "./MdxPre";
 import "../styles/app.scss";
-
-function Table(props) {
-  return (
-    <div style={{ maxWidth: "100%", overflowX: "auto" }}>
-      <table className="u-full-width" {...props} />
-    </div>
-  );
-}
 
 let firstLoad = true;
 
@@ -210,6 +203,7 @@ function MyPageLayout({ children }) {
             );
           },
           table: Table,
+          caption: Caption,
         }}
       >
         <main>

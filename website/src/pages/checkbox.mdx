@@ -1,5 +1,6 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Checkbox"
@@ -320,10 +321,10 @@ function Example() {
 
 [Check out the React documentation for additional information about form inputs in React.](https://reactjs.org/docs/forms.html)
 
-| Prop                                  | Type                   | Required |
-| ------------------------------------- | ---------------------- | -------- |
-| [`checked`](#mixedcheckbox-checked)   | `boolean` \| `"mixed"` | false    |
-| [`onChange`](#mixedcheckbox-onchange) | `func`                 | false    |
+| Prop                                  | Type                         | Required |
+| ------------------------------------- | ---------------------------- | -------- |
+| [`checked`](#mixedcheckbox-checked)   | `boolean` <Pipe /> `"mixed"` | false    |
+| [`onChange`](#mixedcheckbox-onchange) | `func`                       | false    |
 
 ##### MixedCheckbox `checked`
 
@@ -421,16 +422,16 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckbox Props
 
-| Prop                                               | Type                   | Required |
-| -------------------------------------------------- | ---------------------- | -------- |
-| [`span` props](#customcheckbox-span-props)         |                        |          |
-| [`checked`](#customcheckbox-checked)               | `boolean` \| `"mixed"` | false    |
-| [`children`](#customcheckbox-children)             | `node` \| `func`       | false    |
-| [`defaultChecked`](#customcheckbox-defaultchecked) | `boolean`              | false    |
-| [`disabled`](#customcheckbox-disabled)             | `boolean`              | false    |
-| [`name`](#customcheckbox-name)                     | `string`               | false    |
-| [`onChange`](#customcheckbox-onchange)             | `func`                 | false    |
-| [`value`](#customcheckbox-value)                   | `string | number`      | false    |
+| Prop                                               | Type                         | Required |
+| -------------------------------------------------- | ---------------------------- | -------- |
+| [`span` props](#customcheckbox-span-props)         |                              |          |
+| [`checked`](#customcheckbox-checked)               | `boolean` <Pipe /> `"mixed"` | false    |
+| [`children`](#customcheckbox-children)             | `node` <Pipe /> `func`       | false    |
+| [`defaultChecked`](#customcheckbox-defaultchecked) | `boolean`                    | false    |
+| [`disabled`](#customcheckbox-disabled)             | `boolean`                    | false    |
+| [`name`](#customcheckbox-name)                     | `string`                     | false    |
+| [`onChange`](#customcheckbox-onchange)             | `func`                       | false    |
+| [`value`](#customcheckbox-value)                   | `string | number`            | false    |
 
 ##### CustomCheckbox `span` props
 
@@ -519,14 +520,14 @@ Please see the [styling guide](/styling).
 
 #### CustomCheckboxContainer Props
 
-| Prop                                                        | Type                   | Required |
-| ----------------------------------------------------------- | ---------------------- | -------- |
-| [`span` props](#customcheckboxcontainer-span-props)         |                        |          |
-| [`checked`](#customcheckboxcontainer-checked)               | `boolean` \| `"mixed"` | false    |
-| [`children`](#customcheckboxcontainer-children)             | `node` \| `func`       | true     |
-| [`defaultChecked`](#customcheckboxcontainer-defaultchecked) | `boolean`              | false    |
-| [`disabled`](#customcheckboxcontainer-disabled)             | `boolean`              | false    |
-| [`onChange`](#customcheckboxcontainer-onchange)             | `func`                 | false    |
+| Prop                                                        | Type                         | Required |
+| ----------------------------------------------------------- | ---------------------------- | -------- |
+| [`span` props](#customcheckboxcontainer-span-props)         |                              |          |
+| [`checked`](#customcheckboxcontainer-checked)               | `boolean` <Pipe /> `"mixed"` | false    |
+| [`children`](#customcheckboxcontainer-children)             | `node` <Pipe /> `func`       | true     |
+| [`defaultChecked`](#customcheckboxcontainer-defaultchecked) | `boolean`                    | false    |
+| [`disabled`](#customcheckboxcontainer-disabled)             | `boolean`                    | false    |
+| [`onChange`](#customcheckboxcontainer-onchange)             | `func`                       | false    |
 
 ##### CustomCheckboxContainer `span` props
 
