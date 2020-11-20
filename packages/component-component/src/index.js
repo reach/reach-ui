@@ -121,4 +121,5 @@ if (__DEV__) {
   };
 }
 
+export { Component };
 export default Component;

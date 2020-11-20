@@ -72,7 +72,7 @@ const genId = () => ++id;
  *
  * @see Docs https://reach.tech/auto-id
  */
-export const useId = (idFromProps?: string | null) => {
+function useId(idFromProps?: string | null) {
   /*
    * If this instance isn't part of the initial render, we don't have to do the
    * double render/patch-up dance. We can just generate the ID and return it.
@@ -105,4 +105,6 @@ export const useId = (idFromProps?: string | null) => {
     }
   }, []);
   return id != null ? String(id) : undefined;
-};
+}
+
+export { useId };

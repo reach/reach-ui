@@ -53,14 +53,13 @@ type VisuallyHiddenDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
  */
-export type VisuallyHiddenOwnProps = {
+type VisuallyHiddenOwnProps = {
   /**
    * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
    */
   children: React.ReactNode;
 };
-export type VisuallyHiddenProps = VisuallyHiddenDOMProps &
-  VisuallyHiddenOwnProps;
+type VisuallyHiddenProps = VisuallyHiddenDOMProps & VisuallyHiddenOwnProps;
 
 if (__DEV__) {
   VisuallyHidden.displayName = "VisuallyHidden";
@@ -69,8 +68,6 @@ if (__DEV__) {
     children: PropTypes.node,
   };
 }
-
-export default VisuallyHidden;
 
 ////////////////////////////////////////////////////////////////////////////////
 // TODO: These all come from @reach/utils but we don't want to bundle that here
@@ -126,3 +123,10 @@ interface ForwardRefExoticComponentWithAs<
     PropsWithAs<ComponentType, ComponentProps>
   >;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type { VisuallyHiddenOwnProps, VisuallyHiddenProps };
+export { VisuallyHidden };
+export default VisuallyHidden;

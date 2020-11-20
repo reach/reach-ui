@@ -7,7 +7,7 @@ import {
   usePrevious,
 } from "@reach/utils";
 
-export function createDescendantContext<DescendantType extends Descendant>(
+function createDescendantContext<DescendantType extends Descendant>(
   name: string,
   initialValue = {}
 ) {
@@ -44,7 +44,7 @@ export function createDescendantContext<DescendantType extends Descendant>(
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
  */
-export function useDescendant<DescendantType extends Descendant>(
+function useDescendant<DescendantType extends Descendant>(
   descendant: Omit<DescendantType, "index">,
   context: React.Context<DescendantContextValue<DescendantType>>,
   indexProp?: number
@@ -97,17 +97,17 @@ export function useDescendant<DescendantType extends Descendant>(
   return index;
 }
 
-export function useDescendantsInit<DescendantType extends Descendant>() {
+function useDescendantsInit<DescendantType extends Descendant>() {
   return React.useState<DescendantType[]>([]);
 }
 
-export function useDescendants<DescendantType extends Descendant>(
+function useDescendants<DescendantType extends Descendant>(
   ctx: React.Context<DescendantContextValue<DescendantType>>
 ) {
   return React.useContext(ctx).descendants;
 }
 
-export function DescendantProvider<DescendantType extends Descendant>({
+function DescendantProvider<DescendantType extends Descendant>({
   context: Ctx,
   children,
   items,
@@ -249,7 +249,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
  * @param context
  * @param options
  */
-export function useDescendantKeyDown<
+function useDescendantKeyDown<
   DescendantType extends Descendant,
   K extends keyof DescendantType = keyof DescendantType
 >(
@@ -400,13 +400,26 @@ export function useDescendantKeyDown<
 
 type SomeElement<T> = T extends Element ? T : HTMLElement;
 
-export type Descendant<ElementType = HTMLElement> = {
+type Descendant<ElementType = HTMLElement> = {
   element: SomeElement<ElementType> | null;
   index: number;
 };
 
-export interface DescendantContextValue<DescendantType extends Descendant> {
+interface DescendantContextValue<DescendantType extends Descendant> {
   descendants: DescendantType[];
   registerDescendant(descendant: DescendantType): void;
   unregisterDescendant(element: DescendantType["element"]): void;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type { Descendant, DescendantContextValue };
+export {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendantKeyDown,
+  useDescendants,
+  useDescendantsInit,
+};

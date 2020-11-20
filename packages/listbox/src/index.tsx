@@ -89,7 +89,7 @@ const ListboxGroupContext = createNamedContext(
  *
  * @see Docs https://reach.tech/listbox#listboxinput
  */
-export const ListboxInput = forwardRefWithAs<
+const ListboxInput = forwardRefWithAs<
   ListboxInputProps & { _componentName?: string },
   "div"
 >(function ListboxInput(
@@ -359,7 +359,7 @@ type ListboxInputDOMProps = Omit<
   | "defaultValue"
 > &
   Pick<React.ComponentProps<"select">, "form" | "name" | "required">;
-export type ListboxInputOwnProps = {
+type ListboxInputOwnProps = {
   /**
    * The composed listbox expects to receive `ListboxButton` and
    * `ListboxPopover` as children. You can also pass in arbitrary wrapper
@@ -401,7 +401,7 @@ export type ListboxInputOwnProps = {
    */
   value?: ListboxValue;
 };
-export type ListboxInputProps = ListboxInputDOMProps & ListboxInputOwnProps;
+type ListboxInputProps = ListboxInputDOMProps & ListboxInputOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -419,7 +419,7 @@ export type ListboxInputProps = ListboxInputDOMProps & ListboxInputOwnProps;
  *
  * @see Docs https://reach.tech/listbox#listbox-1
  */
-export const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
+const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
   { arrow = "▼", button, children, portal = true, ...props },
   forwardedRef
 ) {
@@ -456,10 +456,21 @@ if (__DEV__) {
   };
 }
 
+type ListboxDOMProps = Omit<
+  React.ComponentProps<"div">,
+  | keyof ListboxInputOwnProps
+  | "autoComplete"
+  | "autoFocus"
+  | "form"
+  | "name"
+  | "onChange"
+  | "defaultValue"
+> &
+  Pick<React.ComponentProps<"select">, "form" | "name" | "required">;
 /**
  * @see Docs https://reach.tech/listbox#listbox-props
  */
-export type ListboxProps = Omit<ListboxInputProps, "children"> & {
+type ListboxOwnProps = Omit<ListboxInputOwnProps, "children"> & {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * Listbox button.
@@ -488,6 +499,7 @@ export type ListboxProps = Omit<ListboxInputProps, "children"> & {
    */
   portal?: boolean;
 };
+type ListboxProps = ListboxDOMProps & ListboxOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -624,7 +636,7 @@ if (__DEV__) {
   };
 }
 
-export const ListboxButton = memoWithAs(ListboxButtonImpl);
+const ListboxButton = memoWithAs(ListboxButtonImpl);
 
 type ListboxButtonDOMProps = Omit<
   React.ComponentProps<"span">,
@@ -633,7 +645,7 @@ type ListboxButtonDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxbutton-props
  */
-export type ListboxButtonOwnProps = {
+type ListboxButtonOwnProps = {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * button.
@@ -690,7 +702,7 @@ export type ListboxButtonOwnProps = {
         expanded: boolean;
       }) => React.ReactNode);
 };
-export type ListboxButtonProps = ListboxButtonDOMProps & ListboxButtonOwnProps;
+type ListboxButtonProps = ListboxButtonDOMProps & ListboxButtonOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -736,7 +748,7 @@ if (__DEV__) {
   };
 }
 
-export const ListboxArrow = memoWithAs(ListboxArrowImpl);
+const ListboxArrow = memoWithAs(ListboxArrowImpl);
 
 type ListboxArrowDOMProps = Omit<
   React.ComponentProps<"span">,
@@ -745,7 +757,7 @@ type ListboxArrowDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxarrow-props
  */
-export type ListboxArrowOwnProps = {
+type ListboxArrowOwnProps = {
   /**
    * Children to render as the listbox button's arrow. This can be a render
    * function that accepts the listbox's expanded state as an argument.
@@ -758,7 +770,7 @@ export type ListboxArrowOwnProps = {
         expanded: boolean;
       }) => React.ReactNode);
 };
-export type ListboxArrowProps = ListboxArrowDOMProps & ListboxArrowOwnProps;
+type ListboxArrowProps = ListboxArrowDOMProps & ListboxArrowOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -832,7 +844,7 @@ if (__DEV__) {
   };
 }
 
-export const ListboxPopover = memoWithAs(ListboxPopoverImpl);
+const ListboxPopover = memoWithAs(ListboxPopoverImpl);
 
 type ListboxPopoverDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -841,7 +853,7 @@ type ListboxPopoverDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxpopover-props
  */
-export type ListboxPopoverOwnProps = {
+type ListboxPopoverOwnProps = {
   /**
    * `ListboxPopover` expects to receive `ListboxList` as its children.
    *
@@ -863,8 +875,7 @@ export type ListboxPopoverOwnProps = {
   position?: PopoverProps["position"];
   unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
 };
-export type ListboxPopoverProps = ListboxPopoverDOMProps &
-  ListboxPopoverOwnProps;
+type ListboxPopoverProps = ListboxPopoverDOMProps & ListboxPopoverOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -875,7 +886,7 @@ export type ListboxPopoverProps = ListboxPopoverDOMProps &
  *
  * @see Docs https://reach.tech/listbox#listboxlist
  */
-export const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
+const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
   function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
     let {
       ariaLabel,
@@ -934,8 +945,8 @@ type ListboxListDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxlist-props
  */
-export type ListboxListOwnProps = {};
-export type ListboxListProps = ListboxListDOMProps & ListboxListOwnProps;
+type ListboxListOwnProps = {};
+type ListboxListProps = ListboxListDOMProps & ListboxListOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -946,7 +957,7 @@ export type ListboxListProps = ListboxListDOMProps & ListboxListOwnProps;
  *
  * @see Docs https://reach.tech/listbox#listboxoption
  */
-export const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
+const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
   function ListboxOption(
     {
       as: Comp = "li",
@@ -1123,7 +1134,7 @@ type ListboxOptionDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxoption-props
  */
-export type ListboxOptionOwnProps = {
+type ListboxOptionOwnProps = {
   /**
    * The option's value. This will be passed into a hidden input field for use
    * in forms.
@@ -1148,7 +1159,7 @@ export type ListboxOptionOwnProps = {
    */
   disabled?: boolean;
 };
-export type ListboxOptionProps = ListboxOptionDOMProps & ListboxOptionOwnProps;
+type ListboxOptionProps = ListboxOptionDOMProps & ListboxOptionOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1159,7 +1170,7 @@ export type ListboxOptionProps = ListboxOptionDOMProps & ListboxOptionOwnProps;
  *
  * @see Docs https://reach.tech/listbox#listboxgroup
  */
-export const ListboxGroup = forwardRefWithAs<ListboxGroupProps, "div">(
+const ListboxGroup = forwardRefWithAs<ListboxGroupProps, "div">(
   function ListboxGroup(
     { as: Comp = "div", label, children, ...props },
     forwardedRef
@@ -1201,7 +1212,7 @@ type ListboxGroupDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-export type ListboxGroupOwnProps = {
+type ListboxGroupOwnProps = {
   /**
    * The text label to use for the listbox group. This can be omitted if a
    * group contains a `ListboxGroupLabel` component. The label should always
@@ -1211,7 +1222,7 @@ export type ListboxGroupOwnProps = {
    */
   label?: React.ReactNode;
 };
-export type ListboxGroupProps = ListboxGroupDOMProps & ListboxGroupOwnProps;
+type ListboxGroupProps = ListboxGroupDOMProps & ListboxGroupOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1220,23 +1231,22 @@ export type ListboxGroupProps = ListboxGroupDOMProps & ListboxGroupOwnProps;
  *
  * @see Docs https://reach.tech/listbox#listboxgrouplabel
  */
-export const ListboxGroupLabel = forwardRefWithAs<
-  ListboxGroupLabelProps,
-  "span"
->(function ListboxGroupLabel({ as: Comp = "span", ...props }, forwardedRef) {
-  let { labelId } = React.useContext(ListboxGroupContext);
-  return (
-    <Comp
-      // See examples
-      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-      role="presentation"
-      {...props}
-      ref={forwardedRef}
-      data-reach-listbox-group-label=""
-      id={labelId}
-    />
-  );
-});
+const ListboxGroupLabel = forwardRefWithAs<ListboxGroupLabelProps, "span">(
+  function ListboxGroupLabel({ as: Comp = "span", ...props }, forwardedRef) {
+    let { labelId } = React.useContext(ListboxGroupContext);
+    return (
+      <Comp
+        // See examples
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+        role="presentation"
+        {...props}
+        ref={forwardedRef}
+        data-reach-listbox-group-label=""
+        id={labelId}
+      />
+    );
+  }
+);
 
 if (__DEV__) {
   ListboxGroupLabel.displayName = "ListboxGroupLabel";
@@ -1250,8 +1260,8 @@ type ListboxGroupLabelDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-export type ListboxGroupLabelOwnProps = {};
-export type ListboxGroupLabelProps = ListboxGroupLabelDOMProps &
+type ListboxGroupLabelOwnProps = {};
+type ListboxGroupLabelProps = ListboxGroupLabelDOMProps &
   ListboxGroupLabelOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1261,7 +1271,7 @@ export type ListboxGroupLabelProps = ListboxGroupLabelDOMProps &
  *
  * @see Docs https://reach.tech/listbox#uselistboxcontext
  */
-export function useListboxContext(): ListboxContextValue {
+function useListboxContext(): ListboxContextValue {
   let {
     highlightedOptionRef,
     listboxId,
@@ -1411,15 +1421,15 @@ function popoverContainsEventTarget(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type ListboxValue = string;
+type ListboxValue = string;
 
-export type ListboxDescendant = Descendant<HTMLElement> & {
+type ListboxDescendant = Descendant<HTMLElement> & {
   value: ListboxValue;
   label: string;
   disabled: boolean;
 };
 
-export type ListboxContextValue = {
+type ListboxContextValue = {
   id: string | undefined;
   isExpanded: boolean;
   highlightedOptionRef: React.RefObject<ListboxNodeRefs["highlightedOption"]>;
@@ -1488,3 +1498,42 @@ function useStableCallback<T extends (...args: any[]) => any>(
     []
   );
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  ListboxArrowOwnProps,
+  ListboxArrowProps,
+  ListboxButtonOwnProps,
+  ListboxButtonProps,
+  ListboxContextValue,
+  ListboxDescendant,
+  ListboxGroupLabelOwnProps,
+  ListboxGroupLabelProps,
+  ListboxGroupOwnProps,
+  ListboxGroupProps,
+  ListboxInputOwnProps,
+  ListboxInputProps,
+  ListboxListOwnProps,
+  ListboxListProps,
+  ListboxOptionOwnProps,
+  ListboxOptionProps,
+  ListboxOwnProps,
+  ListboxPopoverOwnProps,
+  ListboxPopoverProps,
+  ListboxProps,
+  ListboxValue,
+};
+export {
+  Listbox,
+  ListboxArrow,
+  ListboxButton,
+  ListboxGroup,
+  ListboxGroupLabel,
+  ListboxInput,
+  ListboxList,
+  ListboxOption,
+  ListboxPopover,
+  useListboxContext,
+};

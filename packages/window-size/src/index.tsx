@@ -17,7 +17,7 @@ import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
  * @see Docs https://reach.tech/window-size#windowsize
  * @param props
  */
-export const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
+const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
   const dimensions = useWindowSize();
   return children(dimensions);
 };
@@ -25,7 +25,7 @@ export const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
 /**
  * @see Docs https://reach.tech/window-size#windowsize-props
  */
-export type WindowSizeProps = {
+type WindowSizeProps = {
   /**
    * A function that calls back to you with the window size.
    *
@@ -44,8 +44,6 @@ if (__DEV__) {
   };
 }
 
-export default WindowSize;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -53,7 +51,7 @@ export default WindowSize;
  *
  * @see Docs https://reach.tech/window-size#usewindowsize
  */
-export function useWindowSize() {
+function useWindowSize() {
   let { current: hasWindow } = React.useRef(canUseDOM());
   const [dimensions, setDimensions] = React.useState({
     width: hasWindow ? window.innerWidth : 0,
@@ -72,7 +70,14 @@ export function useWindowSize() {
 }
 
 // TODO: Remove in 1.0
-export type TWindowSize = {
+type TWindowSize = {
   width: number;
   height: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default WindowSize;
+export type { TWindowSize, WindowSizeProps };
+export { useWindowSize, WindowSize };

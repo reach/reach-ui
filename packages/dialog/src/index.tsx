@@ -46,7 +46,7 @@ const overlayPropTypes = {
  *
  * @see Docs https://reach.tech/dialog#dialogoverlay
  */
-export const DialogOverlay = forwardRefWithAs<DialogOverlayProps, "div">(
+const DialogOverlay = forwardRefWithAs<DialogOverlayProps, "div">(
   function DialogOverlay(
     { as: Comp = "div", isOpen = true, ...props },
     forwardedRef
@@ -89,7 +89,7 @@ type DialogOverlayDOMProps = Omit<
   React.ComponentProps<"div">,
   keyof DialogOverlayOwnProps
 >;
-export type DialogOverlayOwnProps = DialogOwnProps & {
+type DialogOverlayOwnProps = DialogOwnProps & {
   /**
    * By default the dialog locks the focus inside it. Normally this is what you
    * want. This prop is provided so that this feature can be disabled. This,
@@ -128,7 +128,7 @@ export type DialogOverlayOwnProps = DialogOwnProps & {
    */
   dangerouslyBypassScrollLock?: boolean;
 };
-export type DialogOverlayProps = DialogOverlayDOMProps & DialogOverlayOwnProps;
+type DialogOverlayProps = DialogOverlayDOMProps & DialogOverlayOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -241,7 +241,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialogcontent
  */
-export const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
+const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
   function DialogContent(
     { as: Comp = "div", onClick, onKeyDown, ...props },
     forwardedRef
@@ -270,7 +270,7 @@ type DialogContentDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/dialog#dialogcontent-props
  */
-export type DialogContentOwnProps = {
+type DialogContentOwnProps = {
   /**
    * Accepts any renderable content.
    *
@@ -278,7 +278,7 @@ export type DialogContentOwnProps = {
    */
   children?: React.ReactNode;
 };
-export type DialogContentProps = DialogContentDOMProps & DialogContentOwnProps;
+type DialogContentProps = DialogContentDOMProps & DialogContentOwnProps;
 
 if (__DEV__) {
   DialogContent.displayName = "DialogContent";
@@ -298,7 +298,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialog
  */
-export const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
+const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
   {
     allowPinchZoom = false,
     initialFocusRef,
@@ -325,7 +325,7 @@ type DialogDOMProps = Omit<React.ComponentProps<"div">, keyof DialogOwnProps>;
 /**
  * @see Docs https://reach.tech/dialog#dialog-props
  */
-export type DialogOwnProps = {
+type DialogOwnProps = {
   /**
    * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
    * Defaults to `false`.
@@ -386,7 +386,7 @@ export type DialogOwnProps = {
    */
   unstable_lockFocusAcrossFrames?: boolean;
 };
-export type DialogProps = DialogDOMProps & DialogOwnProps;
+type DialogProps = DialogDOMProps & DialogOwnProps;
 
 if (__DEV__) {
   Dialog.displayName = "Dialog";
@@ -397,8 +397,6 @@ if (__DEV__) {
     "aria-labelledby": ariaLabelType,
   };
 }
-
-export default Dialog;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -479,3 +477,17 @@ function ariaLabelType(
   }
   return null;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  DialogContentOwnProps,
+  DialogContentProps,
+  DialogOverlayOwnProps,
+  DialogOverlayProps,
+  DialogOwnProps,
+  DialogProps,
+};
+export { Dialog, DialogContent, DialogOverlay };
+export default Dialog;

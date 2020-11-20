@@ -65,7 +65,7 @@ let renderTimer: number | null;
  *
  * @see Docs https://reach.tech/alert
  */
-export const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
+const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
   { as: Comp = "div", children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
@@ -89,7 +89,7 @@ type AlertDOMProps = Omit<React.ComponentProps<"div">, keyof AlertOwnProps>;
 /**
  * @see Docs https://reach.tech/alert#alert-props
  */
-export type AlertOwnProps = {
+type AlertOwnProps = {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
@@ -99,7 +99,7 @@ export type AlertOwnProps = {
   type?: "assertive" | "polite";
   children: React.ReactNode;
 };
-export type AlertProps = AlertDOMProps & AlertOwnProps;
+type AlertProps = AlertDOMProps & AlertOwnProps;
 
 if (__DEV__) {
   Alert.displayName = "Alert";
@@ -108,8 +108,6 @@ if (__DEV__) {
     type: PropTypes.oneOf(["assertive", "polite"]),
   };
 }
-
-export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -233,3 +231,10 @@ type RegionElements<T extends HTMLElement = HTMLDivElement> = {
 type RegionKeys = {
   [key in RegionTypes]: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type { AlertOwnProps, AlertProps };
+export { Alert };
+export default Alert;

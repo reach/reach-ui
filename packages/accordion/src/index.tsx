@@ -45,7 +45,7 @@ const AccordionItemContext = createNamedContext<
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export enum AccordionStates {
+enum AccordionStates {
   Open = "OPEN",
   Collapsed = "COLLAPSED",
 }
@@ -61,152 +61,150 @@ export enum AccordionStates {
  *
  * @see Docs https://reach.tech/accordion#accordion-1
  */
-export const Accordion = forwardRefWithAs<AccordionProps, "div">(
-  function Accordion(
-    {
-      as: Comp = "div",
-      children,
-      defaultIndex,
-      index: controlledIndex,
-      onChange,
-      readOnly = false,
-      collapsible = false,
-      multiple = false,
-      ...props
-    },
-    forwardedRef
-  ) {
-    /*
-     * You shouldn't switch between controlled/uncontrolled. We'll check for a
-     * controlled component and track any changes in a ref to show a warning.
-     */
-    const wasControlled = typeof controlledIndex !== "undefined";
-    const { current: isControlled } = React.useRef(wasControlled);
+const Accordion = forwardRefWithAs<AccordionProps, "div">(function Accordion(
+  {
+    as: Comp = "div",
+    children,
+    defaultIndex,
+    index: controlledIndex,
+    onChange,
+    readOnly = false,
+    collapsible = false,
+    multiple = false,
+    ...props
+  },
+  forwardedRef
+) {
+  /*
+   * You shouldn't switch between controlled/uncontrolled. We'll check for a
+   * controlled component and track any changes in a ref to show a warning.
+   */
+  const wasControlled = typeof controlledIndex !== "undefined";
+  const { current: isControlled } = React.useRef(wasControlled);
 
-    const [descendants, setDescendants] = useDescendantsInit<
-      AccordionDescendant
-    >();
+  const [descendants, setDescendants] = useDescendantsInit<
+    AccordionDescendant
+  >();
 
-    const id = useId(props.id);
+  const id = useId(props.id);
 
-    // Define our default starting index
-    const [openPanels, setOpenPanels] = React.useState<AccordionIndex>(() => {
-      switch (true) {
-        case isControlled:
-          return controlledIndex!;
+  // Define our default starting index
+  const [openPanels, setOpenPanels] = React.useState<AccordionIndex>(() => {
+    switch (true) {
+      case isControlled:
+        return controlledIndex!;
 
-        // If we have a defaultIndex, we need to do a few checks
-        case defaultIndex != null:
-          /*
-           * If multiple is set to true, we need to make sure the `defaultIndex`
-           * is an array (and vice versa). We'll handle console warnings in
-           * our propTypes, but this will at least keep the component from
-           * blowing up.
-           */
-          if (multiple) {
-            return Array.isArray(defaultIndex) ? defaultIndex : [defaultIndex!];
-          } else {
-            return Array.isArray(defaultIndex)
-              ? defaultIndex[0] ?? 0
-              : defaultIndex!;
-          }
-
+      // If we have a defaultIndex, we need to do a few checks
+      case defaultIndex != null:
         /*
-         * Collapsible accordions with no defaultIndex will start with all
-         * panels collapsed. Otherwise the first panel will be our default.
+         * If multiple is set to true, we need to make sure the `defaultIndex`
+         * is an array (and vice versa). We'll handle console warnings in
+         * our propTypes, but this will at least keep the component from
+         * blowing up.
          */
-        case collapsible:
-          return multiple ? [] : -1;
-        default:
-          return multiple ? [0] : 0;
-      }
-    });
-
-    if (__DEV__) {
-      warning(
-        !(!isControlled && wasControlled),
-        "Accordion is changing from controlled to uncontrolled. Accordion should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
-      );
-      warning(
-        !(isControlled && !wasControlled),
-        "Accordion is changing from uncontrolled to controlled. Accordion should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
-      );
-      warning(
-        !(isControlled && collapsible),
-        "The `collapsible` prop on Accordion has no effect when the state of the component is controlled."
-      );
-      warning(
-        !(isControlled && multiple),
-        "The `multiple` prop on Accordion has no effect when the state of the component is controlled."
-      );
-    }
-
-    const onSelectPanel = React.useCallback(
-      (index: number) => {
-        onChange && onChange(index);
-
-        if (!isControlled) {
-          setOpenPanels((prevOpenPanels) => {
-            /*
-             * If we're dealing with an uncontrolled component, the index arg
-             * in selectChange will always be a number rather than an array.
-             */
-            index = index as number;
-            // multiple allowed
-            if (multiple) {
-              // state will always be an array here
-              prevOpenPanels = prevOpenPanels as number[];
-              if (
-                // User is clicking on an already-open button
-                prevOpenPanels.includes(index as number)
-              ) {
-                // Other panels are open OR accordion is allowed to collapse
-                if (prevOpenPanels.length > 1 || collapsible) {
-                  // Close the panel by filtering it from the array
-                  return prevOpenPanels.filter((i) => i !== index);
-                }
-              } else {
-                // Open the panel by adding it to the array.
-                return [...prevOpenPanels, index].sort();
-              }
-            } else {
-              prevOpenPanels = prevOpenPanels as number;
-              return prevOpenPanels === index && collapsible ? -1 : index;
-            }
-            return prevOpenPanels;
-          });
+        if (multiple) {
+          return Array.isArray(defaultIndex) ? defaultIndex : [defaultIndex!];
+        } else {
+          return Array.isArray(defaultIndex)
+            ? defaultIndex[0] ?? 0
+            : defaultIndex!;
         }
-      },
-      [collapsible, isControlled, multiple, onChange]
+
+      /*
+       * Collapsible accordions with no defaultIndex will start with all
+       * panels collapsed. Otherwise the first panel will be our default.
+       */
+      case collapsible:
+        return multiple ? [] : -1;
+      default:
+        return multiple ? [0] : 0;
+    }
+  });
+
+  if (__DEV__) {
+    warning(
+      !(!isControlled && wasControlled),
+      "Accordion is changing from controlled to uncontrolled. Accordion should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
     );
-
-    const context: InternalAccordionContextValue = React.useMemo(
-      () => ({
-        accordionId: id,
-        openPanels: isControlled ? controlledIndex! : openPanels,
-        onSelectPanel: readOnly ? noop : onSelectPanel,
-        readOnly,
-      }),
-      [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
+    warning(
+      !(isControlled && !wasControlled),
+      "Accordion is changing from uncontrolled to controlled. Accordion should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
     );
-
-    useCheckStyles("accordion");
-
-    return (
-      <DescendantProvider
-        context={AccordionDescendantContext}
-        items={descendants}
-        set={setDescendants}
-      >
-        <AccordionContext.Provider value={context}>
-          <Comp {...props} ref={forwardedRef} data-reach-accordion="">
-            {children}
-          </Comp>
-        </AccordionContext.Provider>
-      </DescendantProvider>
+    warning(
+      !(isControlled && collapsible),
+      "The `collapsible` prop on Accordion has no effect when the state of the component is controlled."
+    );
+    warning(
+      !(isControlled && multiple),
+      "The `multiple` prop on Accordion has no effect when the state of the component is controlled."
     );
   }
-);
+
+  const onSelectPanel = React.useCallback(
+    (index: number) => {
+      onChange && onChange(index);
+
+      if (!isControlled) {
+        setOpenPanels((prevOpenPanels) => {
+          /*
+           * If we're dealing with an uncontrolled component, the index arg
+           * in selectChange will always be a number rather than an array.
+           */
+          index = index as number;
+          // multiple allowed
+          if (multiple) {
+            // state will always be an array here
+            prevOpenPanels = prevOpenPanels as number[];
+            if (
+              // User is clicking on an already-open button
+              prevOpenPanels.includes(index as number)
+            ) {
+              // Other panels are open OR accordion is allowed to collapse
+              if (prevOpenPanels.length > 1 || collapsible) {
+                // Close the panel by filtering it from the array
+                return prevOpenPanels.filter((i) => i !== index);
+              }
+            } else {
+              // Open the panel by adding it to the array.
+              return [...prevOpenPanels, index].sort();
+            }
+          } else {
+            prevOpenPanels = prevOpenPanels as number;
+            return prevOpenPanels === index && collapsible ? -1 : index;
+          }
+          return prevOpenPanels;
+        });
+      }
+    },
+    [collapsible, isControlled, multiple, onChange]
+  );
+
+  const context: InternalAccordionContextValue = React.useMemo(
+    () => ({
+      accordionId: id,
+      openPanels: isControlled ? controlledIndex! : openPanels,
+      onSelectPanel: readOnly ? noop : onSelectPanel,
+      readOnly,
+    }),
+    [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
+  );
+
+  useCheckStyles("accordion");
+
+  return (
+    <DescendantProvider
+      context={AccordionDescendantContext}
+      items={descendants}
+      set={setDescendants}
+    >
+      <AccordionContext.Provider value={context}>
+        <Comp {...props} ref={forwardedRef} data-reach-accordion="">
+          {children}
+        </Comp>
+      </AccordionContext.Provider>
+    </DescendantProvider>
+  );
+});
 
 type AccordionDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -215,7 +213,7 @@ type AccordionDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/accordion#accordion-props
  */
-export type AccordionOwnProps = {
+type AccordionOwnProps = {
   /**
    * `Accordion` can accept `AccordionItem` components as children.
    *
@@ -282,7 +280,7 @@ export type AccordionOwnProps = {
    */
   multiple?: boolean;
 };
-export type AccordionProps = AccordionDOMProps & AccordionOwnProps;
+type AccordionProps = AccordionDOMProps & AccordionOwnProps;
 
 if (__DEV__) {
   Accordion.displayName = "Accordion";
@@ -346,7 +344,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionitem
  */
-export const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
+const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
   function AccordionItem(
     { as: Comp = "div", children, disabled = false, ...props },
     forwardedRef
@@ -409,7 +407,7 @@ type AccordionItemDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/accordion#accordionitem-props
  */
-export type AccordionItemOwnProps = {
+type AccordionItemOwnProps = {
   /**
    * An `AccordionItem` expects to receive an `AccordionButton` and
    * `AccordionPanel` components as its children, though you can also nest other
@@ -427,7 +425,7 @@ export type AccordionItemOwnProps = {
    */
   disabled?: boolean;
 };
-export type AccordionItemProps = AccordionItemDOMProps & AccordionItemOwnProps;
+type AccordionItemProps = AccordionItemDOMProps & AccordionItemOwnProps;
 
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
@@ -447,7 +445,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionbutton
  */
-export const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
+const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
   function AccordionButton(
     {
       as: Comp = "button",
@@ -556,7 +554,7 @@ type AccordionButtonDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/accordion#accordionbutton-props
  */
-export type AccordionButtonOwnProps = {
+type AccordionButtonOwnProps = {
   /**
    * Typically a text string that serves as a label for the accordion, though
    * nested DOM nodes can be passed as well so long as they are valid children
@@ -567,8 +565,7 @@ export type AccordionButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-export type AccordionButtonProps = AccordionButtonDOMProps &
-  AccordionButtonOwnProps;
+type AccordionButtonProps = AccordionButtonDOMProps & AccordionButtonOwnProps;
 
 if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
@@ -588,7 +585,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionpanel
  */
-export const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
+const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
   function AccordionPanel(
     { as: Comp = "div", children, ...props },
     forwardedRef
@@ -636,7 +633,7 @@ type AccordionPanelDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/accordion#accordionpanel-props
  */
-export type AccordionPanelOwnProps = {
+type AccordionPanelOwnProps = {
   /**
    * Inner collapsible content for the accordion item.
    *
@@ -644,8 +641,7 @@ export type AccordionPanelOwnProps = {
    */
   children: React.ReactNode;
 };
-export type AccordionPanelProps = AccordionPanelDOMProps &
-  AccordionPanelOwnProps;
+type AccordionPanelProps = AccordionPanelDOMProps & AccordionPanelOwnProps;
 
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";
@@ -662,7 +658,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#useaccordioncontext
  */
-export function useAccordionContext(): AccordionContextValue {
+function useAccordionContext(): AccordionContextValue {
   let { openPanels, accordionId } = React.useContext(AccordionContext);
   return React.useMemo(
     () => ({
@@ -681,7 +677,7 @@ export function useAccordionContext(): AccordionContextValue {
  *
  * @see Docs https://reach.tech/accordion#useaccordionitemcontext
  */
-export function useAccordionItemContext(): AccordionItemContextValue {
+function useAccordionItemContext(): AccordionItemContextValue {
   let { index, state } = React.useContext(AccordionItemContext);
   return React.useMemo(
     () => ({
@@ -701,12 +697,12 @@ function getDataState(state: AccordionStates) {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type AccordionContextValue = {
+type AccordionContextValue = {
   id: string | undefined;
   openPanels: number[];
 };
 
-export type AccordionItemContextValue = {
+type AccordionItemContextValue = {
   index: number;
   isExpanded: boolean;
 };
@@ -737,3 +733,28 @@ interface InternalAccordionItemContextValue {
   panelId: string;
   state: AccordionStates;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  AccordionButtonOwnProps,
+  AccordionButtonProps,
+  AccordionContextValue,
+  AccordionItemContextValue,
+  AccordionItemOwnProps,
+  AccordionItemProps,
+  AccordionOwnProps,
+  AccordionPanelOwnProps,
+  AccordionPanelProps,
+  AccordionProps,
+};
+export {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
+  AccordionStates,
+  useAccordionContext,
+  useAccordionItemContext,
+};

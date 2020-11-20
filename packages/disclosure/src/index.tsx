@@ -34,7 +34,7 @@ const DisclosureContext = createNamedContext<DisclosureContextValue>(
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export enum DisclosureStates {
+enum DisclosureStates {
   Open = "open",
   Collapsed = "collapsed",
 }
@@ -52,7 +52,7 @@ export enum DisclosureStates {
  *
  * @param props
  */
-export const Disclosure: React.FC<DisclosureProps> = ({
+const Disclosure: React.FC<DisclosureProps> = ({
   children,
   defaultOpen = false,
   onChange,
@@ -118,7 +118,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-export type DisclosureOwnProps = {
+type DisclosureOwnProps = {
   /**
    * `Disclosure` expects to receive accept `DisclosureButton` and
    * `DisclosurePanel` components as children. It can also accept wrapper
@@ -162,7 +162,7 @@ export type DisclosureOwnProps = {
    */
   open?: boolean;
 };
-export type DisclosureProps = DisclosureOwnProps;
+type DisclosureProps = DisclosureOwnProps;
 
 if (__DEV__) {
   Disclosure.displayName = "Disclosure";
@@ -183,55 +183,54 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurebutton
  */
-export const DisclosureButton = forwardRefWithAs<
-  DisclosureButtonProps,
-  "button"
->(function DisclosureButton(
-  {
-    // The element that shows and hides the content has role `button`.
-    // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-    as: Comp = "button",
-    children,
-    onClick,
-    onMouseDown,
-    onPointerDown,
-    ...props
-  },
-  forwardedRef
-) {
-  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
-  const ownRef = React.useRef<HTMLElement | null>(null);
+const DisclosureButton = forwardRefWithAs<DisclosureButtonProps, "button">(
+  function DisclosureButton(
+    {
+      // The element that shows and hides the content has role `button`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+      as: Comp = "button",
+      children,
+      onClick,
+      onMouseDown,
+      onPointerDown,
+      ...props
+    },
+    forwardedRef
+  ) {
+    const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+    const ownRef = React.useRef<HTMLElement | null>(null);
 
-  const ref = useForkedRef(forwardedRef, ownRef);
+    const ref = useForkedRef(forwardedRef, ownRef);
 
-  function handleClick(event: React.MouseEvent) {
-    event.preventDefault();
-    ownRef.current && ownRef.current.focus();
-    onSelect();
+    function handleClick(event: React.MouseEvent) {
+      event.preventDefault();
+      ownRef.current && ownRef.current.focus();
+      onSelect();
+    }
+
+    return (
+      <Comp
+        // Optionally, the element with role `button` has a value specified for
+        // `aria-controls` that refers to the element that contains all the
+        // content that is shown or hidden.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+        aria-controls={panelId}
+        // When the content is visible, the element with role `button` has
+        // `aria-expanded` set to `true`. When the content area is hidden, it is
+        // set to `false`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+        aria-expanded={open}
+        {...props}
+        data-reach-disclosure-button=""
+        data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
+        ref={ref}
+        onClick={wrapEvent(onClick, handleClick)}
+      >
+        {children}
+      </Comp>
+    );
   }
-
-  return (
-    <Comp
-      // Optionally, the element with role `button` has a value specified for
-      // `aria-controls` that refers to the element that contains all the
-      // content that is shown or hidden.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-      aria-controls={panelId}
-      // When the content is visible, the element with role `button` has
-      // `aria-expanded` set to `true`. When the content area is hidden, it is
-      // set to `false`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-      aria-expanded={open}
-      {...props}
-      data-reach-disclosure-button=""
-      data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
-      ref={ref}
-      onClick={wrapEvent(onClick, handleClick)}
-    >
-      {children}
-    </Comp>
-  );
-});
+);
 
 type DisclosureButtonDOMProps = Omit<
   React.ComponentProps<"button">,
@@ -240,7 +239,7 @@ type DisclosureButtonDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
-export type DisclosureButtonOwnProps = {
+type DisclosureButtonOwnProps = {
   /**
    * Typically a text string that serves as a label for the disclosure button,
    * though nested DOM nodes can be passed as well so long as they are valid
@@ -251,7 +250,7 @@ export type DisclosureButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-export type DisclosureButtonProps = DisclosureButtonDOMProps &
+type DisclosureButtonProps = DisclosureButtonDOMProps &
   DisclosureButtonOwnProps;
 
 if (__DEV__) {
@@ -272,7 +271,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurepanel
  */
-export const DisclosurePanel = forwardRefWithAs<DisclosurePanelProps, "div">(
+const DisclosurePanel = forwardRefWithAs<DisclosurePanelProps, "div">(
   function DisclosurePanel(
     { as: Comp = "div", children, ...props },
     forwardedRef
@@ -307,7 +306,7 @@ type DisclosurePanelDOMProps = Omit<
   React.ComponentProps<"div">,
   keyof DisclosurePanelOwnProps
 >;
-export type DisclosurePanelOwnProps = {
+type DisclosurePanelOwnProps = {
   /**
    * Inner collapsible content for the disclosure item.
    *
@@ -315,8 +314,7 @@ export type DisclosurePanelOwnProps = {
    */
   children: React.ReactNode;
 };
-export type DisclosurePanelProps = DisclosurePanelDOMProps &
-  DisclosurePanelOwnProps;
+type DisclosurePanelProps = DisclosurePanelDOMProps & DisclosurePanelOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -326,7 +324,7 @@ export type DisclosurePanelProps = DisclosurePanelDOMProps &
  *
  * @see Docs https://reach.tech/disclosure#usedisclosurecontext
  */
-export function useDisclosureContext() {
+function useDisclosureContext() {
   let { open, panelId, disclosureId } = React.useContext(DisclosureContext);
   return React.useMemo(
     () => ({
@@ -372,3 +370,22 @@ function useStableCallback<T extends (...args: any[]) => any>(
     []
   );
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  DisclosureButtonOwnProps,
+  DisclosureButtonProps,
+  DisclosureOwnProps,
+  DisclosurePanelOwnProps,
+  DisclosurePanelProps,
+  DisclosureProps,
+};
+export {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  DisclosureStates,
+  useDisclosureContext,
+};

@@ -25,7 +25,7 @@ const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
 });
 
 type PopoverDOMProps = Omit<React.ComponentProps<"div">, keyof PopoverOwnProps>;
-export type PopoverOwnProps = {
+type PopoverOwnProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
@@ -45,13 +45,11 @@ export type PopoverOwnProps = {
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
 };
-export type PopoverProps = PopoverDOMProps & PopoverOwnProps;
+type PopoverProps = PopoverDOMProps & PopoverOwnProps;
 
 if (__DEV__) {
   Popover.displayName = "Popover";
 }
-
-export default Popover;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -127,7 +125,7 @@ function getTopPosition(targetRect: PRect, popoverRect: PRect) {
   };
 }
 
-export const positionDefault: Position = (targetRect, popoverRect) => {
+const positionDefault: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -141,7 +139,7 @@ export const positionDefault: Position = (targetRect, popoverRect) => {
   };
 };
 
-export const positionRight: Position = (targetRect, popoverRect) => {
+const positionRight: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -155,7 +153,7 @@ export const positionRight: Position = (targetRect, popoverRect) => {
   };
 };
 
-export const positionMatchWidth: Position = (targetRect, popoverRect) => {
+const positionMatchWidth: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -167,7 +165,7 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
   };
 };
 
-export function getCollisions(
+function getCollisions(
   targetRect: PRect,
   popoverRect: PRect,
   offsetLeft: number = 0,
@@ -362,10 +360,23 @@ function useSimulateTabNavigationForReactTree<
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type Position = (
+type Position = (
   targetRect?: PRect | null,
   popoverRect?: PRect | null,
   ...unstable_observableNodes: PossibleNode[]
 ) => React.CSSProperties;
 
 type PossibleNode = null | undefined | HTMLElement | SVGElement;
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Popover;
+export type { PopoverOwnProps, PopoverProps, Position };
+export {
+  getCollisions,
+  Popover,
+  positionDefault,
+  positionMatchWidth,
+  positionRight,
+};

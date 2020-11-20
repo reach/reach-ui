@@ -25,11 +25,7 @@ import {
  *
  * @param props
  */
-export const Rect: React.FC<RectProps> = ({
-  onChange,
-  observe = true,
-  children,
-}) => {
+const Rect: React.FC<RectProps> = ({ onChange, observe = true, children }) => {
   const ref = React.useRef<HTMLElement | null>(null);
   const rect = useRect(ref, { observe, onChange });
   return children({ ref, rect });
@@ -38,7 +34,7 @@ export const Rect: React.FC<RectProps> = ({
 /**
  * @see Docs https://reach.tech/rect#rect-props
  */
-export type RectProps = UseRectOptions & {
+type RectProps = UseRectOptions & {
   /**
    * A function that calls back to you with a `ref` to place on an element and
    * the `rect` measurements of the dom node.
@@ -66,13 +62,13 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export function useRect<T extends Element = HTMLElement>(
+function useRect<T extends Element = HTMLElement>(
   nodeRef: React.RefObject<T | undefined | null>,
   observe?: UseRectOptions["observe"],
   onChange?: UseRectOptions["onChange"]
 ): null | DOMRect;
 
-export function useRect<T extends Element = HTMLElement>(
+function useRect<T extends Element = HTMLElement>(
   nodeRef: React.RefObject<T | undefined | null>,
   options?: UseRectOptions
 ): null | DOMRect;
@@ -84,7 +80,7 @@ export function useRect<T extends Element = HTMLElement>(
  * @param observe
  * @param onChange
  */
-export function useRect<T extends Element = HTMLElement>(
+function useRect<T extends Element = HTMLElement>(
   nodeRef: React.RefObject<T | undefined | null>,
   observeOrOptions?: boolean | UseRectOptions,
   deprecated_onChange?: UseRectOptions["onChange"]
@@ -184,7 +180,7 @@ export function useRect<T extends Element = HTMLElement>(
 /**
  * @see Docs https://reach.tech/rect#userect
  */
-export type UseRectOptions = {
+type UseRectOptions = {
   /**
    * Tells `Rect` to observe the position of the node or not. While observing,
    * the `children` render prop may call back very quickly (especially while
@@ -208,9 +204,7 @@ export type UseRectOptions = {
   onChange?: (rect: PRect) => void;
 };
 
-export default Rect;
-
-export type PRect = Partial<DOMRect> & {
+type PRect = Partial<DOMRect> & {
   readonly bottom: number;
   readonly height: number;
   readonly left: number;
@@ -218,3 +212,10 @@ export type PRect = Partial<DOMRect> & {
   readonly top: number;
   readonly width: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Rect;
+export type { PRect, UseRectOptions, RectProps };
+export { Rect, useRect };

@@ -61,12 +61,12 @@ const TabsContext = createNamedContext(
   {} as InternalTabsContextValue
 );
 
-export enum TabsKeyboardActivation {
+enum TabsKeyboardActivation {
   Auto = "auto",
   Manual = "manual",
 }
 
-export enum TabsOrientation {
+enum TabsOrientation {
   Horizontal = "horizontal",
   Vertical = "vertical",
 }
@@ -80,7 +80,7 @@ export enum TabsOrientation {
  *
  * @see Docs https://reach.tech/tabs#tabs
  */
-export const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
+const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   {
     as: Comp = "div",
     children,
@@ -205,7 +205,7 @@ type TabsDOMProps = Omit<React.ComponentProps<"div">, keyof TabsOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tabs-props
  */
-export type TabsOwnProps = {
+type TabsOwnProps = {
   /**
    * Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't
    * matter, you can have tabs on the top or the bottom. In fact, you could have
@@ -263,7 +263,7 @@ export type TabsOwnProps = {
    */
   onChange?: (index: number) => void;
 };
-export type TabsProps = TabsDOMProps & TabsOwnProps;
+type TabsProps = TabsDOMProps & TabsOwnProps;
 
 if (__DEV__) {
   Tabs.displayName = "Tabs";
@@ -405,7 +405,7 @@ type TabListDOMProps = Omit<React.ComponentProps<"div">, keyof TabListOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tablist-props
  */
-export type TabListOwnProps = {
+type TabListOwnProps = {
   /**
    * `TabList` expects multiple `Tab` elements as children.
    *
@@ -415,13 +415,11 @@ export type TabListOwnProps = {
    */
   children?: React.ReactNode;
 };
-export type TabListProps = TabListDOMProps & TabListOwnProps;
+type TabListProps = TabListDOMProps & TabListOwnProps;
 
 if (__DEV__) {
   TabList.displayName = "TabList";
 }
-
-export { TabList };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -432,7 +430,7 @@ export { TabList };
  *
  * @see Docs https://reach.tech/tabs#tab
  */
-export const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
+const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
   {
     // TODO: Remove in 1.0
     // @ts-ignore
@@ -529,11 +527,11 @@ export const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
   );
 });
 
-export type TabDOMProps = Omit<React.ComponentProps<"div">, keyof TabOwnProps>;
+type TabDOMProps = Omit<React.ComponentProps<"div">, keyof TabOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tab-props
  */
-export type TabOwnProps = {
+type TabOwnProps = {
   /**
    * `Tab` can receive any type of children.
    *
@@ -552,7 +550,7 @@ export type TabOwnProps = {
 
 // This should be TabDOMProps & TabOwnProps, but TS is hanging up on that union
 // for some reason and I cannot for the life of me figure out why 🤦‍♂️
-export type TabProps = TabOwnProps;
+type TabProps = TabOwnProps;
 
 if (__DEV__) {
   Tab.displayName = "Tab";
@@ -608,14 +606,12 @@ type TabPanelsDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/tabs#tabpanels-props
  */
-export type TabPanelsOwnProps = TabListOwnProps & {};
-export type TabPanelsProps = TabPanelsDOMProps & TabPanelsOwnProps;
+type TabPanelsOwnProps = TabListOwnProps & {};
+type TabPanelsProps = TabPanelsDOMProps & TabPanelsOwnProps;
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
 }
-
-export { TabPanels };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -626,69 +622,67 @@ export { TabPanels };
  *
  * @see Docs https://reach.tech/tabs#tabpanel
  */
-export const TabPanel = forwardRefWithAs<TabPanelProps, "div">(
-  function TabPanel(
-    { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
-    forwardedRef
-  ) {
-    let { selectedPanelRef, selectedIndex, id: tabsId } = React.useContext(
-      TabsContext
-    );
-    let ownRef = React.useRef<HTMLElement | null>(null);
+const TabPanel = forwardRefWithAs<TabPanelProps, "div">(function TabPanel(
+  { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
+  forwardedRef
+) {
+  let { selectedPanelRef, selectedIndex, id: tabsId } = React.useContext(
+    TabsContext
+  );
+  let ownRef = React.useRef<HTMLElement | null>(null);
 
-    let index = useDescendant(
-      { element: ownRef.current! },
-      TabPanelDescendantsContext
-    );
+  let index = useDescendant(
+    { element: ownRef.current! },
+    TabPanelDescendantsContext
+  );
 
-    let id = makeId(tabsId, "panel", index);
+  let id = makeId(tabsId, "panel", index);
 
-    // Because useDescendant will always return -1 on the first render,
-    // `isSelected` will briefly be false for all tabs. We set a tab panel's
-    // hidden attribute based `isSelected` being false, meaning that all tabs
-    // are initially hidden. This makes it impossible for consumers to do
-    // certain things, like focus an element inside the active tab panel when
-    // the page loads. So what we can do is track that a panel is "ready" to be
-    // hidden once effects are run (descendants work their magic in
-    // useLayoutEffect, so we can set our ref in useEffecct to run later). We
-    // can use a ref instead of state because we're always geting a re-render
-    // anyway thanks to descendants. This is a little more coupled to the
-    // implementation details of descendants than I'd like, but we'll add a test
-    // to (hopefully) catch any regressions.
-    let isSelected = index === selectedIndex;
-    let readyToHide = React.useRef(false);
-    let hidden = readyToHide.current ? !isSelected : false;
-    React.useEffect(() => {
-      readyToHide.current = true;
-    }, []);
+  // Because useDescendant will always return -1 on the first render,
+  // `isSelected` will briefly be false for all tabs. We set a tab panel's
+  // hidden attribute based `isSelected` being false, meaning that all tabs
+  // are initially hidden. This makes it impossible for consumers to do
+  // certain things, like focus an element inside the active tab panel when
+  // the page loads. So what we can do is track that a panel is "ready" to be
+  // hidden once effects are run (descendants work their magic in
+  // useLayoutEffect, so we can set our ref in useEffecct to run later). We
+  // can use a ref instead of state because we're always geting a re-render
+  // anyway thanks to descendants. This is a little more coupled to the
+  // implementation details of descendants than I'd like, but we'll add a test
+  // to (hopefully) catch any regressions.
+  let isSelected = index === selectedIndex;
+  let readyToHide = React.useRef(false);
+  let hidden = readyToHide.current ? !isSelected : false;
+  React.useEffect(() => {
+    readyToHide.current = true;
+  }, []);
 
-    let ref = useForkedRef(
-      forwardedRef,
-      ownRef,
-      isSelected ? selectedPanelRef : null
-    );
+  let ref = useForkedRef(
+    forwardedRef,
+    ownRef,
+    isSelected ? selectedPanelRef : null
+  );
 
-    return (
-      <Comp
-        // Each element with role `tabpanel` has the property `aria-labelledby`
-        // referring to its associated tab element.
-        aria-labelledby={makeId(tabsId, "tab", index)}
-        hidden={hidden}
-        // Each element that contains the content panel for a tab has role
-        // `tabpanel`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-        role="tabpanel"
-        tabIndex={isSelected ? 0 : -1}
-        {...props}
-        ref={ref}
-        data-reach-tab-panel=""
-        id={id}
-      >
-        {children}
-      </Comp>
-    );
-  }
-);
+  return (
+    <Comp
+      // Each element with role `tabpanel` has the property `aria-labelledby`
+      // referring to its associated tab element.
+      aria-labelledby={makeId(tabsId, "tab", index)}
+      hidden={hidden}
+      // Each element that contains the content panel for a tab has role
+      // `tabpanel`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+      role="tabpanel"
+      tabIndex={isSelected ? 0 : -1}
+      {...props}
+      ref={ref}
+      data-reach-tab-panel=""
+      id={id}
+    >
+      {children}
+    </Comp>
+  );
+});
 
 type TabPanelDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -697,7 +691,7 @@ type TabPanelDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/tabs#tabpanel-props
  */
-export type TabPanelOwnProps = {
+type TabPanelOwnProps = {
   /**
    * `TabPanel` can receive any type of children.
    *
@@ -705,7 +699,7 @@ export type TabPanelOwnProps = {
    */
   children?: React.ReactNode;
 };
-export type TabPanelProps = TabPanelDOMProps & TabPanelOwnProps;
+type TabPanelProps = TabPanelDOMProps & TabPanelOwnProps;
 
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
@@ -722,7 +716,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#usetabscontext
  */
-export function useTabsContext(): TabsContextValue {
+function useTabsContext(): TabsContextValue {
   let { focusedIndex, id, selectedIndex } = React.useContext(TabsContext);
   return React.useMemo(
     () => ({
@@ -743,7 +737,7 @@ type TabDescendant = Descendant<HTMLElement> & {
 
 type TabPanelDescendant = Descendant<HTMLElement>;
 
-export type TabsContextValue = {
+type TabsContextValue = {
   focusedIndex: number;
   id: string;
   selectedIndex: number;
@@ -764,4 +758,31 @@ type InternalTabsContextValue = {
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   userInteractedRef: React.MutableRefObject<boolean>;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  TabListOwnProps,
+  TabListProps,
+  TabOwnProps,
+  TabPanelOwnProps,
+  TabPanelProps,
+  TabPanelsOwnProps,
+  TabPanelsProps,
+  TabProps,
+  TabsContextValue,
+  TabsOwnProps,
+  TabsProps,
+};
+export {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  TabsKeyboardActivation,
+  TabsOrientation,
+  useTabsContext,
 };

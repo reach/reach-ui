@@ -54,7 +54,7 @@ const DEBUG = false;
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
-export enum MixedCheckboxStates {
+enum MixedCheckboxStates {
   Checked = "checked",
   Mixed = "mixed",
   Unchecked = "unchecked",
@@ -63,7 +63,7 @@ export enum MixedCheckboxStates {
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 
-export enum MixedCheckboxEvents {
+enum MixedCheckboxEvents {
   GetDerivedData = "GET_DERIVED_DATA",
   Mount = "MOUNT",
   Set = "SET",
@@ -148,7 +148,7 @@ const commonEvents = {
  * @param initial
  * @param props
  */
-export const createMachineDefinition = (
+const createMachineDefinition = (
   initial: MixedCheckboxStates,
   props: {
     disabled: boolean;
@@ -208,7 +208,7 @@ export const createMachineDefinition = (
  *
  * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
-export const MixedCheckbox = forwardRefWithAs<
+const MixedCheckbox = forwardRefWithAs<
   MixedCheckboxProps & { _componentName?: string },
   "input"
 >(function MixedCheckbox(
@@ -239,14 +239,14 @@ type MixedCheckboxDOMProps = Omit<
   React.ComponentProps<"input">,
   keyof MixedCheckboxOwnProps
 >;
-export type MixedCheckboxOwnProps = {
+type MixedCheckboxOwnProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
    */
   checked?: MixedOrBool;
 };
-export type MixedCheckboxProps = MixedCheckboxDOMProps & MixedCheckboxOwnProps;
+type MixedCheckboxProps = MixedCheckboxDOMProps & MixedCheckboxOwnProps;
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
@@ -269,7 +269,7 @@ type MixedCheckboxArgs = {
   onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
 };
 
-export type UseMixedCheckboxProps = Required<
+type UseMixedCheckboxProps = Required<
   Pick<
     React.ComponentProps<"input">,
     "checked" | "disabled" | "onChange" | "onClick" | "type"
@@ -287,7 +287,7 @@ export type UseMixedCheckboxProps = Required<
  * @param ref
  * @param args
  */
-export function useMixedCheckbox(
+function useMixedCheckbox(
   ref: MixedCheckboxInputRef,
   args?: MixedCheckboxArgs,
   functionOrComponentName: string = "useMixedCheckbox"
@@ -400,7 +400,7 @@ export function useMixedCheckbox(
  * checked prop with a value of `true`, `false` or `"mixed"`.
  */
 
-export function checkedPropToStateValue(checked?: MixedOrBool) {
+function checkedPropToStateValue(checked?: MixedOrBool) {
   return checked === true
     ? MixedCheckboxStates.Checked
     : checked === "mixed"
@@ -408,7 +408,7 @@ export function checkedPropToStateValue(checked?: MixedOrBool) {
     : MixedCheckboxStates.Unchecked;
 }
 
-export function stateValueToAriaChecked(state: string): MixedOrBool {
+function stateValueToAriaChecked(state: string): MixedOrBool {
   return state === MixedCheckboxStates.Checked
     ? true
     : state === MixedCheckboxStates.Mixed
@@ -416,12 +416,12 @@ export function stateValueToAriaChecked(state: string): MixedOrBool {
     : false;
 }
 
-export function stateValueToChecked(state: string) {
+function stateValueToChecked(state: string) {
   return state === MixedCheckboxStates.Checked ? true : false;
 }
 
 // TODO: Move to @reach/utils
-export function useControlledSwitchWarning(
+function useControlledSwitchWarning(
   controlPropValue: any,
   controlPropName: string,
   componentName: string
@@ -449,9 +449,9 @@ export function useControlledSwitchWarning(
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type MixedOrBool = boolean | "mixed";
+type MixedOrBool = boolean | "mixed";
 
-export interface MixedCheckboxData {
+interface MixedCheckboxData {
   disabled: boolean;
   isControlled: boolean;
   refs: MixedCheckboxNodeRefs;
@@ -467,7 +467,7 @@ interface MixedCheckboxEventBase extends MachineEventWithRefs {
 /**
  * Event object for the checkbox state machine.
  */
-export type MixedCheckboxEvent = MixedCheckboxEventBase &
+type MixedCheckboxEvent = MixedCheckboxEventBase &
   (
     | {
         type: MixedCheckboxEvents.Toggle;
@@ -485,7 +485,7 @@ export type MixedCheckboxEvent = MixedCheckboxEventBase &
 /**
  * State object for the checkbox state machine.
  */
-export type MixedCheckboxState =
+type MixedCheckboxState =
   | {
       value: MixedCheckboxStates.Checked;
       context: MixedCheckboxData;
@@ -502,7 +502,7 @@ export type MixedCheckboxState =
 /**
  * DOM nodes for all of the refs used in the mixed checkbox state machine.
  */
-export type MixedCheckboxNodeRefs = {
+type MixedCheckboxNodeRefs = {
   input: HTMLInputElement | null;
 };
 
@@ -510,3 +510,21 @@ export type MixedCheckboxNodeRefs = {
  * Input element ref object.
  */
 type MixedCheckboxInputRef = React.RefObject<MixedCheckboxNodeRefs["input"]>;
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  MixedCheckboxOwnProps,
+  MixedCheckboxProps,
+  MixedOrBool,
+  UseMixedCheckboxProps,
+};
+export {
+  MixedCheckbox,
+  MixedCheckboxEvents,
+  MixedCheckboxStates,
+  useMixedCheckbox,
+  checkedPropToStateValue as internal_checkedPropToStateValue,
+  useControlledSwitchWarning as internal_useControlledSwitchWarning,
+};

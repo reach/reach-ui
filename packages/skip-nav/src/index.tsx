@@ -14,7 +14,7 @@ let defaultId = "reach-skip-nav";
  *
  * @see Docs https://reach.tech/skip-nav#skipnavlink
  */
-export const SkipNavLink = forwardRefWithAs<SkipNavLinkProps, "a">(
+const SkipNavLink = forwardRefWithAs<SkipNavLinkProps, "a">(
   function SkipNavLink(
     { as: Comp = "a", children = "Skip to content", contentId, ...props },
     forwardedRef
@@ -43,7 +43,7 @@ type SkipNavLinkDOMProps = Omit<
   React.ComponentProps<"a">,
   keyof SkipNavLinkOwnProps | "href"
 >;
-export type SkipNavLinkOwnProps = {
+type SkipNavLinkOwnProps = {
   /**
    * Allows you to change the text for your preferred phrase or localization.
    *
@@ -58,7 +58,7 @@ export type SkipNavLinkOwnProps = {
    */
   contentId?: string;
 };
-export type SkipNavLinkProps = SkipNavLinkDOMProps & SkipNavLinkOwnProps;
+type SkipNavLinkProps = SkipNavLinkDOMProps & SkipNavLinkOwnProps;
 
 if (__DEV__) {
   SkipNavLink.displayName = "SkipNavLink";
@@ -73,7 +73,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/skip-nav#skipnavcontent
  */
-export const SkipNavContent = forwardRefWithAs<SkipNavContentProps, "div">(
+const SkipNavContent = forwardRefWithAs<SkipNavContentProps, "div">(
   function SkipNavContent(
     { as: Comp = "div", id: idProp, ...props },
     forwardedRef
@@ -97,7 +97,7 @@ type SkipNavContentDOMProps = Omit<
   React.ComponentProps<"div">,
   keyof SkipNavContentOwnProps
 >;
-export type SkipNavContentOwnProps = {
+type SkipNavContentOwnProps = {
   /**
    * You can place the `SkipNavContent` element as a sibling to your main
    * content or as a wrapper.
@@ -124,9 +124,19 @@ export type SkipNavContentOwnProps = {
    */
   id?: string;
 };
-export type SkipNavContentProps = SkipNavContentDOMProps &
-  SkipNavContentOwnProps;
+type SkipNavContentProps = SkipNavContentDOMProps & SkipNavContentOwnProps;
 
 if (__DEV__) {
   SkipNavContent.displayName = "SkipNavContent";
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  SkipNavContentProps,
+  SkipNavLinkOwnProps,
+  SkipNavLinkProps,
+  SkipNavContentOwnProps,
+};
+export { SkipNavLink, SkipNavContent };

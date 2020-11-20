@@ -51,7 +51,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
 /**
  * @see Docs https://reach.tech/portal#portal-props
  */
-export type PortalProps = {
+type PortalProps = {
   /**
    * Regular React children.
    *
@@ -70,4 +70,9 @@ if (__DEV__) {
   Portal.displayName = "Portal";
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
 export default Portal;
+export type { PortalProps };
+export { Portal };

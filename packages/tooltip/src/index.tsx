@@ -59,8 +59,8 @@ import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import PropTypes from "prop-types";
 
-export const MOUSE_REST_TIMEOUT = 100;
-export const LEAVE_TIMEOUT = 500;
+const MOUSE_REST_TIMEOUT = 100;
+const LEAVE_TIMEOUT = 500;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -225,7 +225,7 @@ function clearContextId() {
  *
  * @param params
  */
-export function useTooltip<T extends HTMLElement>({
+function useTooltip<T extends HTMLElement>({
   id: idProp,
   onMouseEnter,
   onMouseMove,
@@ -355,7 +355,7 @@ export function useTooltip<T extends HTMLElement>({
  *
  * @see Docs https://reach.tech/tooltip#tooltip
  */
-export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
+const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   {
     children,
     label,
@@ -403,11 +403,11 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
 });
 
 type TooltipDOMProps = Omit<React.ComponentProps<"div">, keyof TooltipOwnProps>;
-export type TooltipOwnProps = {
+type TooltipOwnProps = {
   children: React.ReactNode;
   DEBUG_STYLE?: boolean;
 } & Omit<TooltipContentOwnProps, "triggerRect" | "isVisible">;
-export type TooltipProps = TooltipDOMProps & TooltipOwnProps;
+type TooltipProps = TooltipDOMProps & TooltipOwnProps;
 
 if (__DEV__) {
   Tooltip.displayName = "Tooltip";
@@ -418,8 +418,6 @@ if (__DEV__) {
   };
 }
 
-export default Tooltip;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -427,7 +425,7 @@ export default Tooltip;
  *
  * @see Docs https://reach.tech/tooltip#tooltippopup
  */
-export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
+const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   function TooltipPopup(
     {
       // could use children but we want to encourage simple strings
@@ -459,10 +457,10 @@ type TooltipPopupDOMProps = Omit<
   React.ComponentProps<"div">,
   keyof TooltipPopupOwnProps
 >;
-export type TooltipPopupOwnProps = {
+type TooltipPopupOwnProps = {
   children?: React.ReactNode;
 } & TooltipContentOwnProps;
-export type TooltipPopupProps = TooltipPopupDOMProps & TooltipPopupOwnProps;
+type TooltipPopupProps = TooltipPopupDOMProps & TooltipPopupOwnProps;
 
 if (__DEV__) {
   TooltipPopup.displayName = "TooltipPopup";
@@ -538,15 +536,14 @@ type TooltipContentDOMProps = Omit<
   React.ComponentProps<"div">,
   keyof TooltipContentOwnProps
 >;
-export type TooltipContentOwnProps = {
+type TooltipContentOwnProps = {
   ariaLabel?: string;
   position?: Position;
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
 };
-export type TooltipContentProps = TooltipContentDOMProps &
-  TooltipContentOwnProps;
+type TooltipContentProps = TooltipContentDOMProps & TooltipContentOwnProps;
 
 if (__DEV__) {
   TooltipContent.displayName = "TooltipContent";
@@ -644,7 +641,7 @@ const transition: Transition = (event, payload) => {
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
 
-export interface TriggerParams {
+interface TriggerParams {
   "aria-describedby"?: string | undefined;
   "data-reach-tooltip-trigger": string;
   ref: React.Ref<any>;
@@ -657,7 +654,7 @@ export interface TriggerParams {
   onMouseDown: React.ReactEventHandler;
 }
 
-export interface TooltipParams {
+interface TooltipParams {
   id: string;
   triggerRect: DOMRect | null;
   isVisible: boolean;
@@ -696,7 +693,7 @@ type StateContext = {
   id?: string | null;
 };
 
-export type Position = (
+type Position = (
   targetRect?: PRect | null,
   popoverRect?: PRect | null
 ) => React.CSSProperties;
@@ -709,3 +706,20 @@ type PRect = Partial<DOMRect> & {
   readonly top: number;
   readonly width: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Tooltip;
+export type {
+  Position,
+  TooltipContentOwnProps,
+  TooltipContentProps,
+  TooltipOwnProps,
+  TooltipParams,
+  TooltipPopupOwnProps,
+  TooltipPopupProps,
+  TooltipProps,
+  TriggerParams,
+};
+export { MOUSE_REST_TIMEOUT, LEAVE_TIMEOUT, Tooltip, TooltipPopup, useTooltip };

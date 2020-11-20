@@ -87,7 +87,7 @@ const initialState: MenuButtonState = {
  *
  * @see Docs https://reach.tech/menu-button#menu
  */
-export const Menu: React.FC<MenuProps> = ({ id, children }) => {
+const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = React.useRef(null);
   let menuRef = React.useRef(null);
   let popoverRef = React.useRef(null);
@@ -171,7 +171,7 @@ export const Menu: React.FC<MenuProps> = ({ id, children }) => {
 /**
  * @see Docs https://reach.tech/menu-button#menu-props
  */
-export interface MenuProps {
+interface MenuProps {
   /**
    * Requires two children: a `<MenuButton>` and a `<MenuList>`.
    *
@@ -205,7 +205,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menubutton
  */
-export const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
+const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
   function MenuButton(
     { as: Comp = "button", onKeyDown, onMouseDown, id, ...props },
     forwardedRef
@@ -307,7 +307,7 @@ type MenuButtonDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/menu-button#menubutton-props
  */
-export type MenuButtonOwnProps = {
+type MenuButtonOwnProps = {
   /**
    * Accepts any renderable content.
    *
@@ -315,7 +315,7 @@ export type MenuButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-export type MenuButtonProps = MenuButtonDOMProps & MenuButtonOwnProps;
+type MenuButtonProps = MenuButtonDOMProps & MenuButtonOwnProps;
 
 if (__DEV__) {
   MenuButton.displayName = "MenuButton";
@@ -514,7 +514,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
   }
 );
 
-export type MenuItemImplProps = {
+type MenuItemImplProps = {
   /**
    * You can put any type of content inside of a `<MenuItem>`.
    *
@@ -547,11 +547,12 @@ export type MenuItemImplProps = {
  *
  * @see Docs https://reach.tech/menu-button#menuitem
  */
-export const MenuItem = forwardRefWithAs<MenuItemProps, "div">(
-  function MenuItem({ as = "div", ...props }, forwardedRef) {
-    return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
-  }
-);
+const MenuItem = forwardRefWithAs<MenuItemProps, "div">(function MenuItem(
+  { as = "div", ...props },
+  forwardedRef
+) {
+  return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
+});
 
 type MenuItemDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -560,8 +561,8 @@ type MenuItemDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/menu-button#menuitem-props
  */
-export type MenuItemOwnProps = Omit<MenuItemImplProps, "isLink">;
-export type MenuItemProps = MenuItemDOMProps & MenuItemOwnProps;
+type MenuItemOwnProps = Omit<MenuItemImplProps, "isLink">;
+type MenuItemProps = MenuItemDOMProps & MenuItemOwnProps;
 
 if (__DEV__) {
   MenuItem.displayName = "MenuItem";
@@ -582,178 +583,175 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menuitems
  */
-export const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(
-  function MenuItems(
-    { as: Comp = "div", children, id, onKeyDown, ...props },
-    forwardedRef
-  ) {
-    const {
-      menuId,
-      dispatch,
-      buttonRef,
-      menuRef,
-      selectCallbacks,
-      state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
-    } = React.useContext(MenuContext);
-    const menuItems = useDescendants(MenuDescendantContext);
-    const ref = useForkedRef(menuRef, forwardedRef);
+const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(function MenuItems(
+  { as: Comp = "div", children, id, onKeyDown, ...props },
+  forwardedRef
+) {
+  const {
+    menuId,
+    dispatch,
+    buttonRef,
+    menuRef,
+    selectCallbacks,
+    state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
+  } = React.useContext(MenuContext);
+  const menuItems = useDescendants(MenuDescendantContext);
+  const ref = useForkedRef(menuRef, forwardedRef);
 
-    React.useEffect(() => {
-      // Respond to user char key input with typeahead
-      const match = findItemFromTypeahead(menuItems, typeaheadQuery);
-      if (typeaheadQuery && match != null) {
-        dispatch({
-          type: SELECT_ITEM_AT_INDEX,
-          payload: { index: match },
-        });
-      }
-      let timeout = window.setTimeout(
-        () =>
-          typeaheadQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
-        1000
-      );
-      return () => window.clearTimeout(timeout);
-    }, [dispatch, menuItems, typeaheadQuery]);
+  React.useEffect(() => {
+    // Respond to user char key input with typeahead
+    const match = findItemFromTypeahead(menuItems, typeaheadQuery);
+    if (typeaheadQuery && match != null) {
+      dispatch({
+        type: SELECT_ITEM_AT_INDEX,
+        payload: { index: match },
+      });
+    }
+    let timeout = window.setTimeout(
+      () => typeaheadQuery && dispatch({ type: SEARCH_FOR_ITEM, payload: "" }),
+      1000
+    );
+    return () => window.clearTimeout(timeout);
+  }, [dispatch, menuItems, typeaheadQuery]);
 
-    const prevMenuItemsLength = usePrevious(menuItems.length);
-    const prevSelected = usePrevious(menuItems[selectionIndex]);
-    const prevSelectionIndex = usePrevious(selectionIndex);
+  const prevMenuItemsLength = usePrevious(menuItems.length);
+  const prevSelected = usePrevious(menuItems[selectionIndex]);
+  const prevSelectionIndex = usePrevious(selectionIndex);
 
-    React.useEffect(() => {
-      if (selectionIndex > menuItems.length - 1) {
-        // If for some reason our selection index is larger than our possible
-        // index range (let's say the last item is selected and the list
-        // dynamically updates), we need to select the last item in the list.
-        dispatch({
-          type: SELECT_ITEM_AT_INDEX,
-          payload: { index: menuItems.length - 1 },
-        });
-      } else if (
-        // Checks if
-        //  - menu length has changed
-        //  - selection index has not changed BUT selected item has changed
-        //
-        // This prevents any dynamic adding/removing of menu items from actually
-        // changing a user's expected selection.
-        prevMenuItemsLength !== menuItems.length &&
-        selectionIndex > -1 &&
-        prevSelected &&
-        prevSelectionIndex === selectionIndex &&
-        menuItems[selectionIndex] !== prevSelected
-      ) {
-        dispatch({
-          type: SELECT_ITEM_AT_INDEX,
-          payload: {
-            index: menuItems.findIndex((i) => i.key === prevSelected.key),
-          },
-        });
-      }
-    }, [
-      dispatch,
-      menuItems,
-      prevMenuItemsLength,
-      prevSelected,
-      prevSelectionIndex,
-      selectionIndex,
-    ]);
-
-    let handleKeyDown = wrapEvent(
-      function handleKeyDown(event: React.KeyboardEvent) {
-        let { key } = event;
-
-        if (!isExpanded) {
-          return;
-        }
-
-        switch (key) {
-          case "Enter":
-          case " ":
-            let selected = menuItems.find(
-              (item) => item.index === selectionIndex
-            );
-            // For links, the Enter key will trigger a click by default, but for
-            // consistent behavior across menu items we'll trigger a click when
-            // the spacebar is pressed.
-            if (selected) {
-              if (selected.isLink && selected.element) {
-                selected.element.click();
-              } else {
-                event.preventDefault();
-                // Focus the button first by default when an item is selected.
-                // We fire the onSelect callback next so the app can manage
-                // focus if needed.
-                focus(buttonRef.current);
-                selectCallbacks.current[selected.index] &&
-                  selectCallbacks.current[selected.index]();
-                dispatch({ type: CLICK_MENU_ITEM });
-              }
-            }
-            break;
-          case "Escape":
-            focus(buttonRef.current);
-            dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
-            break;
-          case "Tab":
-            // prevent leaving
-            event.preventDefault();
-            break;
-          default:
-            // Check if a user is typing some char keys and respond by setting
-            // the query state.
-            if (isString(key) && key.length === 1) {
-              const query = typeaheadQuery + key.toLowerCase();
-              dispatch({
-                type: SEARCH_FOR_ITEM,
-                payload: query,
-              });
-            }
-            break;
-        }
-      },
-      useDescendantKeyDown(MenuDescendantContext, {
-        currentIndex: selectionIndex,
-        orientation: "vertical",
-        rotate: false,
-        filter: (item) => !item.disabled,
-        callback: (index: number) => {
-          dispatch({
-            type: SELECT_ITEM_AT_INDEX,
-            payload: { index },
-          });
+  React.useEffect(() => {
+    if (selectionIndex > menuItems.length - 1) {
+      // If for some reason our selection index is larger than our possible
+      // index range (let's say the last item is selected and the list
+      // dynamically updates), we need to select the last item in the list.
+      dispatch({
+        type: SELECT_ITEM_AT_INDEX,
+        payload: { index: menuItems.length - 1 },
+      });
+    } else if (
+      // Checks if
+      //  - menu length has changed
+      //  - selection index has not changed BUT selected item has changed
+      //
+      // This prevents any dynamic adding/removing of menu items from actually
+      // changing a user's expected selection.
+      prevMenuItemsLength !== menuItems.length &&
+      selectionIndex > -1 &&
+      prevSelected &&
+      prevSelectionIndex === selectionIndex &&
+      menuItems[selectionIndex] !== prevSelected
+    ) {
+      dispatch({
+        type: SELECT_ITEM_AT_INDEX,
+        payload: {
+          index: menuItems.findIndex((i) => i.key === prevSelected.key),
         },
-        key: "index",
-      })
-    );
+      });
+    }
+  }, [
+    dispatch,
+    menuItems,
+    prevMenuItemsLength,
+    prevSelected,
+    prevSelectionIndex,
+    selectionIndex,
+  ]);
 
-    return (
-      // TODO: Should probably file a but in jsx-a11y, but this is correct
-      // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-      // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
-      <Comp
-        // Refers to the descendant menuitem element that is visually indicated
-        // as focused.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-        aria-activedescendant={useMenuItemId(selectionIndex) || undefined}
-        // Refers to the element that contains the accessible name for the
-        // `menu`. The menu is labeled by the menu button.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-        aria-labelledby={buttonId || undefined}
-        // The element that contains the menu items displayed by activating the
-        // button has role menu.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        role="menu"
-        tabIndex={-1}
-        {...props}
-        ref={ref}
-        data-reach-menu-items=""
-        id={menuId}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-      >
-        {children}
-      </Comp>
-    );
-  }
-);
+  let handleKeyDown = wrapEvent(
+    function handleKeyDown(event: React.KeyboardEvent) {
+      let { key } = event;
+
+      if (!isExpanded) {
+        return;
+      }
+
+      switch (key) {
+        case "Enter":
+        case " ":
+          let selected = menuItems.find(
+            (item) => item.index === selectionIndex
+          );
+          // For links, the Enter key will trigger a click by default, but for
+          // consistent behavior across menu items we'll trigger a click when
+          // the spacebar is pressed.
+          if (selected) {
+            if (selected.isLink && selected.element) {
+              selected.element.click();
+            } else {
+              event.preventDefault();
+              // Focus the button first by default when an item is selected.
+              // We fire the onSelect callback next so the app can manage
+              // focus if needed.
+              focus(buttonRef.current);
+              selectCallbacks.current[selected.index] &&
+                selectCallbacks.current[selected.index]();
+              dispatch({ type: CLICK_MENU_ITEM });
+            }
+          }
+          break;
+        case "Escape":
+          focus(buttonRef.current);
+          dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+          break;
+        case "Tab":
+          // prevent leaving
+          event.preventDefault();
+          break;
+        default:
+          // Check if a user is typing some char keys and respond by setting
+          // the query state.
+          if (isString(key) && key.length === 1) {
+            const query = typeaheadQuery + key.toLowerCase();
+            dispatch({
+              type: SEARCH_FOR_ITEM,
+              payload: query,
+            });
+          }
+          break;
+      }
+    },
+    useDescendantKeyDown(MenuDescendantContext, {
+      currentIndex: selectionIndex,
+      orientation: "vertical",
+      rotate: false,
+      filter: (item) => !item.disabled,
+      callback: (index: number) => {
+        dispatch({
+          type: SELECT_ITEM_AT_INDEX,
+          payload: { index },
+        });
+      },
+      key: "index",
+    })
+  );
+
+  return (
+    // TODO: Should probably file a but in jsx-a11y, but this is correct
+    // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+    // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
+    <Comp
+      // Refers to the descendant menuitem element that is visually indicated
+      // as focused.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+      aria-activedescendant={useMenuItemId(selectionIndex) || undefined}
+      // Refers to the element that contains the accessible name for the
+      // `menu`. The menu is labeled by the menu button.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+      aria-labelledby={buttonId || undefined}
+      // The element that contains the menu items displayed by activating the
+      // button has role menu.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+      role="menu"
+      tabIndex={-1}
+      {...props}
+      ref={ref}
+      data-reach-menu-items=""
+      id={menuId}
+      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+    >
+      {children}
+    </Comp>
+  );
+});
 
 type MenuItemsDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -762,7 +760,7 @@ type MenuItemsDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/menu-button#menuitems-props
  */
-export type MenuItemsOwnProps = {
+type MenuItemsOwnProps = {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
@@ -770,7 +768,7 @@ export type MenuItemsOwnProps = {
    */
   children: React.ReactNode;
 };
-export type MenuItemsProps = MenuItemsDOMProps & MenuItemsOwnProps;
+type MenuItemsProps = MenuItemsDOMProps & MenuItemsOwnProps;
 
 if (__DEV__) {
   MenuItems.displayName = "MenuItems";
@@ -792,41 +790,37 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menulink
  */
-export const MenuLink = forwardRefWithAs<
-  MenuLinkProps & { component?: any },
-  "a"
->(function MenuLink({ as = "a", component, onSelect, ...props }, forwardedRef) {
-  if (component) {
-    console.warn(
-      "[@reach/menu-button]: Please use the `as` prop instead of `component`."
+const MenuLink = forwardRefWithAs<MenuLinkProps & { component?: any }, "a">(
+  function MenuLink({ as = "a", component, onSelect, ...props }, forwardedRef) {
+    if (component) {
+      console.warn(
+        "[@reach/menu-button]: Please use the `as` prop instead of `component`."
+      );
+    }
+
+    return (
+      <div role="none" tabIndex={-1}>
+        <MenuItemImpl
+          {...props}
+          ref={forwardedRef}
+          data-reach-menu-link=""
+          as={as}
+          isLink={true}
+          onSelect={onSelect || noop}
+        />
+      </div>
     );
   }
-
-  return (
-    <div role="none" tabIndex={-1}>
-      <MenuItemImpl
-        {...props}
-        ref={forwardedRef}
-        data-reach-menu-link=""
-        as={as}
-        isLink={true}
-        onSelect={onSelect || noop}
-      />
-    </div>
-  );
-});
+);
 
 type MenuLinkDOMProps = Omit<React.ComponentProps<"a">, keyof MenuLinkOwnProps>;
 /**
  * @see Docs https://reach.tech/menu-button#menulink-props
  */
-export type MenuLinkOwnProps = Omit<
-  MenuItemImplProps,
-  "isLink" | "onSelect"
-> & {
+type MenuLinkOwnProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?(): void;
 };
-export type MenuLinkProps = MenuLinkDOMProps & MenuLinkOwnProps;
+type MenuLinkProps = MenuLinkDOMProps & MenuLinkOwnProps;
 
 if (__DEV__) {
   MenuLink.displayName = "MenuLink";
@@ -846,15 +840,16 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menulist
  */
-export const MenuList = forwardRefWithAs<MenuListProps, "div">(
-  function MenuList({ portal = true, ...props }, forwardedRef) {
-    return (
-      <MenuPopover portal={portal}>
-        <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
-      </MenuPopover>
-    );
-  }
-);
+const MenuList = forwardRefWithAs<MenuListProps, "div">(function MenuList(
+  { portal = true, ...props },
+  forwardedRef
+) {
+  return (
+    <MenuPopover portal={portal}>
+      <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
+    </MenuPopover>
+  );
+});
 
 type MenuListDOMProps = Omit<
   React.ComponentProps<"div">,
@@ -863,7 +858,7 @@ type MenuListDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/menu-button#menulist-props
  */
-export type MenuListOwnProps = {
+type MenuListOwnProps = {
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
@@ -878,7 +873,7 @@ export type MenuListOwnProps = {
    */
   children: React.ReactNode;
 };
-export type MenuListProps = MenuListDOMProps & MenuListOwnProps;
+type MenuListProps = MenuListDOMProps & MenuListOwnProps;
 
 if (__DEV__) {
   MenuList.displayName = "MenuList";
@@ -899,7 +894,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#menupopover
  */
-export const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
+const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
   function MenuPopover(
     { as: Comp = "div", children, portal = true, position, ...props },
     forwardedRef
@@ -964,7 +959,7 @@ type MenuPopoverDOMProps = Omit<
 /**
  * @see Docs https://reach.tech/menu-button#menupopover-props
  */
-export type MenuPopoverOwnProps = {
+type MenuPopoverOwnProps = {
   /**
    * Must contain a `MenuItems`
    *
@@ -989,7 +984,7 @@ export type MenuPopoverOwnProps = {
    */
   position?: Position;
 };
-export type MenuPopoverProps = MenuPopoverDOMProps & MenuPopoverOwnProps;
+type MenuPopoverProps = MenuPopoverDOMProps & MenuPopoverOwnProps;
 
 if (__DEV__) {
   MenuPopover.displayName = "MenuPopover";
@@ -1005,7 +1000,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/menu-button#usemenubuttoncontext
  */
-export function useMenuButtonContext(): MenuContextValue {
+function useMenuButtonContext(): MenuContextValue {
   let {
     state: { isExpanded },
   } = React.useContext(MenuContext);
@@ -1174,7 +1169,37 @@ interface InternalMenuContextValue {
   state: MenuButtonState;
 }
 
-export type MenuContextValue = {
+type MenuContextValue = {
   isExpanded: boolean;
   // id: string | undefined;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  MenuButtonOwnProps,
+  MenuButtonProps,
+  MenuContextValue,
+  MenuItemOwnProps,
+  MenuItemProps,
+  MenuItemsOwnProps,
+  MenuItemsProps,
+  MenuLinkOwnProps,
+  MenuLinkProps,
+  MenuListOwnProps,
+  MenuListProps,
+  MenuPopoverOwnProps,
+  MenuPopoverProps,
+  MenuProps,
+};
+export {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  MenuLink,
+  MenuList,
+  MenuPopover,
+  useMenuButtonContext,
 };
