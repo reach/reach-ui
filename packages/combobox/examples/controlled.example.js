@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import * as React from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -14,16 +14,16 @@ import "@reach/combobox/styles.css";
 let name = "Controlled";
 
 function Example() {
-  let [term, setTerm] = useState("");
-  let [selection, setSelection] = useState("");
+  let [term, setTerm] = React.useState("");
+  let [selection, setSelection] = React.useState("");
   let results = useCityMatch(term);
-  let ref = useRef();
+  let ref = React.useRef();
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setTerm(event.target.value);
   };
 
-  const handleSelect = value => {
+  const handleSelect = (value) => {
     setSelection(value);
     setTerm("");
   };
@@ -82,12 +82,12 @@ export default { title: "Combobox" };
 
 function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);
-  return useMemo(
+  return React.useMemo(
     () =>
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`],
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

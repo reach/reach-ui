@@ -1,5 +1,6 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { Pipe } from "../components/Pipe";
 
 <SEO title="Tabs" description="Accessible tabs component for React" />
 
@@ -86,16 +87,16 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                                             | Type                                  | Required | Default        |
-| ------------------------------------------------ | ------------------------------------- | -------- | -------------- |
-| [`as`](#tabs-as)                                 | `string` \| `Component`               | false    | `"div"`        |
-| [`children`](#tabs-children)                     | `node`                                | true     |                |
-| [`defaultIndex`](#tabs-defaultindex)             | `number`                              | false    |                |
-| [`index`](#tabs-index)                           | `number`                              | false    |                |
-| [`keyboardActivation`](#tabs-keyboardactivation) | `enum` (`"auto"` \| `"manual"`)       | false    | `"auto`        |
-| [`onChange`](#tabs-onchange)                     | `func`                                | false    |                |
-| [`orientation`](#tabs-orientation)               | `enum` (`"horizontal"`\|`"vertical"`) | false    | `"horizontal"` |
-| [`div` props](#tabs-div-props)                   |                                       | false    |                |
+| Prop                                             | Type                               | Required | Default        |
+| ------------------------------------------------ | ---------------------------------- | -------- | -------------- |
+| [`as`](#tabs-as)                                 | `string` <Pipe /> `Component`      | false    | `"div"`        |
+| [`children`](#tabs-children)                     | `node`                             | true     |                |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                           | false    |                |
+| [`index`](#tabs-index)                           | `number`                           | false    |                |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` <Pipe /> `"manual"`)      | false    | `"auto`        |
+| [`onChange`](#tabs-onchange)                     | `func`                             | false    |                |
+| [`orientation`](#tabs-orientation)               | `"horizontal"`<Pipe />`"vertical"` | false    | `"horizontal"` |
+| [`div` props](#tabs-div-props)                   |                                    | false    |                |
 
 ##### Tabs `as`
 
@@ -204,7 +205,7 @@ Like form inputs, a tab's state can be controlled by the owner. Make sure to inc
 ```jsx
 // jsx-demo
 function Example() {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleSliderChange = (event) => {
     setTabIndex(parseInt(event.target.value, 10));
@@ -275,7 +276,7 @@ Calls back with the tab index whenever the user changes tabs, allowing your app 
 // jsx-demo
 function Example() {
   const colors = ["firebrick", "goldenrod", "dodgerblue"];
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = React.useState(0);
   const backgroundColor = colors[tabIndex];
   return (
     <Tabs
@@ -372,11 +373,11 @@ Please see the [styling guide](/styling).
 
 #### TabList Props
 
-| Prop                              | Type                    | Required | Default |
-| --------------------------------- | ----------------------- | -------- | ------- |
-| [`as`](#tablist-as)               | `string` \| `Component` | false    | `"div"` |
-| [`children`](#tablist-children)   | node                    | true     |         |
-| [`div` props](#tablist-div-props) |                         |          |         |
+| Prop                              | Type                          | Required | Default |
+| --------------------------------- | ----------------------------- | -------- | ------- |
+| [`as`](#tablist-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
+| [`children`](#tablist-children)   | node                          | true     |         |
+| [`div` props](#tablist-div-props) |                               |          |         |
 
 ##### TabList `children`
 
@@ -446,11 +447,11 @@ Please see the [styling guide](/styling).
 
 #### TabPanels Props
 
-| Prop                                | Type                    | Required | Default |
-| ----------------------------------- | ----------------------- | -------- | ------- |
-| [`as`](#tabpanels-as)               | `string` \| `Component` | false    | `"div"` |
-| [`children`](#tabpanels-children)   | `node`                  | true     |         |
-| [`div` props](#tabpanels-div-props) |                         |          |         |
+| Prop                                | Type                          | Required | Default |
+| ----------------------------------- | ----------------------------- | -------- | ------- |
+| [`as`](#tabpanels-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
+| [`children`](#tabpanels-children)   | `node`                        | true     |         |
+| [`div` props](#tabpanels-div-props) |                               |          |         |
 
 ##### TabPanels `as`
 
@@ -524,12 +525,12 @@ Please see the [styling guide](/styling).
 
 #### Tab Props
 
-| Prop                                | Type                    | Required | Default    |
-| ----------------------------------- | ----------------------- | -------- | ---------- |
-| [`as`](#tab-as)                     | `string` \| `Component` | false    | `"button"` |
-| [`children`](#tab-children)         | node                    | true     |            |
-| [`disabled`](#tab-disabled)         | boolean                 | false    | `false`    |
-| [`button` props](#tab-button-props) |                         |          |            |
+| Prop                                | Type                          | Required | Default    |
+| ----------------------------------- | ----------------------------- | -------- | ---------- |
+| [`as`](#tab-as)                     | `string` <Pipe /> `Component` | false    | `"button"` |
+| [`children`](#tab-children)         | node                          | true     |            |
+| [`disabled`](#tab-disabled)         | boolean                       | false    | `false`    |
+| [`button` props](#tab-button-props) |                               |          |            |
 
 ##### Tab `as`
 
@@ -627,11 +628,11 @@ Please see the [styling guide](/styling).
 
 #### TabPanel Props
 
-| Prop                               | Type                    | Required | Default |
-| ---------------------------------- | ----------------------- | -------- | ------- |
-| [`as`](#tabpanel-as)               | `string` \| `Component` | false    | `"div"` |
-| [`children`](#tabpanel-children)   | `node`                  | false    |         |
-| [`div` props](#tabpanel-div-props) |                         |          |         |
+| Prop                               | Type                          | Required | Default |
+| ---------------------------------- | ----------------------------- | -------- | ------- |
+| [`as`](#tabpanel-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
+| [`children`](#tabpanel-children)   | `node`                        | false    |         |
+| [`div` props](#tabpanel-div-props) |                               |          |         |
 
 ##### TabPanel `as`
 
@@ -765,8 +766,8 @@ With a little composition we can animate the selected tab bar.
 
   function AnimatedTabs({ color, children, ...rest }) {
     // some state to store the position we want to animate to
-    const [activeRect, setActiveRect] = useState(null);
-    const ref = useRef();
+    const [activeRect, setActiveRect] = React.useState(null);
+    const ref = React.useRef();
     const rect = useRect(ref);
 
     return (
@@ -806,14 +807,14 @@ With a little composition we can animate the selected tab bar.
     const isSelected = selectedIndex === index;
 
     // measure the size of our element, only listen to rect if active
-    const ref = useRef();
+    const ref = React.useRef();
     const rect = useRect(ref, isSelected);
 
     // get the style changing function from context
     const setActiveRect = useContext(AnimatedContext);
 
     // callup to set styles whenever we're active
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
       if (isSelected) {
         setActiveRect(rect);
       }

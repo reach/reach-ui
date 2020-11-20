@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
 let name = "Basic";
 
 function Example() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

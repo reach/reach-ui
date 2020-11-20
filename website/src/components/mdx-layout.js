@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
 import { MDXProvider } from "@mdx-js/react";
 import {
   Accordion,
@@ -85,22 +85,15 @@ import { useTransition, animated } from "react-spring/web.cjs";
 import { Phased } from "recondition";
 import { useThrottle } from "use-throttle";
 import Layout from "./Layout";
+import { Table, Caption } from "./Table";
 import { PreComponent } from "./MdxPre";
 import "../styles/app.scss";
-
-function Table(props) {
-  return (
-    <div style={{ maxWidth: "100%", overflowX: "auto" }}>
-      <table className="u-full-width" {...props} />
-    </div>
-  );
-}
 
 let firstLoad = true;
 
 function MyPageLayout({ children }) {
-  let contentFocusRef = useRef(null);
-  useEffect(() => {
+  let contentFocusRef = React.useRef(null);
+  React.useEffect(() => {
     if (firstLoad) {
       firstLoad = false;
     } else if (contentFocusRef.current) {
@@ -125,7 +118,7 @@ function MyPageLayout({ children }) {
     <Layout>
       <MDXProvider
         components={{
-          pre: function(props) {
+          pre: function (props) {
             return (
               <PreComponent
                 {...props}
@@ -210,6 +203,7 @@ function MyPageLayout({ children }) {
             );
           },
           table: Table,
+          caption: Caption,
         }}
       >
         <main>

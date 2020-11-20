@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import {
   Disclosure,
   DisclosureButton,
-  DisclosurePanel
+  DisclosurePanel,
 } from "@reach/disclosure";
 
 let name = "Controlled";
 
 function Example() {
-  const [value, setValue] = useState("");
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
+  const [value, setValue] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  React.useEffect(() => {
     if (value.toLowerCase().trim() === "open") {
       setOpen(true);
     } else if (value.toLowerCase().trim() === "close") {
@@ -26,7 +26,7 @@ function Example() {
           style={{ display: "block", margin: "10px 0" }}
           type="text"
           value={value}
-          onChange={event => setValue(event.target.value)}
+          onChange={(event) => setValue(event.target.value)}
         />
       </label>
       <Disclosure open={open} onChange={() => setOpen(!open)}>

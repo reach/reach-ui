@@ -7,12 +7,12 @@
 An accessible listbox for custom select inputs.
 
 ```jsx
-import React, { useState } from "react";
+import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
 function Example(props) {
-  let [value, setValue] = useState("default");
+  let [value, setValue] = React.useState("default");
   return (
     <Listbox value={value} onChange={(value) => setValue(value)}>
       <ListboxOption value="default">🌮 Choose a taco</ListboxOption>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { useTransition, animated, config } from "react-spring/web.cjs";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
@@ -9,12 +9,12 @@ let AnimatedDialogOverlay = animated(DialogOverlay);
 let AnimatedDialogContent = animated(DialogContent);
 
 function Example() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const transitions = useTransition(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
     leave: { opacity: 0, y: 10 },
-    config: config.stiff
+    config: config.stiff,
   });
   return (
     <div>
@@ -31,10 +31,10 @@ function Example() {
                 aria-labelledby="dialog-title"
                 style={{
                   transform: styles.y.interpolate(
-                    value => `translate3d(0px, ${value}px, 0px)`
+                    (value) => `translate3d(0px, ${value}px, 0px)`
                   ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
               >
                 <button onClick={() => setShowDialog(false)}>

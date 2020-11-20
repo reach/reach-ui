@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
@@ -12,7 +12,7 @@ let tabsStyle = {
 };
 
 function Example() {
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = React.useState(0);
 
   return (
     <div>
@@ -24,7 +24,7 @@ function Example() {
           min="0"
           max="2"
           value={tabIndex}
-          onChange={event => {
+          onChange={(event) => {
             setTabIndex(parseInt(event.target.value, 10));
           }}
         />{" "}
@@ -34,7 +34,7 @@ function Example() {
       <Tabs
         index={tabIndex}
         style={tabsStyle}
-        onChange={index => {
+        onChange={(index) => {
           setTabIndex(index);
         }}
       >

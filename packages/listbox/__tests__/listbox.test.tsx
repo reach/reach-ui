@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { render, act, fireEvent, keyType } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";

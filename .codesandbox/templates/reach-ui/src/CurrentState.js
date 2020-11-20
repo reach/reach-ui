@@ -1,12 +1,12 @@
-import React from "react";
+import * as React from "react";
 
-export const CurrentState = props => (
+export const CurrentState = (props) => (
   <div className="CurrentState">
     <h3>Current State</h3>
     <pre
       style={{
         fontSize: ".65rem",
-        padding: ".5rem"
+        padding: ".5rem",
       }}
     >
       <strong>props</strong> = {JSON.stringify(props, null, 2)}

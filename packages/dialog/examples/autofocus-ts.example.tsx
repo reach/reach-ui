@@ -1,12 +1,12 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { Dialog } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
 let name = "Autofocus (TS)";
 
 function Example() {
-  const [showDialog, setShowDialog] = useState(false);
-  const button = useRef(null);
+  const [showDialog, setShowDialog] = React.useState(false);
+  const button = React.useRef(null);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

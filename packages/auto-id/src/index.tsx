@@ -54,7 +54,7 @@
  * server hydration and never again, SO BACK OFF ALRIGHT?
  */
 
-import { useState, useEffect } from "react";
+import * as React from "react";
 import { useIsomorphicLayoutEffect } from "@reach/utils";
 
 let serverHandoffComplete = false;
@@ -79,7 +79,7 @@ export const useId = (idFromProps?: string | null) => {
    */
   const initialId = idFromProps || (serverHandoffComplete ? genId() : null);
 
-  const [id, setId] = useState(initialId);
+  const [id, setId] = React.useState(initialId);
 
   useIsomorphicLayoutEffect(() => {
     if (id === null) {
@@ -94,7 +94,7 @@ export const useId = (idFromProps?: string | null) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (serverHandoffComplete === false) {
       /*
        * Flag all future uses of `useId` to skip the update dance. This is in

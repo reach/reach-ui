@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 import "./custom-pseduo.css";
@@ -6,14 +6,14 @@ import "./custom-pseduo.css";
 let name = "CustomCheckbox with Pseudo Element Styles";
 
 function Example() {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = React.useState(false);
   return (
     <div className="example">
       <label>
         <CustomCheckbox
           value="whatever"
           checked={checked}
-          onChange={event => {
+          onChange={(event) => {
             setChecked(event.target.checked);
           }}
         />

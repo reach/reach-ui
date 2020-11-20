@@ -30,6 +30,7 @@ beforeEach(() => {
   const autoId = require("@reach/auto-id");
   const rect = require("@reach/rect");
   utils.checkStyles = jest.fn();
+  utils.useCheckStyles = jest.fn();
   autoId.useId = (fallback: string) => fallback || "REACH-ID";
   rect.useRect = () => ({ height: 1, width: 1, x: 0, y: 0 });
 });

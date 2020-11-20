@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import {
   ListboxInput,
@@ -13,7 +13,7 @@ import "@reach/listbox/styles.css";
 let name = "Composed";
 
 function Example() {
-  let [value, setValue] = useState("pollo");
+  let [value, setValue] = React.useState("pollo");
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>

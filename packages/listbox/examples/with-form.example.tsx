@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
 import { Taco } from "./common";
@@ -9,8 +9,8 @@ import { Taco } from "./common";
 let name = "With a Form (TS)";
 
 function Example() {
-  let [formData, setFormData] = useState({});
-  let formRef = useRef(null);
+  let [formData, setFormData] = React.useState({});
+  let formRef = React.useRef(null);
   return (
     <div>
       When focused on a form input or our custom listbox inside of a form, you

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   noop,
@@ -50,9 +50,11 @@ export function useDescendant<DescendantType extends Descendant>(
   indexProp?: number
 ) {
   let forceUpdate = useForceUpdate();
-  let { registerDescendant, unregisterDescendant, descendants } = useContext(
-    context
-  );
+  let {
+    registerDescendant,
+    unregisterDescendant,
+    descendants,
+  } = React.useContext(context);
 
   // This will initially return -1 because we haven't registered the descendant
   // on the first render. After we register, this will then return the correct
@@ -96,13 +98,13 @@ export function useDescendant<DescendantType extends Descendant>(
 }
 
 export function useDescendantsInit<DescendantType extends Descendant>() {
-  return useState<DescendantType[]>([]);
+  return React.useState<DescendantType[]>([]);
 }
 
 export function useDescendants<DescendantType extends Descendant>(
   ctx: React.Context<DescendantContextValue<DescendantType>>
 ) {
-  return useContext(ctx).descendants;
+  return React.useContext(ctx).descendants;
 }
 
 export function DescendantProvider<DescendantType extends Descendant>({
@@ -116,7 +118,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
   items: DescendantType[];
   set: React.Dispatch<React.SetStateAction<DescendantType[]>>;
 }) {
-  let registerDescendant = useCallback(
+  let registerDescendant = React.useCallback(
     ({
       element,
       index: explicitIndex,
@@ -197,14 +199,14 @@ export function DescendantProvider<DescendantType extends Descendant>({
         return newItems.map((item, index) => ({ ...item, index }));
       });
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  let unregisterDescendant = useCallback(
+  let unregisterDescendant = React.useCallback(
     (element: DescendantType["element"]) => {
       if (!element) {
         return;
@@ -212,7 +214,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
 
       set((items) => items.filter((item) => element !== item.element));
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -221,7 +223,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
 
   return (
     <Ctx.Provider
-      value={useMemo(() => {
+      value={React.useMemo(() => {
         return {
           descendants: items,
           registerDescendant,
@@ -262,7 +264,7 @@ export function useDescendantKeyDown<
     callback(nextOption: DescendantType | DescendantType[K]): void;
   }
 ) {
-  let { descendants } = useContext(context);
+  let { descendants } = React.useContext(context);
   let {
     callback,
     currentIndex,

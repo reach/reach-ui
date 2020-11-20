@@ -15,7 +15,7 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
  */
 
-import React, { forwardRef, useContext, useRef, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   forwardRefWithAs,
@@ -27,11 +27,10 @@ import {
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 
-const DisclosureContext = createNamedContext<IDisclosureContext>(
+const DisclosureContext = createNamedContext<DisclosureContextValue>(
   "DisclosureContext",
-  {} as IDisclosureContext
+  {} as DisclosureContextValue
 );
-const useDisclosureContext = () => useContext(DisclosureContext);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -65,13 +64,13 @@ export const Disclosure: React.FC<DisclosureProps> = ({
    * controlled component and track any changes in a ref to show a warning.
    */
   const wasControlled = openProp != null;
-  const { current: isControlled } = useRef(wasControlled);
+  const { current: isControlled } = React.useRef(wasControlled);
 
   const id =
     useId(props.id != null ? String(props.id) : undefined) || "disclosure";
   const panelId = makeId("panel", id);
 
-  const [open, setOpen] = useState(
+  const [open, setOpen] = React.useState(
     isControlled ? (openProp as boolean) : defaultOpen
   );
 
@@ -82,19 +81,27 @@ export const Disclosure: React.FC<DisclosureProps> = ({
     );
   }
 
-  function onSelect() {
-    onChange && onChange();
-    if (!isControlled) {
-      setOpen(!open);
-    }
-  }
+  const stableOnChange = useStableCallback(onChange);
 
-  const context: IDisclosureContext = {
-    disclosureId: id,
-    onSelect,
-    open,
-    panelId,
-  };
+  const onSelect = React.useCallback(
+    function onSelect() {
+      stableOnChange();
+      if (!isControlled) {
+        setOpen((open) => !open);
+      }
+    },
+    [stableOnChange, isControlled]
+  );
+
+  const context: DisclosureContextValue = React.useMemo(
+    () => ({
+      disclosureId: id,
+      onSelect,
+      open,
+      panelId,
+    }),
+    [onSelect, id, open, panelId]
+  );
 
   if (isControlled && openProp !== open) {
     /*
@@ -111,7 +118,7 @@ export const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-export type DisclosureProps = {
+export type DisclosureOwnProps = {
   /**
    * `Disclosure` expects to receive accept `DisclosureButton` and
    * `DisclosurePanel` components as children. It can also accept wrapper
@@ -155,6 +162,7 @@ export type DisclosureProps = {
    */
   open?: boolean;
 };
+export type DisclosureProps = DisclosureOwnProps;
 
 if (__DEV__) {
   Disclosure.displayName = "Disclosure";
@@ -191,8 +199,8 @@ export const DisclosureButton = forwardRefWithAs<
   },
   forwardedRef
 ) {
-  const { onSelect, open, panelId } = useDisclosureContext();
-  const ownRef = useRef<HTMLElement | null>(null);
+  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+  const ownRef = React.useRef<HTMLElement | null>(null);
 
   const ref = useForkedRef(forwardedRef, ownRef);
 
@@ -225,10 +233,14 @@ export const DisclosureButton = forwardRefWithAs<
   );
 });
 
+type DisclosureButtonDOMProps = Omit<
+  React.ComponentProps<"button">,
+  keyof DisclosureButtonOwnProps
+>;
 /**
  * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
-export type DisclosureButtonProps = {
+export type DisclosureButtonOwnProps = {
   /**
    * Typically a text string that serves as a label for the disclosure button,
    * though nested DOM nodes can be passed as well so long as they are valid
@@ -239,6 +251,8 @@ export type DisclosureButtonProps = {
    */
   children: React.ReactNode;
 };
+export type DisclosureButtonProps = DisclosureButtonDOMProps &
+  DisclosureButtonOwnProps;
 
 if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
@@ -258,12 +272,15 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurepanel
  */
-export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
-  function DisclosurePanel({ children, ...props }, forwardedRef) {
-    const { panelId, open } = useDisclosureContext();
+export const DisclosurePanel = forwardRefWithAs<DisclosurePanelProps, "div">(
+  function DisclosurePanel(
+    { as: Comp = "div", children, ...props },
+    forwardedRef
+  ) {
+    const { panelId, open } = React.useContext(DisclosureContext);
 
     return (
-      <div
+      <Comp
         ref={forwardedRef}
         hidden={!open}
         {...props}
@@ -273,7 +290,7 @@ export const DisclosurePanel = forwardRef<HTMLDivElement, DisclosurePanelProps>(
         tabIndex={-1}
       >
         {children}
-      </div>
+      </Comp>
     );
   }
 );
@@ -286,7 +303,11 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
+type DisclosurePanelDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof DisclosurePanelOwnProps
+>;
+export type DisclosurePanelOwnProps = {
   /**
    * Inner collapsible content for the disclosure item.
    *
@@ -294,13 +315,60 @@ type DisclosurePanelProps = React.HTMLAttributes<HTMLDivElement> & {
    */
   children: React.ReactNode;
 };
+export type DisclosurePanelProps = DisclosurePanelDOMProps &
+  DisclosurePanelOwnProps;
+
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * A hook that exposes data for a given `Disclosure` component to its
+ * descendants.
+ *
+ * @see Docs https://reach.tech/disclosure#usedisclosurecontext
+ */
+export function useDisclosureContext() {
+  let { open, panelId, disclosureId } = React.useContext(DisclosureContext);
+  return React.useMemo(
+    () => ({
+      id: disclosureId,
+      panelId,
+      open,
+    }),
+    [disclosureId, open, panelId]
+  );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-interface IDisclosureContext {
+interface DisclosureContextValue {
   disclosureId: string;
   onSelect(): void;
   open: boolean;
   panelId: string;
+}
+
+/**
+ * Importing this from @reach/utils is breaking the docs site. Unsure why as of
+ * yet. Including here in the mean time.
+ *
+ * Converts a callback to a ref to avoid triggering re-renders when passed as a
+ * prop and exposed as a stable function to avoid executing effects when
+ * passed as a dependency.
+ */
+function useStableCallback<T extends (...args: any[]) => any>(
+  callback: T | null | undefined
+): T {
+  let callbackRef = React.useRef(callback);
+  React.useEffect(() => {
+    callbackRef.current = callback;
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return React.useCallback(
+    ((...args) => {
+      callbackRef.current && callbackRef.current(...args);
+    }) as T,
+    []
+  );
 }

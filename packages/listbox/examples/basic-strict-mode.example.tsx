@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
@@ -11,7 +11,7 @@ type Option = { value: string; label: string };
 
 function Example() {
   return (
-    <StrictMode>
+    <React.StrictMode>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
       <Listbox
         aria-labelledby="taco-label"
@@ -37,7 +37,7 @@ function Example() {
           Lengua <Taco />
         </ListboxOption>
       </Listbox>
-    </StrictMode>
+    </React.StrictMode>
   );
 }
 

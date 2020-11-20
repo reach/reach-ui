@@ -14,10 +14,10 @@ import { useId } from "@reach/auto-id";
 function FormField(props) {
   const id = useId(props.id);
   return (
-    <Fragment>
+    <React.Fragment>
       <label htmlFor={id}>{props.label}</label>
       <input type={props.type} name={props.name} id={id} />
-    </Fragment>
+    </React.Fragment>
   );
 }
 ```

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 const name = "Disabled MixedCheckbox";
 
 function Example() {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = React.useState(true);
   return (
     <div>
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -14,7 +14,7 @@ function Example() {
             type="checkbox"
             disabled
             checked={checked}
-            onChange={event => {
+            onChange={(event) => {
               setChecked(event.target.checked);
             }}
           />
@@ -26,7 +26,7 @@ function Example() {
             disabled
             value="whatever"
             checked={checked}
-            onChange={event => {
+            onChange={(event) => {
               setChecked(event.target.checked);
             }}
           />

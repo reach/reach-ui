@@ -31,17 +31,12 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, {
-  forwardRef,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import {
-  checkStyles,
   createNamedContext,
+  forwardRefWithAs,
   isFunction,
+  useCheckStyles,
   useForkedRef,
   wrapEvent,
 } from "@reach/utils";
@@ -58,10 +53,10 @@ import PropTypes from "prop-types";
 
 const CustomCheckboxContext = createNamedContext(
   "CustomCheckboxContext",
-  {} as ICustomCheckboxContext
+  {} as CustomCheckboxContextValue
 );
 function useCustomCheckboxContext() {
-  return useContext(CustomCheckboxContext);
+  return React.useContext(CustomCheckboxContext);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,11 +68,12 @@ function useCustomCheckboxContext() {
  *
  * @see Docs https://reach.tech/checkbox#customcheckboxcontainer
  */
-export const CustomCheckboxContainer = forwardRef<
-  HTMLSpanElement,
-  CustomCheckboxContainerProps & { _componentName?: string }
+export const CustomCheckboxContainer = forwardRefWithAs<
+  CustomCheckboxContainerProps & { _componentName?: string },
+  "span"
 >(function CustomCheckboxContainer(
   {
+    as: Comp = "span",
     checked: controlledChecked,
     children,
     defaultChecked,
@@ -89,14 +85,14 @@ export const CustomCheckboxContainer = forwardRef<
   },
   forwardedRef
 ) {
-  let inputRef: CustomCheckboxInputRef = useRef(null);
+  let inputRef: CustomCheckboxInputRef = React.useRef(null);
   let [inputProps, stateData] = useMixedCheckbox(inputRef, {
     defaultChecked,
     checked: controlledChecked,
     disabled,
     onChange,
   });
-  let [focused, setFocused] = useState(false);
+  let [focused, setFocused] = React.useState(false);
 
   function handleClick() {
     // Wait a frame so the input event is triggered, then focus the input
@@ -105,7 +101,7 @@ export const CustomCheckboxContainer = forwardRef<
     });
   }
 
-  let context: ICustomCheckboxContext = {
+  let context: CustomCheckboxContextValue = {
     defaultChecked,
     disabled,
     focused,
@@ -115,11 +111,11 @@ export const CustomCheckboxContainer = forwardRef<
   };
 
   useControlledSwitchWarning(controlledChecked, "checked", _componentName);
-  useEffect(() => checkStyles("checkbox"), []);
+  useCheckStyles("checkbox");
 
   return (
     <CustomCheckboxContext.Provider value={context}>
-      <span
+      <Comp
         {...props}
         ref={forwardedRef}
         data-reach-custom-checkbox-container=""
@@ -134,7 +130,7 @@ export const CustomCheckboxContainer = forwardRef<
               focused,
             })
           : children}
-      </span>
+      </Comp>
     </CustomCheckboxContext.Provider>
   );
 });
@@ -142,10 +138,11 @@ export const CustomCheckboxContainer = forwardRef<
 /**
  * @see Docs https://reach.tech/checkbox#custom-checkboxcontainer-props
  */
-export type CustomCheckboxContainerProps = Omit<
-  React.HTMLAttributes<HTMLSpanElement>,
-  "onChange"
-> & {
+type CustomCheckboxContainerDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof CustomCheckboxContainerOwnProps
+>;
+export type CustomCheckboxContainerOwnProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
@@ -199,6 +196,8 @@ export type CustomCheckboxContainerProps = Omit<
    */
   onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
 };
+export type CustomCheckboxContainerProps = CustomCheckboxContainerDOMProps &
+  CustomCheckboxContainerOwnProps;
 
 if (__DEV__) {
   CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
@@ -224,10 +223,13 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/checkbox#customcheckboxinput
  */
-export const CustomCheckboxInput = forwardRef<
-  HTMLInputElement,
-  CustomCheckboxInputProps
->(function CustomCheckboxInput({ onBlur, onFocus, ...props }, forwardedRef) {
+export const CustomCheckboxInput = forwardRefWithAs<
+  CustomCheckboxInputProps,
+  "input"
+>(function CustomCheckboxInput(
+  { as: Comp = "input", onBlur, onFocus, ...props },
+  forwardedRef
+) {
   let {
     focused,
     inputProps,
@@ -236,7 +238,7 @@ export const CustomCheckboxInput = forwardRef<
   } = useCustomCheckboxContext();
 
   let ref = useForkedRef(forwardedRef, inputRef);
-  let mounted = useRef(true);
+  let mounted = React.useRef(true);
 
   function handleBlur() {
     // window.requestAnimationFrame(() => send(CustomCheckboxEvents.Blur));
@@ -256,10 +258,10 @@ export const CustomCheckboxInput = forwardRef<
     });
   }
 
-  useEffect(() => () => void (mounted.current = false), []);
+  React.useEffect(() => () => void (mounted.current = false), []);
 
   return (
-    <input
+    <Comp
       {...props}
       {...inputProps}
       ref={ref}
@@ -272,10 +274,17 @@ export const CustomCheckboxInput = forwardRef<
   );
 });
 
-export type CustomCheckboxInputProps = Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "checked" | "defaultChecked" | "disabled" | "onChange"
-> & {};
+type CustomCheckboxInputDOMProps = Omit<
+  React.ComponentProps<"input">,
+  | keyof CustomCheckboxInputOwnProps
+  | keyof CustomCheckboxContextValue["inputProps"]
+>;
+export type CustomCheckboxInputOwnProps = Pick<
+  CustomCheckboxOwnProps,
+  "name" | "value"
+>;
+export type CustomCheckboxInputProps = CustomCheckboxInputDOMProps &
+  CustomCheckboxInputOwnProps;
 
 if (__DEV__) {
   CustomCheckboxInput.displayName = "CustomCheckboxInput";
@@ -291,7 +300,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/checkbox#customcheckbox-1
  */
-export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
+export const CustomCheckbox = forwardRefWithAs<CustomCheckboxProps, "input">(
   function CustomCheckbox(
     { children, id, name, value, ...props },
     forwardedRef
@@ -317,10 +326,11 @@ export const CustomCheckbox = forwardRef<HTMLInputElement, CustomCheckboxProps>(
 /**
  * @see Docs https://reach.tech/checkbox#custom-checkbox-props
  */
-export type CustomCheckboxProps = Omit<
-  React.HTMLAttributes<HTMLSpanElement>,
-  "onChange"
-> & {
+type CustomCheckboxDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof CustomCheckboxOwnProps
+>;
+export type CustomCheckboxOwnProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
@@ -357,7 +367,7 @@ export type CustomCheckboxProps = Omit<
    *
    * @see Docs https://reach.tech/checkbox#custom-checkbox-name
    */
-  name?: React.InputHTMLAttributes<HTMLInputElement>["name"];
+  name?: React.ComponentProps<"input">["name"];
   /**
    * The callback that is fired when the checkbox value is changed.
    *
@@ -370,8 +380,10 @@ export type CustomCheckboxProps = Omit<
    *
    * @see Docs https://reach.tech/checkbox#custom-checkbox-value
    */
-  value?: React.InputHTMLAttributes<HTMLInputElement>["value"];
+  value?: React.ComponentProps<"input">["value"];
 };
+export type CustomCheckboxProps = CustomCheckboxDOMProps &
+  CustomCheckboxOwnProps;
 
 if (__DEV__) {
   CustomCheckbox.displayName = "CustomCheckbox";
@@ -393,7 +405,7 @@ if (__DEV__) {
 /**
  * Context object for our custom checkbox wrapper.
  */
-interface ICustomCheckboxContext {
+interface CustomCheckboxContextValue {
   // checked: MixedOrBool;
   defaultChecked: boolean | undefined;
   disabled: boolean | undefined;

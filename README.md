@@ -38,7 +38,7 @@ yarn start
 Next, put a file in `packages/<component-dir>/examples/<name>.example.js` and make it look like this:
 
 ```jsx
-import React from "react";
+import * as React from "react";
 
 // The name of the example (always name the variable `name`)
 let name = "Basic";

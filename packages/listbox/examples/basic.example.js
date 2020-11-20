@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import "@reach/accordion/styles.css";
 import {
   Accordion,
@@ -13,7 +13,7 @@ function Example() {
   const [activeItems, setActiveItems] = React.useState([0]);
   function toggleItem(index) {
     if (activeItems.includes(index)) {
-      setActiveItems(activeItems.filter(item => item !== index));
+      setActiveItems(activeItems.filter((item) => item !== index));
     } else {
       setActiveItems([...activeItems, index].sort());
     }

@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { PropTable } from "../components/PropTable";
+import { listboxDefs } from "../componentDefs";
 
 <SEO
   title="Listbox"
@@ -84,7 +86,7 @@ You can use `Listbox` as a simple standalone component, or compose its parts wit
 (() => {
   function ComposedExample() {
     let labelId = `taco-label--${useId()}`;
-    let [value, setValue] = useState("pollo");
+    let [value, setValue] = React.useState("pollo");
     return (
       <div>
         <VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
@@ -199,7 +201,7 @@ The wrapper component for the high-level listbox API.
 If you want to control the state of the listbox's value, you can do so by passing [`value`](#listboxinput-value) and [`onChange`](#listboxinput-onchange) props. The value corresponds with the value of the selected `ListboxOption`.
 
 ```jsx
-const [value, setValue] = useState("comedy");
+const [value, setValue] = React.useState("comedy");
 return (
   <div>
     <span id="my-label">Choose a movie genre</span>
@@ -215,19 +217,7 @@ return (
 
 #### Listbox Props
 
-| Prop                                    | Type              | Required |
-| --------------------------------------- | ----------------- | -------- |
-| [`arrow`](#listbox-arrow)               | `boolean \| node` | false    |
-| [`button`](#listbox-button)             | `node \| func`    | false    |
-| [`children`](#listbox-children)         | `node \| func`    | true     |
-| [`defaultValue`](#listbox-defaultvalue) | `string`          | false    |
-| [`disabled`](#listbox-disabled)         | `boolean`         | false    |
-| [`form`](#listbox-form)                 | `string`          | false    |
-| [`name`](#listbox-name)                 | `string`          | false    |
-| [`onChange`](#listbox-onchange)         | `func`            | false    |
-| [`portal`](#listbox-portal)             | `boolean`         | false    |
-| [`required`](#listbox-required)         | `boolean`         | false    |
-| [`value`](#listbox-value)               | `string`          | false    |
+<PropTable componentName="Listbox" propDefs={listboxDefs.Listbox.propDefs} />
 
 ##### Listbox `arrow`
 
@@ -340,16 +330,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxInput Props
 
-| Prop                                         | Type           | Required |
-| -------------------------------------------- | -------------- | -------- |
-| [`children`](#listboxinput-children)         | `node \| func` | true     |
-| [`defaultValue`](#listboxinput-defaultvalue) | `string`       | false    |
-| [`disabled`](#listboxinput-disabled)         | `boolean`      | false    |
-| [`form`](#listboxinput-form)                 | `string`       | false    |
-| [`name`](#listboxinput-name)                 | `string`       | false    |
-| [`onChange`](#listboxinput-onchange)         | `func`         | false    |
-| [`required`](#listboxinput-required)         | `boolean`      | false    |
-| [`value`](#listboxinput-value)               | `string`       | false    |
+<PropTable
+  componentName="ListboxInput"
+  propDefs={listboxDefs.ListboxInput.propDefs}
+/>
 
 ##### ListboxInput `children`
 
@@ -437,10 +421,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxButton Props
 
-| Prop                                  | Type              | Required |
-| ------------------------------------- | ----------------- | -------- |
-| [`arrow`](#listboxbutton-arrow)       | `boolean \| node` | false    |
-| [`children`](#listboxbutton-children) | `node \| func`    | true     |
+<PropTable
+  componentName="ListboxButton"
+  propDefs={listboxDefs.ListboxButton.propDefs}
+/>
 
 ##### ListboxButton `arrow`
 
@@ -462,7 +446,7 @@ It's important to note that the ListboxButton's default inner content cannot be 
 
 ```jsx
 let options = { one: "One option", two: "Another option" };
-let [value, setValue] = useState(options.one);
+let [value, setValue] = React.useState(options.one);
 return (
   <ListboxInput>
     <ListboxButton>{options[value]}</ListboxButton>
@@ -498,9 +482,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxArrow Props
 
-| Prop                                 | Type           | Required |
-| ------------------------------------ | -------------- | -------- |
-| [`children`](#listboxarrow-children) | `node \| func` | true     |
+<PropTable
+  componentName="ListboxArrow"
+  propDefs={listboxDefs.ListboxArrow.propDefs}
+/>
 
 ##### ListboxArrow `children`
 
@@ -525,11 +510,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxPopover Props
 
-| Prop                                   | Type      | Required |
-| -------------------------------------- | --------- | -------- |
-| [`children`](#listboxpopover-children) | `node`    | true     |
-| [`portal`](#listboxpopover-portal)     | `boolean` | false    |
-| [`position`](#listboxpopover-position) | `func`    | false    |
+<PropTable
+  componentName="ListboxPopover"
+  propDefs={listboxDefs.ListboxPopover.propDefs}
+/>
 
 ##### ListboxPopover `children`
 
@@ -587,11 +571,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxOption Props
 
-| Prop                                  | Type      | Required |
-| ------------------------------------- | --------- | -------- |
-| [`disabled`](#listboxoption-disabled) | `boolean` | false    |
-| [`label`](#listboxoption-label)       | `string`  | false    |
-| [`value`](#listboxoption-value)       | `string`  | true     |
+<PropTable
+  componentName="ListboxOption"
+  propDefs={listboxDefs.ListboxOption.propDefs}
+/>
 
 ##### ListboxOption `disabled`
 
@@ -628,9 +611,10 @@ Please see the [styling guide](/styling).
 
 #### ListboxGroup Props
 
-| Prop                           | Type     | Required |
-| ------------------------------ | -------- | -------- |
-| [`label`](#listboxgroup-label) | `string` | false    |
+<PropTable
+  componentName="ListboxGroup"
+  propDefs={listboxDefs.ListboxGroup.propDefs}
+/>
 
 ##### ListboxGroup `label`
 
@@ -651,7 +635,7 @@ A label identifier for a `ListboxGroup`. This can be used in lieu of the `label`
 </ListboxGroup>
 ```
 
-#### ListboxGroup CSS Selectors
+#### ListboxGroupLabel CSS Selectors
 
 Please see the [styling guide](/styling).
 

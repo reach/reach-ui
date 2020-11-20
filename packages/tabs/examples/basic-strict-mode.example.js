@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { action } from "@storybook/addon-actions";
 import "@reach/tabs/styles.css";
@@ -7,7 +7,7 @@ let name = "Basic (Strict Mode)";
 
 function Example() {
   return (
-    <StrictMode>
+    <React.StrictMode>
       <Tabs id="awesome" onChange={action("Change")}>
         <TabList>
           <Tab>One</Tab>
@@ -28,7 +28,7 @@ function Example() {
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </StrictMode>
+    </React.StrictMode>
   );
 }
 

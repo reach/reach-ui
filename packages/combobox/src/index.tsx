@@ -18,29 +18,20 @@
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
  */
 
-import React, {
-  forwardRef,
-  useEffect,
-  useRef,
-  useCallback,
-  useContext,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import {
-  checkStyles,
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
   isFunction,
   makeId,
-  useIsomorphicLayoutEffect,
+  noop,
+  useCheckStyles,
   useForkedRef,
+  useIsomorphicLayoutEffect,
   useUpdateEffect,
   wrapEvent,
-  noop,
 } from "@reach/utils";
 import {
   createDescendantContext,
@@ -283,11 +274,11 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
 
     // Need this to focus it
-    const inputRef = useRef();
+    const inputRef = React.useRef();
 
-    const popoverRef = useRef();
+    const popoverRef = React.useRef();
 
-    const buttonRef = useRef();
+    const buttonRef = React.useRef();
 
     // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
     // the user's value while navigating (because it's always the user's value),
@@ -295,9 +286,9 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     // here, so we do something sneaky and write it to this ref on context so we
     // can use it anywhere else 😛. Another new trick for me and I'm excited
     // about this one too!
-    const autocompletePropRef = useRef();
+    const autocompletePropRef = React.useRef();
 
-    const persistSelectionRef = useRef();
+    const persistSelectionRef = React.useRef();
 
     const defaultData: StateData = {
       // The value the user has typed. We derive this also when the developer is
@@ -336,7 +327,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
       transition,
     };
 
-    useEffect(() => checkStyles("combobox"), []);
+    useCheckStyles("combobox");
 
     return (
       <DescendantProvider
@@ -356,10 +347,14 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   }
 );
 
+type ComboboxDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof ComboboxOwnProps
+>;
 /**
  * @see Docs https://reach.tech/combobox#combobox-props
  */
-export type ComboboxProps = {
+export type ComboboxOwnProps = {
   /**
    * @see Docs https://reach.tech/combobox#combobox-children
    */
@@ -390,6 +385,7 @@ export type ComboboxProps = {
    */
   "aria-labelledby"?: string;
 };
+export type ComboboxProps = ComboboxDOMProps & ComboboxOwnProps;
 
 if (__DEV__) {
   Combobox.displayName = "Combobox";
@@ -426,8 +422,8 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     forwardedRef
   ) {
     // https://github.com/reach/reach-ui/issues/464
-    let { current: initialControlledValue } = useRef(controlledValue);
-    let controlledValueChangedRef = useRef(false);
+    let { current: initialControlledValue } = React.useRef(controlledValue);
+    let controlledValueChangedRef = React.useRef(false);
     useUpdateEffect(() => {
       controlledValueChangedRef.current = true;
     }, [controlledValue]);
@@ -443,13 +439,13 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       isExpanded,
       ariaLabel,
       ariaLabelledby,
-    } = useContext(ComboboxContext);
+    } = React.useContext(ComboboxContext);
 
     let ref = useForkedRef(inputRef, forwardedRef);
 
     // Because we close the List on blur, we need to track if the blur is
     // caused by clicking inside the list, and if so, don't close the List.
-    let selectOnClickRef = useRef(false);
+    let selectOnClickRef = React.useRef(false);
 
     let handleKeyDown = useKeyDown();
 
@@ -464,7 +460,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = useCallback(
+    const handleValueChange = React.useCallback(
       (value: ComboboxValue) => {
         if (value.trim() === "") {
           transition(CLEAR);
@@ -480,7 +476,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       [initialControlledValue, transition]
     );
 
-    useEffect(() => {
+    React.useEffect(() => {
       // If they are controlling the value we still need to do our transitions,
       // so  we have this derived state to emulate onChange of the input as we
       // receive new `value`s ...[*]
@@ -556,10 +552,14 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
   }
 );
 
+type ComboboxInputDOMProps = Omit<
+  React.ComponentProps<"input">,
+  keyof ComboboxInputOwnProps
+>;
 /**
  * @see Docs https://reach.tech/combobox#comboboxinput-props
  */
-export type ComboboxInputProps = {
+export type ComboboxInputOwnProps = {
   /**
    * If true, when the user clicks inside the text box the current value will
    * be selected. Use this if the user is likely to delete all the text anyway
@@ -590,6 +590,7 @@ export type ComboboxInputProps = {
    */
   value?: ComboboxValue;
 };
+export type ComboboxInputProps = ComboboxInputDOMProps & ComboboxInputOwnProps;
 
 if (__DEV__) {
   ComboboxInput.displayName = "ComboboxInput";
@@ -606,11 +607,12 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/combobox#comboboxpopover
  */
-export const ComboboxPopover = forwardRef<
-  HTMLDivElement,
-  ComboboxPopoverProps & Partial<PopoverProps>
+export const ComboboxPopover = forwardRefWithAs<
+  ComboboxPopoverProps & Partial<PopoverProps>,
+  "div"
 >(function ComboboxPopover(
   {
+    as: Comp = "div",
     children,
     portal = true,
     onKeyDown,
@@ -620,7 +622,9 @@ export const ComboboxPopover = forwardRef<
   },
   forwardedRef: React.Ref<any>
 ) {
-  const { popoverRef, inputRef, isExpanded } = useContext(ComboboxContext);
+  const { popoverRef, inputRef, isExpanded } = React.useContext(
+    ComboboxContext
+  );
   const ref = useForkedRef(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
@@ -641,6 +645,7 @@ export const ComboboxPopover = forwardRef<
 
   return portal ? (
     <Popover
+      as={Comp}
       {...props}
       ref={ref}
       position={position}
@@ -648,7 +653,7 @@ export const ComboboxPopover = forwardRef<
       {...sharedProps}
     />
   ) : (
-    <div ref={ref} {...props} {...sharedProps} />
+    <Comp ref={ref} {...props} {...sharedProps} />
   );
 });
 
@@ -656,10 +661,14 @@ if (__DEV__) {
   ComboboxPopover.displayName = "ComboboxPopover";
 }
 
+type ComboboxPopoverDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof ComboboxPopoverOwnProps
+>;
 /**
  * @see Docs https://reach.tech/combobox#comboboxpopover-props
  */
-export type ComboboxPopoverProps = {
+export type ComboboxPopoverOwnProps = {
   /**
    * If you pass `<ComboboxPopover portal={false} />` the popover will not
    * render inside of a portal, but in the same order as the React tree. This
@@ -670,6 +679,8 @@ export type ComboboxPopoverProps = {
    */
   portal?: boolean;
 };
+export type ComboboxPopoverProps = ComboboxPopoverDOMProps &
+  ComboboxPopoverOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -692,7 +703,9 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
     },
     forwardedRef
   ) {
-    const { persistSelectionRef, listboxId } = useContext(ComboboxContext);
+    const { persistSelectionRef, listboxId } = React.useContext(
+      ComboboxContext
+    );
 
     if (persistSelection) {
       persistSelectionRef.current = true;
@@ -710,10 +723,14 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   }
 );
 
+type ComboboxListDOMProps = Omit<
+  React.ComponentProps<"ul">,
+  keyof ComboboxListOwnProps
+>;
 /**
  * @see Docs https://reach.tech/combobox#comboboxlist-props
  */
-export type ComboboxListProps = {
+export type ComboboxListOwnProps = {
   /**
    * Defaults to false. When true and the list is opened, if an option's value
    * matches the value in the input, it will automatically be highlighted and
@@ -729,6 +746,7 @@ export type ComboboxListProps = {
    */
   persistSelection?: boolean;
 };
+export type ComboboxListProps = ComboboxListDOMProps & ComboboxListOwnProps;
 
 if (__DEV__) {
   ComboboxList.displayName = "ComboboxList";
@@ -752,9 +770,9 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
       onSelect,
       data: { navigationValue },
       transition,
-    } = useContext(ComboboxContext);
+    } = React.useContext(ComboboxContext);
 
-    let ownRef = useRef<HTMLElement | null>(null);
+    let ownRef = React.useRef<HTMLElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
 
     let index = useDescendant(
@@ -794,10 +812,14 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
   }
 );
 
+type ComboboxOptionDOMProps = Omit<
+  React.ComponentProps<"li">,
+  keyof ComboboxOptionOwnProps
+>;
 /**
  * @see Docs https://reach.tech/combobox#comboboxoption-props
  */
-export type ComboboxOptionProps = {
+export type ComboboxOptionOwnProps = {
   /**
    * Optional. If omitted, the `value` will be used as the children like as:
    * `<ComboboxOption value="Seattle, Tacoma, Washington" />`. But if you need
@@ -820,6 +842,8 @@ export type ComboboxOptionProps = {
    */
   value: string;
 };
+export type ComboboxOptionProps = ComboboxOptionDOMProps &
+  ComboboxOptionOwnProps;
 
 if (__DEV__) {
   ComboboxOption.displayName = "ComboboxOption";
@@ -844,12 +868,12 @@ if (__DEV__) {
  * @see Docs https://reach.tech/combobox#comboboxoptiontext
  */
 export function ComboboxOptionText() {
-  const { value } = useContext(OptionContext);
+  const { value } = React.useContext(OptionContext);
   const {
     data: { value: contextValue },
-  } = useContext(ComboboxContext);
+  } = React.useContext(ComboboxContext);
 
-  const results = useMemo(
+  const results = React.useMemo(
     () =>
       findAll({
         searchWords: escapeRegexp(contextValue || "").split(/\s+/),
@@ -887,14 +911,18 @@ if (__DEV__) {
 /**
  * ComboboxButton
  */
-export const ComboboxButton = forwardRefWithAs<{}, "button">(
+export const ComboboxButton = forwardRefWithAs<ComboboxButtonProps, "button">(
   function ComboboxButton(
     { as: Comp = "button", onClick, onKeyDown, ...props },
     forwardedRef
   ) {
-    const { transition, state, buttonRef, listboxId, isExpanded } = useContext(
-      ComboboxContext
-    );
+    const {
+      transition,
+      state,
+      buttonRef,
+      listboxId,
+      isExpanded,
+    } = React.useContext(ComboboxContext);
     const ref = useForkedRef(buttonRef, forwardedRef);
 
     const handleKeyDown = useKeyDown();
@@ -921,6 +949,14 @@ export const ComboboxButton = forwardRefWithAs<{}, "button">(
     );
   }
 );
+
+type ComboboxButtonDOMProps = Omit<
+  React.ComponentProps<"button">,
+  keyof ComboboxButtonOwnProps
+>;
+export type ComboboxButtonOwnProps = {};
+export type ComboboxButtonProps = ComboboxButtonDOMProps &
+  ComboboxButtonOwnProps;
 
 if (__DEV__) {
   ComboboxButton.displayName = "ComboboxButton";
@@ -968,7 +1004,7 @@ function useKeyDown() {
     transition,
     autocompletePropRef,
     persistSelectionRef,
-  } = useContext(ComboboxContext);
+  } = React.useContext(ComboboxContext);
 
   const options = useDescendants(ComboboxDescendantContext);
 
@@ -1105,9 +1141,13 @@ function useKeyDown() {
 }
 
 function useBlur() {
-  const { state, transition, popoverRef, inputRef, buttonRef } = useContext(
-    ComboboxContext
-  );
+  const {
+    state,
+    transition,
+    popoverRef,
+    inputRef,
+    buttonRef,
+  } = React.useContext(ComboboxContext);
 
   return function handleBlur() {
     let ownerDocument = getOwnerDocument(inputRef.current) || document;
@@ -1145,8 +1185,8 @@ function useReducerMachine(
   reducer: Reducer,
   initialData: Partial<StateData>
 ): [State, StateData, Transition] {
-  const [state, setState] = useState(chart.initial);
-  const [data, dispatch] = useReducer(reducer, initialData);
+  const [state, setState] = React.useState(chart.initial);
+  const [data, dispatch] = React.useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
     const currentState = chart.states[state];
@@ -1204,8 +1244,8 @@ export function escapeRegexp(str: string) {
  * @see Docs https://reach.tech/combobox#usecomboboxcontext
  */
 export function useComboboxContext(): ComboboxContextValue {
-  let { isExpanded, comboboxId } = useContext(ComboboxContext);
-  return useMemo(
+  let { isExpanded, comboboxId } = React.useContext(ComboboxContext);
+  return React.useMemo(
     () => ({
       id: comboboxId,
       isExpanded,

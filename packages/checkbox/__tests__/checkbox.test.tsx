@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import * as React from "react";
 import {
   MixedCheckbox,
   CustomCheckboxContainer,
   CustomCheckboxInput,
+  CustomCheckboxContainerProps,
   CustomCheckboxInputProps,
 } from "@reach/checkbox";
 import { render, fireEvent } from "$test/utils";
@@ -43,7 +44,7 @@ describe("<CustomCheckbox />", () => {
 });
 
 function BasicMixedCheckbox() {
-  const [checked, setChecked] = useState<boolean | "mixed">(true);
+  const [checked, setChecked] = React.useState<boolean | "mixed">(true);
   return (
     <div>
       <MixedCheckbox
@@ -85,8 +86,8 @@ function BasicCustomCheckbox() {
 function MyCustomCheckbox({
   checked: checkedProp,
   ...props
-}: CustomCheckboxInputProps & { checked?: boolean | "mixed" }) {
-  const [checkedState, setChecked] = useState<typeof checkedProp>(
+}: CustomCheckboxInputProps & Pick<CustomCheckboxContainerProps, "checked">) {
+  const [checkedState, setChecked] = React.useState<typeof checkedProp>(
     checkedProp || false
   );
   const checked = checkedProp != null ? checkedProp : checkedState;

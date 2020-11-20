@@ -10,7 +10,7 @@ Measures DOM elements (aka. bounding client rect). See also [Element.getBounding
 import Rect, { useRect } from "@reach/rect";
 
 function Example() {
-  const ref = useRef();
+  const ref = React.useRef();
   const rect = useRect(ref);
 
   return (

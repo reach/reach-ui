@@ -1,11 +1,11 @@
-import React from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import {
   Menu,
   MenuList,
   MenuLink,
   MenuButton,
-  MenuItem
+  MenuItem,
 } from "@reach/menu-button";
 import styled from "styled-components";
 import "@reach/menu-button/styles.css";

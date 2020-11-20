@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { render, act, withMarkup, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -18,7 +18,7 @@ describe("<Combobox />", () => {
   describe("rendering", () => {
     it("renders as any HTML element", async () => {
       function MyCombobox() {
-        let [term, setTerm] = useState("");
+        let [term, setTerm] = React.useState("");
         let results = useCityMatch(term);
 
         return (
@@ -223,7 +223,7 @@ describe("<Combobox />", () => {
 
 ////////////////////////////////////////////////////////////////////////////////
 function BasicCombobox() {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
   const handleChange = (event: any) => {

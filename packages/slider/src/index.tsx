@@ -22,33 +22,26 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import {
-  checkStyles,
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
   isFunction,
+  isRightClick,
   makeId,
   memoWithAs,
+  noop,
+  useCheckStyles,
+  useControlledState,
+  useControlledSwitchWarning,
   useEventCallback,
   useForkedRef,
-  useControlledSwitchWarning,
-  useControlledState,
   useIsomorphicLayoutEffect,
   warning,
   wrapEvent,
-  noop,
-  isRightClick,
 } from "@reach/utils";
 
 // TODO: Remove in 1.0
@@ -79,7 +72,7 @@ const SliderContext = createNamedContext<ISliderContext>(
   "SliderContext",
   {} as ISliderContext
 );
-const useSliderContext = () => useContext(SliderContext);
+const useSliderContext = () => React.useContext(SliderContext);
 
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
@@ -132,10 +125,11 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
   );
 });
 
+type SliderDOMProps = Omit<React.ComponentProps<"div">, keyof SliderOwnProps>;
 /**
  * @see Docs https://reach.tech/slider#slider-props
  */
-export type SliderProps = {
+export type SliderOwnProps = {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -252,6 +246,7 @@ export type SliderProps = {
    */
   step?: number;
 };
+export type SliderProps = SliderDOMProps & SliderOwnProps;
 
 if (__DEV__) {
   Slider.displayName = "Slider";
@@ -318,19 +313,19 @@ const SliderInput = forwardRefWithAs<
     "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
   );
 
-  let touchId: TouchIdRef = useRef();
+  let touchId: TouchIdRef = React.useRef();
 
   let id = useId(rest.id);
 
   // Track whether or not the pointer is down without updating the component
-  let pointerDownRef = useRef(false);
+  let pointerDownRef = React.useRef(false);
 
-  let trackRef: TrackRef = useRef(null);
-  let handleRef: HandleRef = useRef(null);
-  let sliderRef: SliderRef = useRef(null);
+  let trackRef: TrackRef = React.useRef(null);
+  let handleRef: HandleRef = React.useRef(null);
+  let sliderRef: SliderRef = React.useRef(null);
   let ref = useForkedRef(sliderRef, forwardedRef);
 
-  let [hasFocus, setHasFocus] = useState(false);
+  let [hasFocus, setHasFocus] = React.useState(false);
 
   let { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
@@ -354,16 +349,16 @@ const SliderInput = forwardRefWithAs<
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
-  let handlePositionRef = useRef(handlePosition);
+  let handlePositionRef = React.useRef(handlePosition);
   useIsomorphicLayoutEffect(() => {
     handlePositionRef.current = handlePosition;
   }, [handlePosition]);
 
-  let onChangeRef = useRef(onChange);
+  let onChangeRef = React.useRef(onChange);
   useIsomorphicLayoutEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
-  let updateValue = useCallback(
+  let updateValue = React.useCallback(
     function updateValue(newValue) {
       setValue(newValue);
       if (onChangeRef.current) {
@@ -380,7 +375,7 @@ const SliderInput = forwardRefWithAs<
     [max, min, setValue]
   );
 
-  let getNewValueFromEvent = useCallback(
+  let getNewValueFromEvent = React.useCallback(
     (event: SomePointerEvent) => {
       return getNewValue(getPointerPosition(event, touchId), trackRef.current, {
         step,
@@ -491,13 +486,13 @@ const SliderInput = forwardRefWithAs<
   // setPointerCapture and releasePointerCapture. We'll fall back to separate
   // mouse and touch events.
   // TODO: This could be more concise
-  let removeMoveEvents = useRef<() => void>(noop);
-  let removeStartEvents = useRef<() => void>(noop);
-  let removeEndEvents = useRef<() => void>(noop);
+  let removeMoveEvents = React.useRef<() => void>(noop);
+  let removeStartEvents = React.useRef<() => void>(noop);
+  let removeEndEvents = React.useRef<() => void>(noop);
 
   // Store our event handlers in refs so we aren't attaching/detaching events
   // on every render if the user doesn't useCallback
-  let appEvents = useRef({
+  let appEvents = React.useRef({
     onMouseMove,
     onMouseDown,
     onMouseUp,
@@ -593,7 +588,7 @@ const SliderInput = forwardRefWithAs<
     removeEndEvents.current();
   });
 
-  let addMoveListener = useCallback(() => {
+  let addMoveListener = React.useCallback(() => {
     let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
     let touchListener = wrapEvent(
       appEvents.current.onTouchMove,
@@ -611,7 +606,7 @@ const SliderInput = forwardRefWithAs<
     };
   }, [handlePointerMove]);
 
-  let addEndListener = useCallback(() => {
+  let addEndListener = React.useCallback(() => {
     let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
     let pointerListener = wrapEvent(
       appEvents.current.onPointerUp,
@@ -636,7 +631,14 @@ const SliderInput = forwardRefWithAs<
     };
   }, [handleSlideStop, releasePointerCapture]);
 
-  let addStartListener = useCallback(() => {
+  let addStartListener = React.useCallback(() => {
+    // e.preventDefault is ignored by React's synthetic touchStart event, so
+    // we attach the listener directly to the DOM node
+    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
+    const sliderElement = sliderRef.current;
+    if (!sliderElement) {
+      return noop;
+    }
     let touchListener = wrapEvent(
       appEvents.current.onTouchStart,
       handleSlideStart
@@ -649,25 +651,21 @@ const SliderInput = forwardRefWithAs<
       appEvents.current.onPointerDown,
       setPointerCapture
     );
-
-    // e.preventDefault is ignored by React's synthetic touchStart event, so
-    // we attach the listener directly to the DOM node
-    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
-    sliderRef.current!.addEventListener("touchstart", touchListener);
-    sliderRef.current!.addEventListener("mousedown", mouseListener);
+    sliderElement.addEventListener("touchstart", touchListener);
+    sliderElement.addEventListener("mousedown", mouseListener);
     if ("PointerEvent" in window) {
-      sliderRef.current!.addEventListener("pointerdown", pointerListener);
+      sliderElement.addEventListener("pointerdown", pointerListener);
     }
     return () => {
-      sliderRef.current!.removeEventListener("touchstart", touchListener);
-      sliderRef.current!.removeEventListener("mousedown", mouseListener);
+      sliderElement.removeEventListener("touchstart", touchListener);
+      sliderElement.removeEventListener("mousedown", mouseListener);
       if ("PointerEvent" in window) {
-        sliderRef.current!.removeEventListener("pointerdown", pointerListener);
+        sliderElement.removeEventListener("pointerdown", pointerListener);
       }
     };
   }, [setPointerCapture, handleSlideStart]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     removeStartEvents.current = addStartListener();
 
     return () => {
@@ -677,7 +675,7 @@ const SliderInput = forwardRefWithAs<
     };
   }, [addStartListener]);
 
-  useEffect(() => checkStyles("slider"), []);
+  useCheckStyles("slider");
 
   return (
     <SliderContext.Provider value={ctx}>
@@ -717,10 +715,14 @@ const SliderInput = forwardRefWithAs<
   );
 });
 
+type SliderInputDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof SliderInputOwnProps
+>;
 /**
  * @see Docs https://reach.tech/slider#sliderinput-props
  */
-export type SliderInputProps = Omit<SliderProps, "children"> & {
+export type SliderInputOwnProps = Omit<SliderOwnProps, "children"> & {
   /**
    * Slider expects `<SliderTrack>` as its child; The track will accept all
    * additional slider sub-components as children. It can also accept a
@@ -731,6 +733,7 @@ export type SliderInputProps = Omit<SliderProps, "children"> & {
    */
   children: React.ReactNode | SliderChildrenRender;
 };
+export type SliderInputProps = SliderInputDOMProps & SliderInputOwnProps;
 
 if (__DEV__) {
   SliderInput.displayName = "SliderInput";
@@ -779,10 +782,14 @@ if (__DEV__) {
 
 const SliderTrack = memoWithAs(SliderTrackImpl);
 
+type SliderTrackDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof SliderTrackOwnProps
+>;
 /**
  * @see Docs https://reach.tech/slider#slidertrack-props
  */
-export type SliderTrackProps = {
+export type SliderTrackOwnProps = {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
@@ -792,6 +799,7 @@ export type SliderTrackProps = {
    */
   children: React.ReactNode;
 };
+export type SliderTrackProps = SliderTrackDOMProps & SliderTrackOwnProps;
 
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
@@ -837,13 +845,19 @@ if (__DEV__) {
 
 const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
 
+type SliderTrackHighlightDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof SliderTrackHighlightOwnProps
+>;
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  * `SliderTrackHighlight` will not accept or render any children.
  *
  * @see Docs https://reach.tech/slider#slidertrackhighlight-props
  */
-export type SliderTrackHighlightProps = {};
+export type SliderTrackHighlightOwnProps = {};
+export type SliderTrackHighlightProps = SliderTrackHighlightDOMProps &
+  SliderTrackHighlightOwnProps;
 
 if (__DEV__) {
   SliderTrackHighlight.displayName = "SliderTrackHighlight";
@@ -958,12 +972,17 @@ if (__DEV__) {
 
 const SliderHandle = memoWithAs(SliderHandleImpl);
 
+type SliderHandleDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof SliderHandleOwnProps
+>;
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reach.tech/slider#sliderhandle-props
  */
-export type SliderHandleProps = {};
+export type SliderHandleOwnProps = {};
+export type SliderHandleProps = SliderHandleDOMProps & SliderHandleOwnProps;
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
@@ -1040,10 +1059,14 @@ if (__DEV__) {
 
 const SliderMarker = memoWithAs(SliderMarkerImpl);
 
+type SliderMarkerDOMProps = Omit<
+  React.ComponentProps<"div">,
+  keyof SliderMarkerOwnProps
+>;
 /**
  * @see Docs https://reach.tech/slider#slidermarker-props
  */
-export type SliderMarkerProps = {
+export type SliderMarkerOwnProps = {
   /**
    * The value to denote where the marker should appear along the track.
    *
@@ -1051,6 +1074,7 @@ export type SliderMarkerProps = {
    */
   value: number;
 };
+export type SliderMarkerProps = SliderMarkerDOMProps & SliderMarkerOwnProps;
 
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
@@ -1151,7 +1175,10 @@ function getNewValue(
 }
 
 function useDimensions(ref: React.RefObject<HTMLElement | null>) {
-  const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
+  const [{ width, height }, setDimensions] = React.useState({
+    width: 0,
+    height: 0,
+  });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
   // getBoundingClientRect does not work here when borders are applied.
   // getComputedStyle is not as performant so we may want to create a utility to

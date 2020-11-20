@@ -1,13 +1,13 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 
 let name = "With Separate Overlay";
 
 function Example() {
-  const overlayRef = useRef(null);
-  const contentRef = useRef(null);
-  const [showDialog, setShowDialog] = useState(false);
+  const overlayRef = React.useRef(null);
+  const contentRef = React.useRef(null);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
 

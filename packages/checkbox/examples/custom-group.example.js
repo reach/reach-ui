@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useLayoutEffect,
-  useReducer,
-} from "react";
+import * as React from "react";
 import { CustomCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
@@ -41,10 +36,10 @@ export default { title: "Checkbox" };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const GroupContext = createContext({});
+const GroupContext = React.createContext({});
 
 function CheckboxGroup({ name, label, legend, children }) {
-  const [state, dispatch] = useReducer(reducer, { boxes: {} });
+  const [state, dispatch] = React.useReducer(reducer, { boxes: {} });
 
   return (
     <GroupContext.Provider value={{ groupName: name, state, dispatch }}>
@@ -137,11 +132,11 @@ function SmileyCheckbox({ checked, children, id, ...props }) {
 }
 
 function FriendCheckbox({ name, defaultChecked = false, children, ...props }) {
-  const { state, dispatch } = useContext(GroupContext);
+  const { state, dispatch } = React.useContext(GroupContext);
   const isRegistered = Object.hasOwnProperty.call(state.boxes, name);
   const checked = isRegistered ? state.boxes[name] : defaultChecked;
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (!isRegistered) {
       dispatch({
         type: "REGISTER_BOX",

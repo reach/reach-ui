@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Menu Button"
@@ -212,7 +214,7 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 A string representing an HTML element or a React component that will tell the `MenuButton` what underlying element to render. Defaults to `button`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users. While this prop is useful for passing custom implementations, such as styled or design-system components, using anything that renders the wrong semantic HTML element will require stubbing specific behaviors and attributes. This is highly discouraged.
+<AsPropWarning />
 
 ##### MenuButton `children`
 
@@ -442,13 +444,13 @@ function Example() {
 
 #### MenuItem Props
 
-| Prop                                     | Type                    | Required |
-| ---------------------------------------- | ----------------------- | -------- |
-| [element props](#menuitem-element-props) |                         |          |
-| [`as`](#menuitem-as)                     | `string` \| `Component` | false    |
-| [`children`](#menuitem-children)         | `node`                  | false    |
-| [`disabled`](#menuitem-disabled)         | `boolean`               | false    |
-| [`onSelect`](#menuitem-onselect)         | `func`                  | true     |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [element props](#menuitem-element-props) |                               |          |
+| [`as`](#menuitem-as)                     | `string` <Pipe /> `Component` | false    |
+| [`children`](#menuitem-children)         | `node`                        | false    |
+| [`disabled`](#menuitem-disabled)         | `boolean`                     | false    |
+| [`onSelect`](#menuitem-onselect)         | `func`                        | true     |
 
 ##### MenuItem element props
 
@@ -603,13 +605,13 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 #### MenuLink Props
 
-| Prop                                     | Type                    | Required |
-| ---------------------------------------- | ----------------------- | -------- |
-| [element props](#menulink-element-props) |                         |          |
-| [`as`](#menulink-as)                     | `string` \| `Component` | false    |
-| [`children`](#menulink-children)         | `node`                  | false    |
-| [`disabled`](#menulink-disabled)         | `boolean`               | false    |
-| [`onSelect`](#menulink-onselect)         | `func`                  | false    |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [element props](#menulink-element-props) |                               |          |
+| [`as`](#menulink-as)                     | `string` <Pipe /> `Component` | false    |
+| [`children`](#menulink-children)         | `node`                        | false    |
+| [`disabled`](#menulink-disabled)         | `boolean`                     | false    |
+| [`onSelect`](#menulink-onselect)         | `func`                        | false    |
 
 ##### MenuLink element props
 

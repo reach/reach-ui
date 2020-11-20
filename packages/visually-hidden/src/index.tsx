@@ -10,7 +10,8 @@
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/visually-hidden
  */
 
-import React, { forwardRef } from "react";
+import * as React from "react";
+import PropTypes from "prop-types";
 
 /**
  * VisuallyHidden
@@ -18,12 +19,12 @@ import React, { forwardRef } from "react";
  * Provides text for screen readers that is visually hidden.
  * It is the logical opposite of the `aria-hidden` attribute.
  */
-const VisuallyHidden = forwardRef<
-  HTMLSpanElement,
-  React.HTMLAttributes<HTMLSpanElement>
->(function VisuallyHidden(props, ref) {
+const VisuallyHidden = React.forwardRef<any, any>(function VisuallyHidden(
+  { as: Comp = "span", style = {}, ...props },
+  ref
+) {
   return (
-    <span
+    <Comp
       ref={ref}
       style={{
         border: 0,
@@ -38,14 +39,90 @@ const VisuallyHidden = forwardRef<
         // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
         whiteSpace: "nowrap",
         wordWrap: "normal",
+        ...style,
       }}
       {...props}
     />
   );
-});
+}) as ForwardRefExoticComponentWithAs<"span", VisuallyHiddenProps>;
+
+type VisuallyHiddenDOMProps = Omit<
+  React.ComponentProps<"span">,
+  keyof VisuallyHiddenOwnProps
+>;
+/**
+ * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
+ */
+export type VisuallyHiddenOwnProps = {
+  /**
+   * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
+   */
+  children: React.ReactNode;
+};
+export type VisuallyHiddenProps = VisuallyHiddenDOMProps &
+  VisuallyHiddenOwnProps;
 
 if (__DEV__) {
   VisuallyHidden.displayName = "VisuallyHidden";
+  VisuallyHidden.propTypes = {
+    as: PropTypes.any,
+    children: PropTypes.node,
+  };
 }
 
 export default VisuallyHidden;
+
+////////////////////////////////////////////////////////////////////////////////
+// TODO: These all come from @reach/utils but we don't want to bundle that here
+// just for the types. Need to split that up a bit better.
+
+type As<BaseProps = any> = React.ElementType<BaseProps>;
+
+type PropsWithAs<ComponentType extends As, ComponentProps> = ComponentProps &
+  Omit<
+    React.ComponentPropsWithRef<ComponentType>,
+    "as" | keyof ComponentProps
+  > & {
+    as?: ComponentType;
+  };
+
+interface ExoticComponentWithAs<ComponentType extends As, ComponentProps> {
+  /**
+   * **NOTE**: Exotic components are not callable.
+   * Inherited from React.ExoticComponent with modifications to support `as`
+   */
+  <TT extends As>(
+    props: PropsWithAs<TT, ComponentProps>
+  ): React.ReactElement | null;
+  (
+    props: PropsWithAs<ComponentType, ComponentProps>
+  ): React.ReactElement | null;
+
+  /**
+   * Inherited from React.ExoticComponent
+   */
+  readonly $$typeof: symbol;
+}
+
+interface NamedExoticComponentWithAs<ComponentType extends As, ComponentProps>
+  extends ExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.NamedExoticComponent
+   */
+  displayName?: string;
+}
+
+interface ForwardRefExoticComponentWithAs<
+  ComponentType extends As,
+  ComponentProps
+> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
+  /**
+   * Inherited from React.ForwardRefExoticComponent
+   * Will show `ForwardRef(${Component.displayName || Component.name})` in devtools by default,
+   * but can be given its own specific name
+   */
+  defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
+  propTypes?: React.WeakValidationMap<
+    PropsWithAs<ComponentType, ComponentProps>
+  >;
+}

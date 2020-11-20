@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import {
   ListboxInput,
   ListboxButton,
@@ -30,7 +30,7 @@ function StyledListboxButton(props: ListboxButtonProps) {
 }
 
 function Example() {
-  let [value, setValue] = useState("pollo");
+  let [value, setValue] = React.useState("pollo");
 
   function handleChange(value: any) {
     setValue(value);

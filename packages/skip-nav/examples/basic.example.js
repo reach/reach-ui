@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
 import { actions } from "@storybook/addon-actions";

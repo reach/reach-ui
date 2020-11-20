@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import * as React from "react";
 import Component from "@reach/component-component";
 
 let name = "Lifecycles and Refs";
 
 function Example() {
-  const [position, setPosition] = useState(900);
+  const [position, setPosition] = React.useState(900);
   return (
     <div>
       <p>
@@ -17,7 +17,7 @@ function Example() {
             max="1800"
             value={position}
             style={{ width: "100%" }}
-            onChange={event => setPosition(event.target.value)}
+            onChange={(event) => setPosition(event.target.value)}
           />
         </label>
       </p>
@@ -32,9 +32,9 @@ function Example() {
       >
         {({ refs }) => (
           <div
-            ref={node => (refs.node = node)}
+            ref={(node) => (refs.node = node)}
             style={{ height: 200, overflow: "auto" }}
-            onScroll={event => {
+            onScroll={(event) => {
               setPosition(event.target.scrollTop);
             }}
           >
@@ -45,7 +45,7 @@ function Example() {
                     linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
                     linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
                     linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%)
-                  `
+                  `,
               }}
             />
           </div>

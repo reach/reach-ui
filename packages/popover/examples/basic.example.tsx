@@ -1,18 +1,18 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import Popover, { positionDefault, positionMatchWidth } from "@reach/popover";
 
 let name = "Basic (TS)";
 
 function Example() {
-  const ref = useRef<any>(null);
-  const [value, setValue] = useState("");
+  const ref = React.useRef<any>(null);
+  const [value, setValue] = React.useState("");
   return (
     <div>
       <textarea placeholder="resize me to move stuff around" />
       <textarea
         placeholder="Try typing 'match width'"
         ref={ref}
-        onChange={event => setValue(event.target.value)}
+        onChange={(event) => setValue(event.target.value)}
       />
 
       {value.length > 0 && (
@@ -27,7 +27,7 @@ function Example() {
               border: "solid 1px",
               padding: 10,
               background: "white",
-              width: 400
+              width: 400,
             }}
           >
             <p>Huzzah!!! I am here! WASSUPPPPP</p>

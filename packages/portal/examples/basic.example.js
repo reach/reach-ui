@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 
 let name = "Basic";
@@ -8,7 +8,7 @@ function Example() {
     <div
       style={{
         height: 40,
-        overflow: "auto"
+        overflow: "auto",
       }}
     >
       <div style={{ border: "solid 5px", padding: 20, marginLeft: 170 }}>
@@ -24,7 +24,7 @@ function Example() {
             width: 100,
             border: "solid 5px",
             padding: 20,
-            background: "#f0f0f0"
+            background: "#f0f0f0",
           }}
         >
           This is in the portal, rendered in the DOM at the document root so the

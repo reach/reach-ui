@@ -1,13 +1,13 @@
-import React, { useLayoutEffect, useRef } from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import "@reach/tabs/styles.css";
 
 let name = "RTL with HTML dir attribute (TS)";
 
 function Example() {
-  let ref = useRef<HTMLDivElement | null>(null);
-  let rootDir = useRef<any>();
-  useLayoutEffect(() => {
+  let ref = React.useRef<HTMLDivElement | null>(null);
+  let rootDir = React.useRef<any>();
+  React.useLayoutEffect(() => {
     let doc = ref.current && ref.current.ownerDocument;
     if (doc) {
       rootDir.current = doc.dir;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -6,7 +6,7 @@ import "@reach/menu-button/styles.css";
 let name = "Conditional Items";
 
 function Example() {
-  const [activeItem, setActiveItem] = useState(false);
+  const [activeItem, setActiveItem] = React.useState(false);
 
   /*
    * Simulate the menu list changing while the user is navigating.
@@ -16,8 +16,8 @@ function Example() {
    * keyboard. Not much we can do to prevent mouse clicks from selecting a new
    * or wrong item here, hence why devs should avoid this behavior!
    */
-  const [disappearingItem, setDisappearingItem] = useState(false);
-  useEffect(() => {
+  const [disappearingItem, setDisappearingItem] = React.useState(false);
+  React.useEffect(() => {
     let interval = window.setInterval(() => {
       setDisappearingItem(!disappearingItem);
     }, 3000);
