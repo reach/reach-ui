@@ -348,18 +348,10 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxinput-props
  */
-type ListboxInputDOMProps = Omit<
-  React.ComponentProps<"div">,
-  | keyof ListboxInputOwnProps
-  | "autoComplete"
-  | "autoFocus"
-  | "form"
-  | "name"
-  | "onChange"
-  | "defaultValue"
-> &
-  Pick<React.ComponentProps<"select">, "form" | "name" | "required">;
-type ListboxInputOwnProps = {
+type ListboxInputProps = Pick<
+  React.ComponentProps<"select">,
+  "form" | "name" | "required"
+> & {
   /**
    * The composed listbox expects to receive `ListboxButton` and
    * `ListboxPopover` as children. You can also pass in arbitrary wrapper
@@ -401,7 +393,6 @@ type ListboxInputOwnProps = {
    */
   value?: ListboxValue;
 };
-type ListboxInputProps = ListboxInputDOMProps & ListboxInputOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -456,50 +447,39 @@ if (__DEV__) {
   };
 }
 
-type ListboxDOMProps = Omit<
-  React.ComponentProps<"div">,
-  | keyof ListboxInputOwnProps
-  | "autoComplete"
-  | "autoFocus"
-  | "form"
-  | "name"
-  | "onChange"
-  | "defaultValue"
-> &
-  Pick<React.ComponentProps<"select">, "form" | "name" | "required">;
 /**
  * @see Docs https://reach.tech/listbox#listbox-props
  */
-type ListboxOwnProps = Omit<ListboxInputOwnProps, "children"> & {
-  /**
-   * Renders a text string or React node to represent an arrow inside the
-   * Listbox button.
-   *
-   * @see Docs https://reach.tech/listbox#listbox-arrow
-   */
-  arrow?: React.ReactNode | boolean;
-  /**
-   * A render function or React node to to render the Listbox button's inner
-   * content. See the API for the ListboxButton children prop for details.
-   *
-   * @see Docs https://reach.tech/listbox#listbox-button
-   */
-  button?:
-    | React.ReactNode
-    | ((props: {
-        value: ListboxValue | null;
-        label: string | null;
-      }) => React.ReactNode);
-  children: React.ReactNode;
-  /**
-   * Whether or not the popover should be rendered inside a portal. Defaults to
-   * `true`.
-   *
-   * @see Docs https://reach.tech/listbox#listbox-portal
-   */
-  portal?: boolean;
-};
-type ListboxProps = ListboxDOMProps & ListboxOwnProps;
+type ListboxProps = Omit<ListboxInputProps, "children"> &
+  Pick<React.ComponentProps<"select">, "form" | "name" | "required"> & {
+    /**
+     * Renders a text string or React node to represent an arrow inside the
+     * Listbox button.
+     *
+     * @see Docs https://reach.tech/listbox#listbox-arrow
+     */
+    arrow?: React.ReactNode | boolean;
+    /**
+     * A render function or React node to to render the Listbox button's inner
+     * content. See the API for the ListboxButton children prop for details.
+     *
+     * @see Docs https://reach.tech/listbox#listbox-button
+     */
+    button?:
+      | React.ReactNode
+      | ((props: {
+          value: ListboxValue | null;
+          label: string | null;
+        }) => React.ReactNode);
+    children: React.ReactNode;
+    /**
+     * Whether or not the popover should be rendered inside a portal. Defaults to
+     * `true`.
+     *
+     * @see Docs https://reach.tech/listbox#listbox-portal
+     */
+    portal?: boolean;
+  };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -638,14 +618,10 @@ if (__DEV__) {
 
 const ListboxButton = memoWithAs(ListboxButtonImpl);
 
-type ListboxButtonDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof ListboxButtonOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxbutton-props
  */
-type ListboxButtonOwnProps = {
+type ListboxButtonProps = {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * button.
@@ -702,7 +678,6 @@ type ListboxButtonOwnProps = {
         expanded: boolean;
       }) => React.ReactNode);
 };
-type ListboxButtonProps = ListboxButtonDOMProps & ListboxButtonOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -750,14 +725,10 @@ if (__DEV__) {
 
 const ListboxArrow = memoWithAs(ListboxArrowImpl);
 
-type ListboxArrowDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof ListboxArrowOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxarrow-props
  */
-type ListboxArrowOwnProps = {
+type ListboxArrowProps = {
   /**
    * Children to render as the listbox button's arrow. This can be a render
    * function that accepts the listbox's expanded state as an argument.
@@ -770,7 +741,6 @@ type ListboxArrowOwnProps = {
         expanded: boolean;
       }) => React.ReactNode);
 };
-type ListboxArrowProps = ListboxArrowDOMProps & ListboxArrowOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -846,14 +816,10 @@ if (__DEV__) {
 
 const ListboxPopover = memoWithAs(ListboxPopoverImpl);
 
-type ListboxPopoverDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof ListboxPopoverOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxpopover-props
  */
-type ListboxPopoverOwnProps = {
+type ListboxPopoverProps = {
   /**
    * `ListboxPopover` expects to receive `ListboxList` as its children.
    *
@@ -875,7 +841,6 @@ type ListboxPopoverOwnProps = {
   position?: PopoverProps["position"];
   unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
 };
-type ListboxPopoverProps = ListboxPopoverDOMProps & ListboxPopoverOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -938,15 +903,10 @@ if (__DEV__) {
   ListboxList.propTypes = {};
 }
 
-type ListboxListDOMProps = Omit<
-  React.ComponentProps<"ul">,
-  keyof ListboxListOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxlist-props
  */
-type ListboxListOwnProps = {};
-type ListboxListProps = ListboxListDOMProps & ListboxListOwnProps;
+type ListboxListProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1127,14 +1087,10 @@ if (__DEV__) {
   };
 }
 
-type ListboxOptionDOMProps = Omit<
-  React.ComponentProps<"li">,
-  keyof ListboxOptionOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxoption-props
  */
-type ListboxOptionOwnProps = {
+type ListboxOptionProps = {
   /**
    * The option's value. This will be passed into a hidden input field for use
    * in forms.
@@ -1159,7 +1115,6 @@ type ListboxOptionOwnProps = {
    */
   disabled?: boolean;
 };
-type ListboxOptionProps = ListboxOptionDOMProps & ListboxOptionOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1205,14 +1160,10 @@ if (__DEV__) {
   };
 }
 
-type ListboxGroupDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof ListboxGroupOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-type ListboxGroupOwnProps = {
+type ListboxGroupProps = {
   /**
    * The text label to use for the listbox group. This can be omitted if a
    * group contains a `ListboxGroupLabel` component. The label should always
@@ -1222,7 +1173,6 @@ type ListboxGroupOwnProps = {
    */
   label?: React.ReactNode;
 };
-type ListboxGroupProps = ListboxGroupDOMProps & ListboxGroupOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1253,16 +1203,10 @@ if (__DEV__) {
   ListboxGroupLabel.propTypes = {};
 }
 
-type ListboxGroupLabelDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof ListboxGroupLabelOwnProps
->;
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-type ListboxGroupLabelOwnProps = {};
-type ListboxGroupLabelProps = ListboxGroupLabelDOMProps &
-  ListboxGroupLabelOwnProps;
+type ListboxGroupLabelProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1503,24 +1447,15 @@ function useStableCallback<T extends (...args: any[]) => any>(
 // Exports
 
 export type {
-  ListboxArrowOwnProps,
   ListboxArrowProps,
-  ListboxButtonOwnProps,
   ListboxButtonProps,
   ListboxContextValue,
   ListboxDescendant,
-  ListboxGroupLabelOwnProps,
   ListboxGroupLabelProps,
-  ListboxGroupOwnProps,
   ListboxGroupProps,
-  ListboxInputOwnProps,
   ListboxInputProps,
-  ListboxListOwnProps,
   ListboxListProps,
-  ListboxOptionOwnProps,
   ListboxOptionProps,
-  ListboxOwnProps,
-  ListboxPopoverOwnProps,
   ListboxPopoverProps,
   ListboxProps,
   ListboxValue,

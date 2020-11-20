@@ -125,11 +125,10 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
   );
 });
 
-type SliderDOMProps = Omit<React.ComponentProps<"div">, keyof SliderOwnProps>;
 /**
  * @see Docs https://reach.tech/slider#slider-props
  */
-type SliderOwnProps = {
+type SliderProps = {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -246,7 +245,6 @@ type SliderOwnProps = {
    */
   step?: number;
 };
-type SliderProps = SliderDOMProps & SliderOwnProps;
 
 if (__DEV__) {
   Slider.displayName = "Slider";
@@ -712,14 +710,10 @@ const SliderInput = forwardRefWithAs<
   );
 });
 
-type SliderInputDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SliderInputOwnProps
->;
 /**
  * @see Docs https://reach.tech/slider#sliderinput-props
  */
-type SliderInputOwnProps = Omit<SliderOwnProps, "children"> & {
+type SliderInputProps = Omit<SliderProps, "children"> & {
   /**
    * Slider expects `<SliderTrack>` as its child; The track will accept all
    * additional slider sub-components as children. It can also accept a
@@ -730,7 +724,6 @@ type SliderInputOwnProps = Omit<SliderOwnProps, "children"> & {
    */
   children: React.ReactNode | SliderChildrenRender;
 };
-type SliderInputProps = SliderInputDOMProps & SliderInputOwnProps;
 
 if (__DEV__) {
   SliderInput.displayName = "SliderInput";
@@ -777,14 +770,10 @@ if (__DEV__) {
 
 const SliderTrack = memoWithAs(SliderTrackImpl);
 
-type SliderTrackDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SliderTrackOwnProps
->;
 /**
  * @see Docs https://reach.tech/slider#slidertrack-props
  */
-type SliderTrackOwnProps = {
+type SliderTrackProps = {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
@@ -794,7 +783,6 @@ type SliderTrackOwnProps = {
    */
   children: React.ReactNode;
 };
-type SliderTrackProps = SliderTrackDOMProps & SliderTrackOwnProps;
 
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
@@ -838,19 +826,13 @@ if (__DEV__) {
 
 const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
 
-type SliderTrackHighlightDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SliderTrackHighlightOwnProps
->;
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  * `SliderTrackHighlight` will not accept or render any children.
  *
  * @see Docs https://reach.tech/slider#slidertrackhighlight-props
  */
-type SliderTrackHighlightOwnProps = {};
-type SliderTrackHighlightProps = SliderTrackHighlightDOMProps &
-  SliderTrackHighlightOwnProps;
+type SliderTrackHighlightProps = {};
 
 if (__DEV__) {
   SliderTrackHighlight.displayName = "SliderTrackHighlight";
@@ -963,17 +945,12 @@ if (__DEV__) {
 
 const SliderHandle = memoWithAs(SliderHandleImpl);
 
-type SliderHandleDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SliderHandleOwnProps
->;
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reach.tech/slider#sliderhandle-props
  */
-type SliderHandleOwnProps = {};
-type SliderHandleProps = SliderHandleDOMProps & SliderHandleOwnProps;
+type SliderHandleProps = {};
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
@@ -1048,14 +1025,10 @@ if (__DEV__) {
 
 const SliderMarker = memoWithAs(SliderMarkerImpl);
 
-type SliderMarkerDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SliderMarkerOwnProps
->;
 /**
  * @see Docs https://reach.tech/slider#slidermarker-props
  */
-type SliderMarkerOwnProps = {
+type SliderMarkerProps = {
   /**
    * The value to denote where the marker should appear along the track.
    *
@@ -1063,7 +1036,6 @@ type SliderMarkerOwnProps = {
    */
   value: number;
 };
-type SliderMarkerProps = SliderMarkerDOMProps & SliderMarkerOwnProps;
 
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
@@ -1249,17 +1221,11 @@ type SliderChildrenRender = (props: {
 export default Slider;
 export type {
   SliderAlignment,
-  SliderHandleOwnProps,
   SliderHandleProps,
-  SliderInputOwnProps,
   SliderInputProps,
-  SliderMarkerOwnProps,
   SliderMarkerProps,
-  SliderOwnProps,
   SliderProps,
-  SliderTrackHighlightOwnProps,
   SliderTrackHighlightProps,
-  SliderTrackOwnProps,
   SliderTrackProps,
 };
 export {

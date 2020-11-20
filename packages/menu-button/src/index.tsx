@@ -300,14 +300,10 @@ const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
   }
 );
 
-type MenuButtonDOMProps = Omit<
-  React.ComponentProps<"button">,
-  keyof MenuButtonOwnProps
->;
 /**
  * @see Docs https://reach.tech/menu-button#menubutton-props
  */
-type MenuButtonOwnProps = {
+type MenuButtonProps = {
   /**
    * Accepts any renderable content.
    *
@@ -315,7 +311,6 @@ type MenuButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-type MenuButtonProps = MenuButtonDOMProps & MenuButtonOwnProps;
 
 if (__DEV__) {
   MenuButton.displayName = "MenuButton";
@@ -554,15 +549,10 @@ const MenuItem = forwardRefWithAs<MenuItemProps, "div">(function MenuItem(
   return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
 });
 
-type MenuItemDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof MenuItemOwnProps
->;
 /**
  * @see Docs https://reach.tech/menu-button#menuitem-props
  */
-type MenuItemOwnProps = Omit<MenuItemImplProps, "isLink">;
-type MenuItemProps = MenuItemDOMProps & MenuItemOwnProps;
+type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
 
 if (__DEV__) {
   MenuItem.displayName = "MenuItem";
@@ -753,14 +743,10 @@ const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(function MenuItems(
   );
 });
 
-type MenuItemsDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof MenuItemsOwnProps
->;
 /**
  * @see Docs https://reach.tech/menu-button#menuitems-props
  */
-type MenuItemsOwnProps = {
+type MenuItemsProps = {
   /**
    * Can contain only `MenuItem` or a `MenuLink`.
    *
@@ -768,7 +754,6 @@ type MenuItemsOwnProps = {
    */
   children: React.ReactNode;
 };
-type MenuItemsProps = MenuItemsDOMProps & MenuItemsOwnProps;
 
 if (__DEV__) {
   MenuItems.displayName = "MenuItems";
@@ -813,14 +798,12 @@ const MenuLink = forwardRefWithAs<MenuLinkProps & { component?: any }, "a">(
   }
 );
 
-type MenuLinkDOMProps = Omit<React.ComponentProps<"a">, keyof MenuLinkOwnProps>;
 /**
  * @see Docs https://reach.tech/menu-button#menulink-props
  */
-type MenuLinkOwnProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
+type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?(): void;
 };
-type MenuLinkProps = MenuLinkDOMProps & MenuLinkOwnProps;
 
 if (__DEV__) {
   MenuLink.displayName = "MenuLink";
@@ -851,14 +834,10 @@ const MenuList = forwardRefWithAs<MenuListProps, "div">(function MenuList(
   );
 });
 
-type MenuListDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof MenuListOwnProps
->;
 /**
  * @see Docs https://reach.tech/menu-button#menulist-props
  */
-type MenuListOwnProps = {
+type MenuListProps = {
   /**
    * Whether or not the popover should be rendered inside a portal. Defaults to
    * `true`.
@@ -873,7 +852,6 @@ type MenuListOwnProps = {
    */
   children: React.ReactNode;
 };
-type MenuListProps = MenuListDOMProps & MenuListOwnProps;
 
 if (__DEV__) {
   MenuList.displayName = "MenuList";
@@ -952,14 +930,10 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
   }
 );
 
-type MenuPopoverDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof MenuPopoverOwnProps
->;
 /**
  * @see Docs https://reach.tech/menu-button#menupopover-props
  */
-type MenuPopoverOwnProps = {
+type MenuPopoverProps = {
   /**
    * Must contain a `MenuItems`
    *
@@ -984,7 +958,6 @@ type MenuPopoverOwnProps = {
    */
   position?: Position;
 };
-type MenuPopoverProps = MenuPopoverDOMProps & MenuPopoverOwnProps;
 
 if (__DEV__) {
   MenuPopover.displayName = "MenuPopover";
@@ -1178,18 +1151,12 @@ type MenuContextValue = {
 // Exports
 
 export type {
-  MenuButtonOwnProps,
   MenuButtonProps,
   MenuContextValue,
-  MenuItemOwnProps,
   MenuItemProps,
-  MenuItemsOwnProps,
   MenuItemsProps,
-  MenuLinkOwnProps,
   MenuLinkProps,
-  MenuListOwnProps,
   MenuListProps,
-  MenuPopoverOwnProps,
   MenuPopoverProps,
   MenuProps,
 };

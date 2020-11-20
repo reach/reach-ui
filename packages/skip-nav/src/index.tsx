@@ -39,11 +39,7 @@ const SkipNavLink = forwardRefWithAs<SkipNavLinkProps, "a">(
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavlink-props
  */
-type SkipNavLinkDOMProps = Omit<
-  React.ComponentProps<"a">,
-  keyof SkipNavLinkOwnProps | "href"
->;
-type SkipNavLinkOwnProps = {
+type SkipNavLinkProps = {
   /**
    * Allows you to change the text for your preferred phrase or localization.
    *
@@ -58,7 +54,6 @@ type SkipNavLinkOwnProps = {
    */
   contentId?: string;
 };
-type SkipNavLinkProps = SkipNavLinkDOMProps & SkipNavLinkOwnProps;
 
 if (__DEV__) {
   SkipNavLink.displayName = "SkipNavLink";
@@ -93,11 +88,7 @@ const SkipNavContent = forwardRefWithAs<SkipNavContentProps, "div">(
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavcontent-props
  */
-type SkipNavContentDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof SkipNavContentOwnProps
->;
-type SkipNavContentOwnProps = {
+type SkipNavContentProps = {
   /**
    * You can place the `SkipNavContent` element as a sibling to your main
    * content or as a wrapper.
@@ -124,7 +115,6 @@ type SkipNavContentOwnProps = {
    */
   id?: string;
 };
-type SkipNavContentProps = SkipNavContentDOMProps & SkipNavContentOwnProps;
 
 if (__DEV__) {
   SkipNavContent.displayName = "SkipNavContent";
@@ -133,10 +123,5 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type {
-  SkipNavContentProps,
-  SkipNavLinkOwnProps,
-  SkipNavLinkProps,
-  SkipNavContentOwnProps,
-};
+export type { SkipNavContentProps, SkipNavLinkProps };
 export { SkipNavLink, SkipNavContent };

@@ -46,20 +46,15 @@ const VisuallyHidden = React.forwardRef<any, any>(function VisuallyHidden(
   );
 }) as ForwardRefExoticComponentWithAs<"span", VisuallyHiddenProps>;
 
-type VisuallyHiddenDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof VisuallyHiddenOwnProps
->;
 /**
  * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
  */
-type VisuallyHiddenOwnProps = {
+type VisuallyHiddenProps = {
   /**
    * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
    */
   children: React.ReactNode;
 };
-type VisuallyHiddenProps = VisuallyHiddenDOMProps & VisuallyHiddenOwnProps;
 
 if (__DEV__) {
   VisuallyHidden.displayName = "VisuallyHidden";
@@ -127,6 +122,6 @@ interface ForwardRefExoticComponentWithAs<
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type { VisuallyHiddenOwnProps, VisuallyHiddenProps };
+export type { VisuallyHiddenProps };
 export { VisuallyHidden };
 export default VisuallyHidden;

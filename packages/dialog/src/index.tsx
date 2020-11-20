@@ -85,11 +85,7 @@ if (__DEV__) {
   };
 }
 
-type DialogOverlayDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof DialogOverlayOwnProps
->;
-type DialogOverlayOwnProps = DialogOwnProps & {
+type DialogOverlayProps = DialogProps & {
   /**
    * By default the dialog locks the focus inside it. Normally this is what you
    * want. This prop is provided so that this feature can be disabled. This,
@@ -128,7 +124,6 @@ type DialogOverlayOwnProps = DialogOwnProps & {
    */
   dangerouslyBypassScrollLock?: boolean;
 };
-type DialogOverlayProps = DialogOverlayDOMProps & DialogOverlayOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -262,15 +257,10 @@ const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
   }
 );
 
-type DialogContentDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof DialogContentOwnProps
->;
-
 /**
  * @see Docs https://reach.tech/dialog#dialogcontent-props
  */
-type DialogContentOwnProps = {
+type DialogContentProps = {
   /**
    * Accepts any renderable content.
    *
@@ -278,7 +268,6 @@ type DialogContentOwnProps = {
    */
   children?: React.ReactNode;
 };
-type DialogContentProps = DialogContentDOMProps & DialogContentOwnProps;
 
 if (__DEV__) {
   DialogContent.displayName = "DialogContent";
@@ -320,12 +309,10 @@ const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
   );
 });
 
-type DialogDOMProps = Omit<React.ComponentProps<"div">, keyof DialogOwnProps>;
-
 /**
  * @see Docs https://reach.tech/dialog#dialog-props
  */
-type DialogOwnProps = {
+type DialogProps = {
   /**
    * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
    * Defaults to `false`.
@@ -386,7 +373,6 @@ type DialogOwnProps = {
    */
   unstable_lockFocusAcrossFrames?: boolean;
 };
-type DialogProps = DialogDOMProps & DialogOwnProps;
 
 if (__DEV__) {
   Dialog.displayName = "Dialog";
@@ -481,13 +467,6 @@ function ariaLabelType(
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type {
-  DialogContentOwnProps,
-  DialogContentProps,
-  DialogOverlayOwnProps,
-  DialogOverlayProps,
-  DialogOwnProps,
-  DialogProps,
-};
+export type { DialogContentProps, DialogOverlayProps, DialogProps };
 export { Dialog, DialogContent, DialogOverlay };
 export default Dialog;

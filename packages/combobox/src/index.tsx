@@ -347,14 +347,10 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
   }
 );
 
-type ComboboxDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof ComboboxOwnProps
->;
 /**
  * @see Docs https://reach.tech/combobox#combobox-props
  */
-export type ComboboxOwnProps = {
+export type ComboboxProps = {
   /**
    * @see Docs https://reach.tech/combobox#combobox-children
    */
@@ -385,7 +381,6 @@ export type ComboboxOwnProps = {
    */
   "aria-labelledby"?: string;
 };
-export type ComboboxProps = ComboboxDOMProps & ComboboxOwnProps;
 
 if (__DEV__) {
   Combobox.displayName = "Combobox";
@@ -552,14 +547,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
   }
 );
 
-type ComboboxInputDOMProps = Omit<
-  React.ComponentProps<"input">,
-  keyof ComboboxInputOwnProps
->;
 /**
  * @see Docs https://reach.tech/combobox#comboboxinput-props
  */
-export type ComboboxInputOwnProps = {
+export type ComboboxInputProps = {
   /**
    * If true, when the user clicks inside the text box the current value will
    * be selected. Use this if the user is likely to delete all the text anyway
@@ -590,7 +581,6 @@ export type ComboboxInputOwnProps = {
    */
   value?: ComboboxValue;
 };
-export type ComboboxInputProps = ComboboxInputDOMProps & ComboboxInputOwnProps;
 
 if (__DEV__) {
   ComboboxInput.displayName = "ComboboxInput";
@@ -661,14 +651,10 @@ if (__DEV__) {
   ComboboxPopover.displayName = "ComboboxPopover";
 }
 
-type ComboboxPopoverDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof ComboboxPopoverOwnProps
->;
 /**
  * @see Docs https://reach.tech/combobox#comboboxpopover-props
  */
-export type ComboboxPopoverOwnProps = {
+export type ComboboxPopoverProps = {
   /**
    * If you pass `<ComboboxPopover portal={false} />` the popover will not
    * render inside of a portal, but in the same order as the React tree. This
@@ -679,8 +665,6 @@ export type ComboboxPopoverOwnProps = {
    */
   portal?: boolean;
 };
-export type ComboboxPopoverProps = ComboboxPopoverDOMProps &
-  ComboboxPopoverOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -723,14 +707,10 @@ export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
   }
 );
 
-type ComboboxListDOMProps = Omit<
-  React.ComponentProps<"ul">,
-  keyof ComboboxListOwnProps
->;
 /**
  * @see Docs https://reach.tech/combobox#comboboxlist-props
  */
-export type ComboboxListOwnProps = {
+export type ComboboxListProps = {
   /**
    * Defaults to false. When true and the list is opened, if an option's value
    * matches the value in the input, it will automatically be highlighted and
@@ -746,7 +726,6 @@ export type ComboboxListOwnProps = {
    */
   persistSelection?: boolean;
 };
-export type ComboboxListProps = ComboboxListDOMProps & ComboboxListOwnProps;
 
 if (__DEV__) {
   ComboboxList.displayName = "ComboboxList";
@@ -812,14 +791,10 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
   }
 );
 
-type ComboboxOptionDOMProps = Omit<
-  React.ComponentProps<"li">,
-  keyof ComboboxOptionOwnProps
->;
 /**
  * @see Docs https://reach.tech/combobox#comboboxoption-props
  */
-export type ComboboxOptionOwnProps = {
+export type ComboboxOptionProps = {
   /**
    * Optional. If omitted, the `value` will be used as the children like as:
    * `<ComboboxOption value="Seattle, Tacoma, Washington" />`. But if you need
@@ -842,8 +817,6 @@ export type ComboboxOptionOwnProps = {
    */
   value: string;
 };
-export type ComboboxOptionProps = ComboboxOptionDOMProps &
-  ComboboxOptionOwnProps;
 
 if (__DEV__) {
   ComboboxOption.displayName = "ComboboxOption";
@@ -950,13 +923,7 @@ export const ComboboxButton = forwardRefWithAs<ComboboxButtonProps, "button">(
   }
 );
 
-type ComboboxButtonDOMProps = Omit<
-  React.ComponentProps<"button">,
-  keyof ComboboxButtonOwnProps
->;
-export type ComboboxButtonOwnProps = {};
-export type ComboboxButtonProps = ComboboxButtonDOMProps &
-  ComboboxButtonOwnProps;
+export type ComboboxButtonProps = {};
 
 if (__DEV__) {
   ComboboxButton.displayName = "ComboboxButton";

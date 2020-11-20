@@ -402,12 +402,10 @@ const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   );
 });
 
-type TooltipDOMProps = Omit<React.ComponentProps<"div">, keyof TooltipOwnProps>;
-type TooltipOwnProps = {
+type TooltipProps = {
   children: React.ReactNode;
   DEBUG_STYLE?: boolean;
-} & Omit<TooltipContentOwnProps, "triggerRect" | "isVisible">;
-type TooltipProps = TooltipDOMProps & TooltipOwnProps;
+} & Omit<TooltipContentProps, "triggerRect" | "isVisible">;
 
 if (__DEV__) {
   Tooltip.displayName = "Tooltip";
@@ -453,14 +451,9 @@ const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   }
 );
 
-type TooltipPopupDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof TooltipPopupOwnProps
->;
-type TooltipPopupOwnProps = {
+type TooltipPopupProps = {
   children?: React.ReactNode;
-} & TooltipContentOwnProps;
-type TooltipPopupProps = TooltipPopupDOMProps & TooltipPopupOwnProps;
+} & TooltipContentProps;
 
 if (__DEV__) {
   TooltipPopup.displayName = "TooltipPopup";
@@ -532,18 +525,13 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
   }
 );
 
-type TooltipContentDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof TooltipContentOwnProps
->;
-type TooltipContentOwnProps = {
+type TooltipContentProps = {
   ariaLabel?: string;
   position?: Position;
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
 };
-type TooltipContentProps = TooltipContentDOMProps & TooltipContentOwnProps;
 
 if (__DEV__) {
   TooltipContent.displayName = "TooltipContent";
@@ -713,11 +701,8 @@ type PRect = Partial<DOMRect> & {
 export default Tooltip;
 export type {
   Position,
-  TooltipContentOwnProps,
   TooltipContentProps,
-  TooltipOwnProps,
   TooltipParams,
-  TooltipPopupOwnProps,
   TooltipPopupProps,
   TooltipProps,
   TriggerParams,

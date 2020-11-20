@@ -206,14 +206,10 @@ const Accordion = forwardRefWithAs<AccordionProps, "div">(function Accordion(
   );
 });
 
-type AccordionDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AccordionOwnProps
->;
 /**
  * @see Docs https://reach.tech/accordion#accordion-props
  */
-type AccordionOwnProps = {
+type AccordionProps = {
   /**
    * `Accordion` can accept `AccordionItem` components as children.
    *
@@ -280,7 +276,6 @@ type AccordionOwnProps = {
    */
   multiple?: boolean;
 };
-type AccordionProps = AccordionDOMProps & AccordionOwnProps;
 
 if (__DEV__) {
   Accordion.displayName = "Accordion";
@@ -344,70 +339,67 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionitem
  */
-const AccordionItem = forwardRefWithAs<AccordionItemProps, "div">(
-  function AccordionItem(
-    { as: Comp = "div", children, disabled = false, ...props },
-    forwardedRef
-  ) {
-    const { accordionId, openPanels, readOnly } = React.useContext(
-      AccordionContext
-    );
-    const buttonRef: ButtonRef = React.useRef(null);
+const AccordionItem = forwardRefWithAs<
+  AccordionItemProps & React.ComponentPropsWithRef<"div">,
+  "div"
+>(function AccordionItem(
+  { as: Comp = "div", children, disabled = false, ...props },
+  forwardedRef
+) {
+  const { accordionId, openPanels, readOnly } = React.useContext(
+    AccordionContext
+  );
+  const buttonRef: ButtonRef = React.useRef(null);
 
-    const index = useDescendant(
-      {
-        element: buttonRef.current,
-        disabled,
-      },
-      AccordionDescendantContext
-    );
-
-    // We need unique IDs for the panel and button to point to one another
-    const itemId = makeId(accordionId, index);
-    const panelId = makeId("panel", itemId);
-    const buttonId = makeId("button", itemId);
-
-    const state =
-      (Array.isArray(openPanels)
-        ? openPanels.includes(index) && AccordionStates.Open
-        : openPanels === index && AccordionStates.Open) ||
-      AccordionStates.Collapsed;
-
-    const context: InternalAccordionItemContextValue = {
+  const index = useDescendant(
+    {
+      element: buttonRef.current,
       disabled,
-      buttonId,
-      index,
-      itemId,
-      buttonRef,
-      panelId,
-      state,
-    };
+    },
+    AccordionDescendantContext
+  );
 
-    return (
-      <AccordionItemContext.Provider value={context}>
-        <Comp
-          {...props}
-          ref={forwardedRef}
-          data-reach-accordion-item=""
-          data-state={getDataState(state)}
-          data-disabled={disabled ? "" : undefined}
-          data-read-only={readOnly ? "" : undefined}
-        >
-          {children}
-        </Comp>
-      </AccordionItemContext.Provider>
-    );
-  }
-);
+  // We need unique IDs for the panel and button to point to one another
+  const itemId = makeId(accordionId, index);
+  const panelId = makeId("panel", itemId);
+  const buttonId = makeId("button", itemId);
 
-type AccordionItemDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AccordionItemOwnProps
->;
+  const state =
+    (Array.isArray(openPanels)
+      ? openPanels.includes(index) && AccordionStates.Open
+      : openPanels === index && AccordionStates.Open) ||
+    AccordionStates.Collapsed;
+
+  const context: InternalAccordionItemContextValue = {
+    disabled,
+    buttonId,
+    index,
+    itemId,
+    buttonRef,
+    panelId,
+    state,
+  };
+
+  return (
+    <AccordionItemContext.Provider value={context}>
+      <Comp
+        {...props}
+        ref={forwardedRef}
+        data-reach-accordion-item=""
+        data-state={getDataState(state)}
+        data-disabled={disabled ? "" : undefined}
+        data-read-only={readOnly ? "" : undefined}
+      >
+        {children}
+      </Comp>
+    </AccordionItemContext.Provider>
+  );
+});
+
 /**
  * @see Docs https://reach.tech/accordion#accordionitem-props
  */
-type AccordionItemOwnProps = {
+type AccordionItemProps = {
   /**
    * An `AccordionItem` expects to receive an `AccordionButton` and
    * `AccordionPanel` components as its children, though you can also nest other
@@ -425,7 +417,6 @@ type AccordionItemOwnProps = {
    */
   disabled?: boolean;
 };
-type AccordionItemProps = AccordionItemDOMProps & AccordionItemOwnProps;
 
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
@@ -547,14 +538,10 @@ const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
   }
 );
 
-type AccordionButtonDOMProps = Omit<
-  React.ComponentProps<"button">,
-  keyof AccordionButtonOwnProps
->;
 /**
  * @see Docs https://reach.tech/accordion#accordionbutton-props
  */
-type AccordionButtonOwnProps = {
+type AccordionButtonProps = {
   /**
    * Typically a text string that serves as a label for the accordion, though
    * nested DOM nodes can be passed as well so long as they are valid children
@@ -565,7 +552,6 @@ type AccordionButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-type AccordionButtonProps = AccordionButtonDOMProps & AccordionButtonOwnProps;
 
 if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
@@ -626,14 +612,10 @@ const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
   }
 );
 
-type AccordionPanelDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AccordionPanelOwnProps
->;
 /**
  * @see Docs https://reach.tech/accordion#accordionpanel-props
  */
-type AccordionPanelOwnProps = {
+type AccordionPanelProps = {
   /**
    * Inner collapsible content for the accordion item.
    *
@@ -641,7 +623,6 @@ type AccordionPanelOwnProps = {
    */
   children: React.ReactNode;
 };
-type AccordionPanelProps = AccordionPanelDOMProps & AccordionPanelOwnProps;
 
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";
@@ -738,14 +719,10 @@ interface InternalAccordionItemContextValue {
 // Exports
 
 export type {
-  AccordionButtonOwnProps,
   AccordionButtonProps,
   AccordionContextValue,
   AccordionItemContextValue,
-  AccordionItemOwnProps,
   AccordionItemProps,
-  AccordionOwnProps,
-  AccordionPanelOwnProps,
   AccordionPanelProps,
   AccordionProps,
 };

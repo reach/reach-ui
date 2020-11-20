@@ -118,7 +118,7 @@ const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-type DisclosureOwnProps = {
+type DisclosureProps = {
   /**
    * `Disclosure` expects to receive accept `DisclosureButton` and
    * `DisclosurePanel` components as children. It can also accept wrapper
@@ -162,7 +162,6 @@ type DisclosureOwnProps = {
    */
   open?: boolean;
 };
-type DisclosureProps = DisclosureOwnProps;
 
 if (__DEV__) {
   Disclosure.displayName = "Disclosure";
@@ -231,15 +230,10 @@ const DisclosureButton = forwardRefWithAs<DisclosureButtonProps, "button">(
     );
   }
 );
-
-type DisclosureButtonDOMProps = Omit<
-  React.ComponentProps<"button">,
-  keyof DisclosureButtonOwnProps
->;
 /**
  * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
-type DisclosureButtonOwnProps = {
+type DisclosureButtonProps = {
   /**
    * Typically a text string that serves as a label for the disclosure button,
    * though nested DOM nodes can be passed as well so long as they are valid
@@ -250,8 +244,6 @@ type DisclosureButtonOwnProps = {
    */
   children: React.ReactNode;
 };
-type DisclosureButtonProps = DisclosureButtonDOMProps &
-  DisclosureButtonOwnProps;
 
 if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
@@ -302,11 +294,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-type DisclosurePanelDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof DisclosurePanelOwnProps
->;
-type DisclosurePanelOwnProps = {
+type DisclosurePanelProps = {
   /**
    * Inner collapsible content for the disclosure item.
    *
@@ -314,7 +302,6 @@ type DisclosurePanelOwnProps = {
    */
   children: React.ReactNode;
 };
-type DisclosurePanelProps = DisclosurePanelDOMProps & DisclosurePanelOwnProps;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -374,14 +361,7 @@ function useStableCallback<T extends (...args: any[]) => any>(
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type {
-  DisclosureButtonOwnProps,
-  DisclosureButtonProps,
-  DisclosureOwnProps,
-  DisclosurePanelOwnProps,
-  DisclosurePanelProps,
-  DisclosureProps,
-};
+export type { DisclosureButtonProps, DisclosurePanelProps, DisclosureProps };
 export {
   Disclosure,
   DisclosureButton,

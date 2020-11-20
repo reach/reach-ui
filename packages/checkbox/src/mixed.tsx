@@ -235,18 +235,13 @@ const MixedCheckbox = forwardRefWithAs<
   );
 });
 
-type MixedCheckboxDOMProps = Omit<
-  React.ComponentProps<"input">,
-  keyof MixedCheckboxOwnProps
->;
-type MixedCheckboxOwnProps = {
+type MixedCheckboxProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
    */
   checked?: MixedOrBool;
 };
-type MixedCheckboxProps = MixedCheckboxDOMProps & MixedCheckboxOwnProps;
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
@@ -514,12 +509,7 @@ type MixedCheckboxInputRef = React.RefObject<MixedCheckboxNodeRefs["input"]>;
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type {
-  MixedCheckboxOwnProps,
-  MixedCheckboxProps,
-  MixedOrBool,
-  UseMixedCheckboxProps,
-};
+export type { MixedCheckboxProps, MixedOrBool, UseMixedCheckboxProps };
 export {
   MixedCheckbox,
   MixedCheckboxEvents,

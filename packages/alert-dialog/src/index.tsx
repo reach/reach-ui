@@ -34,8 +34,8 @@ import * as React from "react";
 import {
   DialogOverlay,
   DialogContent,
-  DialogOwnProps,
-  DialogContentOwnProps,
+  DialogProps,
+  DialogContentProps,
 } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import {
@@ -175,14 +175,10 @@ const AlertDialogContent = forwardRefWithAs<AlertDialogContentProps, "div">(
   }
 );
 
-type AlertDialogContentDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AlertDialogContentOwnProps
->;
 /**
  * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-props
  */
-type AlertDialogContentOwnProps = {
+type AlertDialogContentProps = {
   /**
    * Accepts any renderable content but should generally be restricted to
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other
@@ -191,10 +187,7 @@ type AlertDialogContentOwnProps = {
    * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-children
    */
   children: React.ReactNode;
-} & DialogContentOwnProps;
-
-type AlertDialogContentProps = AlertDialogContentDOMProps &
-  AlertDialogContentOwnProps;
+} & DialogContentProps;
 
 if (__DEV__) {
   AlertDialogContent.displayName = "AlertDialogContent";
@@ -234,13 +227,7 @@ if (__DEV__) {
   AlertDialogLabel.displayName = "AlertDialogLabel";
 }
 
-type AlertDialogLabelDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AlertDialogLabelOwnProps
->;
-type AlertDialogLabelOwnProps = {};
-type AlertDialogLabelProps = AlertDialogLabelDOMProps &
-  AlertDialogLabelOwnProps;
+type AlertDialogLabelProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -276,13 +263,7 @@ if (__DEV__) {
   AlertDialogDescription.displayName = "AlertDialogDescription";
 }
 
-type AlertDialogDescriptionDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AlertDialogDescriptionOwnProps
->;
-type AlertDialogDescriptionOwnProps = {};
-type AlertDialogDescriptionProps = AlertDialogDescriptionDOMProps &
-  AlertDialogDescriptionOwnProps;
+type AlertDialogDescriptionProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -307,14 +288,10 @@ const AlertDialog = forwardRefWithAs<AlertDialogProps, "div">(
   }
 );
 
-type AlertDialogDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof AlertDialogOwnProps
->;
 /**
  * @see Docs https://reach.tech/alert-dialog#alertdialog-props
  */
-type AlertDialogOwnProps = {
+type AlertDialogProps = {
   id?: string;
   /**
    * Controls whether the dialog is open or not.
@@ -345,8 +322,7 @@ type AlertDialogOwnProps = {
    * @see Docs: https://reach.tech/alert-dialog#alertdialog-children
    */
   children: React.ReactNode;
-} & DialogOwnProps;
-type AlertDialogProps = AlertDialogDOMProps & AlertDialogOwnProps;
+} & DialogProps;
 
 if (__DEV__) {
   AlertDialog.displayName = "AlertDialog";
@@ -372,13 +348,9 @@ interface AlertDialogContextValue {
 // Exports
 
 export type {
-  AlertDialogContentOwnProps,
   AlertDialogContentProps,
-  AlertDialogDescriptionOwnProps,
   AlertDialogDescriptionProps,
-  AlertDialogLabelOwnProps,
   AlertDialogLabelProps,
-  AlertDialogOwnProps,
   AlertDialogProps,
 };
 export {

@@ -138,11 +138,7 @@ const CustomCheckboxContainer = forwardRefWithAs<
 /**
  * @see Docs https://reach.tech/checkbox#custom-checkboxcontainer-props
  */
-type CustomCheckboxContainerDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof CustomCheckboxContainerOwnProps
->;
-type CustomCheckboxContainerOwnProps = {
+type CustomCheckboxContainerProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
@@ -196,8 +192,6 @@ type CustomCheckboxContainerOwnProps = {
    */
   onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
 };
-type CustomCheckboxContainerProps = CustomCheckboxContainerDOMProps &
-  CustomCheckboxContainerOwnProps;
 
 if (__DEV__) {
   CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
@@ -273,17 +267,7 @@ const CustomCheckboxInput = forwardRefWithAs<CustomCheckboxInputProps, "input">(
   }
 );
 
-type CustomCheckboxInputDOMProps = Omit<
-  React.ComponentProps<"input">,
-  | keyof CustomCheckboxInputOwnProps
-  | keyof CustomCheckboxContextValue["inputProps"]
->;
-type CustomCheckboxInputOwnProps = Pick<
-  CustomCheckboxOwnProps,
-  "name" | "value"
->;
-type CustomCheckboxInputProps = CustomCheckboxInputDOMProps &
-  CustomCheckboxInputOwnProps;
+type CustomCheckboxInputProps = Pick<CustomCheckboxProps, "name" | "value">;
 
 if (__DEV__) {
   CustomCheckboxInput.displayName = "CustomCheckboxInput";
@@ -327,9 +311,9 @@ const CustomCheckbox = forwardRefWithAs<CustomCheckboxProps, "input">(
  */
 type CustomCheckboxDOMProps = Omit<
   React.ComponentProps<"span">,
-  keyof CustomCheckboxOwnProps
+  keyof CustomCheckboxProps
 >;
-type CustomCheckboxOwnProps = {
+type CustomCheckboxProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
@@ -381,7 +365,6 @@ type CustomCheckboxOwnProps = {
    */
   value?: React.ComponentProps<"input">["value"];
 };
-type CustomCheckboxProps = CustomCheckboxDOMProps & CustomCheckboxOwnProps;
 
 if (__DEV__) {
   CustomCheckbox.displayName = "CustomCheckbox";
@@ -426,11 +409,8 @@ type CustomCheckboxContainerChildRender = (args: {
 // Exports
 
 export type {
-  CustomCheckboxContainerOwnProps,
   CustomCheckboxContainerProps,
-  CustomCheckboxInputOwnProps,
   CustomCheckboxInputProps,
-  CustomCheckboxOwnProps,
   CustomCheckboxProps,
 };
 export { CustomCheckbox, CustomCheckboxContainer, CustomCheckboxInput };

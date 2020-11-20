@@ -201,11 +201,10 @@ const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
   );
 });
 
-type TabsDOMProps = Omit<React.ComponentProps<"div">, keyof TabsOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tabs-props
  */
-type TabsOwnProps = {
+type TabsProps = {
   /**
    * Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't
    * matter, you can have tabs on the top or the bottom. In fact, you could have
@@ -263,7 +262,6 @@ type TabsOwnProps = {
    */
   onChange?: (index: number) => void;
 };
-type TabsProps = TabsDOMProps & TabsOwnProps;
 
 if (__DEV__) {
   Tabs.displayName = "Tabs";
@@ -401,11 +399,10 @@ if (__DEV__) {
 
 const TabList = memoWithAs(TabListImpl);
 
-type TabListDOMProps = Omit<React.ComponentProps<"div">, keyof TabListOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tablist-props
  */
-type TabListOwnProps = {
+type TabListProps = {
   /**
    * `TabList` expects multiple `Tab` elements as children.
    *
@@ -415,7 +412,6 @@ type TabListOwnProps = {
    */
   children?: React.ReactNode;
 };
-type TabListProps = TabListDOMProps & TabListOwnProps;
 
 if (__DEV__) {
   TabList.displayName = "TabList";
@@ -527,11 +523,10 @@ const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
   );
 });
 
-type TabDOMProps = Omit<React.ComponentProps<"div">, keyof TabOwnProps>;
 /**
  * @see Docs https://reach.tech/tabs#tab-props
  */
-type TabOwnProps = {
+type TabProps = {
   /**
    * `Tab` can receive any type of children.
    *
@@ -547,10 +542,6 @@ type TabOwnProps = {
   disabled?: boolean;
   index?: number;
 };
-
-// This should be TabDOMProps & TabOwnProps, but TS is hanging up on that union
-// for some reason and I cannot for the life of me figure out why 🤦‍♂️
-type TabProps = TabOwnProps;
 
 if (__DEV__) {
   Tab.displayName = "Tab";
@@ -599,15 +590,10 @@ if (__DEV__) {
 
 const TabPanels = memoWithAs(TabPanelsImpl);
 
-type TabPanelsDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof TabPanelsOwnProps
->;
 /**
  * @see Docs https://reach.tech/tabs#tabpanels-props
  */
-type TabPanelsOwnProps = TabListOwnProps & {};
-type TabPanelsProps = TabPanelsDOMProps & TabPanelsOwnProps;
+type TabPanelsProps = TabListProps & {};
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
@@ -684,14 +670,10 @@ const TabPanel = forwardRefWithAs<TabPanelProps, "div">(function TabPanel(
   );
 });
 
-type TabPanelDOMProps = Omit<
-  React.ComponentProps<"div">,
-  keyof TabPanelOwnProps
->;
 /**
  * @see Docs https://reach.tech/tabs#tabpanel-props
  */
-type TabPanelOwnProps = {
+type TabPanelProps = {
   /**
    * `TabPanel` can receive any type of children.
    *
@@ -699,7 +681,6 @@ type TabPanelOwnProps = {
    */
   children?: React.ReactNode;
 };
-type TabPanelProps = TabPanelDOMProps & TabPanelOwnProps;
 
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
@@ -764,16 +745,11 @@ type InternalTabsContextValue = {
 // Exports
 
 export type {
-  TabListOwnProps,
   TabListProps,
-  TabOwnProps,
-  TabPanelOwnProps,
   TabPanelProps,
-  TabPanelsOwnProps,
   TabPanelsProps,
   TabProps,
   TabsContextValue,
-  TabsOwnProps,
   TabsProps,
 };
 export {

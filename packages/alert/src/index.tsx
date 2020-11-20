@@ -85,11 +85,10 @@ const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
   return child;
 });
 
-type AlertDOMProps = Omit<React.ComponentProps<"div">, keyof AlertOwnProps>;
 /**
  * @see Docs https://reach.tech/alert#alert-props
  */
-type AlertOwnProps = {
+type AlertProps = {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
@@ -99,7 +98,6 @@ type AlertOwnProps = {
   type?: "assertive" | "polite";
   children: React.ReactNode;
 };
-type AlertProps = AlertDOMProps & AlertOwnProps;
 
 if (__DEV__) {
   Alert.displayName = "Alert";
@@ -235,6 +233,6 @@ type RegionKeys = {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type { AlertOwnProps, AlertProps };
+export type { AlertProps };
 export { Alert };
 export default Alert;

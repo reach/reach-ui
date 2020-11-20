@@ -24,8 +24,7 @@ const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
   );
 });
 
-type PopoverDOMProps = Omit<React.ComponentProps<"div">, keyof PopoverOwnProps>;
-type PopoverOwnProps = {
+type PopoverProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
@@ -45,7 +44,6 @@ type PopoverOwnProps = {
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
 };
-type PopoverProps = PopoverDOMProps & PopoverOwnProps;
 
 if (__DEV__) {
   Popover.displayName = "Popover";
@@ -372,7 +370,7 @@ type PossibleNode = null | undefined | HTMLElement | SVGElement;
 // Exports
 
 export default Popover;
-export type { PopoverOwnProps, PopoverProps, Position };
+export type { PopoverProps, Position };
 export {
   getCollisions,
   Popover,
