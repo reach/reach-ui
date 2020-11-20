@@ -327,6 +327,13 @@
           },
           "required": false,
           "description": ""
+        },
+        "keepScrollPosition": {
+          "type": {
+            "name": "bool"
+          },
+          "required": false,
+          "description": "Avoid the page scroll when focusing on the menu element"
         }
       }
     },
