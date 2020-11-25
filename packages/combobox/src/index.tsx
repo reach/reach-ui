@@ -36,7 +36,6 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
@@ -44,7 +43,10 @@ import {
 } from "@reach/descendants";
 import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
-import Popover, { positionMatchWidth, PopoverProps } from "@reach/popover";
+import { Popover, positionMatchWidth } from "@reach/popover";
+
+import type { PopoverProps } from "@reach/popover";
+import type { Descendant } from "@reach/descendants";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States

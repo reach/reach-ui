@@ -23,7 +23,6 @@ import {
 } from "@reach/utils";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -31,6 +30,8 @@ import {
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
+
+import type { Descendant } from "@reach/descendants";
 
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
   "AccordionDescendantContext"

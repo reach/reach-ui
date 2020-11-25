@@ -2,8 +2,6 @@ import * as React from "react";
 // import { forwardRefWithAs } from './index';
 // import styled from 'styled-components';
 
-type ReactElement = React.ReactElement;
-
 /**
  * React.Ref uses the readonly type `React.RefObject` instead of
  * `React.MutableRefObject`, We pretty much always assume ref objects are

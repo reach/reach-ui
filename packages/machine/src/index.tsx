@@ -2,13 +2,17 @@ import * as React from "react";
 import {
   assign,
   createMachine,
-  EventObject as MachineEvent,
   interpret,
   InterpreterStatus,
+} from "@xstate/fsm";
+import { isString, useConstant } from "@reach/utils";
+
+import type { DistributiveOmit } from "@reach/utils";
+import type {
+  EventObject as MachineEvent,
   StateMachine,
   Typestate,
 } from "@xstate/fsm";
-import { DistributiveOmit, isString, useConstant } from "@reach/utils";
 
 const getServiceState = <
   TContext extends object,
@@ -214,5 +218,5 @@ export type MachineService<
 > = StateMachine.Service<TC, TE>;
 
 // Export types and functions from xstate/fsm
-export { InterpreterStatus, MachineEvent, StateMachine };
-export { createMachine, assign, interpret };
+export type { MachineEvent, StateMachine };
+export { InterpreterStatus, createMachine, assign, interpret };

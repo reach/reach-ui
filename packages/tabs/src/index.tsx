@@ -20,7 +20,6 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -48,6 +47,8 @@ import {
   wrapEvent,
 } from "@reach/utils";
 import { useId } from "@reach/auto-id";
+
+import type { Descendant } from "@reach/descendants";
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(
   "TabsDescendantsContext"

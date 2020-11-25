@@ -11,7 +11,7 @@
  */
 
 import * as React from "react";
-import Portal from "@reach/portal";
+import { Portal } from "@reach/portal";
 import {
   forwardRefWithAs,
   getOwnerDocument,

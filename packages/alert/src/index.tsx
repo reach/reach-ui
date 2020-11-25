@@ -24,7 +24,7 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import {
   forwardRefWithAs,
   getOwnerDocument,

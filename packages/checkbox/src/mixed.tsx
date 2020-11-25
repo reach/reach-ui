@@ -39,14 +39,10 @@ import {
   warning,
   wrapEvent,
 } from "@reach/utils";
-import {
-  assign,
-  MachineEventWithRefs,
-  StateMachine,
-  useCreateMachine,
-  useMachine,
-} from "@reach/machine";
+import { assign, useCreateMachine, useMachine } from "@reach/machine";
 import PropTypes from "prop-types";
+
+import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 // Used for development only, not recommended for production code!
 const DEBUG = false;

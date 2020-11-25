@@ -64,13 +64,13 @@ if (__DEV__) {
 
 function useRect<T extends Element = HTMLElement>(
   nodeRef: React.RefObject<T | undefined | null>,
-  observe?: UseRectOptions["observe"],
-  onChange?: UseRectOptions["onChange"]
+  options?: UseRectOptions
 ): null | DOMRect;
 
 function useRect<T extends Element = HTMLElement>(
   nodeRef: React.RefObject<T | undefined | null>,
-  options?: UseRectOptions
+  observe?: UseRectOptions["observe"],
+  onChange?: UseRectOptions["onChange"]
 ): null | DOMRect;
 
 /**

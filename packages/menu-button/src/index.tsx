@@ -14,10 +14,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import Popover, { Position } from "@reach/popover";
+import { Popover, Position } from "@reach/popover";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendants,
@@ -37,6 +36,8 @@ import {
   usePrevious,
   wrapEvent,
 } from "@reach/utils";
+
+import type { Descendant } from "@reach/descendants";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions

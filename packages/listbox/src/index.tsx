@@ -27,10 +27,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import Popover, { PopoverProps, positionMatchWidth } from "@reach/popover";
+import { Popover, positionMatchWidth } from "@reach/popover";
 import {
   createDescendantContext,
-  Descendant,
   DescendantProvider,
   useDescendant,
   useDescendantKeyDown,
@@ -39,7 +38,6 @@ import {
 } from "@reach/descendants";
 import {
   createNamedContext,
-  DistributiveOmit,
   forwardRefWithAs,
   isBoolean,
   isFunction,
@@ -53,15 +51,22 @@ import {
   useIsomorphicLayoutEffect as useLayoutEffect,
   wrapEvent,
 } from "@reach/utils";
-import { StateMachine, useCreateMachine, useMachine } from "@reach/machine";
+import { useCreateMachine, useMachine } from "@reach/machine";
 import {
   createMachineDefinition,
   ListboxEvents,
   ListboxStates,
+} from "./machine";
+
+import type { Descendant } from "@reach/descendants";
+import type { DistributiveOmit } from "@reach/utils";
+import type { StateMachine } from "@reach/machine";
+import type {
   ListboxNodeRefs,
   ListboxStateData,
   ListboxEvent,
 } from "./machine";
+import type { PopoverProps } from "@reach/popover";
 
 const DEBUG = false;
 

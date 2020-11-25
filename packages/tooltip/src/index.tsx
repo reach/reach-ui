@@ -54,8 +54,8 @@ import {
   wrapEvent,
   warning,
 } from "@reach/utils";
-import Portal from "@reach/portal";
-import VisuallyHidden from "@reach/visually-hidden";
+import { Portal } from "@reach/portal";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import PropTypes from "prop-types";
 
@@ -254,7 +254,7 @@ function useTooltip<T extends HTMLElement>({
   let ownRef = React.useRef<HTMLDivElement | null>(null);
 
   let ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
-  let triggerRect = useRect(ownRef, isVisible);
+  let triggerRect = useRect(ownRef, { observe: isVisible });
 
   React.useEffect(() => {
     return subscribe(() => {
@@ -499,7 +499,7 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
 
     let ownRef = React.useRef(null);
     let ref = useForkedRef(forwardedRef, ownRef);
-    let tooltipRect = useRect(ownRef, isVisible);
+    let tooltipRect = useRect(ownRef, { observe: isVisible });
     return (
       <React.Fragment>
         <Comp

@@ -42,12 +42,12 @@ import {
 } from "@reach/utils";
 import {
   internal_checkedPropToStateValue as checkedPropToStateValue,
-  MixedOrBool,
   internal_useControlledSwitchWarning as useControlledSwitchWarning,
   useMixedCheckbox,
-  UseMixedCheckboxProps,
 } from "./mixed";
 import PropTypes from "prop-types";
+
+import type { MixedOrBool, UseMixedCheckboxProps } from "./mixed";
 
 ////////////////////////////////////////////////////////////////////////////////
 

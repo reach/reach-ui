@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import fbWarning from "warning";
-import {
+import type {
   As,
   AssignableRef,
   ComponentWithAs,

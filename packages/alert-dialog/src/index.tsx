@@ -31,12 +31,7 @@
  */
 
 import * as React from "react";
-import {
-  DialogOverlay,
-  DialogContent,
-  DialogProps,
-  DialogContentProps,
-} from "@reach/dialog";
+import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import {
   createNamedContext,
@@ -47,6 +42,8 @@ import {
 } from "@reach/utils";
 import invariant from "invariant";
 import PropTypes from "prop-types";
+
+import type { DialogProps, DialogContentProps } from "@reach/dialog";
 
 let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
   "AlertDialogContext",
