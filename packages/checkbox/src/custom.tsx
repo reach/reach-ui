@@ -309,10 +309,6 @@ const CustomCheckbox = forwardRefWithAs<CustomCheckboxProps, "input">(
 /**
  * @see Docs https://reach.tech/checkbox#custom-checkbox-props
  */
-type CustomCheckboxDOMProps = Omit<
-  React.ComponentProps<"span">,
-  keyof CustomCheckboxProps
->;
 type CustomCheckboxProps = {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
