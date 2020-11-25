@@ -889,6 +889,7 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     React.useEffect(() => {
+      let ownerDocument = getOwnerDocument(popoverRef.current) || document;
       function listener(event: MouseEvent | TouchEvent) {
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;
@@ -899,12 +900,12 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
           dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
         }
       }
-      document.addEventListener("mousedown", listener);
+      ownerDocument.addEventListener("mousedown", listener);
       // see https://github.com/reach/reach-ui/pull/700#discussion_r530369265
-      // document.addEventListener("touchstart", listener);
+      // ownerDocument.addEventListener("touchstart", listener);
       return () => {
-        document.removeEventListener("mousedown", listener);
-        // document.removeEventListener("touchstart", listener);
+        ownerDocument.removeEventListener("mousedown", listener);
+        // ownerDocument.removeEventListener("touchstart", listener);
       };
     }, [buttonClickedRef, buttonRef, dispatch, menuRef, popoverRef]);
 
