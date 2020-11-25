@@ -11,7 +11,7 @@ import {
   Slider,
   SliderInput,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
   SliderHandle,
   SliderMarker,
 } from "@reach/slider";
@@ -25,7 +25,7 @@ function ExampleComposed() {
   return (
     <SliderInput min={0} max={200} step={10}>
       <SliderTrack>
-        <SliderTrackHighlight />
+        <SliderRange />
         <SliderHandle />
       </SliderTrack>
     </SliderInput>

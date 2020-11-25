@@ -64,7 +64,7 @@ import {
   Slider,
   SliderInput,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
   SliderHandle,
   SliderMarker,
 } from "@reach/slider";
@@ -179,7 +179,7 @@ function MyPageLayout({ children }) {
                   SliderInput,
                   SliderMarker,
                   SliderTrack,
-                  SliderTrackHighlight,
+                  SliderRange,
                   Tab,
                   TabList,
                   TabPanel,

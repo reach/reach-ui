@@ -5,7 +5,7 @@ import {
   SliderInput,
   SliderHandle,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
 } from "@reach/slider";
 import "@reach/tooltip/styles.css";
 import "@reach/slider/styles.css";
@@ -40,7 +40,7 @@ function Example() {
     <SliderInput>
       {({ value }) => (
         <SliderTrack>
-          <SliderTrackHighlight />
+          <SliderRange />
           <SliderHandle
             ref={handleRef}
             {...trigger}

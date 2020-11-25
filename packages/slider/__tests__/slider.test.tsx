@@ -9,7 +9,7 @@ import {
   SliderInput,
   SliderMarker,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
   // SLIDER_HANDLE_ALIGN_CENTER,
   // SLIDER_HANDLE_ALIGN_CONTAIN,
   // SLIDER_ORIENTATION_HORIZONTAL,
@@ -37,7 +37,7 @@ describe("<Slider />", () => {
       const { getByRole, getByTestId } = render(
         <SliderInput aria-label="highlighter" min={min} max={max}>
           <SliderTrack>
-            <SliderTrackHighlight />
+            <SliderRange />
             <SliderHandle />
             <SliderMarker data-testid="handle-1" value={20} />
             <SliderMarker data-testid="handle-2" value={40} />
@@ -74,7 +74,7 @@ describe("<Slider />", () => {
       const { getByRole } = render(
         <SliderInput aria-label="mover" min={min} max={max}>
           <SliderTrack>
-            <SliderTrackHighlight />
+            <SliderRange />
             <SliderHandle />
           </SliderTrack>
         </SliderInput>
@@ -115,7 +115,7 @@ describe("<Slider />", () => {
       const { getByRole } = render(
         <SliderInput aria-label="mover" disabled>
           <SliderTrack>
-            <SliderTrackHighlight />
+            <SliderRange />
             <SliderHandle />
           </SliderTrack>
         </SliderInput>

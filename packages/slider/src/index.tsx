@@ -117,7 +117,7 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
       _componentName="Slider"
     >
       <SliderTrack>
-        <SliderTrackHighlight />
+        <SliderRange />
         <SliderHandle />
         {children}
       </SliderTrack>
@@ -440,7 +440,7 @@ const SliderInput = forwardRefWithAs<
     ? getAriaValueText(value)
     : ariaValueTextProp;
 
-  let trackHighlightStyle = isVertical
+  let rangeStyle = isVertical
     ? {
         width: `100%`,
         height: `${trackPercent}%`,
@@ -472,7 +472,7 @@ const SliderInput = forwardRefWithAs<
     orientation,
     trackPercent,
     trackRef,
-    trackHighlightStyle,
+    rangeStyle,
     updateValue,
   };
 
@@ -516,6 +516,8 @@ const SliderInput = forwardRefWithAs<
       return;
     }
 
+    let ownerDocument = getOwnerDocument(sliderRef.current)!;
+    let ownerWindow = ownerDocument.defaultView || window;
     pointerDownRef.current = true;
 
     if ((event as TouchEvent).changedTouches) {
@@ -603,6 +605,7 @@ const SliderInput = forwardRefWithAs<
 
   let addEndListener = React.useCallback(() => {
     let ownerDocument = getOwnerDocument(sliderRef.current)!;
+    let ownerWindow = ownerDocument.defaultView || window;
     let pointerListener = wrapEvent(
       appEvents.current.onPointerUp,
       releasePointerCapture
@@ -612,13 +615,13 @@ const SliderInput = forwardRefWithAs<
       handleSlideStop
     );
     let mouseListener = wrapEvent(appEvents.current.onMouseUp, handleSlideStop);
-    if ("PointerEvent" in window) {
+    if ("PointerEvent" in ownerWindow) {
       ownerDocument.addEventListener("pointerup", pointerListener);
     }
     ownerDocument.addEventListener("touchend", touchListener);
     ownerDocument.addEventListener("mouseup", mouseListener);
     return () => {
-      if ("PointerEvent" in window) {
+      if ("PointerEvent" in ownerWindow) {
         ownerDocument.removeEventListener("pointerup", pointerListener);
       }
       ownerDocument.removeEventListener("touchend", touchListener);
@@ -630,10 +633,13 @@ const SliderInput = forwardRefWithAs<
     // e.preventDefault is ignored by React's synthetic touchStart event, so
     // we attach the listener directly to the DOM node
     // https://github.com/facebook/react/issues/9809#issuecomment-413978405
-    const sliderElement = sliderRef.current;
+    let sliderElement = sliderRef.current!;
     if (!sliderElement) {
       return noop;
     }
+
+    let ownerDocument = getOwnerDocument(sliderElement)!;
+    let ownerWindow = ownerDocument.defaultView || window;
     let touchListener = wrapEvent(
       appEvents.current.onTouchStart,
       handleSlideStart
@@ -648,13 +654,13 @@ const SliderInput = forwardRefWithAs<
     );
     sliderElement.addEventListener("touchstart", touchListener);
     sliderElement.addEventListener("mousedown", mouseListener);
-    if ("PointerEvent" in window) {
+    if ("PointerEvent" in ownerWindow) {
       sliderElement.addEventListener("pointerdown", pointerListener);
     }
     return () => {
       sliderElement.removeEventListener("touchstart", touchListener);
       sliderElement.removeEventListener("mousedown", mouseListener);
-      if ("PointerEvent" in window) {
+      if ("PointerEvent" in ownerWindow) {
         sliderElement.removeEventListener("pointerdown", pointerListener);
       }
     };
@@ -791,51 +797,83 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * SliderTrackHighlight
+ * SliderRange
  *
  * The (typically) highlighted portion of the track that represents the space
  * between the slider's `min` value and its current value.
  *
- * TODO: Consider renaming to `SliderTrackProgress`
- *
- * @see Docs https://reach.tech/slider#slidertrackhighlight
+ * @see Docs https://reach.tech/slider#sliderrange
  */
-const SliderTrackHighlightImpl = forwardRefWithAs<SliderTrackHighlightProps>(
-  function SliderTrackHighlight(
-    { as: Comp = "div", children, style = {}, ...props },
-    forwardedRef
-  ) {
-    let { disabled, orientation, trackHighlightStyle } = useSliderContext();
+const SliderRangeImpl = forwardRefWithAs<SliderRangeProps>(function SliderRange(
+  { as: Comp = "div", children, style = {}, ...props },
+  forwardedRef
+) {
+  let { disabled, orientation, rangeStyle } = useSliderContext();
+  return (
+    <Comp
+      ref={forwardedRef}
+      style={{ position: "absolute", ...rangeStyle, ...style }}
+      {...props}
+      data-reach-slider-range=""
+      data-disabled={disabled ? "" : undefined}
+      data-orientation={orientation}
+    />
+  );
+});
+
+if (__DEV__) {
+  SliderRangeImpl.displayName = "SliderRange";
+  SliderRangeImpl.propTypes = {};
+}
+
+const SliderRange = memoWithAs(SliderRangeImpl);
+
+// TODO: Remove in 1.0
+const SliderTrackHighlightImpl = forwardRefWithAs<SliderRangeProps>(
+  function SliderTrackHighlightImpl(props, ref) {
+    if (__DEV__) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      React.useEffect(() => {
+        warning(
+          false,
+          "`SliderTrackHighlight` has been deprecated in favor of `SliderRange` and will be dropped from a future version of Reach UI."
+        );
+      }, []);
+    }
     return (
-      <Comp
-        ref={forwardedRef}
-        style={{ position: "absolute", ...trackHighlightStyle, ...style }}
-        {...props}
+      <SliderRangeImpl
         data-reach-slider-track-highlight=""
-        data-disabled={disabled ? "" : undefined}
-        data-orientation={orientation}
+        {...props}
+        ref={ref}
       />
     );
   }
 );
-
 if (__DEV__) {
   SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
-  SliderTrackHighlightImpl.propTypes = {};
+  SliderTrackHighlightImpl.propTypes = SliderRangeImpl.propTypes;
 }
-
-const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
+export interface SliderTrackHighlightProps extends SliderRangeProps {}
 
 /**
- * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
- * `SliderTrackHighlight` will not accept or render any children.
+ * This component was renamed to `SliderRange` in a previous version of Reach
+ * UI. `SliderTrackHighlight` will be dropped in a future version. We recommend
+ * updating your projects to replace `SliderTrackHighlight` with `SliderRange`.
  *
- * @see Docs https://reach.tech/slider#slidertrackhighlight-props
+ * @alias SliderRange
  */
-type SliderTrackHighlightProps = {};
+export const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
+
+/**
+ * `SliderRange` accepts any props that a HTML div component accepts.
+ * `SliderRange` will not accept or render any children.
+ *
+ * @see Docs https://reach.tech/slider#sliderrange-props
+ */
+type SliderRangeProps = {};
 
 if (__DEV__) {
-  SliderTrackHighlight.displayName = "SliderTrackHighlight";
+  SliderRange.displayName = "SliderRange";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -946,7 +984,7 @@ if (__DEV__) {
 const SliderHandle = memoWithAs(SliderHandleImpl);
 
 /**
- * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
+ * `SliderRange` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reach.tech/slider#sliderhandle-props
  */
@@ -1148,10 +1186,13 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     : 0; */
 
   useIsomorphicLayoutEffect(() => {
+    let ownerDocument = getOwnerDocument(ref.current)!;
+    let ownerWindow = ownerDocument.defaultView || window;
     if (ref.current) {
-      const { height: _newHeight, width: _newWidth } = window.getComputedStyle(
-        ref.current
-      );
+      const {
+        height: _newHeight,
+        width: _newWidth,
+      } = ownerWindow.getComputedStyle(ref.current);
       let newHeight = parseFloat(_newHeight);
       let newWidth = parseFloat(_newWidth);
 
@@ -1200,7 +1241,7 @@ interface ISliderContext {
   orientation: SliderOrientation;
   trackPercent: number;
   trackRef: TrackRef;
-  trackHighlightStyle: React.CSSProperties;
+  rangeStyle: React.CSSProperties;
   updateValue: (newValue: any) => void;
 }
 
@@ -1225,7 +1266,7 @@ export type {
   SliderInputProps,
   SliderMarkerProps,
   SliderProps,
-  SliderTrackHighlightProps,
+  SliderRangeProps,
   SliderTrackProps,
 };
 export {
@@ -1236,7 +1277,7 @@ export {
   SliderMarker,
   SliderOrientation,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
   SLIDER_HANDLE_ALIGN_CENTER,
   SLIDER_HANDLE_ALIGN_CONTAIN,
   SLIDER_ORIENTATION_HORIZONTAL,

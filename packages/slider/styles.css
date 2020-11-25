@@ -66,16 +66,16 @@
   transform: translateX(-50%);
 }
 
-[data-reach-slider-track-highlight] {
+[data-reach-slider-range] {
   border-radius: inherit;
   background: #1159a6;
 }
 
-[data-reach-slider-track-highlight][data-orientation="horizontal"] {
+[data-reach-slider-range][data-orientation="horizontal"] {
   height: 100%;
 }
 
-[data-reach-slider-track-highlight][data-orientation="vertical"] {
+[data-reach-slider-range][data-orientation="vertical"] {
   width: 100%;
 }
 
@@ -101,4 +101,18 @@
 [data-reach-slider-marker][data-state="at-value"],
 [data-reach-slider-marker][data-state="under-value"] {
   background: #1159a6;
+}
+
+/* TODO: Remove in 1.0 */
+[data-reach-slider-track-highlight] {
+  border-radius: inherit;
+  background: #1159a6;
+}
+
+[data-reach-slider-track-highlight][data-orientation="horizontal"] {
+  height: 100%;
+}
+
+[data-reach-slider-track-highlight][data-orientation="vertical"] {
+  width: 100%;
 }

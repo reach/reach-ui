@@ -1,6 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
 import { Pipe } from "../components/Pipe";
+import { Note } from "../components/Note";
 
 <SEO
   title="Slider (range)"
@@ -14,7 +15,7 @@ import { Pipe } from "../components/Pipe";
     <TOCLink href="#slider">Slider</TOCLink>
     <TOCLink href="#sliderinput">SliderInput</TOCLink>
     <TOCLink href="#slidertrack">SliderTrack</TOCLink>
-    <TOCLink href="#slidertrackhighlight">SliderTrackHighlight</TOCLink>
+    <TOCLink href="#sliderrange">SliderRange</TOCLink>
     <TOCLink href="#slidermarker">SliderMarker</TOCLink>
     <TOCLink href="#sliderhandle">SliderHandle</TOCLink>
   </TOCList>
@@ -25,7 +26,7 @@ import { Pipe } from "../components/Pipe";
 
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
-Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderTrackHighlight`, `SliderMarker` and `SliderHandle` components as children.
+Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderRange`, `SliderMarker` and `SliderHandle` components as children.
 
 You can use `Slider` as a simple standalone component, or compose its parts with `SliderInput`.
 
@@ -43,7 +44,7 @@ function Example() {
     <div>
       <SliderInput>
         <SliderTrack>
-          <SliderTrackHighlight />
+          <SliderRange />
           <SliderMarker value={50} />
           <SliderHandle />
         </SliderTrack>
@@ -68,7 +69,7 @@ import {
   Slider,
   SliderInput,
   SliderTrack,
-  SliderTrackHighlight,
+  SliderRange,
   SliderHandle,
   SliderMarker,
 } from "@reach/slider";
@@ -88,7 +89,7 @@ function ExampleComposed() {
   return (
     <SliderInput min={0} max={200} step={10}>
       <SliderTrack>
-        <SliderTrackHighlight />
+        <SliderRange />
         <SliderHandle />
       </SliderTrack>
     </SliderInput>
@@ -289,20 +290,30 @@ Please see the [styling guide](/styling).
 
 `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to function. All other Slider subcomponents should be passed as children inside the `SliderTrack`.
 
-### SliderTrackHighlight
+### SliderRange
 
 The (typically) highlighted portion of the track that represents the space between the slider's `min` value and its current value.
 
-#### SliderTrackHighlight CSS Selectors
+<Note>
+  <p>
+    <strong>NOTE:</strong> This component was named{" "}
+    <code>SliderTrackHighlight</code> in a previous version of Reach UI. That
+    component will be dropped in a future version. We recommend updating your
+    projects to replace <code>SliderTrackHighlight</code> with{" "}
+    <code>SliderRange</code>.
+  </p>
+</Note>
+
+#### SliderRange CSS Selectors
 
 Please see the [styling guide](/styling).
 
 ```css
-[data-reach-slider-track-highlight] {
+[data-reach-slider-range] {
 }
-[data-reach-slider-track-highlight][data-disabled] {
+[data-reach-slider-range][data-disabled] {
 }
-[data-reach-slider-track-highlight][data-orientation="(horizontal|vertical)"] {
+[data-reach-slider-range][data-orientation="(horizontal|vertical)"] {
 }
 ```
 
