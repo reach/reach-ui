@@ -175,11 +175,11 @@ const DialogInner = forwardRefWithAs<DialogOverlayProps, "div">(
       mouseDownTarget.current = event.target;
     }
 
-    React.useEffect(
-      () =>
-        overlayNode.current ? createAriaHider(overlayNode.current) : void null,
-      []
-    );
+    React.useEffect(() => {
+      return overlayNode.current
+        ? createAriaHider(overlayNode.current)
+        : void null;
+    }, []);
 
     return (
       <FocusLock
@@ -389,7 +389,7 @@ if (__DEV__) {
 function createAriaHider(dialogNode: HTMLElement) {
   let originalValues: any[] = [];
   let rootNodes: HTMLElement[] = [];
-  let ownerDocument = getOwnerDocument(dialogNode) || document;
+  let ownerDocument = getOwnerDocument(dialogNode)!;
 
   if (!dialogNode) {
     if (__DEV__) {

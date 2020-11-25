@@ -129,7 +129,7 @@ const AlertDialogContent = forwardRefWithAs<AlertDialogContentProps, "div">(
       overlayRef,
     } = React.useContext(AlertDialogContext);
     React.useEffect(() => {
-      let ownerDocument = getOwnerDocument(overlayRef.current) || document;
+      let ownerDocument = getOwnerDocument(overlayRef.current)!;
       if (labelId) {
         invariant(
           ownerDocument.getElementById(labelId),

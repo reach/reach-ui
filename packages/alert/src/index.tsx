@@ -69,7 +69,7 @@ const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
   { as: Comp = "div", children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
-  const ownRef = React.useRef(null);
+  const ownRef = React.useRef<HTMLDivElement>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
   const child = React.useMemo(
     () => (
@@ -178,13 +178,14 @@ function renderAlerts() {
 function useMirrorEffects(
   regionType: RegionTypes,
   element: JSX.Element,
-  ref: React.RefObject<any>
+  ref: React.RefObject<Element>
 ) {
   const prevType = usePrevious<RegionTypes>(regionType);
   const mirror = React.useRef<Mirror | null>(null);
   const mounted = React.useRef(false);
   React.useEffect(() => {
-    const ownerDocument = getOwnerDocument(ref.current) || document;
+    const ownerDocument = getOwnerDocument(ref.current)!;
+
     if (!mounted.current) {
       mounted.current = true;
       mirror.current = createMirror(regionType, ownerDocument);

@@ -480,7 +480,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
     // Any time a mouseup event occurs anywhere in the document, we reset the
     // mouseEventStarted ref so we can check it again when needed.
     React.useEffect(() => {
-      let ownerDocument = getOwnerDocument(ownRef.current) || document;
+      let ownerDocument = getOwnerDocument(ownRef.current)!;
       let listener = () => (mouseEventStarted.current = false);
       ownerDocument.addEventListener("mouseup", listener);
       return () => ownerDocument.removeEventListener("mouseup", listener);
@@ -889,7 +889,7 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     React.useEffect(() => {
-      let ownerDocument = getOwnerDocument(popoverRef.current) || document;
+      let ownerDocument = getOwnerDocument(popoverRef.current)!;
       function listener(event: MouseEvent | TouchEvent) {
         if (buttonClickedRef.current) {
           buttonClickedRef.current = false;

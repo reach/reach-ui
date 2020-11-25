@@ -272,7 +272,7 @@ function useTooltip<T extends HTMLElement>({
   useCheckStyles("tooltip");
 
   React.useEffect(() => {
-    let ownerDocument = getOwnerDocument(ownRef.current) || document;
+    let ownerDocument = getOwnerDocument(ownRef.current)!;
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&

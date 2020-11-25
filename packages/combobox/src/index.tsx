@@ -30,6 +30,7 @@ import {
   useCheckStyles,
   useForkedRef,
   useIsomorphicLayoutEffect,
+  useLazyRef,
   useUpdateEffect,
   wrapEvent,
 } from "@reach/utils";
@@ -1115,10 +1116,22 @@ function useBlur() {
     inputRef,
     buttonRef,
   } = React.useContext(ComboboxContext);
+  const rafIds = useLazyRef(() => new Set<number>());
+
+  React.useEffect(() => {
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      rafIds.current.forEach((id) => cancelAnimationFrame(id));
+    };
+  }, [rafIds]);
 
   return function handleBlur() {
-    let ownerDocument = getOwnerDocument(inputRef.current) || document;
-    requestAnimationFrame(() => {
+    const ownerDocument = getOwnerDocument(popoverRef.current);
+    if (!ownerDocument) {
+      return;
+    }
+
+    let rafId = requestAnimationFrame(() => {
       // we on want to close only if focus propss outside the combobox
       if (
         ownerDocument.activeElement !== inputRef.current &&
@@ -1136,6 +1149,7 @@ function useBlur() {
         }
       }
     });
+    rafIds.current.add(rafId);
   };
 }
 

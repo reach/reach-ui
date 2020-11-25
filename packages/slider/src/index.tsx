@@ -584,7 +584,7 @@ const SliderInput = forwardRefWithAs<
   });
 
   let addMoveListener = React.useCallback(() => {
-    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+    let ownerDocument = getOwnerDocument(sliderRef.current)!;
     let touchListener = wrapEvent(
       appEvents.current.onTouchMove,
       handlePointerMove
@@ -602,7 +602,7 @@ const SliderInput = forwardRefWithAs<
   }, [handlePointerMove]);
 
   let addEndListener = React.useCallback(() => {
-    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+    let ownerDocument = getOwnerDocument(sliderRef.current)!;
     let pointerListener = wrapEvent(
       appEvents.current.onPointerUp,
       releasePointerCapture
