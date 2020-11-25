@@ -9,6 +9,7 @@ import {
 } from "@reach/slider";
 import "@reach/tooltip/styles.css";
 import "@reach/slider/styles.css";
+import "./examples.css";
 
 let name = "With Tooltip";
 

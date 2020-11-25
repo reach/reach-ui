@@ -440,17 +440,7 @@ const SliderInput = forwardRefWithAs<
     ? getAriaValueText(value)
     : ariaValueTextProp;
 
-  let rangeStyle = isVertical
-    ? {
-        width: `100%`,
-        height: `${trackPercent}%`,
-        bottom: 0,
-      }
-    : {
-        width: `${trackPercent}%`,
-        height: `100%`,
-        left: 0,
-      };
+  let rangeStyle = { [isVertical ? "height" : "width"]: `${trackPercent}%` };
 
   let ctx: ISliderContext = {
     ariaLabel: getAriaLabel ? getAriaLabel(value) : ariaLabel,

@@ -50,6 +50,8 @@ function Example() {
     <div>
       <button onClick={() => setValue(MIN)}>Bring it Down!</button>
       <button onClick={() => setValue(MAX)}>Max Out!</button>
+      <br />
+      <br />
       <Slider onChange={setValue} value={value} min={MIN} max={MAX}>
         {markers.map(({ face, label, value: val }) => (
           <SliderMarker value={val} key={val}>
@@ -59,6 +61,8 @@ function Example() {
           </SliderMarker>
         ))}
       </Slider>
+      <br />
+      <br />
       <p role="status" style={{ color: "crimson" }}>
         Happieness level at {value}% – {status}
       </p>

@@ -7,14 +7,20 @@ let name = "Basic";
 
 function Example() {
   return (
-    <Slider id="gee-whiz">
-      <SliderMarker value={10}>
-        <span>10</span>
-      </SliderMarker>
-      <SliderMarker value={90}>
-        <span>90</span>
-      </SliderMarker>
-    </Slider>
+    <div>
+      <Slider id="gee-whiz">
+        <SliderMarker value={10}>
+          <span>10</span>
+        </SliderMarker>
+        <SliderMarker value={90}>
+          <span>90</span>
+        </SliderMarker>
+      </Slider>
+      <br />
+      <br />
+      <br />
+      <Slider defaultValue={30} disabled></Slider>
+    </div>
   );
 }
 

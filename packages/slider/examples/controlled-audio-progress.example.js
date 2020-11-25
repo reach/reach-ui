@@ -40,6 +40,9 @@ function Example() {
         max={max}
         getAriaValueText={(val) => msToTime(val)}
       ></Slider>
+      <br />
+      <br />
+      <br />
       {audio}
     </div>
   );
