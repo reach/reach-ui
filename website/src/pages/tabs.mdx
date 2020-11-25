@@ -808,7 +808,7 @@ With a little composition we can animate the selected tab bar.
 
     // measure the size of our element, only listen to rect if active
     const ref = React.useRef();
-    const rect = useRect(ref, isSelected);
+    const rect = useRect(ref, { observe: isSelected });
 
     // get the style changing function from context
     const setActiveRect = useContext(AnimatedContext);

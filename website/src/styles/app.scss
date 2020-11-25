@@ -332,6 +332,16 @@ button#hamburger {
   white-space: nowrap;
 }
 
+[data-reach-slider-input][data-orientation="horizontal"] {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+[data-reach-slider-input][data-orientation="vertical"] {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
 .alert-buttons {
   text-align: center;
   margin-top: 20px;

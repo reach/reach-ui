@@ -85,7 +85,7 @@ function ExampleAnimatedTab({ index, ...props }) {
 
   // measure the size of our element, only listen to rect if active
   const ref = React.useRef();
-  const rect = useRect(ref, isSelected);
+  const rect = useRect(ref, { observe: isSelected });
 
   // get the style changing function from context
   const setActiveRect = React.useContext(AnimatedContext);
