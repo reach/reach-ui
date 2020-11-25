@@ -900,10 +900,11 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
         }
       }
       document.addEventListener("mousedown", listener);
-      document.addEventListener("touchstart", listener);
+      // see https://github.com/reach/reach-ui/pull/700#discussion_r530369265
+      // document.addEventListener("touchstart", listener);
       return () => {
         document.removeEventListener("mousedown", listener);
-        document.removeEventListener("touchstart", listener);
+        // document.removeEventListener("touchstart", listener);
       };
     }, [buttonClickedRef, buttonRef, dispatch, menuRef, popoverRef]);
 
