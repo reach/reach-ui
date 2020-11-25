@@ -533,7 +533,7 @@ const SliderInput = forwardRefWithAs<
     if (newValue == null) {
       return;
     }
-    handleRef.current?.focus();
+    ownerWindow.requestAnimationFrame(() => handleRef.current?.focus());
     updateValue(newValue);
 
     removeMoveEvents.current = addMoveListener();
