@@ -1,12 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useMemo,
-  useRef,
-  useLayoutEffect,
-  useEffect,
-  createContext,
-} from "react";
+import * as React from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -22,18 +14,18 @@ import "@reach/combobox/styles.css";
 
 let name = "Controlled";
 
-const Context = createContext();
+const Context = React.createContext();
 
 function Example() {
-  let [term, setTerm] = useState("");
-  let [selections, setSelections] = useState([]);
+  let [term, setTerm] = React.useState("");
+  let [selections, setSelections] = React.useState([]);
   let results = useCityMatch(term);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setTerm(event.target.value);
   };
 
-  const handleSelect = value => {
+  const handleSelect = (value) => {
     setSelections(selections.concat([value]));
     setTerm("");
   };
@@ -43,8 +35,8 @@ function Example() {
       <h2>Tokenbox</h2>
       <ExampleTokenbox onSelect={handleSelect}>
         <ExampleTokenLabel
-          onRemove={item => {
-            setSelections(selections.filter(s => s !== item));
+          onRemove={(item) => {
+            setSelections(selections.filter((s) => s !== item));
           }}
           style={{
             border: "1px solid #888",
@@ -52,7 +44,7 @@ function Example() {
             flexWrap: "wrap",
           }}
         >
-          {selections.map(selection => (
+          {selections.map((selection) => (
             <ExampleToken value={selection} />
           ))}
           <ExampleTokenInput
@@ -104,15 +96,15 @@ export default { title: "Combobox" };
 ////////////////////////////////////////////////////////////////////////////////
 
 function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
-  const selectionsRef = useRef([]);
-  const [selectionNavIndex, setSelectionNavIndex] = useState(-1);
+  const selectionsRef = React.useRef([]);
+  const [selectionNavIndex, setSelectionNavIndex] = React.useState(-1);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     selectionsRef.current = [];
     return () => (selectionsRef.current = []);
   });
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     if (event.key === "ArrowLeft") {
       if (selectionNavIndex > 0) {
         setSelectionNavIndex(selectionNavIndex - 1);
@@ -136,10 +128,10 @@ function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
 }
 
 function ExampleToken({ value, ...props }) {
-  const { selectionsRef } = useContext(Context);
+  const { selectionsRef } = React.useContext(Context);
   // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
 
-  useEffect(() => {
+  React.useEffect(() => {
     selectionsRef.current.push(value);
   });
 
@@ -162,8 +154,8 @@ function ExampleTokenbox({ onSelect, ...props }) {
 }
 
 function ExampleTokenInput({ onKeyDown, ...props }) {
-  const { onRemove, selectionsRef } = useContext(Context);
-  const handleKeyDown = event => {
+  const { onRemove, selectionsRef } = React.useContext(Context);
+  const handleKeyDown = (event) => {
     const { value } = event.target;
     if (
       event.key === "Backspace" &&
@@ -180,12 +172,12 @@ function ExampleTokenInput({ onKeyDown, ...props }) {
 
 function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);
-  return useMemo(
+  return React.useMemo(
     () =>
       term.trim() === ""
         ? null
         : matchSorter(cities, term, {
-            keys: [item => `${item.city}, ${item.state}`],
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [throttledTerm]

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import { Listbox, ListboxOption } from "@reach/listbox";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Controlled";
 
 function Example() {
-  let [value, setValue] = useState("default");
+  let [value, setValue] = React.useState("default");
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
@@ -39,14 +40,6 @@ function Example() {
       <hr />
       <button onClick={() => setValue("default")}>Reset</button>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 

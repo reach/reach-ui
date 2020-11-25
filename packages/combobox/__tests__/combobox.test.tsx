@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { render, act, withMarkup, userEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -18,7 +18,7 @@ describe("<Combobox />", () => {
   describe("rendering", () => {
     it("renders as any HTML element", async () => {
       function MyCombobox() {
-        let [term, setTerm] = useState("");
+        let [term, setTerm] = React.useState("");
         let results = useCityMatch(term);
 
         return (
@@ -238,7 +238,7 @@ describe("<Combobox />", () => {
 
     let selectedOptionIndex = 0;
     let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
-    await userEvent.click(firstComboboxOption);
+    userEvent.click(firstComboboxOption);
     expect(mockedOnSelect).toHaveBeenCalledWith(optionToSelect, {
       index: selectedOptionIndex,
     });
@@ -262,7 +262,7 @@ describe("<Combobox />", () => {
 
     let selectedOptionIndex = 0;
     let firstComboboxOption = getByTestId(`option-${selectedOptionIndex}`);
-    await userEvent.click(firstComboboxOption);
+    userEvent.click(firstComboboxOption);
     expect(mockedOnSelect).toHaveBeenCalledWith(
       optionToSelect,
       selectedOptionIndex
@@ -276,7 +276,7 @@ function BasicCombobox({
 }: {
   onSelect?: (item: string, data?: any) => void;
 }) {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
   const handleChange = (event: any) => {
@@ -324,7 +324,7 @@ function ComboboxWithPrimitiveOnSelectData({
 }: {
   onSelect?: (item: string, index?: number) => void;
 }) {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
   const handleChange = (event: any) => {

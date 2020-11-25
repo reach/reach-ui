@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Disclosure"
@@ -13,6 +15,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#disclosure-1">Disclosure</TOCLink>
     <TOCLink href="#disclosurebutton">DisclosureButton</TOCLink>
     <TOCLink href="#disclosurepanel">DisclosurePanel</TOCLink>
+    <TOCLink href="#usedisclosurecontext">useDisclosureContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -84,7 +87,7 @@ It is important to note that the `Disclosure` component doesn't actually render 
 If you want to control the disclosure's value, you can do so by passing [`open`](#disclosure-open) and [`onChange`](#disclosure-onchange) props.
 
 ```jsx
-const [isOpen, setOpen] = useState(false);
+const [isOpen, setOpen] = React.useState(false);
 return (
   <Disclosure open={isOpen} onChange={() => setOpen(!isOpen)}>
     <DisclosureButton />
@@ -95,13 +98,13 @@ return (
 
 #### Disclosure Props
 
-| Prop                                     | Type                 | Required |
-| ---------------------------------------- | -------------------- | -------- |
-| [`children`](#disclosure-children)       | `node`               | true     |
-| [`defaultOpen`](#disclosure-defaultopen) | `boolean`            | false    |
-| [`id`](#disclosure-id)                   | `string` \| `number` | false    |
-| [`onChange`](#disclosure-onchange)       | `func`               | false    |
-| [`open`](#disclosure-open)               | `boolean`            | false    |
+| Prop                                     | Type                       | Required |
+| ---------------------------------------- | -------------------------- | -------- |
+| [`children`](#disclosure-children)       | `node`                     | true     |
+| [`defaultOpen`](#disclosure-defaultopen) | `boolean`                  | false    |
+| [`id`](#disclosure-id)                   | `string` <Pipe /> `number` | false    |
+| [`onChange`](#disclosure-onchange)       | `func`                     | false    |
+| [`open`](#disclosure-open)               | `boolean`                  | false    |
 
 ##### Disclosure `children`
 
@@ -173,7 +176,7 @@ The callback that is fired when a disclosure's open state is changed.
 The controlled open state of the disclosure. The `open` prop should be used along with `onChange` to create controlled disclosure components.
 
 ```jsx
-const [open, setOpen] = useState(false);
+const [open, setOpen] = React.useState(false);
 return (
   <Disclosure open={open} onChange={() => setOpen(!open)}>
     <DisclosureButton>I have a secret</DisclosureButton>
@@ -205,9 +208,18 @@ Please see the [styling guide](/styling).
 
 #### DisclosureButton Props
 
-| Prop                                     | Type   | Required |
-| ---------------------------------------- | ------ | -------- |
-| [`children`](#disclosurebutton-children) | `node` | true     |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [`as`](#disclosurebutton-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#disclosurebutton-children) | `node`                        | true     |
+
+##### DisclosureButton `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `DisclosureButton` what element to render. Defaults to `button`.
+
+<AsPropWarning />
 
 ##### DisclosureButton `children`
 
@@ -236,12 +248,27 @@ Please see the [styling guide](/styling).
 
 #### DisclosurePanel Props
 
-| Prop                                    | Type   | Required |
-| --------------------------------------- | ------ | -------- |
-| [`children`](#disclosurepanel-children) | `node` | true     |
+| Prop                                    | Type                          | Required |
+| --------------------------------------- | ----------------------------- | -------- |
+| [`as`](#disclosurepanel-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#disclosurepanel-children) | `node`                        | true     |
+
+##### DisclosurePanel `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `DisclosurePanel` what element to render. Defaults to `div`.
+
+<AsPropWarning />
 
 ##### DisclosurePanel `children`
 
 `children: React.ReactNode`
 
 Inner collapsible content for the disclosure item.
+
+### useDisclosureContext
+
+`function useDisclosureContext(): { id: string | undefined; panelId: string; open: boolean }`
+
+A hook that exposes data for a given `Disclosure` component to its descendants.

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Rect from "@reach/rect";
 
 let name = "Basic (TS)";
@@ -14,14 +14,14 @@ function Example() {
             ref={ref}
             contentEditable
             dangerouslySetInnerHTML={{
-              __html: "Observing my rect, I'm also editable"
+              __html: "Observing my rect, I'm also editable",
             }}
             style={{
               display: "inline-block",
               padding: 10,
               margin: 10,
               border: "solid 1px",
-              background: "#f0f0f0"
+              background: "#f0f0f0",
             }}
           />
         </div>

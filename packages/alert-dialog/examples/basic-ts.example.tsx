@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import {
   AlertDialog,
   AlertDialogLabel,
-  AlertDialogDescription
+  AlertDialogDescription,
 } from "@reach/alert-dialog";
 
 let name = "Basic (TS)";
 
 function Example() {
-  const close = useRef(null);
-  const [showDialog, setShowDialog] = useState(false);
+  const close = React.useRef(null);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>

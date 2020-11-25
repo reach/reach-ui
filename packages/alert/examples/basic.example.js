@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import * as React from "react";
 import Alert from "@reach/alert";
 import { usePrevious } from "@reach/utils";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -7,11 +7,11 @@ import LoremIpsum from "./LoremIpsum.js";
 let name = "Basic";
 
 function Example() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
   const { messages, messageCount, bestFriendIsOnline } = state;
-  const interval = useRef(null);
+  const interval = React.useRef(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     interval.current = setInterval(() => {
       dispatch({ type: "TOGGLE_BEST_FRIEND" });
     }, getRandomInt(6000, 10000));
@@ -29,7 +29,7 @@ function Example() {
             type: "ADD_MESSAGE",
             payload: `${messageCount + 1}. ${lipsum.generate(
               getRandomInt(10, 16)
-            )}`
+            )}`,
           })
         }
       >
@@ -56,7 +56,7 @@ function Example() {
               width: 10,
               height: 10,
               background: bestFriendIsOnline ? "green" : "red",
-              borderRadius: "50%"
+              borderRadius: "50%",
             }}
           />{" "}
           Best Friend {bestFriendIsOnline ? "Online" : "Offline"}
@@ -76,7 +76,7 @@ const lipsum = new LoremIpsum();
 const initialState = {
   messages: [],
   messageCount: 0,
-  bestFriendIsOnline: false
+  bestFriendIsOnline: false,
 };
 
 function reducer(state = {}, action) {
@@ -85,17 +85,17 @@ function reducer(state = {}, action) {
       return {
         ...state,
         messageCount: state.messageCount + 1,
-        messages: [...state.messages, action.payload]
+        messages: [...state.messages, action.payload],
       };
     case "CLEAR_OLDEST_MESSAGE":
       return {
         ...state,
-        messages: state.messages.slice(1)
+        messages: state.messages.slice(1),
       };
     case "TOGGLE_BEST_FRIEND":
       return {
         ...state,
-        bestFriendIsOnline: !state.bestFriendIsOnline
+        bestFriendIsOnline: !state.bestFriendIsOnline,
       };
     default:
       return state;
@@ -103,15 +103,15 @@ function reducer(state = {}, action) {
 }
 
 function useMessageTimeout(messages, callback, time = 5000) {
-  const timeouts = useRef([]);
+  const timeouts = React.useRef([]);
   const lastMessageCount = usePrevious(messages.length);
-  useEffect(() => {
+  React.useEffect(() => {
     if (messages.length && lastMessageCount < messages.length) {
       timeouts.current.push(window.setTimeout(callback, time));
     }
   }, [messages, lastMessageCount, callback, time]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const allTimeouts = timeouts.current;
     return () => {
       allTimeouts.forEach(window.clearTimeout);

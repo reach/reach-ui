@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import VisuallyHidden from "@reach/visually-hidden";
 import {
   ListboxInput,
@@ -7,12 +7,13 @@ import {
   ListboxList,
   ListboxPopover,
 } from "@reach/listbox";
+import { Taco } from "./common";
 import "@reach/listbox/styles.css";
 
 let name = "Composed";
 
 function Example() {
-  let [value, setValue] = useState("pollo");
+  let [value, setValue] = React.useState("pollo");
   return (
     <div>
       <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
@@ -56,14 +57,6 @@ function Example() {
         </ListboxPopover>
       </ListboxInput>
     </div>
-  );
-}
-
-function Taco() {
-  return (
-    <span aria-hidden style={{ display: "inline-block", margin: "0 4px" }}>
-      🌮
-    </span>
   );
 }
 

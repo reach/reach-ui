@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import * as React from "react";
 import { Slider } from "@reach/slider";
 import { useAudio, timeToMs, msToTime } from "./utils.js";
 import "@reach/slider/styles.css";
@@ -6,13 +6,13 @@ import "@reach/slider/styles.css";
 let name = "Audio Progress";
 
 function Example() {
-  const [value, setValue] = useState(0);
-  const [max, setMax] = useState(1000);
+  const [value, setValue] = React.useState(0);
+  const [max, setMax] = React.useState(1000);
   const [audio, audioState, audioControls, audioRef] = useAudio({
     src: "http://techslides.com/demos/samples/sample.mp3",
     autoPlay: false,
     controls: true,
-    onLoadedMetadata: function(event) {
+    onLoadedMetadata: function (event) {
       if (audioRef.current) {
         setMax(Math.round(timeToMs(audioRef.current.duration)));
       }
@@ -25,7 +25,7 @@ function Example() {
     }
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (audioState.time != null) {
       setValue(timeToMs(audioState.time));
     }
@@ -38,7 +38,7 @@ function Example() {
         value={value}
         min={0}
         max={max}
-        getAriaValueText={val => msToTime(val)}
+        getAriaValueText={(val) => msToTime(val)}
       ></Slider>
       {audio}
     </div>

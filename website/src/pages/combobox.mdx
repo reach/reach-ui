@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Combobox"
@@ -155,7 +157,7 @@ There is nothing special about managing state for a combobox, it's like managing
 // jsx-demo
 (() => {
   function Example() {
-    const [term, setTerm] = useState("");
+    const [term, setTerm] = React.useState("");
     const results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -192,7 +194,7 @@ There is nothing special about managing state for a combobox, it's like managing
 
   function useCityMatch(term) {
     const throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
@@ -215,7 +217,7 @@ This is the same demo as above, except this time we're going to a server to get 
 // jsx-demo
 (() => {
   function Example() {
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = React.useState("");
     const cities = useCitySearch(searchTerm);
     const handleSearchTermChange = (event) => {
       setSearchTerm(event.target.value);
@@ -248,9 +250,9 @@ This is the same demo as above, except this time we're going to a server to get 
   }
 
   function useCitySearch(searchTerm) {
-    const [cities, setCities] = useState([]);
+    const [cities, setCities] = React.useState([]);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (searchTerm.trim() !== "") {
         let isFresh = true;
         fetchCities(searchTerm).then((cities) => {
@@ -268,7 +270,7 @@ This is the same demo as above, except this time we're going to a server to get 
     if (cache[value]) {
       return Promise.resolve(cache[value]);
     }
-    return fetch("https://city-search.now.sh/?" + value)
+    return fetch("https://city-search.chaance.vercel.app/api?" + value)
       .then((res) => res.json())
       .then((result) => {
         cache[value] = result;
@@ -290,7 +292,7 @@ You can even have other interactive elements inside the popover, it won't close 
 // jsx-demo
 (() => {
   function Example() {
-    const [term, setTerm] = useState("");
+    const [term, setTerm] = React.useState("");
     const results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -344,7 +346,7 @@ You can even have other interactive elements inside the popover, it won't close 
 
   function useCityMatch(term) {
     const throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
@@ -376,7 +378,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 // jsx-demo
 (() => {
   function Example() {
-    let [term, setTerm] = useState("");
+    let [term, setTerm] = React.useState("");
     let results = useCityMatch(term);
     const handleChange = (event) => setTerm(event.target.value);
 
@@ -415,7 +417,7 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 
   function useCityMatch(term) {
     let throttledTerm = useThrottle(term, 100);
-    return useMemo(
+    return React.useMemo(
       () =>
         term.trim() === ""
           ? null
@@ -466,12 +468,12 @@ Parent component that sets up the proper aria roles and context for the rest of 
 
 #### Combobox Props
 
-| Prop                                   | Type                    | Required |
-| -------------------------------------- | ----------------------- | -------- |
-| [`as`](#combobox-as)                   | `string` \| `Component` | false    |
-| [`children`](#combobox-children)       | `node` \| `func`        | false    |
-| [`openOnFocus`](#combobox-openonfocus) | `boolean`               | false    |
-| [`onSelect`](#combobox-onselect)       | `func`                  | false    |
+| Prop                                   | Type                          | Required |
+| -------------------------------------- | ----------------------------- | -------- |
+| [`as`](#combobox-as)                   | `string` <Pipe /> `Component` | false    |
+| [`children`](#combobox-children)       | `node` <Pipe /> `func`        | false    |
+| [`openOnFocus`](#combobox-openonfocus) | `boolean`                     | false    |
+| [`onSelect`](#combobox-onselect)       | `func`                        | false    |
 
 ##### Combobox `as`
 
@@ -479,7 +481,7 @@ Parent component that sets up the proper aria roles and context for the rest of 
 
 A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### Combobox `children`
 
@@ -515,11 +517,11 @@ Wraps an `<input/>` with a couple extra props that work with the combobox.
 
 #### ComboboxInput Props
 
-| Prop                                          | Type                    | Required |
-| --------------------------------------------- | ----------------------- | -------- |
-| [`as`](#comboboxinput-as)                     | `string` \| `Component` | false    |
-| [selectOnClick](#comboboxinput-selectonclick) | `boolean`               | false    |
-| [autocomplete](#comboboxinput-autocomplete)   | `boolean`               | false    |
+| Prop                                          | Type                          | Required |
+| --------------------------------------------- | ----------------------------- | -------- |
+| [`as`](#comboboxinput-as)                     | `string` <Pipe /> `Component` | false    |
+| [selectOnClick](#comboboxinput-selectonclick) | `boolean`                     | false    |
+| [autocomplete](#comboboxinput-autocomplete)   | `boolean`                     | false    |
 
 ##### ComboboxInput `as`
 
@@ -579,10 +581,10 @@ Contains the `ComboboxOption` elements and sets up the proper aria attributes fo
 
 #### ComboboxList Props
 
-| Prop                                                 | Type                    | Required |
-| ---------------------------------------------------- | ----------------------- | -------- |
-| [`as`](#comboboxlist-as)                             | `string` \| `Component` | false    |
-| [`persistSelection`](#comboboxlist-persistselection) | `boolean`               | false    |
+| Prop                                                 | Type                          | Required |
+| ---------------------------------------------------- | ----------------------------- | -------- |
+| [`as`](#comboboxlist-as)                             | `string` <Pipe /> `Component` | false    |
+| [`persistSelection`](#comboboxlist-persistselection) | `boolean`                     | false    |
 
 ##### ComboboxList `as`
 
@@ -590,7 +592,7 @@ Contains the `ComboboxOption` elements and sets up the proper aria attributes fo
 
 A string representing an HTML element or a React component that will tell the `ComboboxList` what element to render. Defaults to `ul`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### ComboboxList `persistSelection`
 
@@ -610,12 +612,12 @@ An option that is suggested to the user as they interact with the combobox.
 
 #### ComboboxOption Props
 
-| Prop                                       | Type                    | Required |
-| ------------------------------------------ | ----------------------- | -------- |
-| [`as`](#comboboxoption-as)                 | `string` \| `Component` | false    |
-| [`value`](#comboboxoption-value)           | `string`                | true     |
-| [`selectData`](#comboboxoption-selectdata) | `any`                   | false    |
-| [`children`](#comboboxoption-children)     | `node`                  | false    |
+| Prop                                       | Type                          | Required |
+| ------------------------------------------ | ----------------------------- | -------- |
+| [`as`](#comboboxoption-as)                 | `string` <Pipe /> `Component` | false    |
+| [`value`](#comboboxoption-value)           | `string`                      | true     |
+| [`selectData`](#comboboxoption-selectdata) | `any`                         | false    |
+| [`children`](#comboboxoption-children)     | `node`                        | false    |
 
 ##### ComboboxOption `as`
 
@@ -623,7 +625,7 @@ An option that is suggested to the user as they interact with the combobox.
 
 A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `li`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### ComboboxOption `value`
 

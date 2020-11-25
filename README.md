@@ -4,7 +4,7 @@ Thanks for getting involved with Reach UI development!
 
 ## Looking for the documentation?
 
-https://reacttraining.com/reach-ui/
+https://reach.tech/
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ yarn start
 Next, put a file in `packages/<component-dir>/examples/<name>.example.js` and make it look like this:
 
 ```jsx
-import React from "react";
+import * as React from "react";
 
 // The name of the example (always name the variable `name`)
 let name = "Basic";
@@ -153,7 +153,7 @@ Stuff I'd like to improve:
 
 ## Website
 
-The website is a Gatsby app in the `website` directory. It automatically deploys to https://reacttraining.com/reach-ui/ when the `website` branch is updated.
+The website is a Gatsby app in the `website` directory. It automatically deploys to https://reach.tech/ when the `website` branch is updated.
 
 ## Contributors
 

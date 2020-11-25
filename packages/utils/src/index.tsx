@@ -1,23 +1,13 @@
 /* eslint-disable no-restricted-globals, eqeqeq  */
 
-import React, {
-  cloneElement,
-  createContext,
-  isValidElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import warning from "warning";
+import * as React from "react";
+import fbWarning from "warning";
 import {
   As,
   AssignableRef,
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
-  ElementByTag,
   ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
   ForwardRefWithAsRenderFunction,
@@ -65,8 +55,15 @@ let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
  * Copy of Facebook's warning package.
+ *
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical paths.
+ * Removing the logging code for production environments will keep the same
+ * logic and follow the same code paths.
+ *
+ * @see https://github.com/BerkeleyTrue/warning/blob/master/warning.js
  */
-export { warning };
+export const warning = fbWarning;
 
 /**
  * When in dev mode, checks that styles for a given @reach package are loaded.
@@ -74,7 +71,6 @@ export { warning };
  * @param packageName Name of the package to check.
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
-// @ts-ignore
 let checkStyles: (packageName: string) => void = noop;
 
 if (__DEV__) {
@@ -182,8 +178,8 @@ export function cloneValidElement<Props>(
   props?: Partial<Props> & React.Attributes,
   ...children: React.ReactNode[]
 ): React.ReactElement<Props> | React.ReactNode {
-  return isValidElement(element)
-    ? cloneElement(element, props, ...children)
+  return React.isValidElement(element)
+    ? React.cloneElement(element, props, ...children)
     : element;
 }
 
@@ -191,7 +187,7 @@ export function createNamedContext<ContextValueType>(
   name: string,
   defaultValue: ContextValueType
 ): React.Context<ContextValueType> {
-  const Ctx = createContext<ContextValueType>(defaultValue);
+  const Ctx = React.createContext<ContextValueType>(defaultValue);
   Ctx.displayName = name;
   return Ctx;
 }
@@ -205,24 +201,25 @@ export function createNamedContext<ContextValueType>(
  * that accepts an `as` prop, we abstract all of that mess to this function for
  * the time time being.
  */
-export function forwardRefWithAs<Props, ComponentType extends As = "div">(
-  render: ForwardRefWithAsRenderFunction<ComponentType, Props>
-) {
+export function forwardRefWithAs<
+  Props,
+  DefaultComponentType extends As = "div"
+>(render: ForwardRefWithAsRenderFunction<DefaultComponentType, Props>) {
   return React.forwardRef(render) as ForwardRefExoticComponentWithAs<
-    ComponentType,
+    DefaultComponentType,
     Props
   >;
 }
 
-export function memoWithAs<Props, ComponentType extends As = "div">(
-  Component: FunctionComponentWithAs<ComponentType, Props>,
+export function memoWithAs<Props, DefaultComponentType extends As = "div">(
+  Component: FunctionComponentWithAs<DefaultComponentType, Props>,
   propsAreEqual?: (
     prevProps: Readonly<React.PropsWithChildren<Props>>,
     nextProps: Readonly<React.PropsWithChildren<Props>>
   ) => boolean
 ) {
   return React.memo(Component, propsAreEqual) as MemoExoticComponentWithAs<
-    ComponentType,
+    DefaultComponentType,
     Props
   >;
 }
@@ -235,12 +232,19 @@ export function memoWithAs<Props, ComponentType extends As = "div">(
 export function getDocumentDimensions(
   element?: HTMLElement | null | undefined
 ) {
-  if (!canUseDOM()) return { width: 0, height: 0 };
-  let doc = element ? getOwnerDocument(element)! : document;
-  let win = element ? getOwnerWindow(element)! : window;
+  let ownerDocument = getOwnerDocument(element)!;
+  let ownerWindow = ownerDocument.defaultView || window;
+  if (!ownerDocument) {
+    return {
+      width: 0,
+      height: 0,
+    };
+  }
+
   return {
-    width: doc.documentElement.clientWidth || win.innerWidth,
-    height: doc.documentElement.clientHeight || win.innerHeight,
+    width: ownerDocument.documentElement.clientWidth ?? ownerWindow.innerWidth,
+    height:
+      ownerDocument.documentElement.clientHeight ?? ownerWindow.innerHeight,
   };
 }
 
@@ -250,39 +254,35 @@ export function getDocumentDimensions(
  * @param element
  */
 export function getScrollPosition(element?: HTMLElement | null | undefined) {
-  if (!canUseDOM()) return { scrollX: 0, scrollY: 0 };
-  let win = element ? getOwnerWindow(element)! : window;
+  let ownerDocument = getOwnerDocument(element)!;
+  let ownerWindow = ownerDocument.defaultView || window;
+  if (!ownerDocument) {
+    return {
+      scrollX: 0,
+      scrollY: 0,
+    };
+  }
   return {
-    scrollX: win.scrollX,
-    scrollY: win.scrollY,
+    scrollX: ownerWindow.scrollX,
+    scrollY: ownerWindow.scrollY,
   };
 }
 
 /**
- * Get a computed style value by property, backwards compatible with IE
+ * Get a computed style value by property.
+ *
  * @param element
  * @param styleProp
  */
-export function getElementComputedStyle(
-  element: HTMLElement & {
-    currentStyle?: Record<string, string>;
-  },
-  styleProp: string
-) {
-  let y: string | null = null;
-  let doc = getOwnerDocument(element);
-  if (element.currentStyle) {
-    y = element.currentStyle[styleProp];
-  } else if (
-    doc &&
-    doc.defaultView &&
-    isFunction(doc.defaultView.getComputedStyle)
-  ) {
-    y = doc.defaultView
+export function getElementComputedStyle(element: Element, styleProp: string) {
+  let ownerDocument = getOwnerDocument(element);
+  let ownerWindow = ownerDocument?.defaultView || window;
+  if (ownerWindow) {
+    return ownerWindow
       .getComputedStyle(element, null)
       .getPropertyValue(styleProp);
   }
-  return y;
+  return null;
 }
 
 /**
@@ -291,21 +291,20 @@ export function getElementComputedStyle(
  *
  * @param element
  */
-export function getOwnerDocument<T extends HTMLElement = HTMLElement>(
-  element: T | null
+export function getOwnerDocument<T extends Element>(
+  element: T | null | undefined
 ) {
-  return element && element.ownerDocument
-    ? element.ownerDocument
-    : canUseDOM()
-    ? document
-    : null;
+  return canUseDOM() ? (element ? element.ownerDocument : document) : null;
 }
 
-export function getOwnerWindow<T extends HTMLElement = HTMLElement>(
-  element: T | null
+/**
+ * TODO: Remove in 1.0
+ */
+export function getOwnerWindow<T extends Element>(
+  element: T | null | undefined
 ) {
-  let doc = element ? getOwnerDocument(element) : null;
-  return doc ? doc.defaultView || window : null;
+  let ownerDocument = getOwnerDocument(element);
+  return ownerDocument ? ownerDocument.defaultView || window : null;
 }
 
 /**
@@ -346,7 +345,7 @@ export function isFunction(value: any): value is Function {
  * @param value
  */
 export function isNumber(value: any): value is number {
-  return typeof value === "number";
+  return typeof value === "number" && !isNaN(value);
 }
 
 /**
@@ -354,8 +353,14 @@ export function isNumber(value: any): value is number {
  *
  * @param nativeEvent
  */
-export function isRightClick(nativeEvent: MouseEvent) {
-  return nativeEvent.which === 3 || nativeEvent.button === 2;
+export function isRightClick(
+  nativeEvent: MouseEvent | PointerEvent | TouchEvent
+) {
+  return "which" in nativeEvent
+    ? nativeEvent.which === 3
+    : "button" in nativeEvent
+    ? (nativeEvent as any).button === 2
+    : false;
 }
 
 /**
@@ -405,9 +410,9 @@ export function useControlledState<T = any>(
   controlledValue: T | undefined,
   defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  let controlledRef = useRef(controlledValue != null);
-  let [valueState, setValue] = useState(defaultValue);
-  let set: React.Dispatch<React.SetStateAction<T>> = useCallback((n) => {
+  let controlledRef = React.useRef(controlledValue != null);
+  let [valueState, setValue] = React.useState(defaultValue);
+  let set: React.Dispatch<React.SetStateAction<T>> = React.useCallback((n) => {
     if (!controlledRef.current) {
       setValue(n);
     }
@@ -438,13 +443,13 @@ if (__DEV__) {
     controlledPropName,
     componentName
   ) {
-    let controlledRef = useRef(controlledValue != null);
-    let nameCache = useRef({ componentName, controlledPropName });
-    useEffect(() => {
+    let controlledRef = React.useRef(controlledValue != null);
+    let nameCache = React.useRef({ componentName, controlledPropName });
+    React.useEffect(() => {
       nameCache.current = { componentName, controlledPropName };
     }, [componentName, controlledPropName]);
 
-    useEffect(() => {
+    React.useEffect(() => {
       let { current: wasControlled } = controlledRef;
       let { componentName, controlledPropName } = nameCache.current;
       let isControlled = controlledValue != null;
@@ -468,9 +473,9 @@ let useCheckStyles: (packageName: string) => void = noop;
 
 if (__DEV__) {
   useCheckStyles = function useCheckStyles(pkg: string) {
-    let name = useRef(pkg);
-    useEffect(() => void (name.current = pkg), [pkg]);
-    useEffect(() => checkStyles(name.current), []);
+    let name = React.useRef(pkg);
+    React.useEffect(() => void (name.current = pkg), [pkg]);
+    React.useEffect(() => checkStyles(name.current), []);
   };
 }
 
@@ -494,29 +499,32 @@ export function useConstant<ValueType>(fn: () => ValueType): ValueType {
 export function useEventCallback<E extends Event | React.SyntheticEvent>(
   callback: (event: E, ...args: any[]) => void
 ) {
-  const ref = useRef(callback);
+  const ref = React.useRef(callback);
   useIsomorphicLayoutEffect(() => {
     ref.current = callback;
   });
-  return useCallback(
+  return React.useCallback(
     (event: E, ...args: any[]) => ref.current(event, ...args),
     []
   );
 }
 
+export function useLazyRef<F extends (...args: any[]) => any>(
+  fn: F
+): React.MutableRefObject<ReturnType<F>> {
+  const ref = React.useRef<any>({ __internalSet: true });
+  if (ref.current && ref.current.__internalSet === true) {
+    ref.current = fn();
+  }
+  return ref;
+}
+
 /**
+ * TODO: Remove in 1.0
+ * @alias useStableCallback
  * @param callback
  */
-export function useCallbackProp<F extends Function>(callback: F | undefined) {
-  const ref = useRef(callback);
-  useEffect(() => {
-    ref.current = callback;
-  });
-  return (useCallback(
-    (...args: any[]) => ref.current && ref.current(...args),
-    []
-  ) as unknown) as F;
-}
+export const useCallbackProp = useStableCallback;
 
 /**
  * Adds a DOM event listener
@@ -530,12 +538,12 @@ export function useEventListener<K extends keyof WindowEventMap>(
   listener: (event: WindowEventMap[K]) => any,
   element: HTMLElement | Document | Window | EventTarget = window
 ) {
-  const savedHandler = useRef(listener);
-  useEffect(() => {
+  const savedHandler = React.useRef(listener);
+  React.useEffect(() => {
     savedHandler.current = listener;
   }, [listener]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const isSupported = element && element.addEventListener;
     if (!isSupported) {
       if (__DEV__) {
@@ -571,9 +579,9 @@ export function useFocusChange(
   when: "focus" | "blur" = "focus",
   ownerDocument: Document = document
 ) {
-  let lastActiveElement = useRef(ownerDocument.activeElement);
+  let lastActiveElement = React.useRef(ownerDocument.activeElement);
 
-  useEffect(() => {
+  React.useEffect(() => {
     lastActiveElement.current = ownerDocument.activeElement;
 
     function onChange(event: FocusEvent) {
@@ -596,6 +604,16 @@ export function useFocusChange(
 }
 
 /**
+ * Forces a re-render, similar to `forceUpdate` in class components.
+ */
+export function useForceUpdate() {
+  let [, dispatch] = React.useState<{}>(Object.create(null));
+  return React.useCallback(() => {
+    dispatch(Object.create(null));
+  }, []);
+}
+
+/**
  * Passes or assigns a value to multiple refs (typically a DOM node). Useful for
  * dealing with components that need an explicit ref for DOM calculations but
  * also forwards refs assigned by an app.
@@ -605,7 +623,7 @@ export function useFocusChange(
 export function useForkedRef<RefValueType = any>(
   ...refs: (AssignableRef<RefValueType> | null | undefined)[]
 ) {
-  return useMemo(() => {
+  return React.useMemo(() => {
     if (refs.every((ref) => ref == null)) {
       return null;
     }
@@ -624,11 +642,33 @@ export function useForkedRef<RefValueType = any>(
  * @param value
  */
 export function usePrevious<ValueType = any>(value: ValueType) {
-  const ref = useRef<ValueType | null>(null);
-  useEffect(() => {
+  const ref = React.useRef<ValueType | null>(null);
+  React.useEffect(() => {
     ref.current = value;
   }, [value]);
   return ref.current;
+}
+
+/**
+ * Converts a callback to a ref to avoid triggering re-renders when passed as a
+ * prop and exposed as a stable function to avoid executing effects when
+ * passed as a dependency.
+ */
+export function useStableCallback<T extends (...args: any[]) => any>(
+  callback: T | null | undefined
+): T {
+  let callbackRef = React.useRef(callback);
+  React.useEffect(() => {
+    callbackRef.current = callback;
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return React.useCallback(
+    ((...args) => {
+      callbackRef.current && callbackRef.current(...args);
+    }) as T,
+    []
+  );
 }
 
 /**
@@ -641,8 +681,8 @@ export function useUpdateEffect(
   effect: React.EffectCallback,
   deps?: React.DependencyList
 ) {
-  const mounted = useRef(false);
-  useEffect(() => {
+  const mounted = React.useRef(false);
+  React.useEffect(() => {
     if (mounted.current) {
       effect();
     } else {
@@ -662,11 +702,11 @@ let useStateLogger: (state: string, DEBUG: boolean) => void = noop;
 
 if (__DEV__) {
   useStateLogger = function useStateLogger(state, DEBUG = false) {
-    let debugRef = useRef(DEBUG);
-    useEffect(() => {
+    let debugRef = React.useRef(DEBUG);
+    React.useEffect(() => {
       debugRef.current = DEBUG;
     }, [DEBUG]);
-    useEffect(() => {
+    React.useEffect(() => {
       if (debugRef.current) {
         console.group("State Updated");
         console.log(
@@ -708,7 +748,6 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
-  ElementByTag,
   ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
   FunctionComponentWithAs,

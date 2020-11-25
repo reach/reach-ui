@@ -5,6 +5,7 @@ Thank you for contributing to Reach UI! Please fill in this template before subm
 - [ ] Add or edit tests to reflect the change (Run with `yarn test`).
 - [ ] Add or edit Storybook examples to reflect the change (Run with `yarn start`).
 - [ ] Ensure formatting is consistent with the project's Prettier configuration.
+- [ ] Add documentation to support any new features.
 
 This pull request:
 

@@ -1,48 +1,50 @@
-import React, { useState } from "react";
-import { axe } from "jest-axe";
+import * as React from "react";
 import {
   MixedCheckbox,
   CustomCheckboxContainer,
   CustomCheckboxInput,
+  CustomCheckboxContainerProps,
   CustomCheckboxInputProps,
 } from "@reach/checkbox";
-import { render, fireEvent, act } from "$test/utils";
+import { render, fireEvent } from "$test/utils";
 
 describe("<MixedCheckbox />", () => {
-  it("should not have basic a11y issues", async () => {
+  it("should not have basic a11y issues after render", async () => {
+    let { container } = render(<BasicMixedCheckbox />);
+    await expect(container).toHaveNoAxeViolations();
+  });
+
+  it("should not have basic a11y issues after initial click", async () => {
     let { container, getByTestId } = render(<BasicMixedCheckbox />);
-
-    await act(async () => {
-      expect(await axe(container)).toHaveNoViolations();
-
-      fireEvent.click(getByTestId("checkbox"));
-      expect(await axe(container)).toHaveNoViolations();
-    });
+    fireEvent.click(getByTestId("checkbox"));
+    await expect(container).toHaveNoAxeViolations();
   });
 
   // TODO: Write tests for mixed checkbox
 });
 
 describe("<CustomCheckbox />", () => {
-  it("should not have basic a11y issues", async () => {
-    let { container, getByTestId } = render(<BasicCustomCheckbox />);
-
-    await act(async () => {
-      expect(await axe(container)).toHaveNoViolations();
-
-      fireEvent.click(getByTestId("checkbox-1"));
-      expect(await axe(container)).toHaveNoViolations();
-
-      fireEvent.click(getByTestId("checkbox-2"));
-      expect(await axe(container)).toHaveNoViolations();
-    });
+  it("should not have basic a11y issues after render", async () => {
+    let { container } = render(<BasicCustomCheckbox />);
+    await expect(container).toHaveNoAxeViolations();
   });
 
+  it("should not have basic a11y issues after initial click (1)", async () => {
+    let { container, getByTestId } = render(<BasicCustomCheckbox />);
+    fireEvent.click(getByTestId("checkbox-1"));
+    await expect(container).toHaveNoAxeViolations();
+  });
+
+  it("should not have basic a11y issues after initial click (2)", async () => {
+    let { container, getByTestId } = render(<BasicCustomCheckbox />);
+    fireEvent.click(getByTestId("checkbox-2"));
+    await expect(container).toHaveNoAxeViolations();
+  });
   // TODO: Write tests for custom checkbox
 });
 
 function BasicMixedCheckbox() {
-  const [checked, setChecked] = useState<boolean | "mixed">(true);
+  const [checked, setChecked] = React.useState<boolean | "mixed">(true);
   return (
     <div>
       <MixedCheckbox
@@ -50,7 +52,7 @@ function BasicMixedCheckbox() {
         id="whatever-input"
         value="whatever"
         checked={checked}
-        onChange={event => {
+        onChange={(event) => {
           setChecked(event.target.checked);
         }}
       />
@@ -84,15 +86,15 @@ function BasicCustomCheckbox() {
 function MyCustomCheckbox({
   checked: checkedProp,
   ...props
-}: CustomCheckboxInputProps & { checked?: boolean | "mixed" }) {
-  const [checkedState, setChecked] = useState<typeof checkedProp>(
+}: CustomCheckboxInputProps & Pick<CustomCheckboxContainerProps, "checked">) {
+  const [checkedState, setChecked] = React.useState<typeof checkedProp>(
     checkedProp || false
   );
   const checked = checkedProp != null ? checkedProp : checkedState;
   return (
     <CustomCheckboxContainer
       checked={checked}
-      onChange={event => setChecked(event.target.checked)}
+      onChange={(event) => setChecked(event.target.checked)}
       style={{
         background: "rgba(240, 240, 250, 0.8)",
         border: "2px solid rgba(0, 0, 0, 0.8)",

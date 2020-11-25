@@ -43,12 +43,29 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
   width: 250px;
   background: $color-primary;
   transition: left 200ms ease;
   z-index: 1;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $color-primary;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(#fff, 0.5);
+    border: 3px solid transparent;
+    border-radius: 9px;
+    background-clip: content-box;
+  }
 }
 
 #content {

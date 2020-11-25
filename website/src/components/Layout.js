@@ -1,10 +1,4 @@
-import React, {
-  forwardRef,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
 import VisuallyHidden from "@reach/visually-hidden";
@@ -25,7 +19,7 @@ import "@reach/accordion/styles.css";
 import "@reach/listbox/styles.css";
 import "../styles/app.scss";
 
-const NavLink = forwardRef(function NavLink({ children, ...props }, ref) {
+const NavLink = React.forwardRef(function NavLink({ children, ...props }, ref) {
   return (
     <li style={{ margin: 0, padding: 0 }}>
       {props.href ? (
@@ -156,17 +150,17 @@ function Header({ children, style = {}, ...props }) {
 }
 
 function Nav({ media }) {
-  const [isOpen, setIsOpen] = useState(null);
-  const navNode = useRef(null);
-  useEffect(() => void setIsOpen(!media.small), [media]);
+  const [isOpen, setIsOpen] = React.useState(null);
+  const navNode = React.useRef(null);
+  React.useEffect(() => void setIsOpen(!media.small), [media]);
 
   return (
-    <Fragment>
+    <React.Fragment>
       {media && media.small && (
         <HamburgerButton
-          onFocus={event => event.stopPropagation()}
+          onFocus={(event) => event.stopPropagation()}
           onClick={() => {
-            setIsOpen(isOpen => {
+            setIsOpen((isOpen) => {
               let nextState = !isOpen;
               if (nextState && navNode.current) {
                 navNode.current.focus();
@@ -252,7 +246,7 @@ function Nav({ media }) {
           <Footer />
         </div>
       </div>
-    </Fragment>
+    </React.Fragment>
   );
 }
 
@@ -260,7 +254,7 @@ function Layout({ children }) {
   let media = useMatchMedia({ small: "(max-width: 800px)" });
 
   return (
-    <Fragment>
+    <React.Fragment>
       <SEO />
       <SkipNavLink style={{ zIndex: 2 }} />
 
@@ -270,7 +264,7 @@ function Layout({ children }) {
           <div id="content">{children}</div>
         </SkipNavContent>
       </div>
-    </Fragment>
+    </React.Fragment>
   );
 }
 

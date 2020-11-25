@@ -1,11 +1,11 @@
 /**
  * Measure the current window dimensions.
  *
- * @see Docs   https://reacttraining.com/reach-ui/window-size
+ * @see Docs   https://reach.tech/window-size
  * @see Source https://github.com/reach/reach-ui/tree/main/packages/window-size
  */
 
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
 
@@ -14,24 +14,27 @@ import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
 /**
  * WindowSize
  *
- * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize
+ * @see Docs https://reach.tech/window-size#windowsize
  * @param props
  */
-export const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
+const WindowSize: React.FC<WindowSizeProps> = ({ children }) => {
   const dimensions = useWindowSize();
   return children(dimensions);
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-props
+ * @see Docs https://reach.tech/window-size#windowsize-props
  */
-export type WindowSizeProps = {
+type WindowSizeProps = {
   /**
    * A function that calls back to you with the window size.
    *
-   * @see Docs https://reacttraining.com/reach-ui/window-size#windowsize-children
+   * @see Docs https://reach.tech/window-size#windowsize-children
    */
-  children: (size: TWindowSize) => React.ReactElement<any>;
+  children: (size: {
+    width: number;
+    height: number;
+  }) => React.ReactElement<any, any>;
 };
 
 if (__DEV__) {
@@ -41,18 +44,16 @@ if (__DEV__) {
   };
 }
 
-export default WindowSize;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * useWindowSize
  *
- * @see Docs https://reacttraining.com/reach-ui/window-size#usewindowsize
+ * @see Docs https://reach.tech/window-size#usewindowsize
  */
-export function useWindowSize() {
-  let { current: hasWindow } = useRef(canUseDOM());
-  const [dimensions, setDimensions] = useState({
+function useWindowSize() {
+  let { current: hasWindow } = React.useRef(canUseDOM());
+  const [dimensions, setDimensions] = React.useState({
     width: hasWindow ? window.innerWidth : 0,
     height: hasWindow ? window.innerHeight : 0,
   });
@@ -68,10 +69,15 @@ export function useWindowSize() {
   return dimensions;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Types
-
-export type TWindowSize = {
+// TODO: Remove in 1.0
+type TWindowSize = {
   width: number;
   height: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default WindowSize;
+export type { TWindowSize, WindowSizeProps };
+export { useWindowSize, WindowSize };

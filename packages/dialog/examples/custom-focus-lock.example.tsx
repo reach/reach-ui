@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 import FocusLock from "react-focus-lock";
@@ -43,7 +43,7 @@ function FakeInaccessibleFrame({
         <iframe
           title="Wikipedia"
           style={FRAME_STYLES}
-          src="https://reacttraining.com/reach-ui/"
+          src="https://reach.tech/"
         />
       </div>
     </Portal>
@@ -68,8 +68,8 @@ function ExampleDialogContent({ openFrame }: { openFrame: () => void }) {
 }
 
 function ExampleSelectiveDisablingFocusLock() {
-  const [showFrame, setShowFrame] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
+  const [showFrame, setShowFrame] = React.useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <p>
@@ -96,8 +96,8 @@ function ExampleSelectiveDisablingFocusLock() {
 }
 
 function ExampleCustomFocusLock() {
-  const [showFrame, setShowFrame] = useState(false);
-  const [showDialog, setShowDialog] = useState(false);
+  const [showFrame, setShowFrame] = React.useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   return (
     <div>
       <h3>Setup our own focus lock</h3>

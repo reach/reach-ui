@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import * as React from "react";
 import Component from "@reach/component-component";
 
 let name = "Kitchen Sink Todo List";
@@ -7,16 +7,16 @@ function Example() {
   return (
     <Component
       getRefs={() => ({
-        input: null
+        input: null,
       })}
       getInitialState={() => ({
         todos: JSON.parse(
           localStorage.getItem("todos") || '["quit making weird components"]'
-        )
+        ),
       })}
     >
       {({ state, setState, refs }) => (
-        <Fragment>
+        <React.Fragment>
           <Component
             didUpdate={() =>
               localStorage.setItem("todos", JSON.stringify(state.todos))
@@ -29,14 +29,14 @@ function Example() {
           <div style={{ fontFamily: "sans-serif" }}>
             <h1>Todo List</h1>
             <form
-              onSubmit={event => {
+              onSubmit={(event) => {
                 event.preventDefault();
                 let node = refs.input;
                 setState({ todos: state.todos.concat([node.value]) });
                 node.value = "";
               }}
             >
-              <input ref={n => (refs.input = n)} />
+              <input ref={(n) => (refs.input = n)} />
             </form>
             <ul>
               {state.todos.map((todo, index) => (
@@ -72,7 +72,7 @@ function Example() {
               </button>
             </p>
           </div>
-        </Fragment>
+        </React.Fragment>
       )}
     </Component>
   );

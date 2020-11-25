@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Slider, SLIDER_HANDLE_ALIGN_CONTAIN } from "@reach/slider";
 import "@reach/slider/styles.css";
 

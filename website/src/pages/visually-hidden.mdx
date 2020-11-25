@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import { AsPropWarning } from "../components/AsPropWarning";
 
 <SEO
   title="Visually Hidden"
@@ -44,12 +45,21 @@ import VisuallyHidden from "@reach/visually-hidden";
 
 #### VisuallyHidden Props
 
-| Prop                  | Type |
-| --------------------- | ---- |
-| [children](#children) | func |
+| Prop                                   | Type                          | Required |
+| -------------------------------------- | ----------------------------- | -------- |
+| [`as`](#visuallyhidden-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#visuallyhidden-children) | `node`                        | true     |
 
-##### VisuallyHidden children
+##### VisuallyHidden `as`
 
-_Type_: `node`
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `VisuallyHidden` what element to render. Defaults to `span`.
+
+<AsPropWarning />
+
+##### VisuallyHidden `children`
+
+`children: React.ReactNode`
 
 The content you want to be visually hidden.

@@ -6,24 +6,24 @@
  * with a different DOM hierarchy to prevent parent styles from clipping or
  * hiding content (for popovers, dropdowns, and modals).
  *
- * @see Docs   https://reacttraining.com/reach-ui/portal
+ * @see Docs   https://reach.tech/portal
  * @see Source https://github.com/reach/reach-ui/tree/main/packages/portal
  * @see React  https://reactjs.org/docs/portals.html
  */
 
-import React, { useRef, useState } from "react";
-import { useIsomorphicLayoutEffect } from "@reach/utils";
+import * as React from "react";
+import { useIsomorphicLayoutEffect, useForceUpdate } from "@reach/utils";
 import { createPortal } from "react-dom";
 
 /**
  * Portal
  *
- * @see Docs https://reacttraining.com/reach-ui/portal#portal
+ * @see Docs https://reach.tech/portal#portal
  */
 const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
-  let mountNode = useRef<HTMLDivElement | null>(null);
-  let portalNode = useRef<HTMLElement | null>(null);
-  let [, forceUpdate] = useState();
+  let mountNode = React.useRef<HTMLDivElement | null>(null);
+  let portalNode = React.useRef<HTMLElement | null>(null);
+  let forceUpdate = useForceUpdate();
 
   useIsomorphicLayoutEffect(() => {
     // This ref may be null when a hot-loader replaces components on the page
@@ -33,13 +33,13 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
     const ownerDocument = mountNode.current!.ownerDocument;
     portalNode.current = ownerDocument?.createElement(type)!;
     ownerDocument!.body.appendChild(portalNode.current);
-    forceUpdate({});
+    forceUpdate();
     return () => {
       if (portalNode.current && portalNode.current.ownerDocument) {
         portalNode.current.ownerDocument.body.removeChild(portalNode.current);
       }
     };
-  }, [type]);
+  }, [type, forceUpdate]);
 
   return portalNode.current ? (
     createPortal(children, portalNode.current)
@@ -49,19 +49,19 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
 };
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/portal#portal-props
+ * @see Docs https://reach.tech/portal#portal-props
  */
-export type PortalProps = {
+type PortalProps = {
   /**
    * Regular React children.
    *
-   * @see Docs https://reacttraining.com/reach-ui/portal#portal-children
+   * @see Docs https://reach.tech/portal#portal-children
    */
   children: React.ReactNode;
   /**
    * The DOM element type to render.
    *
-   * @see Docs https://reacttraining.com/reach-ui/portal#portal-type
+   * @see Docs https://reach.tech/portal#portal-type
    */
   type?: string;
 };
@@ -70,4 +70,9 @@ if (__DEV__) {
   Portal.displayName = "Portal";
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
 export default Portal;
+export type { PortalProps };
+export { Portal };

@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO
   title="Menu Button"
@@ -204,7 +206,7 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 A string representing an HTML element or a React component that will tell the `MenuButton` what underlying element to render. Defaults to `button`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users. While this prop is useful for passing custom implementations, such as styled or design-system components, using anything that renders the wrong semantic HTML element will require stubbing specific behaviors and attributes. This is highly discouraged.
+<AsPropWarning />
 
 ##### MenuButton `children`
 
@@ -342,6 +344,7 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 | ----------------------------------- | --------- | -------- |
 | [`children`](#menupopover-children) | `node`    | true     |
 | [`portal`](#menupopover-portal)     | `boolean` | false    |
+| [`position`](#menupopover-position) | `func`    | false    |
 
 ##### MenuPopover `children` props
 
@@ -352,6 +355,14 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 `portal?: boolean`
 
 Whether or not the popover should be rendered inside a portal. Defaults to `true`.
+
+##### MenuPopover `position`
+
+`position?: (targetRect?: DOMRect | null, popoverRect?: DOMRect | null) => React.CSSProperties`
+
+A function used to determine the position of the popover in relation to the menu button. By default, the menu button will attempt to position the popover below the button aligned with its left edge. If this positioning results in collisions with any side of the window, the popover will be anchored to a different side to avoid those collisions if possible.
+
+The function accepts the DOMRect of the menu button element, and the DOMRect of the popover element as arguments, and returns a CSS properties object that is then applied to the popover as inline styles.
 
 ### MenuItems
 
@@ -425,12 +436,13 @@ function Example() {
 
 #### MenuItem Props
 
-| Prop                                     | Type                    | Required |
-| ---------------------------------------- | ----------------------- | -------- |
-| [element props](#menuitem-element-props) |                         |          |
-| [`as`](#menuitem-as)                     | `string` \| `Component` | false    |
-| [`children`](#menuitem-children)         | `node`                  | false    |
-| [`onSelect`](#menuitem-onselect)         | `func`                  | true     |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [element props](#menuitem-element-props) |                               |          |
+| [`as`](#menuitem-as)                     | `string` <Pipe /> `Component` | false    |
+| [`children`](#menuitem-children)         | `node`                        | false    |
+| [`disabled`](#menuitem-disabled)         | `boolean`                     | false    |
+| [`onSelect`](#menuitem-onselect)         | `func`                        | true     |
 
 ##### MenuItem element props
 
@@ -534,6 +546,12 @@ function Example(props) {
 }
 ```
 
+##### MenuItem `disabled`
+
+`disabled?: boolean`
+
+Whether or not the item is disabled from selection and navigation.
+
 ##### MenuItem `onSelect`
 
 `onSelect(): void`
@@ -579,12 +597,13 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 #### MenuLink Props
 
-| Prop                                     | Type                    | Required |
-| ---------------------------------------- | ----------------------- | -------- |
-| [element props](#menulink-element-props) |                         |          |
-| [`as`](#menulink-as)                     | `string` \| `Component` | false    |
-| [`children`](#menulink-children)         | `node`                  | false    |
-| [`onSelect`](#menulink-onselect)         | `func`                  | false    |
+| Prop                                     | Type                          | Required |
+| ---------------------------------------- | ----------------------------- | -------- |
+| [element props](#menulink-element-props) |                               |          |
+| [`as`](#menulink-as)                     | `string` <Pipe /> `Component` | false    |
+| [`children`](#menulink-children)         | `node`                        | false    |
+| [`disabled`](#menulink-disabled)         | `boolean`                     | false    |
+| [`onSelect`](#menulink-onselect)         | `func`                        | false    |
 
 ##### MenuLink element props
 
@@ -641,6 +660,12 @@ You can render any kind of content inside of a MenuLink.
   <UserName>Ryan Florence</UserName>
 </MenuLink>
 ```
+
+##### MenuLink `disabled`
+
+`disabled?: boolean`
+
+Whether or not the link is disabled from selection and navigation.
 
 ##### MenuLink `onSelect`
 

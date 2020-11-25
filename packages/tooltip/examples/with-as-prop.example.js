@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useRef } from "react";
+import * as React from "react";
 import ReachTooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
 let name = "As a span";
 
 function Example() {
-  const coolRef = useRef();
+  const coolRef = React.useRef();
   return (
     <div>
       <Tooltip id="wow" label="Notifications">

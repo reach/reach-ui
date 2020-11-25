@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { render, act, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -49,8 +49,9 @@ function AlertApp() {
         onClick={() =>
           dispatch({
             type: "ADD_MESSAGE",
-            payload: `${messageCount +
-              1}. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
+            payload: `${
+              messageCount + 1
+            }. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
           })
         }
       >

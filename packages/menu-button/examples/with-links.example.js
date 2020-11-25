@@ -1,18 +1,18 @@
-import React from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import {
   Menu,
   MenuList,
   MenuButton,
   MenuLink,
-  MenuItem
+  MenuItem,
 } from "@reach/menu-button";
 import {
   Router,
   Link,
   createMemorySource,
   createHistory,
-  LocationProvider
+  LocationProvider,
 } from "@reach/router";
 import "@reach/menu-button/styles.css";
 

@@ -2,10 +2,10 @@
  * Welcome to @reach/popover!
  */
 
-import React, { useRef, forwardRef, useEffect } from "react";
+import * as React from "react";
 import Portal from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { getOwnerDocument, useForkedRef } from "@reach/utils";
+import { forwardRefWithAs, getOwnerDocument, useForkedRef } from "@reach/utils";
 import tabbable from "tabbable";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,7 +13,7 @@ import tabbable from "tabbable";
 /**
  * Popover
  */
-const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
+const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
   props,
   ref
 ) {
@@ -24,25 +24,30 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(function Popover(
   );
 });
 
-export type PopoverProps = {
+type PopoverProps = {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
+  /**
+   * Render the popover markup, but hide it – used by MenuButton so that it
+   * can have an `aria-controls` attribute even when its menu isn't open, and
+   * used inside `Popover` as a hint that we can tell `useRect` to stop
+   * observing for better performance.
+   */
+  hidden?: boolean;
   /**
    * Testing this API so we might accept additional nodes that apps can use to
    * determine the position of the popover. One example where it may be useful
    * is for positioning the popover of a listbox where the cursor rests on top
    * of the selected option. Pretty sure this will change so don't use it
-   * anywehre in public yet!
+   * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
-} & React.HTMLAttributes<HTMLDivElement>;
+};
 
 if (__DEV__) {
   Popover.displayName = "Popover";
 }
-
-export default Popover;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -52,42 +57,41 @@ export default Popover;
  * Popover is conditionally rendered so we can't start measuring until it shows
  * up, so useRect needs to live down here not up in Popover
  */
-const PopoverImpl = forwardRef<HTMLDivElement, PopoverProps>(
-  function PopoverImpl(
-    {
-      targetRef,
-      position = positionDefault,
-      unstable_observableRefs = [],
-      ...props
-    },
-    forwardedRef
-  ) {
-    const popoverRef = useRef<HTMLDivElement>(null);
-    const popoverRect = useRect(popoverRef);
-    const targetRect = useRect(targetRef);
-    const ref = useForkedRef(popoverRef, forwardedRef);
+const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
+  {
+    as: Comp = "div",
+    targetRef,
+    position = positionDefault,
+    unstable_observableRefs = [],
+    ...props
+  },
+  forwardedRef
+) {
+  const popoverRef = React.useRef<HTMLDivElement>(null);
+  const popoverRect = useRect(popoverRef, !props.hidden);
+  const targetRect = useRect(targetRef, !props.hidden);
+  const ref = useForkedRef(popoverRef, forwardedRef);
 
-    useSimulateTabNavigationForReactTree(targetRef, popoverRef);
+  useSimulateTabNavigationForReactTree(targetRef, popoverRef);
 
-    return (
-      <div
-        data-reach-popover=""
-        ref={ref}
-        {...props}
-        style={{
-          position: "absolute",
-          ...getStyles(
-            position,
-            targetRect,
-            popoverRect,
-            ...unstable_observableRefs
-          ),
-          ...props.style,
-        }}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      data-reach-popover=""
+      ref={ref}
+      {...props}
+      style={{
+        position: "absolute",
+        ...getStyles(
+          position,
+          targetRect,
+          popoverRect,
+          ...unstable_observableRefs
+        ),
+        ...props.style,
+      }}
+    />
+  );
+});
 
 if (__DEV__) {
   PopoverImpl.displayName = "PopoverImpl";
@@ -119,7 +123,7 @@ function getTopPosition(targetRect: PRect, popoverRect: PRect) {
   };
 }
 
-export const positionDefault: Position = (targetRect, popoverRect) => {
+const positionDefault: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -133,7 +137,7 @@ export const positionDefault: Position = (targetRect, popoverRect) => {
   };
 };
 
-export const positionRight: Position = (targetRect, popoverRect) => {
+const positionRight: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -147,7 +151,7 @@ export const positionRight: Position = (targetRect, popoverRect) => {
   };
 };
 
-export const positionMatchWidth: Position = (targetRect, popoverRect) => {
+const positionMatchWidth: Position = (targetRect, popoverRect) => {
   if (!targetRect || !popoverRect) {
     return {};
   }
@@ -159,7 +163,7 @@ export const positionMatchWidth: Position = (targetRect, popoverRect) => {
   };
 };
 
-export function getCollisions(
+function getCollisions(
   targetRect: PRect,
   popoverRect: PRect,
   offsetLeft: number = 0,
@@ -189,10 +193,10 @@ export function getCollisions(
 // (We call targetRef, triggerRef inside this function to avoid confusion with
 // event.target)
 function useSimulateTabNavigationForReactTree<
-  T extends HTMLElement = HTMLElement,
-  P extends HTMLElement = HTMLElement
+  T extends HTMLElement,
+  P extends HTMLElement
 >(triggerRef: React.RefObject<T>, popoverRef: React.RefObject<P>) {
-  const ownerDocument = getOwnerDocument(triggerRef.current);
+  const ownerDocument = getOwnerDocument(triggerRef.current)!;
 
   function handleKeyDown(event: KeyboardEvent) {
     if (
@@ -222,19 +226,16 @@ function useSimulateTabNavigationForReactTree<
     }
   }
 
-  useEffect(() => {
-    if (ownerDocument) {
-      ownerDocument.addEventListener("keydown", handleKeyDown);
-      return () => {
-        ownerDocument.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-    return;
+  React.useEffect(() => {
+    ownerDocument.addEventListener("keydown", handleKeyDown);
+    return () => {
+      ownerDocument.removeEventListener("keydown", handleKeyDown);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function getElementAfterTrigger() {
-    const elements = ownerDocument && tabbable(ownerDocument);
+    const elements = tabbable(ownerDocument);
     const targetIndex =
       elements && triggerRef.current
         ? elements.indexOf(triggerRef.current)
@@ -247,7 +248,7 @@ function useSimulateTabNavigationForReactTree<
   }
 
   function tabbedFromTriggerToPopover() {
-    return triggerRef.current && ownerDocument
+    return triggerRef.current
       ? triggerRef.current === ownerDocument.activeElement
       : false;
   }
@@ -261,15 +262,13 @@ function useSimulateTabNavigationForReactTree<
   }
 
   function tabbedOutOfPopover() {
-    const inPopover =
-      popoverRef.current && ownerDocument
-        ? popoverRef.current.contains(ownerDocument.activeElement || null)
-        : false;
+    const inPopover = popoverRef.current
+      ? popoverRef.current.contains(ownerDocument.activeElement || null)
+      : false;
     if (inPopover) {
       const elements = popoverRef.current && tabbable(popoverRef.current);
       return Boolean(
         elements &&
-          ownerDocument &&
           elements[elements.length - 1] === ownerDocument.activeElement
       );
     }
@@ -313,19 +312,18 @@ function useSimulateTabNavigationForReactTree<
   }
 
   function tabbedToBrowserChrome(event: KeyboardEvent) {
-    const elements =
-      ownerDocument && popoverRef.current
-        ? tabbable(ownerDocument).filter(
-            (element) => !popoverRef.current!.contains(element)
-          )
-        : null;
+    const elements = popoverRef.current
+      ? tabbable(ownerDocument).filter(
+          (element) => !popoverRef.current!.contains(element)
+        )
+      : null;
     return elements ? event.target === elements[elements.length - 1] : false;
   }
 
   function shiftTabbedToBrowserChrome(event: KeyboardEvent) {
     // we're assuming the popover will never contain the first tabbable
     // element, and it better not, because the trigger needs to be tabbable!
-    return ownerDocument ? event.target === tabbable(ownerDocument)[0] : false;
+    return event.target === tabbable(ownerDocument)[0];
   }
 
   let restoreTabIndexTuplés: [HTMLElement, number][] = [];
@@ -337,14 +335,12 @@ function useSimulateTabNavigationForReactTree<
         restoreTabIndexTuplés.push([element, element.tabIndex]);
         element.tabIndex = -1;
       });
-      ownerDocument &&
-        ownerDocument.addEventListener("focusin", enableTabbablesInPopover);
+      ownerDocument.addEventListener("focusin", enableTabbablesInPopover);
     }
   }
 
   function enableTabbablesInPopover() {
-    ownerDocument &&
-      ownerDocument.removeEventListener("focusin", enableTabbablesInPopover);
+    ownerDocument.removeEventListener("focusin", enableTabbablesInPopover);
     restoreTabIndexTuplés.forEach(([element, tabIndex]) => {
       element.tabIndex = tabIndex;
     });
@@ -354,10 +350,23 @@ function useSimulateTabNavigationForReactTree<
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type Position = (
+type Position = (
   targetRect?: PRect | null,
   popoverRect?: PRect | null,
   ...unstable_observableNodes: PossibleNode[]
 ) => React.CSSProperties;
 
 type PossibleNode = null | undefined | HTMLElement | SVGElement;
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Popover;
+export type { PopoverProps, Position };
+export {
+  getCollisions,
+  Popover,
+  positionDefault,
+  positionMatchWidth,
+  positionRight,
+};

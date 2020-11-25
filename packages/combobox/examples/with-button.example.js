@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import * as React from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -16,7 +16,7 @@ import "@reach/combobox/styles.css";
 let name = "With Button";
 
 function Example() {
-  let [term, setTerm] = useState("");
+  let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
   function handleChange(event) {
@@ -57,12 +57,12 @@ export default { title: "Combobox" };
 
 function useCityMatch(term) {
   let throttledTerm = useThrottle(term, 100);
-  return useMemo(
+  return React.useMemo(
     () =>
       throttledTerm.trim() === ""
         ? null
         : matchSorter(cities, throttledTerm, {
-            keys: [item => `${item.city}, ${item.state}`],
+            keys: [(item) => `${item.city}, ${item.state}`],
           }),
     [throttledTerm]
   );

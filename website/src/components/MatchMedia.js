@@ -1,4 +1,5 @@
-import { useLayoutEffect, useReducer, useMemo } from "react";
+import * as React from "react";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
 import createMediaListener from "./createMediaListener";
 
 let canUseDOM = typeof window !== "undefined";
@@ -7,25 +8,25 @@ function reducer(state, action) {
   if (action.state) {
     return {
       ...state,
-      ...action.state
+      ...action.state,
     };
   }
   return state;
 }
 
 export function useMatchMedia(media) {
-  let mediaListener = useMemo(
+  let mediaListener = React.useMemo(
     () => (canUseDOM ? createMediaListener(media) : null),
     [media]
   );
-  let [state, dispatch] = useReducer(
+  let [state, dispatch] = React.useReducer(
     reducer,
     mediaListener ? mediaListener.getState() : null
   );
 
   useLayoutEffect(() => {
     if (mediaListener) {
-      mediaListener.listen(newState => dispatch({ state: newState }));
+      mediaListener.listen((newState) => dispatch({ state: newState }));
       return mediaListener.dispose;
     }
   }, [mediaListener]);

@@ -2,7 +2,7 @@
 
 [![Stable release](https://img.shields.io/npm/v/@reach/auto-id.svg)](https://npm.im/@reach/auto-id) ![MIT license](https://badgen.now.sh/badge/license/MIT)
 
-[Docs](https://reacttraining.com/reach-ui/auto-id) | [Source](https://github.com/reach/reach-ui/tree/main/packages/auto-id)
+[Docs](https://reach.tech/auto-id) | [Source](https://github.com/reach/reach-ui/tree/main/packages/auto-id)
 
 Autogenerate IDs to facilitate WAI-ARIA and server rendering.
 
@@ -14,10 +14,10 @@ import { useId } from "@reach/auto-id";
 function FormField(props) {
   const id = useId(props.id);
   return (
-    <Fragment>
+    <React.Fragment>
       <label htmlFor={id}>{props.label}</label>
       <input type={props.type} name={props.name} id={id} />
-    </Fragment>
+    </React.Fragment>
   );
 }
 ```

@@ -75,7 +75,7 @@ The solution most people turn to is to bail out of the element API and turn to a
 />;
 
 function Menu({ items }) {
-  const [activeIndex, setActiveIndex] = useState();
+  const [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {items.map((item, index) => (
@@ -180,7 +180,7 @@ We can use `React.cloneElement` to keep (most of) the normal React composition. 
 
 ```jsx
 function Menu({ children }) {
-  const [activeIndex, setActiveIndex] = useState();
+  const [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {React.Children.map(children, (child, index) =>
@@ -240,16 +240,17 @@ So now we need a way to define arbitrary components as a `MenuItem`. One workaro
 The `descendants` package provides these key tools:
 
 - `createDescendantContext`: Creates a special context object to deal with registering descendants in a tree (accepts a name string for better debugging)
-- `useDescendants`: A hook to create a state object containing a descendants array and setter function.
+- `useDescendantsInit`: A hook to create a state object containing a descendants array and setter function.
 - `DescendantProvider`: A provider that accepts the descendants array, the state setter, and the component's context object for use at the top of the component tree
 - `useDescendant`: A hook called in the body of a nested descendant component that registers its DOM node and returns its index relative to other descendants in the tree
+- `useDescendants`: A hook that accepts the descendant context and returns descendants registered to the passed context.
 
 ```jsx
 import {
   createDescendantContext,
   DescendantProvider,
   useDescendant,
-  useDescendants,
+  useDescendantsInit,
 } from "@reach/descendants";
 
 let DescendantContext = createDescendantContext("DescendantContext");
@@ -261,7 +262,7 @@ function Menu({ id, children }) {
   // component and we don't want to force creating an arbitrary child
   // component just so we can consume the context.
   let [descendants, setDescendants] = useDescendantsInit();
-  let [activeIndex, setActiveIndex] = useState(-1);
+  let [activeIndex, setActiveIndex] = React.useState(-1);
   return (
     <DescendantProvider
       context={DescendantContext}
@@ -295,7 +296,7 @@ function MenuList(props) {
 
 function MenuItem({ index: explicitIndex, ...props }) {
   let { activeIndex, setActiveIndex } = useContext(MenuContext);
-  let ref = useRef(null);
+  let ref = React.useRef(null);
   let index = useDescendant(
     {
       // Assign the DOM node using a ref
@@ -335,7 +336,7 @@ function MenuItem({ index: explicitIndex, ...props }) {
 }
 ```
 
-You can also access the descendants object anywhere in the tree (below the top-level component) with `useDescendants`:
+You can also access the descendants array anywhere in the tree (below the top-level component) with `useDescendants`:
 
 ```jsx
 let menuItems = useDescendants(DescendantContext);
@@ -362,7 +363,7 @@ function Comp() {
 function CompSSR() {
   // This limits composition, but now you have your data in one place at the top
   let options = ["Apple", "Orange", "Banana"];
-  let [activeOption, setActiveOption] = useState(options[0]);
+  let [activeOption, setActiveOption] = React.useState(options[0]);
   <Listbox onChange={setActiveOption} selected={activeOption}>
     {/* The button needs to know which value is selected to render its label! */}
     <ListboxButton>{activeOption}</ListboxButton>
@@ -377,7 +378,7 @@ function CompSSR() {
 function ComposableSSR() {
   // You can manage state at the top and still get back some composition, you'll
   // just have to deal with a bit of repitition
-  let [activeOption, setActiveOption] = useState("Apple");
+  let [activeOption, setActiveOption] = React.useState("Apple");
   <Listbox onChange={setActiveOption} selected={activeOption}>
     {/* The button needs to know which value is selected to render its label! */}
     <ListboxButton>{activeOption}</ListboxButton>

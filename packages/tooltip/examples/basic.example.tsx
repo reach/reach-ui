@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useRef } from "react";
+import * as React from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
 let name = "Basic (TS)";
 
 function Example() {
-  const coolRef = useRef(null);
+  const coolRef = React.useRef(null);
   return (
     <div>
       <Tooltip id="wow" label="Notifications">

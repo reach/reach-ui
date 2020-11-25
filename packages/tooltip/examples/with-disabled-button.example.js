@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 

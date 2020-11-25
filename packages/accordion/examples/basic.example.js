@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import {
   Accordion,
   AccordionItem,
@@ -122,7 +122,7 @@ function ExampleForm() {
         />
       </label>
       <button
-        onClick={event => {
+        onClick={(event) => {
           event.preventDefault();
           window.alert("Great job!");
         }}

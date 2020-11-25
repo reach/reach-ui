@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Component from "@reach/component-component";
 
 let name = "Basic State";
@@ -11,7 +11,7 @@ function Example() {
           style={{
             background: `hsl(${state.hue}, 50%, 50%)`,
             padding: 20,
-            textAlign: "center"
+            textAlign: "center",
           }}
         >
           <button onClick={() => setState({ hue: Math.random() * 360 })}>

@@ -25,12 +25,12 @@
  * and renders a `Dialog`, same for `AlertDialogOverlay` to `DialogOverlay`, and
  * `AlertDialogContent` to `DialogContent`.
  *
- * @see Docs     https://reacttraining.com/reach-ui/alert-dialog
- * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert-dialog
+ * @see Docs     https://reach.tech/alert-dialog
+ * @see Source https://github.com/reach/reach-ui/tree/main/packages/alert-dialog
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
  */
 
-import React, { forwardRef, useContext, useEffect, useRef } from "react";
+import * as React from "react";
 import {
   DialogOverlay,
   DialogContent,
@@ -39,8 +39,9 @@ import {
 } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import {
-  getOwnerDocument,
   createNamedContext,
+  forwardRefWithAs,
+  getOwnerDocument,
   makeId,
   useForkedRef,
 } from "@reach/utils";
@@ -63,11 +64,11 @@ let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
  *
  * Note: You must render an `AlertDialogContent` inside.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogoverlay
+ * @see Docs https://reach.tech/alert-dialog#alertdialogoverlay
  */
-export const AlertDialogOverlay = forwardRef<HTMLDivElement, AlertDialogProps>(
+const AlertDialogOverlay = forwardRefWithAs<AlertDialogProps, "div">(
   function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardedRef) {
-    let ownRef = useRef<HTMLDivElement | null>(null);
+    let ownRef = React.useRef<HTMLDivElement | null>(null);
     let ref = useForkedRef(forwardedRef, ownRef);
     let id = useId(props.id);
     let labelId = id ? makeId("alert-dialog", id) : undefined;
@@ -117,71 +118,73 @@ if (__DEV__) {
  * `AlertDialogOverlay`, otherwise you can use the high-level `AlertDialog`
  * component and pass the props to it.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent
+ * @see Docs https://reach.tech/alert-dialog#alertdialogcontent
  */
-export const AlertDialogContent = forwardRef<
-  HTMLDivElement,
-  AlertDialogContentProps
->(function AlertDialogContent({ children, ...props }, forwardRef) {
-  let { descriptionId, labelId, leastDestructiveRef, overlayRef } = useContext(
-    AlertDialogContext
-  );
-  useEffect(() => {
-    let ownerDocument = getOwnerDocument(overlayRef.current) || document;
-    if (labelId) {
-      invariant(
-        ownerDocument.getElementById(labelId),
-        `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
-          inside an \`<AlertDialog/>\`.`
-      );
-    }
-    invariant(
+const AlertDialogContent = forwardRefWithAs<AlertDialogContentProps, "div">(
+  function AlertDialogContent({ children, ...props }, forwardedRef) {
+    let {
+      descriptionId,
+      labelId,
       leastDestructiveRef,
-      `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
+      overlayRef,
+    } = React.useContext(AlertDialogContext);
+    React.useEffect(() => {
+      let ownerDocument = getOwnerDocument(overlayRef.current)!;
+      if (labelId) {
+        invariant(
+          ownerDocument.getElementById(labelId),
+          `@reach/alert-dialog: You must render a \`<AlertDialogLabel>\`
+          inside an \`<AlertDialog/>\`.`
+        );
+      }
+      invariant(
+        leastDestructiveRef,
+        `@reach/alert-dialog: You must provide a \`leastDestructiveRef\` to
           \`<AlertDialog>\` or \`<AlertDialogOverlay/>\`. Please see
           https://ui.reach.tech/alert-dialog/#alertdialogoverlay-leastdestructiveref`
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [labelId, leastDestructiveRef]);
+    return (
+      <DialogContent
+        // The element that contains all elements of the dialog, including the
+        // alert message and any dialog buttons, has role alertdialog.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
+        role="alertdialog"
+        // The element with role `alertdialog` has a value set for
+        // `aria-describedby` that refers to the element containing the alert
+        // message.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
+        aria-describedby={descriptionId}
+        // The element with role `alertdialog` has either:
+        //   - A value for `aria-labelledby` that refers to the element containing
+        //     the title of the dialog if the dialog has a visible label.
+        //   - A value for `aria-label` if the dialog does not have a visible
+        //     label.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
+        aria-labelledby={props["aria-label"] ? undefined : labelId}
+        {...props}
+        ref={forwardedRef}
+        // lol: remove in 1.0
+        data-reach-alert-dialong-content
+        data-reach-alert-dialog-content
+      >
+        {children}
+      </DialogContent>
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [labelId, leastDestructiveRef]);
-  return (
-    <DialogContent
-      // The element that contains all elements of the dialog, including the
-      // alert message and any dialog buttons, has role alertdialog.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
-      role="alertdialog"
-      // The element with role `alertdialog` has a value set for
-      // `aria-describedby` that refers to the element containing the alert
-      // message.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
-      aria-describedby={descriptionId}
-      // The element with role `alertdialog` has either:
-      //   - A value for `aria-labelledby` that refers to the element containing
-      //     the title of the dialog if the dialog has a visible label.
-      //   - A value for `aria-label` if the dialog does not have a visible
-      //     label.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#alertdialog
-      aria-labelledby={props["aria-label"] ? undefined : labelId}
-      {...props}
-      ref={forwardRef}
-      // lol: remove in 1.0
-      data-reach-alert-dialong-content
-      data-reach-alert-dialog-content
-    >
-      {children}
-    </DialogContent>
-  );
-});
+  }
+);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent-props
+ * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-props
  */
-export type AlertDialogContentProps = {
+type AlertDialogContentProps = {
   /**
    * Accepts any renderable content but should generally be restricted to
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other
    * content might not be announced to the user by the screen reader.
    *
-   * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogcontent-children
+   * @see Docs https://reach.tech/alert-dialog#alertdialogcontent-children
    */
   children: React.ReactNode;
 } & DialogContentProps;
@@ -204,18 +207,27 @@ if (__DEV__) {
  * This is required. The `AlertDialog` will throw an error if no label is
  * rendered.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialoglabel
+ * @see Docs https://reach.tech/alert-dialog#alertdialoglabel
  */
-export const AlertDialogLabel: React.FC<React.HTMLAttributes<
-  HTMLDivElement
->> = (props) => {
-  const { labelId } = useContext(AlertDialogContext);
-  return <div {...props} id={labelId} data-reach-alert-dialog-label />;
-};
+const AlertDialogLabel = forwardRefWithAs<AlertDialogLabelProps, "div">(
+  function ({ as: Comp = "div", ...props }, forwardedRef) {
+    const { labelId } = React.useContext(AlertDialogContext);
+    return (
+      <Comp
+        {...props}
+        ref={forwardedRef}
+        id={labelId}
+        data-reach-alert-dialog-label
+      />
+    );
+  }
+);
 
 if (__DEV__) {
   AlertDialogLabel.displayName = "AlertDialogLabel";
 }
+
+type AlertDialogLabelProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -226,21 +238,32 @@ if (__DEV__) {
  * about what you need from the user like "This action is permanent, are you
  * sure?" etc.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialogdescription
+ * @see Docs https://reach.tech/alert-dialog#alertdialogdescription
  * @param props
  */
-export const AlertDialogDescription: React.FC<React.HTMLAttributes<
-  HTMLDivElement
->> = (props) => {
-  const { descriptionId } = useContext(AlertDialogContext);
+const AlertDialogDescription = forwardRefWithAs<
+  AlertDialogDescriptionProps,
+  "div"
+>(function AlertDialogDescription(
+  { as: Comp = "div", ...props },
+  forwardedRef
+) {
+  const { descriptionId } = React.useContext(AlertDialogContext);
   return (
-    <div {...props} id={descriptionId} data-reach-alert-dialog-description />
+    <Comp
+      {...props}
+      ref={forwardedRef}
+      id={descriptionId}
+      data-reach-alert-dialog-description
+    />
   );
-};
+});
 
 if (__DEV__) {
   AlertDialogDescription.displayName = "AlertDialogDescription";
 }
+
+type AlertDialogDescriptionProps = {};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -249,31 +272,31 @@ if (__DEV__) {
  *
  * High-level component to render an alert dialog.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialog
+ * @see Docs https://reach.tech/alert-dialog#alertdialog
  * @param props
  */
-export const AlertDialog: React.FC<AlertDialogProps> = ({
-  id,
-  isOpen,
-  onDismiss,
-  leastDestructiveRef,
-  ...props
-}) => {
-  return (
-    <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
-      <AlertDialogContent {...props} />
-    </AlertDialogOverlay>
-  );
-};
+const AlertDialog = forwardRefWithAs<AlertDialogProps, "div">(
+  function AlertDialog(
+    { id, isOpen, onDismiss, leastDestructiveRef, ...props },
+    forwardedRef
+  ) {
+    return (
+      <AlertDialogOverlay {...{ isOpen, onDismiss, leastDestructiveRef, id }}>
+        <AlertDialogContent ref={forwardedRef} {...props} />
+      </AlertDialogOverlay>
+    );
+  }
+);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert-dialog#alertdialog-props
+ * @see Docs https://reach.tech/alert-dialog#alertdialog-props
  */
-export type AlertDialogProps = {
+type AlertDialogProps = {
+  id?: string;
   /**
    * Controls whether the dialog is open or not.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-isopen
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-isopen
    */
   isOpen?: boolean;
   /**
@@ -281,14 +304,14 @@ export type AlertDialogProps = {
    * this function will be called. If you want the modal to close,
    * you’ll need to set state.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-ondismiss
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-ondismiss
    */
   onDismiss?: (event?: React.SyntheticEvent) => void;
   /**
    * To prevent accidental data loss, an alert dialog should focus the least
    * destructive action button when it opens.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-leastdestructiveref
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-leastdestructiveref
    */
   leastDestructiveRef?: React.RefObject<HTMLElement>;
   /**
@@ -296,7 +319,7 @@ export type AlertDialogProps = {
    * `AlertDialogLabel`, `AlertDialogDescription` and action buttons, other
    * content might not be announced to the user by the screen reader.
    *
-   * @see Docs: https://reacttraining.com/reach-ui/alert-dialog#alertdialog-children
+   * @see Docs: https://reach.tech/alert-dialog#alertdialog-children
    */
   children: React.ReactNode;
 } & DialogProps;
@@ -320,3 +343,20 @@ interface AlertDialogContextValue {
   overlayRef: React.MutableRefObject<HTMLDivElement | null>;
   leastDestructiveRef?: React.RefObject<HTMLElement>;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type {
+  AlertDialogContentProps,
+  AlertDialogDescriptionProps,
+  AlertDialogLabelProps,
+  AlertDialogProps,
+};
+export {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogLabel,
+  AlertDialogOverlay,
+};

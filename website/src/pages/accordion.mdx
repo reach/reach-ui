@@ -1,5 +1,7 @@
 import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
+import { AsPropWarning } from "../components/AsPropWarning";
+import { Pipe } from "../components/Pipe";
 
 <SEO title="Accordion" description="Accessible accordion component for React" />
 
@@ -12,7 +14,7 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
     <TOCLink href="#accordionbutton">AccordionButton</TOCLink>
     <TOCLink href="#accordionpanel">AccordionPanel</TOCLink>
     <TOCLink href="#useaccordioncontext">useAccordionContext</TOCLink>
-    <TOCLink href="#useAccordionitemcontext">useAccordionItemContext</TOCLink>
+    <TOCLink href="#useaccordionitemcontext">useAccordionItemContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -304,7 +306,7 @@ function Example() {
 If you want to control the accordion's open panels, you can do so by passing [`index`](#accordion-index) and [`onChange`](#accordion-onchange) props. The index corresponds with the order of each accordion item as they appear within an accordion. The index value passed sets its corresponding panel to an `open` state.
 
 ```jsx
-const [index, setIndex] = useState(0);
+const [index, setIndex] = React.useState(0);
 return (
   <Accordion index={index} onChange={(value) => setIndex(value)}>
     <AccordionItem {...items[0].props} />
@@ -317,7 +319,7 @@ return (
 In a controlled accordion, multiple items can be set to `open` by passing an array of indices to the `index` prop.
 
 ```jsx
-const [indices, setIndices] = useState([0, 2]);
+const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
     setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
@@ -337,15 +339,24 @@ return (
 
 #### Accordion Props
 
-| Prop                                      | Type                   | Required |
-| ----------------------------------------- | ---------------------- | -------- |
-| [`children`](#accordion-children)         | `node`                 | true     |
-| [`collapsible`](#accordion-collapsible)   | `boolean`              | false    |
-| [`defaultIndex`](#accordion-defaultindex) | `number` \| `number[]` | false    |
-| [`index`](#accordion-index)               | `number` \| `number[]` | false    |
-| [`multiple`](#accordion-multiple)         | `boolean`              | false    |
-| [`onChange`](#accordion-onchange)         | `func`                 | false    |
-| [`readOnly`](#accordion-readonly)         | `boolean`              | false    |
+| Prop                                      | Type                          | Required |
+| ----------------------------------------- | ----------------------------- | -------- |
+| [`as`](#accordion-as)                     | `string` <Pipe /> `Component` | false    |
+| [`children`](#accordion-children)         | `node`                        | true     |
+| [`collapsible`](#accordion-collapsible)   | `boolean`                     | false    |
+| [`defaultIndex`](#accordion-defaultindex) | `number` <Pipe /> `number[]`  | false    |
+| [`index`](#accordion-index)               | `number` <Pipe /> `number[]`  | false    |
+| [`multiple`](#accordion-multiple)         | `boolean`                     | false    |
+| [`onChange`](#accordion-onchange)         | `func`                        | false    |
+| [`readOnly`](#accordion-readonly)         | `boolean`                     | false    |
+
+##### Accordion `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `Accordion` what element to render. Defaults to `div`.
+
+<AsPropWarning />
 
 ##### Accordion `children`
 
@@ -417,7 +428,7 @@ You can only pass an array of indices to `defaultIndex` if you also set `multipl
 The index or array of indices for open accordion panels. The `index` prop should be used along with `onChange` to create controlled accordion components.
 
 ```jsx
-const [indices, setIndices] = useState([0, 2]);
+const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
   if (indices.includes(toggledIndex)) {
     setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
@@ -483,11 +494,11 @@ Please see the [styling guide](/styling).
 
 #### AccordionItem Props
 
-| Prop                                  | Type                    | Required |
-| ------------------------------------- | ----------------------- | -------- |
-| [`as`](#accordionitem-as)             | `string` \| `Component` | false    |
-| [`children`](#accordionitem-children) | `node`                  | true     |
-| [`disabled`](#accordionitem-disabled) | `boolean`               | false    |
+| Prop                                  | Type                          | Required |
+| ------------------------------------- | ----------------------------- | -------- |
+| [`as`](#accordionitem-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#accordionitem-children) | `node`                        | true     |
+| [`disabled`](#accordionitem-disabled) | `boolean`                     | false    |
 
 ##### AccordionItem `as`
 
@@ -495,7 +506,7 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionItem` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### AccordionItem `children`
 
@@ -548,10 +559,10 @@ Please see the [styling guide](/styling).
 
 #### AccordionButton Props
 
-| Prop                                    | Type                    | Required |
-| --------------------------------------- | ----------------------- | -------- |
-| [`as`](#accordionbutton-as)             | `string` \| `Component` | false    |
-| [`children`](#accordionbutton-children) | `node`                  | true     |
+| Prop                                    | Type                          | Required |
+| --------------------------------------- | ----------------------------- | -------- |
+| [`as`](#accordionbutton-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#accordionbutton-children) | `node`                        | true     |
 
 ##### AccordionButton `as`
 
@@ -559,7 +570,7 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionButton` what element to render. Defaults to `button`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### AccordionButton `children`
 
@@ -690,10 +701,10 @@ Please see the [styling guide](/styling).
 
 #### AccordionPanel Props
 
-| Prop                                   | Type                    | Required |
-| -------------------------------------- | ----------------------- | -------- |
-| [`as`](#accordionpanel-as)             | `string` \| `Component` | false    |
-| [`children`](#accordionpanel-children) | `node`                  | true     |
+| Prop                                   | Type                          | Required |
+| -------------------------------------- | ----------------------------- | -------- |
+| [`as`](#accordionpanel-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#accordionpanel-children) | `node`                        | true     |
 
 ##### AccordionPanel `as`
 
@@ -701,7 +712,7 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionPanel` what element to render. Defaults to `div`.
 
-> **NOTE:** Many semantic elements, such as `button` elements, have meaning to assistive devices and browsers that provide context for the user and, in many cases, provide or restrict interactive behaviors. Use caution when overriding our defaults and make sure that the element you choose to render provides the same experience for all users.
+<AsPropWarning />
 
 ##### AccordionPanel `children`
 

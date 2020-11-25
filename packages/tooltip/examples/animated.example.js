@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { Fragment, cloneElement } from "react";
+import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { useTransition, animated } from "react-spring/web.cjs";
 import "@reach/tooltip/styles.css";
@@ -53,8 +53,8 @@ function ExampleAnimatedTooltip({ children, ...rest }) {
   });
 
   return (
-    <Fragment>
-      {cloneElement(children, trigger)}
+    <React.Fragment>
+      {React.cloneElement(children, trigger)}
 
       {transitions.map(
         ({ item: tooltip, props: styles, key }) =>
@@ -67,6 +67,6 @@ function ExampleAnimatedTooltip({ children, ...rest }) {
             />
           )
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }

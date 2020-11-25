@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { Fragment, cloneElement } from "react";
+import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import Portal from "@reach/portal";
 import "@reach/tooltip/styles.css";
@@ -56,8 +56,8 @@ function ExampleTriangle({ children, ...rest }) {
   const { isVisible, triggerRect } = tooltip;
 
   return (
-    <Fragment>
-      {cloneElement(children, trigger)}
+    <React.Fragment>
+      {React.cloneElement(children, trigger)}
 
       {isVisible && (
         // the Triangle, we position it relative to the trigger, not the popup
@@ -90,6 +90,6 @@ function ExampleTriangle({ children, ...rest }) {
         }}
         position={centered}
       />
-    </Fragment>
+    </React.Fragment>
   );
 }

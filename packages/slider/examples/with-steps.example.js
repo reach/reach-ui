@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Slider, SliderMarker } from "@reach/slider";
 import "@reach/slider/styles.css";
 import "./examples.css";
@@ -14,7 +14,7 @@ function Example() {
 
   return (
     <Slider step={step} min={min} max={max}>
-      {steps.map(key => {
+      {steps.map((key) => {
         const value = key * step;
         return (
           <SliderMarker key={key} value={value}>

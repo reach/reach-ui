@@ -13,7 +13,7 @@
  *  - We may want to research some use cases for reversed sliders in RTL
  *    languages if that's a thing
  *
- * @see Docs     https://reacttraining.com/reach-ui/slider
+ * @see Docs     https://reach.tech/slider
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/slider
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#slider
  * @see Example  https://github.com/Stanko/aria-progress-range-slider
@@ -22,45 +22,39 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import {
-  checkStyles,
   createNamedContext,
   forwardRefWithAs,
   getOwnerDocument,
   isFunction,
+  isRightClick,
   makeId,
   memoWithAs,
+  noop,
+  useCheckStyles,
+  useControlledState,
+  useControlledSwitchWarning,
   useEventCallback,
   useForkedRef,
-  useControlledSwitchWarning,
-  useControlledState,
   useIsomorphicLayoutEffect,
   warning,
   wrapEvent,
-  noop,
 } from "@reach/utils";
 
 // TODO: Remove in 1.0
-export type SliderAlignment = "center" | "contain";
+type SliderAlignment = "center" | "contain";
 
-export enum SliderOrientation {
+enum SliderOrientation {
   Horizontal = "horizontal",
   Vertical = "vertical",
   // TODO: Add support for RTL slider
 }
 
 // TODO: Remove in 1.0
-export enum SliderHandleAlignment {
+enum SliderHandleAlignment {
   // Handle is centered directly over the current value marker
   Center = "center",
   // Handle is contained within the bounds of the track, offset slightly from
@@ -69,16 +63,16 @@ export enum SliderHandleAlignment {
 }
 
 // TODO: Remove in 1.0
-export const SLIDER_ORIENTATION_HORIZONTAL = SliderOrientation.Horizontal;
-export const SLIDER_ORIENTATION_VERTICAL = SliderOrientation.Vertical;
-export const SLIDER_HANDLE_ALIGN_CENTER = SliderHandleAlignment.Center;
-export const SLIDER_HANDLE_ALIGN_CONTAIN = SliderHandleAlignment.Contain;
+const SLIDER_ORIENTATION_HORIZONTAL = SliderOrientation.Horizontal;
+const SLIDER_ORIENTATION_VERTICAL = SliderOrientation.Vertical;
+const SLIDER_HANDLE_ALIGN_CENTER = SliderHandleAlignment.Center;
+const SLIDER_HANDLE_ALIGN_CONTAIN = SliderHandleAlignment.Contain;
 
 const SliderContext = createNamedContext<ISliderContext>(
   "SliderContext",
   {} as ISliderContext
 );
-const useSliderContext = () => useContext(SliderContext);
+const useSliderContext = () => React.useContext(SliderContext);
 
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
@@ -109,7 +103,7 @@ const sliderPropTypes = {
 /**
  * Slider
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slider
+ * @see Docs https://reach.tech/slider#slider
  */
 const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
   { children, ...props },
@@ -132,44 +126,44 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slider-props
+ * @see Docs https://reach.tech/slider#slider-props
  */
-export type SliderProps = {
+type SliderProps = {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-children
+   * @see Docs https://reach.tech/slider#slider-children
    */
   children?: React.ReactNode;
   /**
    * The defaultValue is used to set an initial value for an uncontrolled
    * Slider.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-defaultvalue
+   * @see Docs https://reach.tech/slider#slider-defaultvalue
    */
   defaultValue?: number;
   /**
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-disabled
+   * @see Docs https://reach.tech/slider#slider-disabled
    */
   disabled?: boolean;
   /**
    * Whether or not the slider should be disabled from user interaction.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-value
+   * @see Docs https://reach.tech/slider#slider-value
    */
   value?: number;
   /**
    * A function used to set a human-readable name for the slider.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getarialabel
+   * @see Docs https://reach.tech/slider#slider-getarialabel
    */
   getAriaLabel?(value: number): string;
   /**
    * A function used to set a human-readable value text based on the slider's
    * current value.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-getariavaluetext
+   * @see Docs https://reach.tech/slider#slider-getariavaluetext
    */
   getAriaValueText?(value: number): string;
   /**
@@ -188,26 +182,26 @@ export type SliderProps = {
    * of the track, meaning its position will be slightly offset from the actual
    * value depending on where it sits on the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-handlealignment
+   * @see Docs https://reach.tech/slider#slider-handlealignment
    */
   handleAlignment?: "center" | "contain" | SliderAlignment;
   /**
    * The maximum value of the slider. Defaults to `100`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-max
+   * @see Docs https://reach.tech/slider#slider-max
    */
   max?: number;
   /**
    * The minimum value of the slider. Defaults to `0`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-min
+   * @see Docs https://reach.tech/slider#slider-min
    */
   min?: number;
   /**
    * If the slider is used as a form input, it should accept a `name` prop to
    * identify its value in context of the form.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-name
+   * @see Docs https://reach.tech/slider#slider-name
    */
   name?: string;
   /**
@@ -215,7 +209,7 @@ export type SliderProps = {
    * set, the Slider state becomes controlled and `onChange` must be used to
    * update the value in response to user interaction.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-onchange
+   * @see Docs https://reach.tech/slider#slider-onchange
    */
   onChange?(
     newValue: number,
@@ -239,7 +233,7 @@ export type SliderProps = {
   /**
    * Sets the slider to horizontal or vertical mode.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-orientation
+   * @see Docs https://reach.tech/slider#slider-orientation
    */
   orientation?: SliderOrientation;
   /**
@@ -247,7 +241,7 @@ export type SliderProps = {
    * value must adhere to as it changes. Step sets minimum intervals of change,
    * creating a "snap" effect when the handle is moved along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slider-step
+   * @see Docs https://reach.tech/slider#slider-step
    */
   step?: number;
 };
@@ -260,9 +254,6 @@ if (__DEV__) {
   };
 }
 
-export { Slider };
-export default Slider;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -272,7 +263,7 @@ export default Slider;
  * if you need more control over styles or rendering the slider's inner
  * components.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput
+ * @see Docs https://reach.tech/slider#sliderinput
  */
 const SliderInput = forwardRefWithAs<
   SliderInputProps & { _componentName?: string }
@@ -317,19 +308,19 @@ const SliderInput = forwardRefWithAs<
     "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
   );
 
-  let touchId: TouchIdRef = useRef();
+  let touchId: TouchIdRef = React.useRef();
 
   let id = useId(rest.id);
 
   // Track whether or not the pointer is down without updating the component
-  let pointerDownRef = useRef(false);
+  let pointerDownRef = React.useRef(false);
 
-  let trackRef: TrackRef = useRef(null);
-  let handleRef: HandleRef = useRef(null);
-  let sliderRef: SliderRef = useRef(null);
+  let trackRef: TrackRef = React.useRef(null);
+  let handleRef: HandleRef = React.useRef(null);
+  let sliderRef: SliderRef = React.useRef(null);
   let ref = useForkedRef(sliderRef, forwardedRef);
 
-  let [hasFocus, setHasFocus] = useState(false);
+  let [hasFocus, setHasFocus] = React.useState(false);
 
   let { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
@@ -353,16 +344,16 @@ const SliderInput = forwardRefWithAs<
       ? `${handleSize}px / 2`
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
-  let handlePositionRef = useRef(handlePosition);
+  let handlePositionRef = React.useRef(handlePosition);
   useIsomorphicLayoutEffect(() => {
     handlePositionRef.current = handlePosition;
   }, [handlePosition]);
 
-  let onChangeRef = useRef(onChange);
+  let onChangeRef = React.useRef(onChange);
   useIsomorphicLayoutEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
-  let updateValue = useCallback(
+  let updateValue = React.useCallback(
     function updateValue(newValue) {
       setValue(newValue);
       if (onChangeRef.current) {
@@ -379,7 +370,7 @@ const SliderInput = forwardRefWithAs<
     [max, min, setValue]
   );
 
-  let getNewValueFromEvent = useCallback(
+  let getNewValueFromEvent = React.useCallback(
     (event: SomePointerEvent) => {
       return getNewValue(getPointerPosition(event, touchId), trackRef.current, {
         step,
@@ -490,13 +481,13 @@ const SliderInput = forwardRefWithAs<
   // setPointerCapture and releasePointerCapture. We'll fall back to separate
   // mouse and touch events.
   // TODO: This could be more concise
-  let removeMoveEvents = useRef<() => void>(noop);
-  let removeStartEvents = useRef<() => void>(noop);
-  let removeEndEvents = useRef<() => void>(noop);
+  let removeMoveEvents = React.useRef<() => void>(noop);
+  let removeStartEvents = React.useRef<() => void>(noop);
+  let removeEndEvents = React.useRef<() => void>(noop);
 
   // Store our event handlers in refs so we aren't attaching/detaching events
   // on every render if the user doesn't useCallback
-  let appEvents = useRef({
+  let appEvents = React.useRef({
     onMouseMove,
     onMouseDown,
     onMouseUp,
@@ -518,6 +509,8 @@ const SliderInput = forwardRefWithAs<
   }, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
 
   let handleSlideStart = useEventCallback((event: SomePointerEvent) => {
+    if (isRightClick(event)) return;
+
     if (disabled) {
       pointerDownRef.current = false;
       return;
@@ -546,6 +539,7 @@ const SliderInput = forwardRefWithAs<
   });
 
   let setPointerCapture = useEventCallback((event: PointerEvent) => {
+    if (isRightClick(event)) return;
     if (disabled) {
       pointerDownRef.current = false;
       return;
@@ -555,6 +549,7 @@ const SliderInput = forwardRefWithAs<
   });
 
   let releasePointerCapture = useEventCallback((event: PointerEvent) => {
+    if (isRightClick(event)) return;
     sliderRef.current?.releasePointerCapture(event.pointerId);
     pointerDownRef.current = false;
   });
@@ -573,6 +568,8 @@ const SliderInput = forwardRefWithAs<
   });
 
   let handleSlideStop = useEventCallback((event: SomePointerEvent) => {
+    if (isRightClick(event)) return;
+
     pointerDownRef.current = false;
 
     let newValue = getNewValueFromEvent(event);
@@ -586,8 +583,8 @@ const SliderInput = forwardRefWithAs<
     removeEndEvents.current();
   });
 
-  let addMoveListener = useCallback(() => {
-    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+  let addMoveListener = React.useCallback(() => {
+    let ownerDocument = getOwnerDocument(sliderRef.current)!;
     let touchListener = wrapEvent(
       appEvents.current.onTouchMove,
       handlePointerMove
@@ -604,8 +601,8 @@ const SliderInput = forwardRefWithAs<
     };
   }, [handlePointerMove]);
 
-  let addEndListener = useCallback(() => {
-    let ownerDocument = getOwnerDocument(sliderRef.current!) || document;
+  let addEndListener = React.useCallback(() => {
+    let ownerDocument = getOwnerDocument(sliderRef.current)!;
     let pointerListener = wrapEvent(
       appEvents.current.onPointerUp,
       releasePointerCapture
@@ -629,7 +626,14 @@ const SliderInput = forwardRefWithAs<
     };
   }, [handleSlideStop, releasePointerCapture]);
 
-  let addStartListener = useCallback(() => {
+  let addStartListener = React.useCallback(() => {
+    // e.preventDefault is ignored by React's synthetic touchStart event, so
+    // we attach the listener directly to the DOM node
+    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
+    const sliderElement = sliderRef.current;
+    if (!sliderElement) {
+      return noop;
+    }
     let touchListener = wrapEvent(
       appEvents.current.onTouchStart,
       handleSlideStart
@@ -642,25 +646,21 @@ const SliderInput = forwardRefWithAs<
       appEvents.current.onPointerDown,
       setPointerCapture
     );
-
-    // e.preventDefault is ignored by React's synthetic touchStart event, so
-    // we attach the listener directly to the DOM node
-    // https://github.com/facebook/react/issues/9809#issuecomment-413978405
-    sliderRef.current!.addEventListener("touchstart", touchListener);
-    sliderRef.current!.addEventListener("mousedown", mouseListener);
+    sliderElement.addEventListener("touchstart", touchListener);
+    sliderElement.addEventListener("mousedown", mouseListener);
     if ("PointerEvent" in window) {
-      sliderRef.current!.addEventListener("pointerdown", pointerListener);
+      sliderElement.addEventListener("pointerdown", pointerListener);
     }
     return () => {
-      sliderRef.current!.removeEventListener("touchstart", touchListener);
-      sliderRef.current!.removeEventListener("mousedown", mouseListener);
+      sliderElement.removeEventListener("touchstart", touchListener);
+      sliderElement.removeEventListener("mousedown", mouseListener);
       if ("PointerEvent" in window) {
-        sliderRef.current!.removeEventListener("pointerdown", pointerListener);
+        sliderElement.removeEventListener("pointerdown", pointerListener);
       }
     };
   }, [setPointerCapture, handleSlideStart]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     removeStartEvents.current = addStartListener();
 
     return () => {
@@ -670,7 +670,7 @@ const SliderInput = forwardRefWithAs<
     };
   }, [addStartListener]);
 
-  useEffect(() => checkStyles("slider"), []);
+  useCheckStyles("slider");
 
   return (
     <SliderContext.Provider value={ctx}>
@@ -711,16 +711,16 @@ const SliderInput = forwardRefWithAs<
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput-props
+ * @see Docs https://reach.tech/slider#sliderinput-props
  */
-export type SliderInputProps = Omit<SliderProps, "children"> & {
+type SliderInputProps = Omit<SliderProps, "children"> & {
   /**
    * Slider expects `<SliderTrack>` as its child; The track will accept all
    * additional slider sub-components as children. It can also accept a
    * function/render prop as its child to expose some of its internal state
    * variables.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#sliderinput-children
+   * @see Docs https://reach.tech/slider#sliderinput-children
    */
   children: React.ReactNode | SliderChildrenRender;
 };
@@ -733,14 +733,12 @@ if (__DEV__) {
   };
 }
 
-export { SliderInput };
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * SliderTrack
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack
+ * @see Docs https://reach.tech/slider#slidertrack
  */
 const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
   { as: Comp = "div", children, style = {}, ...props },
@@ -773,15 +771,15 @@ if (__DEV__) {
 const SliderTrack = memoWithAs(SliderTrackImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-props
+ * @see Docs https://reach.tech/slider#slidertrack-props
  */
-export type SliderTrackProps = {
+type SliderTrackProps = {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
    * inside the `SliderTrack`.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slidertrack-children
+   * @see Docs https://reach.tech/slider#slidertrack-children
    */
   children: React.ReactNode;
 };
@@ -789,8 +787,6 @@ export type SliderTrackProps = {
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
 }
-
-export { SliderTrack };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -802,7 +798,7 @@ export { SliderTrack };
  *
  * TODO: Consider renaming to `SliderTrackProgress`
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight
+ * @see Docs https://reach.tech/slider#slidertrackhighlight
  */
 const SliderTrackHighlightImpl = forwardRefWithAs<SliderTrackHighlightProps>(
   function SliderTrackHighlight(
@@ -834,15 +830,13 @@ const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  * `SliderTrackHighlight` will not accept or render any children.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidertrackhighlight-props
+ * @see Docs https://reach.tech/slider#slidertrackhighlight-props
  */
-export type SliderTrackHighlightProps = {};
+type SliderTrackHighlightProps = {};
 
 if (__DEV__) {
   SliderTrackHighlight.displayName = "SliderTrackHighlight";
 }
-
-export { SliderTrackHighlight };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -851,7 +845,7 @@ export { SliderTrackHighlight };
  *
  * The handle that the user drags along the track to set the slider value.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle
+ * @see Docs https://reach.tech/slider#sliderhandle
  */
 const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
   function SliderHandle(
@@ -954,15 +948,13 @@ const SliderHandle = memoWithAs(SliderHandleImpl);
 /**
  * `SliderTrackHighlight` accepts any props that a HTML div component accepts.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#sliderhandle-props
+ * @see Docs https://reach.tech/slider#sliderhandle-props
  */
-export type SliderHandleProps = {};
+type SliderHandleProps = {};
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
 }
-
-export { SliderHandle };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -972,7 +964,7 @@ export { SliderHandle };
  * A fixed value marker. These can be used to illustrate a range of steps or
  * highlight important points along the slider track.
  *
- * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker
+ * @see Docs https://reach.tech/slider#slidermarker
  */
 const SliderMarkerImpl = forwardRefWithAs<SliderMarkerProps>(
   function SliderMarker(
@@ -1034,13 +1026,13 @@ if (__DEV__) {
 const SliderMarker = memoWithAs(SliderMarkerImpl);
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-props
+ * @see Docs https://reach.tech/slider#slidermarker-props
  */
-export type SliderMarkerProps = {
+type SliderMarkerProps = {
   /**
    * The value to denote where the marker should appear along the track.
    *
-   * @see Docs https://reacttraining.com/reach-ui/slider#slidermarker-value
+   * @see Docs https://reach.tech/slider#slidermarker-value
    */
   value: number;
 };
@@ -1048,8 +1040,6 @@ export type SliderMarkerProps = {
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";
 }
-
-export { SliderMarker };
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1144,7 +1134,10 @@ function getNewValue(
 }
 
 function useDimensions(ref: React.RefObject<HTMLElement | null>) {
-  const [{ width, height }, setDimensions] = useState({ width: 0, height: 0 });
+  const [{ width, height }, setDimensions] = React.useState({
+    width: 0,
+    height: 0,
+  });
   // Many existing `useDimensions` type hooks will use `getBoundingClientRect`
   // getBoundingClientRect does not work here when borders are applied.
   // getComputedStyle is not as performant so we may want to create a utility to
@@ -1221,3 +1214,31 @@ type SliderChildrenRender = (props: {
   value?: number;
   valueText?: string | undefined; // TODO: Remove in 1.0
 }) => JSX.Element;
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Slider;
+export type {
+  SliderAlignment,
+  SliderHandleProps,
+  SliderInputProps,
+  SliderMarkerProps,
+  SliderProps,
+  SliderTrackHighlightProps,
+  SliderTrackProps,
+};
+export {
+  Slider,
+  SliderHandle,
+  SliderHandleAlignment,
+  SliderInput,
+  SliderMarker,
+  SliderOrientation,
+  SliderTrack,
+  SliderTrackHighlight,
+  SLIDER_HANDLE_ALIGN_CENTER,
+  SLIDER_HANDLE_ALIGN_CONTAIN,
+  SLIDER_ORIENTATION_HORIZONTAL,
+  SLIDER_ORIENTATION_VERTICAL,
+};

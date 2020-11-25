@@ -161,8 +161,8 @@ You may want to drop down to this lower level API if you need animation or you w
     const { isVisible, triggerRect } = tooltip;
 
     return (
-      <Fragment>
-        {cloneElement(children, trigger)}
+      <React.Fragment>
+        {React.cloneElement(children, trigger)}
 
         {isVisible && (
           // The Triangle. We position it relative to the trigger, not the popup
@@ -199,7 +199,7 @@ You may want to drop down to this lower level API if you need animation or you w
           }}
           position={centered}
         />
-      </Fragment>
+      </React.Fragment>
     );
   }
 
@@ -237,7 +237,7 @@ You may want to drop down to this lower level API if you need animation or you w
 Here's some code you can copy/paste to make it happen along with [React Spring](http://react-spring.io):
 
 ```jsx
-import React, { Fragment, cloneElement } from "react";
+import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import { useTransition, animated } from "react-spring";
 
@@ -255,8 +255,8 @@ function AnimatedTooltip({ children, ...rest }) {
   });
 
   return (
-    <Fragment>
-      {cloneElement(children, trigger)}
+    <React.Fragment>
+      {React.cloneElement(children, trigger)}
 
       {transitions.map(
         ({ item: tooltip, props: styles, key }) =>
@@ -269,7 +269,7 @@ function AnimatedTooltip({ children, ...rest }) {
             />
           )
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 

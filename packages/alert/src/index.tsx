@@ -18,14 +18,19 @@
  * with default context to do it, but we haven't explored that yet. So, we'll
  * see how this goes. If it becomes a problem we can introduce a portal later.
  *
- * @see Docs     https://reacttraining.com/reach-ui/alert
+ * @see Docs     https://reach.tech/alert
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/alert
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#alert
  */
-import React, { forwardRef, useEffect, useRef, useMemo } from "react";
-import { render } from "react-dom";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import VisuallyHidden from "@reach/visually-hidden";
-import { getOwnerDocument, usePrevious, useForkedRef } from "@reach/utils";
+import {
+  forwardRefWithAs,
+  getOwnerDocument,
+  usePrevious,
+  useForkedRef,
+} from "@reach/utils";
 import PropTypes from "prop-types";
 
 /*
@@ -58,19 +63,19 @@ let renderTimer: number | null;
  * messages when network events or other things happen. Users with assistive
  * technologies may not know about the message unless you develop for it.
  *
- * @see Docs https://reacttraining.com/reach-ui/alert
+ * @see Docs https://reach.tech/alert
  */
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { children, type: regionType = "polite", ...props },
+const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
+  { as: Comp = "div", children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
-  const ownRef = useRef(null);
+  const ownRef = React.useRef<HTMLDivElement>(null);
   const ref = useForkedRef(forwardedRef, ownRef);
-  const child = useMemo(
+  const child = React.useMemo(
     () => (
-      <div {...props} ref={ref} data-reach-alert>
+      <Comp {...props} ref={ref} data-reach-alert>
         {children}
-      </div>
+      </Comp>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [children, props]
@@ -81,18 +86,18 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 /**
- * @see Docs https://reacttraining.com/reach-ui/alert#alert-props
+ * @see Docs https://reach.tech/alert#alert-props
  */
-export type AlertProps = {
+type AlertProps = {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
    *
-   * @see Docs https://reacttraining.com/reach-ui/alert#alert-type
+   * @see Docs https://reach.tech/alert#alert-type
    */
   type?: "assertive" | "polite";
   children: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
 
 if (__DEV__) {
   Alert.displayName = "Alert";
@@ -101,8 +106,6 @@ if (__DEV__) {
     type: PropTypes.oneOf(["assertive", "polite"]),
   };
 }
-
-export default Alert;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -144,8 +147,8 @@ function renderAlerts() {
       let regionType: RegionTypes = elementType as RegionTypes;
       let container = liveRegions[regionType]!;
       if (container) {
-        render(
-          <VisuallyHidden>
+        ReactDOM.render(
+          <VisuallyHidden as="div">
             <div
               // The status role is a type of live region and a container whose
               // content is advisory information for the user that is not
@@ -175,13 +178,14 @@ function renderAlerts() {
 function useMirrorEffects(
   regionType: RegionTypes,
   element: JSX.Element,
-  ref: React.RefObject<any>
+  ref: React.RefObject<Element>
 ) {
   const prevType = usePrevious<RegionTypes>(regionType);
-  const mirror = useRef<Mirror | null>(null);
-  const mounted = useRef(false);
-  useEffect(() => {
-    const ownerDocument = getOwnerDocument(ref.current) || document;
+  const mirror = React.useRef<Mirror | null>(null);
+  const mounted = React.useRef(false);
+  React.useEffect(() => {
+    const ownerDocument = getOwnerDocument(ref.current)!;
+
     if (!mounted.current) {
       mounted.current = true;
       mirror.current = createMirror(regionType, ownerDocument);
@@ -195,7 +199,7 @@ function useMirrorEffects(
     }
   }, [element, regionType, prevType, ref]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       mirror.current && mirror.current.unmount();
     };
@@ -226,3 +230,10 @@ type RegionElements<T extends HTMLElement = HTMLDivElement> = {
 type RegionKeys = {
   [key in RegionTypes]: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type { AlertProps };
+export { Alert };
+export default Alert;

@@ -319,14 +319,14 @@ Use the following CSS to target the overlay:
 
 | Prop                                                                 | Type   | Required |
 | -------------------------------------------------------------------- | ------ | -------- |
-| [`div` props](#dialogoverlay-div-props)                              | spread |          |
-| [`allowPinchZoom`](#dialogoverlay-allowpinchzoom)                    | bool   | false    |
-| [`children`](#dialogoverlay-children)                                | node   | true     |
+| [`div` props](#dialogoverlay-div-props)                              |        |          |
+| [`allowPinchZoom`](#dialogoverlay-allowpinchzoom)                    | `bool` | false    |
+| [`children`](#dialogoverlay-children)                                | `node` | true     |
 | [`dangerouslyBypassFocusLock`](#dialog-dangerouslybypassfocuslock)   | `bool` | false    |
 | [`dangerouslyBypassScrollLock`](#dialog-dangerouslybypassscrolllock) | `bool` | false    |
-| [`initialFocusRef`](#dialogoverlay-initialfocusref)                  | ref    | false    |
-| [`isOpen`](#dialogoverlay-isopen)                                    | bool   | false    |
-| [`onDismiss`](#dialogoverlay-ondismiss)                              | func   | false    |
+| [`initialFocusRef`](#dialogoverlay-initialfocusref)                  | `ref`  | false    |
+| [`isOpen`](#dialogoverlay-isopen)                                    | `bool` | false    |
+| [`onDismiss`](#dialogoverlay-ondismiss)                              | `func` | false    |
 
 ##### DialogOverlay `div` props
 
@@ -366,7 +366,7 @@ If you do set this prop to `true`, make sure you set up your own `FocusLock` com
 
 ```jsx
 function DialogWithCustomFocusLock() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   return (
@@ -398,7 +398,7 @@ This prop will disable `react-remove-scroll` and allow you to compose your own s
 
 ```jsx
 function DialogWithCustomScrollLock() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const open = () => setShowDialog(true);
   const close = () => setShowDialog(false);
   return (

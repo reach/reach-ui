@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { MixedCheckbox } from "@reach/checkbox";
 import "@reach/checkbox/styles.css";
 
 let name = "Basic MixedCheckbox";
 
 function Example() {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = React.useState(true);
   return (
     <div>
       <div>
@@ -19,7 +19,7 @@ function Example() {
           id="whatever-input"
           value="whatever"
           checked={checked}
-          onChange={event => {
+          onChange={(event) => {
             setChecked(event.target.checked);
           }}
         />

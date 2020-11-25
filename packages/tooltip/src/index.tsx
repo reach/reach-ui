@@ -37,26 +37,19 @@
  *         tooltip for a little while longer in case their hand was
  *         obstructing the tooltip.
  *
- * @see Docs     https://reacttraining.com/reach-ui/tooltip
+ * @see Docs     https://reach.tech/tooltip
  * @see Source   https://github.com/reach/reach-ui/tree/main/packages/tooltip
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
  */
 
-import React, {
-  Children,
-  cloneElement,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as React from "react";
 import { useId } from "@reach/auto-id";
 import {
-  checkStyles,
   forwardRefWithAs,
   getOwnerDocument,
   getDocumentDimensions,
   makeId,
+  useCheckStyles,
   useForkedRef,
   wrapEvent,
   warning,
@@ -66,8 +59,8 @@ import VisuallyHidden from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import PropTypes from "prop-types";
 
-export const MOUSE_REST_TIMEOUT = 100;
-export const LEAVE_TIMEOUT = 500;
+const MOUSE_REST_TIMEOUT = 100;
+const LEAVE_TIMEOUT = 500;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -232,7 +225,7 @@ function clearContextId() {
  *
  * @param params
  */
-export function useTooltip<T extends HTMLElement>({
+function useTooltip<T extends HTMLElement>({
   id: idProp,
   onMouseEnter,
   onMouseMove,
@@ -249,7 +242,7 @@ export function useTooltip<T extends HTMLElement>({
 } & React.HTMLAttributes<T> = {}): [TriggerParams, TooltipParams, boolean] {
   let id = String(useId(idProp));
 
-  let [isVisible, setIsVisible] = useState(
+  let [isVisible, setIsVisible] = React.useState(
     DEBUG_STYLE
       ? true
       : id === null
@@ -258,12 +251,12 @@ export function useTooltip<T extends HTMLElement>({
   );
 
   // hopefully they always pass a ref if they ever pass one
-  let ownRef = useRef<HTMLDivElement | null>(null);
+  let ownRef = React.useRef<HTMLDivElement | null>(null);
 
   let ref = useForkedRef(forwardedRef as any, ownRef); // TODO: Fix in utils
   let triggerRect = useRect(ownRef, isVisible);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return subscribe(() => {
       if (
         context.id === id &&
@@ -276,10 +269,10 @@ export function useTooltip<T extends HTMLElement>({
     });
   }, [id]);
 
-  useEffect(() => checkStyles("tooltip"), []);
+  useCheckStyles("tooltip");
 
-  useEffect(() => {
-    let ownerDocument = getOwnerDocument(ownRef.current) || document;
+  React.useEffect(() => {
+    let ownerDocument = getOwnerDocument(ownRef.current)!;
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&
@@ -360,9 +353,9 @@ export function useTooltip<T extends HTMLElement>({
 /**
  * Tooltip
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltip
+ * @see Docs https://reach.tech/tooltip#tooltip
  */
-export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
+const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   {
     children,
     label,
@@ -374,11 +367,11 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   },
   forwardedRef
 ) {
-  let child = Children.only(children) as any;
+  let child = React.Children.only(children) as any;
 
   warning(
     !DEPRECATED_ariaLabel,
-    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version. Please use `aria-label` instead."
+    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
   );
 
   // We need to pass some properties from the child into useTooltip
@@ -396,8 +389,8 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
     DEBUG_STYLE,
   });
   return (
-    <Fragment>
-      {cloneElement(child, trigger as any)}
+    <React.Fragment>
+      {React.cloneElement(child, trigger as any)}
       <TooltipPopup
         ref={forwardedRef}
         label={label}
@@ -405,11 +398,11 @@ export const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
         {...tooltip}
         {...props}
       />
-    </Fragment>
+    </React.Fragment>
   );
 });
 
-export type TooltipProps = {
+type TooltipProps = {
   children: React.ReactNode;
   DEBUG_STYLE?: boolean;
 } & Omit<TooltipContentProps, "triggerRect" | "isVisible">;
@@ -423,16 +416,14 @@ if (__DEV__) {
   };
 }
 
-export default Tooltip;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * TooltipPopup
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltippopup
+ * @see Docs https://reach.tech/tooltip#tooltippopup
  */
-export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
+const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   function TooltipPopup(
     {
       // could use children but we want to encourage simple strings
@@ -460,7 +451,7 @@ export const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
   }
 );
 
-export type TooltipPopupProps = {
+type TooltipPopupProps = {
   children?: React.ReactNode;
 } & TooltipContentProps;
 
@@ -478,7 +469,7 @@ if (__DEV__) {
  *
  * We need a separate component so that useRect works inside the portal.
  *
- * @see Docs https://reacttraining.com/reach-ui/tooltip#tooltipcontent
+ * @see Docs https://reach.tech/tooltip#tooltipcontent
  */
 const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
   function TooltipContent(
@@ -506,11 +497,11 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     // the only content announced to them is whatever is in the tooltip.
     let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
-    let ownRef = useRef(null);
+    let ownRef = React.useRef(null);
     let ref = useForkedRef(forwardedRef, ownRef);
     let tooltipRect = useRect(ownRef, isVisible);
     return (
-      <Fragment>
+      <React.Fragment>
         <Comp
           role={hasAriaLabel ? undefined : "tooltip"}
           {...props}
@@ -529,12 +520,12 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
             {realAriaLabel || ariaLabel}
           </VisuallyHidden>
         )}
-      </Fragment>
+      </React.Fragment>
     );
   }
 );
 
-export type TooltipContentProps = {
+type TooltipContentProps = {
   ariaLabel?: string;
   position?: Position;
   label: React.ReactNode;
@@ -638,7 +629,7 @@ const transition: Transition = (event, payload) => {
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
 
-export interface TriggerParams {
+interface TriggerParams {
   "aria-describedby"?: string | undefined;
   "data-reach-tooltip-trigger": string;
   ref: React.Ref<any>;
@@ -651,7 +642,7 @@ export interface TriggerParams {
   onMouseDown: React.ReactEventHandler;
 }
 
-export interface TooltipParams {
+interface TooltipParams {
   id: string;
   triggerRect: DOMRect | null;
   isVisible: boolean;
@@ -690,7 +681,7 @@ type StateContext = {
   id?: string | null;
 };
 
-export type Position = (
+type Position = (
   targetRect?: PRect | null,
   popoverRect?: PRect | null
 ) => React.CSSProperties;
@@ -703,3 +694,17 @@ type PRect = Partial<DOMRect> & {
   readonly top: number;
   readonly width: number;
 };
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export default Tooltip;
+export type {
+  Position,
+  TooltipContentProps,
+  TooltipParams,
+  TooltipPopupProps,
+  TooltipProps,
+  TriggerParams,
+};
+export { MOUSE_REST_TIMEOUT, LEAVE_TIMEOUT, Tooltip, TooltipPopup, useTooltip };

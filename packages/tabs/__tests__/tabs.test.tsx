@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { act, render, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
@@ -530,6 +530,44 @@ describe("<Tabs />", () => {
       // fireEvent.click(getByText("Tab 1"));
       // fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
       // expect(getByText("Tab 2")).toHaveFocus();
+    });
+
+    it("correctly calls focus and blur events on Tab component", () => {
+      const onBlur = jest.fn();
+      const onFocus = jest.fn();
+
+      const { getAllByRole } = render(
+        <Tabs>
+          <TabList>
+            <Tab onFocus={onFocus} onBlur={onBlur}>
+              Tab 1
+            </Tab>
+            <Tab onFocus={onFocus} onBlur={onBlur}>
+              Tab 2
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <p>Panel 1</p>
+            </TabPanel>
+            <TabPanel>
+              <p>Panel 2</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      );
+
+      let tabs = getAllByRole("tab");
+
+      fireEvent.focus(tabs[0]);
+
+      expect(onFocus).toHaveBeenCalledTimes(1);
+
+      fireEvent.blur(tabs[0]);
+      fireEvent.focus(tabs[1]);
+
+      expect(onFocus).toHaveBeenCalledTimes(2);
+      expect(onBlur).toHaveBeenCalledTimes(1);
     });
   });
 });

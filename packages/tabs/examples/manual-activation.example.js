@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
 import { action } from "@storybook/addon-actions";
 import "@reach/tabs/styles.css";

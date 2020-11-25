@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { useTransition, animated, config } from "react-spring/web.cjs";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
@@ -9,7 +9,7 @@ let AnimatedDialogOverlay = animated(DialogOverlay);
 let AnimatedDialogContent = animated(DialogContent);
 
 function Example() {
-  const [showDialog, setShowDialog] = useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const transitions = useTransition<any, any>(showDialog, null, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },

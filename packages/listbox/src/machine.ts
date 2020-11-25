@@ -94,13 +94,13 @@ function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
     let { list, popover } = event.refs;
     let { relatedTarget } = event;
 
-    let ownerDocument = (popover && getOwnerDocument(popover)) || document;
+    let ownerDocument = getOwnerDocument(popover);
 
     return !!(
-      ownerDocument.activeElement !== list &&
+      ownerDocument?.activeElement !== list &&
       popover &&
       !popover.contains(
-        (relatedTarget as Element) || ownerDocument.activeElement
+        (relatedTarget as Element) || ownerDocument?.activeElement
       )
     );
   }

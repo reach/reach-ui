@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import renderer from "react-test-renderer";
 import Component from "@reach/component-component";
 
@@ -134,7 +134,7 @@ describe("<Component />", () => {
     });
     it("updates state", () => {
       // create spy function to be triggered with Component setState as callback
-      const setStateFunction = jest.fn(setState => {
+      const setStateFunction = jest.fn((setState) => {
         setState({ goodAtTesting: true });
       });
       const testComponent = renderer.create(

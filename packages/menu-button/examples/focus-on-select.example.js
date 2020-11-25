@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import * as React from "react";
 import { action } from "@storybook/addon-actions";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
@@ -6,9 +6,9 @@ import "@reach/menu-button/styles.css";
 let name = "Move Focus on Item Select";
 
 function Example() {
-  const [buttonText, setButtonText] = useState(null);
-  const [linkText, setLinkText] = useState(null);
-  const linkRef = useRef(null);
+  const [buttonText, setButtonText] = React.useState(null);
+  const [linkText, setLinkText] = React.useState(null);
+  const linkRef = React.useRef(null);
   return (
     <div>
       <p>

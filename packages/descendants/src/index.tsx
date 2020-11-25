@@ -1,12 +1,13 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import * as React from "react";
 import {
   createNamedContext,
   noop,
+  useForceUpdate,
   useIsomorphicLayoutEffect,
   usePrevious,
 } from "@reach/utils";
 
-export function createDescendantContext<DescendantType extends Descendant>(
+function createDescendantContext<DescendantType extends Descendant>(
   name: string,
   initialValue = {}
 ) {
@@ -43,15 +44,17 @@ export function createDescendantContext<DescendantType extends Descendant>(
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
  */
-export function useDescendant<DescendantType extends Descendant>(
+function useDescendant<DescendantType extends Descendant>(
   descendant: Omit<DescendantType, "index">,
   context: React.Context<DescendantContextValue<DescendantType>>,
   indexProp?: number
 ) {
-  let [, forceUpdate] = useState();
-  let { registerDescendant, unregisterDescendant, descendants } = useContext(
-    context
-  );
+  let forceUpdate = useForceUpdate();
+  let {
+    registerDescendant,
+    unregisterDescendant,
+    descendants,
+  } = React.useContext(context);
 
   // This will initially return -1 because we haven't registered the descendant
   // on the first render. After we register, this will then return the correct
@@ -74,7 +77,7 @@ export function useDescendant<DescendantType extends Descendant>(
 
   // Prevent any flashing
   useIsomorphicLayoutEffect(() => {
-    if (!descendant.element) forceUpdate({});
+    if (!descendant.element) forceUpdate();
     registerDescendant({
       ...descendant,
       index,
@@ -82,10 +85,11 @@ export function useDescendant<DescendantType extends Descendant>(
     return () => unregisterDescendant(descendant.element);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    registerDescendant,
-    unregisterDescendant,
+    forceUpdate,
     index,
+    registerDescendant,
     someDescendantsHaveChanged,
+    unregisterDescendant,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(descendant),
   ]);
@@ -93,17 +97,17 @@ export function useDescendant<DescendantType extends Descendant>(
   return index;
 }
 
-export function useDescendantsInit<DescendantType extends Descendant>() {
-  return useState<DescendantType[]>([]);
+function useDescendantsInit<DescendantType extends Descendant>() {
+  return React.useState<DescendantType[]>([]);
 }
 
-export function useDescendants<DescendantType extends Descendant>(
+function useDescendants<DescendantType extends Descendant>(
   ctx: React.Context<DescendantContextValue<DescendantType>>
 ) {
-  return useContext(ctx).descendants;
+  return React.useContext(ctx).descendants;
 }
 
-export function DescendantProvider<DescendantType extends Descendant>({
+function DescendantProvider<DescendantType extends Descendant>({
   context: Ctx,
   children,
   items,
@@ -114,7 +118,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
   items: DescendantType[];
   set: React.Dispatch<React.SetStateAction<DescendantType[]>>;
 }) {
-  let registerDescendant = useCallback(
+  let registerDescendant = React.useCallback(
     ({
       element,
       index: explicitIndex,
@@ -195,14 +199,14 @@ export function DescendantProvider<DescendantType extends Descendant>({
         return newItems.map((item, index) => ({ ...item, index }));
       });
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  let unregisterDescendant = useCallback(
+  let unregisterDescendant = React.useCallback(
     (element: DescendantType["element"]) => {
       if (!element) {
         return;
@@ -210,7 +214,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
 
       set((items) => items.filter((item) => element !== item.element));
     },
-    // set is a state setter initialized by the useDescendants hook.
+    // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
     // between renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +223,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
 
   return (
     <Ctx.Provider
-      value={useMemo(() => {
+      value={React.useMemo(() => {
         return {
           descendants: items,
           registerDescendant,
@@ -245,7 +249,7 @@ export function DescendantProvider<DescendantType extends Descendant>({
  * @param context
  * @param options
  */
-export function useDescendantKeyDown<
+function useDescendantKeyDown<
   DescendantType extends Descendant,
   K extends keyof DescendantType = keyof DescendantType
 >(
@@ -260,7 +264,7 @@ export function useDescendantKeyDown<
     callback(nextOption: DescendantType | DescendantType[K]): void;
   }
 ) {
-  let { descendants } = useContext(context);
+  let { descendants } = React.useContext(context);
   let {
     callback,
     currentIndex,
@@ -396,13 +400,26 @@ export function useDescendantKeyDown<
 
 type SomeElement<T> = T extends Element ? T : HTMLElement;
 
-export type Descendant<ElementType = HTMLElement> = {
+type Descendant<ElementType = HTMLElement> = {
   element: SomeElement<ElementType> | null;
   index: number;
 };
 
-export interface DescendantContextValue<DescendantType extends Descendant> {
+interface DescendantContextValue<DescendantType extends Descendant> {
   descendants: DescendantType[];
   registerDescendant(descendant: DescendantType): void;
   unregisterDescendant(element: DescendantType["element"]): void;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Exports
+
+export type { Descendant, DescendantContextValue };
+export {
+  createDescendantContext,
+  DescendantProvider,
+  useDescendant,
+  useDescendantKeyDown,
+  useDescendants,
+  useDescendantsInit,
+};
