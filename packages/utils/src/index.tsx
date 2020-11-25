@@ -8,7 +8,6 @@ import {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
-  ElementByTag,
   ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
   ForwardRefWithAsRenderFunction,
@@ -202,24 +201,25 @@ export function createNamedContext<ContextValueType>(
  * that accepts an `as` prop, we abstract all of that mess to this function for
  * the time time being.
  */
-export function forwardRefWithAs<Props, ComponentType extends As = "div">(
-  render: ForwardRefWithAsRenderFunction<ComponentType, Props>
-) {
+export function forwardRefWithAs<
+  Props,
+  DefaultComponentType extends As = "div"
+>(render: ForwardRefWithAsRenderFunction<DefaultComponentType, Props>) {
   return React.forwardRef(render) as ForwardRefExoticComponentWithAs<
-    ComponentType,
+    DefaultComponentType,
     Props
   >;
 }
 
-export function memoWithAs<Props, ComponentType extends As = "div">(
-  Component: FunctionComponentWithAs<ComponentType, Props>,
+export function memoWithAs<Props, DefaultComponentType extends As = "div">(
+  Component: FunctionComponentWithAs<DefaultComponentType, Props>,
   propsAreEqual?: (
     prevProps: Readonly<React.PropsWithChildren<Props>>,
     nextProps: Readonly<React.PropsWithChildren<Props>>
   ) => boolean
 ) {
   return React.memo(Component, propsAreEqual) as MemoExoticComponentWithAs<
-    ComponentType,
+    DefaultComponentType,
     Props
   >;
 }
@@ -748,7 +748,6 @@ export {
   ComponentWithAs,
   ComponentWithForwardedRef,
   DistributiveOmit,
-  ElementByTag,
   ElementTagNameMap,
   ForwardRefExoticComponentWithAs,
   FunctionComponentWithAs,
