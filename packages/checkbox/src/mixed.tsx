@@ -241,6 +241,7 @@ type MixedCheckboxProps = {
    * state.
    */
   checked?: MixedOrBool;
+  onChange?: React.ComponentProps<"input">["onChange"];
 };
 
 if (__DEV__) {
