@@ -742,7 +742,7 @@ export function wrapEvent<EventType extends React.SyntheticEvent | Event>(
 }
 
 // Export types
-export {
+export type {
   As,
   AssignableRef,
   ComponentWithAs,
