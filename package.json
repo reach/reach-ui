@@ -20,7 +20,8 @@
     "ver": "lerna version --no-push --exact",
     "changes": "dotenv lerna-changelog",
     "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "release": "lerna publish from-git --yes --pre-dist-tag next"
   },
   "dependencies": {
     "@babel/core": "^7.11.4",
