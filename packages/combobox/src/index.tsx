@@ -1096,6 +1096,7 @@ function useKeyDown() {
       case "Escape":
         if (state !== IDLE) {
           transition(ESCAPE);
+          event.stopPropagation();
         }
         break;
       case "Enter":
