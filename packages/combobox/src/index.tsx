@@ -339,9 +339,19 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
         set={setOptions}
       >
         <ComboboxContext.Provider value={context}>
-          <Comp {...props} data-reach-combobox="" ref={forwardedRef}>
+          <Comp
+            {...props}
+            data-reach-combobox=""
+            data-state={getDataState(state)}
+            ref={forwardedRef}
+          >
             {isFunction(children)
-              ? children({ id, isExpanded: popoverIsExpanded(state) })
+              ? children({
+                  id,
+                  isExpanded: popoverIsExpanded(state),
+                  navigationValue: data.navigationValue ?? null,
+                  state,
+                })
               : children}
           </Comp>
         </ComboboxContext.Provider>
@@ -538,6 +548,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         role="combobox"
         {...props}
         data-reach-combobox-input=""
+        data-state={getDataState(state)}
         ref={ref}
         onBlur={wrapEvent(onBlur, handleBlur)}
         onChange={wrapEvent(onChange, handleChange)}
@@ -615,7 +626,7 @@ export const ComboboxPopover = forwardRefWithAs<
   },
   forwardedRef: React.Ref<any>
 ) {
-  const { popoverRef, inputRef, isExpanded } = React.useContext(
+  const { popoverRef, inputRef, isExpanded, state } = React.useContext(
     ComboboxContext
   );
   const ref = useForkedRef(popoverRef, forwardedRef);
@@ -624,6 +635,7 @@ export const ComboboxPopover = forwardRefWithAs<
 
   const sharedProps = {
     "data-reach-combobox-popover": "",
+    "data-state": getDataState(state),
     onKeyDown: wrapEvent<any>(onKeyDown, handleKeyDown),
     onBlur: wrapEvent<any>(onBlur, handleBlur),
     // Instead of conditionally rendering the popover we use the `hidden` prop
@@ -787,8 +799,17 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
           // onBlur will work as intended
           tabIndex={-1}
           onClick={wrapEvent(onClick, handleClick)}
-          children={children || <ComboboxOptionText />}
-        />
+        >
+          {children ? (
+            isFunction(children) ? (
+              children({ value, index })
+            ) : (
+              children
+            )
+          ) : (
+            <ComboboxOptionText />
+          )}
+        </Comp>
       </OptionContext.Provider>
     );
   }
@@ -812,7 +833,9 @@ export type ComboboxOptionProps = {
    *
    * @see Docs https://reach.tech/combobox#comboboxoption-children
    */
-  children?: React.ReactNode;
+  children?:
+    | React.ReactNode
+    | ((props: ComboboxOptionContextValue) => React.ReactNode);
   /**
    * The value to match against when suggesting.
    *
@@ -866,6 +889,7 @@ export function ComboboxOptionText() {
             return (
               <span
                 key={index}
+                data-reach-combobox-option-text=""
                 data-user-value={result.highlight ? true : undefined}
                 data-suggested-value={result.highlight ? undefined : true}
               >
@@ -1195,7 +1219,7 @@ function useReducerMachine(
  * @see https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
  * @param str
  */
-const makeHash = (str: string) => {
+function makeHash(str: string) {
   let hash = 0;
   if (str.length === 0) {
     return hash;
@@ -1206,7 +1230,11 @@ const makeHash = (str: string) => {
     hash = hash & hash;
   }
   return hash;
-};
+}
+
+function getDataState(state: State) {
+  return state.toLowerCase();
+}
 
 /**
  * Escape regexp special characters in `str`
@@ -1227,13 +1255,34 @@ export function escapeRegexp(str: string) {
  * @see Docs https://reach.tech/combobox#usecomboboxcontext
  */
 export function useComboboxContext(): ComboboxContextValue {
-  let { isExpanded, comboboxId } = React.useContext(ComboboxContext);
+  let { isExpanded, comboboxId, data, state } = React.useContext(
+    ComboboxContext
+  );
+  let { navigationValue } = data;
   return React.useMemo(
     () => ({
       id: comboboxId,
       isExpanded,
+      navigationValue: navigationValue ?? null,
+      state,
     }),
-    [comboboxId, isExpanded]
+    [comboboxId, isExpanded, navigationValue, state]
+  );
+}
+
+/**
+ * A hook that exposes data for a given `ComboboxOption` component to its descendants.
+ *
+ * @see Docs https://reach.tech/combobox#usecomboboxcontext
+ */
+export function useComboboxOptionContext(): ComboboxOptionContextValue {
+  const { value, index } = React.useContext(OptionContext);
+  return React.useMemo(
+    () => ({
+      value,
+      index,
+    }),
+    [value, index]
   );
 }
 
@@ -1248,6 +1297,8 @@ export function useComboboxContext(): ComboboxContextValue {
 export type ComboboxContextValue = {
   id: string | undefined;
   isExpanded: boolean;
+  navigationValue: ComboboxValue | null;
+  state: State;
 };
 
 type ComboboxDescendant = Descendant<HTMLElement> & {

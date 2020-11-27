@@ -19,6 +19,7 @@ import { Pipe } from "../components/Pipe";
     <TOCLink href="#comboboxoption">ComboboxOption</TOCLink>
     <TOCLink href="#comboboxoptiontext">ComboboxOptionText</TOCLink>
     <TOCLink href="#usecomboboxcontext">useComboboxContext</TOCLink>
+    <TOCLink href="#usecomboboxoptioncontext">useComboboxOptionContext</TOCLink>
   </TOCList>
 </TOC>
 
@@ -432,39 +433,25 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 })();
 ```
 
-## CSS Selectors
+## Component API
+
+### Combobox
+
+Parent component that sets up the proper ARIA roles and context for the rest of the components.
+
+#### Combobox CSS Selectors
 
 Please see the [styling guide](/styling).
 
 ```css
 [data-reach-combobox] {
 }
-[data-reach-combobox-input] {
-}
-[data-reach-combobox-popover] {
-}
-[data-reach-combobox-list] {
-}
-[data-reach-combobox-option] {
-}
-[data-reach-combobox-option][data-highlighted] {
-}
-[data-reach-combobox-button] {
-}
 
-/* the string portions that match what the user has typed */
-[data-user-value] {
-}
-/* the string portions are suggested */
-[data-suggested-value] {
+/* root element in a specific state  */
+/* possible states: "idle" | "suggesting" | "navigating" | "interacting"  */
+[data-reach-combobox][data-state="STATE_REF"] {
 }
 ```
-
-## Component API
-
-### Combobox
-
-Parent component that sets up the proper aria roles and context for the rest of the components.
 
 #### Combobox Props
 
@@ -485,7 +472,7 @@ A string representing an HTML element or a React component that will tell the `C
 
 ##### Combobox `children`
 
-`children: React.ReactNode | ((props: { id: string | undefined; isExpanded: boolean }) => React.ReactNode)`
+`children: React.ReactNode | ((props: { id: string | undefined; isExpanded: boolean; navigationValue: string | null; state: string }) => React.ReactNode)`
 
 Combobox expects to receive `ComboboxInput` and `ComboboxPopover` as children. You can also pass a render function to expose data for `Combobox` to its descendants.
 
@@ -514,6 +501,20 @@ Called with the selection value when the user makes a selection from the list.
 ### ComboboxInput
 
 Wraps an `<input/>` with a couple extra props that work with the combobox.
+
+#### ComboboxInput CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-combobox-input] {
+}
+
+/* input element in a specific state */
+/* possible states: "idle" | "suggesting" | "navigating" | "interacting"  */
+[data-reach-combobox-input][data-state="STATE_REF"] {
+}
+```
 
 #### ComboboxInput Props
 
@@ -563,6 +564,20 @@ Set this to false when you don't really need the value from the input but want t
 
 Contains the popup that renders the list. Because some UI needs to render more than the list in the popup, you need to render one of these around the list. For example, maybe you want to render the number of results suggested.
 
+#### ComboboxPopover CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-combobox-popover] {
+}
+
+/* popover element in a specific state */
+/* possible states: "idle" | "suggesting" | "navigating" | "interacting"  */
+[data-reach-combobox-popover][data-state="STATE_REF"] {
+}
+```
+
 #### ComboboxPopover Props
 
 | Prop                                | Type      | Required |
@@ -578,6 +593,15 @@ Defaults to `true`.
 ### ComboboxList
 
 Contains the `ComboboxOption` elements and sets up the proper aria attributes for the list.
+
+#### ComboboxList CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-combobox-list] {
+}
+```
 
 #### ComboboxList Props
 
@@ -610,6 +634,19 @@ This allows you to treat a Combobox more like a `<select>` than an `<input/>`, b
 
 An option that is suggested to the user as they interact with the combobox.
 
+#### ComboboxOption CSS Selectors
+
+Please see the [styling guide](/styling).
+
+```css
+[data-reach-combobox-option] {
+}
+
+/* option element when highlighted */
+[data-reach-combobox-option][data-highlighted] {
+}
+```
+
 #### ComboboxOption Props
 
 | Prop                                   | Type                          | Required |
@@ -638,7 +675,7 @@ The value to match against when suggesting.
 
 ##### ComboboxOption `children`
 
-`children?: React.ReactNode`
+`children?: React.ReactNode | ((props: { value: string; index: number }) => React.ReactNode)`
 
 Optional. If omitted, the `value` will be used as the children like this:
 
@@ -675,9 +712,13 @@ And the user typed `Sea`, the out would be:
 #### ComboboxOptionText CSS Selectors
 
 ```css
+[data-reach-combobox-option-text] {
+}
+
 /* the matching segments of text */
 [data-user-value] {
 }
+
 /* the unmatching segments */
 [data-suggested-value] {
 }
@@ -685,6 +726,12 @@ And the user typed `Sea`, the out would be:
 
 ### useComboboxContext
 
-`function useComboboxContext(): { id: string | undefined; isExpanded: boolean }`
+`function useComboboxContext(): { id: string | undefined; isExpanded: boolean; navigationValue: string | null; state: string }`
 
 A hook that exposes data for a given `Combobox` component to its descendants.
+
+### useComboboxOptionContext
+
+`function useComboboxOptionContext(): { value: string; index: number }`
+
+A hook that exposes data for a given `ComboboxOption` component to its descendants.
