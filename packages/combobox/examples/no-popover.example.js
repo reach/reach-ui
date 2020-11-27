@@ -6,9 +6,7 @@ import {
   ComboboxPopover,
   ComboboxOption,
 } from "@reach/combobox";
-import matchSorter from "match-sorter";
-import { useThrottle } from "use-throttle";
-import cities from "./cities";
+import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
 let name = "No Popover";
@@ -60,19 +58,3 @@ function Example() {
 Example.story = { name };
 export const Comp = Example;
 export default { title: "Combobox" };
-
-////////////////////////////////////////////////////////////////////////////////
-
-function useCityMatch(term) {
-  let throttledTerm = useThrottle(term, 100);
-  return React.useMemo(
-    () =>
-      term.trim() === ""
-        ? null
-        : matchSorter(cities, term, {
-            keys: [(item) => `${item.city}, ${item.state}`],
-          }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [throttledTerm]
-  );
-}

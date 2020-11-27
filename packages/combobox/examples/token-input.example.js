@@ -7,12 +7,10 @@ import {
   ComboboxPopover,
 } from "@reach/combobox";
 import { wrapEvent } from "@reach/utils";
-import matchSorter from "match-sorter";
-import { useThrottle } from "use-throttle";
-import cities from "./cities";
+import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
-let name = "Controlled";
+let name = "Token Input";
 
 const Context = React.createContext();
 
@@ -170,20 +168,6 @@ function ExampleTokenInput({ onKeyDown, ...props }) {
   );
 }
 
-function useCityMatch(term) {
-  let throttledTerm = useThrottle(term, 100);
-  return React.useMemo(
-    () =>
-      term.trim() === ""
-        ? null
-        : matchSorter(cities, term, {
-            keys: [(item) => `${item.city}, ${item.state}`],
-          }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [throttledTerm]
-  );
-}
-
 const selectionStyle = {
   fontSize: "11px",
   background: "#eee",
@@ -191,4 +175,5 @@ const selectionStyle = {
   margin: "0.25rem",
   borderRadius: "1000px",
   padding: "0.2rem 0.5rem",
+  userSelect: "none",
 };

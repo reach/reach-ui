@@ -6,9 +6,7 @@ import {
   ComboboxOption as ReachComboboxOption,
   ComboboxPopover,
 } from "@reach/combobox";
-import matchSorter from "match-sorter";
-import { useThrottle } from "./use-throttle";
-import cities from "./cities";
+import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
 import type {
@@ -145,20 +143,6 @@ interface ComboboxOptionProps
    * second argument.
    */
   selectData?: any;
-}
-
-function useCityMatch(term: string) {
-  let throttledTerm = useThrottle(term, 100);
-  return React.useMemo(
-    () =>
-      term.trim() === ""
-        ? null
-        : matchSorter(cities, term, {
-            keys: [(item) => `${item.city}, ${item.state}`],
-          }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [throttledTerm]
-  );
 }
 
 const inputStyle = {

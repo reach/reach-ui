@@ -80,7 +80,7 @@ import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
 import VisuallyHidden from "@reach/visually-hidden";
 import WindowSize, { useWindowSize } from "@reach/window-size";
 import GatsbyLink from "gatsby-link";
-import matchSorter from "match-sorter";
+import { matchSorter } from "match-sorter";
 import { useTransition, animated } from "react-spring/web.cjs";
 import { Phased } from "recondition";
 import { useThrottle } from "use-throttle";

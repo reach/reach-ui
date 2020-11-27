@@ -7,10 +7,8 @@ import {
   ComboboxOption,
   ComboboxButton,
 } from "@reach/combobox";
-import VisuallyHidden from "@reach/visually-hidden";
-import matchSorter from "match-sorter";
-import { useThrottle } from "use-throttle";
-import cities from "./cities";
+import { VisuallyHidden } from "@reach/visually-hidden";
+import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
 let name = "With Button";
@@ -52,18 +50,3 @@ function Example() {
 Example.story = { name };
 export const Comp = Example;
 export default { title: "Combobox" };
-
-////////////////////////////////////////////////////////////////////////////////
-
-function useCityMatch(term) {
-  let throttledTerm = useThrottle(term, 100);
-  return React.useMemo(
-    () =>
-      throttledTerm.trim() === ""
-        ? null
-        : matchSorter(cities, throttledTerm, {
-            keys: [(item) => `${item.city}, ${item.state}`],
-          }),
-    [throttledTerm]
-  );
-}

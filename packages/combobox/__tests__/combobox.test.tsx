@@ -11,7 +11,7 @@ import {
   ComboboxInputProps,
   useComboboxContext,
 } from "@reach/combobox";
-import matchSorter from "match-sorter";
+import { matchSorter } from "match-sorter";
 import cities from "../examples/cities";
 
 describe("<Combobox />", () => {

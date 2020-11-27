@@ -56,7 +56,7 @@
     "gatsby-source-filesystem": "^2.5.0",
     "gatsby-transformer-react-docgen": "^5.3.0",
     "gatsby-transformer-sharp": "^2.6.0",
-    "match-sorter": "^4.2.0",
+    "match-sorter": "^6.0.1",
     "node-sass": "^4.14.1",
     "postcss-preset-env": "^6.7.0",
     "prism-react-renderer": "^1.1.1",
