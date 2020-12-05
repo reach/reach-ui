@@ -61,6 +61,7 @@ import PropTypes from "prop-types";
 
 const MOUSE_REST_TIMEOUT = 100;
 const LEAVE_TIMEOUT = 500;
+const POINTER_TYPE_MOUSE = "mouse";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -227,13 +228,17 @@ function clearContextId() {
  */
 function useTooltip<T extends HTMLElement>({
   id: idProp,
+  onPointerEnter,
+  onPointerMove,
+  onPointerLeave,
+  onPointerDown,
   onMouseEnter,
   onMouseMove,
   onMouseLeave,
+  onMouseDown,
   onFocus,
   onBlur,
   onKeyDown,
-  onMouseDown,
   ref: forwardedRef,
   DEBUG_STYLE,
 }: {
@@ -285,12 +290,73 @@ function useTooltip<T extends HTMLElement>({
     return () => ownerDocument.removeEventListener("keydown", listener);
   }, []);
 
+  React.useEffect(() => {
+    /*
+      This is a workaround for using tooltips with disabled controls in Safari.
+      Safari fires `pointerenter` but does not fire `pointerleave`
+      and `onPointerEventLeave` added to the trigger element will not work
+    */
+
+    if (!("PointerEvent" in window)) return;
+
+    let ownerDocument = getOwnerDocument(ownRef.current)!;
+
+    function listener(event: MouseEvent) {
+      // @ts-ignore `disabled` does not exist on HTMLDivElement but tooltips can be used with different elements
+      if (state !== VISIBLE || !ownRef.current?.disabled) return;
+
+      let target = event.target as Element | null;
+      if (
+        (target?.hasAttribute("data-reach-tooltip-trigger") &&
+          target?.hasAttribute("aria-describedby")) ||
+        target?.closest("[data-reach-tooltip-trigger][aria-describedby]")
+      ) {
+        return;
+      }
+
+      transition(GLOBAL_MOUSE_MOVE);
+    }
+
+    ownerDocument.addEventListener("mousemove", listener);
+    return () => ownerDocument.removeEventListener("mousemove", listener);
+  }, []);
+
+  function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
+    theirHandler: ((event: EventType) => any) | undefined,
+    ourHandler: (event: EventType) => any
+  ) {
+    // Use internal MouseEvent handler only if PointerEvent not supported
+    if ("PointerEvent" in window) return theirHandler;
+
+    return wrapEvent(theirHandler, ourHandler);
+  }
+
+  function wrapPointerEventHandler(
+    handler: (event: React.PointerEvent) => any
+  ) {
+    return function onPointerEvent(event: React.PointerEvent) {
+      // Handle pointer events only from mouse device
+      if (event.pointerType !== POINTER_TYPE_MOUSE) return;
+      handler(event);
+    };
+  }
+
   function handleMouseEnter() {
     transition(MOUSE_ENTER, { id });
   }
 
   function handleMouseMove() {
     transition(MOUSE_MOVE, { id });
+  }
+
+  function handleMouseLeave() {
+    transition(MOUSE_LEAVE);
+  }
+
+  function handleMouseDown() {
+    // Allow quick click from one tool to another
+    if (context.id !== id) return;
+    transition(MOUSE_DOWN);
   }
 
   function handleFocus() {
@@ -301,20 +367,10 @@ function useTooltip<T extends HTMLElement>({
     transition(FOCUS, { id });
   }
 
-  function handleMouseLeave() {
-    transition(MOUSE_LEAVE);
-  }
-
   function handleBlur() {
     // Allow quick click from one tool to another
     if (context.id !== id) return;
     transition(BLUR);
-  }
-
-  function handleMouseDown() {
-    // Allow quick click from one tool to another
-    if (context.id !== id) return;
-    transition(MOUSE_DOWN);
   }
 
   function handleKeyDown(event: React.KeyboardEvent<T>) {
@@ -330,13 +386,29 @@ function useTooltip<T extends HTMLElement>({
     "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
     "data-reach-tooltip-trigger": "",
     ref,
-    onMouseEnter: wrapEvent(onMouseEnter, handleMouseEnter),
-    onMouseMove: wrapEvent(onMouseMove, handleMouseMove),
+    onPointerEnter: wrapEvent(
+      onPointerEnter,
+      wrapPointerEventHandler(handleMouseEnter)
+    ),
+    onPointerMove: wrapEvent(
+      onPointerMove,
+      wrapPointerEventHandler(handleMouseMove)
+    ),
+    onPointerLeave: wrapEvent(
+      onPointerLeave,
+      wrapPointerEventHandler(handleMouseLeave)
+    ),
+    onPointerDown: wrapEvent(
+      onPointerDown,
+      wrapPointerEventHandler(handleMouseDown)
+    ),
+    onMouseEnter: wrapMouseEvent(onMouseEnter, handleMouseEnter),
+    onMouseMove: wrapMouseEvent(onMouseMove, handleMouseMove),
+    onMouseLeave: wrapMouseEvent(onMouseLeave, handleMouseLeave),
+    onMouseDown: wrapMouseEvent(onMouseDown, handleMouseDown),
     onFocus: wrapEvent(onFocus, handleFocus),
     onBlur: wrapEvent(onBlur, handleBlur),
-    onMouseLeave: wrapEvent(onMouseLeave, handleMouseLeave),
     onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
-    onMouseDown: wrapEvent(onMouseDown, handleMouseDown),
   };
 
   let tooltip: TooltipParams = {
@@ -378,13 +450,17 @@ const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
   // to make sure users can maintain control over the trigger's ref and events
   let [trigger, tooltip] = useTooltip({
     id,
+    onPointerEnter: child.props.onPointerEnter,
+    onPointerMove: child.props.onPointerMove,
+    onPointerLeave: child.props.onPointerLeave,
+    onPointerDown: child.props.onPointerDown,
     onMouseEnter: child.props.onMouseEnter,
     onMouseMove: child.props.onMouseMove,
     onMouseLeave: child.props.onMouseLeave,
+    onMouseDown: child.props.onMouseDown,
     onFocus: child.props.onFocus,
     onBlur: child.props.onBlur,
     onKeyDown: child.props.onKeyDown,
-    onMouseDown: child.props.onMouseDown,
     ref: child.ref,
     DEBUG_STYLE,
   });
@@ -557,7 +633,11 @@ function getStyles(
 // It feels awkward when it's perfectly aligned w/ the trigger
 const OFFSET_DEFAULT = 8;
 
-export const positionTooltip: Position = (triggerRect, tooltipRect, offset = OFFSET_DEFAULT) => {
+export const positionTooltip: Position = (
+  triggerRect,
+  tooltipRect,
+  offset = OFFSET_DEFAULT
+) => {
   let { width: windowWidth, height: windowHeight } = getDocumentDimensions();
   if (!triggerRect || !tooltipRect) {
     return {};
@@ -605,7 +685,7 @@ const transition: Transition = (event, payload) => {
 
   // Really useful for debugging
   // console.log({ event, state, nextState, contextId: context.id });
-  // !nextState && console.log('no transition taken')
+  // !nextState && console.log("no transition taken");
 
   if (!nextState) {
     return;
@@ -635,13 +715,17 @@ interface TriggerParams {
   "aria-describedby"?: string | undefined;
   "data-reach-tooltip-trigger": string;
   ref: React.Ref<any>;
-  onMouseEnter: React.ReactEventHandler;
-  onMouseMove: React.ReactEventHandler;
+  onPointerEnter: React.ReactEventHandler;
+  onPointerDown: React.ReactEventHandler;
+  onPointerMove: React.ReactEventHandler;
+  onPointerLeave: React.ReactEventHandler;
+  onMouseEnter?: React.ReactEventHandler;
+  onMouseDown?: React.ReactEventHandler;
+  onMouseMove?: React.ReactEventHandler;
+  onMouseLeave?: React.ReactEventHandler;
   onFocus: React.ReactEventHandler;
   onBlur: React.ReactEventHandler;
-  onMouseLeave: React.ReactEventHandler;
   onKeyDown: React.ReactEventHandler;
-  onMouseDown: React.ReactEventHandler;
 }
 
 interface TooltipParams {

@@ -9,7 +9,17 @@ function Example() {
     <div>
       <Tooltip label="Oh oh oh, oh oh">
         <button style={{ fontSize: 25, pointerEvents: "all" }} disabled>
-          Can't Touch This
+          <span aria-hidden>💾</span> Can't Touch This
+        </button>
+      </Tooltip>
+      <Tooltip label="Oh oh oh, oh oh">
+        <button style={{ fontSize: 25, pointerEvents: "all" }} disabled>
+          <span aria-hidden>🔔</span>
+        </button>
+      </Tooltip>
+      <Tooltip label="Oh oh oh, oh oh">
+        <button style={{ fontSize: 25, pointerEvents: "all" }} disabled>
+          <span aria-hidden>⚙️</span>
         </button>
       </Tooltip>
     </div>
