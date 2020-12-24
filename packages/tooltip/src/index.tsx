@@ -481,7 +481,7 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
       id,
       isVisible,
       label,
-      position = positionDefault,
+      position = positionTooltip,
       style,
       triggerRect,
       ...props
@@ -540,9 +540,6 @@ if (__DEV__) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// feels awkward when it's perfectly aligned w/ the trigger
-const OFFSET = 8;
-
 function getStyles(
   position: Position,
   triggerRect: PRect,
@@ -555,7 +552,12 @@ function getStyles(
   return position(triggerRect, tooltipRect);
 }
 
-let positionDefault: Position = (triggerRect, tooltipRect) => {
+// Default offset from the trigger (e.g., if the tooltip is positioned above,
+// there will be 8px between the bottom of the tooltip and the top of the trigger).
+// It feels awkward when it's perfectly aligned w/ the trigger
+const OFFSET_DEFAULT = 8;
+
+export const positionTooltip: Position = (triggerRect, tooltipRect, offset = OFFSET_DEFAULT) => {
   let { width: windowWidth, height: windowHeight } = getDocumentDimensions();
   if (!triggerRect || !tooltipRect) {
     return {};
@@ -564,7 +566,7 @@ let positionDefault: Position = (triggerRect, tooltipRect) => {
   let collisions = {
     top: triggerRect.top - tooltipRect.height < 0,
     right: windowWidth < triggerRect.left + tooltipRect.width,
-    bottom: windowHeight < triggerRect.bottom + tooltipRect.height + OFFSET,
+    bottom: windowHeight < triggerRect.bottom + tooltipRect.height + offset,
     left: triggerRect.left - tooltipRect.width < 0,
   };
 
@@ -577,10 +579,10 @@ let positionDefault: Position = (triggerRect, tooltipRect) => {
       : `${triggerRect.left + window.pageXOffset}px`,
     top: directionUp
       ? `${
-          triggerRect.top - OFFSET - tooltipRect.height + window.pageYOffset
+          triggerRect.top - offset - tooltipRect.height + window.pageYOffset
         }px`
       : `${
-          triggerRect.top + OFFSET + triggerRect.height + window.pageYOffset
+          triggerRect.top + offset + triggerRect.height + window.pageYOffset
         }px`,
   };
 };
