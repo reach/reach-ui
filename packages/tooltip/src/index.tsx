@@ -305,11 +305,11 @@ function useTooltip<T extends HTMLElement>({
       // @ts-ignore `disabled` does not exist on HTMLDivElement but tooltips can be used with different elements
       if (state !== VISIBLE || !ownRef.current?.disabled) return;
 
-      let target = event.target as Element | null;
       if (
-        (target?.hasAttribute("data-reach-tooltip-trigger") &&
-          target?.hasAttribute("aria-describedby")) ||
-        target?.closest("[data-reach-tooltip-trigger][aria-describedby]")
+        event.target instanceof Element &&
+        event.target.closest(
+          "[data-reach-tooltip-trigger][data-state='tooltip-visible']"
+        )
       ) {
         return;
       }
@@ -384,6 +384,7 @@ function useTooltip<T extends HTMLElement>({
     // `aria-describedby`.
     // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
     "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
+    "data-state": isVisible ? "tooltip-visible" : "tooltip-hidden",
     "data-reach-tooltip-trigger": "",
     ref,
     onPointerEnter: wrapEvent(
@@ -713,6 +714,7 @@ const transition: Transition = (event, payload) => {
 
 interface TriggerParams {
   "aria-describedby"?: string | undefined;
+  "data-state": string;
   "data-reach-tooltip-trigger": string;
   ref: React.Ref<any>;
   onPointerEnter: React.ReactEventHandler;
