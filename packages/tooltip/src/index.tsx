@@ -239,10 +239,12 @@ function useTooltip<T extends HTMLElement>({
   onFocus,
   onBlur,
   onKeyDown,
+  disabled,
   ref: forwardedRef,
   DEBUG_STYLE,
 }: {
   ref?: React.Ref<any>;
+  disabled?: boolean;
   DEBUG_STYLE?: boolean;
 } & React.HTMLAttributes<T> = {}): [TriggerParams, TooltipParams, boolean] {
   let id = String(useId(idProp));
@@ -296,14 +298,12 @@ function useTooltip<T extends HTMLElement>({
       Safari fires `pointerenter` but does not fire `pointerleave`
       and `onPointerEventLeave` added to the trigger element will not work
     */
-
-    if (!("PointerEvent" in window)) return;
+    if (!("PointerEvent" in window) || !disabled) return;
 
     let ownerDocument = getOwnerDocument(ownRef.current)!;
 
     function listener(event: MouseEvent) {
-      // @ts-ignore `disabled` does not exist on HTMLDivElement but tooltips can be used with different elements
-      if (state !== VISIBLE || !ownRef.current?.disabled) return;
+      if (state !== VISIBLE) return;
 
       if (
         event.target instanceof Element &&
@@ -319,7 +319,7 @@ function useTooltip<T extends HTMLElement>({
 
     ownerDocument.addEventListener("mousemove", listener);
     return () => ownerDocument.removeEventListener("mousemove", listener);
-  }, []);
+  }, [disabled]);
 
   function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
     theirHandler: ((event: EventType) => any) | undefined,
@@ -462,6 +462,7 @@ const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
     onFocus: child.props.onFocus,
     onBlur: child.props.onBlur,
     onKeyDown: child.props.onKeyDown,
+    disabled: child.props.disabled,
     ref: child.ref,
     DEBUG_STYLE,
   });
