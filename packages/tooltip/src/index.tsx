@@ -153,8 +153,10 @@ const chart: StateChart = {
  * Chart context allows us to persist some data around, in Tooltip all we use
  * is the id of the current tooltip being interacted with.
  */
-let context: StateContext = { id: null };
-let state = chart.initial;
+let state: StateObject = {
+  value: chart.initial,
+  context: { id: null },
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Subscriptions:
@@ -175,7 +177,7 @@ function subscribe(fn: Function) {
 }
 
 function notify() {
-  subscriptions.forEach((fn) => fn(state, context));
+  subscriptions.forEach((fn) => fn(state));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +189,9 @@ let restTimeout: number;
 
 function startRestTimer() {
   window.clearTimeout(restTimeout);
-  restTimeout = window.setTimeout(() => transition(REST), MOUSE_REST_TIMEOUT);
+  restTimeout = window.setTimeout(() => {
+    send({ type: REST });
+  }, MOUSE_REST_TIMEOUT);
 }
 
 function clearRestTimer() {
@@ -200,7 +204,7 @@ let leavingVisibleTimer: number;
 function startLeavingVisibleTimer() {
   window.clearTimeout(leavingVisibleTimer);
   leavingVisibleTimer = window.setTimeout(
-    () => transition(TIME_COMPLETE),
+    () => send({ type: TIME_COMPLETE }),
     LEAVE_TIMEOUT
   );
 }
@@ -212,7 +216,7 @@ function clearLeavingVisibleTimer() {
 // allows us to come on back later w/o entering something else first after the
 // user leaves or dismisses
 function clearContextId() {
-  context.id = null;
+  state.context.id = null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -254,7 +258,7 @@ function useTooltip<ElementType extends HTMLElement>({
       ? true
       : id === null
       ? false
-      : context.id === id && state === VISIBLE
+      : state.context.id === id && state.value === VISIBLE
   );
 
   // hopefully they always pass a ref if they ever pass one
@@ -266,8 +270,8 @@ function useTooltip<ElementType extends HTMLElement>({
   React.useEffect(() => {
     return subscribe(() => {
       if (
-        context.id === id &&
-        (state === VISIBLE || state === LEAVING_VISIBLE)
+        state.context.id === id &&
+        (state.value === VISIBLE || state.value === LEAVING_VISIBLE)
       ) {
         setIsVisible(true);
       } else {
@@ -283,9 +287,9 @@ function useTooltip<ElementType extends HTMLElement>({
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&
-        state === VISIBLE
+        state.value === VISIBLE
       ) {
-        transition(SELECT_WITH_KEYBOARD);
+        send({ type: SELECT_WITH_KEYBOARD });
       }
     }
     ownerDocument.addEventListener("keydown", listener);
@@ -317,19 +321,20 @@ function useTooltip<ElementType extends HTMLElement>({
         return;
       }
 
-      transition(GLOBAL_MOUSE_MOVE);
+      send({ type: GLOBAL_MOUSE_MOVE });
     }
 
     ownerDocument.addEventListener("mousemove", handleMouseMove);
-    return () =>
+    return () => {
       ownerDocument.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [disabled, isVisible]);
 
   function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
     theirHandler: ((event: EventType) => any) | undefined,
     ourHandler: (event: EventType) => any
   ) {
-    // Use internal MouseEvent handler only if PointerEvent not supported
+    // Use internal MouseEvent handler only if PointerEvent is not supported
     if ("PointerEvent" in window) return theirHandler;
 
     return wrapEvent(theirHandler, ourHandler);
@@ -348,23 +353,21 @@ function useTooltip<ElementType extends HTMLElement>({
   }
 
   function handleMouseEnter() {
-    transition(MOUSE_ENTER, { id });
+    send({ type: MOUSE_ENTER, id });
   }
 
   function handleMouseMove() {
-    transition(MOUSE_MOVE, { id });
+    send({ type: MOUSE_MOVE, id });
   }
 
   function handleMouseLeave() {
-    transition(MOUSE_LEAVE);
+    send({ type: MOUSE_LEAVE });
   }
 
   function handleMouseDown() {
     // Allow quick click from one tool to another
-    if (context.id !== id) {
-      return;
-    }
-    transition(MOUSE_DOWN);
+    if (state.context.id !== id) return;
+    send({ type: MOUSE_DOWN });
   }
 
   function handleFocus() {
@@ -372,20 +375,18 @@ function useTooltip<ElementType extends HTMLElement>({
     if (window.__REACH_DISABLE_TOOLTIPS) {
       return;
     }
-    transition(FOCUS, { id });
+    send({ type: FOCUS, id });
   }
 
   function handleBlur() {
     // Allow quick click from one tool to another
-    if (context.id !== id) {
-      return;
-    }
-    transition(BLUR);
+    if (state.context.id !== id) return;
+    send({ type: BLUR });
   }
 
   function handleKeyDown(event: React.KeyboardEvent<ElementType>) {
     if (event.key === "Enter" || event.key === " ") {
-      transition(SELECT_WITH_KEYBOARD);
+      send({ type: SELECT_WITH_KEYBOARD });
     }
   }
 
@@ -682,8 +683,8 @@ export const positionTooltip: Position = (
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Finds the next state from the current state + action. If the chart doesn't
- * describe that transition, it will throw.
+ * Send an event to our state machine to find the next state from the current
+ * state + action.
  *
  * It also manages lifecycles of the machine, (enter/leave hooks on the state
  * chart)
@@ -691,34 +692,50 @@ export const positionTooltip: Position = (
  * @param event
  * @param payload
  */
-const transition: Transition = (event, payload) => {
-  let stateDef = chart.states[state];
-  let nextState = stateDef && stateDef.on && stateDef.on[event];
+function send(event: MachineEvent): void {
+  let { value, context, changed } = transition(state, event);
+  if (changed) {
+    state = { value, context };
+    notify();
+  }
+}
+
+function transition(
+  currentState: StateObject,
+  event: MachineEvent
+): StateObject & { changed: boolean } {
+  let stateDef = chart.states[currentState.value];
+  let nextState = stateDef && stateDef.on && stateDef.on[event.type];
 
   // Really useful for debugging
   // console.log({ event, state, nextState, contextId: context.id });
   // !nextState && console.log("no transition taken");
 
   if (!nextState) {
-    return;
+    return { ...currentState, changed: false };
   }
 
   if (stateDef && stateDef.leave) {
-    stateDef.leave();
+    stateDef.leave(currentState.context, event);
   }
 
-  if (payload) {
-    context = payload;
-  }
+  const { type: _, ...payload } = event;
+  // TODO: Use actions instead of directly setting context
+  let context = { ...state.context, ...payload };
 
-  let nextDef = chart.states[nextState];
+  let nextStateValue =
+    typeof nextState === "string" ? nextState : nextState.target;
+  let nextDef = chart.states[nextStateValue];
   if (nextDef && nextDef.enter) {
-    nextDef.enter();
+    nextDef.enter(currentState.context, event);
   }
 
-  state = nextState;
-  notify();
-};
+  return {
+    value: nextStateValue,
+    context,
+    changed: true,
+  };
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
@@ -747,9 +764,21 @@ interface TooltipParams {
   isVisible: boolean;
 }
 
-type Transition = (event: MachineEventType, payload?: any) => any;
-
 type State = "IDLE" | "FOCUSED" | "VISIBLE" | "LEAVING_VISIBLE" | "DISMISSED";
+
+type StateObject = { value: State; context: StateContext };
+
+type MachineEvent =
+  | { type: "BLUR" }
+  | { type: "FOCUS"; id: string | null }
+  | { type: "GLOBAL_MOUSE_MOVE" }
+  | { type: "MOUSE_DOWN" }
+  | { type: "MOUSE_ENTER"; id: string | null }
+  | { type: "MOUSE_LEAVE" }
+  | { type: "MOUSE_MOVE"; id: string | null }
+  | { type: "REST" }
+  | { type: "SELECT_WITH_KEYBOARD" }
+  | { type: "TIME_COMPLETE" };
 
 type MachineEventType =
   | "BLUR"
@@ -766,15 +795,23 @@ type MachineEventType =
 interface StateChart {
   initial: State;
   states: {
-    [key in State]?: {
-      enter?: Function;
-      leave?: Function;
+    [key in State]: {
+      enter?: ActionFunction;
+      leave?: ActionFunction;
       on: {
-        [key in MachineEventType]?: State;
+        [key in MachineEventType]?:
+          | State
+          | {
+              target: State;
+              cond?: (context: StateContext, event: MachineEvent) => boolean;
+              actions?: ActionFunction[];
+            };
       };
     };
   };
 }
+
+type ActionFunction = (context: StateContext, event: MachineEvent) => void;
 
 type StateContext = {
   id?: string | null;
