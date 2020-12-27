@@ -63,87 +63,91 @@ const LEAVE_TIMEOUT = 500;
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
-// Nothing goin' on
-const IDLE = "IDLE";
+enum TooltipStates {
+  // Nothing goin' on
+  Idle = "IDLE",
 
-// We're considering showing the tooltip, but we're gonna wait a sec
-const FOCUSED = "FOCUSED";
+  // We're considering showing the tooltip, but we're gonna wait a sec
+  Focused = "FOCUSED",
 
-// It's on!
-const VISIBLE = "VISIBLE";
+  // It's on!
+  Visible = "VISIBLE",
 
-// Focus has left, but we want to keep it visible for a sec
-const LEAVING_VISIBLE = "LEAVING_VISIBLE";
+  // Focus has left, but we want to keep it visible for a sec
+  LeavingVisible = "LEAVING_VISIBLE",
 
-// The user clicked the tool, so we want to hide the thing, we can't just use
-// IDLE because we need to ignore mousemove, etc.
-const DISMISSED = "DISMISSED";
+  // The user clicked the tool, so we want to hide the thing, we can't just use
+  // IDLE because we need to ignore mousemove, etc.
+  Dismissed = "DISMISSED",
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 
-const BLUR = "BLUR";
-const FOCUS = "FOCUS";
-const GLOBAL_MOUSE_MOVE = "GLOBAL_MOUSE_MOVE";
-const MOUSE_DOWN = "MOUSE_DOWN";
-const MOUSE_ENTER = "MOUSE_ENTER";
-const MOUSE_LEAVE = "MOUSE_LEAVE";
-const MOUSE_MOVE = "MOUSE_MOVE";
-const REST = "REST";
-const SELECT_WITH_KEYBOARD = "SELECT_WITH_KEYBOARD";
-const TIME_COMPLETE = "TIME_COMPLETE";
+enum TooltipEvents {
+  Blur = "BLUR",
+  Focus = "FOCUS",
+  GlobalMouseMove = "GLOBAL_MOUSE_MOVE",
+  MouseDown = "MOUSE_DOWN",
+  MouseEnter = "MOUSE_ENTER",
+  MouseLeave = "MOUSE_LEAVE",
+  MouseMove = "MOUSE_MOVE",
+  Rest = "REST",
+  SelectWithKeyboard = "SELECT_WITH_KEYBOARD",
+  TimeComplete = "TIME_COMPLETE",
+}
 
 const chart: StateChart = {
-  initial: IDLE,
+  initial: TooltipStates.Idle,
   states: {
-    [IDLE]: {
+    [TooltipStates.Idle]: {
       enter: clearContextId,
       on: {
-        [MOUSE_ENTER]: FOCUSED,
-        [FOCUS]: VISIBLE,
+        [TooltipEvents.MouseEnter]: TooltipStates.Focused,
+        [TooltipEvents.Focus]: TooltipStates.Visible,
       },
     },
-    [FOCUSED]: {
+    [TooltipStates.Focused]: {
       enter: startRestTimer,
       leave: clearRestTimer,
       on: {
-        [MOUSE_MOVE]: FOCUSED,
-        [MOUSE_LEAVE]: IDLE,
-        [MOUSE_DOWN]: DISMISSED,
-        [BLUR]: IDLE,
-        [REST]: VISIBLE,
+        [TooltipEvents.MouseMove]: TooltipStates.Focused,
+        [TooltipEvents.MouseLeave]: TooltipStates.Idle,
+        [TooltipEvents.MouseDown]: TooltipStates.Dismissed,
+        [TooltipEvents.Blur]: TooltipStates.Idle,
+        [TooltipEvents.Rest]: TooltipStates.Visible,
       },
     },
-    [VISIBLE]: {
+    [TooltipStates.Visible]: {
       on: {
-        [FOCUS]: FOCUSED,
-        [MOUSE_ENTER]: FOCUSED,
-        [MOUSE_LEAVE]: LEAVING_VISIBLE,
-        [BLUR]: LEAVING_VISIBLE,
-        [MOUSE_DOWN]: DISMISSED,
-        [SELECT_WITH_KEYBOARD]: DISMISSED,
-        [GLOBAL_MOUSE_MOVE]: LEAVING_VISIBLE,
+        [TooltipEvents.Focus]: TooltipStates.Focused,
+        [TooltipEvents.MouseEnter]: TooltipStates.Focused,
+        [TooltipEvents.MouseLeave]: TooltipStates.LeavingVisible,
+        [TooltipEvents.Blur]: TooltipStates.LeavingVisible,
+        [TooltipEvents.MouseDown]: TooltipStates.Dismissed,
+        [TooltipEvents.SelectWithKeyboard]: TooltipStates.Dismissed,
+        [TooltipEvents.GlobalMouseMove]: TooltipStates.LeavingVisible,
       },
     },
-    [LEAVING_VISIBLE]: {
+    [TooltipStates.LeavingVisible]: {
       enter: startLeavingVisibleTimer,
       leave: () => {
         clearLeavingVisibleTimer();
         clearContextId();
       },
       on: {
-        [MOUSE_ENTER]: VISIBLE,
-        [FOCUS]: VISIBLE,
-        [TIME_COMPLETE]: IDLE,
+        [TooltipEvents.MouseEnter]: TooltipStates.Visible,
+        [TooltipEvents.Focus]: TooltipStates.Visible,
+        [TooltipEvents.TimeComplete]: TooltipStates.Idle,
       },
     },
-    [DISMISSED]: {
+    [TooltipStates.Dismissed]: {
       leave: () => {
         clearContextId();
       },
       on: {
-        [MOUSE_LEAVE]: IDLE,
-        [BLUR]: IDLE,
+        [TooltipEvents.MouseLeave]: TooltipStates.Idle,
+        [TooltipEvents.Blur]: TooltipStates.Idle,
       },
     },
   },
@@ -190,7 +194,7 @@ let restTimeout: number;
 function startRestTimer() {
   window.clearTimeout(restTimeout);
   restTimeout = window.setTimeout(() => {
-    send({ type: REST });
+    send({ type: TooltipEvents.Rest });
   }, MOUSE_REST_TIMEOUT);
 }
 
@@ -204,7 +208,7 @@ let leavingVisibleTimer: number;
 function startLeavingVisibleTimer() {
   window.clearTimeout(leavingVisibleTimer);
   leavingVisibleTimer = window.setTimeout(
-    () => send({ type: TIME_COMPLETE }),
+    () => send({ type: TooltipEvents.TimeComplete }),
     LEAVE_TIMEOUT
   );
 }
@@ -254,11 +258,7 @@ function useTooltip<ElementType extends HTMLElement>({
   let id = String(useId(idProp));
 
   let [isVisible, setIsVisible] = React.useState(
-    DEBUG_STYLE
-      ? true
-      : id === null
-      ? false
-      : state.context.id === id && state.value === VISIBLE
+    DEBUG_STYLE ? true : isTooltipVisible(id, true)
   );
 
   // hopefully they always pass a ref if they ever pass one
@@ -269,14 +269,7 @@ function useTooltip<ElementType extends HTMLElement>({
 
   React.useEffect(() => {
     return subscribe(() => {
-      if (
-        state.context.id === id &&
-        (state.value === VISIBLE || state.value === LEAVING_VISIBLE)
-      ) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(isTooltipVisible(id));
     });
   }, [id]);
 
@@ -287,9 +280,9 @@ function useTooltip<ElementType extends HTMLElement>({
     function listener(event: KeyboardEvent) {
       if (
         (event.key === "Escape" || event.key === "Esc") &&
-        state.value === VISIBLE
+        state.value === TooltipStates.Visible
       ) {
-        send({ type: SELECT_WITH_KEYBOARD });
+        send({ type: TooltipEvents.SelectWithKeyboard });
       }
     }
     ownerDocument.addEventListener("keydown", listener);
@@ -299,8 +292,11 @@ function useTooltip<ElementType extends HTMLElement>({
   React.useEffect(() => {
     // This is a workaround for using tooltips with disabled controls in Safari.
     // Safari fires `pointerenter` but does not fire `pointerleave`, and
-    // `onPointerEventLeave` added to the trigger element will not work.
+    // `onPointerEventLeave` added to the trigger element will not work. NOTE:
+    // We may remove this in a future version. Direction from WAI-ARIA needed
+    // for guidance on handling disabled triggers.
     // https://github.com/reach/reach-ui/issues/564
+    // https://github.com/w3c/aria-practices/issues/128#issuecomment-588625727
     if (!("PointerEvent" in window) || !disabled || !isVisible) {
       return;
     }
@@ -321,7 +317,7 @@ function useTooltip<ElementType extends HTMLElement>({
         return;
       }
 
-      send({ type: GLOBAL_MOUSE_MOVE });
+      send({ type: TooltipEvents.GlobalMouseMove });
     }
 
     ownerDocument.addEventListener("mousemove", handleMouseMove);
@@ -353,21 +349,22 @@ function useTooltip<ElementType extends HTMLElement>({
   }
 
   function handleMouseEnter() {
-    send({ type: MOUSE_ENTER, id });
+    send({ type: TooltipEvents.MouseEnter, id });
   }
 
   function handleMouseMove() {
-    send({ type: MOUSE_MOVE, id });
+    send({ type: TooltipEvents.MouseMove, id });
   }
 
   function handleMouseLeave() {
-    send({ type: MOUSE_LEAVE });
+    send({ type: TooltipEvents.MouseLeave });
   }
 
   function handleMouseDown() {
     // Allow quick click from one tool to another
-    if (state.context.id !== id) return;
-    send({ type: MOUSE_DOWN });
+    if (state.context.id === id) {
+      send({ type: TooltipEvents.MouseDown });
+    }
   }
 
   function handleFocus() {
@@ -375,18 +372,19 @@ function useTooltip<ElementType extends HTMLElement>({
     if (window.__REACH_DISABLE_TOOLTIPS) {
       return;
     }
-    send({ type: FOCUS, id });
+    send({ type: TooltipEvents.Focus, id });
   }
 
   function handleBlur() {
     // Allow quick click from one tool to another
-    if (state.context.id !== id) return;
-    send({ type: BLUR });
+    if (state.context.id === id) {
+      send({ type: TooltipEvents.Blur });
+    }
   }
 
   function handleKeyDown(event: React.KeyboardEvent<ElementType>) {
     if (event.key === "Enter" || event.key === " ") {
-      send({ type: SELECT_WITH_KEYBOARD });
+      send({ type: TooltipEvents.SelectWithKeyboard });
     }
   }
 
@@ -578,12 +576,12 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     forwardedRef
   ) {
     // The element that serves as the tooltip container has role tooltip.
-    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
-    // When an app passes an `aria-label`, we actually want to implement
-    // `role="tooltip"` on a visually hidden element inside of the trigger.
-    // In these cases we want the screen reader user to know both the content in
-    // the tooltip, but also the content in the badge. For screen reader users,
-    // the only content announced to them is whatever is in the tooltip.
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip When an app passes
+    // an `aria-label`, we actually want to implement `role="tooltip"` on a
+    // visually hidden element inside of the trigger. In these cases we want the
+    // screen reader user to know both the content in the tooltip, but also the
+    // content in the badge. For screen reader users, the only content announced
+    // to them is whatever is in the tooltip.
     let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
     let ownRef = React.useRef(null);
@@ -737,6 +735,16 @@ function transition(
   };
 }
 
+function isTooltipVisible(id: string, initial?: boolean) {
+  return (
+    state.context.id === id &&
+    (initial
+      ? state.value === TooltipStates.Visible
+      : state.value === TooltipStates.Visible ||
+        state.value === TooltipStates.LeavingVisible)
+  );
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
 
@@ -764,45 +772,31 @@ interface TooltipParams {
   isVisible: boolean;
 }
 
-type State = "IDLE" | "FOCUSED" | "VISIBLE" | "LEAVING_VISIBLE" | "DISMISSED";
-
-type StateObject = { value: State; context: StateContext };
+type StateObject = { value: TooltipStates; context: StateContext };
 
 type MachineEvent =
-  | { type: "BLUR" }
-  | { type: "FOCUS"; id: string | null }
-  | { type: "GLOBAL_MOUSE_MOVE" }
-  | { type: "MOUSE_DOWN" }
-  | { type: "MOUSE_ENTER"; id: string | null }
-  | { type: "MOUSE_LEAVE" }
-  | { type: "MOUSE_MOVE"; id: string | null }
-  | { type: "REST" }
-  | { type: "SELECT_WITH_KEYBOARD" }
-  | { type: "TIME_COMPLETE" };
-
-type MachineEventType =
-  | "BLUR"
-  | "FOCUS"
-  | "GLOBAL_MOUSE_MOVE"
-  | "MOUSE_DOWN"
-  | "MOUSE_ENTER"
-  | "MOUSE_LEAVE"
-  | "MOUSE_MOVE"
-  | "REST"
-  | "SELECT_WITH_KEYBOARD"
-  | "TIME_COMPLETE";
+  | { type: TooltipEvents.Blur }
+  | { type: TooltipEvents.Focus; id: string | null }
+  | { type: TooltipEvents.GlobalMouseMove }
+  | { type: TooltipEvents.MouseDown }
+  | { type: TooltipEvents.MouseEnter; id: string | null }
+  | { type: TooltipEvents.MouseLeave }
+  | { type: TooltipEvents.MouseMove; id: string | null }
+  | { type: TooltipEvents.Rest }
+  | { type: TooltipEvents.SelectWithKeyboard }
+  | { type: TooltipEvents.TimeComplete };
 
 interface StateChart {
-  initial: State;
+  initial: TooltipStates;
   states: {
-    [key in State]: {
+    [key in TooltipStates]: {
       enter?: ActionFunction;
       leave?: ActionFunction;
       on: {
-        [key in MachineEventType]?:
-          | State
+        [key in TooltipEvents]?:
+          | TooltipStates
           | {
-              target: State;
+              target: TooltipStates;
               cond?: (context: StateContext, event: MachineEvent) => boolean;
               actions?: ActionFunction[];
             };
