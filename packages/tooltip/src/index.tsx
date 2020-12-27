@@ -289,42 +289,7 @@ function useTooltip<ElementType extends HTMLElement>({
     return () => ownerDocument.removeEventListener("keydown", listener);
   }, []);
 
-  React.useEffect(() => {
-    // This is a workaround for using tooltips with disabled controls in Safari.
-    // Safari fires `pointerenter` but does not fire `pointerleave`, and
-    // `onPointerEventLeave` added to the trigger element will not work. NOTE:
-    // We may remove this in a future version. Direction from WAI-ARIA needed
-    // for guidance on handling disabled triggers.
-    // https://github.com/reach/reach-ui/issues/564
-    // https://github.com/w3c/aria-practices/issues/128#issuecomment-588625727
-    if (!("PointerEvent" in window) || !disabled || !isVisible) {
-      return;
-    }
-
-    let ownerDocument = getOwnerDocument(ownRef.current)!;
-
-    function handleMouseMove(event: MouseEvent) {
-      if (!isVisible) {
-        return;
-      }
-
-      if (
-        event.target instanceof Element &&
-        event.target.closest(
-          "[data-reach-tooltip-trigger][data-state='tooltip-visible']"
-        )
-      ) {
-        return;
-      }
-
-      send({ type: TooltipEvents.GlobalMouseMove });
-    }
-
-    ownerDocument.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      ownerDocument.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [disabled, isVisible]);
+  useDisabledTriggerOnSafari({ disabled, isVisible, ref: ownRef });
 
   function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
     theirHandler: ((event: EventType) => any) | undefined,
@@ -677,6 +642,59 @@ export const positionTooltip: Position = (
         }px`,
   };
 };
+
+/**
+ * This is a workaround for using tooltips with disabled controls in Safari.
+ * Safari fires `pointerenter` but does not fire `pointerleave`, and
+ * `onPointerEventLeave` added to the trigger element will not work.
+ *
+ * TODO: We may remove or modiify this behavior in a future version. Direction
+ * from WAI-ARIA needed for guidance on handling disabled triggers. Tooltips
+ * must be accessible by keyboard, and disabled form controls are generally
+ * excluded from the tab sequence.
+ *
+ * @see https://github.com/reach/reach-ui/issues/564
+ * @see https://github.com/w3c/aria-practices/issues/128#issuecomment-588625727
+ */
+function useDisabledTriggerOnSafari({
+  disabled,
+  isVisible,
+  ref,
+}: {
+  disabled: boolean | undefined;
+  isVisible: boolean;
+  ref: React.RefObject<HTMLElement>;
+}) {
+  React.useEffect(() => {
+    if (!("PointerEvent" in window) || !disabled || !isVisible) {
+      return;
+    }
+
+    let ownerDocument = getOwnerDocument(ref.current)!;
+
+    function handleMouseMove(event: MouseEvent) {
+      if (!isVisible) {
+        return;
+      }
+
+      if (
+        event.target instanceof Element &&
+        event.target.closest(
+          "[data-reach-tooltip-trigger][data-state='tooltip-visible']"
+        )
+      ) {
+        return;
+      }
+
+      send({ type: TooltipEvents.GlobalMouseMove });
+    }
+
+    ownerDocument.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      ownerDocument.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [disabled, isVisible]);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
