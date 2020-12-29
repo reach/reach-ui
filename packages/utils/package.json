@@ -13,8 +13,8 @@
     "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
   },
   "main": "dist/index.js",
   "module": "dist/utils.esm.js",
