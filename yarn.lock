@@ -16428,11 +16428,6 @@ use-sidecar@^1.0.1:
     detect-node "^2.0.4"
     tslib "^1.9.3"
 
-use-throttle@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/use-throttle/-/use-throttle-0.0.3.tgz#06d465b831c2ededb2c52448bee0b5d9833804ae"
-  integrity sha512-cgA3c+pe6V7cZ7pkLnYnWxXJub2AmksY7YTp/xiZzKesQyECJ1slWknVY2CVZOBf48avbZsAvJIDjO+aFu9+pw==
-
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
