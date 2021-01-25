@@ -642,15 +642,13 @@ if (__DEV__) {
  */
 function useAccordionContext(): AccordionContextValue {
   let { openPanels, accordionId } = React.useContext(AccordionContext);
-  return React.useMemo(
-    () => ({
+  return React.useMemo(() => {
+    let panels: number[] = [];
+    return {
       id: accordionId,
-      openPanels: ([] as number[])
-        .concat(openPanels as any)
-        .filter((i) => i < 0),
-    }),
-    [accordionId, openPanels]
-  );
+      openPanels: panels.concat(openPanels).filter((i) => i >= 0),
+    };
+  }, [accordionId, openPanels]);
 }
 
 /**
