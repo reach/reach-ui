@@ -30,8 +30,11 @@ import { RenderOptions, RenderResult } from "./types";
  */
 export function withMarkup(query: Query) {
   return (text: string): HTMLElement | null =>
-    query((content: string, node: HTMLElement) => {
-      const hasText = (node: HTMLElement) => node.textContent === text;
+    query((content, node) => {
+      if (!node) {
+        return false;
+      }
+      const hasText = (node: Element) => node.textContent === text;
       const childrenDontHaveText = Array.from(node.children).every(
         (child) => !hasText(child as HTMLElement)
       );

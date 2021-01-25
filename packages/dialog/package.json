@@ -16,13 +16,13 @@
     "@reach/portal": "0.12.1",
     "@reach/utils": "0.12.1",
     "prop-types": "^15.7.2",
-    "react-focus-lock": "^2.3.1",
-    "react-remove-scroll": "^2.3.0",
+    "react-focus-lock": "^2.5.0",
+    "react-remove-scroll": "^2.4.1",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
   },
   "main": "dist/index.js",
   "module": "dist/dialog.esm.js",

@@ -21,8 +21,8 @@
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
   },
   "main": "dist/index.js",
   "module": "dist/listbox.esm.js",

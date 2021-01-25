@@ -529,6 +529,6 @@ function fireMouseClick(element: HTMLElement) {
   fireEvent.mouseUp(element);
 }
 
-function getPopover(container: HTMLElement) {
+function getPopover(container: Element) {
   return container.querySelector("[data-reach-listbox-popover]");
 }
