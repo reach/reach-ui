@@ -6,16 +6,13 @@ import {
   ComboboxOption,
   ComboboxPopover,
 } from "@reach/combobox";
-import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
 let name = "Open on focus";
 
 function Example() {
-  let [term, setTerm] = React.useState("D");
+  let [term, setTerm] = React.useState("");
   let [selection, setSelection] = React.useState("");
-  let results = useCityMatch(term);
-  let inputRef = React.useRef(null);
 
   function handleChange(event) {
     setTerm(event.target.value);
@@ -35,23 +32,16 @@ function Example() {
           onChange={handleChange}
           value={term}
           style={inputStyle}
-          ref={inputRef}
         />
-        {results && (
-          <ComboboxPopover style={popupStyle}>
-            <p>
-              <button>Hi</button>
-            </p>
-            <ComboboxList>
-              {results.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={`${result.city}, ${result.state}`}
-                />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        )}
+        <ComboboxPopover style={popupStyle}>
+          <ComboboxList>
+            <ComboboxOption value="Apple" />
+            <ComboboxOption value="Banana" />
+            <ComboboxOption value="Orange" />
+            <ComboboxOption value="Pineapple" />
+            <ComboboxOption value="Kiwi" />
+          </ComboboxList>
+        </ComboboxPopover>
       </Combobox>
     </div>
   );
