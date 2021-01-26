@@ -12,9 +12,13 @@
   "dependencies": {
     "prop-types": "^15.7.2"
   },
+  "devDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "peerDependencies": {
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react": "^16.4.0 || 17.x",
+    "react-dom": "^16.4.0 || 17.x"
   },
   "main": "dist/reach-component-component.cjs.js",
   "module": "dist/reach-component-component.esm.js",
