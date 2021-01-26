@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/listbox"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/auto-id": "0.13.0",
     "@reach/descendants": "0.13.0",
@@ -24,9 +21,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/listbox.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-listbox.cjs.js",
+  "module": "dist/reach-listbox.esm.js",
   "files": [
     "README.md",
     "dist",

@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/machine"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/utils": "0.13.0",
     "@xstate/fsm": "1.4.0",
@@ -21,9 +18,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/machine.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-machine.cjs.js",
+  "module": "dist/reach-machine.esm.js",
   "files": [
     "README.md",
     "dist"

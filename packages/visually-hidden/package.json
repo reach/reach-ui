@@ -9,21 +9,18 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/visually-hidden"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/visually-hidden.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-visually-hidden.cjs.js",
+  "module": "dist/reach-visually-hidden.esm.js",
   "files": [
     "README.md",
     "dist"
   ],
   "dependencies": {
+    "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   }
 }

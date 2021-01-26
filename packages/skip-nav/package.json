@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/skip-nav"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/utils": "0.13.0",
     "tslib": "^2.0.0"
@@ -20,9 +17,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/skip-nav.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-skip-nav.cjs.js",
+  "module": "dist/reach-skip-nav.esm.js",
   "files": [
     "README.md",
     "dist",

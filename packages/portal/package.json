@@ -9,16 +9,12 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/portal"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/portal.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-portal.cjs.js",
+  "module": "dist/reach-portal.esm.js",
   "files": [
     "README.md",
     "dist"

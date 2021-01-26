@@ -9,21 +9,18 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/disclosure"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/auto-id": "0.13.0",
     "@reach/utils": "0.13.0",
+    "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/disclosure.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-disclosure.cjs.js",
+  "module": "dist/reach-disclosure.esm.js",
   "files": [
     "README.md",
     "dist"

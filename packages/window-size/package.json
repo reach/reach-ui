@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/window-size"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/utils": "0.13.0",
     "prop-types": "^15.7.2",
@@ -21,9 +18,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/window-size.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-window-size.cjs.js",
+  "module": "dist/reach-window-size.esm.js",
   "files": [
     "README.md",
     "dist"

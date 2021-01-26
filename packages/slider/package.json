@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/slider"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/auto-id": "0.13.0",
     "@reach/utils": "0.13.0",
@@ -22,9 +19,8 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },
-  "main": "dist/index.js",
-  "module": "dist/slider.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-slider.cjs.js",
+  "module": "dist/reach-slider.esm.js",
   "files": [
     "README.md",
     "dist",

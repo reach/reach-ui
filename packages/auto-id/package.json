@@ -9,16 +9,12 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/auto-id"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/auto-id.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-auto-id.cjs.js",
+  "module": "dist/reach-auto-id.esm.js",
   "files": [
     "README.md",
     "dist"

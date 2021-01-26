@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/component-component"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "prop-types": "^15.7.2"
   },
@@ -19,8 +16,8 @@
     "react": "^16.4.0",
     "react-dom": "^16.4.0"
   },
-  "main": "dist/index.js",
-  "module": "dist/component-component.esm.js",
+  "main": "dist/reach-component-component.cjs.js",
+  "module": "dist/reach-component-component.esm.js",
   "files": [
     "README.md",
     "dist"
