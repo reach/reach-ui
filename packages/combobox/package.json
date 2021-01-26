@@ -29,6 +29,7 @@
   },
   "main": "dist/reach-combobox.cjs.js",
   "module": "dist/reach-combobox.esm.js",
+  "types": "dist/reach-combobox.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

@@ -23,6 +23,7 @@
   },
   "main": "dist/reach-portal.cjs.js",
   "module": "dist/reach-portal.esm.js",
+  "types": "dist/reach-portal.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

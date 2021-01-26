@@ -27,6 +27,7 @@
   },
   "main": "dist/reach-checkbox.cjs.js",
   "module": "dist/reach-checkbox.esm.js",
+  "types": "dist/reach-checkbox.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

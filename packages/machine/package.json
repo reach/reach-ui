@@ -24,6 +24,7 @@
   },
   "main": "dist/reach-machine.cjs.js",
   "module": "dist/reach-machine.esm.js",
+  "types": "dist/reach-machine.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

@@ -24,6 +24,7 @@
   },
   "main": "dist/reach-utils.cjs.js",
   "module": "dist/reach-utils.esm.js",
+  "types": "dist/reach-utils.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

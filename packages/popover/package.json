@@ -26,6 +26,7 @@
   },
   "main": "dist/reach-popover.cjs.js",
   "module": "dist/reach-popover.esm.js",
+  "types": "dist/reach-popover.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

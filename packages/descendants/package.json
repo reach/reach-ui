@@ -23,6 +23,7 @@
   },
   "main": "dist/reach-descendants.cjs.js",
   "module": "dist/reach-descendants.esm.js",
+  "types": "dist/reach-descendants.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

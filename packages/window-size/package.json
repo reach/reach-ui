@@ -24,6 +24,7 @@
   },
   "main": "dist/reach-window-size.cjs.js",
   "module": "dist/reach-window-size.esm.js",
+  "types": "dist/reach-window-size.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

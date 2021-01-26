@@ -23,6 +23,7 @@
   },
   "main": "dist/reach-skip-nav.cjs.js",
   "module": "dist/reach-skip-nav.esm.js",
+  "types": "dist/reach-skip-nav.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

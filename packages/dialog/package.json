@@ -27,6 +27,7 @@
   },
   "main": "dist/reach-dialog.cjs.js",
   "module": "dist/reach-dialog.esm.js",
+  "types": "dist/reach-dialog.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

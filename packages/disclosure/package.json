@@ -25,6 +25,7 @@
   },
   "main": "dist/reach-disclosure.cjs.js",
   "module": "dist/reach-disclosure.esm.js",
+  "types": "dist/reach-disclosure.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

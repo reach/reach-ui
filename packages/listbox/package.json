@@ -27,6 +27,7 @@
   },
   "main": "dist/reach-listbox.cjs.js",
   "module": "dist/reach-listbox.esm.js",
+  "types": "dist/reach-listbox.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

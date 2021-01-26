@@ -23,6 +23,7 @@
   },
   "main": "dist/reach-auto-id.cjs.js",
   "module": "dist/reach-auto-id.esm.js",
+  "types": "dist/reach-auto-id.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

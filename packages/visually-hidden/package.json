@@ -23,6 +23,7 @@
   },
   "main": "dist/reach-visually-hidden.cjs.js",
   "module": "dist/reach-visually-hidden.esm.js",
+  "types": "dist/reach-visually-hidden.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

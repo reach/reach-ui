@@ -27,6 +27,7 @@
   },
   "main": "dist/reach-alert-dialog.cjs.js",
   "module": "dist/reach-alert-dialog.esm.js",
+  "types": "dist/reach-alert-dialog.cjs.d.ts",
   "files": [
     "README.md",
     "dist"

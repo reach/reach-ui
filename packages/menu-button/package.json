@@ -27,6 +27,7 @@
   },
   "main": "dist/reach-menu-button.cjs.js",
   "module": "dist/reach-menu-button.esm.js",
+  "types": "dist/reach-menu-button.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

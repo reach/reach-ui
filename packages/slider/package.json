@@ -25,6 +25,7 @@
   },
   "main": "dist/reach-slider.cjs.js",
   "module": "dist/reach-slider.esm.js",
+  "types": "dist/reach-slider.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

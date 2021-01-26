@@ -26,6 +26,7 @@
   },
   "main": "dist/reach-tabs.cjs.js",
   "module": "dist/reach-tabs.esm.js",
+  "types": "dist/reach-tabs.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

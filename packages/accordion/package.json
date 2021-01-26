@@ -26,6 +26,7 @@
   },
   "main": "dist/reach-accordion.cjs.js",
   "module": "dist/reach-accordion.esm.js",
+  "types": "dist/reach-accordion.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

@@ -28,6 +28,7 @@
   },
   "main": "dist/reach-tooltip.cjs.js",
   "module": "dist/reach-tooltip.esm.js",
+  "types": "dist/reach-tooltip.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

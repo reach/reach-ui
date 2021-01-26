@@ -25,6 +25,7 @@
   },
   "main": "dist/reach-alert.cjs.js",
   "module": "dist/reach-alert.esm.js",
+  "types": "dist/reach-alert.cjs.d.ts",
   "files": [
     "README.md",
     "dist"
