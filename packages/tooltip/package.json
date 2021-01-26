@@ -28,5 +28,9 @@
     "README.md",
     "dist",
     "styles.css"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
   ]
 }

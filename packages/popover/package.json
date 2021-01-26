@@ -25,5 +25,9 @@
   "files": [
     "README.md",
     "dist"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
   ]
 }

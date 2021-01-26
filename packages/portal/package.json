@@ -9,6 +9,10 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/portal"
   },
+  "dependencies": {
+    "@reach/utils": "0.13.0",
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
@@ -19,8 +23,8 @@
     "README.md",
     "dist"
   ],
-  "dependencies": {
-    "@reach/utils": "0.13.0",
-    "tslib": "^2.0.0"
-  }
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ]
 }
