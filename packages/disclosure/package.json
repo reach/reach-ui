@@ -1,6 +1,6 @@
 {
   "name": "@reach/disclosure",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Accessible React disclosure component",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "dependencies": {
-    "@reach/auto-id": "0.12.1",
-    "@reach/utils": "0.12.1",
+    "@reach/auto-id": "0.13.0",
+    "@reach/utils": "0.13.0",
     "tslib": "^2.0.0"
   },
   "peerDependencies": {

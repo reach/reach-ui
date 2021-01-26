@@ -1,6 +1,6 @@
 {
   "name": "@reach/menu-button",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Accessible React button dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,10 +13,10 @@
     "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
   },
   "dependencies": {
-    "@reach/auto-id": "0.12.1",
-    "@reach/descendants": "0.12.1",
-    "@reach/popover": "0.12.1",
-    "@reach/utils": "0.12.1",
+    "@reach/auto-id": "0.13.0",
+    "@reach/descendants": "0.13.0",
+    "@reach/popover": "0.13.0",
+    "@reach/utils": "0.13.0",
     "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   },
