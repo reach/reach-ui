@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render /* act, fireEvent */ } from "$test/utils";
+import { render, userEvent, act, fireEvent } from "$test/utils";
 import { axe } from "jest-axe";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 
@@ -11,23 +11,26 @@ describe("<SkipNavLink />", () => {
     });
   });
 
-  // TODO: Doesn't pass, not sure why
-  //   it("should focus the SkipNavContent on click", () => {
-  //     let { getByText } = render(<Layout />);
-  //     act(() => {
-  //       fireEvent.click(getByText("Skip Nav"));
-  //       fireEvent.keyDown(document, { key: "Tab" });
-  //       expect(getByText("Focus me")).toHaveFocus();
-  //     });
-  //   });
-  //   it("should work with a custom ID", () => {
-  //     let { getByText } = render(<Layout skipNavId="whatever" />);
-  //     act(() => {
-  //       fireEvent.click(getByText("Skip Nav"));
-  //       fireEvent.keyDown(document, { key: "Tab" });
-  //       expect(getByText("Focus me")).toHaveFocus();
-  //     });
-  //   });
+  it("should focus the SkipNavContent on click", () => {
+    let { getByText, getByTestId } = render(<Layout />);
+    const mainContent = getByTestId("main");
+    act(() => {
+      userEvent.tab();
+      fireEvent.click(getByText("Skip Nav"));
+      userEvent.tab({ focusTrap: mainContent });
+      expect(getByText("Focus me")).toHaveFocus();
+    });
+  });
+  it("should work with a custom ID", () => {
+    let { getByText, getByTestId } = render(<Layout skipNavId="whatever" />);
+    const mainContent = getByTestId("main");
+    act(() => {
+      userEvent.tab();
+      fireEvent.click(getByText("Skip Nav"));
+      userEvent.tab({ focusTrap: mainContent });
+      expect(getByText("Focus me")).toHaveFocus();
+    });
+  });
 });
 
 function Layout({ skipNavId }: { skipNavId?: string }) {
