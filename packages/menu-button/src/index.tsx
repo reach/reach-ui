@@ -890,6 +890,10 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
     const ref = useForkedRef(popoverRef, forwardedRef);
 
     React.useEffect(() => {
+      if (!isExpanded) {
+        return;
+      }
+
       let ownerDocument = getOwnerDocument(popoverRef.current)!;
       function listener(event: MouseEvent | TouchEvent) {
         if (buttonClickedRef.current) {
@@ -908,7 +912,14 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
         ownerDocument.removeEventListener("mousedown", listener);
         // ownerDocument.removeEventListener("touchstart", listener);
       };
-    }, [buttonClickedRef, buttonRef, dispatch, menuRef, popoverRef]);
+    }, [
+      buttonClickedRef,
+      buttonRef,
+      dispatch,
+      menuRef,
+      popoverRef,
+      isExpanded,
+    ]);
 
     let commonProps = {
       ref,
