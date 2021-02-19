@@ -296,7 +296,9 @@ function useTooltip<ElementType extends HTMLElement>({
     ourHandler: (event: EventType) => any
   ) {
     // Use internal MouseEvent handler only if PointerEvent is not supported
-    if ("PointerEvent" in window) return theirHandler;
+    if (typeof window !== "undefined" && "PointerEvent" in window) {
+      return theirHandler;
+    }
 
     return wrapEvent(theirHandler, ourHandler);
   }
@@ -666,7 +668,11 @@ function useDisabledTriggerOnSafari({
   ref: React.RefObject<HTMLElement>;
 }) {
   React.useEffect(() => {
-    if (!("PointerEvent" in window) || !disabled || !isVisible) {
+    if (
+      !(typeof window !== "undefined" && "PointerEvent" in window) ||
+      !disabled ||
+      !isVisible
+    ) {
       return;
     }
 
