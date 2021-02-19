@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export const CurrentState = (props) => (
+export const CurrentState = (props: any) => (
   <div className="CurrentState">
     <h3>Current State</h3>
     <pre
