@@ -1,6 +1,6 @@
 {
   "name": "@reach/checkbox",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Accessible components to build custom, tri-state checkboxes in React.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -11,9 +11,9 @@
     "directory": "packages/checkbox"
   },
   "dependencies": {
-    "@reach/auto-id": "0.13.0",
-    "@reach/machine": "0.13.0",
-    "@reach/utils": "0.13.0",
+    "@reach/auto-id": "0.13.1",
+    "@reach/machine": "0.13.1",
+    "@reach/utils": "0.13.1",
     "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   },

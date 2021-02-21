@@ -1,6 +1,6 @@
 {
   "name": "@reach/auto-id",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "directory": "packages/auto-id"
   },
   "dependencies": {
-    "@reach/utils": "0.13.0",
+    "@reach/utils": "0.13.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
