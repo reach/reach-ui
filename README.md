@@ -116,6 +116,11 @@ This is our current release process. It's not perfect, but it has almost the rig
 $ yarn build
 $ yarn test
 
+# If you aren't already on the main branch, be sure to check it out
+# and merge release changes from `develop`
+$ git checkout main
+$ git merge develop
+
 # Generate the changelog and copy it somewhere for later. We'll
 # automate this part eventually, but for now you can get the changelog
 # with:
