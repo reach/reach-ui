@@ -9,9 +9,6 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/combobox"
   },
-  "scripts": {
-    "build": "ts-node --transpile-only ../../scripts/build-package $npm_package_name"
-  },
   "dependencies": {
     "@reach/auto-id": "0.13.0",
     "@reach/descendants": "0.13.0",
@@ -22,16 +19,24 @@
     "prop-types": "^15.7.2",
     "tslib": "^2.0.0"
   },
+  "devDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/index.js",
-  "module": "dist/combobox.esm.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/reach-combobox.cjs.js",
+  "module": "dist/reach-combobox.esm.js",
+  "types": "dist/reach-combobox.cjs.d.ts",
   "files": [
     "README.md",
     "dist",
     "styles.css"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
   ]
 }
