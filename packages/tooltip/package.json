@@ -16,7 +16,7 @@
     "@reach/utils": "0.13.1",
     "@reach/visually-hidden": "0.13.1",
     "prop-types": "^15.7.2",
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "react": "^17.0.1",

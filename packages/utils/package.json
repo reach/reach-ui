@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@types/warning": "^3.0.0",
-    "tslib": "^2.0.0",
+    "tslib": "^2.1.0",
     "warning": "^4.0.3"
   },
   "devDependencies": {

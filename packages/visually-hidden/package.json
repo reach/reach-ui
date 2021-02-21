@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "react": "^17.0.1",

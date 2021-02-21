@@ -12,7 +12,7 @@
   "dependencies": {
     "@reach/utils": "0.13.1",
     "@xstate/fsm": "1.4.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "react": "^17.0.1",

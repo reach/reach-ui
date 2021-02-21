@@ -78,7 +78,7 @@
     "jest-watch-typeahead": "0.6.0",
     "lerna": "^3.22.1",
     "lerna-changelog": "^1.0.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "match-sorter": "^6.0.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^3.0.0",
@@ -91,10 +91,8 @@
     "react-test-renderer": "^16.13.1",
     "sinon": "^9.0.3",
     "styled-components": "^5.1.1",
-    "ts-jest": "^26.3.0",
-    "ts-loader": "^8.0.2",
-    "ts-node": "^8.10.2",
-    "typescript": "^4.0.2"
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.1.5"
   },
   "resolutions": {
     "@types/react": "^17.0.2",

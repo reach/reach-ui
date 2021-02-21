@@ -15,7 +15,7 @@
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.5.0",
     "react-remove-scroll": "^2.4.1",
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "react": "^17.0.1",
