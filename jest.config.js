@@ -1,10 +1,4 @@
-import * as fs from "fs-extra";
-import * as path from "path";
-
-const appDirectory = fs.realpathSync(process.cwd());
-const rootDir = path.resolve(appDirectory, ".");
-
-export default {
+module.exports = {
   collectCoverageFrom: ["packages/**/src/**/*.{ts,tsx,js}"],
   globals: {
     __DEV__: "boolean",
@@ -25,7 +19,7 @@ export default {
     "^.+\\.js$",
   ],
   // projects: ["<rootDir>", "<rootDir>/packages/*"],
-  rootDir,
+  // rootDir,
   watchPlugins: [
     require.resolve("jest-watch-typeahead/filename"),
     require.resolve("jest-watch-typeahead/testname"),
