@@ -72,6 +72,9 @@ const genId = () => ++id;
  *
  * @see Docs https://reach.tech/auto-id
  */
+function useId(idFromProps: string): string;
+function useId(idFromProps: string | undefined): string | undefined;
+function useId(idFromProps?: null): string | undefined;
 function useId(idFromProps?: string | null) {
   /*
    * If this instance isn't part of the initial render, we don't have to do the
