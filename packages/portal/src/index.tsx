@@ -20,7 +20,11 @@ import { createPortal } from "react-dom";
  *
  * @see Docs https://reach.tech/portal#portal
  */
-const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
+const Portal: React.FC<PortalProps> = ({
+  children,
+  type = "reach-portal",
+  nodeContainer,
+}) => {
   let mountNode = React.useRef<HTMLDivElement | null>(null);
   let portalNode = React.useRef<HTMLElement | null>(null);
   let forceUpdate = useForceUpdate();
@@ -32,11 +36,12 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
     // In that case, it's important to append to the correct document element.
     const ownerDocument = mountNode.current!.ownerDocument;
     portalNode.current = ownerDocument?.createElement(type)!;
-    ownerDocument!.body.appendChild(portalNode.current);
+    const container = nodeContainer || portalNode.current!.ownerDocument.body;
+    container.appendChild(portalNode.current);
     forceUpdate();
     return () => {
-      if (portalNode.current && portalNode.current.ownerDocument) {
-        portalNode.current.ownerDocument.body.removeChild(portalNode.current);
+      if (portalNode.current && container) {
+        container.removeChild(portalNode.current);
       }
     };
   }, [type, forceUpdate]);
@@ -64,6 +69,12 @@ type PortalProps = {
    * @see Docs https://reach.tech/portal#portal-type
    */
   type?: string;
+  /**
+   * Target DOM element to render the portal.
+   *
+   * @see Docs https://reach.tech/portal#portal-nodeContainer
+   */
+  nodeContainer?: HTMLElement;
 };
 
 if (__DEV__) {
