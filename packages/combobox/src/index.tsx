@@ -526,6 +526,10 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         selectOnClickRef.current = false;
         inputRef.current.select();
       }
+
+      if (openOnFocus) {
+        transition("OPEN_WITH_BUTTON");
+      }
     }
 
     const inputValue =
