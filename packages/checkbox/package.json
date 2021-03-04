@@ -5,6 +5,7 @@
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "source": "",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",

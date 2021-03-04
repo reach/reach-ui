@@ -4,6 +4,7 @@
   "description": "Accessible tooltips",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
