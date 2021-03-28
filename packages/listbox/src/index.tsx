@@ -1091,8 +1091,6 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         data-reach-listbox-option=""
         data-current-nav={isHighlighted ? "" : undefined}
         data-current-selected={isSelected ? "" : undefined}
-        /** TODO: Remove in 1.0 */
-        data-current={isSelected ? "" : undefined}
         data-label={label}
         data-value={value}
         onClick={wrapEvent(onClick, handleClick)}
