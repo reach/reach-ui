@@ -7,7 +7,9 @@ export const Tag: React.FC<React.ComponentPropsWithoutRef<"span">> = (
   let ref = React.useRef<HTMLSpanElement | null>(null);
   let setInnerTextRef = React.useCallback((node: HTMLSpanElement) => {
     ref.current = node;
-    setInnerText(node.innerText);
+    if (node) {
+      setInnerText(node.innerText);
+    }
   }, []);
   return (
     <span

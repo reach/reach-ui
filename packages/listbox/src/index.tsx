@@ -121,8 +121,6 @@ const ListboxInput = forwardRefWithAs<
   let isControlled = React.useRef(valueProp != null);
   let [options, setOptions] = useDescendantsInit<ListboxDescendant>();
 
-  let stableOnChange = useStableCallback(onChange);
-
   // DOM refs
   let buttonRef = React.useRef<ListboxNodeRefs["button"]>(null);
   let hiddenInputRef = React.useRef<HTMLInputElement>(null);
@@ -155,6 +153,12 @@ const ListboxInput = forwardRefWithAs<
     },
     DEBUG
   );
+
+  let stableOnChange = useStableCallback((newValue: string) => {
+    if (newValue !== state.context.value) {
+      onChange?.(newValue);
+    }
+  });
 
   // IDs for aria attributes
   let _id = useId(props.id);
@@ -929,6 +933,7 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       as: Comp = "li",
       children,
       disabled,
+      onClick,
       onMouseDown,
       onMouseEnter,
       onMouseLeave,
@@ -1036,6 +1041,22 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
       }
     }
 
+    function handleClick(event: React.MouseEvent) {
+      // Generally an option will be selected on mouseup, but in case this isn't
+      // handled correctly by the device (whether because it's a touch/pen or
+      // virtual click event) we want to handle selection on a full click event
+      // just in case. This should address issues with screenreader selection,
+      // but this needs more robust testing.
+      if (!isRightClick(event.nativeEvent)) {
+        send({
+          type: ListboxEvents.OptionClick,
+          value,
+          callback: onValueChange,
+          disabled: !!disabled,
+        });
+      }
+    }
+
     function handleMouseMove() {
       // We don't really *need* these guards since we put all of our transition
       // logic in the state machine, but in this case it seems wise not to
@@ -1068,9 +1089,13 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         ref={ref}
         id={useOptionId(value)}
         data-reach-listbox-option=""
+        data-current-nav={isHighlighted ? "" : undefined}
+        data-current-selected={isSelected ? "" : undefined}
+        /** TODO: Remove in 1.0 */
         data-current={isSelected ? "" : undefined}
         data-label={label}
         data-value={value}
+        onClick={wrapEvent(onClick, handleClick)}
         onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
         onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
         onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
