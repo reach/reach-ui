@@ -115,19 +115,6 @@ if (__DEV__) {
 export { checkStyles };
 
 /**
- * Ponyfill for the global object in some environments.
- *
- * @link https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
- */
-export const ponyfillGlobal =
-  typeof window != "undefined" && window.Math == Math
-    ? window
-    : typeof self != "undefined" && self.Math == Math
-    ? self
-    : // eslint-disable-next-line no-new-func
-      Function("return this")();
-
-/**
  * Passes or assigns an arbitrary value to a ref function or object.
  *
  * @param ref
