@@ -42,19 +42,17 @@
 
 import * as React from "react";
 import { useId } from "@reach/auto-id";
-import {
-  forwardRefWithAs,
-  getOwnerDocument,
-  getDocumentDimensions,
-  makeId,
-  useCheckStyles,
-  useForkedRef,
-  wrapEvent,
-  warning,
-} from "@reach/utils";
+import { getDocumentDimensions } from "@reach/utils/get-document-dimensions";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { makeId } from "@reach/utils/make-id";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { Portal } from "@reach/portal";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
+import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
 const MOUSE_REST_TIMEOUT = 100;
@@ -264,7 +262,7 @@ function useTooltip<ElementType extends HTMLElement>({
   // hopefully they always pass a ref if they ever pass one
   let ownRef = React.useRef<ElementType | null>(null);
 
-  let ref = useForkedRef(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, ownRef);
   let triggerRect = useRect(ownRef, { observe: isVisible });
 
   React.useEffect(() => {
@@ -300,7 +298,7 @@ function useTooltip<ElementType extends HTMLElement>({
       return theirHandler;
     }
 
-    return wrapEvent(theirHandler, ourHandler);
+    return composeEventHandlers(theirHandler, ourHandler);
   }
 
   function wrapPointerEventHandler(
@@ -363,19 +361,19 @@ function useTooltip<ElementType extends HTMLElement>({
     "data-state": isVisible ? "tooltip-visible" : "tooltip-hidden",
     "data-reach-tooltip-trigger": "",
     ref,
-    onPointerEnter: wrapEvent(
+    onPointerEnter: composeEventHandlers(
       onPointerEnter,
       wrapPointerEventHandler(handleMouseEnter)
     ),
-    onPointerMove: wrapEvent(
+    onPointerMove: composeEventHandlers(
       onPointerMove,
       wrapPointerEventHandler(handleMouseMove)
     ),
-    onPointerLeave: wrapEvent(
+    onPointerLeave: composeEventHandlers(
       onPointerLeave,
       wrapPointerEventHandler(handleMouseLeave)
     ),
-    onPointerDown: wrapEvent(
+    onPointerDown: composeEventHandlers(
       onPointerDown,
       wrapPointerEventHandler(handleMouseDown)
     ),
@@ -383,9 +381,9 @@ function useTooltip<ElementType extends HTMLElement>({
     onMouseMove: wrapMouseEvent(onMouseMove, handleMouseMove),
     onMouseLeave: wrapMouseEvent(onMouseLeave, handleMouseLeave),
     onMouseDown: wrapMouseEvent(onMouseDown, handleMouseDown),
-    onFocus: wrapEvent(onFocus, handleFocus),
-    onBlur: wrapEvent(onBlur, handleBlur),
-    onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
+    onFocus: composeEventHandlers(onFocus, handleFocus),
+    onBlur: composeEventHandlers(onBlur, handleBlur),
+    onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
   };
 
   let tooltip: TooltipParams = {
@@ -552,7 +550,7 @@ const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
     let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
     let ownRef = React.useRef(null);
-    let ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useComposedRefs(forwardedRef, ownRef);
     let tooltipRect = useRect(ownRef, { observe: isVisible });
     return (
       <React.Fragment>
@@ -699,7 +697,7 @@ function useDisabledTriggerOnSafari({
     return () => {
       ownerDocument.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [disabled, isVisible]);
+  }, [disabled, isVisible, ref]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -32,14 +32,12 @@
  */
 
 import * as React from "react";
-import {
-  forwardRefWithAs,
-  useForkedRef,
-  useIsomorphicLayoutEffect,
-  warning,
-  wrapEvent,
-} from "@reach/utils";
+import { useIsomorphicLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
+import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
@@ -212,7 +210,7 @@ const MixedCheckbox = forwardRefWithAs<
   forwardedRef
 ) {
   let ownRef: MixedCheckboxInputRef = React.useRef(null);
-  let ref = useForkedRef(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, ownRef);
   let [inputProps] = useMixedCheckbox(
     ownRef,
     {
@@ -312,8 +310,8 @@ function useMixedCheckbox(
     "aria-checked": stateValueToAriaChecked(current.value),
     checked: stateValueToChecked(current.value),
     disabled: !!disabled,
-    onChange: wrapEvent(onChange, handleChange),
-    onClick: wrapEvent(onClick, handleClick),
+    onChange: composeEventHandlers(onChange, handleChange),
+    onClick: composeEventHandlers(onClick, handleClick),
     type: "checkbox",
   };
 

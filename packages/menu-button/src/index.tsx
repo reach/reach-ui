@@ -23,20 +23,17 @@ import {
   useDescendantsInit,
   useDescendantKeyDown,
 } from "@reach/descendants";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  getOwnerDocument,
-  isFunction,
-  isString,
-  makeId,
-  noop,
-  useCheckStyles,
-  useForkedRef,
-  usePrevious,
-  wrapEvent,
-} from "@reach/utils";
-
+import { isRightClick } from "@reach/utils/is-right-click";
+import { usePrevious } from "@reach/utils/use-previous";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { isFunction, isString } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
+import { noop } from "@reach/utils/noop";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import type { Descendant } from "@reach/descendants";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +215,7 @@ const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
       state: { buttonId, isExpanded },
       dispatch,
     } = React.useContext(MenuContext);
-    let ref = useForkedRef(buttonRef, forwardedRef);
+    let ref = useComposedRefs(buttonRef, forwardedRef);
     let items = useDescendants(MenuDescendantContext);
     let firstNonDisabledIndex = React.useMemo(
       () => items.findIndex((item) => !item.disabled),
@@ -293,8 +290,8 @@ const MenuButton = forwardRefWithAs<MenuButtonProps, "button">(
         ref={ref}
         data-reach-menu-button=""
         id={buttonId || undefined}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
         type="button"
       />
     );
@@ -374,7 +371,7 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
       [valueText, valueTextProp]
     );
 
-    let ref = useForkedRef(forwardedRef, setValueTextFromDom);
+    let ref = useComposedRefs(forwardedRef, setValueTextFromDom);
 
     let mouseEventStarted = React.useRef(false);
 
@@ -498,13 +495,13 @@ const MenuItemImpl = forwardRefWithAs<MenuItemImplProps, "div">(
         data-reach-menu-item=""
         data-selected={isSelected ? "" : undefined}
         data-valuetext={valueText}
-        onClick={wrapEvent(onClick, handleClick)}
-        onDragStart={wrapEvent(onDragStart, handleDragStart)}
-        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-        onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
-        onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
-        onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
-        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+        onClick={composeEventHandlers(onClick, handleClick)}
+        onDragStart={composeEventHandlers(onDragStart, handleDragStart)}
+        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+        onMouseEnter={composeEventHandlers(onMouseEnter, handleMouseEnter)}
+        onMouseLeave={composeEventHandlers(onMouseLeave, handleMouseLeave)}
+        onMouseMove={composeEventHandlers(onMouseMove, handleMouseMove)}
+        onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
       />
     );
   }
@@ -587,7 +584,7 @@ const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(function MenuItems(
     state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
   } = React.useContext(MenuContext);
   const menuItems = useDescendants(MenuDescendantContext);
-  const ref = useForkedRef(menuRef, forwardedRef);
+  const ref = useComposedRefs(menuRef, forwardedRef);
 
   React.useEffect(() => {
     // Respond to user char key input with typeahead
@@ -647,7 +644,7 @@ const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(function MenuItems(
     selectionIndex,
   ]);
 
-  let handleKeyDown = wrapEvent(
+  let handleKeyDown = composeEventHandlers(
     function handleKeyDown(event: React.KeyboardEvent) {
       let { key } = event;
 
@@ -737,7 +734,7 @@ const MenuItems = forwardRefWithAs<MenuItemsProps, "div">(function MenuItems(
       ref={ref}
       data-reach-menu-items=""
       id={menuId}
-      onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
     >
       {children}
     </Comp>
@@ -887,7 +884,7 @@ const MenuPopover = forwardRefWithAs<MenuPopoverProps, "div">(
       state: { isExpanded },
     } = React.useContext(MenuContext);
 
-    const ref = useForkedRef(popoverRef, forwardedRef);
+    const ref = useComposedRefs(popoverRef, forwardedRef);
 
     React.useEffect(() => {
       if (!isExpanded) {
@@ -1044,10 +1041,6 @@ type MenuButtonAction =
   | { type: "CLEAR_SELECTION_INDEX" }
   | { type: "SET_BUTTON_ID"; payload: string }
   | { type: "SEARCH_FOR_ITEM"; payload: string };
-
-function isRightClick(nativeEvent: MouseEvent) {
-  return nativeEvent.which === 3 || nativeEvent.button === 2;
-}
 
 function focus<T extends HTMLElement = HTMLElement>(
   element: T | undefined | null

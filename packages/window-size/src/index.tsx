@@ -7,7 +7,8 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import { canUseDOM, useIsomorphicLayoutEffect } from "@reach/utils";
+import { canUseDOM } from "@reach/utils/can-use-dom";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +58,7 @@ function useWindowSize() {
     width: hasWindow ? window.innerWidth : 0,
     height: hasWindow ? window.innerHeight : 0,
   });
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const resize = () =>
       setDimensions({
         width: window.innerWidth,

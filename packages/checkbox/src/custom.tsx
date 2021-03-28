@@ -32,14 +32,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import * as React from "react";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  isFunction,
-  useCheckStyles,
-  useForkedRef,
-  wrapEvent,
-} from "@reach/utils";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { isFunction } from "@reach/utils/type-check";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import {
   internal_checkedPropToStateValue as checkedPropToStateValue,
   internal_useControlledSwitchWarning as useControlledSwitchWarning,
@@ -121,7 +119,7 @@ const CustomCheckboxContainer = forwardRefWithAs<
         data-reach-custom-checkbox-container=""
         data-focused={focused ? "" : undefined}
         data-state={checkedPropToStateValue(stateData.checked)}
-        onClick={wrapEvent(onClick, handleClick)}
+        onClick={composeEventHandlers(onClick, handleClick)}
       >
         {isFunction(children)
           ? children({
@@ -229,7 +227,7 @@ const CustomCheckboxInput = forwardRefWithAs<CustomCheckboxInputProps, "input">(
       setFocused,
     } = useCustomCheckboxContext();
 
-    let ref = useForkedRef(forwardedRef, inputRef);
+    let ref = useComposedRefs(forwardedRef, inputRef);
     let mounted = React.useRef(true);
 
     function handleBlur() {
@@ -260,8 +258,8 @@ const CustomCheckboxInput = forwardRefWithAs<CustomCheckboxInputProps, "input">(
         type="checkbox"
         data-reach-custom-checkbox-input=""
         data-focused={focused ? "" : undefined}
-        onBlur={wrapEvent(onBlur, handleBlur)}
-        onFocus={wrapEvent(onFocus, handleFocus)}
+        onBlur={composeEventHandlers(onBlur, handleBlur)}
+        onFocus={composeEventHandlers(onFocus, handleFocus)}
       />
     );
   }

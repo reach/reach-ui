@@ -25,24 +25,23 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
+import { useControlledState } from "@reach/utils/use-controlled-state";
+import { isRightClick } from "@reach/utils/is-right-click";
+import { useStableLayoutCallback } from "@reach/utils/use-stable-callback";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
+import { isFunction } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
+import { noop } from "@reach/utils/noop";
 import {
-  createNamedContext,
-  forwardRefWithAs,
-  getOwnerDocument,
-  isFunction,
-  isRightClick,
-  makeId,
-  memoWithAs,
-  noop,
   useCheckStyles,
-  useControlledState,
   useControlledSwitchWarning,
-  useEventCallback,
-  useForkedRef,
-  useIsomorphicLayoutEffect,
-  warning,
-  wrapEvent,
-} from "@reach/utils";
+} from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import warning from "tiny-warning";
 
 // TODO: Remove in 1.0
 type SliderAlignment = "center" | "contain";
@@ -318,7 +317,7 @@ const SliderInput = forwardRefWithAs<
   let trackRef: TrackRef = React.useRef(null);
   let handleRef: HandleRef = React.useRef(null);
   let sliderRef: SliderRef = React.useRef(null);
-  let ref = useForkedRef(sliderRef, forwardedRef);
+  let ref = useComposedRefs(sliderRef, forwardedRef);
 
   let [hasFocus, setHasFocus] = React.useState(false);
 
@@ -345,12 +344,12 @@ const SliderInput = forwardRefWithAs<
       : `${handleSize}px * ${trackPercent * 0.01}`
   })`;
   let handlePositionRef = React.useRef(handlePosition);
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     handlePositionRef.current = handlePosition;
   }, [handlePosition]);
 
   let onChangeRef = React.useRef(onChange);
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
   let updateValue = React.useCallback(
@@ -383,7 +382,7 @@ const SliderInput = forwardRefWithAs<
   );
 
   // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
-  let handleKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+  let handleKeyDown = useStableLayoutCallback((event: React.KeyboardEvent) => {
     if (disabled) {
       return;
     }
@@ -487,7 +486,7 @@ const SliderInput = forwardRefWithAs<
     onPointerDown,
     onPointerUp,
   });
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     appEvents.current.onMouseMove = onMouseMove;
     appEvents.current.onMouseDown = onMouseDown;
     appEvents.current.onMouseUp = onMouseUp;
@@ -498,7 +497,7 @@ const SliderInput = forwardRefWithAs<
     appEvents.current.onPointerUp = onPointerUp;
   }, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
 
-  let handleSlideStart = useEventCallback((event: SomePointerEvent) => {
+  let handleSlideStart = useStableLayoutCallback((event: SomePointerEvent) => {
     if (isRightClick(event)) return;
 
     if (disabled) {
@@ -530,7 +529,7 @@ const SliderInput = forwardRefWithAs<
     removeEndEvents.current = addEndListener();
   });
 
-  let setPointerCapture = useEventCallback((event: PointerEvent) => {
+  let setPointerCapture = useStableLayoutCallback((event: PointerEvent) => {
     if (isRightClick(event)) return;
     if (disabled) {
       pointerDownRef.current = false;
@@ -540,13 +539,13 @@ const SliderInput = forwardRefWithAs<
     sliderRef.current?.setPointerCapture(event.pointerId);
   });
 
-  let releasePointerCapture = useEventCallback((event: PointerEvent) => {
+  let releasePointerCapture = useStableLayoutCallback((event: PointerEvent) => {
     if (isRightClick(event)) return;
     sliderRef.current?.releasePointerCapture(event.pointerId);
     pointerDownRef.current = false;
   });
 
-  let handlePointerMove = useEventCallback((event: SomePointerEvent) => {
+  let handlePointerMove = useStableLayoutCallback((event: SomePointerEvent) => {
     if (disabled || !pointerDownRef.current) {
       pointerDownRef.current = false;
       return;
@@ -559,7 +558,7 @@ const SliderInput = forwardRefWithAs<
     updateValue(newValue);
   });
 
-  let handleSlideStop = useEventCallback((event: SomePointerEvent) => {
+  let handleSlideStop = useStableLayoutCallback((event: SomePointerEvent) => {
     if (isRightClick(event)) return;
 
     pointerDownRef.current = false;
@@ -577,11 +576,11 @@ const SliderInput = forwardRefWithAs<
 
   let addMoveListener = React.useCallback(() => {
     let ownerDocument = getOwnerDocument(sliderRef.current)!;
-    let touchListener = wrapEvent(
+    let touchListener = composeEventHandlers(
       appEvents.current.onTouchMove,
       handlePointerMove
     );
-    let mouseListener = wrapEvent(
+    let mouseListener = composeEventHandlers(
       appEvents.current.onMouseMove,
       handlePointerMove
     );
@@ -596,15 +595,18 @@ const SliderInput = forwardRefWithAs<
   let addEndListener = React.useCallback(() => {
     let ownerDocument = getOwnerDocument(sliderRef.current)!;
     let ownerWindow = ownerDocument.defaultView || window;
-    let pointerListener = wrapEvent(
+    let pointerListener = composeEventHandlers(
       appEvents.current.onPointerUp,
       releasePointerCapture
     );
-    let touchListener = wrapEvent(
+    let touchListener = composeEventHandlers(
       appEvents.current.onTouchEnd,
       handleSlideStop
     );
-    let mouseListener = wrapEvent(appEvents.current.onMouseUp, handleSlideStop);
+    let mouseListener = composeEventHandlers(
+      appEvents.current.onMouseUp,
+      handleSlideStop
+    );
     if ("PointerEvent" in ownerWindow) {
       ownerDocument.addEventListener("pointerup", pointerListener);
     }
@@ -630,15 +632,15 @@ const SliderInput = forwardRefWithAs<
 
     let ownerDocument = getOwnerDocument(sliderElement)!;
     let ownerWindow = ownerDocument.defaultView || window;
-    let touchListener = wrapEvent(
+    let touchListener = composeEventHandlers(
       appEvents.current.onTouchStart,
       handleSlideStart
     );
-    let mouseListener = wrapEvent(
+    let mouseListener = composeEventHandlers(
       appEvents.current.onMouseDown,
       handleSlideStart
     );
-    let pointerListener = wrapEvent(
+    let pointerListener = composeEventHandlers(
       appEvents.current.onPointerDown,
       setPointerCapture
     );
@@ -741,7 +743,7 @@ const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
   forwardedRef
 ) {
   const { disabled, orientation, trackRef } = useSliderContext();
-  const ref = useForkedRef(trackRef, forwardedRef);
+  const ref = useComposedRefs(trackRef, forwardedRef);
 
   return (
     <Comp
@@ -905,7 +907,7 @@ const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
       value,
     } = useSliderContext();
 
-    const ref = useForkedRef(handleRef, forwardedRef);
+    const ref = useComposedRefs(handleRef, forwardedRef);
 
     return (
       <Comp
@@ -947,13 +949,13 @@ const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
         {...props}
         data-reach-slider-handle=""
         ref={ref}
-        onBlur={wrapEvent(onBlur, () => {
+        onBlur={composeEventHandlers(onBlur, () => {
           setHasFocus(false);
         })}
-        onFocus={wrapEvent(onFocus, () => {
+        onFocus={composeEventHandlers(onFocus, () => {
           setHasFocus(true);
         })}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
         style={{
           position: "absolute",
           ...(isVertical
@@ -1175,7 +1177,7 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     ? ref.current.getBoundingClientRect()
     : 0; */
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     let ownerDocument = getOwnerDocument(ref.current)!;
     let ownerWindow = ownerDocument.defaultView || window;
     if (ref.current) {

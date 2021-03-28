@@ -16,16 +16,14 @@
  */
 
 import * as React from "react";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  makeId,
-  useForkedRef,
-  useStableCallback,
-  warning,
-  wrapEvent,
-} from "@reach/utils";
+import { useStableCallback } from "@reach/utils/use-stable-callback";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { makeId } from "@reach/utils/make-id";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useId } from "@reach/auto-id";
+import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
 const DisclosureContext = createNamedContext<DisclosureContextValue>(
@@ -200,7 +198,7 @@ const DisclosureButton = forwardRefWithAs<DisclosureButtonProps, "button">(
     const { onSelect, open, panelId } = React.useContext(DisclosureContext);
     const ownRef = React.useRef<HTMLElement | null>(null);
 
-    const ref = useForkedRef(forwardedRef, ownRef);
+    const ref = useComposedRefs(forwardedRef, ownRef);
 
     function handleClick(event: React.MouseEvent) {
       event.preventDefault();
@@ -224,7 +222,7 @@ const DisclosureButton = forwardRefWithAs<DisclosureButtonProps, "button">(
         data-reach-disclosure-button=""
         data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
         ref={ref}
-        onClick={wrapEvent(onClick, handleClick)}
+        onClick={composeEventHandlers(onClick, handleClick)}
       >
         {children}
       </Comp>

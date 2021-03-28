@@ -36,22 +36,19 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
+import { isRightClick } from "@reach/utils/is-right-click";
+import { useStableCallback } from "@reach/utils/use-stable-callback";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
+import { isBoolean, isFunction, isString } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
 import {
-  createNamedContext,
-  forwardRefWithAs,
-  isBoolean,
-  isFunction,
-  isRightClick,
-  isString,
-  makeId,
-  memoWithAs,
   useCheckStyles,
   useControlledSwitchWarning,
-  useForkedRef,
-  useIsomorphicLayoutEffect as useLayoutEffect,
-  useStableCallback,
-  wrapEvent,
-} from "@reach/utils";
+} from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useCreateMachine, useMachine } from "@reach/machine";
 import {
   createMachineDefinition,
@@ -60,7 +57,7 @@ import {
 } from "./machine";
 
 import type { Descendant } from "@reach/descendants";
-import type { DistributiveOmit } from "@reach/utils";
+import type { DistributiveOmit } from "@reach/utils/types";
 import type { StateMachine } from "@reach/machine";
 import type {
   ListboxNodeRefs,
@@ -164,7 +161,7 @@ const ListboxInput = forwardRefWithAs<
   let _id = useId(props.id);
   let id = props.id || makeId("listbox-input", _id);
 
-  let ref = useForkedRef(inputRef, forwardedRef);
+  let ref = useComposedRefs(inputRef, forwardedRef);
 
   // If the button has children, we just render them as the label.
   // Otherwise we'll find the option with a value that matches the listbox value
@@ -526,7 +523,7 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
     } = React.useContext(ListboxContext);
     let listboxValue = stateData.value;
 
-    let ref = useForkedRef(buttonRef, forwardedRef);
+    let ref = useComposedRefs(buttonRef, forwardedRef);
 
     let handleKeyDown = useKeyDown();
 
@@ -605,9 +602,9 @@ const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
         ref={ref}
         data-reach-listbox-button=""
         id={id}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+        onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
       >
         {label}
         {arrow && (
@@ -777,7 +774,7 @@ const ListboxPopoverImpl = forwardRefWithAs<ListboxPopoverProps, "div">(
     let { buttonRef, popoverRef, send, isExpanded } = React.useContext(
       ListboxContext
     );
-    let ref = useForkedRef(popoverRef, forwardedRef);
+    let ref = useComposedRefs(popoverRef, forwardedRef);
 
     let handleKeyDown = useKeyDown();
 
@@ -787,8 +784,8 @@ const ListboxPopoverImpl = forwardRefWithAs<ListboxPopoverProps, "div">(
       ...props,
       ref,
       "data-reach-listbox-popover": "",
-      onBlur: wrapEvent(onBlur, handleBlur),
-      onKeyDown: wrapEvent(onKeyDown, handleKeyDown),
+      onBlur: composeEventHandlers(onBlur, handleBlur),
+      onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
     };
 
     function handleBlur(event: React.FocusEvent) {
@@ -871,7 +868,7 @@ const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
       listRef,
       stateData: { value, navigationValue },
     } = React.useContext(ListboxContext);
-    let ref = useForkedRef(forwardedRef, listRef);
+    let ref = useComposedRefs(forwardedRef, listRef);
 
     return (
       <Comp
@@ -994,7 +991,7 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
     let isHighlighted = navigationValue ? navigationValue === value : false;
     let isSelected = listboxValue === value;
 
-    let ref = useForkedRef(
+    let ref = useComposedRefs(
       getLabelFromDomNode,
       forwardedRef,
       ownRef,
@@ -1093,13 +1090,13 @@ const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
         data-current-selected={isSelected ? "" : undefined}
         data-label={label}
         data-value={value}
-        onClick={wrapEvent(onClick, handleClick)}
-        onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
-        onMouseEnter={wrapEvent(onMouseEnter, handleMouseEnter)}
-        onMouseLeave={wrapEvent(onMouseLeave, handleMouseLeave)}
-        onMouseMove={wrapEvent(onMouseMove, handleMouseMove)}
-        onMouseUp={wrapEvent(onMouseUp, handleMouseUp)}
-        onTouchStart={wrapEvent(onTouchStart, handleTouchStart)}
+        onClick={composeEventHandlers(onClick, handleClick)}
+        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+        onMouseEnter={composeEventHandlers(onMouseEnter, handleMouseEnter)}
+        onMouseLeave={composeEventHandlers(onMouseLeave, handleMouseLeave)}
+        onMouseMove={composeEventHandlers(onMouseMove, handleMouseMove)}
+        onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
+        onTouchStart={composeEventHandlers(onTouchStart, handleTouchStart)}
       >
         {children}
       </Comp>
@@ -1313,7 +1310,7 @@ function useKeyDown() {
 
   let index = options.findIndex(({ value }) => value === navigationValue);
 
-  let handleKeyDown = wrapEvent(
+  let handleKeyDown = composeEventHandlers(
     function (event: React.KeyboardEvent) {
       let { key } = event;
       let isSearching = isString(key) && key.length === 1;

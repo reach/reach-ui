@@ -6,7 +6,7 @@ import {
   ComboboxOption,
   ComboboxPopover,
 } from "@reach/combobox";
-import { wrapEvent } from "@reach/utils";
+import { composeEventHandlers } from "@reach/utils";
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
@@ -120,7 +120,10 @@ function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
 
   return (
     <Context.Provider value={context}>
-      <label onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
+      <label
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+        {...props}
+      />
     </Context.Provider>
   );
 }
@@ -144,7 +147,7 @@ function ExampleTokenbox({ onSelect, ...props }) {
   const handleSelect = () => {};
   return (
     <Combobox
-      onSelect={wrapEvent(onSelect, handleSelect)}
+      onSelect={composeEventHandlers(onSelect, handleSelect)}
       aria-label="choose a city"
       {...props}
     />
@@ -164,7 +167,10 @@ function ExampleTokenInput({ onKeyDown, ...props }) {
     }
   };
   return (
-    <ComboboxInput onKeyDown={wrapEvent(onKeyDown, handleKeyDown)} {...props} />
+    <ComboboxInput
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+      {...props}
+    />
   );
 }
 

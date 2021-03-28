@@ -12,15 +12,13 @@
 
 import * as React from "react";
 import { Portal } from "@reach/portal";
-import {
-  forwardRefWithAs,
-  getOwnerDocument,
-  isString,
-  noop,
-  useCheckStyles,
-  useForkedRef,
-  wrapEvent,
-} from "@reach/utils";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { isString } from "@reach/utils/type-check";
+import { noop } from "@reach/utils/noop";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
@@ -149,7 +147,7 @@ const DialogInner = forwardRefWithAs<DialogOverlayProps, "div">(
   ) {
     const mouseDownTarget = React.useRef<EventTarget | null>(null);
     const overlayNode = React.useRef<HTMLDivElement | null>(null);
-    const ref = useForkedRef(overlayNode, forwardedRef);
+    const ref = useComposedRefs(overlayNode, forwardedRef);
 
     const activateFocusLock = React.useCallback(() => {
       if (initialFocusRef && initialFocusRef.current) {
@@ -202,9 +200,9 @@ const DialogInner = forwardRefWithAs<DialogOverlayProps, "div">(
              * because our overlay is only designed to capture any outside
              * clicks, not to serve as a clickable element itself.
              */
-            onClick={wrapEvent(onClick, handleClick)}
-            onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
-            onMouseDown={wrapEvent(onMouseDown, handleMouseDown)}
+            onClick={composeEventHandlers(onClick, handleClick)}
+            onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+            onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
           />
         </RemoveScroll>
       </FocusLock>
@@ -249,7 +247,7 @@ const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
         {...props}
         ref={forwardedRef}
         data-reach-dialog-content=""
-        onClick={wrapEvent(onClick, (event) => {
+        onClick={composeEventHandlers(onClick, (event) => {
           event.stopPropagation();
         })}
       />

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { forwardRefWithAs, useCheckStyles } from "@reach/utils";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
 
 // The user may want to provide their own ID (maybe there are multiple nav
 // menus on a page a use might want to skip at various points in tabbing?).

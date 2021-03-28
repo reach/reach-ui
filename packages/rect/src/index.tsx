@@ -11,12 +11,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import observeRect from "@reach/observe-rect";
-import {
-  isBoolean,
-  isFunction,
-  useIsomorphicLayoutEffect as useLayoutEffect,
-  warning,
-} from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { isBoolean, isFunction } from "@reach/utils/type-check";
+import warning from "tiny-warning";
 
 ////////////////////////////////////////////////////////////////////////////////
 

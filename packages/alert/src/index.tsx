@@ -25,12 +25,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import {
-  forwardRefWithAs,
-  getOwnerDocument,
-  usePrevious,
-  useForkedRef,
-} from "@reach/utils";
+import { usePrevious } from "@reach/utils/use-previous";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { useComposedRefs } from "@reach/utils/compose-refs";
 import PropTypes from "prop-types";
 
 /*
@@ -70,7 +68,7 @@ const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
   forwardedRef
 ) {
   const ownRef = React.useRef<HTMLDivElement>(null);
-  const ref = useForkedRef(forwardedRef, ownRef);
+  const ref = useComposedRefs(forwardedRef, ownRef);
   const child = React.useMemo(
     () => (
       <Comp {...props} ref={ref} data-reach-alert>

@@ -20,20 +20,18 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  getOwnerDocument,
-  isFunction,
-  makeId,
-  noop,
-  useCheckStyles,
-  useForkedRef,
-  useIsomorphicLayoutEffect,
-  useLazyRef,
-  useUpdateEffect,
-  wrapEvent,
-} from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { isFunction } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
+import { noop } from "@reach/utils/noop";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { useLazyRef } from "@reach/utils/use-lazy-ref";
+import { useUpdateEffect } from "@reach/utils/use-update-effect";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -449,7 +447,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
       ariaLabelledby,
     } = React.useContext(ComboboxContext);
 
-    let ref = useForkedRef(inputRef, forwardedRef);
+    let ref = useComposedRefs(inputRef, forwardedRef);
 
     // Because we close the List on blur, we need to track if the blur is
     // caused by clicking inside the list, and if so, don't close the List.
@@ -464,7 +462,7 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
     // Layout effect should be SSR-safe here because we don't actually do
     // anything with this ref that involves rendering until after we've
     // let the client hydrate in nested components.
-    useIsomorphicLayoutEffect(() => {
+    useLayoutEffect(() => {
       autocompletePropRef.current = autocomplete;
     }, [autocomplete, autocompletePropRef]);
 
@@ -550,11 +548,11 @@ export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
         data-reach-combobox-input=""
         data-state={getDataState(state)}
         ref={ref}
-        onBlur={wrapEvent(onBlur, handleBlur)}
-        onChange={wrapEvent(onChange, handleChange)}
-        onClick={wrapEvent(onClick, handleClick)}
-        onFocus={wrapEvent(onFocus, handleFocus)}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onBlur={composeEventHandlers(onBlur, handleBlur)}
+        onChange={composeEventHandlers(onChange, handleChange)}
+        onClick={composeEventHandlers(onClick, handleClick)}
+        onFocus={composeEventHandlers(onFocus, handleFocus)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
         value={inputValue || ""}
       />
     );
@@ -629,15 +627,15 @@ export const ComboboxPopover = forwardRefWithAs<
   const { popoverRef, inputRef, isExpanded, state } = React.useContext(
     ComboboxContext
   );
-  const ref = useForkedRef(popoverRef, forwardedRef);
+  const ref = useComposedRefs(popoverRef, forwardedRef);
   const handleKeyDown = useKeyDown();
   const handleBlur = useBlur();
 
   const sharedProps = {
     "data-reach-combobox-popover": "",
     "data-state": getDataState(state),
-    onKeyDown: wrapEvent<any>(onKeyDown, handleKeyDown),
-    onBlur: wrapEvent<any>(onBlur, handleBlur),
+    onKeyDown: composeEventHandlers<any>(onKeyDown, handleKeyDown),
+    onBlur: composeEventHandlers<any>(onBlur, handleBlur),
     // Instead of conditionally rendering the popover we use the `hidden` prop
     // because we don't want to unmount on close (from escape or onSelect).
     // However, the developer can conditionally render the ComboboxPopover if
@@ -767,7 +765,7 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
     } = React.useContext(ComboboxContext);
 
     let ownRef = React.useRef<HTMLElement | null>(null);
-    let ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useComposedRefs(forwardedRef, ownRef);
 
     let index = useDescendant(
       {
@@ -798,7 +796,7 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
           // element can be `document.activeElement` and then our focus checks in
           // onBlur will work as intended
           tabIndex={-1}
-          onClick={wrapEvent(onClick, handleClick)}
+          onClick={composeEventHandlers(onClick, handleClick)}
         >
           {children ? (
             isFunction(children) ? (
@@ -923,7 +921,7 @@ export const ComboboxButton = forwardRefWithAs<ComboboxButtonProps, "button">(
       listboxId,
       isExpanded,
     } = React.useContext(ComboboxContext);
-    const ref = useForkedRef(buttonRef, forwardedRef);
+    const ref = useComposedRefs(buttonRef, forwardedRef);
 
     const handleKeyDown = useKeyDown();
 
@@ -943,8 +941,8 @@ export const ComboboxButton = forwardRefWithAs<ComboboxButtonProps, "button">(
         {...props}
         data-reach-combobox-button=""
         ref={ref}
-        onClick={wrapEvent(onClick, handleClick)}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onClick={composeEventHandlers(onClick, handleClick)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
       />
     );
   }
@@ -974,7 +972,7 @@ function useFocusManagement(
   // of awkwardly at the beginning, unclear to me why 🤷‍♂️
   //
   // Should be safe to use here since we're just focusing an input.
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (
       lastEventType === NAVIGATE ||
       lastEventType === ESCAPE ||

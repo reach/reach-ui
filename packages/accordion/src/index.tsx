@@ -9,18 +9,15 @@
  */
 
 import * as React from "react";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  isBoolean,
-  isNumber,
-  makeId,
-  noop,
-  useCheckStyles,
-  useForkedRef,
-  warning,
-  wrapEvent,
-} from "@reach/utils";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { isBoolean, isNumber } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
+import { noop } from "@reach/utils/noop";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import warning from "tiny-warning";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -462,7 +459,7 @@ const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
       state,
     } = React.useContext(AccordionItemContext);
 
-    let ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useComposedRefs(forwardedRef, ownRef);
 
     function handleClick(event: React.MouseEvent) {
       event.preventDefault();
@@ -530,8 +527,8 @@ const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
         // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
         disabled={disabled || undefined}
         id={buttonId}
-        onClick={wrapEvent(onClick, handleClick)}
-        onKeyDown={wrapEvent(onKeyDown, handleKeyDown)}
+        onClick={composeEventHandlers(onClick, handleClick)}
+        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
       >
         {children}
       </Comp>

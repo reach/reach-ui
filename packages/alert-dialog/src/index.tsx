@@ -33,13 +33,11 @@
 import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
-import {
-  createNamedContext,
-  forwardRefWithAs,
-  getOwnerDocument,
-  makeId,
-  useForkedRef,
-} from "@reach/utils";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { makeId } from "@reach/utils/make-id";
+import { useComposedRefs } from "@reach/utils/compose-refs";
 import invariant from "invariant";
 import PropTypes from "prop-types";
 
@@ -66,7 +64,7 @@ let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
 const AlertDialogOverlay = forwardRefWithAs<AlertDialogProps, "div">(
   function AlertDialogOverlay({ leastDestructiveRef, ...props }, forwardedRef) {
     let ownRef = React.useRef<HTMLDivElement | null>(null);
-    let ref = useForkedRef(forwardedRef, ownRef);
+    let ref = useComposedRefs(forwardedRef, ownRef);
     let id = useId(props.id);
     let labelId = id ? makeId("alert-dialog", id) : undefined;
     let descriptionId = id ? makeId("alert-dialog-description", id) : undefined;

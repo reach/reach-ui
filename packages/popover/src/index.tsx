@@ -5,7 +5,9 @@
 import * as React from "react";
 import { Portal } from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { forwardRefWithAs, getOwnerDocument, useForkedRef } from "@reach/utils";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { forwardRefWithAs } from "@reach/utils/polymorphic";
+import { useComposedRefs } from "@reach/utils/compose-refs";
 import tabbable from "tabbable";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +72,7 @@ const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
   const popoverRef = React.useRef<HTMLDivElement>(null);
   const popoverRect = useRect(popoverRef, { observe: !props.hidden });
   const targetRect = useRect(targetRef, { observe: !props.hidden });
-  const ref = useForkedRef(popoverRef, forwardedRef);
+  const ref = useComposedRefs(popoverRef, forwardedRef);
 
   useSimulateTabNavigationForReactTree(targetRef, popoverRef);
 

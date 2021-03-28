@@ -11,9 +11,8 @@
     "directory": "packages/utils"
   },
   "dependencies": {
-    "@types/warning": "^3.0.0",
-    "tslib": "^2.1.0",
-    "warning": "^4.0.3"
+    "tiny-warning": "^1.0.3",
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
     "react": "^17.0.1",
@@ -28,10 +27,69 @@
   "types": "dist/reach-utils.cjs.d.ts",
   "files": [
     "README.md",
-    "dist"
+    "dist",
+    "can-use-dom",
+    "clone-valid-element",
+    "compose-event-handlers",
+    "compose-refs",
+    "computed-styles",
+    "context",
+    "dev-utils",
+    "get-document-dimensions",
+    "get-scroll-position",
+    "get-scrollbar-offset",
+    "is-right-click",
+    "make-id",
+    "noop",
+    "owner-document",
+    "polymorphic",
+    "type-check",
+    "types",
+    "use-constant",
+    "use-controlled-state",
+    "use-event-listener",
+    "use-focus-change",
+    "use-force-update",
+    "use-isomorphic-layout-effect",
+    "use-lazy-ref",
+    "use-previous",
+    "use-stable-callback",
+    "use-update-effect"
   ],
   "eslintIgnore": [
     "node_modules",
     "dist"
-  ]
+  ],
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "can-use-dom.ts",
+      "clone-valid-element.ts",
+      "compose-event-handlers.ts",
+      "compose-refs.ts",
+      "computed-styles.ts",
+      "context.ts",
+      "dev-utils.ts",
+      "get-document-dimensions.ts",
+      "get-scroll-position.ts",
+      "get-scrollbar-offset.ts",
+      "is-right-click.ts",
+      "make-id.ts",
+      "noop.ts",
+      "owner-document.ts",
+      "polymorphic.ts",
+      "type-check.ts",
+      "types.ts",
+      "use-constant.ts",
+      "use-controlled-state.ts",
+      "use-event-listener.ts",
+      "use-focus-change.ts",
+      "use-force-update.ts",
+      "use-isomorphic-layout-effect.ts",
+      "use-lazy-ref.ts",
+      "use-previous.ts",
+      "use-stable-callback.ts",
+      "use-update-effect.ts"
+    ]
+  }
 }

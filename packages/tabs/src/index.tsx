@@ -26,28 +26,24 @@ import {
   useDescendantsInit,
   useDescendants,
 } from "@reach/descendants";
+import { getComputedStyle } from "@reach/utils/computed-styles";
+import { cloneValidElement } from "@reach/utils/clone-valid-element";
+import { useControlledState } from "@reach/utils/use-controlled-state";
+import {} from "@reach/utils/use-stable-callback";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { createNamedContext } from "@reach/utils/context";
+import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
+import { isBoolean, isNumber, isFunction } from "@reach/utils/type-check";
+import { makeId } from "@reach/utils/make-id";
+import { noop } from "@reach/utils/noop";
 import {
-  boolOrBoolString,
-  cloneValidElement,
-  createNamedContext,
-  forwardRefWithAs,
-  getElementComputedStyle,
-  isNumber,
-  isFunction,
-  makeId,
-  memoWithAs,
-  noop,
   useCheckStyles,
   useControlledSwitchWarning,
-  useControlledState,
-  useEventCallback,
-  useForkedRef,
-  useIsomorphicLayoutEffect,
-  useUpdateEffect,
-  wrapEvent,
-} from "@reach/utils";
+} from "@reach/utils/dev-utils";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { useUpdateEffect } from "@reach/utils/use-update-effect";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useId } from "@reach/auto-id";
-
 import type { Descendant } from "@reach/descendants";
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(
@@ -321,37 +317,35 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
   let tabs = useDescendants(TabsDescendantsContext);
 
   let ownRef = React.useRef<HTMLElement | null>(null);
-  let ref = useForkedRef(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, ownRef);
 
   React.useEffect(() => {
     if (
       ownRef.current &&
       ((ownRef.current.ownerDocument &&
         ownRef.current.ownerDocument.dir === "rtl") ||
-        getElementComputedStyle(ownRef.current, "direction") === "rtl")
+        getComputedStyle(ownRef.current, "direction") === "rtl")
     ) {
       isRTL.current = true;
     }
   }, [isRTL]);
 
-  let handleKeyDown = useEventCallback(
-    wrapEvent(
-      onKeyDown,
-      useDescendantKeyDown(TabsDescendantsContext, {
-        currentIndex:
-          keyboardActivation === TabsKeyboardActivation.Manual
-            ? focusedIndex
-            : selectedIndex,
-        orientation,
-        rotate: true,
-        callback: onSelectTabWithKeyboard,
-        filter: (tab) => !tab.disabled,
-        rtl: isRTL.current,
-      })
-    )
+  let handleKeyDown = composeEventHandlers(
+    onKeyDown,
+    useDescendantKeyDown(TabsDescendantsContext, {
+      currentIndex:
+        keyboardActivation === TabsKeyboardActivation.Manual
+          ? focusedIndex
+          : selectedIndex,
+      orientation,
+      rotate: true,
+      callback: onSelectTabWithKeyboard,
+      filter: (tab) => !tab.disabled,
+      rtl: isRTL.current,
+    })
   );
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     // In the event an uncontrolled component's selected index is disabled,
     // (this should only happen if the first tab is disabled and no default
     // index is set), we need to override the selection to the next selectable
@@ -452,7 +446,7 @@ const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
     setFocusedIndex,
   } = React.useContext(TabsContext);
   const ownRef = React.useRef<HTMLElement | null>(null);
-  const ref = useForkedRef(forwardedRef, ownRef);
+  const ref = useComposedRefs(forwardedRef, ownRef);
   const index = useDescendant(
     {
       element: ownRef.current!,
@@ -479,18 +473,6 @@ const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
     }
   }, [isSelected, userInteractedRef]);
 
-  let handleFocus = useEventCallback(
-    wrapEvent(onFocus, () => {
-      setFocusedIndex(index);
-    })
-  );
-
-  let handleBlur = useEventCallback(
-    wrapEvent(onBlur, () => {
-      setFocusedIndex(-1);
-    })
-  );
-
   return (
     <Comp
       // Each element with role `tab` has the property `aria-controls` referring
@@ -515,8 +497,12 @@ const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
       disabled={disabled}
       id={makeId(tabsId, "tab", index)}
       onClick={onSelect}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      onFocus={composeEventHandlers(onFocus, () => {
+        setFocusedIndex(index);
+      })}
+      onBlur={composeEventHandlers(onBlur, () => {
+        setFocusedIndex(-1);
+      })}
       type={htmlType}
     >
       {children}
@@ -564,7 +550,7 @@ if (__DEV__) {
 const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
   function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
     let ownRef = React.useRef();
-    let ref = useForkedRef(ownRef, forwardedRef);
+    let ref = useComposedRefs(ownRef, forwardedRef);
     let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
 
     return (
@@ -644,7 +630,7 @@ const TabPanel = forwardRefWithAs<TabPanelProps, "div">(function TabPanel(
     readyToHide.current = true;
   }, []);
 
-  let ref = useForkedRef(
+  let ref = useComposedRefs(
     forwardedRef,
     ownRef,
     isSelected ? selectedPanelRef : null
@@ -763,3 +749,7 @@ export {
   TabsOrientation,
   useTabsContext,
 };
+
+function boolOrBoolString(value: any): value is "true" | true {
+  return value === "true" ? true : isBoolean(value) ? value : false;
+}
