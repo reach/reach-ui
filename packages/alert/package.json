@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "description": "Screen-reader-friendly alert messages.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -11,8 +11,8 @@
     "directory": "packages/alert"
   },
   "dependencies": {
-    "@reach/utils": "0.13.2",
-    "@reach/visually-hidden": "0.13.2",
+    "@reach/utils": "0.14.0",
+    "@reach/visually-hidden": "0.14.0",
     "prop-types": "^15.7.2",
     "tslib": "^2.1.0"
   },
