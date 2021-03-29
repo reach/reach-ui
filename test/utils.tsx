@@ -76,10 +76,10 @@ export function render<
   };
   Wrapper.propTypes = { children: PropTypes.node };
 
-  const result = tlRender(element, {
+  const result = (tlRender(element, {
     baseElement,
     wrapper: Wrapper,
-  }) as RenderResult<P, T>;
+  }) as unknown) as RenderResult<P, T>;
 
   // These handy functions courtesy of https://github.com/mui-org/material-ui
   result.setProps = function setProps(props: P) {

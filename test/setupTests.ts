@@ -1,4 +1,3 @@
-// import { checkStyles } from "@reach/utils";
 import "@testing-library/jest-dom/extend-expect";
 import "jest-axe/extend-expect";
 import { axe, toHaveNoViolations } from "jest-axe";

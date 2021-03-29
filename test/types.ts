@@ -4,7 +4,7 @@ import {
   RenderResult as TLRenderResult,
 } from "@testing-library/react";
 import { axe } from "jest-axe";
-import { ThenArg } from "@reach/utils";
+import { ThenArg } from "@reach/utils/types";
 
 export type EventElement = Document | Element | Window;
 
