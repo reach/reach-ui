@@ -6,7 +6,7 @@ import {
   ComboboxOption,
   ComboboxPopover,
 } from "@reach/combobox";
-import { composeEventHandlers } from "@reach/utils";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 

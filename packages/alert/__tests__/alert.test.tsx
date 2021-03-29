@@ -2,9 +2,9 @@ import * as React from "react";
 import { render, act, fireEvent } from "$test/utils";
 import { AxeResults } from "$test/types";
 import { axe } from "jest-axe";
-import Alert from "@reach/alert";
-import { usePrevious } from "@reach/utils";
-import VisuallyHidden from "@reach/visually-hidden";
+import { Alert } from "@reach/alert";
+import { VisuallyHidden } from "@reach/visually-hidden";
+import { usePrevious } from "@reach/utils/use-previous";
 
 const MESSAGE_TIMEOUT = 5000;
 

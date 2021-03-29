@@ -1,7 +1,7 @@
 import * as React from "react";
-import Alert from "@reach/alert";
-import { usePrevious } from "@reach/utils";
-import VisuallyHidden from "@reach/visually-hidden";
+import { Alert } from "@reach/alert";
+import { usePrevious } from "@reach/utils/use-previous";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import LoremIpsum from "./LoremIpsum.js";
 
 let name = "Basic";
