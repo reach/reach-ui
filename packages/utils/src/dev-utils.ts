@@ -49,7 +49,7 @@ export function checkStyles(packageName: string): void {
     checkedPkgs[packageName] = true;
 
     if (
-      environment !== "test" &&
+      environment === "development" &&
       parseInt(
         window
           .getComputedStyle(document.body)
