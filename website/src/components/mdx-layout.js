@@ -110,7 +110,6 @@ function MyPageLayout({ children }) {
       focusNode.focus();
     }
     // I dunno, I just made it global on window, whatever...
-    // eslint-disable-next-line no-unused-expressions
     import("./cities.js");
   }, []);
 
