@@ -1,6 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useEffect } from "react";
-import { noop } from "./noop";
-// import type * as React from "react";
 
 let checkedPkgs: { [key: string]: boolean } = {};
 
@@ -10,43 +9,8 @@ let checkedPkgs: { [key: string]: boolean } = {};
  * @param state
  * @param DEBUG
  */
-let useStateLogger: (state: string, DEBUG: boolean) => void = noop;
-
-/**
- * When in dev mode, checks that styles for a given `@reach` package are loaded.
- *
- * @param packageName Name of the package to check.
- * @example checkStyles("dialog") will check for styles for @reach/dialog
- */
-let checkStyles: (packageName: string) => void = noop;
-
-/**
- * When in dev mode, checks that styles for a given `@reach` package are loaded.
- *
- * @param packageName Name of the package to check.
- * @example useCheckStyles("dialog") will check for styles for @reach/dialog
- */
-let useCheckStyles: (packageName: string) => void = noop;
-
-/**
- * Logs a warning in dev mode when a component switches from controlled to
- * uncontrolled, or vice versa
- *
- * A single prop should typically be used to determine whether or not a
- * component is controlled or not.
- *
- * @param controlledValue
- * @param controlledPropName
- * @param componentName
- */
-let useControlledSwitchWarning: (
-  controlledValue: any,
-  controlledPropName: string,
-  componentName: string
-) => void = noop;
-
-if (__DEV__) {
-  useStateLogger = function useStateLogger(state, DEBUG = false) {
+export function useStateLogger(state: string, DEBUG = false): void {
+  if (__DEV__) {
     let debugRef = useRef(DEBUG);
     useEffect(() => {
       debugRef.current = DEBUG;
@@ -61,23 +25,31 @@ if (__DEV__) {
         console.groupEnd();
       }
     }, [state]);
-  };
+  }
+}
 
-  // In CJS files, process.env.NODE_ENV is stripped from our build, but we need
-  // it to prevent style checks from clogging up user logs while testing.
-  // This is a workaround until we can tweak the build a bit to accommodate.
-  let { env } =
-    typeof process !== "undefined"
-      ? process
-      : { env: { NODE_ENV: "development" } };
+/**
+ * When in dev mode, checks that styles for a given `@reach` package are loaded.
+ *
+ * @param packageName Name of the package to check.
+ * @example checkStyles("dialog") will check for styles for @reach/dialog
+ */
+export function checkStyles(packageName: string): void {
+  if (__DEV__) {
+    // In CJS files, process.env.NODE_ENV is stripped from our build, but we
+    // need it to prevent style checks from clogging up user logs while testing.
+    // This is a workaround until we can tweak the build a bit to accommodate.
+    let { NODE_ENV: environment } =
+      typeof process !== "undefined"
+        ? process.env
+        : { NODE_ENV: "development" };
 
-  checkStyles = function checkStyles(packageName: string) {
     // only check once per package
     if (checkedPkgs[packageName]) return;
     checkedPkgs[packageName] = true;
 
     if (
-      env.NODE_ENV !== "test" &&
+      environment !== "test" &&
       parseInt(
         window
           .getComputedStyle(document.body)
@@ -98,19 +70,40 @@ if (__DEV__) {
     `
       );
     }
-  };
+  }
+}
 
-  useCheckStyles = function useCheckStyles(pkg: string) {
-    let name = useRef(pkg);
-    useEffect(() => void (name.current = pkg), [pkg]);
+/**
+ * When in dev mode, checks that styles for a given `@reach` package are loaded.
+ *
+ * @param packageName Name of the package to check.
+ * @example useCheckStyles("dialog") will check for styles for @reach/dialog
+ */
+export function useCheckStyles(packageName: string): void {
+  if (__DEV__) {
+    let name = useRef(packageName);
+    useEffect(() => void (name.current = packageName), [packageName]);
     useEffect(() => checkStyles(name.current), []);
-  };
+  }
+}
 
-  useControlledSwitchWarning = function useControlledSwitchWarning(
-    controlledValue,
-    controlledPropName,
-    componentName
-  ) {
+/**
+ * Logs a warning in dev mode when a component switches from controlled to
+ * uncontrolled, or vice versa
+ *
+ * A single prop should typically be used to determine whether or not a
+ * component is controlled or not.
+ *
+ * @param controlledValue
+ * @param controlledPropName
+ * @param componentName
+ */
+export function useControlledSwitchWarning(
+  controlledValue: any,
+  controlledPropName: string,
+  componentName: string
+): void {
+  if (__DEV__) {
     let controlledRef = useRef(controlledValue != null);
     let nameCache = useRef({ componentName, controlledPropName });
     useEffect(() => {
@@ -128,16 +121,9 @@ if (__DEV__) {
           }controlled \`${controlledPropName}\` state of ${componentName} to be ${
             wasControlled ? "un" : ""
           }controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled ${componentName} element for the lifetime of the component.
-  More info: https://fb.me/react-controlled-components`
+      More info: https://fb.me/react-controlled-components`
         );
       }
     }, [controlledValue]);
-  };
+  }
 }
-
-export {
-  checkStyles,
-  useCheckStyles,
-  useStateLogger,
-  useControlledSwitchWarning,
-};
