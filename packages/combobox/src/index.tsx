@@ -291,6 +291,8 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
 
     const persistSelectionRef = React.useRef();
 
+    const optionDataFunctions = useOptionDataFactory();
+
     const defaultData: StateData = {
       // The value the user has typed. We derive this also when the developer is
       // controlling the value of ComboboxInput.
@@ -313,6 +315,7 @@ export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
     const context: InternalComboboxContextValue = {
       ariaLabel,
       ariaLabelledby,
+      ...optionDataFunctions,
       autocompletePropRef,
       buttonRef,
       comboboxId: id,
@@ -374,7 +377,7 @@ export type ComboboxProps = {
    *
    * @see Docs https://reach.tech/combobox#combobox-onselect
    */
-  onSelect?(value: ComboboxValue): void;
+  onSelect?: (value: ComboboxValue, data?: any) => void;
   /**
    * If true, the popover opens when focus is on the text box.
    *
@@ -401,6 +404,40 @@ if (__DEV__) {
     openOnFocus: PropTypes.bool,
   };
 }
+
+/**
+ * Uses a ref object which stores the index as a key and custom data as value
+ * for each ComboboxOption. Hides the ref so that we can only mutate it through
+ * the returned functions. 🙈
+ */
+const useOptionDataFactory = (): {
+  addOptionData: AddOptionData;
+  getOptionData: GetOptionData;
+  removeOptionData: RemoveOptionData;
+} => {
+  const optionData = React.useRef<OptionData>({});
+
+  const addOptionData = React.useCallback<AddOptionData>(
+    (index: OptionIndex, data: any) => (optionData.current[index] = data),
+    []
+  );
+
+  const getOptionData = React.useCallback<GetOptionData>(
+    (index: OptionIndex) => optionData.current[index],
+    []
+  );
+
+  const removeOptionData = React.useCallback<RemoveOptionData>(
+    (index: OptionIndex) => delete optionData.current[index],
+    []
+  );
+
+  return {
+    addOptionData,
+    getOptionData,
+    removeOptionData,
+  };
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -755,13 +792,15 @@ if (__DEV__) {
  */
 export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
   function ComboboxOption(
-    { as: Comp = "li", children, value, onClick, ...props },
+    { as: Comp = "li", children, value, selectData, onClick, ...props },
     forwardedRef: React.Ref<any>
   ) {
     const {
       onSelect,
       data: { navigationValue },
       transition,
+      addOptionData,
+      removeOptionData,
     } = React.useContext(ComboboxContext);
 
     let ownRef = React.useRef<HTMLElement | null>(null);
@@ -777,8 +816,14 @@ export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
 
     const isActive = navigationValue === value;
 
+    React.useEffect(() => {
+      addOptionData(index, selectData);
+
+      return () => removeOptionData(index);
+    }, [index, selectData, addOptionData, removeOptionData]);
+
     const handleClick = () => {
-      onSelect && onSelect(value);
+      onSelect && onSelect(value, selectData);
       transition(SELECT_WITH_CLICK, { value });
     };
 
@@ -840,6 +885,13 @@ export type ComboboxOptionProps = {
    * @see Docs https://reach.tech/combobox#comboboxoption-value
    */
   value: string;
+  /**
+   * Custom data that will be passed to the `onSelect` of the `Combobox` as a
+   * second argument.
+   *
+   * @see Docs https://reacttraining.com/reach-ui/combobox#comboboxoption-selectdata
+   */
+  selectData?: any;
 };
 
 if (__DEV__) {
@@ -996,13 +1048,13 @@ function useKeyDown() {
     transition,
     autocompletePropRef,
     persistSelectionRef,
+    getOptionData,
   } = React.useContext(ComboboxContext);
 
   const options = useDescendants(ComboboxDescendantContext);
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     let index = options.findIndex(({ value }) => value === navigationValue);
-
     function getNextOption() {
       let atBottom = index === options.length - 1;
       if (atBottom) {
@@ -1122,9 +1174,11 @@ function useKeyDown() {
         break;
       case "Enter":
         if (state === NAVIGATING && navigationValue !== null) {
+          let customData = getOptionData(index);
+
           // don't want to submit forms
           event.preventDefault();
-          onSelect && onSelect(navigationValue);
+          onSelect && onSelect(navigationValue, customData);
           transition(SELECT_WITH_KEYBOARD);
         }
         break;
@@ -1303,16 +1357,25 @@ type ComboboxDescendant = Descendant<HTMLElement> & {
   value: ComboboxValue;
 };
 
+type OptionIndex = number;
+
+type OptionData = Record<OptionIndex, any>;
+
+type AddOptionData = (index: OptionIndex, data: any) => void;
+
+type GetOptionData = (index: OptionIndex) => any | undefined;
+
+type RemoveOptionData = (index: OptionIndex) => void;
+
 interface ComboboxOptionContextValue {
   value: ComboboxValue;
-  index: number;
+  index: OptionIndex;
 }
 
 interface InternalComboboxContextValue {
   ariaLabel?: string;
   ariaLabelledby?: string;
   autocompletePropRef: React.MutableRefObject<any>;
-  buttonRef: React.MutableRefObject<any>;
   comboboxId: string | undefined;
   data: StateData;
   inputRef: React.MutableRefObject<any>;
@@ -1322,6 +1385,11 @@ interface InternalComboboxContextValue {
   openOnFocus: boolean;
   persistSelectionRef: React.MutableRefObject<any>;
   popoverRef: React.MutableRefObject<any>;
+  buttonRef: React.MutableRefObject<any>;
+  onSelect(value?: ComboboxValue, data?: any): any;
+  getOptionData: GetOptionData;
+  addOptionData: AddOptionData;
+  removeOptionData: RemoveOptionData;
   state: State;
   transition: Transition;
 }

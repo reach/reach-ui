@@ -490,9 +490,9 @@ If true, the popover opens when focus is on the text box.
 
 ##### Combobox `onSelect`
 
-`onSelect?(value: string): void`
+`onSelect?(value: string, data?: any): void`
 
-Called with the selection value when the user makes a selection from the list.
+Called with the selection value and data when the user selects an item from the list.
 
 ```jsx
 <Combobox onSelect={(item) => {}} />
@@ -649,11 +649,12 @@ Please see the [styling guide](/styling).
 
 #### ComboboxOption Props
 
-| Prop                                   | Type                          | Required |
-| -------------------------------------- | ----------------------------- | -------- |
-| [`as`](#comboboxoption-as)             | `string` <Pipe /> `Component` | false    |
-| [`value`](#comboboxoption-value)       | `string`                      | true     |
-| [`children`](#comboboxoption-children) | `node`                        | false    |
+| Prop                                       | Type                          | Required |
+| ------------------------------------------ | ----------------------------- | -------- |
+| [`as`](#comboboxoption-as)                 | `string` <Pipe /> `Component` | false    |
+| [`value`](#comboboxoption-value)           | `string`                      | true     |
+| [`selectData`](#comboboxoption-selectdata) | `any`                         | false    |
+| [`children`](#comboboxoption-children)     | `node`                        | false    |
 
 ##### ComboboxOption `as`
 
@@ -671,6 +672,18 @@ The value to match against when suggesting.
 
 ```jsx
 <ComboboxOption value="Salt Lake City, Utah" />
+```
+
+##### ComboboxOption `selectData`
+
+`selectData?: any`
+
+Arbitrary data that will be passed as a second argument to the `onSelect` of the [`Combobox`](#combobox-onselect).
+
+This is especially useful when you need to pass extra information to your `onSelect` handler. It is most commonly used when in need to display extra information about the item after selection, or to do an item lookup by passing the id/index of an item when part of a dynamic list.
+
+```jsx
+<ComboboxOption value="Salt Lake City, Utah" selectData={{ country: "USA" }} />
 ```
 
 ##### ComboboxOption `children`
