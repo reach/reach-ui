@@ -23,14 +23,10 @@ expect.extend({
 });
 
 beforeEach(() => {
-  jest.unmock("@reach/utils/dev-utils");
   jest.unmock("@reach/auto-id");
   jest.unmock("@reach/rect");
-  const devUtils = require("@reach/utils/dev-utils");
   const autoId = require("@reach/auto-id");
   const rect = require("@reach/rect");
-  devUtils.checkStyles = jest.fn();
-  devUtils.useCheckStyles = jest.fn();
   autoId.useId = (fallback: string) => fallback || "REACH-ID";
   rect.useRect = () => ({ height: 1, width: 1, x: 0, y: 0 });
 });

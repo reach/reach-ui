@@ -30,10 +30,10 @@
     "@reach/utils": "latest",
     "@reach/visually-hidden": "latest",
     "@reach/window-size": "latest",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-scripts": "3.4.1"
   },
   "devDependencies": {
