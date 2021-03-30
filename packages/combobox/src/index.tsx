@@ -442,6 +442,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     isExpanded,
     ariaLabel,
     ariaLabelledby,
+    persistSelectionRef,
   } = React.useContext(ComboboxContext);
 
   let ref = useComposedRefs(inputRef, forwardedRef);
@@ -512,7 +513,9 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     // input, in those cases we don't want to cause the menu to open back up,
     // so we guard behind these states.
     if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
-      transition(FOCUS);
+      transition(FOCUS, {
+        persistSelection: persistSelectionRef.current,
+      });
     }
   }
 

@@ -20,7 +20,7 @@
     "lint:packages": "eslint packages",
     "lint": "yarn lint:packages",
     "fix": "manypkg fix && preconstruct fix",
-    "dev": "yarn start",
+    "dev": "preconstruct dev && yarn start",
     "postinstall": "manypkg check && preconstruct dev",
     "release": "lerna publish from-git --yes --pre-dist-tag next"
   },
