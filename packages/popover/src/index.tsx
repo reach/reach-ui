@@ -114,10 +114,13 @@ function getStyles(
     : { visibility: "hidden" };
 }
 
-function getTopPosition(targetRect: PRect, popoverRect: PRect) {
-  const { directionUp } = getCollisions(targetRect, popoverRect);
+function getTopPosition(
+  targetRect: PRect,
+  popoverRect: PRect,
+  isDirectionUp: boolean
+) {
   return {
-    top: directionUp
+    top: isDirectionUp
       ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
       : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
   };
@@ -128,12 +131,15 @@ const positionDefault: Position = (targetRect, popoverRect) => {
     return {};
   }
 
-  const { directionRight } = getCollisions(targetRect, popoverRect);
+  const { directionRight, directionUp } = getCollisions(
+    targetRect,
+    popoverRect
+  );
   return {
     left: directionRight
       ? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
       : `${targetRect.left + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 
@@ -142,12 +148,12 @@ const positionRight: Position = (targetRect, popoverRect) => {
     return {};
   }
 
-  const { directionLeft } = getCollisions(targetRect, popoverRect);
+  const { directionLeft, directionUp } = getCollisions(targetRect, popoverRect);
   return {
     left: directionLeft
       ? `${targetRect.left + window.pageXOffset}px`
       : `${targetRect.right - popoverRect.width + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 
@@ -156,10 +162,11 @@ const positionMatchWidth: Position = (targetRect, popoverRect) => {
     return {};
   }
 
+  const { directionUp } = getCollisions(targetRect, popoverRect);
   return {
     width: targetRect.width,
     left: targetRect.left,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 
