@@ -27,9 +27,10 @@ import * as ReactDOM from "react-dom";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { usePrevious } from "@reach/utils/use-previous";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import PropTypes from "prop-types";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 /*
  * Singleton state is fine because you don't server render
@@ -63,7 +64,7 @@ let renderTimer: number | null;
  *
  * @see Docs https://reach.tech/alert
  */
-const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
+const Alert = React.forwardRef(function Alert(
   { as: Comp = "div", children, type: regionType = "polite", ...props },
   forwardedRef
 ) {
@@ -81,12 +82,12 @@ const Alert = forwardRefWithAs<AlertProps, "div">(function Alert(
   useMirrorEffects(regionType, child, ownRef);
 
   return child;
-});
+}) as Polymorphic.ForwardRefComponent<"div", AlertProps>;
 
 /**
  * @see Docs https://reach.tech/alert#alert-props
  */
-type AlertProps = {
+interface AlertProps {
   /**
    * Controls whether the assistive technology should read immediately
    * ("assertive") or wait until the user is idle ("polite").
@@ -95,7 +96,7 @@ type AlertProps = {
    */
   type?: "assertive" | "polite";
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   Alert.displayName = "Alert";

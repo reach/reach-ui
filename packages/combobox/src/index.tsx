@@ -23,7 +23,6 @@ import PropTypes from "prop-types";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { getOwnerDocument } from "@reach/utils/owner-document";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -43,6 +42,7 @@ import { findAll } from "highlight-words-core";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { PopoverProps } from "@reach/popover";
 import type { Descendant } from "@reach/descendants";
 
@@ -259,109 +259,107 @@ const OptionContext = createNamedContext(
  *
  * @see Docs https://reach.tech/combobox#combobox
  */
-export const Combobox = forwardRefWithAs<ComboboxProps, "div">(
-  function Combobox(
-    {
-      onSelect,
-      openOnFocus = false,
-      children,
-      as: Comp = "div",
-      "aria-label": ariaLabel,
-      "aria-labelledby": ariaLabelledby,
-      ...props
-    },
-    forwardedRef
-  ) {
-    let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
+export const Combobox = React.forwardRef(function Combobox(
+  {
+    onSelect,
+    openOnFocus = false,
+    children,
+    as: Comp = "div",
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledby,
+    ...props
+  },
+  forwardedRef
+) {
+  let [options, setOptions] = useDescendantsInit<ComboboxDescendant>();
 
-    // Need this to focus it
-    const inputRef = React.useRef();
+  // Need this to focus it
+  const inputRef = React.useRef();
 
-    const popoverRef = React.useRef();
+  const popoverRef = React.useRef();
 
-    const buttonRef = React.useRef();
+  const buttonRef = React.useRef();
 
-    // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
-    // the user's value while navigating (because it's always the user's value),
-    // but we need to know this in useKeyDown which is far away from the prop
-    // here, so we do something sneaky and write it to this ref on context so we
-    // can use it anywhere else 😛. Another new trick for me and I'm excited
-    // about this one too!
-    const autocompletePropRef = React.useRef();
+  // When <ComboboxInput autocomplete={false} /> we don't want cycle back to
+  // the user's value while navigating (because it's always the user's value),
+  // but we need to know this in useKeyDown which is far away from the prop
+  // here, so we do something sneaky and write it to this ref on context so we
+  // can use it anywhere else 😛. Another new trick for me and I'm excited
+  // about this one too!
+  const autocompletePropRef = React.useRef();
 
-    const persistSelectionRef = React.useRef();
+  const persistSelectionRef = React.useRef();
 
-    const defaultData: StateData = {
-      // The value the user has typed. We derive this also when the developer is
-      // controlling the value of ComboboxInput.
-      value: "",
-      // the value the user has navigated to with the keyboard
-      navigationValue: null,
-    };
+  const defaultData: StateData = {
+    // The value the user has typed. We derive this also when the developer is
+    // controlling the value of ComboboxInput.
+    value: "",
+    // the value the user has navigated to with the keyboard
+    navigationValue: null,
+  };
 
-    const [state, data, transition] = useReducerMachine(
-      stateChart,
-      reducer,
-      defaultData
-    );
+  const [state, data, transition] = useReducerMachine(
+    stateChart,
+    reducer,
+    defaultData
+  );
 
-    useFocusManagement(data.lastEventType, inputRef);
+  useFocusManagement(data.lastEventType, inputRef);
 
-    const id = useId(props.id);
-    const listboxId = id ? makeId("listbox", id) : "listbox";
+  const id = useId(props.id);
+  const listboxId = id ? makeId("listbox", id) : "listbox";
 
-    const context: InternalComboboxContextValue = {
-      ariaLabel,
-      ariaLabelledby,
-      autocompletePropRef,
-      buttonRef,
-      comboboxId: id,
-      data,
-      inputRef,
-      isExpanded: popoverIsExpanded(state),
-      listboxId,
-      onSelect: onSelect || noop,
-      openOnFocus,
-      persistSelectionRef,
-      popoverRef,
-      state,
-      transition,
-    };
+  const context: InternalComboboxContextValue = {
+    ariaLabel,
+    ariaLabelledby,
+    autocompletePropRef,
+    buttonRef,
+    comboboxId: id,
+    data,
+    inputRef,
+    isExpanded: popoverIsExpanded(state),
+    listboxId,
+    onSelect: onSelect || noop,
+    openOnFocus,
+    persistSelectionRef,
+    popoverRef,
+    state,
+    transition,
+  };
 
-    useCheckStyles("combobox");
+  useCheckStyles("combobox");
 
-    return (
-      <DescendantProvider
-        context={ComboboxDescendantContext}
-        items={options}
-        set={setOptions}
-      >
-        <ComboboxContext.Provider value={context}>
-          <Comp
-            {...props}
-            data-reach-combobox=""
-            data-state={getDataState(state)}
-            ref={forwardedRef}
-          >
-            {isFunction(children)
-              ? children({
-                  id,
-                  isExpanded: popoverIsExpanded(state),
-                  navigationValue: data.navigationValue ?? null,
-                  state,
-                })
-              : children}
-          </Comp>
-        </ComboboxContext.Provider>
-      </DescendantProvider>
-    );
-  }
-);
+  return (
+    <DescendantProvider
+      context={ComboboxDescendantContext}
+      items={options}
+      set={setOptions}
+    >
+      <ComboboxContext.Provider value={context}>
+        <Comp
+          {...props}
+          data-reach-combobox=""
+          data-state={getDataState(state)}
+          ref={forwardedRef}
+        >
+          {isFunction(children)
+            ? children({
+                id,
+                isExpanded: popoverIsExpanded(state),
+                navigationValue: data.navigationValue ?? null,
+                state,
+              })
+            : children}
+        </Comp>
+      </ComboboxContext.Provider>
+    </DescendantProvider>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", ComboboxProps>;
 
 /**
  * @see Docs https://reach.tech/combobox#combobox-props
  */
-export type ComboboxProps = {
+export interface ComboboxProps {
   /**
    * @see Docs https://reach.tech/combobox#combobox-children
    */
@@ -391,7 +389,7 @@ export type ComboboxProps = {
    * @see Docs https://reach.tech/combobox#accessibility
    */
   "aria-labelledby"?: string;
-};
+}
 
 if (__DEV__) {
   Combobox.displayName = "Combobox";
@@ -411,158 +409,156 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/combobox#comboboxinput
  */
-export const ComboboxInput = forwardRefWithAs<ComboboxInputProps, "input">(
-  function ComboboxInput(
-    {
-      as: Comp = "input",
-      selectOnClick = false,
-      autocomplete = true,
-      onClick,
-      onChange,
-      onKeyDown,
-      onBlur,
-      onFocus,
-      value: controlledValue,
-      ...props
-    },
-    forwardedRef
-  ) {
-    // https://github.com/reach/reach-ui/issues/464
-    let { current: initialControlledValue } = React.useRef(controlledValue);
-    let controlledValueChangedRef = React.useRef(false);
-    useUpdateEffect(() => {
-      controlledValueChangedRef.current = true;
-    }, [controlledValue]);
+export const ComboboxInput = React.forwardRef(function ComboboxInput(
+  {
+    as: Comp = "input",
+    selectOnClick = false,
+    autocomplete = true,
+    onClick,
+    onChange,
+    onKeyDown,
+    onBlur,
+    onFocus,
+    value: controlledValue,
+    ...props
+  },
+  forwardedRef
+) {
+  // https://github.com/reach/reach-ui/issues/464
+  let { current: initialControlledValue } = React.useRef(controlledValue);
+  let controlledValueChangedRef = React.useRef(false);
+  useUpdateEffect(() => {
+    controlledValueChangedRef.current = true;
+  }, [controlledValue]);
 
-    let {
-      data: { navigationValue, value, lastEventType },
-      inputRef,
-      state,
-      transition,
-      listboxId,
-      autocompletePropRef,
-      openOnFocus,
-      isExpanded,
-      ariaLabel,
-      ariaLabelledby,
-    } = React.useContext(ComboboxContext);
+  let {
+    data: { navigationValue, value, lastEventType },
+    inputRef,
+    state,
+    transition,
+    listboxId,
+    autocompletePropRef,
+    openOnFocus,
+    isExpanded,
+    ariaLabel,
+    ariaLabelledby,
+  } = React.useContext(ComboboxContext);
 
-    let ref = useComposedRefs(inputRef, forwardedRef);
+  let ref = useComposedRefs(inputRef, forwardedRef);
 
-    // Because we close the List on blur, we need to track if the blur is
-    // caused by clicking inside the list, and if so, don't close the List.
-    let selectOnClickRef = React.useRef(false);
+  // Because we close the List on blur, we need to track if the blur is
+  // caused by clicking inside the list, and if so, don't close the List.
+  let selectOnClickRef = React.useRef(false);
 
-    let handleKeyDown = useKeyDown();
+  let handleKeyDown = useKeyDown();
 
-    let handleBlur = useBlur();
+  let handleBlur = useBlur();
 
-    let isControlled = controlledValue != null;
+  let isControlled = controlledValue != null;
 
-    // Layout effect should be SSR-safe here because we don't actually do
-    // anything with this ref that involves rendering until after we've
-    // let the client hydrate in nested components.
-    useLayoutEffect(() => {
-      autocompletePropRef.current = autocomplete;
-    }, [autocomplete, autocompletePropRef]);
+  // Layout effect should be SSR-safe here because we don't actually do
+  // anything with this ref that involves rendering until after we've
+  // let the client hydrate in nested components.
+  useLayoutEffect(() => {
+    autocompletePropRef.current = autocomplete;
+  }, [autocomplete, autocompletePropRef]);
 
-    const handleValueChange = React.useCallback(
-      (value: ComboboxValue) => {
-        if (value.trim() === "") {
-          transition(CLEAR);
-        } else if (
-          value === initialControlledValue &&
-          !controlledValueChangedRef.current
-        ) {
-          transition(INITIAL_CHANGE, { value });
-        } else {
-          transition(CHANGE, { value });
-        }
-      },
-      [initialControlledValue, transition]
-    );
-
-    React.useEffect(() => {
-      // If they are controlling the value we still need to do our transitions,
-      // so  we have this derived state to emulate onChange of the input as we
-      // receive new `value`s ...[*]
-      if (
-        isControlled &&
-        controlledValue !== value &&
-        // https://github.com/reach/reach-ui/issues/481
-        (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+  const handleValueChange = React.useCallback(
+    (value: ComboboxValue) => {
+      if (value.trim() === "") {
+        transition(CLEAR);
+      } else if (
+        value === initialControlledValue &&
+        !controlledValueChangedRef.current
       ) {
-        handleValueChange(controlledValue!);
+        transition(INITIAL_CHANGE, { value });
+      } else {
+        transition(CHANGE, { value });
       }
-    }, [controlledValue, handleValueChange, isControlled, value]);
+    },
+    [initialControlledValue, transition]
+  );
 
-    // [*]... and when controlled, we don't trigger handleValueChange as the
-    // user types, instead the developer controls it with the normal input
-    // onChange prop
-    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-      const { value } = event.target;
-      if (!isControlled) {
-        handleValueChange(value);
-      }
+  React.useEffect(() => {
+    // If they are controlling the value we still need to do our transitions,
+    // so  we have this derived state to emulate onChange of the input as we
+    // receive new `value`s ...[*]
+    if (
+      isControlled &&
+      controlledValue !== value &&
+      // https://github.com/reach/reach-ui/issues/481
+      (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+    ) {
+      handleValueChange(controlledValue!);
     }
+  }, [controlledValue, handleValueChange, isControlled, value]);
 
-    function handleFocus() {
-      if (selectOnClick) {
-        selectOnClickRef.current = true;
-      }
-
-      // If we select an option with click, useFocusManagement will focus the
-      // input, in those cases we don't want to cause the menu to open back up,
-      // so we guard behind these states.
-      if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
-        transition(FOCUS);
-      }
+  // [*]... and when controlled, we don't trigger handleValueChange as the
+  // user types, instead the developer controls it with the normal input
+  // onChange prop
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = event.target;
+    if (!isControlled) {
+      handleValueChange(value);
     }
-
-    function handleClick() {
-      if (selectOnClickRef.current) {
-        selectOnClickRef.current = false;
-        inputRef.current.select();
-      }
-    }
-
-    const inputValue =
-      autocomplete && (state === NAVIGATING || state === INTERACTING)
-        ? // When idle, we don't have a navigationValue on ArrowUp/Down
-          navigationValue || controlledValue || value
-        : controlledValue || value;
-
-    return (
-      <Comp
-        aria-activedescendant={
-          navigationValue ? String(makeHash(navigationValue)) : undefined
-        }
-        aria-autocomplete="both"
-        aria-controls={listboxId}
-        aria-expanded={isExpanded}
-        aria-haspopup="listbox"
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabel ? undefined : ariaLabelledby}
-        role="combobox"
-        {...props}
-        data-reach-combobox-input=""
-        data-state={getDataState(state)}
-        ref={ref}
-        onBlur={composeEventHandlers(onBlur, handleBlur)}
-        onChange={composeEventHandlers(onChange, handleChange)}
-        onClick={composeEventHandlers(onClick, handleClick)}
-        onFocus={composeEventHandlers(onFocus, handleFocus)}
-        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        value={inputValue || ""}
-      />
-    );
   }
-);
+
+  function handleFocus() {
+    if (selectOnClick) {
+      selectOnClickRef.current = true;
+    }
+
+    // If we select an option with click, useFocusManagement will focus the
+    // input, in those cases we don't want to cause the menu to open back up,
+    // so we guard behind these states.
+    if (openOnFocus && lastEventType !== SELECT_WITH_CLICK) {
+      transition(FOCUS);
+    }
+  }
+
+  function handleClick() {
+    if (selectOnClickRef.current) {
+      selectOnClickRef.current = false;
+      inputRef.current.select();
+    }
+  }
+
+  const inputValue =
+    autocomplete && (state === NAVIGATING || state === INTERACTING)
+      ? // When idle, we don't have a navigationValue on ArrowUp/Down
+        navigationValue || controlledValue || value
+      : controlledValue || value;
+
+  return (
+    <Comp
+      aria-activedescendant={
+        navigationValue ? String(makeHash(navigationValue)) : undefined
+      }
+      aria-autocomplete="both"
+      aria-controls={listboxId}
+      aria-expanded={isExpanded}
+      aria-haspopup="listbox"
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabel ? undefined : ariaLabelledby}
+      role="combobox"
+      {...props}
+      data-reach-combobox-input=""
+      data-state={getDataState(state)}
+      ref={ref}
+      onBlur={composeEventHandlers(onBlur, handleBlur)}
+      onChange={composeEventHandlers(onChange, handleChange)}
+      onClick={composeEventHandlers(onClick, handleClick)}
+      onFocus={composeEventHandlers(onFocus, handleFocus)}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+      value={inputValue || ""}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"input", ComboboxInputProps>;
 
 /**
  * @see Docs https://reach.tech/combobox#comboboxinput-props
  */
-export type ComboboxInputProps = {
+export interface ComboboxInputProps {
   /**
    * If true, when the user clicks inside the text box the current value will
    * be selected. Use this if the user is likely to delete all the text anyway
@@ -592,7 +588,7 @@ export type ComboboxInputProps = {
    * @see Docs https://reach.tech/combobox#comboboxinput-value
    */
   value?: ComboboxValue;
-};
+}
 
 if (__DEV__) {
   ComboboxInput.displayName = "ComboboxInput";
@@ -609,10 +605,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/combobox#comboboxpopover
  */
-export const ComboboxPopover = forwardRefWithAs<
-  ComboboxPopoverProps & Partial<PopoverProps>,
-  "div"
->(function ComboboxPopover(
+export const ComboboxPopover = React.forwardRef(function ComboboxPopover(
   {
     as: Comp = "div",
     children,
@@ -658,7 +651,10 @@ export const ComboboxPopover = forwardRefWithAs<
   ) : (
     <Comp ref={ref} {...props} {...sharedProps} />
   );
-});
+}) as Polymorphic.ForwardRefComponent<
+  "div",
+  ComboboxPopoverProps & Partial<PopoverProps>
+>;
 
 if (__DEV__) {
   ComboboxPopover.displayName = "ComboboxPopover";
@@ -667,7 +663,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/combobox#comboboxpopover-props
  */
-export type ComboboxPopoverProps = {
+export interface ComboboxPopoverProps {
   /**
    * If you pass `<ComboboxPopover portal={false} />` the popover will not
    * render inside of a portal, but in the same order as the React tree. This
@@ -677,7 +673,7 @@ export type ComboboxPopoverProps = {
    * @see Docs https://reach.tech/combobox#comboboxpopover-portal
    */
   portal?: boolean;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -689,41 +685,37 @@ export type ComboboxPopoverProps = {
  *
  * @see Docs https://reach.tech/combobox#comboboxlist
  */
-export const ComboboxList = forwardRefWithAs<ComboboxListProps, "ul">(
-  function ComboboxList(
-    {
-      // when true, and the list opens again, the option with a matching value
-      // will be automatically highlighted.
-      persistSelection = false,
-      as: Comp = "ul",
-      ...props
-    },
-    forwardedRef
-  ) {
-    const { persistSelectionRef, listboxId } = React.useContext(
-      ComboboxContext
-    );
+export const ComboboxList = React.forwardRef(function ComboboxList(
+  {
+    // when true, and the list opens again, the option with a matching value
+    // will be automatically highlighted.
+    persistSelection = false,
+    as: Comp = "ul",
+    ...props
+  },
+  forwardedRef
+) {
+  const { persistSelectionRef, listboxId } = React.useContext(ComboboxContext);
 
-    if (persistSelection) {
-      persistSelectionRef.current = true;
-    }
-
-    return (
-      <Comp
-        role="listbox"
-        {...props}
-        ref={forwardedRef}
-        data-reach-combobox-list=""
-        id={listboxId}
-      />
-    );
+  if (persistSelection) {
+    persistSelectionRef.current = true;
   }
-);
+
+  return (
+    <Comp
+      role="listbox"
+      {...props}
+      ref={forwardedRef}
+      data-reach-combobox-list=""
+      id={listboxId}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"ul", ComboboxListProps>;
 
 /**
  * @see Docs https://reach.tech/combobox#comboboxlist-props
  */
-export type ComboboxListProps = {
+export interface ComboboxListProps {
   /**
    * Defaults to false. When true and the list is opened, if an option's value
    * matches the value in the input, it will automatically be highlighted and
@@ -738,7 +730,7 @@ export type ComboboxListProps = {
    * @see Docs https://reach.tech/combobox#comboboxlist-persistselection
    */
   persistSelection?: boolean;
-};
+}
 
 if (__DEV__) {
   ComboboxList.displayName = "ComboboxList";
@@ -753,70 +745,68 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/combobox#comboboxoption
  */
-export const ComboboxOption = forwardRefWithAs<ComboboxOptionProps, "li">(
-  function ComboboxOption(
-    { as: Comp = "li", children, value, onClick, ...props },
-    forwardedRef: React.Ref<any>
-  ) {
-    const {
-      onSelect,
-      data: { navigationValue },
-      transition,
-    } = React.useContext(ComboboxContext);
+export const ComboboxOption = React.forwardRef(function ComboboxOption(
+  { as: Comp = "li", children, value, onClick, ...props },
+  forwardedRef: React.Ref<any>
+) {
+  const {
+    onSelect,
+    data: { navigationValue },
+    transition,
+  } = React.useContext(ComboboxContext);
 
-    let ownRef = React.useRef<HTMLElement | null>(null);
-    let ref = useComposedRefs(forwardedRef, ownRef);
+  let ownRef = React.useRef<HTMLElement | null>(null);
+  let ref = useComposedRefs(forwardedRef, ownRef);
 
-    let index = useDescendant(
-      {
-        element: ownRef.current!,
-        value,
-      },
-      ComboboxDescendantContext
-    );
+  let index = useDescendant(
+    {
+      element: ownRef.current!,
+      value,
+    },
+    ComboboxDescendantContext
+  );
 
-    const isActive = navigationValue === value;
+  const isActive = navigationValue === value;
 
-    const handleClick = () => {
-      onSelect && onSelect(value);
-      transition(SELECT_WITH_CLICK, { value });
-    };
+  const handleClick = () => {
+    onSelect && onSelect(value);
+    transition(SELECT_WITH_CLICK, { value });
+  };
 
-    return (
-      <OptionContext.Provider value={{ value, index }}>
-        <Comp
-          aria-selected={isActive}
-          role="option"
-          {...props}
-          data-reach-combobox-option=""
-          ref={ref}
-          id={String(makeHash(value))}
-          data-highlighted={isActive ? "" : undefined}
-          // Without this the menu will close from `onBlur`, but with it the
-          // element can be `document.activeElement` and then our focus checks in
-          // onBlur will work as intended
-          tabIndex={-1}
-          onClick={composeEventHandlers(onClick, handleClick)}
-        >
-          {children ? (
-            isFunction(children) ? (
-              children({ value, index })
-            ) : (
-              children
-            )
+  return (
+    <OptionContext.Provider value={{ value, index }}>
+      <Comp
+        aria-selected={isActive}
+        role="option"
+        {...props}
+        data-reach-combobox-option=""
+        ref={ref}
+        id={String(makeHash(value))}
+        data-highlighted={isActive ? "" : undefined}
+        // Without this the menu will close from `onBlur`, but with it the
+        // element can be `document.activeElement` and then our focus checks in
+        // onBlur will work as intended
+        tabIndex={-1}
+        onClick={composeEventHandlers(onClick, handleClick)}
+      >
+        {children ? (
+          isFunction(children) ? (
+            children({ value, index })
           ) : (
-            <ComboboxOptionText />
-          )}
-        </Comp>
-      </OptionContext.Provider>
-    );
-  }
-);
+            children
+          )
+        ) : (
+          <ComboboxOptionText />
+        )}
+      </Comp>
+    </OptionContext.Provider>
+  );
+}) as Polymorphic.ForwardRefComponent<"li", ComboboxOptionProps>;
 
 /**
  * @see Docs https://reach.tech/combobox#comboboxoption-props
  */
-export type ComboboxOptionProps = {
+export interface ComboboxOptionProps {
   /**
    * Optional. If omitted, the `value` will be used as the children like as:
    * `<ComboboxOption value="Seattle, Tacoma, Washington" />`. But if you need
@@ -840,7 +830,7 @@ export type ComboboxOptionProps = {
    * @see Docs https://reach.tech/combobox#comboboxoption-value
    */
   value: string;
-};
+}
 
 if (__DEV__) {
   ComboboxOption.displayName = "ComboboxOption";
@@ -909,46 +899,44 @@ if (__DEV__) {
 /**
  * ComboboxButton
  */
-export const ComboboxButton = forwardRefWithAs<ComboboxButtonProps, "button">(
-  function ComboboxButton(
-    { as: Comp = "button", onClick, onKeyDown, ...props },
-    forwardedRef
-  ) {
-    const {
-      transition,
-      state,
-      buttonRef,
-      listboxId,
-      isExpanded,
-    } = React.useContext(ComboboxContext);
-    const ref = useComposedRefs(buttonRef, forwardedRef);
+export const ComboboxButton = React.forwardRef(function ComboboxButton(
+  { as: Comp = "button", onClick, onKeyDown, ...props },
+  forwardedRef
+) {
+  const {
+    transition,
+    state,
+    buttonRef,
+    listboxId,
+    isExpanded,
+  } = React.useContext(ComboboxContext);
+  const ref = useComposedRefs(buttonRef, forwardedRef);
 
-    const handleKeyDown = useKeyDown();
+  const handleKeyDown = useKeyDown();
 
-    const handleClick = () => {
-      if (state === IDLE) {
-        transition(OPEN_WITH_BUTTON);
-      } else {
-        transition(CLOSE_WITH_BUTTON);
-      }
-    };
+  const handleClick = () => {
+    if (state === IDLE) {
+      transition(OPEN_WITH_BUTTON);
+    } else {
+      transition(CLOSE_WITH_BUTTON);
+    }
+  };
 
-    return (
-      <Comp
-        aria-controls={listboxId}
-        aria-haspopup="listbox"
-        aria-expanded={isExpanded}
-        {...props}
-        data-reach-combobox-button=""
-        ref={ref}
-        onClick={composeEventHandlers(onClick, handleClick)}
-        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      aria-controls={listboxId}
+      aria-haspopup="listbox"
+      aria-expanded={isExpanded}
+      {...props}
+      data-reach-combobox-button=""
+      ref={ref}
+      onClick={composeEventHandlers(onClick, handleClick)}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"button", ComboboxButtonProps>;
 
-export type ComboboxButtonProps = {};
+export interface ComboboxButtonProps {}
 
 if (__DEV__) {
   ComboboxButton.displayName = "ComboboxButton";
@@ -1292,12 +1280,12 @@ export function useComboboxOptionContext(): ComboboxOptionContextValue {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-export type ComboboxContextValue = {
+export interface ComboboxContextValue {
   id: string | undefined;
   isExpanded: boolean;
   navigationValue: ComboboxValue | null;
   state: State;
-};
+}
 
 type ComboboxDescendant = Descendant<HTMLElement> & {
   value: ComboboxValue;
@@ -1357,11 +1345,11 @@ interface StateChart {
   };
 }
 
-type StateData = {
+interface StateData {
   lastEventType?: MachineEventType;
   navigationValue?: ComboboxValue | null;
   value?: ComboboxValue | null;
-};
+}
 
 type MachineEvent =
   | { type: "BLUR" }

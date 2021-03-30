@@ -29,10 +29,8 @@ import {
 import { getComputedStyle } from "@reach/utils/computed-styles";
 import { cloneValidElement } from "@reach/utils/clone-valid-element";
 import { useControlledState } from "@reach/utils/use-controlled-state";
-import {} from "@reach/utils/use-stable-callback";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
 import { isBoolean, isNumber, isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -44,7 +42,9 @@ import { useComposedRefs } from "@reach/utils/compose-refs";
 import { useUpdateEffect } from "@reach/utils/use-update-effect";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useId } from "@reach/auto-id";
+
 import type { Descendant } from "@reach/descendants";
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(
   "TabsDescendantsContext"
@@ -77,7 +77,7 @@ enum TabsOrientation {
  *
  * @see Docs https://reach.tech/tabs#tabs
  */
-const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
+const Tabs = React.forwardRef(function Tabs(
   {
     as: Comp = "div",
     children,
@@ -196,12 +196,12 @@ const Tabs = forwardRefWithAs<TabsProps, "div">(function Tabs(
       </TabsContext.Provider>
     </DescendantProvider>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", TabsProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tabs-props
  */
-type TabsProps = {
+interface TabsProps {
   /**
    * Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't
    * matter, you can have tabs on the top or the bottom. In fact, you could have
@@ -258,7 +258,7 @@ type TabsProps = {
    * @see Docs https://reach.tech/tabs#tabs-onchange
    */
   onChange?: (index: number) => void;
-};
+}
 
 if (__DEV__) {
   Tabs.displayName = "Tabs";
@@ -300,7 +300,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tablist
  */
-const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
+const TabListImpl = React.forwardRef(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
   forwardedRef
 ) {
@@ -382,7 +382,7 @@ const TabListImpl = forwardRefWithAs<TabListProps, "div">(function TabList(
       })}
     </Comp>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", TabListProps>;
 
 if (__DEV__) {
   TabListImpl.displayName = "TabList";
@@ -392,12 +392,15 @@ if (__DEV__) {
   };
 }
 
-const TabList = memoWithAs(TabListImpl);
+const TabList = React.memo(TabListImpl) as Polymorphic.MemoComponent<
+  "div",
+  TabListProps
+>;
 
 /**
  * @see Docs https://reach.tech/tabs#tablist-props
  */
-type TabListProps = {
+interface TabListProps {
   /**
    * `TabList` expects multiple `Tab` elements as children.
    *
@@ -406,7 +409,7 @@ type TabListProps = {
    * @see Docs https://reach.tech/tabs#tablist-children
    */
   children?: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   TabList.displayName = "TabList";
@@ -421,7 +424,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tab
  */
-const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
+const Tab = React.forwardRef(function Tab(
   {
     // TODO: Remove in 1.0
     // @ts-ignore
@@ -508,12 +511,12 @@ const Tab = forwardRefWithAs<TabProps, "button">(function Tab(
       {children}
     </Comp>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"button", TabProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tab-props
  */
-type TabProps = {
+interface TabProps {
   /**
    * `Tab` can receive any type of children.
    *
@@ -528,7 +531,7 @@ type TabProps = {
    */
   disabled?: boolean;
   index?: number;
-};
+}
 
 if (__DEV__) {
   Tab.displayName = "Tab";
@@ -547,25 +550,26 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tabpanels
  */
-const TabPanelsImpl = forwardRefWithAs<TabPanelsProps, "div">(
-  function TabPanels({ children, as: Comp = "div", ...props }, forwardedRef) {
-    let ownRef = React.useRef();
-    let ref = useComposedRefs(ownRef, forwardedRef);
-    let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
+const TabPanelsImpl = React.forwardRef(function TabPanels(
+  { children, as: Comp = "div", ...props },
+  forwardedRef
+) {
+  let ownRef = React.useRef();
+  let ref = useComposedRefs(ownRef, forwardedRef);
+  let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
 
-    return (
-      <DescendantProvider
-        context={TabPanelDescendantsContext}
-        items={tabPanels}
-        set={setTabPanels}
-      >
-        <Comp {...props} ref={ref} data-reach-tab-panels="">
-          {children}
-        </Comp>
-      </DescendantProvider>
-    );
-  }
-);
+  return (
+    <DescendantProvider
+      context={TabPanelDescendantsContext}
+      items={tabPanels}
+      set={setTabPanels}
+    >
+      <Comp {...props} ref={ref} data-reach-tab-panels="">
+        {children}
+      </Comp>
+    </DescendantProvider>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", TabPanelsProps>;
 
 if (__DEV__) {
   TabPanelsImpl.displayName = "TabPanels";
@@ -575,12 +579,15 @@ if (__DEV__) {
   };
 }
 
-const TabPanels = memoWithAs(TabPanelsImpl);
+const TabPanels = React.memo(TabPanelsImpl) as Polymorphic.MemoComponent<
+  "div",
+  TabPanelsProps
+>;
 
 /**
  * @see Docs https://reach.tech/tabs#tabpanels-props
  */
-type TabPanelsProps = TabListProps & {};
+interface TabPanelsProps extends TabListProps {}
 
 if (__DEV__) {
   TabPanels.displayName = "TabPanels";
@@ -595,7 +602,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tabpanel
  */
-const TabPanel = forwardRefWithAs<TabPanelProps, "div">(function TabPanel(
+const TabPanel = React.forwardRef(function TabPanel(
   { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
   forwardedRef
 ) {
@@ -655,19 +662,19 @@ const TabPanel = forwardRefWithAs<TabPanelProps, "div">(function TabPanel(
       {children}
     </Comp>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", TabPanelProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tabpanel-props
  */
-type TabPanelProps = {
+interface TabPanelProps {
   /**
    * `TabPanel` can receive any type of children.
    *
    * @see Docs https://reach.tech/tabs#tabpanel-children
    */
   children?: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   TabPanel.displayName = "TabPanel";
@@ -705,13 +712,13 @@ type TabDescendant = Descendant<HTMLElement> & {
 
 type TabPanelDescendant = Descendant<HTMLElement>;
 
-type TabsContextValue = {
+interface TabsContextValue {
   focusedIndex: number;
   id: string;
   selectedIndex: number;
-};
+}
 
-type InternalTabsContextValue = {
+interface InternalTabsContextValue {
   focusedIndex: number;
   id: string;
   isControlled: boolean;
@@ -726,7 +733,7 @@ type InternalTabsContextValue = {
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
   userInteractedRef: React.MutableRefObject<boolean>;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports

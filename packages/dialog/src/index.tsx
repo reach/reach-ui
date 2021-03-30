@@ -13,7 +13,6 @@
 import * as React from "react";
 import { Portal } from "@reach/portal";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { isString } from "@reach/utils/type-check";
 import { noop } from "@reach/utils/noop";
 import { useCheckStyles } from "@reach/utils/dev-utils";
@@ -22,6 +21,8 @@ import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 import PropTypes from "prop-types";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 const overlayPropTypes = {
   allowPinchZoom: PropTypes.bool,
@@ -44,36 +45,34 @@ const overlayPropTypes = {
  *
  * @see Docs https://reach.tech/dialog#dialogoverlay
  */
-const DialogOverlay = forwardRefWithAs<DialogOverlayProps, "div">(
-  function DialogOverlay(
-    { as: Comp = "div", isOpen = true, ...props },
-    forwardedRef
-  ) {
-    useCheckStyles("dialog");
+const DialogOverlay = React.forwardRef(function DialogOverlay(
+  { as: Comp = "div", isOpen = true, ...props },
+  forwardedRef
+) {
+  useCheckStyles("dialog");
 
-    // We want to ignore the immediate focus of a tooltip so it doesn't pop
-    // up again when the menu closes, only pops up when focus returns again
-    // to the tooltip (like native OS tooltips).
-    React.useEffect(() => {
-      if (isOpen) {
+  // We want to ignore the immediate focus of a tooltip so it doesn't pop
+  // up again when the menu closes, only pops up when focus returns again
+  // to the tooltip (like native OS tooltips).
+  React.useEffect(() => {
+    if (isOpen) {
+      // @ts-ignore
+      window.__REACH_DISABLE_TOOLTIPS = true;
+    } else {
+      window.requestAnimationFrame(() => {
+        // Wait a frame so that this doesn't fire before tooltip does
         // @ts-ignore
-        window.__REACH_DISABLE_TOOLTIPS = true;
-      } else {
-        window.requestAnimationFrame(() => {
-          // Wait a frame so that this doesn't fire before tooltip does
-          // @ts-ignore
-          window.__REACH_DISABLE_TOOLTIPS = false;
-        });
-      }
-    }, [isOpen]);
+        window.__REACH_DISABLE_TOOLTIPS = false;
+      });
+    }
+  }, [isOpen]);
 
-    return isOpen ? (
-      <Portal data-reach-dialog-wrapper="">
-        <DialogInner ref={forwardedRef} as={Comp} {...props} />
-      </Portal>
-    ) : null;
-  }
-);
+  return isOpen ? (
+    <Portal data-reach-dialog-wrapper="">
+      <DialogInner ref={forwardedRef} as={Comp} {...props} />
+    </Portal>
+  ) : null;
+}) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
 if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
@@ -83,7 +82,7 @@ if (__DEV__) {
   };
 }
 
-type DialogOverlayProps = DialogProps & {
+interface DialogOverlayProps extends DialogProps {
   /**
    * By default the dialog locks the focus inside it. Normally this is what you
    * want. This prop is provided so that this feature can be disabled. This,
@@ -121,94 +120,92 @@ type DialogOverlayProps = DialogProps & {
    * @see https://github.com/theKashey/react-remove-scroll
    */
   dangerouslyBypassScrollLock?: boolean;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogInner
  */
-const DialogInner = forwardRefWithAs<DialogOverlayProps, "div">(
-  function DialogInner(
-    {
-      allowPinchZoom,
-      as: Comp = "div",
-      dangerouslyBypassFocusLock = false,
-      dangerouslyBypassScrollLock = false,
-      initialFocusRef,
-      onClick,
-      onDismiss = noop,
-      onKeyDown,
-      onMouseDown,
-      unstable_lockFocusAcrossFrames = true,
-      ...props
-    },
-    forwardedRef
-  ) {
-    const mouseDownTarget = React.useRef<EventTarget | null>(null);
-    const overlayNode = React.useRef<HTMLDivElement | null>(null);
-    const ref = useComposedRefs(overlayNode, forwardedRef);
+const DialogInner = React.forwardRef(function DialogInner(
+  {
+    allowPinchZoom,
+    as: Comp = "div",
+    dangerouslyBypassFocusLock = false,
+    dangerouslyBypassScrollLock = false,
+    initialFocusRef,
+    onClick,
+    onDismiss = noop,
+    onKeyDown,
+    onMouseDown,
+    unstable_lockFocusAcrossFrames = true,
+    ...props
+  },
+  forwardedRef
+) {
+  const mouseDownTarget = React.useRef<EventTarget | null>(null);
+  const overlayNode = React.useRef<HTMLDivElement | null>(null);
+  const ref = useComposedRefs(overlayNode, forwardedRef);
 
-    const activateFocusLock = React.useCallback(() => {
-      if (initialFocusRef && initialFocusRef.current) {
-        initialFocusRef.current.focus();
-      }
-    }, [initialFocusRef]);
-
-    function handleClick(event: React.MouseEvent) {
-      if (mouseDownTarget.current === event.target) {
-        event.stopPropagation();
-        onDismiss(event);
-      }
+  const activateFocusLock = React.useCallback(() => {
+    if (initialFocusRef && initialFocusRef.current) {
+      initialFocusRef.current.focus();
     }
+  }, [initialFocusRef]);
 
-    function handleKeyDown(event: React.KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.stopPropagation();
-        onDismiss(event);
-      }
+  function handleClick(event: React.MouseEvent) {
+    if (mouseDownTarget.current === event.target) {
+      event.stopPropagation();
+      onDismiss(event);
     }
-
-    function handleMouseDown(event: React.MouseEvent) {
-      mouseDownTarget.current = event.target;
-    }
-
-    React.useEffect(() => {
-      return overlayNode.current
-        ? createAriaHider(overlayNode.current)
-        : void null;
-    }, []);
-
-    return (
-      <FocusLock
-        autoFocus
-        returnFocus
-        onActivation={activateFocusLock}
-        disabled={dangerouslyBypassFocusLock}
-        crossFrame={unstable_lockFocusAcrossFrames}
-      >
-        <RemoveScroll
-          allowPinchZoom={allowPinchZoom}
-          enabled={!dangerouslyBypassScrollLock}
-        >
-          <Comp
-            {...props}
-            ref={ref}
-            data-reach-dialog-overlay=""
-            /*
-             * We can ignore the `no-static-element-interactions` warning here
-             * because our overlay is only designed to capture any outside
-             * clicks, not to serve as a clickable element itself.
-             */
-            onClick={composeEventHandlers(onClick, handleClick)}
-            onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-            onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
-          />
-        </RemoveScroll>
-      </FocusLock>
-    );
   }
-);
+
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Escape") {
+      event.stopPropagation();
+      onDismiss(event);
+    }
+  }
+
+  function handleMouseDown(event: React.MouseEvent) {
+    mouseDownTarget.current = event.target;
+  }
+
+  React.useEffect(() => {
+    return overlayNode.current
+      ? createAriaHider(overlayNode.current)
+      : void null;
+  }, []);
+
+  return (
+    <FocusLock
+      autoFocus
+      returnFocus
+      onActivation={activateFocusLock}
+      disabled={dangerouslyBypassFocusLock}
+      crossFrame={unstable_lockFocusAcrossFrames}
+    >
+      <RemoveScroll
+        allowPinchZoom={allowPinchZoom}
+        enabled={!dangerouslyBypassScrollLock}
+      >
+        <Comp
+          {...props}
+          ref={ref}
+          data-reach-dialog-overlay=""
+          /*
+           * We can ignore the `no-static-element-interactions` warning here
+           * because our overlay is only designed to capture any outside
+           * clicks, not to serve as a clickable element itself.
+           */
+          onClick={composeEventHandlers(onClick, handleClick)}
+          onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+          onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+        />
+      </RemoveScroll>
+    </FocusLock>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
 if (__DEV__) {
   DialogOverlay.displayName = "DialogOverlay";
@@ -234,38 +231,36 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialogcontent
  */
-const DialogContent = forwardRefWithAs<DialogContentProps, "div">(
-  function DialogContent(
-    { as: Comp = "div", onClick, onKeyDown, ...props },
-    forwardedRef
-  ) {
-    return (
-      <Comp
-        aria-modal="true"
-        role="dialog"
-        tabIndex={-1}
-        {...props}
-        ref={forwardedRef}
-        data-reach-dialog-content=""
-        onClick={composeEventHandlers(onClick, (event) => {
-          event.stopPropagation();
-        })}
-      />
-    );
-  }
-);
+const DialogContent = React.forwardRef(function DialogContent(
+  { as: Comp = "div", onClick, onKeyDown, ...props },
+  forwardedRef
+) {
+  return (
+    <Comp
+      aria-modal="true"
+      role="dialog"
+      tabIndex={-1}
+      {...props}
+      ref={forwardedRef}
+      data-reach-dialog-content=""
+      onClick={composeEventHandlers(onClick, (event) => {
+        event.stopPropagation();
+      })}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"div", DialogContentProps>;
 
 /**
  * @see Docs https://reach.tech/dialog#dialogcontent-props
  */
-type DialogContentProps = {
+interface DialogContentProps {
   /**
    * Accepts any renderable content.
    *
    * @see Docs https://reach.tech/dialog#dialogcontent-children
    */
   children?: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   DialogContent.displayName = "DialogContent";
@@ -285,7 +280,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/dialog#dialog
  */
-const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
+const Dialog = React.forwardRef(function Dialog(
   {
     allowPinchZoom = false,
     initialFocusRef,
@@ -305,12 +300,12 @@ const Dialog = forwardRefWithAs<DialogProps, "div">(function Dialog(
       <DialogContent ref={forwardedRef} {...props} />
     </DialogOverlay>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", DialogProps>;
 
 /**
  * @see Docs https://reach.tech/dialog#dialog-props
  */
-type DialogProps = {
+interface DialogProps {
   /**
    * Handle zoom/pinch gestures on iOS devices when scroll locking is enabled.
    * Defaults to `false`.
@@ -370,7 +365,7 @@ type DialogProps = {
    * https://github.com/reach/reach-ui/issues/536
    */
   unstable_lockFocusAcrossFrames?: boolean;
-};
+}
 
 if (__DEV__) {
   Dialog.displayName = "Dialog";

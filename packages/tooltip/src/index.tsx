@@ -44,7 +44,6 @@ import * as React from "react";
 import { useId } from "@reach/auto-id";
 import { getDocumentDimensions } from "@reach/utils/get-document-dimensions";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { makeId } from "@reach/utils/make-id";
 import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
@@ -54,6 +53,8 @@ import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 import warning from "tiny-warning";
 import PropTypes from "prop-types";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 const MOUSE_REST_TIMEOUT = 100;
 const LEAVE_TIMEOUT = 500;
@@ -402,7 +403,7 @@ function useTooltip<ElementType extends HTMLElement>({
  *
  * @see Docs https://reach.tech/tooltip#tooltip
  */
-const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
+const Tooltip = React.forwardRef(function (
   {
     children,
     label,
@@ -452,12 +453,13 @@ const Tooltip = forwardRefWithAs<TooltipProps, "div">(function (
       />
     </React.Fragment>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", TooltipProps>;
 
-type TooltipProps = {
+interface TooltipProps
+  extends Omit<TooltipContentProps, "triggerRect" | "isVisible"> {
   children: React.ReactNode;
   DEBUG_STYLE?: boolean;
-} & Omit<TooltipContentProps, "triggerRect" | "isVisible">;
+}
 
 if (__DEV__) {
   Tooltip.displayName = "Tooltip";
@@ -475,37 +477,35 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tooltip#tooltippopup
  */
-const TooltipPopup = forwardRefWithAs<TooltipPopupProps, "div">(
-  function TooltipPopup(
-    {
-      // could use children but we want to encourage simple strings
-      label,
-      // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-      ariaLabel: DEPRECATED_ariaLabel,
-      isVisible,
-      id,
-      ...props
-    },
-    forwardRef
-  ) {
-    return isVisible ? (
-      <Portal>
-        <TooltipContent
-          ref={forwardRef}
-          label={label}
-          aria-label={DEPRECATED_ariaLabel}
-          isVisible={isVisible}
-          {...props}
-          id={makeId("tooltip", String(id))}
-        />
-      </Portal>
-    ) : null;
-  }
-);
+const TooltipPopup = React.forwardRef(function TooltipPopup(
+  {
+    // could use children but we want to encourage simple strings
+    label,
+    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+    ariaLabel: DEPRECATED_ariaLabel,
+    isVisible,
+    id,
+    ...props
+  },
+  forwardRef
+) {
+  return isVisible ? (
+    <Portal>
+      <TooltipContent
+        ref={forwardRef}
+        label={label}
+        aria-label={DEPRECATED_ariaLabel}
+        isVisible={isVisible}
+        {...props}
+        id={makeId("tooltip", String(id))}
+      />
+    </Portal>
+  ) : null;
+}) as Polymorphic.ForwardRefComponent<"div", TooltipPopupProps>;
 
-type TooltipPopupProps = {
+interface TooltipPopupProps extends TooltipContentProps {
   children?: React.ReactNode;
-} & TooltipContentProps;
+}
 
 if (__DEV__) {
   TooltipPopup.displayName = "TooltipPopup";
@@ -523,67 +523,65 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tooltip#tooltipcontent
  */
-const TooltipContent = forwardRefWithAs<TooltipContentProps, "div">(
-  function TooltipContent(
-    {
-      // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-      ariaLabel,
-      "aria-label": realAriaLabel,
-      as: Comp = "div",
-      id,
-      isVisible,
-      label,
-      position = positionTooltip,
-      style,
-      triggerRect,
-      ...props
-    },
-    forwardedRef
-  ) {
-    // The element that serves as the tooltip container has role tooltip.
-    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip When an app passes
-    // an `aria-label`, we actually want to implement `role="tooltip"` on a
-    // visually hidden element inside of the trigger. In these cases we want the
-    // screen reader user to know both the content in the tooltip, but also the
-    // content in the badge. For screen reader users, the only content announced
-    // to them is whatever is in the tooltip.
-    let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
+const TooltipContent = React.forwardRef(function TooltipContent(
+  {
+    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+    ariaLabel,
+    "aria-label": realAriaLabel,
+    as: Comp = "div",
+    id,
+    isVisible,
+    label,
+    position = positionTooltip,
+    style,
+    triggerRect,
+    ...props
+  },
+  forwardedRef
+) {
+  // The element that serves as the tooltip container has role tooltip.
+  // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip When an app passes
+  // an `aria-label`, we actually want to implement `role="tooltip"` on a
+  // visually hidden element inside of the trigger. In these cases we want the
+  // screen reader user to know both the content in the tooltip, but also the
+  // content in the badge. For screen reader users, the only content announced
+  // to them is whatever is in the tooltip.
+  let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
-    let ownRef = React.useRef(null);
-    let ref = useComposedRefs(forwardedRef, ownRef);
-    let tooltipRect = useRect(ownRef, { observe: isVisible });
-    return (
-      <React.Fragment>
-        <Comp
-          role={hasAriaLabel ? undefined : "tooltip"}
-          {...props}
-          ref={ref}
-          data-reach-tooltip=""
-          id={hasAriaLabel ? undefined : id}
-          style={{
-            ...style,
-            ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
-          }}
-        >
-          {label}
-        </Comp>
-        {hasAriaLabel && (
-          <VisuallyHidden role="tooltip" id={id}>
-            {realAriaLabel || ariaLabel}
-          </VisuallyHidden>
-        )}
-      </React.Fragment>
-    );
-  }
-);
+  let ownRef = React.useRef(null);
+  let ref = useComposedRefs(forwardedRef, ownRef);
+  let tooltipRect = useRect(ownRef, { observe: isVisible });
+  return (
+    <React.Fragment>
+      <Comp
+        role={hasAriaLabel ? undefined : "tooltip"}
+        {...props}
+        ref={ref}
+        data-reach-tooltip=""
+        id={hasAriaLabel ? undefined : id}
+        style={{
+          ...style,
+          ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
+        }}
+      >
+        {label}
+      </Comp>
+      {hasAriaLabel && (
+        <VisuallyHidden role="tooltip" id={id}>
+          {realAriaLabel || ariaLabel}
+        </VisuallyHidden>
+      )}
+    </React.Fragment>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", TooltipContentProps>;
 
-type TooltipContentProps = {
+interface TooltipContentProps {
   ariaLabel?: string;
   position?: Position;
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
-};
+}
 
 if (__DEV__) {
   TooltipContent.displayName = "TooltipContent";

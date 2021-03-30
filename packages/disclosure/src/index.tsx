@@ -18,13 +18,14 @@
 import * as React from "react";
 import { useStableCallback } from "@reach/utils/use-stable-callback";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { makeId } from "@reach/utils/make-id";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useId } from "@reach/auto-id";
 import warning from "tiny-warning";
 import PropTypes from "prop-types";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 const DisclosureContext = createNamedContext<DisclosureContextValue>(
   "DisclosureContext",
@@ -117,7 +118,7 @@ const Disclosure: React.FC<DisclosureProps> = ({
   );
 };
 
-type DisclosureProps = {
+interface DisclosureProps {
   /**
    * `Disclosure` expects to receive accept `DisclosureButton` and
    * `DisclosurePanel` components as children. It can also accept wrapper
@@ -160,7 +161,7 @@ type DisclosureProps = {
    * @see Docs https://reach.tech/disclosure#disclosure-open
    */
   open?: boolean;
-};
+}
 
 if (__DEV__) {
   Disclosure.displayName = "Disclosure";
@@ -181,58 +182,57 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurebutton
  */
-const DisclosureButton = forwardRefWithAs<DisclosureButtonProps, "button">(
-  function DisclosureButton(
-    {
-      // The element that shows and hides the content has role `button`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-      as: Comp = "button",
-      children,
-      onClick,
-      onMouseDown,
-      onPointerDown,
-      ...props
-    },
-    forwardedRef
-  ) {
-    const { onSelect, open, panelId } = React.useContext(DisclosureContext);
-    const ownRef = React.useRef<HTMLElement | null>(null);
+const DisclosureButton = React.forwardRef(function DisclosureButton(
+  {
+    // The element that shows and hides the content has role `button`.
+    // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+    as: Comp = "button",
+    children,
+    onClick,
+    onMouseDown,
+    onPointerDown,
+    ...props
+  },
+  forwardedRef
+) {
+  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+  const ownRef = React.useRef<HTMLElement | null>(null);
 
-    const ref = useComposedRefs(forwardedRef, ownRef);
+  const ref = useComposedRefs(forwardedRef, ownRef);
 
-    function handleClick(event: React.MouseEvent) {
-      event.preventDefault();
-      ownRef.current && ownRef.current.focus();
-      onSelect();
-    }
-
-    return (
-      <Comp
-        // Optionally, the element with role `button` has a value specified for
-        // `aria-controls` that refers to the element that contains all the
-        // content that is shown or hidden.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-        aria-controls={panelId}
-        // When the content is visible, the element with role `button` has
-        // `aria-expanded` set to `true`. When the content area is hidden, it is
-        // set to `false`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
-        aria-expanded={open}
-        {...props}
-        data-reach-disclosure-button=""
-        data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
-        ref={ref}
-        onClick={composeEventHandlers(onClick, handleClick)}
-      >
-        {children}
-      </Comp>
-    );
+  function handleClick(event: React.MouseEvent) {
+    event.preventDefault();
+    ownRef.current && ownRef.current.focus();
+    onSelect();
   }
-);
+
+  return (
+    <Comp
+      // Optionally, the element with role `button` has a value specified for
+      // `aria-controls` that refers to the element that contains all the
+      // content that is shown or hidden.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+      aria-controls={panelId}
+      // When the content is visible, the element with role `button` has
+      // `aria-expanded` set to `true`. When the content area is hidden, it is
+      // set to `false`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
+      aria-expanded={open}
+      {...props}
+      data-reach-disclosure-button=""
+      data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
+      ref={ref}
+      onClick={composeEventHandlers(onClick, handleClick)}
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"button", DisclosureButtonProps>;
+
 /**
  * @see Docs https://reach.tech/disclosure#disclosurebutton-props
  */
-type DisclosureButtonProps = {
+interface DisclosureButtonProps {
   /**
    * Typically a text string that serves as a label for the disclosure button,
    * though nested DOM nodes can be passed as well so long as they are valid
@@ -242,7 +242,7 @@ type DisclosureButtonProps = {
    * @see Docs https://reach.tech/disclosure#disclosurebutton-children
    */
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   DisclosureButton.displayName = "DisclosureButton";
@@ -262,28 +262,26 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/disclosure#disclosurepanel
  */
-const DisclosurePanel = forwardRefWithAs<DisclosurePanelProps, "div">(
-  function DisclosurePanel(
-    { as: Comp = "div", children, ...props },
-    forwardedRef
-  ) {
-    const { panelId, open } = React.useContext(DisclosureContext);
+const DisclosurePanel = React.forwardRef(function DisclosurePanel(
+  { as: Comp = "div", children, ...props },
+  forwardedRef
+) {
+  const { panelId, open } = React.useContext(DisclosureContext);
 
-    return (
-      <Comp
-        ref={forwardedRef}
-        hidden={!open}
-        {...props}
-        data-reach-disclosure-panel=""
-        data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
-        id={panelId}
-        tabIndex={-1}
-      >
-        {children}
-      </Comp>
-    );
-  }
-);
+  return (
+    <Comp
+      ref={forwardedRef}
+      hidden={!open}
+      {...props}
+      data-reach-disclosure-panel=""
+      data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
+      id={panelId}
+      tabIndex={-1}
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", DisclosurePanelProps>;
 
 if (__DEV__) {
   DisclosurePanel.displayName = "DisclosurePanel";
@@ -293,14 +291,14 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props
  */
-type DisclosurePanelProps = {
+interface DisclosurePanelProps {
   /**
    * Inner collapsible content for the disclosure item.
    *
    * @see Docs https://reach.tech/disclosure#disclosurepanel-children
    */
   children: React.ReactNode;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -6,27 +6,25 @@ import * as React from "react";
 import { Portal } from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import tabbable from "tabbable";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Popover
  */
-const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
-  props,
-  ref
-) {
+const Popover = React.forwardRef(function Popover(props, ref) {
   return (
     <Portal>
       <PopoverImpl ref={ref} {...props} />
     </Portal>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
-type PopoverProps = {
+interface PopoverProps {
   children: React.ReactNode;
   targetRef: React.RefObject<HTMLElement>;
   position?: Position;
@@ -45,7 +43,7 @@ type PopoverProps = {
    * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
-};
+}
 
 if (__DEV__) {
   Popover.displayName = "Popover";
@@ -59,7 +57,7 @@ if (__DEV__) {
  * Popover is conditionally rendered so we can't start measuring until it shows
  * up, so useRect needs to live down here not up in Popover
  */
-const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
+const PopoverImpl = React.forwardRef(function PopoverImpl(
   {
     as: Comp = "div",
     targetRef,
@@ -93,7 +91,7 @@ const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
       }}
     />
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
 if (__DEV__) {
   PopoverImpl.displayName = "PopoverImpl";

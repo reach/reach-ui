@@ -10,7 +10,6 @@
 
 import * as React from "react";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { isBoolean, isNumber } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -28,6 +27,7 @@ import {
 import { useId } from "@reach/auto-id";
 import PropTypes from "prop-types";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { Descendant } from "@reach/descendants";
 
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
@@ -59,7 +59,7 @@ enum AccordionStates {
  *
  * @see Docs https://reach.tech/accordion#accordion-1
  */
-const Accordion = forwardRefWithAs<AccordionProps, "div">(function Accordion(
+const Accordion = React.forwardRef(function Accordion(
   {
     as: Comp = "div",
     children,
@@ -202,12 +202,12 @@ const Accordion = forwardRefWithAs<AccordionProps, "div">(function Accordion(
       </AccordionContext.Provider>
     </DescendantProvider>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", AccordionProps>;
 
 /**
  * @see Docs https://reach.tech/accordion#accordion-props
  */
-type AccordionProps = {
+interface AccordionProps {
   /**
    * `Accordion` can accept `AccordionItem` components as children.
    *
@@ -273,7 +273,7 @@ type AccordionProps = {
    * by the index prop.
    */
   multiple?: boolean;
-};
+}
 
 if (__DEV__) {
   Accordion.displayName = "Accordion";
@@ -337,10 +337,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionitem
  */
-const AccordionItem = forwardRefWithAs<
-  AccordionItemProps & React.ComponentPropsWithRef<"div">,
-  "div"
->(function AccordionItem(
+const AccordionItem = React.forwardRef(function AccordionItem(
   { as: Comp = "div", children, disabled = false, ...props },
   forwardedRef
 ) {
@@ -392,12 +389,12 @@ const AccordionItem = forwardRefWithAs<
       </Comp>
     </AccordionItemContext.Provider>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", AccordionItemProps>;
 
 /**
  * @see Docs https://reach.tech/accordion#accordionitem-props
  */
-type AccordionItemProps = {
+interface AccordionItemProps {
   /**
    * An `AccordionItem` expects to receive an `AccordionButton` and
    * `AccordionPanel` components as its children, though you can also nest other
@@ -414,7 +411,7 @@ type AccordionItemProps = {
    * @see Docs https://reach.tech/accordion#accordionitem-disabled
    */
   disabled?: boolean;
-};
+}
 
 if (__DEV__) {
   AccordionItem.displayName = "AccordionItem";
@@ -434,112 +431,110 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionbutton
  */
-const AccordionButton = forwardRefWithAs<AccordionButtonProps, "button">(
-  function AccordionButton(
-    {
-      as: Comp = "button",
-      children,
-      onClick,
-      onKeyDown,
-      onMouseDown,
-      onPointerDown,
-      tabIndex,
-      ...props
-    },
-    forwardedRef
-  ) {
-    let { onSelectPanel } = React.useContext(AccordionContext);
+const AccordionButton = React.forwardRef(function AccordionButton(
+  {
+    as: Comp = "button",
+    children,
+    onClick,
+    onKeyDown,
+    onMouseDown,
+    onPointerDown,
+    tabIndex,
+    ...props
+  },
+  forwardedRef
+) {
+  let { onSelectPanel } = React.useContext(AccordionContext);
 
-    let {
-      disabled,
-      buttonId,
-      buttonRef: ownRef,
-      index,
-      panelId,
-      state,
-    } = React.useContext(AccordionItemContext);
+  let {
+    disabled,
+    buttonId,
+    buttonRef: ownRef,
+    index,
+    panelId,
+    state,
+  } = React.useContext(AccordionItemContext);
 
-    let ref = useComposedRefs(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, ownRef);
 
-    function handleClick(event: React.MouseEvent) {
-      event.preventDefault();
-      if (disabled) {
-        return;
-      }
-      ownRef.current.focus();
-      onSelectPanel(index);
+  function handleClick(event: React.MouseEvent) {
+    event.preventDefault();
+    if (disabled) {
+      return;
     }
-
-    let handleKeyDown = useDescendantKeyDown(AccordionDescendantContext, {
-      currentIndex: index,
-      orientation: "vertical",
-      key: "element",
-      rotate: true,
-      callback(element: HTMLElement) {
-        element && element.focus();
-      },
-      filter: (button) => !button.disabled,
-    });
-
-    return (
-      <Comp
-        // Each accordion header `button` is wrapped in an element with role
-        // `heading` that has a value set for `aria-level` that is appropriate
-        // for the information architecture of the page.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
-        // I believe this should be left for apps to handle, since headings
-        // are necessarily context-aware. An app can wrap a button inside any
-        // arbitrary tag(s).
-        // TODO: Revisit documentation and examples
-        // @example
-        // <div>
-        //   <h3>
-        //     <AccordionButton>Click Me</AccordionButton>
-        //   </h3>
-        //   <SomeComponent />
-        // </div>
-
-        // The title of each accordion header is contained in an element with
-        // role `button`. We use an HTML button by default, so we can omit
-        // this attribute.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
-        // role="button"
-
-        // The accordion header `button` element has `aria-controls` set to the
-        // ID of the element containing the accordion panel content.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
-        aria-controls={panelId}
-        // If the accordion panel associated with an accordion header is
-        // visible, the header `button` element has `aria-expanded` set to
-        // `true`. If the panel is not visible, `aria-expanded` is set to
-        // `false`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
-        aria-expanded={state === AccordionStates.Open}
-        tabIndex={disabled ? -1 : tabIndex}
-        {...props}
-        ref={ref}
-        data-reach-accordion-button=""
-        // If the accordion panel associated with an accordion header is
-        // visible, and if the accordion does not permit the panel to be
-        // collapsed, the header `button` element has `aria-disabled` set to
-        // `true`. We can use `disabled` since we opt for an HTML5 `button`
-        // element.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
-        disabled={disabled || undefined}
-        id={buttonId}
-        onClick={composeEventHandlers(onClick, handleClick)}
-        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-      >
-        {children}
-      </Comp>
-    );
+    ownRef.current.focus();
+    onSelectPanel(index);
   }
-);
+
+  let handleKeyDown = useDescendantKeyDown(AccordionDescendantContext, {
+    currentIndex: index,
+    orientation: "vertical",
+    key: "element",
+    rotate: true,
+    callback(element: HTMLElement) {
+      element && element.focus();
+    },
+    filter: (button) => !button.disabled,
+  });
+
+  return (
+    <Comp
+      // Each accordion header `button` is wrapped in an element with role
+      // `heading` that has a value set for `aria-level` that is appropriate
+      // for the information architecture of the page.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+      // I believe this should be left for apps to handle, since headings
+      // are necessarily context-aware. An app can wrap a button inside any
+      // arbitrary tag(s).
+      // TODO: Revisit documentation and examples
+      // @example
+      // <div>
+      //   <h3>
+      //     <AccordionButton>Click Me</AccordionButton>
+      //   </h3>
+      //   <SomeComponent />
+      // </div>
+
+      // The title of each accordion header is contained in an element with
+      // role `button`. We use an HTML button by default, so we can omit
+      // this attribute.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+      // role="button"
+
+      // The accordion header `button` element has `aria-controls` set to the
+      // ID of the element containing the accordion panel content.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+      aria-controls={panelId}
+      // If the accordion panel associated with an accordion header is
+      // visible, the header `button` element has `aria-expanded` set to
+      // `true`. If the panel is not visible, `aria-expanded` is set to
+      // `false`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+      aria-expanded={state === AccordionStates.Open}
+      tabIndex={disabled ? -1 : tabIndex}
+      {...props}
+      ref={ref}
+      data-reach-accordion-button=""
+      // If the accordion panel associated with an accordion header is
+      // visible, and if the accordion does not permit the panel to be
+      // collapsed, the header `button` element has `aria-disabled` set to
+      // `true`. We can use `disabled` since we opt for an HTML5 `button`
+      // element.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+      disabled={disabled || undefined}
+      id={buttonId}
+      onClick={composeEventHandlers(onClick, handleClick)}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"button", AccordionButtonProps>;
 
 /**
  * @see Docs https://reach.tech/accordion#accordionbutton-props
  */
-type AccordionButtonProps = {
+interface AccordionButtonProps {
   /**
    * Typically a text string that serves as a label for the accordion, though
    * nested DOM nodes can be passed as well so long as they are valid children
@@ -549,7 +544,7 @@ type AccordionButtonProps = {
    * @see Docs https://reach.tech/accordion#accordionbutton-children
    */
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   AccordionButton.displayName = "AccordionButton";
@@ -569,58 +564,56 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/accordion#accordionpanel
  */
-const AccordionPanel = forwardRefWithAs<AccordionPanelProps, "div">(
-  function AccordionPanel(
-    { as: Comp = "div", children, ...props },
-    forwardedRef
-  ) {
-    const { disabled, panelId, buttonId, state } = React.useContext(
-      AccordionItemContext
-    );
+const AccordionPanel = React.forwardRef(function AccordionPanel(
+  { as: Comp = "div", children, ...props },
+  forwardedRef
+) {
+  const { disabled, panelId, buttonId, state } = React.useContext(
+    AccordionItemContext
+  );
 
-    return (
-      <Comp
-        hidden={state !== AccordionStates.Open}
-        // Optionally, each element that serves as a container for panel content
-        // has role `region` and `aria-labelledby` with a value that refers to
-        // the button that controls display of the panel.
-        // Role `region` is especially helpful to the perception of structure by
-        // screen reader users when panels contain heading elements or a nested
-        // accordion.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
+  return (
+    <Comp
+      hidden={state !== AccordionStates.Open}
+      // Optionally, each element that serves as a container for panel content
+      // has role `region` and `aria-labelledby` with a value that refers to
+      // the button that controls display of the panel.
+      // Role `region` is especially helpful to the perception of structure by
+      // screen reader users when panels contain heading elements or a nested
+      // accordion.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
 
-        // Avoid using the region role in circumstances that create landmark
-        // region proliferation, e.g., in an accordion that contains more than
-        // approximately 6 panels that can be expanded at the same time.
-        // A user can override this with `role="none"` or `role="presentation"`
-        // TODO: Add to docs
-        role="region"
-        aria-labelledby={buttonId}
-        {...props}
-        ref={forwardedRef}
-        data-reach-accordion-panel=""
-        data-disabled={disabled || undefined}
-        data-state={getDataState(state)}
-        id={panelId}
-        tabIndex={-1}
-      >
-        {children}
-      </Comp>
-    );
-  }
-);
+      // Avoid using the region role in circumstances that create landmark
+      // region proliferation, e.g., in an accordion that contains more than
+      // approximately 6 panels that can be expanded at the same time.
+      // A user can override this with `role="none"` or `role="presentation"`
+      // TODO: Add to docs
+      role="region"
+      aria-labelledby={buttonId}
+      {...props}
+      ref={forwardedRef}
+      data-reach-accordion-panel=""
+      data-disabled={disabled || undefined}
+      data-state={getDataState(state)}
+      id={panelId}
+      tabIndex={-1}
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", AccordionPanelProps>;
 
 /**
  * @see Docs https://reach.tech/accordion#accordionpanel-props
  */
-type AccordionPanelProps = {
+interface AccordionPanelProps {
   /**
    * Inner collapsible content for the accordion item.
    *
    * @see Docs https://reach.tech/accordion#accordionpanel-children
    */
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   AccordionPanel.displayName = "AccordionPanel";
@@ -687,8 +680,6 @@ type AccordionItemContextValue = {
 type AccordionDescendant = Descendant & {
   disabled: boolean;
 };
-
-type ResultBox<T> = { v: T };
 
 type ButtonRef = React.MutableRefObject<any>;
 

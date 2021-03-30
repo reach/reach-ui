@@ -40,7 +40,6 @@ import { isRightClick } from "@reach/utils/is-right-click";
 import { useStableCallback } from "@reach/utils/use-stable-callback";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
 import { isBoolean, isFunction, isString } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import {
@@ -56,6 +55,7 @@ import {
   ListboxStates,
 } from "./machine";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { Descendant } from "@reach/descendants";
 import type { DistributiveOmit } from "@reach/utils/types";
 import type { StateMachine } from "@reach/machine";
@@ -92,10 +92,7 @@ const ListboxGroupContext = createNamedContext(
  *
  * @see Docs https://reach.tech/listbox#listboxinput
  */
-const ListboxInput = forwardRefWithAs<
-  ListboxInputProps & { _componentName?: string },
-  "div"
->(function ListboxInput(
+const ListboxInput = React.forwardRef(function ListboxInput(
   {
     as: Comp = "div",
     "aria-labelledby": ariaLabelledBy,
@@ -110,7 +107,7 @@ const ListboxInput = forwardRefWithAs<
     value: valueProp,
 
     // We only use this prop for console warnings
-    _componentName = "ListboxInput",
+    __componentName = "ListboxInput",
     ...props
   },
   forwardedRef
@@ -235,7 +232,7 @@ const ListboxInput = forwardRefWithAs<
     }
   }
 
-  useControlledSwitchWarning(valueProp, "value", _componentName);
+  useControlledSwitchWarning(valueProp, "value", __componentName);
 
   // Even if the app controls state, we still need to update it internally to
   // run the state machine transitions
@@ -336,7 +333,10 @@ const ListboxInput = forwardRefWithAs<
       </ListboxContext.Provider>
     </DescendantProvider>
   );
-});
+}) as Polymorphic.ForwardRefComponent<
+  "div",
+  ListboxInputProps & { __componentName?: string }
+>;
 
 if (__DEV__) {
   ListboxInput.displayName = "ListboxInput";
@@ -417,12 +417,12 @@ type ListboxInputProps = Pick<
  *
  * @see Docs https://reach.tech/listbox#listbox-1
  */
-const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
+const Listbox = React.forwardRef(function Listbox(
   { arrow = "▼", button, children, portal = true, ...props },
   forwardedRef
 ) {
   return (
-    <ListboxInput {...props} _componentName="Listbox" ref={forwardedRef}>
+    <ListboxInput {...props} __componentName="Listbox" ref={forwardedRef}>
       {({ value, valueLabel }) => (
         <React.Fragment>
           <ListboxButton
@@ -442,7 +442,7 @@ const Listbox = forwardRefWithAs<ListboxProps, "div">(function Listbox(
       )}
     </ListboxInput>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", ListboxProps>;
 
 if (__DEV__) {
   Listbox.displayName = "Listbox";
@@ -497,123 +497,119 @@ type ListboxProps = Omit<ListboxInputProps, "children"> &
  *
  * @see Docs https://reach.tech/listbox#listbox-button
  */
-const ListboxButtonImpl = forwardRefWithAs<ListboxButtonProps, "span">(
-  function ListboxButton(
-    {
-      "aria-label": ariaLabel,
-      arrow = false,
-      as: Comp = "span",
-      children,
-      onKeyDown,
-      onMouseDown,
-      onMouseUp,
-      ...props
-    },
-    forwardedRef
-  ) {
-    let {
-      ariaLabelledBy,
-      buttonRef,
-      disabled,
-      isExpanded,
-      listboxId,
-      stateData,
-      send,
-      listboxValueLabel,
-    } = React.useContext(ListboxContext);
-    let listboxValue = stateData.value;
+const ListboxButtonImpl = React.forwardRef(function ListboxButton(
+  {
+    "aria-label": ariaLabel,
+    arrow = false,
+    as: Comp = "span",
+    children,
+    onKeyDown,
+    onMouseDown,
+    onMouseUp,
+    ...props
+  },
+  forwardedRef
+) {
+  let {
+    ariaLabelledBy,
+    buttonRef,
+    disabled,
+    isExpanded,
+    listboxId,
+    stateData,
+    send,
+    listboxValueLabel,
+  } = React.useContext(ListboxContext);
+  let listboxValue = stateData.value;
 
-    let ref = useComposedRefs(buttonRef, forwardedRef);
+  let ref = useComposedRefs(buttonRef, forwardedRef);
 
-    let handleKeyDown = useKeyDown();
+  let handleKeyDown = useKeyDown();
 
-    function handleMouseDown(event: React.MouseEvent) {
-      if (!isRightClick(event.nativeEvent)) {
-        event.preventDefault();
-        event.stopPropagation();
-        send({
-          type: ListboxEvents.ButtonMouseDown,
-          disabled,
-        });
-      }
+  function handleMouseDown(event: React.MouseEvent) {
+    if (!isRightClick(event.nativeEvent)) {
+      event.preventDefault();
+      event.stopPropagation();
+      send({
+        type: ListboxEvents.ButtonMouseDown,
+        disabled,
+      });
     }
-
-    function handleMouseUp(event: React.MouseEvent) {
-      if (!isRightClick(event.nativeEvent)) {
-        event.preventDefault();
-        event.stopPropagation();
-        send({ type: ListboxEvents.ButtonMouseUp });
-      }
-    }
-
-    let id = makeId("button", listboxId);
-
-    // If the button has children, we just render them as the label
-    // If a user needs the label on the server to prevent hydration mismatch
-    // errors, they need to control the state of the component and pass a label
-    // directly to the button.
-    let label: React.ReactNode = React.useMemo(() => {
-      if (!children) {
-        return listboxValueLabel;
-      } else if (isFunction(children)) {
-        return children({
-          isExpanded,
-          label: listboxValueLabel!,
-          value: listboxValue,
-          // TODO: Remove in 1.0
-          expanded: isExpanded,
-        });
-      }
-      return children;
-    }, [children, listboxValueLabel, isExpanded, listboxValue]);
-
-    return (
-      <Comp
-        // Applicable to all host language elements regardless of whether a
-        // `role` is applied.
-        // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
-        aria-disabled={disabled || undefined}
-        // Set by the JavaScript when the listbox is displayed. Otherwise, is
-        // not present.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        aria-expanded={isExpanded || undefined}
-        // Indicates that activating the button displays a listbox.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        aria-haspopup="listbox"
-        // References the two elements whose labels are concatenated by the
-        // browser to label the button. The first element is a span containing
-        // perceivable label for the listbox component. The second element is
-        // the button itself; the button text is set to the name of the
-        // currently chosen element.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        // If an `aria-label` is passed, we should skip `aria-labelledby` to
-        // avoid confusion.
-        aria-labelledby={
-          ariaLabel ? undefined : [ariaLabelledBy, id].filter(Boolean).join(" ")
-        }
-        aria-label={ariaLabel}
-        // Identifies the element as a button widget.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
-        role="button"
-        // Includes the element in the tab sequence.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
-        tabIndex={disabled ? -1 : 0}
-        {...props}
-        ref={ref}
-        data-reach-listbox-button=""
-        id={id}
-        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
-        onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
-      >
-        {label}
-        {arrow && (
-          <ListboxArrow>{isBoolean(arrow) ? null : arrow}</ListboxArrow>
-        )}
-      </Comp>
-    );
   }
-);
+
+  function handleMouseUp(event: React.MouseEvent) {
+    if (!isRightClick(event.nativeEvent)) {
+      event.preventDefault();
+      event.stopPropagation();
+      send({ type: ListboxEvents.ButtonMouseUp });
+    }
+  }
+
+  let id = makeId("button", listboxId);
+
+  // If the button has children, we just render them as the label
+  // If a user needs the label on the server to prevent hydration mismatch
+  // errors, they need to control the state of the component and pass a label
+  // directly to the button.
+  let label: React.ReactNode = React.useMemo(() => {
+    if (!children) {
+      return listboxValueLabel;
+    } else if (isFunction(children)) {
+      return children({
+        isExpanded,
+        label: listboxValueLabel!,
+        value: listboxValue,
+        // TODO: Remove in 1.0
+        expanded: isExpanded,
+      });
+    }
+    return children;
+  }, [children, listboxValueLabel, isExpanded, listboxValue]);
+
+  return (
+    <Comp
+      // Applicable to all host language elements regardless of whether a
+      // `role` is applied.
+      // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
+      aria-disabled={disabled || undefined}
+      // Set by the JavaScript when the listbox is displayed. Otherwise, is
+      // not present.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
+      aria-expanded={isExpanded || undefined}
+      // Indicates that activating the button displays a listbox.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
+      aria-haspopup="listbox"
+      // References the two elements whose labels are concatenated by the
+      // browser to label the button. The first element is a span containing
+      // perceivable label for the listbox component. The second element is
+      // the button itself; the button text is set to the name of the
+      // currently chosen element.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
+      // If an `aria-label` is passed, we should skip `aria-labelledby` to
+      // avoid confusion.
+      aria-labelledby={
+        ariaLabel ? undefined : [ariaLabelledBy, id].filter(Boolean).join(" ")
+      }
+      aria-label={ariaLabel}
+      // Identifies the element as a button widget.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
+      role="button"
+      // Includes the element in the tab sequence.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/button/button.html
+      tabIndex={disabled ? -1 : 0}
+      {...props}
+      ref={ref}
+      data-reach-listbox-button=""
+      id={id}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+      onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+      onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
+    >
+      {label}
+      {arrow && <ListboxArrow>{isBoolean(arrow) ? null : arrow}</ListboxArrow>}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"span", ListboxButtonProps>;
 
 if (__DEV__) {
   ListboxButtonImpl.displayName = "ListboxButton";
@@ -623,12 +619,14 @@ if (__DEV__) {
   };
 }
 
-const ListboxButton = memoWithAs(ListboxButtonImpl);
+const ListboxButton = React.memo(
+  ListboxButtonImpl
+) as Polymorphic.MemoComponent<"span", ListboxButtonProps>;
 
 /**
  * @see Docs https://reach.tech/listbox#listboxbutton-props
  */
-type ListboxButtonProps = {
+interface ListboxButtonProps {
   /**
    * Renders a text string or React node to represent an arrow inside the
    * button.
@@ -684,7 +682,7 @@ type ListboxButtonProps = {
         // TODO: Remove in 1.0
         expanded: boolean;
       }) => React.ReactNode);
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -695,33 +693,31 @@ type ListboxButtonProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxarrow
  */
-const ListboxArrowImpl = forwardRefWithAs<ListboxArrowProps, "span">(
-  function ListboxArrow(
-    { as: Comp = "span", children, ...props },
-    forwardedRef
-  ) {
-    let { isExpanded } = React.useContext(ListboxContext);
-    return (
-      <Comp
-        // The arrow provides no semantic value and its inner content should be
-        // hidden from the accessibility tree
-        aria-hidden
-        {...props}
-        ref={forwardedRef}
-        data-reach-listbox-arrow=""
-        data-expanded={isExpanded ? "" : undefined}
-      >
-        {isFunction(children)
-          ? children({
-              isExpanded,
-              // TODO: Remove in 1.0
-              expanded: isExpanded,
-            })
-          : children || "▼"}
-      </Comp>
-    );
-  }
-);
+const ListboxArrowImpl = React.forwardRef(function ListboxArrow(
+  { as: Comp = "span", children, ...props },
+  forwardedRef
+) {
+  let { isExpanded } = React.useContext(ListboxContext);
+  return (
+    <Comp
+      // The arrow provides no semantic value and its inner content should be
+      // hidden from the accessibility tree
+      aria-hidden
+      {...props}
+      ref={forwardedRef}
+      data-reach-listbox-arrow=""
+      data-expanded={isExpanded ? "" : undefined}
+    >
+      {isFunction(children)
+        ? children({
+            isExpanded,
+            // TODO: Remove in 1.0
+            expanded: isExpanded,
+          })
+        : children || "▼"}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"span", ListboxArrowProps>;
 
 if (__DEV__) {
   ListboxArrowImpl.displayName = "ListboxArrow";
@@ -730,12 +726,15 @@ if (__DEV__) {
   };
 }
 
-const ListboxArrow = memoWithAs(ListboxArrowImpl);
+const ListboxArrow = React.memo(ListboxArrowImpl) as Polymorphic.MemoComponent<
+  "span",
+  ListboxArrowProps
+>;
 
 /**
  * @see Docs https://reach.tech/listbox#listboxarrow-props
  */
-type ListboxArrowProps = {
+interface ListboxArrowProps {
   /**
    * Children to render as the listbox button's arrow. This can be a render
    * function that accepts the listbox's expanded state as an argument.
@@ -747,7 +746,7 @@ type ListboxArrowProps = {
         // TODO: Remove in 1.0
         expanded: boolean;
       }) => React.ReactNode);
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -758,59 +757,57 @@ type ListboxArrowProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxpopover
  */
-const ListboxPopoverImpl = forwardRefWithAs<ListboxPopoverProps, "div">(
-  function ListboxPopover(
-    {
-      as: Comp = "div",
-      position = positionMatchWidth,
-      onBlur,
-      onKeyDown,
-      portal = true,
-      unstable_observableRefs,
-      ...props
-    },
-    forwardedRef
-  ) {
-    let { buttonRef, popoverRef, send, isExpanded } = React.useContext(
-      ListboxContext
-    );
-    let ref = useComposedRefs(popoverRef, forwardedRef);
+const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
+  {
+    as: Comp = "div",
+    position = positionMatchWidth,
+    onBlur,
+    onKeyDown,
+    portal = true,
+    unstable_observableRefs,
+    ...props
+  },
+  forwardedRef
+) {
+  let { buttonRef, popoverRef, send, isExpanded } = React.useContext(
+    ListboxContext
+  );
+  let ref = useComposedRefs(popoverRef, forwardedRef);
 
-    let handleKeyDown = useKeyDown();
+  let handleKeyDown = useKeyDown();
 
-    let commonProps = {
-      hidden: !isExpanded,
-      tabIndex: -1,
-      ...props,
-      ref,
-      "data-reach-listbox-popover": "",
-      onBlur: composeEventHandlers(onBlur, handleBlur),
-      onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
-    };
+  let commonProps = {
+    hidden: !isExpanded,
+    tabIndex: -1,
+    ...props,
+    ref,
+    "data-reach-listbox-popover": "",
+    onBlur: composeEventHandlers(onBlur, handleBlur),
+    onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
+  };
 
-    function handleBlur(event: React.FocusEvent) {
-      let { nativeEvent } = event;
-      requestAnimationFrame(() => {
-        send({
-          type: ListboxEvents.Blur,
-          relatedTarget: nativeEvent.relatedTarget || nativeEvent.target,
-        });
+  function handleBlur(event: React.FocusEvent) {
+    let { nativeEvent } = event;
+    requestAnimationFrame(() => {
+      send({
+        type: ListboxEvents.Blur,
+        relatedTarget: nativeEvent.relatedTarget || nativeEvent.target,
       });
-    }
-
-    return portal ? (
-      <Popover
-        {...commonProps}
-        as={Comp}
-        targetRef={buttonRef as any}
-        position={position}
-        unstable_observableRefs={unstable_observableRefs}
-      />
-    ) : (
-      <Comp {...commonProps} />
-    );
+    });
   }
-);
+
+  return portal ? (
+    <Popover
+      {...commonProps}
+      as={Comp}
+      targetRef={buttonRef as any}
+      position={position}
+      unstable_observableRefs={unstable_observableRefs}
+    />
+  ) : (
+    <Comp {...commonProps} />
+  );
+}) as Polymorphic.ForwardRefComponent<"div", ListboxPopoverProps>;
 
 if (__DEV__) {
   ListboxPopoverImpl.displayName = "ListboxPopover";
@@ -821,12 +818,14 @@ if (__DEV__) {
   };
 }
 
-const ListboxPopover = memoWithAs(ListboxPopoverImpl);
+const ListboxPopover = React.memo(
+  ListboxPopoverImpl
+) as Polymorphic.MemoComponent<"div", ListboxPopoverProps>;
 
 /**
  * @see Docs https://reach.tech/listbox#listboxpopover-props
  */
-type ListboxPopoverProps = {
+interface ListboxPopoverProps {
   /**
    * `ListboxPopover` expects to receive `ListboxList` as its children.
    *
@@ -847,7 +846,7 @@ type ListboxPopoverProps = {
    */
   position?: PopoverProps["position"];
   unstable_observableRefs?: PopoverProps["unstable_observableRefs"];
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -858,52 +857,51 @@ type ListboxPopoverProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxlist
  */
-const ListboxList = forwardRefWithAs<ListboxListProps, "ul">(
-  function ListboxList({ as: Comp = "ul", ...props }, forwardedRef) {
-    let {
-      ariaLabel,
-      ariaLabelledBy,
-      isExpanded,
-      listboxId,
-      listRef,
-      stateData: { value, navigationValue },
-    } = React.useContext(ListboxContext);
-    let ref = useComposedRefs(forwardedRef, listRef);
+const ListboxList = React.forwardRef(function ListboxList(
+  { as: Comp = "ul", ...props },
+  forwardedRef
+) {
+  let {
+    ariaLabel,
+    ariaLabelledBy,
+    isExpanded,
+    listboxId,
+    listRef,
+    stateData: { value, navigationValue },
+  } = React.useContext(ListboxContext);
+  let ref = useComposedRefs(forwardedRef, listRef);
 
-    return (
-      <Comp
-        // Tells assistive technologies which of the options, if any, is
-        // visually indicated as having keyboard focus. DOM focus remains on the
-        // `ul` element and the idref specified for `aria-activedescendant`
-        // refers to the `li` element that is visually styled as focused. When
-        // navigation keys, such as `Down Arrow`, are pressed, the JavaScript
-        // changes the value.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-        aria-activedescendant={useOptionId(
-          isExpanded ? navigationValue : value
-        )}
-        // If the listbox is not part of another widget, then it has a visible
-        // label referenced by `aria-labelledby` on the element with role
-        // `listbox`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        // If an `aria-label` is passed, we should skip `aria-labelledby` to
-        // avoid confusion.
-        aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
-        aria-label={ariaLabel}
-        // An element that contains or owns all the listbox options has role
-        // listbox.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        role="listbox"
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
-        tabIndex={-1}
-        {...props}
-        ref={ref}
-        data-reach-listbox-list=""
-        id={makeId("listbox", listboxId)}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      // Tells assistive technologies which of the options, if any, is
+      // visually indicated as having keyboard focus. DOM focus remains on the
+      // `ul` element and the idref specified for `aria-activedescendant`
+      // refers to the `li` element that is visually styled as focused. When
+      // navigation keys, such as `Down Arrow`, are pressed, the JavaScript
+      // changes the value.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+      aria-activedescendant={useOptionId(isExpanded ? navigationValue : value)}
+      // If the listbox is not part of another widget, then it has a visible
+      // label referenced by `aria-labelledby` on the element with role
+      // `listbox`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
+      // If an `aria-label` is passed, we should skip `aria-labelledby` to
+      // avoid confusion.
+      aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
+      aria-label={ariaLabel}
+      // An element that contains or owns all the listbox options has role
+      // listbox.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
+      role="listbox"
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-collapsible.html
+      tabIndex={-1}
+      {...props}
+      ref={ref}
+      data-reach-listbox-list=""
+      id={makeId("listbox", listboxId)}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"ul", ListboxListProps>;
 
 if (__DEV__) {
   ListboxList.displayName = "ListboxList";
@@ -913,7 +911,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxlist-props
  */
-type ListboxListProps = {};
+interface ListboxListProps {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -924,185 +922,183 @@ type ListboxListProps = {};
  *
  * @see Docs https://reach.tech/listbox#listboxoption
  */
-const ListboxOption = forwardRefWithAs<ListboxOptionProps, "li">(
-  function ListboxOption(
-    {
-      as: Comp = "li",
-      children,
-      disabled,
-      onClick,
-      onMouseDown,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseMove,
-      onMouseUp,
-      onTouchStart,
-      value,
-      label: labelProp,
-      ...props
-    },
-    forwardedRef
-  ) {
-    if (__DEV__ && !value) {
-      throw Error(`A ListboxOption must have a value prop.`);
-    }
-
-    let {
-      highlightedOptionRef,
-      isExpanded,
-      onValueChange,
-      selectedOptionRef,
-      send,
-      state,
-      stateData: { value: listboxValue, navigationValue },
-    } = React.useContext(ListboxContext);
-
-    let [labelState, setLabel] = React.useState(labelProp);
-    let label = labelProp || labelState || "";
-
-    let ownRef = React.useRef<HTMLElement | null>(null);
-    useDescendant(
-      {
-        element: ownRef.current!,
-        value,
-        label,
-        disabled: !!disabled,
-      },
-      ListboxDescendantContext
-    );
-
-    // After the ref is mounted to the DOM node, we check to see if we have an
-    // explicit label prop before looking for the node's textContent for
-    // typeahead functionality.
-    let getLabelFromDomNode = React.useCallback(
-      (node: HTMLElement) => {
-        if (!labelProp && node) {
-          setLabel((prevState) => {
-            if (node.textContent && prevState !== node.textContent) {
-              return node.textContent;
-            }
-            return prevState || "";
-          });
-        }
-      },
-      [labelProp]
-    );
-
-    let isHighlighted = navigationValue ? navigationValue === value : false;
-    let isSelected = listboxValue === value;
-
-    let ref = useComposedRefs(
-      getLabelFromDomNode,
-      forwardedRef,
-      ownRef,
-      isSelected ? selectedOptionRef : null,
-      isHighlighted ? highlightedOptionRef : null
-    );
-
-    function handleMouseEnter() {
-      send({
-        type: ListboxEvents.OptionMouseEnter,
-        value,
-        disabled: !!disabled,
-      });
-    }
-
-    function handleTouchStart() {
-      send({
-        type: ListboxEvents.OptionTouchStart,
-        value,
-        disabled: !!disabled,
-      });
-    }
-
-    function handleMouseLeave() {
-      send({ type: ListboxEvents.ClearNavSelection });
-    }
-
-    function handleMouseDown(event: React.MouseEvent) {
-      // Prevent blur event from firing and bubbling to the popover
-      if (!isRightClick(event.nativeEvent)) {
-        event.preventDefault();
-        send({ type: ListboxEvents.OptionMouseDown });
-      }
-    }
-
-    function handleMouseUp(event: React.MouseEvent) {
-      if (!isRightClick(event.nativeEvent)) {
-        send({
-          type: ListboxEvents.OptionMouseUp,
-          value,
-          callback: onValueChange,
-          disabled: !!disabled,
-        });
-      }
-    }
-
-    function handleClick(event: React.MouseEvent) {
-      // Generally an option will be selected on mouseup, but in case this isn't
-      // handled correctly by the device (whether because it's a touch/pen or
-      // virtual click event) we want to handle selection on a full click event
-      // just in case. This should address issues with screenreader selection,
-      // but this needs more robust testing.
-      if (!isRightClick(event.nativeEvent)) {
-        send({
-          type: ListboxEvents.OptionClick,
-          value,
-          callback: onValueChange,
-          disabled: !!disabled,
-        });
-      }
-    }
-
-    function handleMouseMove() {
-      // We don't really *need* these guards since we put all of our transition
-      // logic in the state machine, but in this case it seems wise not to
-      // needlessly run our transitions every time the user's mouse moves. Seems
-      // like a lot. 🙃
-      if (state === ListboxStates.Open || navigationValue !== value) {
-        send({
-          type: ListboxEvents.OptionMouseMove,
-          value,
-          disabled: !!disabled,
-        });
-      }
-    }
-
-    return (
-      <Comp
-        // In a single-select listbox, the selected option has `aria-selected`
-        // set to `true`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        aria-selected={(isExpanded ? isHighlighted : isSelected) || undefined}
-        // Applicable to all host language elements regardless of whether a
-        // `role` is applied.
-        // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
-        aria-disabled={disabled || undefined}
-        // Each option in the listbox has role `option` and is a DOM descendant
-        // of the element with role `listbox`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
-        role="option"
-        {...props}
-        ref={ref}
-        id={useOptionId(value)}
-        data-reach-listbox-option=""
-        data-current-nav={isHighlighted ? "" : undefined}
-        data-current-selected={isSelected ? "" : undefined}
-        data-label={label}
-        data-value={value}
-        onClick={composeEventHandlers(onClick, handleClick)}
-        onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
-        onMouseEnter={composeEventHandlers(onMouseEnter, handleMouseEnter)}
-        onMouseLeave={composeEventHandlers(onMouseLeave, handleMouseLeave)}
-        onMouseMove={composeEventHandlers(onMouseMove, handleMouseMove)}
-        onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
-        onTouchStart={composeEventHandlers(onTouchStart, handleTouchStart)}
-      >
-        {children}
-      </Comp>
-    );
+const ListboxOption = React.forwardRef(function ListboxOption(
+  {
+    as: Comp = "li",
+    children,
+    disabled,
+    onClick,
+    onMouseDown,
+    onMouseEnter,
+    onMouseLeave,
+    onMouseMove,
+    onMouseUp,
+    onTouchStart,
+    value,
+    label: labelProp,
+    ...props
+  },
+  forwardedRef
+) {
+  if (__DEV__ && !value) {
+    throw Error(`A ListboxOption must have a value prop.`);
   }
-);
+
+  let {
+    highlightedOptionRef,
+    isExpanded,
+    onValueChange,
+    selectedOptionRef,
+    send,
+    state,
+    stateData: { value: listboxValue, navigationValue },
+  } = React.useContext(ListboxContext);
+
+  let [labelState, setLabel] = React.useState(labelProp);
+  let label = labelProp || labelState || "";
+
+  let ownRef = React.useRef<HTMLElement | null>(null);
+  useDescendant(
+    {
+      element: ownRef.current!,
+      value,
+      label,
+      disabled: !!disabled,
+    },
+    ListboxDescendantContext
+  );
+
+  // After the ref is mounted to the DOM node, we check to see if we have an
+  // explicit label prop before looking for the node's textContent for
+  // typeahead functionality.
+  let getLabelFromDomNode = React.useCallback(
+    (node: HTMLElement) => {
+      if (!labelProp && node) {
+        setLabel((prevState) => {
+          if (node.textContent && prevState !== node.textContent) {
+            return node.textContent;
+          }
+          return prevState || "";
+        });
+      }
+    },
+    [labelProp]
+  );
+
+  let isHighlighted = navigationValue ? navigationValue === value : false;
+  let isSelected = listboxValue === value;
+
+  let ref = useComposedRefs(
+    getLabelFromDomNode,
+    forwardedRef,
+    ownRef,
+    isSelected ? selectedOptionRef : null,
+    isHighlighted ? highlightedOptionRef : null
+  );
+
+  function handleMouseEnter() {
+    send({
+      type: ListboxEvents.OptionMouseEnter,
+      value,
+      disabled: !!disabled,
+    });
+  }
+
+  function handleTouchStart() {
+    send({
+      type: ListboxEvents.OptionTouchStart,
+      value,
+      disabled: !!disabled,
+    });
+  }
+
+  function handleMouseLeave() {
+    send({ type: ListboxEvents.ClearNavSelection });
+  }
+
+  function handleMouseDown(event: React.MouseEvent) {
+    // Prevent blur event from firing and bubbling to the popover
+    if (!isRightClick(event.nativeEvent)) {
+      event.preventDefault();
+      send({ type: ListboxEvents.OptionMouseDown });
+    }
+  }
+
+  function handleMouseUp(event: React.MouseEvent) {
+    if (!isRightClick(event.nativeEvent)) {
+      send({
+        type: ListboxEvents.OptionMouseUp,
+        value,
+        callback: onValueChange,
+        disabled: !!disabled,
+      });
+    }
+  }
+
+  function handleClick(event: React.MouseEvent) {
+    // Generally an option will be selected on mouseup, but in case this isn't
+    // handled correctly by the device (whether because it's a touch/pen or
+    // virtual click event) we want to handle selection on a full click event
+    // just in case. This should address issues with screenreader selection,
+    // but this needs more robust testing.
+    if (!isRightClick(event.nativeEvent)) {
+      send({
+        type: ListboxEvents.OptionClick,
+        value,
+        callback: onValueChange,
+        disabled: !!disabled,
+      });
+    }
+  }
+
+  function handleMouseMove() {
+    // We don't really *need* these guards since we put all of our transition
+    // logic in the state machine, but in this case it seems wise not to
+    // needlessly run our transitions every time the user's mouse moves. Seems
+    // like a lot. 🙃
+    if (state === ListboxStates.Open || navigationValue !== value) {
+      send({
+        type: ListboxEvents.OptionMouseMove,
+        value,
+        disabled: !!disabled,
+      });
+    }
+  }
+
+  return (
+    <Comp
+      // In a single-select listbox, the selected option has `aria-selected`
+      // set to `true`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
+      aria-selected={(isExpanded ? isHighlighted : isSelected) || undefined}
+      // Applicable to all host language elements regardless of whether a
+      // `role` is applied.
+      // https://www.w3.org/WAI/PF/aria/states_and_properties#global_states_header
+      aria-disabled={disabled || undefined}
+      // Each option in the listbox has role `option` and is a DOM descendant
+      // of the element with role `listbox`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#Listbox
+      role="option"
+      {...props}
+      ref={ref}
+      id={useOptionId(value)}
+      data-reach-listbox-option=""
+      data-current-nav={isHighlighted ? "" : undefined}
+      data-current-selected={isSelected ? "" : undefined}
+      data-label={label}
+      data-value={value}
+      onClick={composeEventHandlers(onClick, handleClick)}
+      onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
+      onMouseEnter={composeEventHandlers(onMouseEnter, handleMouseEnter)}
+      onMouseLeave={composeEventHandlers(onMouseLeave, handleMouseLeave)}
+      onMouseMove={composeEventHandlers(onMouseMove, handleMouseMove)}
+      onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
+      onTouchStart={composeEventHandlers(onTouchStart, handleTouchStart)}
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"li", ListboxOptionProps>;
 
 if (__DEV__) {
   ListboxOption.displayName = "ListboxOption";
@@ -1116,7 +1112,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxoption-props
  */
-type ListboxOptionProps = {
+interface ListboxOptionProps {
   /**
    * The option's value. This will be passed into a hidden input field for use
    * in forms.
@@ -1140,7 +1136,7 @@ type ListboxOptionProps = {
    * @see Docs https://reach.tech/listbox#listboxoption-disabled
    */
   disabled?: boolean;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1151,33 +1147,31 @@ type ListboxOptionProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxgroup
  */
-const ListboxGroup = forwardRefWithAs<ListboxGroupProps, "div">(
-  function ListboxGroup(
-    { as: Comp = "div", label, children, ...props },
-    forwardedRef
-  ) {
-    let { listboxId } = React.useContext(ListboxContext);
-    let labelId = makeId("label", useId(props.id), listboxId);
-    return (
-      <ListboxGroupContext.Provider value={{ labelId }}>
-        <Comp
-          // Refers to the element containing the option group label
-          // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-          aria-labelledby={labelId}
-          // Identifies a group of related options
-          // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-          role="group"
-          {...props}
-          data-reach-listbox-group=""
-          ref={forwardedRef}
-        >
-          {label && <ListboxGroupLabel>{label}</ListboxGroupLabel>}
-          {children}
-        </Comp>
-      </ListboxGroupContext.Provider>
-    );
-  }
-);
+const ListboxGroup = React.forwardRef(function ListboxGroup(
+  { as: Comp = "div", label, children, ...props },
+  forwardedRef
+) {
+  let { listboxId } = React.useContext(ListboxContext);
+  let labelId = makeId("label", useId(props.id), listboxId);
+  return (
+    <ListboxGroupContext.Provider value={{ labelId }}>
+      <Comp
+        // Refers to the element containing the option group label
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+        aria-labelledby={labelId}
+        // Identifies a group of related options
+        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+        role="group"
+        {...props}
+        data-reach-listbox-group=""
+        ref={forwardedRef}
+      >
+        {label && <ListboxGroupLabel>{label}</ListboxGroupLabel>}
+        {children}
+      </Comp>
+    </ListboxGroupContext.Provider>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", ListboxGroupProps>;
 
 if (__DEV__) {
   ListboxGroup.displayName = "ListboxGroup";
@@ -1189,7 +1183,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-type ListboxGroupProps = {
+interface ListboxGroupProps {
   /**
    * The text label to use for the listbox group. This can be omitted if a
    * group contains a `ListboxGroupLabel` component. The label should always
@@ -1198,7 +1192,7 @@ type ListboxGroupProps = {
    * @see Docs https://reach.tech/listbox#listboxgroup-label
    */
   label?: React.ReactNode;
-};
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1207,22 +1201,23 @@ type ListboxGroupProps = {
  *
  * @see Docs https://reach.tech/listbox#listboxgrouplabel
  */
-const ListboxGroupLabel = forwardRefWithAs<ListboxGroupLabelProps, "span">(
-  function ListboxGroupLabel({ as: Comp = "span", ...props }, forwardedRef) {
-    let { labelId } = React.useContext(ListboxGroupContext);
-    return (
-      <Comp
-        // See examples
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
-        role="presentation"
-        {...props}
-        ref={forwardedRef}
-        data-reach-listbox-group-label=""
-        id={labelId}
-      />
-    );
-  }
-);
+const ListboxGroupLabel = React.forwardRef(function ListboxGroupLabel(
+  { as: Comp = "span", ...props },
+  forwardedRef
+) {
+  let { labelId } = React.useContext(ListboxGroupContext);
+  return (
+    <Comp
+      // See examples
+      // https://www.w3.org/TR/wai-aria-practices-1.2/examples/listbox/listbox-grouped.html
+      role="presentation"
+      {...props}
+      ref={forwardedRef}
+      data-reach-listbox-group-label=""
+      id={labelId}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"span", ListboxGroupLabelProps>;
 
 if (__DEV__) {
   ListboxGroupLabel.displayName = "ListboxGroupLabel";
@@ -1232,7 +1227,7 @@ if (__DEV__) {
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
  */
-type ListboxGroupLabelProps = {};
+interface ListboxGroupLabelProps {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1399,14 +1394,14 @@ type ListboxDescendant = Descendant<HTMLElement> & {
   disabled: boolean;
 };
 
-type ListboxContextValue = {
+interface ListboxContextValue {
   id: string | undefined;
   isExpanded: boolean;
   highlightedOptionRef: React.RefObject<ListboxNodeRefs["highlightedOption"]>;
   selectedOptionRef: React.RefObject<ListboxNodeRefs["selectedOption"]>;
   value: ListboxValue | null;
   valueLabel: string | null;
-};
+}
 
 interface InternalListboxContextValue {
   ariaLabel?: string;

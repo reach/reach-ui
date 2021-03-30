@@ -1,41 +1,115 @@
-import { forwardRef, memo } from "react";
+// adapted from https://github.com/radix-ui/primitives/blob/2f139a832ba0cdfd445c937ebf63c2e79e0ef7ed/packages/react/polymorphic/src/polymorphic.ts
+// Would have liked to use it directly instead of copying but they are
+// (rightfully) treating it as an internal utility, so copy/paste it is to
+// prevent any needless churn if they make breaking changes.
+// Big thanks to Jenna for the heavy lifting! https://github.com/jjenzz
+
 import type * as React from "react";
-import type {
-  As,
-  ForwardRefExoticComponentWithAs,
-  ForwardRefWithAsRenderFunction,
-  FunctionComponentWithAs,
-  MemoExoticComponentWithAs,
-} from "./types";
+
+type Merge<P1 = {}, P2 = {}> = Omit<P1, keyof P2> & P2;
+
+type MergeProps<E, P = {}> = P &
+  Merge<
+    E extends React.ElementType ? React.ComponentPropsWithRef<E> : never,
+    P
+  >;
 
 /**
- * This is a hack for sure. The thing is, getting a component to intelligently
- * infer props based on a component or JSX string passed into an `as` prop is
- * kind of a huge pain. Getting it to work and satisfy the constraints of
- * `forwardRef` seems dang near impossible. To avoid needing to do this awkward
- * type song-and-dance every time we want to forward a ref into a component
- * that accepts an `as` prop, we abstract all of that mess to this function for
- * the time time being.
+ * Infers `OwnProps` if E is a ForwardRefComponent
  */
-export function forwardRefWithAs<
-  Props,
-  DefaultComponentType extends As = "div"
->(render: ForwardRefWithAsRenderFunction<DefaultComponentType, Props>) {
-  return forwardRef(render) as ForwardRefExoticComponentWithAs<
-    DefaultComponentType,
-    Props
-  >;
+type OwnProps<E> = E extends ForwardRefComponent<any, infer P> ? P : {};
+
+/**
+ * Infers the JSX.IntrinsicElement if E is a ForwardRefComponent
+ */
+type IntrinsicElement<E> = E extends ForwardRefComponent<infer I, any>
+  ? I
+  : never;
+
+type NarrowIntrinsic<E> = E extends keyof JSX.IntrinsicElements ? E : never;
+
+/**
+ * Extends original type to ensure built in React types play nice with
+ * polymorphic components still e.g. `React.ElementRef` etc.
+ */
+interface ForwardRefComponent<IntrinsicElementString, OwnProps = {}>
+  extends React.ForwardRefExoticComponent<
+    MergeProps<
+      IntrinsicElementString,
+      OwnProps & { as?: IntrinsicElementString }
+    >
+  > {
+  /*
+   * When passing an `as` prop as a string, use this overload. Merges original
+   * own props (without DOM props) and the inferred props from `as` element with
+   * the own props taking precendence.
+   *
+   * We explicitly define a `JSX.IntrinsicElements` overload so that events are
+   * typed for consumers.
+   */
+  <
+    As extends keyof JSX.IntrinsicElements = NarrowIntrinsic<
+      IntrinsicElementString
+    >
+  >(
+    props: MergeProps<As, OwnProps & { as: As }>
+  ): React.ReactElement | null;
+
+  /**
+   * When passing an `as` prop as a component, use this overload. Merges
+   * original own props (without DOM props) and the inferred props from `as`
+   * element with the own props taking precendence.
+   *
+   * We don't use `React.ComponentType` here as we get type errors when
+   * consumers try to do inline `as` components.
+   */
+  <As extends React.ElementType>(
+    props: MergeProps<As, OwnProps & { as: As }>
+  ): React.ReactElement | null;
+}
+interface MemoComponent<IntrinsicElementString, OwnProps = {}>
+  extends React.MemoExoticComponent<
+    ForwardRefComponent<
+      MergeProps<
+        IntrinsicElementString,
+        OwnProps & { as?: IntrinsicElementString }
+      >
+    >
+  > {
+  /*
+   * When passing an `as` prop as a string, use this overload. Merges original
+   * own props (without DOM props) and the inferred props from `as` element with
+   * the own props taking precendence.
+   *
+   * We explicitly define a `JSX.IntrinsicElements` overload so that events are
+   * typed for consumers.
+   */
+  <
+    As extends keyof JSX.IntrinsicElements = NarrowIntrinsic<
+      IntrinsicElementString
+    >
+  >(
+    props: MergeProps<As, OwnProps & { as?: As }>
+  ): React.ReactElement | null;
+
+  /**
+   * When passing an `as` prop as a component, use this overload. Merges
+   * original own props (without DOM props) and the inferred props from `as`
+   * element with the own props taking precendence.
+   *
+   * We don't use `React.ComponentType` here as we get type errors when
+   * consumers try to do inline `as` components.
+   */
+  <As extends React.ElementType>(
+    props: MergeProps<As, OwnProps & { as?: As }>
+  ): React.ReactElement | null;
 }
 
-export function memoWithAs<Props, DefaultComponentType extends As = "div">(
-  Component: FunctionComponentWithAs<DefaultComponentType, Props>,
-  propsAreEqual?: (
-    prevProps: Readonly<React.PropsWithChildren<Props>>,
-    nextProps: Readonly<React.PropsWithChildren<Props>>
-  ) => boolean
-) {
-  return memo(Component, propsAreEqual) as MemoExoticComponentWithAs<
-    DefaultComponentType,
-    Props
-  >;
-}
+export type {
+  ForwardRefComponent,
+  MemoComponent,
+  OwnProps,
+  IntrinsicElement,
+  Merge,
+};
+export default {};

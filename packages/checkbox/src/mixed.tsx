@@ -33,13 +33,13 @@
 
 import * as React from "react";
 import { useIsomorphicLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { forwardRefWithAs } from "@reach/utils/polymorphic";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
 import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 // Used for development only, not recommended for production code!
@@ -202,10 +202,7 @@ const createMachineDefinition = (
  *
  * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
-const MixedCheckbox = forwardRefWithAs<
-  MixedCheckboxProps & { _componentName?: string },
-  "input"
->(function MixedCheckbox(
+const MixedCheckbox = React.forwardRef(function MixedCheckbox(
   { as: Comp = "input", checked, defaultChecked, disabled, onChange, ...props },
   forwardedRef
 ) {
@@ -227,16 +224,16 @@ const MixedCheckbox = forwardRefWithAs<
   return (
     <Comp {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
   );
-});
+}) as Polymorphic.ForwardRefComponent<"input", MixedCheckboxProps>;
 
-type MixedCheckboxProps = {
+interface MixedCheckboxProps {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
    */
   checked?: MixedOrBool;
   onChange?: React.ComponentProps<"input">["onChange"];
-};
+}
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
@@ -471,23 +468,6 @@ type MixedCheckboxEvent = MixedCheckboxEventBase &
         data: Partial<MixedCheckboxData>;
       }
   );
-
-/**
- * State object for the checkbox state machine.
- */
-type MixedCheckboxState =
-  | {
-      value: MixedCheckboxStates.Checked;
-      context: MixedCheckboxData;
-    }
-  | {
-      value: MixedCheckboxStates.Unchecked;
-      context: MixedCheckboxData;
-    }
-  | {
-      value: MixedCheckboxStates.Mixed;
-      context: MixedCheckboxData;
-    };
 
 /**
  * DOM nodes for all of the refs used in the mixed checkbox state machine.

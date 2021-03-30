@@ -31,7 +31,6 @@ import { useStableLayoutCallback } from "@reach/utils/use-stable-callback";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { getOwnerDocument } from "@reach/utils/owner-document";
 import { createNamedContext } from "@reach/utils/context";
-import { forwardRefWithAs, memoWithAs } from "@reach/utils/polymorphic";
 import { isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -42,6 +41,8 @@ import {
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import warning from "tiny-warning";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 // TODO: Remove in 1.0
 type SliderAlignment = "center" | "contain";
@@ -104,7 +105,7 @@ const sliderPropTypes = {
  *
  * @see Docs https://reach.tech/slider#slider
  */
-const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
+const Slider = React.forwardRef(function Slider(
   { children, ...props },
   forwardedRef
 ) {
@@ -113,7 +114,7 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
       {...props}
       ref={forwardedRef}
       data-reach-slider=""
-      _componentName="Slider"
+      __componentName="Slider"
     >
       <SliderTrack>
         <SliderRange />
@@ -122,12 +123,12 @@ const Slider = forwardRefWithAs<SliderProps, "div">(function Slider(
       </SliderTrack>
     </SliderInput>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", SliderProps>;
 
 /**
  * @see Docs https://reach.tech/slider#slider-props
  */
-type SliderProps = {
+interface SliderProps {
   /**
    * `Slider` can accept `SliderMarker` children to enhance display of specific
    * values along the track.
@@ -243,7 +244,7 @@ type SliderProps = {
    * @see Docs https://reach.tech/slider#slider-step
    */
   step?: number;
-};
+}
 
 if (__DEV__) {
   Slider.displayName = "Slider";
@@ -264,9 +265,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/slider#sliderinput
  */
-const SliderInput = forwardRefWithAs<
-  SliderInputProps & { _componentName?: string }
->(function SliderInput(
+const SliderInput = React.forwardRef(function SliderInput(
   {
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
@@ -295,12 +294,12 @@ const SliderInput = forwardRefWithAs<
     orientation = SliderOrientation.Horizontal,
     step = 1,
     children,
-    _componentName = "SliderInput",
+    __componentName = "SliderInput",
     ...rest
   },
   forwardedRef
 ) {
-  useControlledSwitchWarning(controlledValue, "value", _componentName);
+  useControlledSwitchWarning(controlledValue, "value", __componentName);
 
   warning(
     !DEPRECATED_getValueText,
@@ -706,7 +705,10 @@ const SliderInput = forwardRefWithAs<
       </Comp>
     </SliderContext.Provider>
   );
-});
+}) as Polymorphic.ForwardRefComponent<
+  "div",
+  SliderInputProps & { __componentName?: string }
+>;
 
 /**
  * @see Docs https://reach.tech/slider#sliderinput-props
@@ -738,7 +740,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/slider#slidertrack
  */
-const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
+const SliderTrackImpl = React.forwardRef(function SliderTrack(
   { as: Comp = "div", children, style = {}, ...props },
   forwardedRef
 ) {
@@ -757,7 +759,7 @@ const SliderTrackImpl = forwardRefWithAs<SliderTrackProps>(function SliderTrack(
       {children}
     </Comp>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", SliderTrackProps>;
 
 if (__DEV__) {
   SliderTrackImpl.displayName = "SliderTrack";
@@ -766,12 +768,15 @@ if (__DEV__) {
   };
 }
 
-const SliderTrack = memoWithAs(SliderTrackImpl);
+const SliderTrack = React.memo(SliderTrackImpl) as Polymorphic.MemoComponent<
+  "div",
+  SliderTrackProps
+>;
 
 /**
  * @see Docs https://reach.tech/slider#slidertrack-props
  */
-type SliderTrackProps = {
+interface SliderTrackProps {
   /**
    * `SliderTrack` expects `<SliderHandle>`, at minimum, for the Slider to
    * function. All other Slider subcomponents should be passed as children
@@ -780,7 +785,7 @@ type SliderTrackProps = {
    * @see Docs https://reach.tech/slider#slidertrack-children
    */
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   SliderTrack.displayName = "SliderTrack";
@@ -796,7 +801,7 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/slider#sliderrange
  */
-const SliderRangeImpl = forwardRefWithAs<SliderRangeProps>(function SliderRange(
+const SliderRangeImpl = React.forwardRef(function SliderRange(
   { as: Comp = "div", children, style = {}, ...props },
   forwardedRef
 ) {
@@ -811,17 +816,20 @@ const SliderRangeImpl = forwardRefWithAs<SliderRangeProps>(function SliderRange(
       data-orientation={orientation}
     />
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", SliderRangeProps>;
 
 if (__DEV__) {
   SliderRangeImpl.displayName = "SliderRange";
   SliderRangeImpl.propTypes = {};
 }
 
-const SliderRange = memoWithAs(SliderRangeImpl);
+const SliderRange = React.memo(SliderRangeImpl) as Polymorphic.MemoComponent<
+  "div",
+  SliderRangeProps
+>;
 
 // TODO: Remove in 1.0
-const SliderTrackHighlightImpl = forwardRefWithAs<SliderRangeProps>(
+const SliderTrackHighlightImpl = React.forwardRef(
   function SliderTrackHighlightImpl(props, ref) {
     if (__DEV__) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -840,11 +848,13 @@ const SliderTrackHighlightImpl = forwardRefWithAs<SliderRangeProps>(
       />
     );
   }
-);
+) as Polymorphic.ForwardRefComponent<"div", SliderRangeProps>;
+
 if (__DEV__) {
   SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
   SliderTrackHighlightImpl.propTypes = SliderRangeImpl.propTypes;
 }
+
 export interface SliderTrackHighlightProps extends SliderRangeProps {}
 
 /**
@@ -854,7 +864,9 @@ export interface SliderTrackHighlightProps extends SliderRangeProps {}
  *
  * @alias SliderRange
  */
-export const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
+export const SliderTrackHighlight = React.memo(
+  SliderTrackHighlightImpl
+) as Polymorphic.MemoComponent<"div", SliderRangeProps>;
 
 /**
  * `SliderRange` accepts any props that a HTML div component accepts.
@@ -862,7 +874,7 @@ export const SliderTrackHighlight = memoWithAs(SliderTrackHighlightImpl);
  *
  * @see Docs https://reach.tech/slider#sliderrange-props
  */
-type SliderRangeProps = {};
+interface SliderRangeProps {}
 
 if (__DEV__) {
   SliderRange.displayName = "SliderRange";
@@ -877,110 +889,109 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/slider#sliderhandle
  */
-const SliderHandleImpl = forwardRefWithAs<SliderHandleProps>(
-  function SliderHandle(
-    {
-      // min,
-      // max,
-      as: Comp = "div",
-      onBlur,
-      onFocus,
-      style = {},
-      onKeyDown,
-      ...props
-    },
-    forwardedRef
-  ) {
-    const {
-      ariaLabel,
-      ariaLabelledBy,
-      ariaValueText,
-      disabled,
-      handlePosition,
-      handleRef,
-      isVertical,
-      handleKeyDown,
-      orientation,
-      setHasFocus,
-      sliderMin,
-      sliderMax,
-      value,
-    } = useSliderContext();
+const SliderHandleImpl = React.forwardRef(function SliderHandle(
+  {
+    // min,
+    // max,
+    as: Comp = "div",
+    onBlur,
+    onFocus,
+    style = {},
+    onKeyDown,
+    ...props
+  },
+  forwardedRef
+) {
+  const {
+    ariaLabel,
+    ariaLabelledBy,
+    ariaValueText,
+    disabled,
+    handlePosition,
+    handleRef,
+    isVertical,
+    handleKeyDown,
+    orientation,
+    setHasFocus,
+    sliderMin,
+    sliderMax,
+    value,
+  } = useSliderContext();
 
-    const ref = useComposedRefs(handleRef, forwardedRef);
+  const ref = useComposedRefs(handleRef, forwardedRef);
 
-    return (
-      <Comp
-        aria-disabled={disabled || undefined}
-        // If the slider has a visible label, it is referenced by
-        // `aria-labelledby` on the slider element. Otherwise, the slider
-        // element has a label provided by `aria-label`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
-        // If the slider is vertically oriented, it has `aria-orientation` set
-        // to vertical. The default value of `aria-orientation` for a slider is
-        // horizontal.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-orientation={orientation}
-        // The slider element has the `aria-valuemax` property set to a decimal
-        // value representing the maximum allowed value of the slider.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-valuemax={sliderMax}
-        // The slider element has the `aria-valuemin` property set to a decimal
-        // value representing the minimum allowed value of the slider.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-valuemin={sliderMin}
-        // The slider element has the `aria-valuenow` property set to a decimal
-        // value representing the current value of the slider.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-valuenow={value}
-        // If the value of `aria-valuenow` is not user-friendly, e.g., the day
-        // of the week is represented by a number, the `aria-valuetext` property
-        // is set to a string that makes the slider value understandable, e.g.,
-        // "Monday".
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        aria-valuetext={ariaValueText}
-        // The element serving as the focusable slider control has role
-        // `slider`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
-        role="slider"
-        tabIndex={disabled ? -1 : 0}
-        {...props}
-        data-reach-slider-handle=""
-        ref={ref}
-        onBlur={composeEventHandlers(onBlur, () => {
-          setHasFocus(false);
-        })}
-        onFocus={composeEventHandlers(onFocus, () => {
-          setHasFocus(true);
-        })}
-        onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        style={{
-          position: "absolute",
-          ...(isVertical
-            ? { bottom: handlePosition }
-            : { left: handlePosition }),
-          ...style,
-        }}
-      />
-    );
-  }
-);
+  return (
+    <Comp
+      aria-disabled={disabled || undefined}
+      // If the slider has a visible label, it is referenced by
+      // `aria-labelledby` on the slider element. Otherwise, the slider
+      // element has a label provided by `aria-label`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabel ? undefined : ariaLabelledBy}
+      // If the slider is vertically oriented, it has `aria-orientation` set
+      // to vertical. The default value of `aria-orientation` for a slider is
+      // horizontal.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-orientation={orientation}
+      // The slider element has the `aria-valuemax` property set to a decimal
+      // value representing the maximum allowed value of the slider.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-valuemax={sliderMax}
+      // The slider element has the `aria-valuemin` property set to a decimal
+      // value representing the minimum allowed value of the slider.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-valuemin={sliderMin}
+      // The slider element has the `aria-valuenow` property set to a decimal
+      // value representing the current value of the slider.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-valuenow={value}
+      // If the value of `aria-valuenow` is not user-friendly, e.g., the day
+      // of the week is represented by a number, the `aria-valuetext` property
+      // is set to a string that makes the slider value understandable, e.g.,
+      // "Monday".
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      aria-valuetext={ariaValueText}
+      // The element serving as the focusable slider control has role
+      // `slider`.
+      // https://www.w3.org/TR/wai-aria-practices-1.2/#slider_roles_states_props
+      role="slider"
+      tabIndex={disabled ? -1 : 0}
+      {...props}
+      data-reach-slider-handle=""
+      ref={ref}
+      onBlur={composeEventHandlers(onBlur, () => {
+        setHasFocus(false);
+      })}
+      onFocus={composeEventHandlers(onFocus, () => {
+        setHasFocus(true);
+      })}
+      onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
+      style={{
+        position: "absolute",
+        ...(isVertical ? { bottom: handlePosition } : { left: handlePosition }),
+        ...style,
+      }}
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"div", SliderHandleProps>;
 
 if (__DEV__) {
   SliderHandleImpl.displayName = "SliderHandle";
   SliderHandleImpl.propTypes = {};
 }
 
-const SliderHandle = memoWithAs(SliderHandleImpl);
+const SliderHandle = React.memo(SliderHandleImpl) as Polymorphic.MemoComponent<
+  "div",
+  SliderHandleProps
+>;
 
 /**
  * `SliderRange` accepts any props that a HTML div component accepts.
  *
  * @see Docs https://reach.tech/slider#sliderhandle-props
  */
-type SliderHandleProps = {};
+interface SliderHandleProps {}
 
 if (__DEV__) {
   SliderHandle.displayName = "SliderHandle";
@@ -996,55 +1007,49 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/slider#slidermarker
  */
-const SliderMarkerImpl = forwardRefWithAs<SliderMarkerProps>(
-  function SliderMarker(
-    { as: Comp = "div", children, style = {}, value, ...props },
-    forwardedRef
-  ) {
-    const {
-      disabled,
-      isVertical,
-      orientation,
-      sliderMin,
-      sliderMax,
-      value: sliderValue,
-    } = useSliderContext();
+const SliderMarkerImpl = React.forwardRef(function SliderMarker(
+  { as: Comp = "div", children, style = {}, value, ...props },
+  forwardedRef
+) {
+  const {
+    disabled,
+    isVertical,
+    orientation,
+    sliderMin,
+    sliderMax,
+    value: sliderValue,
+  } = useSliderContext();
 
-    let inRange = !(value < sliderMin || value > sliderMax);
-    let absoluteStartPosition = `${valueToPercent(
-      value,
-      sliderMin,
-      sliderMax
-    )}%`;
+  let inRange = !(value < sliderMin || value > sliderMax);
+  let absoluteStartPosition = `${valueToPercent(value, sliderMin, sliderMax)}%`;
 
-    let state =
-      value < sliderValue
-        ? "under-value"
-        : value === sliderValue
-        ? "at-value"
-        : "over-value";
+  let state =
+    value < sliderValue
+      ? "under-value"
+      : value === sliderValue
+      ? "at-value"
+      : "over-value";
 
-    return inRange ? (
-      <Comp
-        ref={forwardedRef}
-        style={{
-          position: "absolute",
-          ...(isVertical
-            ? { bottom: absoluteStartPosition }
-            : { left: absoluteStartPosition }),
-          ...style,
-        }}
-        {...props}
-        data-reach-slider-marker=""
-        data-disabled={disabled ? "" : undefined}
-        data-orientation={orientation}
-        data-state={state}
-        data-value={value}
-        children={children}
-      />
-    ) : null;
-  }
-);
+  return inRange ? (
+    <Comp
+      ref={forwardedRef}
+      style={{
+        position: "absolute",
+        ...(isVertical
+          ? { bottom: absoluteStartPosition }
+          : { left: absoluteStartPosition }),
+        ...style,
+      }}
+      {...props}
+      data-reach-slider-marker=""
+      data-disabled={disabled ? "" : undefined}
+      data-orientation={orientation}
+      data-state={state}
+      data-value={value}
+      children={children}
+    />
+  ) : null;
+}) as Polymorphic.ForwardRefComponent<"div", SliderMarkerProps>;
 
 if (__DEV__) {
   SliderMarkerImpl.displayName = "SliderMarker";
@@ -1053,19 +1058,22 @@ if (__DEV__) {
   };
 }
 
-const SliderMarker = memoWithAs(SliderMarkerImpl);
+const SliderMarker = React.memo(SliderMarkerImpl) as Polymorphic.MemoComponent<
+  "div",
+  SliderMarkerProps
+>;
 
 /**
  * @see Docs https://reach.tech/slider#slidermarker-props
  */
-type SliderMarkerProps = {
+interface SliderMarkerProps {
   /**
    * The value to denote where the marker should appear along the track.
    *
    * @see Docs https://reach.tech/slider#slidermarker-value
    */
   value: number;
-};
+}
 
 if (__DEV__) {
   SliderMarker.displayName = "SliderMarker";

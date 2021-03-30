@@ -13,6 +13,8 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
+
 /**
  * VisuallyHidden
  *
@@ -44,17 +46,17 @@ const VisuallyHidden = React.forwardRef<any, any>(function VisuallyHidden(
       {...props}
     />
   );
-}) as ForwardRefExoticComponentWithAs<"span", VisuallyHiddenProps>;
+}) as Polymorphic.ForwardRefComponent<"span", VisuallyHiddenProps>;
 
 /**
  * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
  */
-type VisuallyHiddenProps = {
+interface VisuallyHiddenProps {
   /**
    * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
    */
   children: React.ReactNode;
-};
+}
 
 if (__DEV__) {
   VisuallyHidden.displayName = "VisuallyHidden";
@@ -62,61 +64,6 @@ if (__DEV__) {
     as: PropTypes.any,
     children: PropTypes.node,
   };
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO: These all come from @reach/utils but we don't want to bundle that here
-// just for the types. Need to split that up a bit better.
-
-type As<BaseProps = any> = React.ElementType<BaseProps>;
-
-type PropsWithAs<ComponentType extends As, ComponentProps> = ComponentProps &
-  Omit<
-    React.ComponentPropsWithRef<ComponentType>,
-    "as" | keyof ComponentProps
-  > & {
-    as?: ComponentType;
-  };
-
-interface ExoticComponentWithAs<ComponentType extends As, ComponentProps> {
-  /**
-   * **NOTE**: Exotic components are not callable.
-   * Inherited from React.ExoticComponent with modifications to support `as`
-   */
-  <TT extends As>(
-    props: PropsWithAs<TT, ComponentProps>
-  ): React.ReactElement | null;
-  (
-    props: PropsWithAs<ComponentType, ComponentProps>
-  ): React.ReactElement | null;
-
-  /**
-   * Inherited from React.ExoticComponent
-   */
-  readonly $$typeof: symbol;
-}
-
-interface NamedExoticComponentWithAs<ComponentType extends As, ComponentProps>
-  extends ExoticComponentWithAs<ComponentType, ComponentProps> {
-  /**
-   * Inherited from React.NamedExoticComponent
-   */
-  displayName?: string;
-}
-
-interface ForwardRefExoticComponentWithAs<
-  ComponentType extends As,
-  ComponentProps
-> extends NamedExoticComponentWithAs<ComponentType, ComponentProps> {
-  /**
-   * Inherited from React.ForwardRefExoticComponent
-   * Will show `ForwardRef(${Component.displayName || Component.name})` in devtools by default,
-   * but can be given its own specific name
-   */
-  defaultProps?: Partial<PropsWithAs<ComponentType, ComponentProps>>;
-  propTypes?: React.WeakValidationMap<
-    PropsWithAs<ComponentType, ComponentProps>
-  >;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
