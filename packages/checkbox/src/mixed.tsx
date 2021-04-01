@@ -347,13 +347,10 @@ function useMixedCheckbox(
     }
   }
 
-  React.useEffect(() => {
-    if (__DEV__ && !ref.current) {
-      throw new Error(
-        `A ref was not assigned to an input element in ${functionOrComponentName}.`
-      );
-    }
-  }, [ref, functionOrComponentName]);
+  useRefDevWarning(
+    ref,
+    `A ref was not assigned to an input element in ${functionOrComponentName}.`
+  );
 
   React.useEffect(() => {
     if (isControlled) {
@@ -493,3 +490,17 @@ export {
   checkedPropToStateValue as internal_checkedPropToStateValue,
   useControlledSwitchWarning as internal_useControlledSwitchWarning,
 };
+
+function useRefDevWarning(ref: React.RefObject<any>, message: string) {
+  if (__DEV__) {
+    /* eslint-disable react-hooks/rules-of-hooks */
+    let messageRef = React.useRef(message);
+    React.useEffect(() => {
+      messageRef.current = message;
+    }, [message]);
+    React.useEffect(() => {
+      warning(ref.current, messageRef.current);
+    }, [ref]);
+    /* eslint-enable react-hooks/rules-of-hooks */
+  }
+}
