@@ -156,7 +156,6 @@ const stateChart: StateChart = {
 
 const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   const nextState = { ...data, lastEventType: event.type };
-  console.table({ where: "Inreducer", data, event });
   switch (event.type) {
     case CHANGE:
     case INITIAL_CHANGE:
@@ -226,11 +225,8 @@ function popoverIsExpanded(state: State) {
  * @param event
  */
 function findNavigationValue(stateData: StateData, event: MachineEvent) {
-  console.table({ where: "in findNavigationValue", stateData, event });
   // @ts-ignore
   if (event.value) {
-    // @ts-ignore
-    console.error({ navigationValue: event.value });
     // @ts-ignore
     return event.value;
     // @ts-ignore
@@ -483,10 +479,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   const handleValueChange = React.useCallback(
     (value: ComboboxValue) => {
-      //      console.table({
-      //where: "handleValueChange",
-      //options
-      //});
       if (value.trim() === "") {
         transition(CLEAR);
       } else if (
@@ -515,20 +507,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     }
   }, [controlledValue, handleValueChange, isControlled, value]);
 
-  React.useEffect(() => {
-    return;
-    if (autoSelectFirstOption && options && options.length > 0) {
-      // console.table({
-      //where: "useEffect options changing",
-      //options,
-      //firstValue: options[0] && options[0].value
-      //})
-      if (options[0]) {
-        initialNavigation(options[0].value);
-      }
-    }
-  }, [options]);
-
   // [*]... and when controlled, we don't trigger handleValueChange as the
   // user types, instead the developer controls it with the normal input
   // onChange prop
@@ -537,12 +515,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     if (!isControlled) {
       handleValueChange(value);
     }
-  }
-
-  function initialNavigation(value) {
-    transition(NAVIGATE, {
-      value,
-    });
   }
 
   function handleFocus() {
@@ -1106,12 +1078,6 @@ function useKeyDown() {
 
         let next = getNextOption();
 
-        console.table({
-          where: "ArrowDown",
-          state,
-          persistSelectionRef: persistSelectionRef.current,
-          next,
-        });
         if (state === IDLE) {
           // Opening a closed list
           transition(NAVIGATE, {
@@ -1248,13 +1214,8 @@ function useReducerMachine(
   const [data, dispatch] = React.useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
-    console.table({
-      chart,
-      state,
-    });
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
-    console.table({ where: "In transtion", currentState, nextState });
     if (nextState) {
       dispatch({ type: event, state, nextState: state, ...payload });
       setState(nextState);
