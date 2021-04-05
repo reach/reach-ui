@@ -161,7 +161,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case INITIAL_CHANGE:
       return {
         ...nextState,
-        navigationValue: findNavigationValue(nextState, event),
+        navigationValue: null,
         value: event.value,
       };
     case NAVIGATE:
@@ -541,7 +541,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   const inputValue =
     autocomplete && (state === NAVIGATING || state === INTERACTING)
-      ? // When idle, we don't have a navigationValue on ArrowUp/Down
+      ? // On navigatin up/down, input value should not change.
         controlledValue || value
       : controlledValue || value;
 
@@ -562,7 +562,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
       data-state={getDataState(state)}
       ref={ref}
       onBlur={composeEventHandlers(onBlur, handleBlur)}
-      onChange={composeEventHandlers(onChange, handleChange, initialNavigation)}
+      onChange={composeEventHandlers(onChange, handleChange)}
       onClick={composeEventHandlers(onClick, handleClick)}
       onFocus={composeEventHandlers(onFocus, handleFocus)}
       onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
@@ -784,10 +784,11 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
   );
 
   /*
-   * As soon as new set of current option's vlaue ischanged, we will check if its index is zero and if autoSelectFirstOption is true, we will c
+   * As soon as current option's value ischanged, we will check if its index is zero
+   * and if autoSelectFirstOption is true. If yes, that option is will be automatically
+   * highlighted i.e navigationValue will be changed.
    *
-   * */
-
+   **/
   React.useEffect(() => {
     if (index === 0 && autoSelectFirstOption) {
       transition(NAVIGATE, {
@@ -1076,15 +1077,13 @@ function useKeyDown() {
           return;
         }
 
-        let next = getNextOption();
-
         if (state === IDLE) {
           // Opening a closed list
           transition(NAVIGATE, {
             persistSelection: persistSelectionRef.current,
-            value: next ? next.value : null,
           });
         } else {
+          let next = getNextOption();
           transition(NAVIGATE, { value: next ? next.value : null });
         }
         break;
