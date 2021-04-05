@@ -156,12 +156,13 @@ const stateChart: StateChart = {
 
 const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   const nextState = { ...data, lastEventType: event.type };
+  console.table({ where: "Inreducer", data, event });
   switch (event.type) {
     case CHANGE:
     case INITIAL_CHANGE:
       return {
         ...nextState,
-        navigationValue: null,
+        navigationValue: findNavigationValue(nextState, event),
         value: event.value,
       };
     case NAVIGATE:
@@ -169,6 +170,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
       return {
         ...nextState,
         navigationValue: findNavigationValue(nextState, event),
+        value: data.value,
       };
     case CLEAR:
       return {
@@ -224,8 +226,11 @@ function popoverIsExpanded(state: State) {
  * @param event
  */
 function findNavigationValue(stateData: StateData, event: MachineEvent) {
+  console.table({ where: "in findNavigationValue", stateData, event });
   // @ts-ignore
   if (event.value) {
+    // @ts-ignore
+    console.error({ navigationValue: event.value });
     // @ts-ignore
     return event.value;
     // @ts-ignore
@@ -263,6 +268,7 @@ export const Combobox = React.forwardRef(function Combobox(
   {
     onSelect,
     openOnFocus = false,
+    autoSelectFirstOption,
     children,
     as: Comp = "div",
     "aria-label": ariaLabel,
@@ -325,6 +331,7 @@ export const Combobox = React.forwardRef(function Combobox(
     popoverRef,
     state,
     transition,
+    autoSelectFirstOption,
   };
 
   useCheckStyles("combobox");
@@ -389,6 +396,13 @@ export interface ComboboxProps {
    * @see Docs https://reach.tech/combobox#accessibility
    */
   "aria-labelledby"?: string;
+  /**
+   *
+   * Make sures that first option in the list is automatically selected.
+   *
+   */
+
+  autoSelectFirstOption?: boolean;
 }
 
 if (__DEV__) {
@@ -443,6 +457,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     ariaLabel,
     ariaLabelledby,
     persistSelectionRef,
+    autoSelectFirstOption,
   } = React.useContext(ComboboxContext);
 
   let ref = useComposedRefs(inputRef, forwardedRef);
@@ -457,6 +472,8 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   let isControlled = controlledValue != null;
 
+  const options = useDescendants(ComboboxDescendantContext);
+
   // Layout effect should be SSR-safe here because we don't actually do
   // anything with this ref that involves rendering until after we've
   // let the client hydrate in nested components.
@@ -466,6 +483,10 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   const handleValueChange = React.useCallback(
     (value: ComboboxValue) => {
+      //      console.table({
+      //where: "handleValueChange",
+      //options
+      //});
       if (value.trim() === "") {
         transition(CLEAR);
       } else if (
@@ -477,7 +498,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
         transition(CHANGE, { value });
       }
     },
-    [initialControlledValue, transition]
+    [initialControlledValue, transition, options]
   );
 
   React.useEffect(() => {
@@ -494,6 +515,20 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     }
   }, [controlledValue, handleValueChange, isControlled, value]);
 
+  React.useEffect(() => {
+    return;
+    if (autoSelectFirstOption && options && options.length > 0) {
+      // console.table({
+      //where: "useEffect options changing",
+      //options,
+      //firstValue: options[0] && options[0].value
+      //})
+      if (options[0]) {
+        initialNavigation(options[0].value);
+      }
+    }
+  }, [options]);
+
   // [*]... and when controlled, we don't trigger handleValueChange as the
   // user types, instead the developer controls it with the normal input
   // onChange prop
@@ -502,6 +537,12 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     if (!isControlled) {
       handleValueChange(value);
     }
+  }
+
+  function initialNavigation(value) {
+    transition(NAVIGATE, {
+      value,
+    });
   }
 
   function handleFocus() {
@@ -529,7 +570,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   const inputValue =
     autocomplete && (state === NAVIGATING || state === INTERACTING)
       ? // When idle, we don't have a navigationValue on ArrowUp/Down
-        navigationValue || controlledValue || value
+        controlledValue || value
       : controlledValue || value;
 
   return (
@@ -549,7 +590,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
       data-state={getDataState(state)}
       ref={ref}
       onBlur={composeEventHandlers(onBlur, handleBlur)}
-      onChange={composeEventHandlers(onChange, handleChange)}
+      onChange={composeEventHandlers(onChange, handleChange, initialNavigation)}
       onClick={composeEventHandlers(onClick, handleClick)}
       onFocus={composeEventHandlers(onFocus, handleFocus)}
       onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
@@ -756,6 +797,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
     onSelect,
     data: { navigationValue },
     transition,
+    autoSelectFirstOption,
   } = React.useContext(ComboboxContext);
 
   let ownRef = React.useRef<HTMLElement | null>(null);
@@ -768,6 +810,19 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
     },
     ComboboxDescendantContext
   );
+
+  /*
+   * As soon as new set of current option's vlaue ischanged, we will check if its index is zero and if autoSelectFirstOption is true, we will c
+   *
+   * */
+
+  React.useEffect(() => {
+    if (index === 0 && autoSelectFirstOption) {
+      transition(NAVIGATE, {
+        value,
+      });
+    }
+  }, [value]);
 
   const isActive = navigationValue === value;
 
@@ -1049,13 +1104,21 @@ function useKeyDown() {
           return;
         }
 
+        let next = getNextOption();
+
+        console.table({
+          where: "ArrowDown",
+          state,
+          persistSelectionRef: persistSelectionRef.current,
+          next,
+        });
         if (state === IDLE) {
           // Opening a closed list
           transition(NAVIGATE, {
             persistSelection: persistSelectionRef.current,
+            value: next ? next.value : null,
           });
         } else {
-          let next = getNextOption();
           transition(NAVIGATE, { value: next ? next.value : null });
         }
         break;
@@ -1185,8 +1248,13 @@ function useReducerMachine(
   const [data, dispatch] = React.useReducer(reducer, initialData);
 
   const transition: Transition = (event, payload = {}) => {
+    console.table({
+      chart,
+      state,
+    });
     const currentState = chart.states[state];
     const nextState = currentState && currentState.on[event];
+    console.table({ where: "In transtion", currentState, nextState });
     if (nextState) {
       dispatch({ type: event, state, nextState: state, ...payload });
       setState(nextState);
@@ -1315,6 +1383,7 @@ interface InternalComboboxContextValue {
   popoverRef: React.MutableRefObject<any>;
   state: State;
   transition: Transition;
+  autoSelectFirstOption: boolean;
 }
 
 type Transition = (event: MachineEventType, payload?: any) => any;
