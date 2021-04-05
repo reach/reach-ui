@@ -468,8 +468,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   let isControlled = controlledValue != null;
 
-  const options = useDescendants(ComboboxDescendantContext);
-
   // Layout effect should be SSR-safe here because we don't actually do
   // anything with this ref that involves rendering until after we've
   // let the client hydrate in nested components.
@@ -490,7 +488,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
         transition(CHANGE, { value });
       }
     },
-    [initialControlledValue, transition, options]
+    [initialControlledValue, transition]
   );
 
   React.useEffect(() => {
