@@ -83,12 +83,16 @@ const CustomCheckboxContainer = React.forwardRef(
     forwardedRef
   ) {
     let inputRef: CustomCheckboxInputRef = React.useRef(null);
-    let [inputProps, stateData] = useMixedCheckbox(inputRef, {
-      defaultChecked,
-      checked: controlledChecked,
-      disabled,
-      onChange,
-    });
+    let [inputProps, stateData] = useMixedCheckbox(
+      inputRef,
+      {
+        defaultChecked,
+        checked: controlledChecked,
+        disabled,
+        onChange,
+      },
+      __componentName
+    );
     let [focused, setFocused] = React.useState(false);
 
     function handleClick() {
