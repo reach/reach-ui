@@ -515,6 +515,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
       {...props}
       ref={ref}
       data-reach-accordion-button=""
+      data-state={getDataState(state)}
       // If the accordion panel associated with an accordion header is
       // visible, and if the accordion does not permit the panel to be
       // collapsed, the header `button` element has `aria-disabled` set to
@@ -667,15 +668,15 @@ function getDataState(state: AccordionStates) {
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type AccordionContextValue = {
+interface AccordionContextValue {
   id: string | undefined;
   openPanels: number[];
-};
+}
 
-type AccordionItemContextValue = {
+interface AccordionItemContextValue {
   index: number;
   isExpanded: boolean;
-};
+}
 
 type AccordionDescendant = Descendant & {
   disabled: boolean;
