@@ -21,6 +21,7 @@
     "lint": "yarn lint:packages",
     "fix": "manypkg fix && preconstruct fix",
     "dev": "preconstruct dev && yarn start",
+    "pc": "preconstruct",
     "postinstall": "manypkg check && preconstruct dev",
     "release": "lerna publish from-git --yes --pre-dist-tag next"
   },
