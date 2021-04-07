@@ -777,7 +777,7 @@ const MenuLink = React.forwardRef(function MenuLink(
   }
 
   return (
-    <div role="none" tabIndex={-1}>
+    <div role="none">
       <MenuItemImpl
         {...props}
         ref={forwardedRef}
@@ -855,7 +855,8 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * MenuPopover
+ * 
+ 
  *
  * A low-level wrapper for the popover that appears when a menu button is open.
  * You can compose it with `MenuItems` for more control over the nested
