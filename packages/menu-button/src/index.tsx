@@ -13,6 +13,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
+import warning from "tiny-warning";
 import { useId } from "@reach/auto-id";
 import { Popover, Position } from "@reach/popover";
 import {
@@ -770,11 +771,10 @@ const MenuLink = React.forwardRef(function MenuLink(
   { as = "a", component, onSelect, ...props },
   forwardedRef
 ) {
-  if (component) {
-    console.warn(
-      "[@reach/menu-button]: Please use the `as` prop instead of `component`."
-    );
-  }
+  useDevWarning(
+    !component,
+    "[@reach/menu-button]: Please use the `as` prop instead of `component`"
+  );
 
   return (
     <div role="none">
@@ -1107,6 +1107,20 @@ function reducer(
       return state;
     default:
       return state;
+  }
+}
+
+function useDevWarning(condition: any, message: string) {
+  if (__DEV__) {
+    /* eslint-disable react-hooks/rules-of-hooks */
+    let messageRef = React.useRef(message);
+    React.useEffect(() => {
+      messageRef.current = message;
+    }, [message]);
+    React.useEffect(() => {
+      warning(condition, messageRef.current);
+    }, [condition]);
+    /* eslint-enable react-hooks/rules-of-hooks */
   }
 }
 
