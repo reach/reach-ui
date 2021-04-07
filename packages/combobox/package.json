@@ -18,11 +18,11 @@
     "@reach/popover": "0.15.0",
     "@reach/portal": "0.15.0",
     "@reach/utils": "0.15.0",
-    "highlight-words-core": "1.2.2",
     "prop-types": "^15.7.2",
     "tslib": "^2.1.0"
   },
   "devDependencies": {
+    "latinize": "0.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

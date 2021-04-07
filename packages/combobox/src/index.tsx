@@ -38,7 +38,7 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
-import { findAll } from "highlight-words-core";
+import { HighlightWords } from "./utils";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
 
@@ -865,7 +865,7 @@ export function ComboboxOptionText() {
 
   const results = React.useMemo(
     () =>
-      findAll({
+      HighlightWords.findAll({
         searchWords: escapeRegexp(contextValue || "").split(/\s+/),
         textToHighlight: value,
       }),
@@ -1236,7 +1236,8 @@ export function escapeRegexp(str: string) {
   return String(str).replace(/([.*+?=^!:${}()|[\]/\\])/g, "\\$1");
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////
+//////////////////////////////////////////////////////
 
 /**
  * A hook that exposes data for a given `Combobox` component to its descendants.

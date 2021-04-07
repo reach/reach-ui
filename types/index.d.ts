@@ -11,3 +11,7 @@ declare module "jest-axe" {
   ): (html: any, additionalOptions: RunOptions) => Promise<AxeResults>;
   export const toHaveNoViolations: jest.ExpectExtendMap;
 }
+
+declare module "latinize" {
+  export default function latinize(string: string): string;
+}
