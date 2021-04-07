@@ -40,7 +40,7 @@ describe("<MenuButton />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { container } = render(
         <Menu>
           <MenuButton id="example-button">

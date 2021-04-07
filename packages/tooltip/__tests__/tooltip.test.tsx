@@ -34,7 +34,7 @@ describe("<Tooltip />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { container, getByText } = render(
         <div data-testid="tooltip">
           <Tooltip label="Content">

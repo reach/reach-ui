@@ -83,7 +83,7 @@ describe("<Disclosure />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { getByRole, container } = render(
         <Disclosure>
           <DisclosureButton>Click Button</DisclosureButton>

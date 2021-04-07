@@ -10,7 +10,7 @@ const MESSAGE_TIMEOUT = 5000;
 
 describe("<Alert />", () => {
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { container, getByTestId } = render(<AlertApp />);
       let results: AxeResults = null as any;
       await act(async () => {
