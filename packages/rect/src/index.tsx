@@ -148,7 +148,11 @@ function useRect<T extends Element = HTMLElement>(
       elem = nodeRef.current;
     }
 
-    if (!elem && observe) {
+    if (!observe) {
+      return cleanup;
+    }
+
+    if (!elem) {
       if (__DEV__) {
         console.warn("You need to place the ref");
       }
@@ -160,7 +164,7 @@ function useRect<T extends Element = HTMLElement>(
       setRect(rect);
     });
 
-    observe && observer.observe();
+    observer.observe();
     return cleanup;
 
     function cleanup() {
