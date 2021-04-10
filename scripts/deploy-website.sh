@@ -21,10 +21,10 @@ cd $tmp_dir
 git add -A
 git commit \
   --allow-empty \
-  --author "Travis CI <travis-ci@reacttraining.com>" \
+  --author "GitHub CI <github-ci@reacttraining.com>" \
   -m "Update reach-ui website
 
-https://travis-ci.com/$TRAVIS_REPO_SLUG/builds/$TRAVIS_BUILD_ID"
+$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
 # Deploy
 git push origin master
