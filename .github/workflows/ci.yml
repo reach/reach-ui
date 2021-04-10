@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - next
+      - website
+  pull_request: {}
+  release: {}
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore Lerna (Cache)
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build Packages
+        run: yarn build
+
+      - name: Run Tests
+        run: yarn test
+
+  release:
+    needs: test
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    if: ${{ startsWith(github.ref, 'refs/tags/v') && github.event_name == 'release' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore Lerna (Cache)
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - run: echo "RELEASE_TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build Packages
+        run: yarn build
+
+      - run: echo "Publishing $RELEASE_TAG to npm ..."
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+
+      - name: Publish Packages
+        run: lerna publish from-git --yes --pre-dist-tag next
+
+  website:
+    name: Deploy Website
+    runs-on: ubuntu-latest
+
+    if: ${{ github.ref == 'refs/heads/website' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Restore Lerna (Cache)
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Checkout
+        run: yarn --frozen-lockfile
+
+      - name: Build Packages
+        run: yarn build
+
+      - run: echo "Deploying website to https://reach.tech/"
+      - run: openssl aes-256-cbc -K $encrypted_e12d3fc86b46_key -iv $encrypted_e12d3fc86b46_iv -in website-deploy-key.enc -out website-deploy-key -d
+      - run: chmod 600 website-deploy-key
+      - run: eval $(ssh-agent -s)
+      - run: ssh-add website-deploy-key
+      - run: bash scripts/deploy-website.sh
