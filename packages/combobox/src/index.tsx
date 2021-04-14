@@ -486,10 +486,10 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
       (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
     ) {
       handleValueChange(controlledValue!);
-      // After we handled the changed value, we need to make sure the next
-      // controlled change won't trigger a CHANGE event. (instead of a SIMULATED_CHANGE)
-      inputValueChangedRef.current = false;
     }
+    // After we handled the changed value, we need to make sure the next
+    // controlled change won't trigger a CHANGE event. (instead of a SIMULATED_CHANGE)
+    inputValueChangedRef.current = false;
   }, [controlledValue, handleValueChange, isControlled, value]);
 
   // [*]... and when controlled, we don't trigger handleValueChange as the

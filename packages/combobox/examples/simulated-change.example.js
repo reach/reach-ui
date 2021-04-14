@@ -9,7 +9,7 @@ import {
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
-let name = "Controlled";
+let name = "Simulated Change";
 
 function Example() {
   let [term, setTerm] = React.useState("Detroit");
@@ -35,8 +35,8 @@ function Example() {
       <h2>Clientside Search</h2>
       <p>
         This example tests that changes to the controlled value of Combobox
-        don't trigger it to open unless we are actually typing. The initial
-        value and programmatically set value here shouldn't open the Popover.
+        don't expand it unless we are actually typing. The initial value and
+        programmatically set value here shouldn't open the Popover.
       </p>
       <p>Selection: {selection}</p>
       <p>Term: {term}</p>
