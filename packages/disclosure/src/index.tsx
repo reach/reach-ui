@@ -276,7 +276,6 @@ const DisclosurePanel = React.forwardRef(function DisclosurePanel(
       data-reach-disclosure-panel=""
       data-state={open ? DisclosureStates.Open : DisclosureStates.Collapsed}
       id={panelId}
-      tabIndex={-1}
     >
       {children}
     </Comp>
