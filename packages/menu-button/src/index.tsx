@@ -54,9 +54,13 @@ const SET_BUTTON_ID = "SET_BUTTON_ID";
 const MenuDescendantContext = createDescendantContext<MenuButtonDescendant>(
   "MenuDescendantContext"
 );
-const MenuContext = createNamedContext<InternalMenuContextValue>(
-  "MenuContext",
-  {} as InternalMenuContextValue
+const StableMenuContext = createNamedContext<StableMenuContextValue>(
+  "StableMenuContext",
+  {} as StableMenuContextValue
+);
+const UnstableMenuContext = createNamedContext<UnstableMenuContextValue>(
+  "UnstableMenuContext",
+  {} as UnstableMenuContextValue
 );
 
 const initialState: MenuButtonState = {
@@ -117,15 +121,22 @@ const Menu: React.FC<MenuProps> = ({ id, children }) => {
   // on most platforms, and our menu button popover works similarly.
   let readyToSelect = React.useRef(false);
 
-  let context: InternalMenuContextValue = {
-    buttonRef,
-    dispatch,
+  // Trying a new approach for splitting up contexts by stable/unstable
+  // references. We'll see how it goes!
+  let stableContext = React.useMemo<StableMenuContextValue>(() => {
+    return {
+      buttonRef,
+      dispatch,
+      menuRef,
+      popoverRef,
+      buttonClickedRef,
+      readyToSelect,
+      selectCallbacks,
+    };
+  }, []);
+
+  let unstableContext: UnstableMenuContextValue = {
     menuId,
-    menuRef,
-    popoverRef,
-    buttonClickedRef,
-    readyToSelect,
-    selectCallbacks,
     state,
   };
 
@@ -155,15 +166,17 @@ const Menu: React.FC<MenuProps> = ({ id, children }) => {
       items={descendants}
       set={setDescendants}
     >
-      <MenuContext.Provider value={context}>
-        {isFunction(children)
-          ? children({
-              isExpanded: state.isExpanded,
-              // TODO: Remove in 1.0
-              isOpen: state.isExpanded,
-            })
-          : children}
-      </MenuContext.Provider>
+      <StableMenuContext.Provider value={stableContext}>
+        <UnstableMenuContext.Provider value={unstableContext}>
+          {isFunction(children)
+            ? children({
+                isExpanded: state.isExpanded,
+                // TODO: Remove in 1.0
+                isOpen: state.isExpanded,
+              })
+            : children}
+        </UnstableMenuContext.Provider>
+      </StableMenuContext.Provider>
     </DescendantProvider>
   );
 };
@@ -209,13 +222,13 @@ const MenuButton = React.forwardRef(function MenuButton(
   { as: Comp = "button", onKeyDown, onMouseDown, id, ...props },
   forwardedRef
 ) {
+  let { buttonRef, buttonClickedRef, dispatch } = React.useContext(
+    StableMenuContext
+  );
   let {
-    buttonRef,
-    buttonClickedRef,
     menuId,
     state: { buttonId, isExpanded },
-    dispatch,
-  } = React.useContext(MenuContext);
+  } = React.useContext(UnstableMenuContext);
   let ref = useComposedRefs(buttonRef, forwardedRef);
   let items = useDescendants(MenuDescendantContext);
   let firstNonDisabledIndex = React.useMemo(
@@ -344,29 +357,26 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
     dispatch,
     readyToSelect,
     selectCallbacks,
+  } = React.useContext(StableMenuContext);
+  let {
     state: { selectionIndex, isExpanded },
-  } = React.useContext(MenuContext);
+  } = React.useContext(UnstableMenuContext);
   let ownRef = React.useRef<HTMLElement | null>(null);
   // After the ref is mounted to the DOM node, we check to see if we have an
   // explicit valueText prop before looking for the node's textContent for
   // typeahead functionality.
   let [valueText, setValueText] = React.useState(valueTextProp || "");
-  let setValueTextFromDom = React.useCallback(
-    (node) => {
-      if (node) {
-        ownRef.current = node;
-        if (
-          !valueTextProp ||
-          (node.textContent && valueText !== node.textContent)
-        ) {
-          setValueText(node.textContent);
-        }
+
+  let setValueTextFromDOM = React.useCallback(
+    (node: HTMLElement) => {
+      if (!valueTextProp && node?.textContent) {
+        setValueText(node.textContent);
       }
     },
-    [valueText, valueTextProp]
+    [valueTextProp]
   );
 
-  let ref = useComposedRefs(forwardedRef, setValueTextFromDom);
+  let ref = useComposedRefs(forwardedRef, ownRef, setValueTextFromDOM);
 
   let mouseEventStarted = React.useRef(false);
 
@@ -411,11 +421,13 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
   }
 
   function handleMouseDown(event: React.MouseEvent) {
-    if (isRightClick(event.nativeEvent)) return;
+    if (isRightClick(event.nativeEvent)) {
+      return;
+    }
 
     if (isLink) {
-      // Signal that the mouse is down so we can react call the right function
-      // if the user is clicking on a link.
+      // Signal that the mouse is down so we can call the right function if the
+      // user is clicking on a link.
       mouseEventStarted.current = true;
     } else {
       event.preventDefault();
@@ -474,9 +486,14 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
   // mouseEventStarted ref so we can check it again when needed.
   React.useEffect(() => {
     let ownerDocument = getOwnerDocument(ownRef.current)!;
-    let listener = () => (mouseEventStarted.current = false);
     ownerDocument.addEventListener("mouseup", listener);
-    return () => ownerDocument.removeEventListener("mouseup", listener);
+    return () => {
+      ownerDocument.removeEventListener("mouseup", listener);
+    };
+
+    function listener() {
+      mouseEventStarted.current = false;
+    }
   }, []);
 
   return (
@@ -569,14 +586,13 @@ const MenuItems = React.forwardRef(function MenuItems(
   { as: Comp = "div", children, id, onKeyDown, ...props },
   forwardedRef
 ) {
+  const { dispatch, buttonRef, menuRef, selectCallbacks } = React.useContext(
+    StableMenuContext
+  );
   const {
     menuId,
-    dispatch,
-    buttonRef,
-    menuRef,
-    selectCallbacks,
     state: { isExpanded, buttonId, selectionIndex, typeaheadQuery },
-  } = React.useContext(MenuContext);
+  } = React.useContext(UnstableMenuContext);
   const menuItems = useDescendants(MenuDescendantContext);
   const ref = useComposedRefs(menuRef, forwardedRef);
 
@@ -855,16 +871,16 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * 
- 
- *
- * A low-level wrapper for the popover that appears when a menu button is open.
- * You can compose it with `MenuItems` for more control over the nested
- * components and their rendered DOM nodes, or if you need to nest arbitrary
- * components between the outer wrapper and your list.
- *
- * @see Docs https://reach.tech/menu-button#menupopover
- */
+  * 
+  
+  *
+  * A low-level wrapper for the popover that appears when a menu button is open.
+  * You can compose it with `MenuItems` for more control over the nested
+  * components and their rendered DOM nodes, or if you need to nest arbitrary
+  * components between the outer wrapper and your list.
+  *
+  * @see Docs https://reach.tech/menu-button#menupopover
+  */
 const MenuPopover = React.forwardRef(function MenuPopover(
   { as: Comp = "div", children, portal = true, position, ...props },
   forwardedRef
@@ -875,8 +891,10 @@ const MenuPopover = React.forwardRef(function MenuPopover(
     dispatch,
     menuRef,
     popoverRef,
+  } = React.useContext(StableMenuContext);
+  const {
     state: { isExpanded },
-  } = React.useContext(MenuContext);
+  } = React.useContext(UnstableMenuContext);
 
   const ref = useComposedRefs(popoverRef, forwardedRef);
 
@@ -973,7 +991,7 @@ if (__DEV__) {
 function useMenuButtonContext(): MenuContextValue {
   let {
     state: { isExpanded },
-  } = React.useContext(MenuContext);
+  } = React.useContext(UnstableMenuContext);
   return React.useMemo(() => ({ isExpanded }), [isExpanded]);
 }
 
@@ -1001,7 +1019,7 @@ function findItemFromTypeahead(
 }
 
 function useMenuItemId(index: number | null) {
-  let { menuId } = React.useContext(MenuContext);
+  let { menuId } = React.useContext(UnstableMenuContext);
   return index != null && index > -1
     ? makeId(`option-${index}`, menuId)
     : undefined;
@@ -1137,16 +1155,19 @@ type ButtonRef = React.RefObject<null | HTMLElement>;
 type MenuRef = React.RefObject<null | HTMLElement>;
 type PopoverRef = React.RefObject<null | HTMLElement>;
 
-interface InternalMenuContextValue {
+interface UnstableMenuContextValue {
+  menuId: string | undefined;
+  state: MenuButtonState;
+}
+
+interface StableMenuContextValue {
   buttonRef: ButtonRef;
   buttonClickedRef: React.MutableRefObject<boolean>;
   dispatch: React.Dispatch<MenuButtonAction>;
-  menuId: string | undefined;
   menuRef: MenuRef;
   popoverRef: PopoverRef;
   readyToSelect: React.MutableRefObject<boolean>;
   selectCallbacks: React.MutableRefObject<(() => void)[]>;
-  state: MenuButtonState;
 }
 
 interface MenuContextValue {
