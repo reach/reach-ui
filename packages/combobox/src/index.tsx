@@ -522,6 +522,10 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
       selectOnClickRef.current = false;
       inputRef.current?.select();
     }
+
+    if (openOnFocus) {
+      transition("OPEN_WITH_BUTTON");
+    }
   }
 
   const inputValue =
