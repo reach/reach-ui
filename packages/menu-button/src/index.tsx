@@ -785,7 +785,13 @@ if (__DEV__) {
  * @see Docs https://reach.tech/menu-button#menulink
  */
 const MenuLink = React.forwardRef(function MenuLink(
-  { as = "a", component, onSelect, ...props },
+  {
+    as = "a",
+    // @ts-ignore
+    component,
+    onSelect,
+    ...props
+  },
   forwardedRef
 ) {
   useDevWarning(
@@ -794,18 +800,16 @@ const MenuLink = React.forwardRef(function MenuLink(
   );
 
   return (
-    <div role="none">
-      <MenuItemImpl
-        {...props}
-        ref={forwardedRef}
-        data-reach-menu-link=""
-        as={as}
-        isLink={true}
-        onSelect={onSelect || noop}
-      />
-    </div>
+    <MenuItemImpl
+      {...props}
+      ref={forwardedRef}
+      data-reach-menu-link=""
+      as={as}
+      isLink={true}
+      onSelect={onSelect || noop}
+    />
   );
-}) as Polymorphic.ForwardRefComponent<"a", MenuLinkProps & { component?: any }>;
+}) as Polymorphic.ForwardRefComponent<"a", MenuLinkProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menulink-props
@@ -818,7 +822,6 @@ if (__DEV__) {
   MenuLink.displayName = "MenuLink";
   MenuLink.propTypes = {
     as: PropTypes.any,
-    component: PropTypes.any,
   };
 }
 
