@@ -15,7 +15,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import warning from "tiny-warning";
 import { useId } from "@reach/auto-id";
-import { Popover, Position } from "@reach/popover";
+import { Popover } from "@reach/popover";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -35,6 +35,7 @@ import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 
+import type { Position } from "@reach/popover";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { Descendant } from "@reach/descendants";
 
@@ -275,7 +276,7 @@ const MenuButton = React.forwardRef(function MenuButton(
     if (isRightClick(event.nativeEvent)) {
       return;
     } else if (isExpanded) {
-      dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+      dispatch({ type: CLOSE_MENU });
     } else {
       dispatch({ type: OPEN_MENU_CLEARED });
     }
@@ -688,7 +689,7 @@ const MenuItems = React.forwardRef(function MenuItems(
           break;
         case "Escape":
           focus(buttonRef.current);
-          dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+          dispatch({ type: CLOSE_MENU });
           break;
         case "Tab":
           // prevent leaving
@@ -882,7 +883,7 @@ if (__DEV__) {
   * @see Docs https://reach.tech/menu-button#menupopover
   */
 const MenuPopover = React.forwardRef(function MenuPopover(
-  { as: Comp = "div", children, portal = true, position, ...props },
+  { as: Comp = "div", children, onBlur, portal = true, position, ...props },
   forwardedRef
 ) {
   const {
@@ -911,7 +912,7 @@ const MenuPopover = React.forwardRef(function MenuPopover(
         !popoverContainsEventTarget(popoverRef.current, event.target)
       ) {
         // We on want to close only if focus rests outside the menu
-        dispatch({ type: CLOSE_MENU, payload: { buttonRef } });
+        dispatch({ type: CLOSE_MENU });
       }
     }
     ownerDocument.addEventListener("mousedown", listener);
@@ -930,6 +931,12 @@ const MenuPopover = React.forwardRef(function MenuPopover(
     "data-reach-menu-popover": "",
     hidden: !isExpanded,
     children,
+    onBlur: composeEventHandlers(onBlur, (event) => {
+      if (event.currentTarget.contains(event.relatedTarget as Node)) {
+        return;
+      }
+      dispatch({ type: CLOSE_MENU });
+    }),
     ...props,
   };
 
@@ -1034,7 +1041,7 @@ interface MenuButtonState {
 
 type MenuButtonAction =
   | { type: "CLICK_MENU_ITEM" }
-  | { type: "CLOSE_MENU"; payload: { buttonRef: ButtonRef } }
+  | { type: "CLOSE_MENU" }
   | { type: "OPEN_MENU_AT_FIRST_ITEM" }
   | { type: "OPEN_MENU_AT_INDEX"; payload: { index: number } }
   | { type: "OPEN_MENU_CLEARED" }
