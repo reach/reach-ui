@@ -597,7 +597,6 @@ const AccordionPanel = React.forwardRef(function AccordionPanel(
       data-disabled={disabled || undefined}
       data-state={getDataState(state)}
       id={panelId}
-      tabIndex={-1}
     >
       {children}
     </Comp>
