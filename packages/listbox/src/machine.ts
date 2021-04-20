@@ -1,5 +1,5 @@
 import { assign } from "@reach/machine";
-import { getOwnerDocument } from "@reach/utils";
+import { getOwnerDocument } from "@reach/utils/owner-document";
 
 import type { ListboxDescendant, ListboxValue } from "./index";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
@@ -41,9 +41,18 @@ export enum ListboxEvents {
   KeyDownSearch = "KEY_DOWN_SEARCH",
   KeyDownTab = "KEY_DOWN_TAB",
   KeyDownShiftTab = "KEY_DOWN_SHIFT_TAB",
+
   OptionTouchStart = "OPTION_TOUCH_START",
   OptionMouseMove = "OPTION_MOUSE_MOVE",
   OptionMouseEnter = "OPTION_MOUSE_ENTER",
+  OptionMouseDown = "OPTION_MOUSE_DOWN",
+  OptionMouseUp = "OPTION_MOUSE_UP",
+  OptionClick = "OPTION_CLICK",
+
+  // WIP: Simplify and consolidate events
+  // TODO: Use a separate machine to deal with states to determine press events
+  OptionPress = "OPTION_PRESS",
+
   OutsideMouseDown = "OUTSIDE_MOUSE_DOWN",
   OutsideMouseUp = "OUTSIDE_MOUSE_UP",
 
@@ -51,8 +60,6 @@ export enum ListboxEvents {
   // ValueChange > Value change may have come from somewhere else
   ValueChange = "VALUE_CHANGE",
 
-  OptionMouseDown = "OPTION_MOUSE_DOWN",
-  OptionMouseUp = "OPTION_MOUSE_UP",
   PopoverPointerDown = "POPOVER_POINTER_DOWN",
   PopoverPointerUp = "POPOVER_POINTER_UP",
   UpdateAfterTypeahead = "UPDATE_AFTER_TYPEAHEAD",
@@ -178,9 +185,12 @@ function optionIsNavigable(data: ListboxStateData, event: ListboxEvent) {
   return true;
 }
 
-function optionIsSelectable(data: ListboxStateData, event: any) {
-  if (event && event.disabled) {
+function optionIsSelectable(data: ListboxStateData, event: ListboxEvent) {
+  if ("disabled" in event && event.disabled) {
     return false;
+  }
+  if ("value" in event) {
+    return event.value != null;
   }
   return data.navigationValue != null;
 }
@@ -410,6 +420,16 @@ export const createMachineDefinition = ({
           actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
         },
+        [ListboxEvents.OptionClick]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.OptionPress]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
         [ListboxEvents.OptionMouseEnter]: {
           target: ListboxStates.Navigating,
           actions: [navigate, clearTypeahead],
@@ -501,6 +521,16 @@ export const createMachineDefinition = ({
           target: ListboxStates.Navigating,
           actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionClick]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.OptionPress]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
         },
         [ListboxEvents.KeyDownNavigate]: {
           target: ListboxStates.Navigating,
@@ -610,6 +640,16 @@ export const createMachineDefinition = ({
           target: ListboxStates.Navigating,
           actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionClick]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.OptionPress]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
         },
         [ListboxEvents.OptionMouseEnter]: {
           target: ListboxStates.Dragging,
@@ -727,6 +767,16 @@ export const createMachineDefinition = ({
           target: ListboxStates.Navigating,
           actions: [navigate, clearTypeahead],
           cond: optionIsNavigable,
+        },
+        [ListboxEvents.OptionClick]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
+        },
+        [ListboxEvents.OptionPress]: {
+          target: ListboxStates.Idle,
+          actions: [assignValue, clearTypeahead, focusButton, selectOption],
+          cond: optionIsSelectable,
         },
         [ListboxEvents.OptionMouseEnter]: {
           target: ListboxStates.Navigating,
@@ -886,6 +936,18 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.OptionMouseUp;
+        value: ListboxValue | null | undefined;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.OptionClick;
+        value: ListboxValue | null | undefined;
+        callback?: ((newValue: ListboxValue) => void) | null | undefined;
+        disabled: boolean;
+      }
+    | {
+        type: ListboxEvents.OptionPress;
         value: ListboxValue | null | undefined;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
         disabled: boolean;

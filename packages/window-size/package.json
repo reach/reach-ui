@@ -1,22 +1,25 @@
 {
   "name": "@reach/window-size",
-  "version": "0.13.1",
+  "version": "0.15.0",
   "description": "Measure the window size in React",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/window-size"
   },
   "dependencies": {
-    "@reach/utils": "0.13.1",
+    "@reach/utils": "0.15.0",
     "prop-types": "^15.7.2",
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "devDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",

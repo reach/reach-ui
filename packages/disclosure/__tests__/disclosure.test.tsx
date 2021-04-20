@@ -83,7 +83,7 @@ describe("<Disclosure />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { getByRole, container } = render(
         <Disclosure>
           <DisclosureButton>Click Button</DisclosureButton>
@@ -106,16 +106,6 @@ describe("<Disclosure />", () => {
         </Disclosure>
       );
       expect(getByText("Panel body")).toHaveAttribute("id", "panel--my-id");
-    });
-
-    it("removes the panel from the navigation flow", () => {
-      let { getByText } = render(
-        <Disclosure>
-          <DisclosureButton>Click Button</DisclosureButton>
-          <DisclosurePanel>Panel body</DisclosurePanel>
-        </Disclosure>
-      );
-      expect(getByText("Panel body")).toHaveAttribute("tabindex", "-1");
     });
 
     it("sets the correct aria attributes when collapsed", () => {

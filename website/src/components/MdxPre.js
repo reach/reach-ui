@@ -2,7 +2,7 @@ import * as React from "react";
 import assign from "core-js/features/object/assign";
 import Highlight, { Prism } from "prism-react-renderer";
 import theme from "prism-react-renderer/themes/github";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 
 /*
  * We need to transpile code extracted from mdx before we try to eval it.

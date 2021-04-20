@@ -5,28 +5,28 @@
 import * as React from "react";
 import { Portal } from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { forwardRefWithAs, getOwnerDocument, useForkedRef } from "@reach/utils";
+import { getOwnerDocument } from "@reach/utils/owner-document";
+import { useComposedRefs } from "@reach/utils/compose-refs";
 import tabbable from "tabbable";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Popover
  */
-const Popover = forwardRefWithAs<PopoverProps, "div">(function Popover(
-  props,
-  ref
-) {
+const Popover = React.forwardRef(function Popover(props, ref) {
   return (
     <Portal>
       <PopoverImpl ref={ref} {...props} />
     </Portal>
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
-type PopoverProps = {
+interface PopoverProps {
   children: React.ReactNode;
-  targetRef: React.RefObject<HTMLElement>;
+  targetRef: React.RefObject<PossibleNode>;
   position?: Position;
   /**
    * Render the popover markup, but hide it – used by MenuButton so that it
@@ -43,7 +43,7 @@ type PopoverProps = {
    * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
-};
+}
 
 if (__DEV__) {
   Popover.displayName = "Popover";
@@ -57,7 +57,7 @@ if (__DEV__) {
  * Popover is conditionally rendered so we can't start measuring until it shows
  * up, so useRect needs to live down here not up in Popover
  */
-const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
+const PopoverImpl = React.forwardRef(function PopoverImpl(
   {
     as: Comp = "div",
     targetRef,
@@ -70,9 +70,9 @@ const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
   const popoverRef = React.useRef<HTMLDivElement>(null);
   const popoverRect = useRect(popoverRef, { observe: !props.hidden });
   const targetRect = useRect(targetRef, { observe: !props.hidden });
-  const ref = useForkedRef(popoverRef, forwardedRef);
+  const ref = useComposedRefs(popoverRef, forwardedRef);
 
-  useSimulateTabNavigationForReactTree(targetRef, popoverRef);
+  useSimulateTabNavigationForReactTree(targetRef as any, popoverRef);
 
   return (
     <Comp
@@ -91,7 +91,7 @@ const PopoverImpl = forwardRefWithAs<PopoverProps, "div">(function PopoverImpl(
       }}
     />
   );
-});
+}) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
 if (__DEV__) {
   PopoverImpl.displayName = "PopoverImpl";
@@ -114,10 +114,13 @@ function getStyles(
     : { visibility: "hidden" };
 }
 
-function getTopPosition(targetRect: PRect, popoverRect: PRect) {
-  const { directionUp } = getCollisions(targetRect, popoverRect);
+function getTopPosition(
+  targetRect: PRect,
+  popoverRect: PRect,
+  isDirectionUp: boolean
+) {
   return {
-    top: directionUp
+    top: isDirectionUp
       ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
       : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
   };
@@ -128,12 +131,15 @@ const positionDefault: Position = (targetRect, popoverRect) => {
     return {};
   }
 
-  const { directionRight } = getCollisions(targetRect, popoverRect);
+  const { directionRight, directionUp } = getCollisions(
+    targetRect,
+    popoverRect
+  );
   return {
     left: directionRight
       ? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
       : `${targetRect.left + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 
@@ -142,12 +148,12 @@ const positionRight: Position = (targetRect, popoverRect) => {
     return {};
   }
 
-  const { directionLeft } = getCollisions(targetRect, popoverRect);
+  const { directionLeft, directionUp } = getCollisions(targetRect, popoverRect);
   return {
     left: directionLeft
       ? `${targetRect.left + window.pageXOffset}px`
       : `${targetRect.right - popoverRect.width + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 
@@ -156,10 +162,11 @@ const positionMatchWidth: Position = (targetRect, popoverRect) => {
     return {};
   }
 
+  const { directionUp } = getCollisions(targetRect, popoverRect);
   return {
     width: targetRect.width,
     left: targetRect.left,
-    ...getTopPosition(targetRect, popoverRect),
+    ...getTopPosition(targetRect, popoverRect, directionUp),
   };
 };
 

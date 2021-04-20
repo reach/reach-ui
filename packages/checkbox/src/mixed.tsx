@@ -32,16 +32,14 @@
  */
 
 import * as React from "react";
-import {
-  forwardRefWithAs,
-  useForkedRef,
-  useIsomorphicLayoutEffect,
-  warning,
-  wrapEvent,
-} from "@reach/utils";
+import { useIsomorphicLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { useComposedRefs } from "@reach/utils/compose-refs";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
+import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
+import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 // Used for development only, not recommended for production code!
@@ -204,15 +202,12 @@ const createMachineDefinition = (
  *
  * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
-const MixedCheckbox = forwardRefWithAs<
-  MixedCheckboxProps & { _componentName?: string },
-  "input"
->(function MixedCheckbox(
+const MixedCheckbox = React.forwardRef(function MixedCheckbox(
   { as: Comp = "input", checked, defaultChecked, disabled, onChange, ...props },
   forwardedRef
 ) {
   let ownRef: MixedCheckboxInputRef = React.useRef(null);
-  let ref = useForkedRef(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, ownRef);
   let [inputProps] = useMixedCheckbox(
     ownRef,
     {
@@ -229,16 +224,16 @@ const MixedCheckbox = forwardRefWithAs<
   return (
     <Comp {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
   );
-});
+}) as Polymorphic.ForwardRefComponent<"input", MixedCheckboxProps>;
 
-type MixedCheckboxProps = {
+interface MixedCheckboxProps {
   /**
    * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
    * state.
    */
   checked?: MixedOrBool;
   onChange?: React.ComponentProps<"input">["onChange"];
-};
+}
 
 if (__DEV__) {
   MixedCheckbox.displayName = "MixedCheckbox";
@@ -312,8 +307,8 @@ function useMixedCheckbox(
     "aria-checked": stateValueToAriaChecked(current.value),
     checked: stateValueToChecked(current.value),
     disabled: !!disabled,
-    onChange: wrapEvent(onChange, handleChange),
-    onClick: wrapEvent(onClick, handleClick),
+    onChange: composeEventHandlers(onChange, handleChange),
+    onClick: composeEventHandlers(onClick, handleClick),
     type: "checkbox",
   };
 
@@ -352,13 +347,10 @@ function useMixedCheckbox(
     }
   }
 
-  React.useEffect(() => {
-    if (__DEV__ && !ref.current) {
-      throw new Error(
-        `A ref was not assigned to an input element in ${functionOrComponentName}.`
-      );
-    }
-  }, [ref, functionOrComponentName]);
+  useRefDevWarning(
+    ref,
+    `A ref was not assigned to an input element in ${functionOrComponentName}.`
+  );
 
   React.useEffect(() => {
     if (isControlled) {
@@ -475,23 +467,6 @@ type MixedCheckboxEvent = MixedCheckboxEventBase &
   );
 
 /**
- * State object for the checkbox state machine.
- */
-type MixedCheckboxState =
-  | {
-      value: MixedCheckboxStates.Checked;
-      context: MixedCheckboxData;
-    }
-  | {
-      value: MixedCheckboxStates.Unchecked;
-      context: MixedCheckboxData;
-    }
-  | {
-      value: MixedCheckboxStates.Mixed;
-      context: MixedCheckboxData;
-    };
-
-/**
  * DOM nodes for all of the refs used in the mixed checkbox state machine.
  */
 type MixedCheckboxNodeRefs = {
@@ -515,3 +490,17 @@ export {
   checkedPropToStateValue as internal_checkedPropToStateValue,
   useControlledSwitchWarning as internal_useControlledSwitchWarning,
 };
+
+function useRefDevWarning(ref: React.RefObject<any>, message: string) {
+  if (__DEV__) {
+    /* eslint-disable react-hooks/rules-of-hooks */
+    let messageRef = React.useRef(message);
+    React.useEffect(() => {
+      messageRef.current = message;
+    }, [message]);
+    React.useEffect(() => {
+      warning(ref.current, messageRef.current);
+    }, [ref]);
+    /* eslint-enable react-hooks/rules-of-hooks */
+  }
+}

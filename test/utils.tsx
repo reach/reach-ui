@@ -76,10 +76,10 @@ export function render<
   };
   Wrapper.propTypes = { children: PropTypes.node };
 
-  const result = tlRender(element, {
+  const result = (tlRender(element, {
     baseElement,
     wrapper: Wrapper,
-  }) as RenderResult<P, T>;
+  }) as unknown) as RenderResult<P, T>;
 
   // These handy functions courtesy of https://github.com/mui-org/material-ui
   result.setProps = function setProps(props: P) {
@@ -99,17 +99,48 @@ export function render<
   return result;
 }
 
+export async function wait(time: number) {
+  return await new Promise<void>((res) => setTimeout(res, time));
+}
+
 /**
  * When a user clicks with a mouse, mousedown, mouseup and then click events
  * are fired. Some packages rely on mousedown and mouseup events where click
  * might be assumed by most consumers. This helper fires all three events in
  * order to make testing a bit more predictable.
+ * @see https://testing-library.com/docs/guide-events#interactions-vs-events
  * @param element
  */
-export function fireClickAndMouseEvents(element: HTMLElement) {
+export function simulateMouseClick(element: HTMLElement) {
+  fireEvent.pointerDown(element, { pointerType: "mouse" });
   fireEvent.mouseDown(element);
+  fireEvent.pointerUp(element, { pointerType: "mouse" });
   fireEvent.mouseUp(element);
   fireEvent.click(element);
+}
+
+export function simulateSpaceKeyClick(
+  element: HTMLElement,
+  opts?: { fireClick?: boolean }
+) {
+  let { fireClick } = opts || {};
+  fireEvent.keyDown(element, { key: " " });
+  fireEvent.keyUp(element, { key: " " });
+  if (fireClick) {
+    fireEvent.click(element);
+  }
+}
+
+export function simulateEnterKeyClick(
+  element: HTMLElement,
+  opts?: { fireClick?: boolean }
+) {
+  let { fireClick } = opts || {};
+  fireEvent.keyDown(element, { key: "Enter" });
+  fireEvent.keyUp(element, { key: "Enter" });
+  if (fireClick) {
+    fireEvent.click(element);
+  }
 }
 
 type Query = (f: MatcherFunction) => HTMLElement | null;

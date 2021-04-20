@@ -75,7 +75,7 @@ describe("<Listbox />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       let { container } = render(<FancyListbox />);
       let results: AxeResults = null as any;
       await act(async () => {

@@ -1,5 +1,7 @@
 import * as React from "react";
-import { forwardRefWithAs, useCheckStyles } from "@reach/utils";
+import { useCheckStyles } from "@reach/utils/dev-utils";
+
+import type * as Polymorphic from "@reach/utils/polymorphic";
 
 // The user may want to provide their own ID (maybe there are multiple nav
 // menus on a page a use might want to skip at various points in tabbing?).
@@ -14,32 +16,30 @@ let defaultId = "reach-skip-nav";
  *
  * @see Docs https://reach.tech/skip-nav#skipnavlink
  */
-const SkipNavLink = forwardRefWithAs<SkipNavLinkProps, "a">(
-  function SkipNavLink(
-    { as: Comp = "a", children = "Skip to content", contentId, ...props },
-    forwardedRef
-  ) {
-    let id = contentId || defaultId;
-    useCheckStyles("skip-nav");
-    return (
-      <Comp
-        {...props}
-        ref={forwardedRef}
-        href={`#${id}`}
-        // TODO: Remove in 1.0 (kept for back compat)
-        data-reach-skip-link=""
-        data-reach-skip-nav-link=""
-      >
-        {children}
-      </Comp>
-    );
-  }
-);
+const SkipNavLink = React.forwardRef(function SkipNavLink(
+  { as: Comp = "a", children = "Skip to content", contentId, ...props },
+  forwardedRef
+) {
+  let id = contentId || defaultId;
+  useCheckStyles("skip-nav");
+  return (
+    <Comp
+      {...props}
+      ref={forwardedRef}
+      href={`#${id}`}
+      // TODO: Remove in 1.0 (kept for back compat)
+      data-reach-skip-link=""
+      data-reach-skip-nav-link=""
+    >
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"a", SkipNavLinkProps>;
 
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavlink-props
  */
-type SkipNavLinkProps = {
+interface SkipNavLinkProps {
   /**
    * Allows you to change the text for your preferred phrase or localization.
    *
@@ -53,7 +53,7 @@ type SkipNavLinkProps = {
    * @see Docs https://reach.tech/skip-nav#skipnavlink-contentid
    */
   contentId?: string;
-};
+}
 
 if (__DEV__) {
   SkipNavLink.displayName = "SkipNavLink";
@@ -68,27 +68,25 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/skip-nav#skipnavcontent
  */
-const SkipNavContent = forwardRefWithAs<SkipNavContentProps, "div">(
-  function SkipNavContent(
-    { as: Comp = "div", id: idProp, ...props },
-    forwardedRef
-  ) {
-    let id = idProp || defaultId;
-    return (
-      <Comp
-        {...props}
-        ref={forwardedRef}
-        id={id}
-        data-reach-skip-nav-content=""
-      />
-    );
-  }
-);
+const SkipNavContent = React.forwardRef(function SkipNavContent(
+  { as: Comp = "div", id: idProp, ...props },
+  forwardedRef
+) {
+  let id = idProp || defaultId;
+  return (
+    <Comp
+      {...props}
+      ref={forwardedRef}
+      id={id}
+      data-reach-skip-nav-content=""
+    />
+  );
+}) as Polymorphic.ForwardRefComponent<"div", SkipNavContentProps>;
 
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavcontent-props
  */
-type SkipNavContentProps = {
+interface SkipNavContentProps {
   /**
    * You can place the `SkipNavContent` element as a sibling to your main
    * content or as a wrapper.
@@ -114,7 +112,7 @@ type SkipNavContentProps = {
    * @see Docs https://reach.tech/skip-nav#skipnavcontent-id
    */
   id?: string;
-};
+}
 
 if (__DEV__) {
   SkipNavContent.displayName = "SkipNavContent";

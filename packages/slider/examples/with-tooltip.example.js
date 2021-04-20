@@ -1,5 +1,5 @@
 import * as React from "react";
-import { wrapEvent } from "@reach/utils";
+import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import {
   SliderInput,
@@ -35,7 +35,7 @@ function Example() {
   }, []);
 
   const getEventHandler = (handler) =>
-    wrapEvent(preventDefaultWhenFocused, handler);
+    composeEventHandlers(preventDefaultWhenFocused, handler);
 
   return (
     <SliderInput>

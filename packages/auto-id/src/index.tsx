@@ -55,7 +55,7 @@
  */
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect } from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 
 let serverHandoffComplete = false;
 let id = 0;
@@ -84,7 +84,7 @@ function useId(idFromProps?: string | null) {
 
   const [id, setId] = React.useState(initialId);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (id === null) {
       /*
        * Patch the ID after render. We do this in `useLayoutEffect` to avoid any

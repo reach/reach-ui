@@ -100,7 +100,7 @@ describe("<Combobox />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       jest.useRealTimers();
       let { container } = render(<BasicCombobox />);
       let results: AxeResults = null as any;

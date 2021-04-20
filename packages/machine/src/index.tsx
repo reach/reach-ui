@@ -5,9 +5,10 @@ import {
   interpret,
   InterpreterStatus,
 } from "@xstate/fsm";
-import { isString, useConstant } from "@reach/utils";
+import { isString } from "@reach/utils/type-check";
+import { useConstant } from "@reach/utils/use-constant";
 
-import type { DistributiveOmit } from "@reach/utils";
+import type { DistributiveOmit } from "@reach/utils/types";
 import type {
   EventObject as MachineEvent,
   StateMachine,

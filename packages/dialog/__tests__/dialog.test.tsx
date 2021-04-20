@@ -33,7 +33,7 @@ describe("<Dialog />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       clock.restore();
       const { container } = render(<BasicOpenDialog />);
       let results: AxeResults = null as any;

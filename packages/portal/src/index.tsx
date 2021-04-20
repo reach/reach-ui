@@ -12,7 +12,8 @@
  */
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect, useForceUpdate } from "@reach/utils";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { useForceUpdate } from "@reach/utils/use-force-update";
 import { createPortal } from "react-dom";
 
 /**
@@ -25,7 +26,7 @@ const Portal: React.FC<PortalProps> = ({ children, type = "reach-portal" }) => {
   let portalNode = React.useRef<HTMLElement | null>(null);
   let forceUpdate = useForceUpdate();
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     // This ref may be null when a hot-loader replaces components on the page
     if (!mountNode.current) return;
     // It's possible that the content of the portal has, itself, been portaled.

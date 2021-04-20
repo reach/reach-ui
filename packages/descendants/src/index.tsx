@@ -1,11 +1,9 @@
 import * as React from "react";
-import {
-  createNamedContext,
-  noop,
-  useForceUpdate,
-  useIsomorphicLayoutEffect,
-  usePrevious,
-} from "@reach/utils";
+import { useForceUpdate } from "@reach/utils/use-force-update";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { usePrevious } from "@reach/utils/use-previous";
+import { createNamedContext } from "@reach/utils/context";
+import { noop } from "@reach/utils/noop";
 
 function createDescendantContext<DescendantType extends Descendant>(
   name: string,
@@ -76,7 +74,7 @@ function useDescendant<DescendantType extends Descendant>(
   });
 
   // Prevent any flashing
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!descendant.element) forceUpdate();
     registerDescendant({
       ...descendant,
@@ -274,7 +272,6 @@ function useDescendantKeyDown<
     rotate = true,
     rtl = false,
   } = options;
-  let index = currentIndex ?? -1;
 
   return function handleKeyDown(event: React.KeyboardEvent) {
     if (
@@ -291,6 +288,8 @@ function useDescendantKeyDown<
     ) {
       return;
     }
+
+    let index = currentIndex ?? -1;
 
     // If we use a filter function, we need to re-index our descendants array
     // so that filtered descendent elements aren't selected.

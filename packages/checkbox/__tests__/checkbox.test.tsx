@@ -9,12 +9,12 @@ import {
 import { render, fireEvent } from "$test/utils";
 
 describe("<MixedCheckbox />", () => {
-  it("should not have basic a11y issues after render", async () => {
+  it("Should not have ARIA violations after render", async () => {
     let { container } = render(<BasicMixedCheckbox />);
     await expect(container).toHaveNoAxeViolations();
   });
 
-  it("should not have basic a11y issues after initial click", async () => {
+  it("Should not have ARIA violations after initial click", async () => {
     let { container, getByTestId } = render(<BasicMixedCheckbox />);
     fireEvent.click(getByTestId("checkbox"));
     await expect(container).toHaveNoAxeViolations();
@@ -24,18 +24,18 @@ describe("<MixedCheckbox />", () => {
 });
 
 describe("<CustomCheckbox />", () => {
-  it("should not have basic a11y issues after render", async () => {
+  it("Should not have ARIA violations after render", async () => {
     let { container } = render(<BasicCustomCheckbox />);
     await expect(container).toHaveNoAxeViolations();
   });
 
-  it("should not have basic a11y issues after initial click (1)", async () => {
+  it("Should not have ARIA violations after initial click (1)", async () => {
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-1"));
     await expect(container).toHaveNoAxeViolations();
   });
 
-  it("should not have basic a11y issues after initial click (2)", async () => {
+  it("Should not have ARIA violations after initial click (2)", async () => {
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-2"));
     await expect(container).toHaveNoAxeViolations();

@@ -355,7 +355,7 @@ describe("<Tabs />", () => {
   });
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       const { container } = render(
         <div>
           <Tabs>

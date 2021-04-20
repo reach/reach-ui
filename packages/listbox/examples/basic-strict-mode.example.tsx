@@ -7,8 +7,6 @@ import "@reach/listbox/styles.css";
 
 let name = "Basic (Strict Mode)";
 
-type Option = { value: string; label: string };
-
 function Example() {
   return (
     <React.StrictMode>

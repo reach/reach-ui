@@ -23,7 +23,7 @@ describe("<Slider />", () => {
   describe("rendering", () => {});
 
   describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
+    it("Should not have ARIA violations", async () => {
       const { container } = render(<BasicSlider />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();

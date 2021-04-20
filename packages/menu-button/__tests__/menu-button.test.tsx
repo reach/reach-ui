@@ -1,172 +1,342 @@
 import * as React from "react";
-import { render, act, fireEvent, fireClickAndMouseEvents } from "$test/utils";
-import { AxeResults } from "$test/types";
+import {
+  render,
+  screen,
+  fireEvent,
+  simulateMouseClick,
+  simulateSpaceKeyClick,
+  simulateEnterKeyClick,
+} from "$test/utils";
 import { axe } from "jest-axe";
-import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  MenuLink,
+} from "@reach/menu-button";
 
-describe("<MenuButton />", () => {
-  describe("rendering", () => {
-    it("should mount the component", () => {
-      let { queryByRole } = render(
-        <Menu>
-          <MenuButton>Actions</MenuButton>
-          <MenuList>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-            <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
-          </MenuList>
-        </Menu>
-      );
-      expect(queryByRole("button")).toBeTruthy();
+let noop = () => {};
+
+describe("<MenuButton /> with <MenuItem />", () => {
+  describe("a11y", () => {
+    it("Should not have ARIA violations", async () => {
+      let { container, list, button } = renderTestMenu();
+
+      let results = await axe(container);
+      expect(results).toHaveNoViolations();
+
+      // Toggle the menu and check again
+      simulateMouseClick(button);
+      results = await axe(container);
+
+      // We have to check the container and list separately since the list is
+      // portaled outside of the container.
+      let listResults = await axe(list);
+
+      expect(results).toHaveNoViolations();
+      expect(listResults).toHaveNoViolations();
     });
 
-    it("should mount with render props", () => {
-      let { queryByRole } = render(
-        <Menu>
-          {(props) => (
-            <React.Fragment>
-              <MenuButton>
-                {props.isExpanded ? "Close" : "Open"} Actions
-              </MenuButton>
-              <MenuList>
-                <MenuItem onSelect={jest.fn}>Download</MenuItem>
-                <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
-              </MenuList>
-            </React.Fragment>
-          )}
-        </Menu>
-      );
-      expect(queryByRole("button")).toBeTruthy();
+    describe("ARIA attributes", () => {
+      it("`role` is set to `menu` for list element", () => {
+        let { button, list } = renderTestMenu();
+
+        // Toggle the menu so that it is rendered
+        simulateMouseClick(button);
+        expect(list).toHaveAttribute("role", "menu");
+      });
+
+      it("`aria-controls` for button element points to the list element id", () => {
+        let rendered = renderTestMenu();
+
+        // Toggle the menu so that it is rendered
+        simulateMouseClick(rendered.button);
+
+        let id = rendered.list.getAttribute("id");
+        expect(rendered.button).toHaveAttribute("aria-controls", id);
+      });
+
+      it("`aria-haspopup` for button element is present", () => {
+        let rendered = renderTestMenu();
+        expect(rendered.button).toHaveAttribute("aria-haspopup");
+      });
+
+      describe("when the list is not toggled", () => {
+        it("`aria-expanded` for the button element is not present", () => {
+          let rendered = renderTestMenu();
+          expect(rendered.button).not.toHaveAttribute("aria-expanded");
+        });
+      });
+
+      describe("when the list is toggled", () => {
+        let rendered: ReturnType<typeof renderTestMenu>;
+        beforeEach(() => {
+          rendered = renderTestMenu();
+          simulateMouseClick(rendered.button);
+        });
+
+        it("`role` is set to `menuitem` for item elements", () => {
+          expect(rendered.items[0]).toHaveAttribute("role", "menuitem");
+          expect(rendered.items[1]).toHaveAttribute("role", "menuitem");
+        });
+
+        it("`aria-expanded` for the button element is true", async () => {
+          expect(rendered.button).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("`aria-labelledby` for list element points to the button element id", () => {
+          let id = rendered.button.getAttribute("id");
+          expect(rendered.list).toHaveAttribute("aria-labelledby", id);
+        });
+
+        it("`aria-activedescendant` for list element is not present", () => {
+          expect(rendered.list).not.toHaveAttribute("aria-activedescendant");
+        });
+
+        describe("when mouse enters an item", () => {
+          it("`aria-activedescendant` for list element points to the active item", () => {
+            let item = rendered.items[0];
+            let id = item.getAttribute("id");
+            fireEvent.mouseEnter(item);
+            expect(rendered.list).toHaveAttribute("aria-activedescendant", id);
+          });
+        });
+      });
     });
   });
 
-  describe("a11y", () => {
-    it("should not have basic a11y issues", async () => {
-      let { container } = render(
+  describe("rendering", () => {
+    it("passes DOM props to the button", () => {
+      let { getByRole } = render(
         <Menu>
-          <MenuButton id="example-button">
-            Actions <span aria-hidden="true">▾</span>
-          </MenuButton>
+          <MenuButton id="test-id">Actions</MenuButton>
           <MenuList>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-            <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
-            <MenuItem onSelect={jest.fn}>Mark as Draft</MenuItem>
-            <MenuItem onSelect={jest.fn}>Delete</MenuItem>
+            <MenuItem onSelect={noop}>Download</MenuItem>
           </MenuList>
         </Menu>
       );
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
+      let button = getByRole("button");
+      expect(button).toHaveAttribute("id", "test-id");
+    });
+
+    it("should not show the menu list by default", () => {
+      let { list } = renderTestMenu();
+      expect(list).not.toBeVisible();
     });
   });
 
   describe("user events", () => {
-    it("should toggle on button click", () => {
-      let { getByRole, baseElement } = render(
-        <Menu>
-          <MenuButton id="example-button">
-            Actions <span aria-hidden="true">▾</span>
-          </MenuButton>
-          <MenuList portal={false}>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-            <MenuItem onSelect={jest.fn}>Create a Copy</MenuItem>
-            <MenuItem onSelect={jest.fn}>Mark as Draft</MenuItem>
-            <MenuItem onSelect={jest.fn}>Delete</MenuItem>
-          </MenuList>
-        </Menu>
-      );
+    it("should show the list when the button is clicked", () => {
+      let rendered = renderTestMenu();
+      simulateMouseClick(rendered.button);
 
-      let getPopover = () =>
-        baseElement.querySelector("[data-reach-menu-popover]");
-
-      expect(getPopover()).not.toBeVisible();
-
-      fireClickAndMouseEvents(getByRole("button"));
-      expect(getPopover()).toBeVisible();
-      fireClickAndMouseEvents(getByRole("button"));
-      expect(getPopover()).not.toBeVisible();
+      expect(rendered.list).toBeVisible();
+      simulateMouseClick(rendered.button);
+      expect(rendered.list).not.toBeVisible();
     });
 
-    it("should not re-focus the button when user selects an item with click", () => {
-      let { getByRole, getByText } = render(
-        <Menu>
-          <MenuButton id="example-button">Actions</MenuButton>
-          <MenuList portal={false}>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-          </MenuList>
-        </Menu>
-      );
+    it("should call `onSelect` when user selects an item", () => {
+      let rendered = renderTestMenu();
+      simulateSpaceKeyClick(rendered.button, { fireClick: true });
+      simulateSpaceKeyClick(rendered.items[0]);
+      expect(rendered.selectCallbacks[0]).toHaveBeenCalledTimes(1);
+    });
 
-      fireClickAndMouseEvents(getByRole("button"));
-      fireClickAndMouseEvents(getByText("Download"));
-      expect(getByRole("button")).not.toHaveFocus();
+    it("should not focus the button when user selects an item with click", () => {
+      let rendered = renderTestMenu();
+      simulateMouseClick(rendered.button);
+      simulateMouseClick(rendered.items[0]);
+      expect(rendered.button).not.toHaveFocus();
     });
 
     it("should manage focus when user selects an item with `Space` key", () => {
-      let { getByRole, getByText } = render(
-        <Menu>
-          <MenuButton id="example-button">Actions</MenuButton>
-          <MenuList portal={false}>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-          </MenuList>
-        </Menu>
-      );
+      let rendered = renderTestMenu();
 
-      fireEvent.keyDown(getByRole("button"), { key: " " });
-      fireEvent.keyDown(getByText("Download"), { key: " " });
-      expect(getByRole("button")).toHaveFocus();
+      simulateSpaceKeyClick(rendered.button, { fireClick: true });
+      simulateSpaceKeyClick(rendered.items[0]);
+      expect(rendered.button).toHaveFocus();
     });
 
     it("should manage focus when user selects an item with `Enter` key", () => {
-      let { getByRole, getByText } = render(
-        <Menu>
-          <MenuButton id="example-button">Actions</MenuButton>
-          <MenuList portal={false}>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-          </MenuList>
-        </Menu>
-      );
+      let rendered = renderTestMenu();
 
-      fireEvent.keyDown(getByRole("button"), { key: "Enter" });
-      fireEvent.keyDown(getByText("Download"), { key: "Enter" });
-
-      expect(getByRole("button")).toHaveFocus();
+      simulateSpaceKeyClick(rendered.button, { fireClick: true });
+      simulateEnterKeyClick(rendered.items[0]);
+      expect(rendered.button).toHaveFocus();
     });
 
     it("should manage focus when user dismisses with the `Escape` key", () => {
-      let { getByRole, getByText } = render(
-        <Menu>
-          <MenuButton id="example-button">Actions</MenuButton>
-          <MenuList portal={false}>
-            <MenuItem onSelect={jest.fn}>Download</MenuItem>
-          </MenuList>
-        </Menu>
-      );
-
-      fireClickAndMouseEvents(getByRole("button"));
-      fireEvent.keyDown(getByText("Download"), { key: "Escape" });
-
-      expect(getByRole("button")).toHaveFocus();
+      let rendered = renderTestMenu();
+      simulateMouseClick(rendered.button);
+      fireEvent.keyDown(rendered.list, { key: "Escape" });
+      expect(rendered.button).toHaveFocus();
     });
 
     it("should not manage focus when user clicks outside element", () => {
-      let { getByRole, getByTestId } = render(
+      let { getByRole } = render(
         <>
           <Menu>
-            <MenuButton id="example-button">Actions</MenuButton>
+            <MenuButton>Actions</MenuButton>
             <MenuList portal={false}>
-              <MenuItem onSelect={jest.fn}>Download</MenuItem>
+              <MenuItem onSelect={noop}>Download</MenuItem>
             </MenuList>
           </Menu>
-          <input type="text" data-testid="input" />
+          <input type="text" />
         </>
       );
+      let button = getByRole("button");
+      let input = getByRole("textbox");
 
-      fireClickAndMouseEvents(getByRole("button"));
-      fireEvent.click(getByTestId("input"));
-      expect(getByRole("button")).not.toHaveFocus();
+      simulateMouseClick(button);
+      fireEvent.click(input);
+      expect(button).not.toHaveFocus();
     });
   });
 });
+
+describe("<MenuButton /> with <MenuLink />", () => {
+  describe("a11y", () => {
+    it("Should not have ARIA violations", async () => {
+      let { container, list, button } = renderTestMenuWithLinks();
+
+      let results = await axe(container);
+      expect(results).toHaveNoViolations();
+
+      // Toggle the menu and check again
+      simulateMouseClick(button);
+      results = await axe(container);
+
+      // We have to check the container and list separately since the list is
+      // portaled outside of the container.
+      let listResults = await axe(list);
+
+      expect(results).toHaveNoViolations();
+      expect(listResults).toHaveNoViolations();
+    });
+  });
+});
+
+describe("<MenuButton /> with <MenuItem /> and <MenuLink />", () => {
+  describe("a11y", () => {
+    it("Should not have ARIA violations", async () => {
+      let { container, list, button } = renderTestMenuWithLinksAndItems();
+
+      let results = await axe(container);
+      expect(results).toHaveNoViolations();
+
+      // Toggle the menu and check again
+      simulateMouseClick(button);
+      results = await axe(container);
+
+      // We have to check the container and list separately since the list is
+      // portaled outside of the container.
+      let listResults = await axe(list);
+
+      expect(results).toHaveNoViolations();
+      expect(listResults).toHaveNoViolations();
+    });
+  });
+});
+
+function renderTestMenu() {
+  let cb1 = jest.fn();
+  let cb2 = jest.fn();
+  let { getByRole, container } = render(
+    <Menu>
+      <MenuButton>
+        Actions <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList data-testid="list">
+        <MenuItem onSelect={cb1}>Download</MenuItem>
+        <MenuItem onSelect={cb2}>Create a Copy</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+  return {
+    container,
+    get root() {
+      return document.body;
+    },
+    get button() {
+      return getByRole("button");
+    },
+    get list() {
+      return screen.getByTestId("list");
+    },
+    get items() {
+      return [screen.getByText("Download"), screen.getByText("Create a Copy")];
+    },
+    selectCallbacks: [cb1, cb2],
+  };
+}
+
+function renderTestMenuWithLinks() {
+  let cb1 = jest.fn();
+  let cb2 = jest.fn();
+  let { getByRole, container } = render(
+    <Menu>
+      <MenuButton>
+        Navigation <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList data-testid="list">
+        <MenuLink href="/" onSelect={cb1}>
+          Home
+        </MenuLink>
+        <MenuLink href="/about" onSelect={cb2}>
+          About
+        </MenuLink>
+      </MenuList>
+    </Menu>
+  );
+  return {
+    container,
+    get root() {
+      return document.body;
+    },
+    get button() {
+      return getByRole("button");
+    },
+    get list() {
+      return screen.getByTestId("list");
+    },
+    get items() {
+      return [screen.getByText("Home"), screen.getByText("About")];
+    },
+    selectCallbacks: [cb1, cb2],
+  };
+}
+
+function renderTestMenuWithLinksAndItems() {
+  let cb1 = jest.fn();
+  let cb2 = jest.fn();
+  let { getByRole, container } = render(
+    <Menu>
+      <MenuButton>
+        Actions and Links <span aria-hidden="true">▾</span>
+      </MenuButton>
+      <MenuList data-testid="list">
+        <MenuItem onSelect={cb1}>Download</MenuItem>
+        <MenuLink href="/about" onSelect={cb2}>
+          About
+        </MenuLink>
+      </MenuList>
+    </Menu>
+  );
+  return {
+    container,
+    get root() {
+      return document.body;
+    },
+    get button() {
+      return getByRole("button");
+    },
+    get list() {
+      return screen.getByTestId("list");
+    },
+    get items() {
+      return [screen.getByText("Home"), screen.getByText("About")];
+    },
+    selectCallbacks: [cb1, cb2],
+  };
+}

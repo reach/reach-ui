@@ -1,9 +1,15 @@
 {
-  "version": "0.13.1",
+  "version": "0.15.0",
   "registry": "https://registry.npmjs.org/",
   "publishConfig": {
     "access": "public"
   },
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "ignoreChanges": [
+    "**/__fixtures__/**",
+    "**/__tests__/**",
+    "**/*.md",
+    "**/examples/**"
+  ]
 }
