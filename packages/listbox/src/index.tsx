@@ -37,7 +37,6 @@ import {
   useDescendantsInit,
 } from "@reach/descendants";
 import { isRightClick } from "@reach/utils/is-right-click";
-import { useStableCallback } from "@reach/utils/use-stable-callback";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { createNamedContext } from "@reach/utils/context";
 import { isBoolean, isFunction, isString } from "@reach/utils/type-check";
@@ -148,11 +147,11 @@ const ListboxInput = React.forwardRef(function ListboxInput(
     DEBUG
   );
 
-  let stableOnChange = useStableCallback((newValue: string) => {
+  function handleValueChange(newValue: string) {
     if (newValue !== state.context.value) {
       onChange?.(newValue);
     }
-  });
+  }
 
   // IDs for aria attributes
   let _id = useId(props.id);
@@ -176,38 +175,23 @@ const ListboxInput = React.forwardRef(function ListboxInput(
 
   let isExpanded = isListboxExpanded(state.value);
 
-  // TODO: Remove duplication and memoize
-  let context: InternalListboxContextValue = React.useMemo(
-    () => ({
-      ariaLabel,
-      ariaLabelledBy,
-      disabled,
-      isExpanded,
-      listboxId: id,
-      listboxValueLabel: valueLabel,
-      onValueChange: stableOnChange,
-      buttonRef,
-      listRef,
-      popoverRef,
-      selectedOptionRef,
-      highlightedOptionRef,
-      send,
-      state: state.value as ListboxStates,
-      stateData: state.context,
-    }),
-    [
-      ariaLabel,
-      ariaLabelledBy,
-      state.value,
-      state.context,
-      disabled,
-      id,
-      isExpanded,
-      stableOnChange,
-      send,
-      valueLabel,
-    ]
-  );
+  let context: InternalListboxContextValue = {
+    ariaLabel,
+    ariaLabelledBy,
+    disabled,
+    isExpanded,
+    listboxId: id,
+    listboxValueLabel: valueLabel,
+    onValueChange: handleValueChange,
+    buttonRef,
+    listRef,
+    popoverRef,
+    selectedOptionRef,
+    highlightedOptionRef,
+    send,
+    state: state.value as ListboxStates,
+    stateData: state.context,
+  };
 
   // For uncontrolled listbox components where no `defaultValue` is provided, we
   // will update the value based on the value of the first selectable option.
