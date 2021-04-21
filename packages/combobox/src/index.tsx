@@ -93,6 +93,8 @@ const FOCUS = "FOCUS";
 
 const OPEN_WITH_BUTTON = "OPEN_WITH_BUTTON";
 
+const OPEN_WITH_INPUT_CLICK = "OPEN_WITH_INPUT_CLICK";
+
 const CLOSE_WITH_BUTTON = "CLOSE_WITH_BUTTON";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +110,7 @@ const stateChart: StateChart = {
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
         [OPEN_WITH_BUTTON]: SUGGESTING,
+        [OPEN_WITH_INPUT_CLICK]: SUGGESTING,
       },
     },
     [SUGGESTING]: {
@@ -164,6 +167,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
       };
     case NAVIGATE:
     case OPEN_WITH_BUTTON:
+    case OPEN_WITH_INPUT_CLICK:
       return {
         ...nextState,
         navigationValue: findNavigationValue(nextState, event),
@@ -523,8 +527,8 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
       inputRef.current?.select();
     }
 
-    if (openOnFocus) {
-      transition("OPEN_WITH_BUTTON");
+    if (openOnFocus && state === IDLE) {
+      transition(OPEN_WITH_INPUT_CLICK);
     }
   }
 
@@ -1335,6 +1339,7 @@ type MachineEventType =
   | "BLUR"
   | "INTERACT"
   | "FOCUS"
+  | "OPEN_WITH_INPUT_CLICK"
   | "OPEN_WITH_BUTTON"
   | "CLOSE_WITH_BUTTON";
 
@@ -1370,6 +1375,7 @@ type MachineEvent =
       value: ComboboxValue;
     }
   | { type: "OPEN_WITH_BUTTON" }
+  | { type: "OPEN_WITH_INPUT_CLICK" }
   | {
       type: "SELECT_WITH_CLICK";
       value: ComboboxValue;
