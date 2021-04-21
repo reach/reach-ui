@@ -119,9 +119,6 @@ function useRect<T extends Element = HTMLElement>(
   let initialRefIsSet = React.useRef(false);
   let [rect, setRect] = React.useState<DOMRect | null>(null);
   let onChangeRef = React.useRef(onChange);
-  let stableOnChange = React.useCallback((rect: PRect) => {
-    onChangeRef.current && onChangeRef.current(rect);
-  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
@@ -159,7 +156,7 @@ function useRect<T extends Element = HTMLElement>(
     }
 
     observer = observeRect(elem, (rect) => {
-      stableOnChange(rect);
+      onChangeRef.current?.(rect);
       setRect(rect);
     });
 
@@ -169,7 +166,7 @@ function useRect<T extends Element = HTMLElement>(
     function cleanup() {
       observer && observer.unobserve();
     }
-  }, [observe, element, nodeRef, stableOnChange]);
+  }, [observe, element, nodeRef]);
 
   return rect;
 }
