@@ -16,7 +16,6 @@
  */
 
 import * as React from "react";
-import { useStableCallback } from "@reach/utils/use-stable-callback";
 import { createNamedContext } from "@reach/utils/context";
 import { makeId } from "@reach/utils/make-id";
 import { useComposedRefs } from "@reach/utils/compose-refs";
@@ -81,27 +80,19 @@ const Disclosure: React.FC<DisclosureProps> = ({
     );
   }
 
-  const stableOnChange = useStableCallback(onChange);
+  function onSelect() {
+    onChange?.();
+    if (!isControlled) {
+      setOpen((open) => !open);
+    }
+  }
 
-  const onSelect = React.useCallback(
-    function onSelect() {
-      stableOnChange();
-      if (!isControlled) {
-        setOpen((open) => !open);
-      }
-    },
-    [stableOnChange, isControlled]
-  );
-
-  const context: DisclosureContextValue = React.useMemo(
-    () => ({
-      disclosureId: id,
-      onSelect,
-      open,
-      panelId,
-    }),
-    [onSelect, id, open, panelId]
-  );
+  const context: DisclosureContextValue = {
+    disclosureId: id,
+    onSelect,
+    open,
+    panelId,
+  };
 
   if (isControlled && openProp !== open) {
     /*
