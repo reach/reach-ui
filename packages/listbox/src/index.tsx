@@ -38,6 +38,7 @@ import {
 } from "@reach/descendants";
 import { isRightClick } from "@reach/utils/is-right-click";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { useStableCallback } from "@reach/utils/use-stable-callback";
 import { createNamedContext } from "@reach/utils/context";
 import { isBoolean, isFunction, isString } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
@@ -73,9 +74,13 @@ const DEBUG = false;
 const ListboxDescendantContext = createDescendantContext<ListboxDescendant>(
   "ListboxDescendantContext"
 );
-const ListboxContext = createNamedContext(
-  "ListboxContext",
-  {} as InternalListboxContextValue
+const UnstableListboxContext = createNamedContext(
+  "UnstableListboxContext",
+  {} as UnstableListboxContextValue
+);
+const StableListboxContext = createNamedContext(
+  "StableListboxContext",
+  {} as StableListboxContextValue
 );
 const ListboxGroupContext = createNamedContext(
   "ListboxGroupContext",
@@ -175,7 +180,7 @@ const ListboxInput = React.forwardRef(function ListboxInput(
 
   let isExpanded = isListboxExpanded(state.value);
 
-  let context: InternalListboxContextValue = {
+  let unstableContext: UnstableListboxContextValue = {
     ariaLabel,
     ariaLabelledBy,
     disabled,
@@ -183,15 +188,20 @@ const ListboxInput = React.forwardRef(function ListboxInput(
     listboxId: id,
     listboxValueLabel: valueLabel,
     onValueChange: handleValueChange,
-    buttonRef,
-    listRef,
-    popoverRef,
-    selectedOptionRef,
-    highlightedOptionRef,
-    send,
     state: state.value as ListboxStates,
     stateData: state.context,
   };
+
+  let stableContext: StableListboxContextValue = React.useMemo(() => {
+    return {
+      buttonRef,
+      listRef,
+      popoverRef,
+      selectedOptionRef,
+      highlightedOptionRef,
+      send,
+    };
+  }, [send]);
 
   // For uncontrolled listbox components where no `defaultValue` is provided, we
   // will update the value based on the value of the first selectable option.
@@ -273,49 +283,52 @@ const ListboxInput = React.forwardRef(function ListboxInput(
   useCheckStyles("listbox");
 
   return (
-    <DescendantProvider
-      context={ListboxDescendantContext}
-      items={options}
-      set={setOptions}
+    <Comp
+      {...props}
+      ref={ref}
+      data-reach-listbox-input=""
+      data-state={isExpanded ? "expanded" : "closed"}
+      data-value={state.context.value}
+      id={id}
     >
-      <ListboxContext.Provider value={context}>
-        <Comp
-          {...props}
-          ref={ref}
-          data-reach-listbox-input=""
-          data-state={isExpanded ? "expanded" : "closed"}
-          data-value={state.context.value}
-          id={id}
+      <StableListboxContext.Provider value={stableContext}>
+        <DescendantProvider
+          context={ListboxDescendantContext}
+          items={options}
+          set={setOptions}
         >
-          {isFunction(children)
-            ? children({
-                id,
-                isExpanded,
-                value: state.context.value,
-                selectedOptionRef: selectedOptionRef,
-                highlightedOptionRef: highlightedOptionRef,
-                valueLabel,
-                // TODO: Remove in 1.0
-                expanded: isExpanded,
-              })
-            : children}
-        </Comp>
-        {(form || name || required) && (
-          <input
-            ref={hiddenInputRef}
-            data-reach-listbox-hidden-input=""
-            disabled={disabled}
-            form={form}
-            name={name}
-            readOnly
-            required={required}
-            tabIndex={-1}
-            type="hidden"
-            value={state.context.value || ""}
-          />
-        )}
-      </ListboxContext.Provider>
-    </DescendantProvider>
+          <UnstableListboxContext.Provider value={unstableContext}>
+            {isFunction(children)
+              ? children({
+                  id,
+                  isExpanded,
+                  value: state.context.value,
+                  selectedOptionRef: selectedOptionRef,
+                  highlightedOptionRef: highlightedOptionRef,
+                  valueLabel,
+                  // TODO: Remove in 1.0
+                  expanded: isExpanded,
+                })
+              : children}
+
+            {(form || name || required) && (
+              <input
+                ref={hiddenInputRef}
+                data-reach-listbox-hidden-input=""
+                disabled={disabled}
+                form={form}
+                name={name}
+                readOnly
+                required={required}
+                tabIndex={-1}
+                type="hidden"
+                value={state.context.value || ""}
+              />
+            )}
+          </UnstableListboxContext.Provider>
+        </DescendantProvider>
+      </StableListboxContext.Provider>
+    </Comp>
   );
 }) as Polymorphic.ForwardRefComponent<
   "div",
@@ -496,14 +509,15 @@ const ListboxButtonImpl = React.forwardRef(function ListboxButton(
 ) {
   let {
     ariaLabelledBy,
-    buttonRef,
+
     disabled,
     isExpanded,
     listboxId,
     stateData,
-    send,
+
     listboxValueLabel,
-  } = React.useContext(ListboxContext);
+  } = React.useContext(UnstableListboxContext);
+  let { buttonRef, send } = React.useContext(StableListboxContext);
   let listboxValue = stateData.value;
 
   let ref = useComposedRefs(buttonRef, forwardedRef);
@@ -681,7 +695,7 @@ const ListboxArrowImpl = React.forwardRef(function ListboxArrow(
   { as: Comp = "span", children, ...props },
   forwardedRef
 ) {
-  let { isExpanded } = React.useContext(ListboxContext);
+  let { isExpanded } = React.useContext(UnstableListboxContext);
   return (
     <Comp
       // The arrow provides no semantic value and its inner content should be
@@ -754,9 +768,8 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
   },
   forwardedRef
 ) {
-  let { buttonRef, popoverRef, send, isExpanded } = React.useContext(
-    ListboxContext
-  );
+  let { isExpanded } = React.useContext(UnstableListboxContext);
+  let { buttonRef, popoverRef, send } = React.useContext(StableListboxContext);
   let ref = useComposedRefs(popoverRef, forwardedRef);
 
   let handleKeyDown = useKeyDown();
@@ -858,9 +871,9 @@ const ListboxList = React.forwardRef(function ListboxList(
     ariaLabelledBy,
     isExpanded,
     listboxId,
-    listRef,
     stateData: { value, navigationValue },
-  } = React.useContext(ListboxContext);
+  } = React.useContext(UnstableListboxContext);
+  let { listRef } = React.useContext(StableListboxContext);
   let ref = useComposedRefs(forwardedRef, listRef);
 
   return (
@@ -937,14 +950,14 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   }
 
   let {
-    highlightedOptionRef,
     isExpanded,
     onValueChange,
-    selectedOptionRef,
-    send,
     state,
     stateData: { value: listboxValue, navigationValue },
-  } = React.useContext(ListboxContext);
+  } = React.useContext(UnstableListboxContext);
+  let { highlightedOptionRef, selectedOptionRef, send } = React.useContext(
+    StableListboxContext
+  );
 
   let [labelState, setLabel] = React.useState(labelProp);
   let label = labelProp || labelState || "";
@@ -1143,7 +1156,7 @@ const ListboxGroup = React.forwardRef(function ListboxGroup(
   { as: Comp = "div", label, children, ...props },
   forwardedRef
 ) {
-  let { listboxId } = React.useContext(ListboxContext);
+  let { listboxId } = React.useContext(UnstableListboxContext);
   let labelId = makeId("label", useId(props.id), listboxId);
   return (
     <ListboxGroupContext.Provider value={{ labelId }}>
@@ -1230,13 +1243,14 @@ interface ListboxGroupLabelProps {}
  */
 function useListboxContext(): ListboxContextValue {
   let {
-    highlightedOptionRef,
     listboxId,
     listboxValueLabel,
     isExpanded,
-    selectedOptionRef,
     stateData: { value },
-  } = React.useContext(ListboxContext);
+  } = React.useContext(UnstableListboxContext);
+  let { highlightedOptionRef, selectedOptionRef } = React.useContext(
+    StableListboxContext
+  );
   return React.useMemo(
     () => ({
       id: listboxId,
@@ -1273,16 +1287,17 @@ function useKeyDown() {
     disabled: listboxDisabled,
     onValueChange,
     stateData: { navigationValue, typeaheadQuery },
-    send,
-  } = React.useContext(ListboxContext);
+  } = React.useContext(UnstableListboxContext);
+  let { send } = React.useContext(StableListboxContext);
   let options = useDescendants(ListboxDescendantContext);
+  let stableOnValueChange = useStableCallback(onValueChange);
 
   React.useEffect(() => {
     if (typeaheadQuery) {
       send({
         type: ListboxEvents.UpdateAfterTypeahead,
         query: typeaheadQuery,
-        callback: onValueChange,
+        callback: stableOnValueChange,
       });
     }
     let timeout = window.setTimeout(() => {
@@ -1293,7 +1308,7 @@ function useKeyDown() {
     return () => {
       window.clearTimeout(timeout);
     };
-  }, [onValueChange, send, typeaheadQuery]);
+  }, [stableOnValueChange, send, typeaheadQuery]);
 
   let index = options.findIndex(({ value }) => value === navigationValue);
 
@@ -1364,7 +1379,7 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  let { listboxId } = React.useContext(ListboxContext);
+  let { listboxId } = React.useContext(UnstableListboxContext);
   return value ? makeId(`option-${value}`, listboxId) : undefined;
 }
 
@@ -1395,23 +1410,26 @@ interface ListboxContextValue {
   valueLabel: string | null;
 }
 
-interface InternalListboxContextValue {
-  ariaLabel?: string;
-  ariaLabelledBy?: string;
+interface StableListboxContextValue {
   buttonRef: React.RefObject<ListboxNodeRefs["button"]>;
-  isExpanded: boolean;
   listRef: React.RefObject<ListboxNodeRefs["list"]>;
   popoverRef: React.RefObject<ListboxNodeRefs["popover"]>;
   selectedOptionRef: React.RefObject<ListboxNodeRefs["selectedOption"]>;
   highlightedOptionRef: React.RefObject<ListboxNodeRefs["highlightedOption"]>;
-  disabled: boolean;
-  listboxId: string;
-  listboxValueLabel: string | null;
-  onValueChange: ((newValue: ListboxValue) => void) | null | undefined;
   send: StateMachine.Service<
     ListboxStateData,
     DistributiveOmit<ListboxEvent, "refs">
   >["send"];
+}
+
+interface UnstableListboxContextValue {
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  isExpanded: boolean;
+  disabled: boolean;
+  listboxId: string;
+  listboxValueLabel: string | null;
+  onValueChange(newValue: ListboxValue): void;
   state: ListboxStates;
   stateData: ListboxStateData;
 }
