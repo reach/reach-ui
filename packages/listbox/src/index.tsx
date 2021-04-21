@@ -747,6 +747,7 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
     position = positionMatchWidth,
     onBlur,
     onKeyDown,
+    onMouseUp,
     portal = true,
     unstable_observableRefs,
     ...props
@@ -760,12 +761,19 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
 
   let handleKeyDown = useKeyDown();
 
+  function handleMouseUp() {
+    send({
+      type: ListboxEvents.ListMouseUp,
+    });
+  }
+
   let commonProps = {
     hidden: !isExpanded,
     tabIndex: -1,
     ...props,
     ref,
     "data-reach-listbox-popover": "",
+    onMouseUp: composeEventHandlers(onMouseUp, handleMouseUp),
     onBlur: composeEventHandlers(onBlur, handleBlur),
     onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
   };
