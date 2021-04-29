@@ -4,10 +4,6 @@ body {
     Ubuntu, Cantarell, Helvetica Neue, sans-serif;
 }
 
-:focus:not(:focus-visible) {
-  outline: none;
-}
-
 * {
   box-sizing: border-box;
 }
