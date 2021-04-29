@@ -6,13 +6,14 @@ import {
   MenuButton,
   MenuItem,
   useMenuButtonContext,
-  MenuButtonProps,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 
 let name = "With useMenuButtonContext (TS)";
 
-function StyledMenuButton(props: MenuButtonProps) {
+function StyledMenuButton(
+  props: React.ComponentPropsWithoutRef<typeof MenuButton>
+) {
   const { isExpanded } = useMenuButtonContext();
 
   return (
@@ -43,6 +44,6 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const Hook = Example;
 export default { title: "MenuButton" };

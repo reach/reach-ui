@@ -47,6 +47,6 @@ function MyMenu() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const LongText = Example;
 export default { title: "MenuButton" };

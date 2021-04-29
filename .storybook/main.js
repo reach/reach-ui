@@ -16,10 +16,15 @@ const alias = packages.reduce((memo, pkg) => {
 
 module.exports = {
   // stories: ["../packages/**/examples/*.example.(js|ts|tsx)"],
+  stories: [
+    // "./packages/*/*.stories.(js|ts|tsx)",
+    "../packages/**/*/*.example.@(js|ts|tsx)",
+  ],
   addons: [
     "@storybook/addon-actions/register",
     "@storybook/addon-docs/register",
     "@storybook/addon-links/register",
+    "@storybook/addon-postcss",
   ],
   webpackFinal: async (config) => {
     config.resolve = {
