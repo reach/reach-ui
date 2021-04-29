@@ -74,13 +74,9 @@ const DEBUG = false;
 const ListboxDescendantContext = createDescendantContext<ListboxDescendant>(
   "ListboxDescendantContext"
 );
-const UnstableListboxContext = createNamedContext(
-  "UnstableListboxContext",
-  {} as UnstableListboxContextValue
-);
-const StableListboxContext = createNamedContext(
-  "StableListboxContext",
-  {} as StableListboxContextValue
+const ListboxContext = createNamedContext(
+  "ListboxContext",
+  {} as InternalListboxContextValue
 );
 const ListboxGroupContext = createNamedContext(
   "ListboxGroupContext",
@@ -180,28 +176,23 @@ const ListboxInput = React.forwardRef(function ListboxInput(
 
   let isExpanded = isListboxExpanded(state.value);
 
-  let unstableContext: UnstableListboxContextValue = {
+  let context: InternalListboxContextValue = {
     ariaLabel,
     ariaLabelledBy,
+    buttonRef,
     disabled,
+    highlightedOptionRef,
     isExpanded,
     listboxId: id,
     listboxValueLabel: valueLabel,
+    listRef,
     onValueChange: handleValueChange,
+    popoverRef,
+    selectedOptionRef,
+    send,
     state: state.value as ListboxStates,
     stateData: state.context,
   };
-
-  let stableContext: StableListboxContextValue = React.useMemo(() => {
-    return {
-      buttonRef,
-      listRef,
-      popoverRef,
-      selectedOptionRef,
-      highlightedOptionRef,
-      send,
-    };
-  }, [send]);
 
   // For uncontrolled listbox components where no `defaultValue` is provided, we
   // will update the value based on the value of the first selectable option.
@@ -291,43 +282,41 @@ const ListboxInput = React.forwardRef(function ListboxInput(
       data-value={state.context.value}
       id={id}
     >
-      <StableListboxContext.Provider value={stableContext}>
+      <ListboxContext.Provider value={context}>
         <DescendantProvider
           context={ListboxDescendantContext}
           items={options}
           set={setOptions}
         >
-          <UnstableListboxContext.Provider value={unstableContext}>
-            {isFunction(children)
-              ? children({
-                  id,
-                  isExpanded,
-                  value: state.context.value,
-                  selectedOptionRef: selectedOptionRef,
-                  highlightedOptionRef: highlightedOptionRef,
-                  valueLabel,
-                  // TODO: Remove in 1.0
-                  expanded: isExpanded,
-                })
-              : children}
+          {isFunction(children)
+            ? children({
+                id,
+                isExpanded,
+                value: state.context.value,
+                selectedOptionRef: selectedOptionRef,
+                highlightedOptionRef: highlightedOptionRef,
+                valueLabel,
+                // TODO: Remove in 1.0
+                expanded: isExpanded,
+              })
+            : children}
 
-            {(form || name || required) && (
-              <input
-                ref={hiddenInputRef}
-                data-reach-listbox-hidden-input=""
-                disabled={disabled}
-                form={form}
-                name={name}
-                readOnly
-                required={required}
-                tabIndex={-1}
-                type="hidden"
-                value={state.context.value || ""}
-              />
-            )}
-          </UnstableListboxContext.Provider>
+          {(form || name || required) && (
+            <input
+              ref={hiddenInputRef}
+              data-reach-listbox-hidden-input=""
+              disabled={disabled}
+              form={form}
+              name={name}
+              readOnly
+              required={required}
+              tabIndex={-1}
+              type="hidden"
+              value={state.context.value || ""}
+            />
+          )}
         </DescendantProvider>
-      </StableListboxContext.Provider>
+      </ListboxContext.Provider>
     </Comp>
   );
 }) as Polymorphic.ForwardRefComponent<
@@ -508,16 +497,15 @@ const ListboxButtonImpl = React.forwardRef(function ListboxButton(
   forwardedRef
 ) {
   let {
+    buttonRef,
+    send,
     ariaLabelledBy,
-
     disabled,
     isExpanded,
     listboxId,
     stateData,
-
     listboxValueLabel,
-  } = React.useContext(UnstableListboxContext);
-  let { buttonRef, send } = React.useContext(StableListboxContext);
+  } = React.useContext(ListboxContext);
   let listboxValue = stateData.value;
 
   let ref = useComposedRefs(buttonRef, forwardedRef);
@@ -695,7 +683,7 @@ const ListboxArrowImpl = React.forwardRef(function ListboxArrow(
   { as: Comp = "span", children, ...props },
   forwardedRef
 ) {
-  let { isExpanded } = React.useContext(UnstableListboxContext);
+  let { isExpanded } = React.useContext(ListboxContext);
   return (
     <Comp
       // The arrow provides no semantic value and its inner content should be
@@ -768,8 +756,9 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
   },
   forwardedRef
 ) {
-  let { isExpanded } = React.useContext(UnstableListboxContext);
-  let { buttonRef, popoverRef, send } = React.useContext(StableListboxContext);
+  let { isExpanded, buttonRef, popoverRef, send } = React.useContext(
+    ListboxContext
+  );
   let ref = useComposedRefs(popoverRef, forwardedRef);
 
   let handleKeyDown = useKeyDown();
@@ -867,13 +856,13 @@ const ListboxList = React.forwardRef(function ListboxList(
   forwardedRef
 ) {
   let {
+    listRef,
     ariaLabel,
     ariaLabelledBy,
     isExpanded,
     listboxId,
     stateData: { value, navigationValue },
-  } = React.useContext(UnstableListboxContext);
-  let { listRef } = React.useContext(StableListboxContext);
+  } = React.useContext(ListboxContext);
   let ref = useComposedRefs(forwardedRef, listRef);
 
   return (
@@ -950,14 +939,14 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   }
 
   let {
+    highlightedOptionRef,
+    selectedOptionRef,
+    send,
     isExpanded,
     onValueChange,
     state,
     stateData: { value: listboxValue, navigationValue },
-  } = React.useContext(UnstableListboxContext);
-  let { highlightedOptionRef, selectedOptionRef, send } = React.useContext(
-    StableListboxContext
-  );
+  } = React.useContext(ListboxContext);
 
   let [labelState, setLabel] = React.useState(labelProp);
   let label = labelProp || labelState || "";
@@ -1156,7 +1145,7 @@ const ListboxGroup = React.forwardRef(function ListboxGroup(
   { as: Comp = "div", label, children, ...props },
   forwardedRef
 ) {
-  let { listboxId } = React.useContext(UnstableListboxContext);
+  let { listboxId } = React.useContext(ListboxContext);
   let labelId = makeId("label", useId(props.id), listboxId);
   return (
     <ListboxGroupContext.Provider value={{ labelId }}>
@@ -1243,14 +1232,13 @@ interface ListboxGroupLabelProps {}
  */
 function useListboxContext(): ListboxContextValue {
   let {
+    highlightedOptionRef,
+    selectedOptionRef,
     listboxId,
     listboxValueLabel,
     isExpanded,
     stateData: { value },
-  } = React.useContext(UnstableListboxContext);
-  let { highlightedOptionRef, selectedOptionRef } = React.useContext(
-    StableListboxContext
-  );
+  } = React.useContext(ListboxContext);
   return React.useMemo(
     () => ({
       id: listboxId,
@@ -1284,11 +1272,11 @@ function isListboxExpanded(state: string) {
 
 function useKeyDown() {
   let {
+    send,
     disabled: listboxDisabled,
     onValueChange,
     stateData: { navigationValue, typeaheadQuery },
-  } = React.useContext(UnstableListboxContext);
-  let { send } = React.useContext(StableListboxContext);
+  } = React.useContext(ListboxContext);
   let options = useDescendants(ListboxDescendantContext);
   let stableOnValueChange = useStableCallback(onValueChange);
 
@@ -1379,7 +1367,7 @@ function useKeyDown() {
 }
 
 function useOptionId(value: ListboxValue | null) {
-  let { listboxId } = React.useContext(UnstableListboxContext);
+  let { listboxId } = React.useContext(ListboxContext);
   return value ? makeId(`option-${value}`, listboxId) : undefined;
 }
 
@@ -1410,7 +1398,7 @@ interface ListboxContextValue {
   valueLabel: string | null;
 }
 
-interface StableListboxContextValue {
+interface InternalListboxContextValue {
   buttonRef: React.RefObject<ListboxNodeRefs["button"]>;
   listRef: React.RefObject<ListboxNodeRefs["list"]>;
   popoverRef: React.RefObject<ListboxNodeRefs["popover"]>;
@@ -1420,9 +1408,7 @@ interface StableListboxContextValue {
     ListboxStateData,
     DistributiveOmit<ListboxEvent, "refs">
   >["send"];
-}
 
-interface UnstableListboxContextValue {
   ariaLabel?: string;
   ariaLabelledBy?: string;
   isExpanded: boolean;
