@@ -8,6 +8,6 @@ function Example() {
   return <Slider handleAlignment={SLIDER_HANDLE_ALIGN_CONTAIN}></Slider>;
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const ContainedHandle = Example;
 export default { title: "Slider" };

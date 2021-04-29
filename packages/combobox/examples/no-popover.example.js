@@ -55,6 +55,6 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const NoPopover = Example;
 export default { title: "Combobox" };

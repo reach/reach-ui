@@ -39,6 +39,6 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const BasicStrictMode = Example;
 export default { title: "Listbox" };

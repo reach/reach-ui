@@ -100,8 +100,8 @@ function TwitterUserOption({
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const Styled = Example;
 export default { title: "Listbox" };
 
 let users = {

@@ -33,6 +33,6 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const CustomWrapper = Example;
 export default { title: "MenuButton" };
