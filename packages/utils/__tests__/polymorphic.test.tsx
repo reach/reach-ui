@@ -13,6 +13,11 @@ const Button = React.forwardRef((props, forwardedRef) => {
   return <Comp {...buttonProps} ref={forwardedRef} />;
 }) as Polymorphic.ForwardRefComponent<"button", ButtonProps>;
 
+const MemoedButton = React.memo(Button) as Polymorphic.MemoComponent<
+  "button",
+  ButtonProps
+>;
+
 const ExtendedButtonUsingReactUtils = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
@@ -24,7 +29,7 @@ export function ExtendedButtonUsingReactUtilsWithInternalInlineAs(
   props: React.ComponentProps<typeof Button>
 ) {
   /* Should not error with inline `as` component */
-  return <Button as={(props) => <button {...props} />} {...props} />;
+  return <Button as={(props: any) => <button {...props} />} {...props} />;
 }
 
 interface ExtendedButtonProps {
@@ -71,8 +76,30 @@ const Anchor = React.forwardRef((props, forwardedRef) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 export function Test() {
+  const buttonRef = React.useRef<React.ElementRef<typeof Button>>(null);
+  const buttonAsDivRef = React.useRef<HTMLDivElement>(null);
+  const buttonAsLinkRef = React.useRef<React.ElementRef<typeof Link>>(null);
+
   return (
     <>
+      {/* Button accepts ref */}
+      <Button ref={buttonRef} />
+
+      {/* Button as "div" accepts ref */}
+      <Button as="div" ref={buttonAsDivRef} />
+
+      {/* Button as Link accepts ref */}
+      <Button as={Link} ref={buttonAsLinkRef} />
+
+      {/* Memoized button accepts ref */}
+      <MemoedButton ref={buttonRef} />
+
+      {/* Memoized button as "div" accepts ref */}
+      <MemoedButton as="div" ref={buttonAsDivRef} />
+
+      {/* Memoized button as Link accepts ref */}
+      <MemoedButton as={Link} ref={buttonAsLinkRef} />
+
       {/* Link accepts onToggle prop */}
       <Link onToggle={(open) => console.log(open)} />
 
@@ -82,6 +109,10 @@ export function Test() {
       {/* Button does not accept href prop */}
       {/* @ts-expect-error */}
       <Button href="#" />
+
+      {/* Memoized button does not accept href prop */}
+      {/* @ts-expect-error */}
+      <MemoedButton href="#" />
 
       {/* Button accepts form prop */}
       <Button form="form" />
@@ -95,6 +126,10 @@ export function Test() {
       {/* Button as "a" does not accept form prop */}
       {/* @ts-expect-error */}
       <Button as="a" form="form" />
+
+      {/* Memoized button as "a" does not accept form prop */}
+      {/* @ts-expect-error */}
+      <MemoedButton as="a" form="form" />
 
       {/* Button as Link accepts href prop */}
       <Button as={Link} href="#" />
