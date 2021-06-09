@@ -337,6 +337,7 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
     onMouseUp,
     onSelect,
     disabled,
+    onFocus,
     valueText: valueTextProp,
     ...props
   },
@@ -433,7 +434,7 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
     dispatch({ type: CLEAR_SELECTION_INDEX });
   }
 
-  function handleMouseMove() {
+  function handleMouseMoveOrFocus() {
     readyToSelect.current = true;
     if (!isSelected && index != null && !disabled) {
       dispatch({ type: SELECT_ITEM_AT_INDEX, payload: { index } });
@@ -500,7 +501,8 @@ const MenuItemImpl = React.forwardRef(function MenuItemImpl(
       onMouseDown={composeEventHandlers(onMouseDown, handleMouseDown)}
       onMouseEnter={composeEventHandlers(onMouseEnter, handleMouseEnter)}
       onMouseLeave={composeEventHandlers(onMouseLeave, handleMouseLeave)}
-      onMouseMove={composeEventHandlers(onMouseMove, handleMouseMove)}
+      onMouseMove={composeEventHandlers(onMouseMove, handleMouseMoveOrFocus)}
+      onFocus={composeEventHandlers(onFocus, handleMouseMoveOrFocus)}
       onMouseUp={composeEventHandlers(onMouseUp, handleMouseUp)}
     />
   );
