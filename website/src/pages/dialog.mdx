@@ -392,7 +392,7 @@ function DialogWithCustomFocusLock() {
 
 `dangerouslyBypassScrollLock?: boolean`
 
-By default the dialog locks scrolling with [`react-remove-scroll`](https://github.com/theKashey/react-remove-scroll), which also injecs some styles on the body element to remove the scrollbar while maintaining its gap to prevent jank when the dialog's open state is toggled. This is almost always what you want in a dialog, but in some cases you may have the need to customize this behavior further.
+By default the dialog locks scrolling with [`react-remove-scroll`](https://github.com/theKashey/react-remove-scroll), which also injects some styles on the body element to remove the scrollbar while maintaining its gap to prevent jank when the dialog's open state is toggled. This is almost always what you want in a dialog, but in some cases you may have the need to customize this behavior further.
 
 This prop will disable `react-remove-scroll` and allow you to compose your own scroll lock component to meet your needs. Like the `dangerouslyBypassFocusLock` prop, this is generally discouraged and should only be used if a proper fallback for managing scroll behavior is provided.
 
