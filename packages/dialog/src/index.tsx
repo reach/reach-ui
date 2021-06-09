@@ -106,7 +106,7 @@ interface DialogOverlayProps extends DialogProps {
   dangerouslyBypassFocusLock?: boolean;
   /**
    * By default the dialog locks scrolling with `react-remove-scroll`, which
-   * also injecs some styles on the body element to remove the scrollbar while
+   * also injects some styles on the body element to remove the scrollbar while
    * maintaining its gap to prevent jank when the dialog's open state is
    * toggled. This is almost always what you want in a dialog, but in some cases
    * you may have the need to customize this behavior further.
