@@ -662,10 +662,10 @@ const MenuItems = React.forwardRef(function MenuItems(
           // consistent behavior across menu items we'll trigger a click when
           // the spacebar is pressed.
           if (selected) {
+            event.preventDefault();
             if (selected.isLink && selected.element) {
               selected.element.click();
             } else {
-              event.preventDefault();
               // Focus the button first by default when an item is selected.
               // We fire the onSelect callback next so the app can manage
               // focus if needed.
