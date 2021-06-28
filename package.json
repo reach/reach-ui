@@ -23,7 +23,8 @@
     "dev": "preconstruct dev && yarn start",
     "pc": "preconstruct",
     "postinstall": "manypkg check && preconstruct dev",
-    "release": "lerna publish from-git --yes --pre-dist-tag next"
+    "release": "lerna publish from-git --yes --pre-dist-tag next",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@babel/core": "^7.14.6",
@@ -164,5 +165,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "devDependencies": {
+    "husky": "^6.0.0"
   }
 }
