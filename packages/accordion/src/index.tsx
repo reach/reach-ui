@@ -37,9 +37,11 @@ const AccordionContext = createNamedContext<InternalAccordionContextValue>(
   "AccordionContext",
   {} as InternalAccordionContextValue
 );
-const AccordionItemContext = createNamedContext<
-  InternalAccordionItemContextValue
->("AccordionItemContext", {} as InternalAccordionItemContextValue);
+const AccordionItemContext =
+  createNamedContext<InternalAccordionItemContextValue>(
+    "AccordionItemContext",
+    {} as InternalAccordionItemContextValue
+  );
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -80,9 +82,8 @@ const Accordion = React.forwardRef(function Accordion(
   const wasControlled = typeof controlledIndex !== "undefined";
   const { current: isControlled } = React.useRef(wasControlled);
 
-  const [descendants, setDescendants] = useDescendantsInit<
-    AccordionDescendant
-  >();
+  const [descendants, setDescendants] =
+    useDescendantsInit<AccordionDescendant>();
 
   const id = useId(props.id);
 
@@ -341,9 +342,8 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   { as: Comp = "div", children, disabled = false, ...props },
   forwardedRef
 ) {
-  const { accordionId, openPanels, readOnly } = React.useContext(
-    AccordionContext
-  );
+  const { accordionId, openPanels, readOnly } =
+    React.useContext(AccordionContext);
   const buttonRef: ButtonRef = React.useRef(null);
 
   const index = useDescendant(
@@ -569,9 +569,8 @@ const AccordionPanel = React.forwardRef(function AccordionPanel(
   { as: Comp = "div", children, ...props },
   forwardedRef
 ) {
-  const { disabled, panelId, buttonId, state } = React.useContext(
-    AccordionItemContext
-  );
+  const { disabled, panelId, buttonId, state } =
+    React.useContext(AccordionItemContext);
 
   return (
     <Comp
