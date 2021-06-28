@@ -127,7 +127,7 @@ function Example(props) {
   const AnimatedDialogContent = animated(DialogContent);
 
   const [showDialog, setShowDialog] = React.useState(false);
-  const transitions = useTransition(showDialog, null, {
+  const transitions = useTransition(showDialog, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
     leave: { opacity: 0, y: 10 },
@@ -135,14 +135,14 @@ function Example(props) {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      {transitions.map(
-        ({ item, key, props: styles }) =>
+      {transitions(
+        (styles, item) =>
           item && (
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: styles.y.interpolate(
-                    value => `translate3d(0px, ${value}px, 0px)`
+                  transform: styles.y.to(
+                    (value) => `translate3d(0px, ${value}px, 0px)`
                   ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10,
