@@ -2,7 +2,6 @@ import * as React from "react";
 // import renderer from "react-test-renderer";
 // import { act } from "react-dom/test-utils";
 import { render, fireEvent } from "$test/utils";
-import { axe } from "jest-axe";
 import {
   Slider,
   SliderHandle,
@@ -22,13 +21,8 @@ const getCurrentValue = (el: HTMLElement) =>
 describe("<Slider />", () => {
   describe("rendering", () => {});
 
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      const { container } = render(<BasicSlider />);
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-  });
+  //   describe("a11y", () => {
+  //   });
 
   describe("user events", () => {
     it("updates marker state as value is exceeded", () => {
@@ -131,7 +125,3 @@ describe("<Slider />", () => {
     });
   });
 });
-
-function BasicSlider() {
-  return <Slider aria-label="basic slider" />;
-}

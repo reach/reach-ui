@@ -1,38 +1,34 @@
 import * as React from "react";
+import { axe } from "jest-axe";
 import { render, fireEvent, act } from "$test/utils";
+import { AxeResults } from "$test/types";
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
 } from "@reach/alert-dialog";
 
-describe("<AlertDialog />", () => {
-  describe("rendering", () => {
-    it("should render the correct labels", () => {
-      const { baseElement, getByText } = render(<BasicAlertDialog />);
-      let openButton = getByText("Show Dialog");
-      fireEvent.click(openButton);
-      let dialogLabel = baseElement.querySelector(
-        "[data-reach-alert-dialog-label]"
-      );
-      let dialogElement = baseElement.querySelector(
-        "[data-reach-alert-dialog-content]"
-      );
-      let dialogLabelId = dialogLabel?.id;
-      expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
+describe("<AlertDialog /> with axe", () => {
+  it("Should not have ARIA violations", async () => {
+    jest.useRealTimers();
+    let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
+    let results: AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
     });
-  });
+    expect(results).toHaveNoViolations();
 
-  describe("user events", () => {
-    it("should open the dialog when clicking the trigger", () => {
-      let { getByTestId, getByText } = render(<BasicAlertDialog />);
-      act(() => void fireEvent.click(getByText("Show Dialog")));
-      expect(getByTestId("dialog")).toBeInTheDocument();
+    let newResults: AxeResults = null as any;
+    act(() => void fireEvent.click(getByText("Show Dialog")));
+    await act(async () => {
+      newResults = await axe(getByTestId("dialog"));
     });
+    expect(newResults).toHaveNoViolations();
   });
 });
 
 ////////////////////////////////////////////////////////////////////////////////
+
 function BasicAlertDialog() {
   const close = React.useRef(null);
   const [showDialog, setShowDialog] = React.useState(false);

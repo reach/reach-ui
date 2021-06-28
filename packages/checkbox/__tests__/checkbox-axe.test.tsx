@@ -10,32 +10,35 @@ import { render, fireEvent } from "$test/utils";
 
 describe("<MixedCheckbox />", () => {
   it("Should not have ARIA violations after render", async () => {
+    jest.useRealTimers();
     let { container } = render(<BasicMixedCheckbox />);
     await expect(container).toHaveNoAxeViolations();
   });
 
   it("Should not have ARIA violations after initial click", async () => {
+    jest.useRealTimers();
     let { container, getByTestId } = render(<BasicMixedCheckbox />);
     fireEvent.click(getByTestId("checkbox"));
     await expect(container).toHaveNoAxeViolations();
   });
-
-  // TODO: Write tests for mixed checkbox
 });
 
 describe("<CustomCheckbox />", () => {
   it("Should not have ARIA violations after render", async () => {
+    jest.useRealTimers();
     let { container } = render(<BasicCustomCheckbox />);
     await expect(container).toHaveNoAxeViolations();
   });
 
   it("Should not have ARIA violations after initial click (1)", async () => {
+    jest.useRealTimers();
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-1"));
     await expect(container).toHaveNoAxeViolations();
   });
 
   it("Should not have ARIA violations after initial click (2)", async () => {
+    jest.useRealTimers();
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-2"));
     await expect(container).toHaveNoAxeViolations();

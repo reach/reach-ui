@@ -1,7 +1,5 @@
 import * as React from "react";
 import { render, act, fireEvent, keyType } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
 import {
   Listbox,
   ListboxButton,
@@ -75,15 +73,6 @@ describe("<Listbox />", () => {
   });
 
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container } = render(<FancyListbox />);
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-    });
-
     it("renders a valid listbox", () => {
       let { queryByRole, getByRole } = render(
         <Listbox portal={false}>
@@ -389,6 +378,8 @@ describe("<Listbox />", () => {
       // continue spelling a word that matches another option
       act(() => void keyType(getByRole("button"), "a"));
       expect(input).toHaveValue("pastor");
+
+      jest.useRealTimers();
     });
 
     it("should update the selection when the user types while expanded", () => {
@@ -456,6 +447,8 @@ describe("<Listbox />", () => {
     // TODO: it("should prevent scrolling on `PageUp`", () => {});
     // TODO: it("should prevent scrolling on `PageDown`", () => {});
     // TODO: it("should call onChange", () => {});
+
+    jest.useRealTimers();
   });
 });
 

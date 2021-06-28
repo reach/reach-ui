@@ -1,7 +1,5 @@
 import * as React from "react";
-import { render, act, withMarkup, userEvent } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
+import { render, withMarkup, userEvent } from "$test/utils";
 import {
   Combobox,
   ComboboxInput,
@@ -100,16 +98,6 @@ describe("<Combobox />", () => {
   });
 
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
-      let { container } = render(<BasicCombobox />);
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-    });
-
     it("should forward aria-label from Combobox to ComboboxInput", () => {
       let { getByRole } = render(<ComboboxExample />);
       let input = getByRole("combobox");
