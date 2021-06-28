@@ -78,7 +78,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^3.9.0",
-    "husky": "^4.2.5",
+    "husky": "^6.0.0",
     "jest": "^27.0.5",
     "jest-axe": "^5.0.1",
     "jest-watch-typeahead": "0.6.4",
@@ -113,11 +113,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "changelog": {
     "labels": {
       "Type: Breaking Change": "🔨 Breaking Changes",
