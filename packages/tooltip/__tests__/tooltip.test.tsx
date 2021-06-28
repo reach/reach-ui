@@ -5,12 +5,10 @@ import { axe } from "jest-axe";
 import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 
 describe("<Tooltip />", () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
   describe("rendering", () => {
     it("renders as any HTML element", () => {
+      jest.useFakeTimers();
+
       let tooltipText = "Look at me";
       let { getByText } = render(
         <p>
@@ -30,6 +28,7 @@ describe("<Tooltip />", () => {
       expect(tooltip.tagName).toBe("SPAN");
 
       act(() => void leaveTooltip(trigger));
+      jest.useRealTimers();
     });
   });
 
@@ -53,26 +52,28 @@ describe("<Tooltip />", () => {
         results = await axe(container);
       });
       expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
 
+      jest.useFakeTimers();
       act(() => {
         fireEvent.mouseOver(trigger);
         jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
       });
-
       jest.useRealTimers();
+
       await act(async () => {
         results = await axe(container);
       });
       expect(results).toHaveNoViolations();
-      jest.useFakeTimers();
 
+      jest.useFakeTimers();
       act(() => void leaveTooltip(trigger));
+      jest.useRealTimers();
     });
   });
 
   describe("user events", () => {
     it("shows/hides on hover", () => {
+      jest.useFakeTimers();
       let tooltipText = "Look at me";
 
       let { getByText, queryByText } = render(
@@ -94,9 +95,12 @@ describe("<Tooltip />", () => {
       act(() => void leaveTooltip(trigger));
 
       expect(queryByText(tooltipText)).toBeFalsy();
+
+      jest.useRealTimers();
     });
 
     it("shows/hides when trigger is focused/blurred", () => {
+      jest.useFakeTimers();
       let tooltipText = "Look at me";
       let { getByText, queryByText } = render(
         <Tooltip label={tooltipText}>
@@ -112,9 +116,12 @@ describe("<Tooltip />", () => {
 
       act(() => void blurTooltip(trigger));
       expect(queryByText(tooltipText)).toBeFalsy();
+
+      jest.useRealTimers();
     });
 
     it("shows without timeout when one tooltip is already visible", () => {
+      jest.useFakeTimers();
       let { getByText } = render(
         <>
           <Tooltip label="First">
@@ -144,9 +151,11 @@ describe("<Tooltip />", () => {
       expect(screen.queryByText("Second Trigger")).toBeTruthy();
 
       act(() => void leaveTooltip(secondTrigger));
+      jest.useRealTimers();
     });
 
     it("hides on ESC", () => {
+      jest.useFakeTimers();
       let tooltipText = "Look at me";
       let { getByText, queryByText } = render(
         <Tooltip label={tooltipText}>
@@ -166,6 +175,7 @@ describe("<Tooltip />", () => {
       expect(queryByText(tooltipText)).toBeFalsy();
 
       act(() => void leaveTooltip(trigger));
+      jest.useRealTimers();
     });
   });
 });

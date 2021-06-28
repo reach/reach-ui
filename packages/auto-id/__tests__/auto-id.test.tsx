@@ -1,16 +1,9 @@
 import * as React from "react";
-import { axe } from "jest-axe";
 import { render } from "$test/utils";
 
 const { useId } = jest.requireActual("@reach/auto-id");
 
 describe("useId", () => {
-  it("should provide a valid ID for a11y", async () => {
-    let { container } = render(<TestInput />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
   it("should generate a unique ID value", () => {
     function Comp() {
       const justNull = null;
@@ -37,13 +30,3 @@ describe("useId", () => {
     expect(getByText("Ok").id).toEqual("awesome");
   });
 });
-
-function TestInput() {
-  let id = `name--${useId()}`;
-  return (
-    <div>
-      <label htmlFor={id}>Name</label>
-      <input name="name" id={id} type="text" />
-    </div>
-  );
-}
