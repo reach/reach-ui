@@ -1,4 +1,5 @@
 {
   "buildCommand": "build",
-  "sandboxes": ["/.codesandbox/templates/reach-ui"]
+  "sandboxes": ["/.codesandbox/templates/reach-ui"],
+  "node": "14"
 }
