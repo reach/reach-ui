@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@reach/utils": "0.15.0",
-    "tslib": "^2.1.0"
+    "tslib": "^2.3.0"
   },
   "devDependencies": {
     "react": "^17.0.2",
