@@ -239,7 +239,7 @@ Here's some code you can copy/paste to make it happen along with [React Spring](
 ```jsx
 import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
-import { useTransition, animated } from "react-spring";
+import { useTransition, animated } from "@react-spring/web";
 
 animated.TooltipPopup = animated(TooltipPopup);
 animated.TooltipContent = animated(TooltipPopup);
@@ -247,7 +247,7 @@ animated.TooltipContent = animated(TooltipPopup);
 function AnimatedTooltip({ children, ...rest }) {
   const [trigger, tooltip, isVisible] = useTooltip();
 
-  const transitions = useTransition(isVisible ? tooltip : false, null, {
+  const transitions = useTransition(isVisible, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -257,16 +257,10 @@ function AnimatedTooltip({ children, ...rest }) {
   return (
     <React.Fragment>
       {React.cloneElement(children, trigger)}
-
-      {transitions.map(
-        ({ item: tooltip, props: styles, key }) =>
-          tooltip && (
-            <animated.TooltipContent
-              key={key}
-              {...tooltip}
-              {...rest}
-              style={styles}
-            />
+      {transitions(
+        (styles, item) =>
+          item && (
+            <animated.TooltipContent {...tooltip} {...rest} style={styles} />
           )
       )}
     </React.Fragment>

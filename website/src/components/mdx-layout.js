@@ -81,7 +81,7 @@ import VisuallyHidden from "@reach/visually-hidden";
 import WindowSize, { useWindowSize } from "@reach/window-size";
 import GatsbyLink from "gatsby-link";
 import { matchSorter } from "match-sorter";
-import { useTransition, animated } from "react-spring/web.cjs";
+import { useTransition, animated } from "@react-spring/web";
 import { Phased } from "recondition";
 import { useThrottle } from "use-throttle";
 import Layout from "./Layout";

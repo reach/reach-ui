@@ -6,7 +6,7 @@ import {
   AccordionPanel,
   useAccordionItemContext,
 } from "@reach/accordion";
-import { animated, config, useSpring } from "react-spring";
+import { animated, useSpring } from "@react-spring/web";
 import { action } from "@storybook/addon-actions";
 import "@reach/accordion/styles.css";
 
@@ -78,7 +78,6 @@ const AnimatedPanel = React.forwardRef(({ children }, forwardedRef) => {
     opacity: isExpanded ? 1 : 0,
     height: isExpanded ? height : 0,
     overflow: "hidden",
-    config: config.default,
   });
 
   return (

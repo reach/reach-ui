@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
-import { useTransition, animated } from "react-spring/web.cjs";
+import { useTransition, animated } from "@react-spring/web";
 import "@reach/tooltip/styles.css";
 
 let name = "Animated";
@@ -45,7 +45,7 @@ export default { title: "Tooltip" };
 function ExampleAnimatedTooltip({ children, ...rest }) {
   const [trigger, tooltip, isVisible] = useTooltip();
 
-  const transitions = useTransition(isVisible ? tooltip : false, null, {
+  const transitions = useTransition(isVisible, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -55,16 +55,10 @@ function ExampleAnimatedTooltip({ children, ...rest }) {
   return (
     <React.Fragment>
       {React.cloneElement(children, trigger)}
-
-      {transitions.map(
-        ({ item: tooltip, props: styles, key }) =>
-          tooltip && (
-            <animated.TooltipContent
-              key={key}
-              {...tooltip}
-              {...rest}
-              style={styles}
-            />
+      {transitions(
+        (styles, item) =>
+          item && (
+            <animated.TooltipContent {...tooltip} {...rest} style={styles} />
           )
       )}
     </React.Fragment>
