@@ -8,22 +8,21 @@ import { usePrevious } from "@reach/utils/use-previous";
 
 const MESSAGE_TIMEOUT = 5000;
 
-describe("<Alert />", () => {
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, getByTestId } = render(<AlertApp />);
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-
-      act(() => void fireEvent.click(getByTestId("add-alert")));
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
+describe("<Alert /> with axe", () => {
+  it("Should not have ARIA violations", async () => {
+    jest.useRealTimers();
+    let { container, getByTestId } = render(<AlertApp />);
+    let results: AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
     });
+    expect(results).toHaveNoViolations();
+
+    act(() => void fireEvent.click(getByTestId("add-alert")));
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
 });
 

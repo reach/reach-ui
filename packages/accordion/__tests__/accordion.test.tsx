@@ -1,6 +1,5 @@
 import * as React from "react";
 import { render, fireEvent } from "$test/utils";
-import { axe } from "jest-axe";
 import {
   Accordion,
   AccordionItem,
@@ -10,18 +9,6 @@ import {
 
 describe("<Accordion />", () => {
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, buttons } = renderTestAccordion();
-      let results = await axe(container);
-
-      expect(results).toHaveNoViolations();
-
-      // Toggle to another panel and check again
-      fireEvent.click(buttons[1]);
-      results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-
     describe("ARIA attributes", () => {
       let buttons: HTMLElement[];
       let panels: HTMLElement[];

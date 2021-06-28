@@ -7,7 +7,6 @@ import {
   simulateSpaceKeyClick,
   simulateEnterKeyClick,
 } from "$test/utils";
-import { axe } from "jest-axe";
 import {
   Menu,
   MenuList,
@@ -20,24 +19,6 @@ let noop = () => {};
 
 describe("<MenuButton /> with <MenuItem />", () => {
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, list, button } = renderTestMenu();
-
-      let results = await axe(container);
-      expect(results).toHaveNoViolations();
-
-      // Toggle the menu and check again
-      simulateMouseClick(button);
-      results = await axe(container);
-
-      // We have to check the container and list separately since the list is
-      // portaled outside of the container.
-      let listResults = await axe(list);
-
-      expect(results).toHaveNoViolations();
-      expect(listResults).toHaveNoViolations();
-    });
-
     describe("ARIA attributes", () => {
       it("`role` is set to `menu` for list element", () => {
         let { button, list } = renderTestMenu();
@@ -195,49 +176,15 @@ describe("<MenuButton /> with <MenuItem />", () => {
   });
 });
 
-describe("<MenuButton /> with <MenuLink />", () => {
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, list, button } = renderTestMenuWithLinks();
+// describe("<MenuButton /> with <MenuLink />", () => {
+//   describe("a11y", () => {
+//   });
+// });
 
-      let results = await axe(container);
-      expect(results).toHaveNoViolations();
-
-      // Toggle the menu and check again
-      simulateMouseClick(button);
-      results = await axe(container);
-
-      // We have to check the container and list separately since the list is
-      // portaled outside of the container.
-      let listResults = await axe(list);
-
-      expect(results).toHaveNoViolations();
-      expect(listResults).toHaveNoViolations();
-    });
-  });
-});
-
-describe("<MenuButton /> with <MenuItem /> and <MenuLink />", () => {
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, list, button } = renderTestMenuWithLinksAndItems();
-
-      let results = await axe(container);
-      expect(results).toHaveNoViolations();
-
-      // Toggle the menu and check again
-      simulateMouseClick(button);
-      results = await axe(container);
-
-      // We have to check the container and list separately since the list is
-      // portaled outside of the container.
-      let listResults = await axe(list);
-
-      expect(results).toHaveNoViolations();
-      expect(listResults).toHaveNoViolations();
-    });
-  });
-});
+// describe("<MenuButton /> with <MenuItem /> and <MenuLink />", () => {
+//   describe("a11y", () => {
+//   });
+// });
 
 function renderTestMenu() {
   let cb1 = jest.fn();
