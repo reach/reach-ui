@@ -26,7 +26,7 @@ const Popover = React.forwardRef(function Popover(props, ref) {
 
 interface PopoverProps {
   children: React.ReactNode;
-  targetRef: React.RefObject<HTMLElement>;
+  targetRef: React.RefObject<PossibleNode>;
   position?: Position;
   /**
    * Render the popover markup, but hide it – used by MenuButton so that it
@@ -72,7 +72,7 @@ const PopoverImpl = React.forwardRef(function PopoverImpl(
   const targetRect = useRect(targetRef, { observe: !props.hidden });
   const ref = useComposedRefs(popoverRef, forwardedRef);
 
-  useSimulateTabNavigationForReactTree(targetRef, popoverRef);
+  useSimulateTabNavigationForReactTree(targetRef as any, popoverRef);
 
   return (
     <Comp

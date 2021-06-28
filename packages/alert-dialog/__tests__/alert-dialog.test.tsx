@@ -1,7 +1,5 @@
 import * as React from "react";
-import { axe } from "jest-axe";
 import { render, fireEvent, act } from "$test/utils";
-import { AxeResults } from "$test/types";
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -22,24 +20,6 @@ describe("<AlertDialog />", () => {
       );
       let dialogLabelId = dialogLabel?.id;
       expect(dialogElement).toHaveAttribute("aria-labelledby", dialogLabelId);
-    });
-  });
-
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-
-      let newResults: AxeResults = null as any;
-      act(() => void fireEvent.click(getByText("Show Dialog")));
-      await act(async () => {
-        newResults = await axe(getByTestId("dialog"));
-      });
-      expect(newResults).toHaveNoViolations();
     });
   });
 

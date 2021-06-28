@@ -49,8 +49,8 @@ function Example() {
 }
 
 // Assign the name to the example and then export it as a named constant
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const Basic = Example;
 
 // Default export an object with the title matching the name of the Reach package
 export default { title: "Dialog" };

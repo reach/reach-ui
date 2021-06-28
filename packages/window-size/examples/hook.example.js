@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useWindowSize } from "@reach/window-size";
 
-let name = "Basic";
+let name = "Basic (useWindowSize)";
 
 function Example() {
   const sizes = useWindowSize();
@@ -10,6 +10,6 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
-export default { title: "useWindowSize" };
+Example.storyName = name;
+export const Basic = Example;
+export default { title: "WindowSize" };

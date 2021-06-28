@@ -12,6 +12,8 @@ module.exports = {
     "\\$test(.*)$": "<rootDir>/test/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/test/setupTests.ts"],
+  timers: "modern",
+  testEnvironment: "jsdom",
   testMatch: ["<rootDir>/**/*.(spec|test).{ts,tsx,js,jsx}"],
   testURL: "http://localhost",
   transformIgnorePatterns: [

@@ -1,6 +1,5 @@
 import * as React from "react";
-import { render, act, fireEvent } from "$test/utils";
-import { axe } from "jest-axe";
+import { render, fireEvent } from "$test/utils";
 import {
   Disclosure,
   DisclosureButton,
@@ -83,21 +82,6 @@ describe("<Disclosure />", () => {
   });
 
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { getByRole, container } = render(
-        <Disclosure>
-          <DisclosureButton>Click Button</DisclosureButton>
-          <DisclosurePanel>Panel body</DisclosurePanel>
-        </Disclosure>
-      );
-      let results = await axe(container);
-      expect(results).toHaveNoViolations();
-
-      act(() => void fireEvent.click(getByRole("button")));
-      let newResults = await axe(container);
-      expect(newResults).toHaveNoViolations();
-    });
-
     it("accepts a custom ID", () => {
       let { getByText } = render(
         <Disclosure id="my-id">
@@ -106,16 +90,6 @@ describe("<Disclosure />", () => {
         </Disclosure>
       );
       expect(getByText("Panel body")).toHaveAttribute("id", "panel--my-id");
-    });
-
-    it("removes the panel from the navigation flow", () => {
-      let { getByText } = render(
-        <Disclosure>
-          <DisclosureButton>Click Button</DisclosureButton>
-          <DisclosurePanel>Panel body</DisclosurePanel>
-        </Disclosure>
-      );
-      expect(getByText("Panel body")).toHaveAttribute("tabindex", "-1");
     });
 
     it("sets the correct aria attributes when collapsed", () => {

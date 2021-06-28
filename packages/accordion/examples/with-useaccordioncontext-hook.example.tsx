@@ -14,7 +14,7 @@ import "@reach/accordion/styles.css";
 let name = "With context hooks (TS)";
 
 function MyAccordionButton(
-  props: AccordionButtonProps & React.ComponentProps<"button">
+  props: AccordionButtonProps & React.ComponentPropsWithoutRef<"button">
 ) {
   let { id } = useAccordionContext();
   let { isExpanded } = useAccordionItemContext();
@@ -63,8 +63,8 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
+Example.storyName = name;
+export const WithContextHooks = Example;
 export default { title: "Accordion" };
 
 ////////////////////////////////////////////////////////////////////////////////

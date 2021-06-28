@@ -30,7 +30,13 @@ You can animate the "enter" phase with just a little CSS.
 .slide-down[data-reach-menu-list],
 .slide-down[data-reach-menu-items] {
   border-radius: 5px;
-  animation: slide-down 0.2s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide-down[data-reach-menu-list],
+  .slide-down[data-reach-menu-items] {
+    animation: slide-down 0.2s ease;
+  }
 }
 ```
 
@@ -64,8 +70,6 @@ First add the CSS to define the animation:
 
 ```css
 .slide-down {
-  transition-property: transform, opacity;
-  transition-duration: 300ms;
   opacity: 0;
   transform: translateY(-10px);
 }
@@ -77,6 +81,13 @@ First add the CSS to define the animation:
 
 .slide-down.exit {
   opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide-down {
+    transition-property: transform, opacity;
+    transition-duration: 300ms;
+  }
 }
 ```
 
@@ -116,7 +127,7 @@ function Example(props) {
   const AnimatedDialogContent = animated(DialogContent);
 
   const [showDialog, setShowDialog] = React.useState(false);
-  const transitions = useTransition(showDialog, null, {
+  const transitions = useTransition(showDialog, {
     from: { opacity: 0, y: -10 },
     enter: { opacity: 1, y: 0 },
     leave: { opacity: 0, y: 10 },
@@ -124,14 +135,14 @@ function Example(props) {
   return (
     <div>
       <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      {transitions.map(
-        ({ item, key, props: styles }) =>
+      {transitions(
+        (styles, item) =>
           item && (
             <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
               <AnimatedDialogContent
                 style={{
-                  transform: styles.y.interpolate(
-                    value => `translate3d(0px, ${value}px, 0px)`
+                  transform: styles.y.to(
+                    (value) => `translate3d(0px, ${value}px, 0px)`
                   ),
                   border: "4px solid hsla(0, 0%, 0%, 0.5)",
                   borderRadius: 10,

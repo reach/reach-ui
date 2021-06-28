@@ -49,6 +49,8 @@ export enum ListboxEvents {
   OptionMouseUp = "OPTION_MOUSE_UP",
   OptionClick = "OPTION_CLICK",
 
+  ListMouseUp = "LIST_MOUSE_UP",
+
   // WIP: Simplify and consolidate events
   // TODO: Use a separate machine to deal with states to determine press events
   OptionPress = "OPTION_PRESS",
@@ -517,6 +519,10 @@ export const createMachineDefinition = ({
           target: ListboxStates.Navigating,
           actions: [navigateFromCurrentValue, focusList],
         },
+        [ListboxEvents.ListMouseUp]: {
+          target: ListboxStates.Navigating,
+          actions: [navigateFromCurrentValue, focusList],
+        },
         [ListboxEvents.OptionTouchStart]: {
           target: ListboxStates.Navigating,
           actions: [navigate, clearTypeahead],
@@ -631,7 +637,6 @@ export const createMachineDefinition = ({
             actions: clearTypeahead,
           },
         ],
-
         [ListboxEvents.ButtonMouseUp]: {
           target: ListboxStates.Navigating,
           actions: [navigateFromCurrentValue, focusList],
@@ -882,6 +887,9 @@ export type ListboxEvent = ListboxEventBase &
       }
     | {
         type: ListboxEvents.ButtonMouseUp;
+      }
+    | {
+        type: ListboxEvents.ListMouseUp;
       }
     | {
         type: ListboxEvents.ClearNavSelection;

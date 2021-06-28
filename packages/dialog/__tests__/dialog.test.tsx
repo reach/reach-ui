@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useFakeTimers, SinonFakeTimers } from "sinon";
-import { axe } from "jest-axe";
 import { fireEvent, render, act, userEvent } from "$test/utils";
-import { AxeResults } from "$test/types";
 import { Dialog } from "@reach/dialog";
 
 function getOverlay(container: Element) {
@@ -33,16 +31,6 @@ describe("<Dialog />", () => {
   });
 
   describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      clock.restore();
-      const { container } = render(<BasicOpenDialog />);
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-    });
-
     it("can be labelled by another element", () => {
       const { getByRole } = render(
         <Dialog isOpen aria-labelledby="dialog-title">

@@ -392,7 +392,7 @@ function DialogWithCustomFocusLock() {
 
 `dangerouslyBypassScrollLock?: boolean`
 
-By default the dialog locks scrolling with [`react-remove-scroll`](https://github.com/theKashey/react-remove-scroll), which also injecs some styles on the body element to remove the scrollbar while maintaining its gap to prevent jank when the dialog's open state is toggled. This is almost always what you want in a dialog, but in some cases you may have the need to customize this behavior further.
+By default the dialog locks scrolling with [`react-remove-scroll`](https://github.com/theKashey/react-remove-scroll), which also injects some styles on the body element to remove the scrollbar while maintaining its gap to prevent jank when the dialog's open state is toggled. This is almost always what you want in a dialog, but in some cases you may have the need to customize this behavior further.
 
 This prop will disable `react-remove-scroll` and allow you to compose your own scroll lock component to meet your needs. Like the `dangerouslyBypassFocusLock` prop, this is generally discouraged and should only be used if a proper fallback for managing scroll behavior is provided.
 
@@ -518,46 +518,52 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 
 ```jsx
 // jsx-demo
-function Example(props) {
+(() => {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
-  const [showDialog, setShowDialog] = React.useState(false);
-  const transitions = useTransition(showDialog, null, {
-    from: { opacity: 0, y: -10 },
-    enter: { opacity: 1, y: 0 },
-    leave: { opacity: 0, y: 10 },
-  });
-  return (
-    <div>
-      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      {transitions.map(
-        ({ item, key, props: styles }) =>
-          item && (
-            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
-              <AnimatedDialogContent
-                style={{
-                  transform: styles.y.interpolate(
-                    (value) => `translate3d(0px, ${value}px, 0px)`
-                  ),
-                  border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                  borderRadius: 10,
-                }}
-              >
-                <button onClick={() => setShowDialog(false)}>
-                  Close Dialog
-                </button>
-                <p>React Spring makes it too easy!</p>
-                <input type="text" />
-                <br />
-                <input type="text" />
-                <button>Ayyyyyy</button>
-              </AnimatedDialogContent>
-            </AnimatedDialogOverlay>
-          )
-      )}
-    </div>
-  );
-}
+
+  function Example(props) {
+    const [showDialog, setShowDialog] = React.useState(false);
+    const transitions = useTransition(showDialog, {
+      from: { opacity: 0, y: -10 },
+      enter: { opacity: 1, y: 0 },
+      leave: { opacity: 0, y: 10 },
+    });
+    return (
+      <div>
+        <button onClick={() => setShowDialog(true)}>Show Dialog</button>
+        {transitions(
+          (styles, item) =>
+            item && (
+              <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+                <AnimatedDialogContent
+                  aria-labelledby="dialog-title"
+                  style={{
+                    transform: styles.y.to(
+                      (value) => `translate3d(0px, ${value}px, 0px)`
+                    ),
+                    border: "4px solid hsla(0, 0%, 0%, 0.5)",
+                    borderRadius: 10,
+                  }}
+                >
+                  <button onClick={() => setShowDialog(false)}>
+                    Close Dialog
+                  </button>
+                  <h2 id="dialog-title">Animated Dialog</h2>
+                  <p>React Spring makes it too easy!</p>
+                  <input type="text" />
+                  <br />
+                  <input type="text" />
+                  <button>Ayyyyyy</button>
+                </AnimatedDialogContent>
+              </AnimatedDialogOverlay>
+            )
+        )}
+      </div>
+    );
+  }
+  return <Example />;
+})();
 ```
 
 ## Accessibility

@@ -14,8 +14,8 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@mdx-js/mdx": "^1.6.21",
-    "@mdx-js/react": "^1.6.21",
+    "@mdx-js/mdx": "^1.6.22",
+    "@mdx-js/react": "^1.6.22",
     "@philpl/buble": "^0.19.7",
     "@reach/accordion": "file:../packages/accordion",
     "@reach/alert": "file:../packages/alert",
@@ -39,6 +39,7 @@
     "@reach/utils": "file:../packages/utils",
     "@reach/visually-hidden": "file:../packages/visually-hidden",
     "@reach/window-size": "file:../packages/window-size",
+    "@react-spring/web": "^9.2.3",
     "clsx": "^1.1.1",
     "core-js": "^3.7.0",
     "gatsby": "^2.26.1",
@@ -61,10 +62,9 @@
     "postcss-preset-env": "^6.7.0",
     "prism-react-renderer": "^1.1.1",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
-    "react-spring": "^8.0.27",
     "recondition": "^1.2.4",
     "use-throttle": "^0.0.3"
   },
