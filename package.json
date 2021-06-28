@@ -55,7 +55,7 @@
     "@types/react-dom": "^17.0.8",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-test-renderer": "^17.0.1",
-    "@types/sinon": "^9.0.4",
+    "@types/sinon": "^10.0.2",
     "@types/styled-components": "^5.1.10",
     "@types/tabbable": "^3.1.0",
     "@types/warning": "^3.0.0",
@@ -102,7 +102,7 @@
     "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.27",
     "react-test-renderer": "^17.0.2",
-    "sinon": "^9.0.3",
+    "sinon": "^11.1.1",
     "styled-components": "^5.3.0",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.4"
