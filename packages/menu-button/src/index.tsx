@@ -92,9 +92,8 @@ const Menu: React.FC<MenuProps> = ({ id, children }) => {
   let buttonRef = React.useRef(null);
   let menuRef = React.useRef(null);
   let popoverRef = React.useRef(null);
-  let [descendants, setDescendants] = useDescendantsInit<
-    MenuButtonDescendant
-  >();
+  let [descendants, setDescendants] =
+    useDescendantsInit<MenuButtonDescendant>();
   let [state, dispatch] = React.useReducer(reducer, initialState);
   let _id = useId(id);
   let menuId = id || makeId("menu", _id);
@@ -661,7 +660,7 @@ const MenuItems = React.forwardRef(function MenuItems(
           // For links, the Enter key will trigger a click by default, but for
           // consistent behavior across menu items we'll trigger a click when
           // the spacebar is pressed.
-          if (selected) {
+          if (selected && !selected.disabled) {
             event.preventDefault();
             if (selected.isLink && selected.element) {
               selected.element.click();
@@ -864,8 +863,8 @@ if (__DEV__) {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
-  * 
-  
+  *
+
   *
   * A low-level wrapper for the popover that appears when a menu button is open.
   * You can compose it with `MenuItems` for more control over the nested
