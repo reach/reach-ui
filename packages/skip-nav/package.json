@@ -1,6 +1,6 @@
 {
   "name": "@reach/skip-nav",
-  "version": "0.15.0",
+  "version": "0.15.2",
   "description": "Skip navigation links for screen reader and keyboard users.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "directory": "packages/skip-nav"
   },
   "dependencies": {
-    "@reach/utils": "0.15.0",
+    "@reach/utils": "0.15.2",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
