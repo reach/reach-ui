@@ -73,6 +73,9 @@ jobs:
   website:
     name: Deploy Website
     runs-on: ubuntu-latest
+    env:
+      ENCRYPTED_KEY: ${{ secrets.ENCRYPTED_KEY }}
+      ENCRYPTED_IV: ${{ secrets.ENCRYPTED_IV }}
 
     if: ${{ github.ref == 'refs/heads/website' }}
 
@@ -95,7 +98,7 @@ jobs:
         run: yarn build
 
       - run: echo "Deploying website to https://reach.tech/"
-      - run: openssl aes-256-cbc -K $encrypted_e12d3fc86b46_key -iv $encrypted_e12d3fc86b46_iv -in website-deploy-key.enc -out website-deploy-key -d
+      - run: openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in website-deploy-key.enc -out website-deploy-key -d
       - run: chmod 600 website-deploy-key
       - run: eval $(ssh-agent -s)
       - run: ssh-add website-deploy-key
