@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionPanel,
 } from "@reach/accordion";
-import Alert from "@reach/alert";
+import { Alert } from "@reach/alert";
 import {
   AlertDialog,
   AlertDialogLabel,
@@ -47,7 +47,7 @@ import {
   ListboxGroup,
   ListboxGroupLabel,
 } from "@reach/listbox";
-import Component from "@reach/component-component";
+import { Component } from "@reach/component-component";
 import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 import {
   Menu,
@@ -58,8 +58,8 @@ import {
   MenuPopover,
   MenuLink,
 } from "@reach/menu-button";
-import Portal from "@reach/portal";
-import Rect, { useRect } from "@reach/rect";
+import { Portal } from "@reach/portal";
+import { useRect, Rect } from "@reach/rect";
 import {
   Slider,
   SliderInput,
@@ -76,10 +76,10 @@ import {
   TabPanel,
   useTabsContext,
 } from "@reach/tabs";
-import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
-import VisuallyHidden from "@reach/visually-hidden";
-import WindowSize, { useWindowSize } from "@reach/window-size";
-import GatsbyLink from "gatsby-link";
+import { useTooltip, TooltipPopup, Tooltip } from "@reach/tooltip";
+import { VisuallyHidden } from "@reach/visually-hidden";
+import { useWindowSize, WindowSize } from "@reach/window-size";
+import { Link as GatsbyLink } from "gatsby";
 import { matchSorter } from "match-sorter";
 import { useTransition, animated } from "@react-spring/web";
 import { Phased } from "recondition";
@@ -113,6 +113,12 @@ function MyPageLayout({ children }) {
     import("./cities.js");
   }, []);
 
+  let {
+    // blerg es modules
+    default: defaultReactExport,
+    ...allReactExports
+  } = React;
+
   return (
     <Layout>
       <MDXProvider
@@ -123,7 +129,8 @@ function MyPageLayout({ children }) {
                 {...props}
                 theme={{ plain: {}, styles: [] }}
                 scope={{
-                  ...React,
+                  ...allReactExports,
+                  React: defaultReactExport,
                   Accordion,
                   AccordionButton,
                   AccordionItem,
