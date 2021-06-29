@@ -12,6 +12,9 @@ import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-i
  */
 import { transform as bubleTransform } from "@philpl/buble";
 
+/** @type {boolean} */
+const __DEBUG__ = false;
+
 const CodeContext = React.createContext();
 
 export function PreComponent({ children, scope, ...props }) {
@@ -31,6 +34,11 @@ export function PreComponent({ children, scope, ...props }) {
       ? trimmed.startsWith(demoKey)
       : false;
 
+  const [isSSR, setIsSSR] = React.useState(true);
+  React.useEffect(() => {
+    setIsSSR(false);
+  }, []);
+
   const code = isDemo
     ? trimmed.replace(new RegExp(`^${demoKey}(\\n|\\s)*`), "")
     : trimmed;
@@ -42,7 +50,7 @@ export function PreComponent({ children, scope, ...props }) {
         {isDemo && (
           <React.Fragment>
             <CodeError className="jsx-demo-error" />
-            <CodePreview className="jsx-demo-preview" />
+            {!isSSR && <CodePreview className="jsx-demo-preview" />}
           </React.Fragment>
         )}
       </CodeProvider>
@@ -92,6 +100,10 @@ export function CodeProvider({
   const transpile = React.useCallback(function (code, scope) {
     const input = { code, scope };
 
+    function handleError(error) {
+      dispatch({ type: SET_ERROR, context: error });
+    }
+
     try {
       const element = generateElement(input, handleError);
       dispatch({
@@ -99,13 +111,12 @@ export function CodeProvider({
         context: element,
       });
     } catch (error) {
+      if (__DEBUG__) {
+        console.error(error);
+      }
       handleError(error);
     }
   }, []);
-
-  function handleError(error) {
-    dispatch({ type: SET_ERROR, context: error });
-  }
 
   useLayoutEffect(() => {
     transpile(code, scope);
