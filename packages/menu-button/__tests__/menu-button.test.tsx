@@ -14,6 +14,7 @@ import {
   MenuItem,
   MenuLink,
 } from "@reach/menu-button";
+import { positionRight } from "@reach/popover";
 
 let noop = () => {};
 
@@ -104,6 +105,24 @@ describe("<MenuButton /> with <MenuItem />", () => {
     it("should not show the menu list by default", () => {
       let { list } = renderTestMenu();
       expect(list).not.toBeVisible();
+    });
+
+    it("should change MenuList position by using the position prop", () => {
+      let { getByRole } = render(
+        <>
+          <Menu>
+            <MenuButton>Actions</MenuButton>
+            <MenuList data-testid="list" position={positionRight}>
+              <MenuItem onSelect={noop}>Download</MenuItem>
+            </MenuList>
+          </Menu>
+        </>
+      );
+      let button = getByRole("button");
+      let list = screen.getByTestId("list");
+      simulateMouseClick(button);
+
+      expect(list).toBeVisible();
     });
   });
 
