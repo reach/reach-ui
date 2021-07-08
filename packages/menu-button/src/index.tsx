@@ -824,11 +824,11 @@ if (__DEV__) {
  * @see Docs https://reach.tech/menu-button#menulist
  */
 const MenuList = React.forwardRef(function MenuList(
-  { portal = true, ...props },
+  { portal = true, position, ...props },
   forwardedRef
 ) {
   return (
-    <MenuPopover portal={portal}>
+    <MenuPopover position={position} portal={portal}>
       <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
     </MenuPopover>
   );
@@ -851,6 +851,16 @@ interface MenuListProps {
    * @see Docs https://reach.tech/menu-button#menulist-children
    */
   children: React.ReactNode;
+  /**
+   * A function used to determine the position of the popover in relation to the
+   * menu button. By default, the menu button will attempt to position the
+   * popover below the button aligned with its left edge. If this positioning
+   * results in collisions with any side of the window, the popover will be
+   * anchored to a different side to avoid those collisions if possible.
+   *
+   * @see Docs https://reach.tech/menu-button#menupopover-position
+   */
+  position?: Position;
 }
 
 if (__DEV__) {
