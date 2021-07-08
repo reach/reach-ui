@@ -251,6 +251,7 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 | [`div` props](#menuitems-div-props) |           |          |
 | [`children`](#menuitems-children)   | `node`    | false    |
 | [`portal`](#menuitems-portal)       | `boolean` | false    |
+| [`position`](#menupopover-position) | `func`    | false    |
 
 ##### MenuList `div` props
 
@@ -313,6 +314,14 @@ Can contain only `MenuItem` or a `MenuLink`
 `portal?: boolean`
 
 Whether or not the popover should be rendered inside a portal. Defaults to `true`.
+
+##### MenuList `position`
+
+`position?: (targetRect?: DOMRect | null, popoverRect?: DOMRect | null) => React.CSSProperties`
+
+A function used to determine the position of the popover in relation to the menu button. By default, the menu button will attempt to position the popover below the button aligned with its left edge. If this positioning results in collisions with any side of the window, the popover will be anchored to a different side to avoid those collisions if possible.
+
+The function accepts the DOMRect of the menu button element, and the DOMRect of the popover element as arguments, and returns a CSS properties object that is then applied to the popover as inline styles.
 
 ### MenuPopover
 
