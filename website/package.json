@@ -27,6 +27,7 @@
     "@reach/descendants": "file:../packages/descendants",
     "@reach/dialog": "file:../packages/dialog",
     "@reach/disclosure": "file:../packages/disclosure",
+    "@reach/dropdown": "file:../packages/dropdown",
     "@reach/listbox": "file:../packages/listbox",
     "@reach/menu-button": "file:../packages/menu-button",
     "@reach/popover": "file:../packages/popover",
