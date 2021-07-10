@@ -2,7 +2,7 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { RenderResult } from "@testing-library/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, BrowserRouter } from "react-router-dom";
 
 interface ButtonProps {
   isDisabled?: boolean;
@@ -82,7 +82,7 @@ export function Test() {
   const buttonAsLinkRef = React.useRef<React.ElementRef<typeof Link>>(null);
 
   return (
-    <>
+    <BrowserRouter>
       {/* Button accepts ref */}
       <Button ref={buttonRef} />
 
@@ -206,7 +206,7 @@ export function Test() {
 
       {/* Button as Anchor (Polymorphic.ForwardRefComponent) accepts requiredProp */}
       <Button as={Anchor} requiredProp />
-    </>
+    </BrowserRouter>
   );
 }
 
