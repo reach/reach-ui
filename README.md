@@ -139,7 +139,7 @@ $ git log -p
 # If everything looks good, push to GitHub along with the new tag:
 $ git push origin main --follow-tags
 
-# Open up travis-ci.com/reach/reach-ui and watch the build. There will
+# Open up github.com/reach/reach-ui/actions and watch the build. There will
 # be 2 builds, one for the push to the main branch and one for the
 # new tag. The tag build will run the build and all the tests and then
 # automatically publish to npm if everything passes. If there's a
@@ -149,7 +149,7 @@ $ git push origin main --follow-tags
 # complete … huzzah!
 ```
 
-You need to be careful when publishing a new package because the `lerna publish` on Travis CI will fail for new packages. To get around this, you should publish a `0.0.0` version of the package manually ahead of time. Then the release from CI will be ok. This is really janky but AFAICT the only workaround.
+You need to be careful when publishing a new package because the `lerna publish` on CI will fail for new packages. To get around this, you should publish a `0.0.0` version of the package manually ahead of time. Then the release from CI will be ok. This is really janky but AFAICT the only workaround.
 
 Stuff I'd like to improve:
 
