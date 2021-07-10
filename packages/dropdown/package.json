@@ -17,8 +17,6 @@
     "@reach/descendants": "0.15.2",
     "@reach/popover": "0.15.2",
     "@reach/utils": "0.15.2",
-    "prop-types": "^15.7.2",
-    "tiny-warning": "^1.0.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
