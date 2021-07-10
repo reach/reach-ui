@@ -13,8 +13,7 @@
     "directory": "packages/menu-button"
   },
   "dependencies": {
-    "@reach/auto-id": "0.15.2",
-    "@reach/descendants": "0.15.2",
+    "@reach/dropdown": "0.15.2",
     "@reach/popover": "0.15.2",
     "@reach/utils": "0.15.2",
     "prop-types": "^15.7.2",
