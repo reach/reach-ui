@@ -5,9 +5,10 @@ on:
     branches:
       - main
       - develop
-      - website
-  pull_request: {}
-  release: {}
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
@@ -17,6 +18,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Use Node 14
+        uses: actions/setup-node@v1
+        with:
+          version: 14.x
 
       - name: Restore Lerna (Cache)
         uses: actions/cache@v2
@@ -35,41 +41,7 @@ jobs:
       - name: Run Tests
         run: yarn test
 
-  release:
-    needs: test
-    name: Release
-    runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    if: ${{ startsWith(github.ref, 'refs/tags/v') && github.event_name == 'release' }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Restore Lerna (Cache)
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-
-      - run: echo "RELEASE_TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile
-
-      - name: Build Packages
-        run: yarn build
-
-      - run: echo "Publishing $RELEASE_TAG to npm ..."
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
-
-      - name: Publish Packages
-        run: lerna publish from-git --yes --pre-dist-tag next
-
+  # TODO: Create separate workflow for website
   # website:
   #   name: Deploy Website
   #   runs-on: ubuntu-latest
