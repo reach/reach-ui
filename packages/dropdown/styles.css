@@ -1,0 +1,36 @@
+[data-reach-dropdown-popover] {
+  display: block;
+  position: absolute;
+}
+
+[data-reach-dropdown-popover][hidden] {
+  display: none;
+}
+
+[data-reach-dropdown-items] {
+  display: block;
+  white-space: nowrap;
+  border: solid 1px hsla(0, 0%, 0%, 0.25);
+  background: hsla(0, 100%, 100%, 1);
+}
+
+[data-reach-dropdown-item] {
+  display: block;
+  user-select: none;
+}
+
+[data-reach-dropdown-item] {
+  cursor: pointer;
+  padding: 5px 20px;
+}
+
+[data-reach-dropdown-item][data-selected] {
+  background: hsla(211, 81%, 36%, 1);
+  color: hsla(0, 100%, 100%, 1);
+  outline: none;
+}
+
+[data-reach-dropdown-item][data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@reach/dropdown",
+  "version": "0.15.2",
+  "description": "React dropdown menu.",
+  "author": "React Training <hello@reacttraining.com>",
+  "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reach/reach-ui.git",
+    "directory": "packages/dropdown"
+  },
+  "dependencies": {
+    "@reach/auto-id": "0.15.2",
+    "@reach/descendants": "0.15.2",
+    "@reach/popover": "0.15.2",
+    "@reach/utils": "0.15.2",
+    "prop-types": "^15.7.2",
+    "tiny-warning": "^1.0.3",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || 17.x",
+    "react-dom": "^16.8.0 || 17.x"
+  },
+  "main": "dist/reach-dropdown.cjs.js",
+  "module": "dist/reach-dropdown.esm.js",
+  "types": "dist/reach-dropdown.cjs.d.ts",
+  "files": [
+    "README.md",
+    "dist",
+    "styles.css"
+  ],
+  "eslintIgnore": [
+    "node_modules",
+    "dist"
+  ]
+}
