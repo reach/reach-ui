@@ -378,11 +378,12 @@ function useDropdownItem({
   }
 
   function handleMouseEnter(event: React.MouseEvent) {
+    let doc = getOwnerDocument(dropdownRef.current)!;
     if (!isSelected && index != null && !disabled) {
       if (
         dropdownRef?.current &&
-        dropdownRef.current !== document.activeElement &&
-        ownRef.current !== document.activeElement
+        dropdownRef.current !== doc.activeElement &&
+        ownRef.current !== doc.activeElement
       ) {
         dropdownRef.current.focus();
       }
@@ -923,16 +924,17 @@ function reducer(
         isExpanded: true,
         selectionIndex: -1,
       };
-    case SELECT_ITEM_AT_INDEX:
+    case SELECT_ITEM_AT_INDEX: {
+      let { dropdownRef = { current: null } } = action.payload;
       if (
         action.payload.index >= 0 &&
         action.payload.index !== state.selectionIndex
       ) {
-        if (
-          action.payload.dropdownRef?.current &&
-          action.payload.dropdownRef.current !== document.activeElement
-        ) {
-          action.payload.dropdownRef.current.focus();
+        if (dropdownRef.current) {
+          let doc = getOwnerDocument(dropdownRef.current);
+          if (dropdownRef.current !== doc?.activeElement) {
+            dropdownRef.current.focus();
+          }
         }
 
         return {
@@ -944,6 +946,7 @@ function reducer(
         };
       }
       return state;
+    }
     case CLEAR_SELECTION_INDEX:
       return {
         ...state,
