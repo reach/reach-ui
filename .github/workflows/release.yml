@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    if: ${{ startsWith(github.ref, 'refs/tags/v') && github.repository == 'reach/reach-ui' && github.event_name == 'release' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node 14
+        uses: actions/setup-node@v1
+        with:
+          version: 14.x
+
+      - name: Restore Lerna (Cache)
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - run: echo "RELEASE_TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build Packages
+        run: yarn build
+
+      - name: Test
+        run: yarn test
+
+      - run: echo "Publishing $RELEASE_TAG to npm ..."
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+
+      - name: Publish Packages
+        run: lerna publish from-git --yes --pre-dist-tag next

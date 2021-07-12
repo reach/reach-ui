@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-let cleanProps = (props) => {
+function cleanProps(props: any): any {
   let {
     initialState,
     getInitialState,
@@ -16,18 +16,30 @@ let cleanProps = (props) => {
     ...rest
   } = props;
   return rest;
-};
+}
 
-class Component extends React.Component {
+class Component<
+  State extends object = {},
+  Refs extends object = {}
+> extends React.Component<ComponentProps<State, Refs>, State> {
   static defaultProps = {
     getInitialState: () => {},
     getRefs: () => ({}),
   };
 
-  state = this.props.initialState || this.props.getInitialState(this.props);
-  _refs = this.props.refs || this.props.getRefs(this.getArgs());
-  _setState = (...args) => this.setState(...args);
-  _forceUpdate = (...args) => this.forceUpdate(...args);
+  state =
+    this.props.initialState ||
+    (this.props.getInitialState || (() => ({} as State)))(this.props);
+  _refs: Refs =
+    this.props.refs ||
+    (this.props.getRefs || (() => ({} as Refs)))(this.getArgs());
+  _setState: React.Component<ComponentProps<State, Refs>, State>["setState"] = (
+    ...args
+  ) => this.setState(...args);
+  _forceUpdate: React.Component<
+    ComponentProps<State, Refs>,
+    State
+  >["forceUpdate"] = (...args) => this.forceUpdate(...args);
 
   getArgs() {
     const {
@@ -50,7 +62,10 @@ class Component extends React.Component {
     if (this.props.didMount) this.props.didMount(this.getArgs());
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(
+    nextProps: ComponentProps<State, Refs>,
+    nextState: State
+  ) {
     if (this.props.shouldUpdate)
       return this.props.shouldUpdate({
         props: this.props,
@@ -70,7 +85,11 @@ class Component extends React.Component {
       });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(
+    prevProps: ComponentProps<State, Refs>,
+    prevState: State,
+    snapshot: any
+  ) {
     if (this.props.didUpdate)
       this.props.didUpdate(
         Object.assign(this.getArgs(), {
@@ -81,7 +100,10 @@ class Component extends React.Component {
       );
   }
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
+  getSnapshotBeforeUpdate(
+    prevProps: ComponentProps<State, Refs>,
+    prevState: State
+  ) {
     if (this.props.getSnapshotBeforeUpdate) {
       return this.props.getSnapshotBeforeUpdate(
         Object.assign(this.getArgs(), {
@@ -105,7 +127,9 @@ class Component extends React.Component {
 }
 
 if (__DEV__) {
+  // @ts-ignore
   Component.displayName = "ComponentComponent";
+  // @ts-ignore
   Component.propTypes = {
     initialState: PropTypes.object,
     getInitialState: PropTypes.func,
@@ -123,3 +147,28 @@ if (__DEV__) {
 
 export { Component };
 export default Component;
+
+interface ComponentProps<State extends object = {}, Refs extends object = {}> {
+  [key: string]: any;
+  initialState?: State;
+  getInitialState?: (props: ComponentProps<State>) => State;
+  refs?: Refs;
+  getRefs?: (...args: any[]) => Refs;
+  didMount?: (...args: any[]) => void;
+  didUpdate?: (...args: any[]) => void;
+  willUnmount?: (...args: any[]) => void;
+  getSnapshotBeforeUpdate?: (...args: any[]) => any;
+  shouldUpdate?: (args: {
+    props: ComponentProps<State>;
+    state: State;
+    nextProps: ComponentProps<State>;
+    nextState: State;
+  }) => boolean;
+  render?: (...args: any[]) => React.ReactElement | null;
+  children?:
+    | ((...args: any[]) => React.ReactElement | null)
+    | React.ReactNode
+    | React.ReactElement
+    | Element
+    | null;
+}

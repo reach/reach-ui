@@ -2,6 +2,7 @@ import * as React from "react";
 import { render } from "@testing-library/react";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { RenderResult } from "@testing-library/react";
+import { Link as RouterLink, BrowserRouter } from "react-router-dom";
 
 interface ButtonProps {
   isDisabled?: boolean;
@@ -49,7 +50,7 @@ const ExtendedButton = React.forwardRef((props, forwardedRef) => {
   ExtendedButtonProps & ExtendedButtonButtonOwnProps
 >;
 
-type LinkProps = React.ComponentProps<"a"> & {
+type LinkProps = React.ComponentPropsWithRef<"a"> & {
   isPrimary?: boolean;
   onToggle?(open: boolean): void;
 };
@@ -81,7 +82,7 @@ export function Test() {
   const buttonAsLinkRef = React.useRef<React.ElementRef<typeof Link>>(null);
 
   return (
-    <>
+    <BrowserRouter>
       {/* Button accepts ref */}
       <Button ref={buttonRef} />
 
@@ -130,6 +131,9 @@ export function Test() {
       {/* Memoized button as "a" does not accept form prop */}
       {/* @ts-expect-error */}
       <MemoedButton as="a" form="form" />
+
+      {/* Button as RouterLink accepts to prop */}
+      <Button as={RouterLink} to="/route" />
 
       {/* Button as Link accepts href prop */}
       <Button as={Link} href="#" />
@@ -202,7 +206,7 @@ export function Test() {
 
       {/* Button as Anchor (Polymorphic.ForwardRefComponent) accepts requiredProp */}
       <Button as={Anchor} requiredProp />
-    </>
+    </BrowserRouter>
   );
 }
 

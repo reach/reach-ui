@@ -1,24 +1,22 @@
 {
-  "name": "@reach/checkbox",
+  "name": "@reach/dropdown",
   "version": "0.15.3",
-  "description": "Accessible components to build custom, tri-state checkboxes in React.",
+  "description": "React dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
-  "source": "",
   "sideEffects": [
     "*.css"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/reach/reach-ui.git",
-    "directory": "packages/checkbox"
+    "directory": "packages/dropdown"
   },
   "dependencies": {
     "@reach/auto-id": "0.15.3",
-    "@reach/machine": "0.15.3",
+    "@reach/descendants": "0.15.3",
+    "@reach/popover": "0.15.3",
     "@reach/utils": "0.15.3",
-    "prop-types": "^15.7.2",
-    "tiny-warning": "^1.0.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
@@ -29,9 +27,9 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/reach-checkbox.cjs.js",
-  "module": "dist/reach-checkbox.esm.js",
-  "types": "dist/reach-checkbox.cjs.d.ts",
+  "main": "dist/reach-dropdown.cjs.js",
+  "module": "dist/reach-dropdown.esm.js",
+  "types": "dist/reach-dropdown.cjs.d.ts",
   "files": [
     "README.md",
     "dist",

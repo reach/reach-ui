@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node 14
+        uses: actions/setup-node@v1
+        with:
+          version: 14.x
+
+      - name: Restore Lerna (Cache)
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Build Packages
+        run: yarn build
+
+      - name: Run Tests
+        run: yarn test
+
+  # TODO: Create separate workflow for website
+  # website:
+  #   name: Deploy Website
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ENCRYPTED_KEY: ${{ secrets.ENCRYPTED_KEY }}
+  #     ENCRYPTED_IV: ${{ secrets.ENCRYPTED_IV }}
+
+  #   if: ${{ github.ref == 'refs/heads/website' }}
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Restore Lerna (Cache)
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: |
+  #           node_modules
+  #           */*/node_modules
+  #         key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+
+  #     - name: Checkout
+  #       run: yarn --frozen-lockfile
+
+  #     - name: Build Packages
+  #       run: yarn build
+
+  #     - run: echo "Deploying website to https://reach.tech/"
+  #     - run: openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in website-deploy-key.enc -out website-deploy-key -d
+  #     - run: chmod 600 website-deploy-key
+  #     - run: eval $(ssh-agent -s)
+  #     - run: ssh-add website-deploy-key
+  #     - run: bash scripts/deploy-website.sh
