@@ -138,11 +138,24 @@ const DialogInner = React.forwardRef(function DialogInner(
     onDismiss = noop,
     onKeyDown,
     onMouseDown,
-    unstable_lockFocusAcrossFrames = true,
+    unstable_lockFocusAcrossFrames,
     ...props
   },
   forwardedRef
 ) {
+  let lockFocusAcrossFramesIsDefined =
+    unstable_lockFocusAcrossFrames !== undefined;
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (lockFocusAcrossFramesIsDefined) {
+        console.warn(
+          `The unstable_lockFocusAcrossFrames in @reach/dialog is deprecated. It will be removed in the next minor release.`
+        );
+      }
+    }, [lockFocusAcrossFramesIsDefined]);
+  }
+
   const mouseDownTarget = React.useRef<EventTarget | null>(null);
   const overlayNode = React.useRef<HTMLDivElement | null>(null);
   const ref = useComposedRefs(overlayNode, forwardedRef);
@@ -183,7 +196,7 @@ const DialogInner = React.forwardRef(function DialogInner(
       returnFocus
       onActivation={activateFocusLock}
       disabled={dangerouslyBypassFocusLock}
-      crossFrame={unstable_lockFocusAcrossFrames}
+      crossFrame={unstable_lockFocusAcrossFrames ?? true}
     >
       <RemoveScroll
         allowPinchZoom={allowPinchZoom}
@@ -363,6 +376,8 @@ interface DialogProps {
    * when the dialog is open.
    *
    * https://github.com/reach/reach-ui/issues/536
+   *
+   * @deprecated
    */
   unstable_lockFocusAcrossFrames?: boolean;
 }
