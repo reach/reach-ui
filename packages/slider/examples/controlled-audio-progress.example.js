@@ -49,5 +49,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const AudioProgress = Example;
-export default { title: "Slider" };
+export { Example };

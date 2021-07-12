@@ -38,5 +38,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const BasicTS = Example;
-export default { title: "Tooltip" };
+export { Example };

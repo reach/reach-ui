@@ -45,5 +45,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Hook = Example;
-export default { title: "MenuButton" };
+export { Example };

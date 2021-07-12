@@ -47,7 +47,7 @@ function MyCheckbox(props) {
   );
 }
 
-export function Example() {
+function Example() {
   return (
     <div>
       <label>
@@ -64,5 +64,4 @@ export function Example() {
 }
 
 Example.storyName = name;
-export const CustomComposed = Example;
-export default { title: "Checkbox" };
+export { Example };

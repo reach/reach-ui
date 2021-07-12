@@ -51,5 +51,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ChangeStylesTS = Example;
-export default { title: "Dialog" };
+export { Example };

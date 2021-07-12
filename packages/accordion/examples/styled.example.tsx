@@ -64,8 +64,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Styled = Example;
-export default { title: "Accordion" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

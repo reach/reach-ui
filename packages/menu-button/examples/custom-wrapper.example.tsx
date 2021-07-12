@@ -34,5 +34,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const CustomWrapperTS = Example;
-export default { title: "MenuButton" };
+export { Example };

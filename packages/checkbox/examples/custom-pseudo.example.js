@@ -29,5 +29,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const CustomPseudo = Example;
-export default { title: "Checkbox" };
+export { Example };

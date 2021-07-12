@@ -50,5 +50,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Hidden = Example;
-export default { title: "Popover" };
+export { Example };

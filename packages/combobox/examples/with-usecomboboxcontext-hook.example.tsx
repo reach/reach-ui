@@ -51,8 +51,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithHook = Example;
-export default { title: "Combobox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

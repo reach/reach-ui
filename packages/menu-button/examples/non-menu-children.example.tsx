@@ -30,8 +30,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const NonMenuChildrenTS = Example;
-export default { title: "MenuButton" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -31,8 +31,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const CustomGroup = Example;
-export default { title: "Checkbox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -56,5 +56,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Lifecycles = Example;
-export default { title: "ComponentComponent" };
+export { Example };

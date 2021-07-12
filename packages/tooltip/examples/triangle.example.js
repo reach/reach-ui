@@ -34,8 +34,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Triangle = Example;
-export default { title: "Tooltip" };
+export { Example };
 
 // Center the tooltip, but collisions will win
 const centered = (triggerRect, tooltipRect) => {

@@ -30,8 +30,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithDisabledLinks = Example;
-export default { title: "MenuButton" };
+export { Example };
 
 let memoryHistory = createHistory(createMemorySource("/"));
 

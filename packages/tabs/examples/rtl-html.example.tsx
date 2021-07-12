@@ -43,5 +43,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const RtlHTML = Example;
-export default { title: "Tabs" };
+export { Example };

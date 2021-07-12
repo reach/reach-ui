@@ -37,8 +37,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Corners = Example;
-export default { title: "MenuButton" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
-import { actions } from "@storybook/addon-actions";
+import { action } from "@storybook/addon-actions";
 
 let name = "Basic";
 
@@ -23,7 +23,7 @@ function Example() {
         <SkipNavContent />
         <main>
           <h1>Welcome to the good stuff!</h1>
-          <button onClick={actions("Focus click")}>Focus me</button>
+          <button onClick={action("Focus click")}>Focus me</button>
         </main>
       </div>
     </div>
@@ -31,5 +31,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Basic = Example;
-export default { title: "Skip Nav" };
+export { Example };

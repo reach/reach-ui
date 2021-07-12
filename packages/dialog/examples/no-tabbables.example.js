@@ -24,5 +24,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const NoTabbables = Example;
-export default { title: "Dialog" };
+export { Example };

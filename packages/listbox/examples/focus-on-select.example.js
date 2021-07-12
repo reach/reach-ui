@@ -51,5 +51,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const MoveFocusOnItemSelect = Example;
-export default { title: "Listbox" };
+export { Example };

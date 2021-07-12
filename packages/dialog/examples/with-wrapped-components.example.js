@@ -35,8 +35,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithWrappedComponents = Example;
-export default { title: "Dialog" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

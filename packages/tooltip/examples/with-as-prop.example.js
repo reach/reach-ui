@@ -42,5 +42,4 @@ function Tooltip(props) {
 }
 
 Example.storyName = name;
-export const WithAsProp = Example;
-export default { title: "Tooltip" };
+export { Example };

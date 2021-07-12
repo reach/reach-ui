@@ -25,5 +25,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Basic = Example;
-export default { title: "Slider" };
+export { Example };

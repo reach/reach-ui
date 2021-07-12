@@ -33,5 +33,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const BasicStrict = Example;
-export default { title: "Tabs" };
+export { Example };

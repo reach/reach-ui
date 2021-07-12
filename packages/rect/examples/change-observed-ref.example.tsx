@@ -25,5 +25,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ChangeObservedRef = Example;
-export default { title: "Rect" };
+export { Example };

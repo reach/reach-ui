@@ -38,5 +38,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithSeparateOverlay = Example;
-export default { title: "Dialog" };
+export { Example };

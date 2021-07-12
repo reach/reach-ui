@@ -37,5 +37,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Basic = Example;
-export default { title: "Portal" };
+export { Example };

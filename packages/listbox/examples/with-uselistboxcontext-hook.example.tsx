@@ -82,5 +82,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithHook = Example;
-export default { title: "Listbox" };
+export { Example };

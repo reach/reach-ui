@@ -23,5 +23,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Animated = Example;
-export default { title: "MenuButton" };
+export { Example };

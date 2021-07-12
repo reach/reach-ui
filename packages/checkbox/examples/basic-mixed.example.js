@@ -36,5 +36,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const BasicMixed = Example;
-export default { title: "Checkbox" };
+export { Example };

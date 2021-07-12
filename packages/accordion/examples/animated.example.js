@@ -96,5 +96,4 @@ const AnimatedPanel = React.forwardRef(({ children }, forwardedRef) => {
 });
 
 Example.storyName = name;
-export const Animated = Example;
-export default { title: "Accordion" };
+export { Example };

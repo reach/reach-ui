@@ -62,5 +62,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const MultipleCollapsible = Example;
-export default { title: "Accordion" };
+export { Example };

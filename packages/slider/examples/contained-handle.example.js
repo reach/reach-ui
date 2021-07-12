@@ -9,5 +9,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ContainedHandle = Example;
-export default { title: "Slider" };
+export { Example };

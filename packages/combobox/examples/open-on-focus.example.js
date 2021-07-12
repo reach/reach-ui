@@ -48,8 +48,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const OpenOnFocus = Example;
-export default { title: "Combobox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -107,8 +107,7 @@ function PositionedPopover({ ...props }: ListboxPopoverProps) {
 }
 
 Example.storyName = name;
-export const PositionPopoverOverSelected = Example;
-export default { title: "Listbox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -15,7 +15,7 @@ const alias = packages.reduce((memo, pkg) => {
 }, {});
 
 module.exports = {
-  stories: ["../packages/**/*/*.example.@(js|ts|tsx)"],
+  stories: ["../packages/**/*/*.story.@(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
     "@storybook/addon-docs/register",

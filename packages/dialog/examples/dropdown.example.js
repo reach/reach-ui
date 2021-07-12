@@ -32,5 +32,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Dropdown = Example;
-export default { title: "Dialog" };
+export { Example };

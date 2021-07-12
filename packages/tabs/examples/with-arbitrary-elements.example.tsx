@@ -53,5 +53,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithArbitraryElems = Example;
-export default { title: "Tabs" };
+export { Example };

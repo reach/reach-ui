@@ -39,5 +39,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithDisabledItems = Example;
-export default { title: "Dropdown" };
+export { Example };

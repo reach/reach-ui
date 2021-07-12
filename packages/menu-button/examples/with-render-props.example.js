@@ -28,5 +28,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithRenderProps = Example;
-export default { title: "MenuButton" };
+export { Example };

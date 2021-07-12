@@ -74,8 +74,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithFormTS = Example;
-export default { title: "Listbox" };
+export { Example };
 
 function formToJSON(form: any) {
   let field;

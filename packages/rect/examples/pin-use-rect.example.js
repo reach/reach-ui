@@ -56,5 +56,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const PinRect = Example;
-export default { title: "Rect" };
+export { Example };

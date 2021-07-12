@@ -136,7 +136,7 @@ function Example() {
 
 // Assign the name to the example and then export it as a named constant
 Example.storyName = name;
-export const CustomFocusLock = Example;
+export { Example };
 
 // Default export an object with the title matching the name of the Reach package
 export default { title: "Dialog" };

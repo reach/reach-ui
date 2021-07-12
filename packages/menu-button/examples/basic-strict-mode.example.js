@@ -24,5 +24,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const BasicStrict = Example;
-export default { title: "MenuButton" };
+export { Example };

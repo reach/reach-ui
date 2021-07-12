@@ -8,5 +8,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithAsProp = Example;
-export default { title: "VisuallyHidden" };
+export { Example };

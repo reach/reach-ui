@@ -37,5 +37,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Nested = Example;
-export default { title: "Dialog" };
+export { Example };

@@ -79,5 +79,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const TodoList = Example;
-export default { title: "ComponentComponent" };
+export { Example };

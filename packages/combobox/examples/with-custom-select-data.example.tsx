@@ -66,19 +66,15 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithCustomOnSelectData = Example;
-export default { title: "Combobox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 const ComboboxContext = React.createContext<ComboboxContextValue>({} as any);
 
 function Combobox({ onSelect: onSelectProp, ...props }: ComboboxProps) {
-  const {
-    addOptionData,
-    getOptionData,
-    removeOptionData,
-  } = useOptionDataFactory();
+  const { addOptionData, getOptionData, removeOptionData } =
+    useOptionDataFactory();
 
   const onSelectRef = React.useRef(onSelectProp);
   React.useEffect(() => {

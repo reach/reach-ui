@@ -61,5 +61,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ComposedTS = Example;
-export default { title: "Listbox" };
+export { Example };

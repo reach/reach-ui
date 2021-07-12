@@ -33,5 +33,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithOtherTabbables = Example;
-export default { title: "MenuButton" };
+export { Example };

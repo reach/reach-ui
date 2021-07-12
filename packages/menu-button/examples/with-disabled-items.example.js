@@ -33,5 +33,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithDisabledItems = Example;
-export default { title: "MenuButton" };
+export { Example };

@@ -98,5 +98,4 @@ function formatOption(string: string) {
 }
 
 Example.storyName = name;
-export const WithNestedTabbables = Example;
-export default { title: "Listbox" };
+export { Example };

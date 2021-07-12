@@ -42,5 +42,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Controlled = Example;
-export default { title: "Disclosure" };
+export { Example };

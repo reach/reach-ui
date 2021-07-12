@@ -47,5 +47,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ReadOnly = Example;
-export default { title: "Accordion" };
+export { Example };

@@ -32,5 +32,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const LongContent = Example;
-export default { title: "Dialog" };
+export { Example };

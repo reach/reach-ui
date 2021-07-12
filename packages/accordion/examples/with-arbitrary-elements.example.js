@@ -61,8 +61,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ArbitraryElems = Example;
-export default { title: "Accordion" };
+export { Example };
 
 function ExampleAccordionBody({ children }) {
   return <AccordionPanel style={{ padding: 16 }}>{children}</AccordionPanel>;

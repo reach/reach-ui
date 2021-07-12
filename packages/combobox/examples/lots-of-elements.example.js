@@ -62,5 +62,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const LotsOfElems = Example;
-export default { title: "Combobox" };
+export { Example };

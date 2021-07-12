@@ -66,5 +66,4 @@ function GroupedTabs() {
 }
 
 Example.storyName = name;
-export const WrappersWild = Example;
-export default { title: "Tabs" };
+export { Example };

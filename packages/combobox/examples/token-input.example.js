@@ -88,8 +88,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const TokenInput = Example;
-export default { title: "Combobox" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -47,5 +47,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithDialog = Example;
-export default { title: "Tooltip" };
+export { Example };

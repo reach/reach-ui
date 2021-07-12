@@ -22,5 +22,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const NoPortal = Example;
-export default { title: "MenuButton" };
+export { Example };

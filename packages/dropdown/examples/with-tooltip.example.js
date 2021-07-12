@@ -38,5 +38,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithTooltip = Example;
-export default { title: "Dropdown" };
+export { Example };

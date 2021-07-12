@@ -26,5 +26,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Dismiss = Example;
-export default { title: "Dialog" };
+export { Example };

@@ -48,5 +48,4 @@ function MyMenu() {
 }
 
 Example.storyName = name;
-export const LongText = Example;
-export default { title: "MenuButton" };
+export { Example };

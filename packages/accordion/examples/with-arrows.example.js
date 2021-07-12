@@ -46,8 +46,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithArrows = Example;
-export default { title: "Accordion" };
+export { Example };
 
 function ArrowButton({ children, active, ...props }) {
   return (

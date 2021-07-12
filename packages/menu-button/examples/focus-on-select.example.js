@@ -61,5 +61,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const MoveFocusOnItemSelect = Example;
-export default { title: "MenuButton" };
+export { Example };

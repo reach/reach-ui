@@ -13,8 +13,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const RtlDIR = Example;
-export default { title: "Tabs" };
+export { Example };
 
 function MyTabs() {
   return (

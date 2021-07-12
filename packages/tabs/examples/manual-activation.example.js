@@ -31,5 +31,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ManualActivation = Example;
-export default { title: "Tabs" };
+export { Example };

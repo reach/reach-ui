@@ -41,5 +41,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Autofocus = Example;
-export default { title: "Dialog" };
+export { Example };

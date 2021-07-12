@@ -64,7 +64,6 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithContextHooks = Example;
-export default { title: "Accordion" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -23,5 +23,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const VerticalTS = Example;
-export default { title: "Slider" };
+export { Example };

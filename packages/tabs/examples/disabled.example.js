@@ -33,5 +33,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Disabled = Example;
-export default { title: "Tabs" };
+export { Example };

@@ -71,5 +71,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ControlledTS = Example;
-export default { title: "Slider" };
+export { Example };

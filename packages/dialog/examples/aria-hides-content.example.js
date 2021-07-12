@@ -41,5 +41,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const AriaHides = Example;
-export default { title: "Dialog" };
+export { Example };

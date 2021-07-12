@@ -52,5 +52,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const MixedDisabled = Example;
-export default { title: "Checkbox" };
+export { Example };

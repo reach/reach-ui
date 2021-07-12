@@ -76,5 +76,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Multiple = Example;
-export default { title: "Accordion" };
+export { Example };

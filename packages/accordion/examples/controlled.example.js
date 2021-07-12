@@ -64,5 +64,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Controlled = Example;
-export default { title: "Accordion" };
+export { Example };

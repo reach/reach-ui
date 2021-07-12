@@ -66,5 +66,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const GroupedWithComposedLabel = Example;
-export default { title: "Listbox" };
+export { Example };

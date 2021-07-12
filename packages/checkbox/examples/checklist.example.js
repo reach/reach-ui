@@ -111,5 +111,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Checklist = Example;
-export default { title: "Checkbox" };
+export { Example };

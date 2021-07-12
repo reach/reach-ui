@@ -46,5 +46,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const DestroyTrigger = Example;
-export default { title: "Dialog" };
+export { Example };

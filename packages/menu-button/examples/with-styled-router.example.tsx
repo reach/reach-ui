@@ -40,8 +40,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithStyledRouter = Example;
-export default { title: "MenuButton" };
+export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 

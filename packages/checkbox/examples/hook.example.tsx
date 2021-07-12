@@ -23,5 +23,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const MixedHook = Example;
-export default { title: "Checkbox" };
+export { Example };

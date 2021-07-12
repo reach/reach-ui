@@ -39,5 +39,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const VerticalRTL = Example;
-export default { title: "Tabs" };
+export { Example };

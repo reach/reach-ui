@@ -39,8 +39,7 @@ function Example() {
 }
 
 Example.storyName = name;
-export const Animated = Example;
-export default { title: "Tooltip" };
+export { Example };
 
 function ExampleAnimatedTooltip({ children, ...rest }) {
   const [trigger, tooltip, isVisible] = useTooltip();

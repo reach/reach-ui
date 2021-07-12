@@ -48,5 +48,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const WithButton = Example;
-export default { title: "Combobox" };
+export { Example };

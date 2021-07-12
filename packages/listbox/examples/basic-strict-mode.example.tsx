@@ -40,5 +40,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const BasicStrictMode = Example;
-export default { title: "Listbox" };
+export { Example };

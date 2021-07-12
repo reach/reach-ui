@@ -60,7 +60,14 @@ function Example() {
   );
 }
 
-function GithubUserOption({ userName, displayName, githubAvatar, ...props }) {
+function GithubUserOption({
+  displayName,
+  githubAvatar,
+  twitterAvatar,
+  twitterHandle,
+  userName,
+  ...props
+}) {
   return (
     <GithubStyledOption value={userName} label={displayName} {...props}>
       <GithubOptionInner>
@@ -77,9 +84,11 @@ function GithubUserOption({ userName, displayName, githubAvatar, ...props }) {
 }
 
 function TwitterUserOption({
-  twitterHandle,
   displayName,
+  githubAvatar,
   twitterAvatar,
+  twitterHandle,
+  userName,
   ...props
 }) {
   return (
@@ -101,9 +110,19 @@ function TwitterUserOption({
 }
 
 Example.storyName = name;
-export const Styled = Example;
-export default { title: "Listbox" };
+export { Example };
 
+/**
+ * @typedef {Object} User
+ * @property {string} displayName
+ * @property {string} twitterHandle
+ * @property {string} twitterAvatar
+ * @property {string} githubAvatar
+ */
+
+/**
+ * @type {Record<string, User}
+ */
 let users = {
   bradwestfall: {
     displayName: "Brad Westfall",

@@ -52,5 +52,4 @@ function Example() {
 }
 
 Example.storyName = name;
-export const ConditionalItems = Example;
-export default { title: "MenuButton" };
+export { Example };
