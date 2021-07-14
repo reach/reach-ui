@@ -136,9 +136,11 @@ function useRect<T extends Element = HTMLElement>(
   }, [element]);
 
   useLayoutEffect(() => {
-    let observer: ReturnType<typeof observeRect>;
-    let elem = element;
+    if (!observe) {
+      return;
+    }
 
+    let elem = element;
     // State initializes before refs are placed, meaning the element state will
     // be undefined on the first render. We still want the rect on the first
     // render, so initially we'll use the nodeRef that was passed instead of
@@ -148,28 +150,21 @@ function useRect<T extends Element = HTMLElement>(
       elem = nodeRef.current;
     }
 
-    if (!observe) {
-      return cleanup;
-    }
-
     if (!elem) {
       if (__DEV__) {
         console.warn("You need to place the ref");
       }
-      return cleanup;
+      return;
     }
 
-    observer = observeRect(elem, (rect) => {
+    let observer = observeRect(elem, (rect) => {
       onChangeRef.current?.(rect);
       setRect(rect);
     });
-
     observer.observe();
-    return cleanup;
-
-    function cleanup() {
-      observer && observer.unobserve();
-    }
+    return () => {
+      observer.unobserve();
+    };
   }, [observe, element, nodeRef]);
 
   return rect;
