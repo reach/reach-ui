@@ -5,7 +5,7 @@
  * implementation.
  *
  * Some background:
- *   1. Accessibiliy APIs rely heavily on element IDs
+ *   1. Accessibility APIs rely heavily on element IDs
  *   2. Requiring developers to put IDs on every element in Reach UI is both
  *      cumbersome and error-prone
  *   3. With a component model, we can generate IDs for them!
