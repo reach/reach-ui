@@ -96,10 +96,12 @@ const DropdownProvider: React.FC<DropdownProviderProps> = ({
   // If the popover's position overlaps with an option when the popover
   // initially opens, the mouseup event will trigger a select. To prevent that,
   // we decide the control is only ready to make a selection if the pointer
-  // moves first, otherwise the user is just registering the initial button
-  // click rather than selecting an item. This is similar to a native select on
-  // most platforms, and our dropdown popover works similarly.
+  // moves a certain distance OR if the mouse button is pressed for a certain
+  // length of time, otherwise the user is just registering the initial button
+  // click rather than selecting an item.
+  // For context on some implementation details, see https://github.com/reach/reach-ui/issues/563
   let readyToSelect = React.useRef(false);
+  let mouseDownStartPosRef = React.useRef({ x: 0, y: 0 });
 
   // Trying a new approach for splitting up contexts by stable/unstable
   // references. We'll see how it goes!
@@ -107,6 +109,7 @@ const DropdownProvider: React.FC<DropdownProviderProps> = ({
     dispatch,
     dropdownId,
     dropdownRef,
+    mouseDownStartPosRef,
     popoverRef,
     readyToSelect,
     selectCallbacks,
@@ -181,10 +184,11 @@ function useDropdownTrigger({
     ref: React.ForwardedRef<HTMLButtonElement>;
   }) {
   let {
-    triggerRef,
-    triggerClickedRef,
     dispatch,
     dropdownId,
+    mouseDownStartPosRef,
+    triggerClickedRef,
+    triggerRef,
     state: { triggerId, isExpanded },
   } = useDropdownContext();
   let ref = useComposedRefs(triggerRef, forwardedRef);
@@ -228,6 +232,11 @@ function useDropdownTrigger({
     if (isRightClick(event.nativeEvent)) {
       return;
     }
+
+    mouseDownStartPosRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+    };
 
     if (!isExpanded) {
       triggerClickedRef.current = true;
@@ -293,11 +302,12 @@ function useDropdownItem({
     ref: React.ForwardedRef<HTMLDivElement>;
   }) {
   let {
-    triggerRef,
-    dropdownRef,
     dispatch,
+    dropdownRef,
+    mouseDownStartPosRef,
     readyToSelect,
     selectCallbacks,
+    triggerRef,
     state: { selectionIndex, isExpanded },
   } = useDropdownContext();
   let ownRef = React.useRef<HTMLElement | null>(null);
@@ -402,8 +412,15 @@ function useDropdownItem({
     dispatch({ type: CLEAR_SELECTION_INDEX });
   }
 
-  function handleMouseMove() {
-    readyToSelect.current = true;
+  function handleMouseMove(event: React.MouseEvent) {
+    if (!readyToSelect.current) {
+      let threshold = 8;
+      let deltaX = Math.abs(event.clientX - mouseDownStartPosRef.current.x);
+      let deltaY = Math.abs(event.clientY - mouseDownStartPosRef.current.y);
+      if (deltaX > threshold || deltaY > threshold) {
+        readyToSelect.current = true;
+      }
+    }
     if (!isSelected && index != null && !disabled) {
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
@@ -453,9 +470,20 @@ function useDropdownItem({
     }
   }
 
-  // When the dropdown closes, reset readyToSelect for the next interaction.
   React.useEffect(() => {
-    if (!isExpanded) {
+    if (isExpanded) {
+      // When the dropdown opens, wait for about half a second before enabling
+      // selection. This is designed to mirror dropdown menus on macOS, where
+      // opening a menu on top of a trigger would otherwise result in an
+      // immediate accidental selection once the click trigger is released.
+      let id = window.setTimeout(() => {
+        readyToSelect.current = true;
+      }, 400);
+      return () => {
+        window.clearTimeout(id);
+      };
+    } else {
+      // When the dropdown closes, reset readyToSelect for the next interaction.
       readyToSelect.current = false;
     }
   }, [isExpanded, readyToSelect]);
@@ -995,6 +1023,7 @@ interface InternalDropdownContextValue {
   dispatch: React.Dispatch<DropdownAction>;
   dropdownId: string | undefined;
   dropdownRef: DropdownRef;
+  mouseDownStartPosRef: React.MutableRefObject<{ x: number; y: number }>;
   popoverRef: PopoverRef;
   readyToSelect: React.MutableRefObject<boolean>;
   selectCallbacks: React.MutableRefObject<(() => void)[]>;
