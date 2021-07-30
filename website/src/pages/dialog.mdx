@@ -209,7 +209,7 @@ function Example(props) {
 
 ##### Dialog `onDismiss`
 
-`onDismiss?: (event?: React.SyntheticEvent) => void`
+`onDismiss?(event: React.MouseEvent | React.KeyboardEvent): void`
 
 This function is called whenever the user hits "Escape" or clicks outside the dialog. _It's important to close the dialog `onDismiss`_ as seen in all the demos on this page.
 

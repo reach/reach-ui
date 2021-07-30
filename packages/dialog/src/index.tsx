@@ -359,7 +359,7 @@ interface DialogProps {
    *
    * @see Docs https://reach.tech/dialog#dialog-ondismiss
    */
-  onDismiss?: (event?: React.SyntheticEvent) => void;
+  onDismiss?(event: React.MouseEvent | React.KeyboardEvent): void;
   /**
    * By default, React Focus Lock prevents focus from being moved outside of the
    * locked element even if the thing trying to take focus is in another frame.

@@ -120,12 +120,8 @@ const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   { children, ...props },
   forwardedRef
 ) {
-  let {
-    descriptionId,
-    labelId,
-    leastDestructiveRef,
-    overlayRef,
-  } = React.useContext(AlertDialogContext);
+  let { descriptionId, labelId, leastDestructiveRef, overlayRef } =
+    React.useContext(AlertDialogContext);
   React.useEffect(() => {
     let ownerDocument = getOwnerDocument(overlayRef.current)!;
     if (labelId) {
@@ -299,7 +295,7 @@ interface AlertDialogProps extends DialogProps {
    *
    * @see Docs: https://reach.tech/alert-dialog#alertdialog-ondismiss
    */
-  onDismiss?: (event?: React.SyntheticEvent) => void;
+  onDismiss?(event: React.MouseEvent | React.KeyboardEvent): void;
   /**
    * To prevent accidental data loss, an alert dialog should focus the least
    * destructive action button when it opens.
