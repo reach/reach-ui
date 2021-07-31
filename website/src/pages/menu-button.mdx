@@ -81,13 +81,33 @@ import "@reach/menu-button/styles.css";
 
 ### Menu
 
-The wrapper component for the other components. No DOM element is rendered.
+The wrapper component for the other components.
+
+`Menu` does not render a DOM element by default, but you may pass the `as` prop if you want to wrap the child components. This may be useful if `portal` is set to `false` on either `MenuList` or `MenuItems` and you want to use a relatively positioned element to make styling the popover easier.
+
+#### Menu CSS Selectors
+
+```css
+/* NOTE: This selector only works if a DOM node is rendered via the `as` prop  */
+[data-reach-menu] {
+}
+```
 
 #### Menu Props
 
-| Prop                         | Type   | Required |
-| ---------------------------- | ------ | -------- |
-| [`children`](#menu-children) | `node` | false    |
+| Prop                         | Type                          | Required |
+| ---------------------------- | ----------------------------- | -------- |
+| [`as`](#menu-as)             | `string` <Pipe /> `Component` | false    |
+| [`children`](#menu-children) | `node`                        | false    |
+| [`id`](#menu-id)             | `string`                      | false    |
+
+##### Menu `as`
+
+`as?: keyof JSX.IntrinsicElements | React.ComponentType`
+
+A string representing an HTML element or a React component that will tell the `Menu` what underlying element to render. Defaults to `React.Fragment`.
+
+<AsPropWarning />
 
 ##### Menu `children`
 
@@ -132,6 +152,14 @@ function Example() {
   );
 }
 ```
+
+##### Menu `id`
+
+`id?: string`
+
+A unique identifier. If provided, children elements will derive their DOM id attributes from this value, so it's important that it is unique in the context of its page.
+
+If the `as` prop is used to render a DOM element, the `id` will also be forwarded along to that element.
 
 ### MenuButton
 
