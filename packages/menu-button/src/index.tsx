@@ -25,6 +25,7 @@ import {
 } from "@reach/dropdown";
 import { noop } from "@reach/utils/noop";
 import { useCheckStyles } from "@reach/utils/dev-utils";
+import { isFragment } from "react-is";
 
 import type { Position } from "@reach/popover";
 import type * as Polymorphic from "@reach/utils/polymorphic";
@@ -38,10 +39,35 @@ import type * as Polymorphic from "@reach/utils/polymorphic";
  *
  * @see Docs https://reach.tech/menu-button#menu
  */
-const Menu: React.FC<MenuProps> = ({ id, children }) => {
-  useCheckStyles("menu-button");
-  return <DropdownProvider id={id} children={children} />;
-};
+const Menu = React.forwardRef(
+  ({ as: Comp = React.Fragment, id, children, ...rest }, forwardedRef) => {
+    useCheckStyles("menu-button");
+    let parentIsFragment = React.useMemo(() => {
+      try {
+        // To test if the component renders a fragment we need to actually
+        // render it, but this may throw an error since we can't predict what is
+        // actually provided. There's technically a small chance that this could
+        // get it wrong but I don't think it's too likely in practice.
+        return isFragment(<Comp />);
+      } catch (err) {
+        return false;
+      }
+    }, [Comp]);
+    let props = parentIsFragment
+      ? {}
+      : {
+          ref: forwardedRef,
+          id,
+          "data-reach-menu": "",
+          ...rest,
+        };
+    return (
+      <Comp {...props}>
+        <DropdownProvider id={id} children={children} />
+      </Comp>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<any, MenuProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menu-props
@@ -386,8 +412,6 @@ const MenuPopover = React.forwardRef(
     } = useDropdownPopover({ ...rest, ref: forwardedRef });
 
     let sharedProps = {
-      // TODO: remove in 1.0
-      "data-reach-menu": "",
       "data-reach-menu-popover": "",
     };
 
