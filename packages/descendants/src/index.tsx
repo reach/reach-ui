@@ -116,18 +116,17 @@ function DescendantProvider<DescendantType extends Descendant>({
       set((items) => {
         let newItems: DescendantType[];
         if (explicitIndex != null) {
-          newItems = [
+          return [
             ...items,
             {
               ...rest,
               element,
               index: explicitIndex,
             } as DescendantType,
-          ];
+          ].sort((a, b) => a.index - b.index);
         } else if (items.length === 0) {
           // If there are no items, register at index 0 and bail.
           newItems = [
-            ...items,
             {
               ...rest,
               element,
@@ -284,36 +283,34 @@ function useDescendantKeyDown<
       ? descendants.filter(filter)
       : descendants;
 
-    // Current index should map to the updated array vs. the original
-    // descendants array.
-    if (filter) {
-      index = selectableDescendants.findIndex(
-        (descendant) => descendant.index === currentIndex
-      );
-    }
-
     // We need some options for any of this to work!
     if (!selectableDescendants.length) {
       return;
     }
 
+    let selectableIndex = selectableDescendants.findIndex(
+      (descendant) => descendant.index === currentIndex
+    );
+
     function getNextOption() {
-      let atBottom = index === selectableDescendants.length - 1;
+      let atBottom = index === getLastOption().index;
       return atBottom
         ? rotate
           ? getFirstOption()
-          : selectableDescendants[index]
-        : selectableDescendants[(index + 1) % selectableDescendants.length];
+          : selectableDescendants[selectableIndex]
+        : selectableDescendants[
+            (selectableIndex + 1) % selectableDescendants.length
+          ];
     }
 
     function getPreviousOption() {
-      let atTop = index === 0;
+      let atTop = index === getFirstOption().index;
       return atTop
         ? rotate
           ? getLastOption()
-          : selectableDescendants[index]
+          : selectableDescendants[selectableIndex]
         : selectableDescendants[
-            (index - 1 + selectableDescendants.length) %
+            (selectableIndex - 1 + selectableDescendants.length) %
               selectableDescendants.length
           ];
     }
