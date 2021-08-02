@@ -23,4 +23,5 @@ export * from "./use-isomorphic-layout-effect";
 export * from "./use-lazy-ref";
 export * from "./use-previous";
 export * from "./use-stable-callback";
+export * from "./use-stateful-ref-value";
 export * from "./use-update-effect";
