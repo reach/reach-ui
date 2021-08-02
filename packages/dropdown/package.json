@@ -1,6 +1,6 @@
 {
   "name": "@reach/dropdown",
-  "version": "0.15.3",
+  "version": "0.16.0",
   "description": "React dropdown menu.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,10 +13,10 @@
     "directory": "packages/dropdown"
   },
   "dependencies": {
-    "@reach/auto-id": "0.15.3",
-    "@reach/descendants": "0.15.3",
-    "@reach/popover": "0.15.3",
-    "@reach/utils": "0.15.3",
+    "@reach/auto-id": "0.16.0",
+    "@reach/descendants": "0.16.0",
+    "@reach/popover": "0.16.0",
+    "@reach/utils": "0.16.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
