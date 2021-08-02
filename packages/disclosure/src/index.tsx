@@ -69,9 +69,20 @@ const Disclosure: React.FC<DisclosureProps> = ({
     useId(props.id != null ? String(props.id) : undefined) || "disclosure";
   const panelId = makeId("panel", id);
 
+  // If a disclosure is uncontrolled, we set its initial state to `true` instead
+  // of using its default state prop. This is because we want disclosures to
+  // generally be accessible without JavaScript enabled. After the first render
+  // we will set state to the `defaultOpen` value.
   const [open, setOpen] = React.useState(
-    isControlled ? (openProp as boolean) : defaultOpen
+    isControlled ? (openProp as boolean) : true
   );
+  React.useEffect(() => {
+    if (!isControlled) {
+      setOpen(defaultOpen);
+    }
+    // explicitly only run on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (__DEV__) {
     warning(
