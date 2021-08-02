@@ -223,12 +223,8 @@ const CustomCheckboxInput = React.forwardRef(function CustomCheckboxInput(
   { as: Comp = "input", onBlur, onFocus, ...props },
   forwardedRef
 ) {
-  let {
-    focused,
-    inputProps,
-    inputRef,
-    setFocused,
-  } = useCustomCheckboxContext();
+  let { focused, inputProps, inputRef, setFocused } =
+    useCustomCheckboxContext();
 
   let ref = useComposedRefs(forwardedRef, inputRef);
   let mounted = React.useRef(true);
@@ -301,10 +297,10 @@ const CustomCheckbox = React.forwardRef(function CustomCheckbox(
   forwardedRef
 ) {
   return (
-    // @ts-ignore
     <CustomCheckboxContainer
       {...props}
       data-reach-custom-checkbox=""
+      // @ts-ignore
       __componentName="CustomCheckbox"
     >
       <CustomCheckboxInput
