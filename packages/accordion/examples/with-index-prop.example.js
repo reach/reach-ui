@@ -65,9 +65,8 @@ function Example() {
       >
         Shuffle Items
       </button>
-      <Accordion defaultIndex={2} onChange={action(`Selecting panel`)}>
+      <Accordion onChange={action(`Selecting panel`)}>
         {items.map((item, index) => {
-          console.log({ indexInLoop: index });
           return (
             <AccordionItem
               key={item.button}
