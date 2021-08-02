@@ -86,8 +86,8 @@ const StyledButton = styled(AccordionButton)`
   box-shadow: none;
   padding: 0.375em 0.5em;
 
-  &[data-disabled] {
-    color: rgba(255, 255, 255, 0.5);
+  &[disabled] {
+    opacity: 0.5;
   }
 
   &:focus {
