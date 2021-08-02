@@ -47,6 +47,7 @@ import {
   useControlledSwitchWarning,
 } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
+import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useCreateMachine, useMachine } from "@reach/machine";
 import {
@@ -118,9 +119,8 @@ const ListboxInput = React.forwardRef(function ListboxInput(
   // DOM refs
   let buttonRef = React.useRef<ListboxNodeRefs["button"]>(null);
   let hiddenInputRef = React.useRef<HTMLInputElement>(null);
-  let highlightedOptionRef = React.useRef<ListboxNodeRefs["highlightedOption"]>(
-    null
-  );
+  let highlightedOptionRef =
+    React.useRef<ListboxNodeRefs["highlightedOption"]>(null);
   let inputRef = React.useRef<ListboxNodeRefs["input"]>(null);
   let listRef = React.useRef<ListboxNodeRefs["list"]>(null);
   let popoverRef = React.useRef<ListboxNodeRefs["popover"]>(null);
@@ -756,9 +756,8 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
   },
   forwardedRef
 ) {
-  let { isExpanded, buttonRef, popoverRef, send } = React.useContext(
-    ListboxContext
-  );
+  let { isExpanded, buttonRef, popoverRef, send } =
+    React.useContext(ListboxContext);
   let ref = useComposedRefs(popoverRef, forwardedRef);
 
   let handleKeyDown = useKeyDown();
@@ -952,15 +951,16 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   let label = labelProp || labelState || "";
 
   let ownRef = React.useRef<HTMLElement | null>(null);
-  useDescendant(
-    {
-      element: ownRef.current!,
+  let [element, handleRefSet] = useStatefulRefValue(ownRef, null);
+  let descendant = React.useMemo(() => {
+    return {
+      element,
       value,
       label,
       disabled: !!disabled,
-    },
-    ListboxDescendantContext
-  );
+    };
+  }, [disabled, element, label, value]);
+  useDescendant(descendant, ListboxDescendantContext);
 
   // After the ref is mounted to the DOM node, we check to see if we have an
   // explicit label prop before looking for the node's textContent for
@@ -985,7 +985,7 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   let ref = useComposedRefs(
     getLabelFromDomNode,
     forwardedRef,
-    ownRef,
+    handleRefSet,
     isSelected ? selectedOptionRef : null,
     isHighlighted ? highlightedOptionRef : null
   );

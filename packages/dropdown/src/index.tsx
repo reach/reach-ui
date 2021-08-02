@@ -15,6 +15,7 @@ import { getOwnerDocument } from "@reach/utils/owner-document";
 import { createNamedContext } from "@reach/utils/context";
 import { isFunction, isString } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
+import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 
@@ -325,21 +326,24 @@ function useDropdownItem({
     [valueTextProp]
   );
 
-  let ref = useComposedRefs(forwardedRef, ownRef, setValueTextFromDOM);
-
   let mouseEventStarted = React.useRef(false);
 
-  let index = useDescendant(
-    {
-      element: ownRef.current!,
+  let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
+    ownRef,
+    null
+  );
+  let descendant = React.useMemo(() => {
+    return {
+      element,
       key: valueText,
       disabled,
       isLink,
-    },
-    DropdownDescendantContext,
-    indexProp
-  );
+    };
+  }, [disabled, element, isLink, valueText]);
+  let index = useDescendant(descendant, DropdownDescendantContext, indexProp);
   let isSelected = index === selectionIndex && !disabled;
+
+  let ref = useComposedRefs(forwardedRef, handleRefSet, setValueTextFromDOM);
 
   // Update the callback ref array on every render
   selectCallbacks.current[index] = onSelect;
@@ -560,7 +564,7 @@ function useDropdownItems({
   React.ComponentPropsWithoutRef<"div"> & {
     ref: React.ForwardedRef<HTMLDivElement>;
   }) {
-  const {
+  let {
     dispatch,
     triggerRef,
     dropdownRef,
@@ -569,12 +573,12 @@ function useDropdownItems({
     state: { isExpanded, triggerId, selectionIndex, typeaheadQuery },
   } = useDropdownContext();
 
-  const items = useDropdownDescendants();
-  const ref = useComposedRefs(dropdownRef, forwardedRef);
+  let items = useDropdownDescendants();
+  let ref = useComposedRefs(dropdownRef, forwardedRef);
 
   React.useEffect(() => {
     // Respond to user char key input with typeahead
-    const match = findItemFromTypeahead(items, typeaheadQuery);
+    let match = findItemFromTypeahead(items, typeaheadQuery);
     if (typeaheadQuery && match != null) {
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
@@ -591,9 +595,9 @@ function useDropdownItems({
     return () => window.clearTimeout(timeout);
   }, [dispatch, items, typeaheadQuery, dropdownRef]);
 
-  const prevItemsLength = usePrevious(items.length);
-  const prevSelected = usePrevious(items[selectionIndex]);
-  const prevSelectionIndex = usePrevious(selectionIndex);
+  let prevItemsLength = usePrevious(items.length);
+  let prevSelected = usePrevious(items[selectionIndex]);
+  let prevSelectionIndex = usePrevious(selectionIndex);
 
   React.useEffect(() => {
     if (selectionIndex > items.length - 1) {
@@ -623,7 +627,7 @@ function useDropdownItems({
       dispatch({
         type: SELECT_ITEM_AT_INDEX,
         payload: {
-          index: items.findIndex((i) => i.key === prevSelected.key),
+          index: items.findIndex((i) => i.key === prevSelected?.key),
           dropdownRef,
         },
       });
@@ -680,7 +684,7 @@ function useDropdownItems({
           // Check if a user is typing some char keys and respond by setting
           // the query state.
           if (isString(key) && key.length === 1) {
-            const query = typeaheadQuery + key.toLowerCase();
+            let query = typeaheadQuery + key.toLowerCase();
             dispatch({
               type: SEARCH_FOR_ITEM,
               payload: query,
@@ -752,7 +756,7 @@ function useDropdownPopover({
   React.ComponentPropsWithoutRef<"div"> & {
     ref: React.ForwardedRef<HTMLDivElement>;
   }) {
-  const {
+  let {
     triggerRef,
     triggerClickedRef,
     dispatch,
@@ -761,7 +765,7 @@ function useDropdownPopover({
     state: { isExpanded },
   } = useDropdownContext();
 
-  const ref = useComposedRefs(popoverRef, forwardedRef);
+  let ref = useComposedRefs(popoverRef, forwardedRef);
 
   React.useEffect(() => {
     if (!isExpanded) {
@@ -863,7 +867,7 @@ function findItemFromTypeahead(
     return null;
   }
 
-  const found = items.find((item) => {
+  let found = items.find((item) => {
     return item.disabled
       ? false
       : item.element?.dataset?.valuetext?.toLowerCase().startsWith(string);

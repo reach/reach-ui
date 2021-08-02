@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useForceUpdate } from "@reach/utils/use-force-update";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { usePrevious } from "@reach/utils/use-previous";
 import { createNamedContext } from "@reach/utils/context";
 import { noop } from "@reach/utils/noop";
 
@@ -37,7 +36,7 @@ function createDescendantContext<DescendantType extends Descendant>(
  *   5) index always up-to-date with the tree despite changes
  *   6) works with memoization of any component in the tree (hopefully)
  *
- * * As for SSR, the good news is that we don't actually need the index on the
+ * As for SSR, the good news is that we don't actually need the index on the
  * server for most use-cases, as we are only using it to determine the order of
  * composed descendants for keyboard navigation. However, in the few cases where
  * this is not the case, we can require an explicit index from the app.
@@ -48,45 +47,33 @@ function useDescendant<DescendantType extends Descendant>(
   indexProp?: number
 ) {
   let forceUpdate = useForceUpdate();
-  let {
-    registerDescendant,
-    unregisterDescendant,
-    descendants,
-  } = React.useContext(context);
+  let { registerDescendant, unregisterDescendant, descendants } =
+    React.useContext(context);
 
   // This will initially return -1 because we haven't registered the descendant
   // on the first render. After we register, this will then return the correct
-  // index on the following render and we will re-register descendants
-  // so that everything is up-to-date before the user interacts with a
-  // collection.
+  // index on the following render and we will re-register descendants so that
+  // everything is up-to-date before the user interacts with a collection.
   let index =
     indexProp ??
     descendants.findIndex((item) => item.element === descendant.element);
 
-  let previousDescendants = usePrevious(descendants);
-
-  // We also need to re-register descendants any time ANY of the other
-  // descendants have changed. My brain was melting when I wrote this and it
-  // feels a little off, but checking in render and using the result in the
-  // effect's dependency array works well enough.
-  let someDescendantsHaveChanged = descendants.some((descendant, index) => {
-    return descendant.element !== previousDescendants?.[index]?.element;
-  });
-
   // Prevent any flashing
   useLayoutEffect(() => {
     if (!descendant.element) forceUpdate();
+
     registerDescendant({
       ...descendant,
       index,
     } as DescendantType);
-    return () => unregisterDescendant(descendant.element);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      unregisterDescendant(descendant.element);
+    };
   }, [
+    descendant,
     forceUpdate,
     index,
     registerDescendant,
-    someDescendantsHaveChanged,
     unregisterDescendant,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(descendant),
@@ -370,9 +357,9 @@ function useDescendantKeyDown<
         break;
       case "PageUp":
         event.preventDefault();
-        let prevOrFirst = (event.ctrlKey
-          ? getPreviousOption
-          : getFirstOption)();
+        let prevOrFirst = (
+          event.ctrlKey ? getPreviousOption : getFirstOption
+        )();
         callback(key === "option" ? prevOrFirst : prevOrFirst[key]);
         break;
       case "Home":

@@ -89,6 +89,11 @@ const StyledButton = styled(AccordionButton)`
   &[data-disabled] {
     color: rgba(255, 255, 255, 0.5);
   }
+
+  &:focus {
+    outline: 3px solid #0c7ecc;
+    outline-offset: 3px;
+  }
 `;
 
 const StyledPanel = styled(AccordionPanel)`

@@ -16,6 +16,7 @@ import { noop } from "@reach/utils/noop";
 import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import warning from "tiny-warning";
 import {
   createDescendantContext,
@@ -79,16 +80,15 @@ const Accordion = React.forwardRef(function Accordion(
    * You shouldn't switch between controlled/uncontrolled. We'll check for a
    * controlled component and track any changes in a ref to show a warning.
    */
-  const wasControlled = typeof controlledIndex !== "undefined";
-  const { current: isControlled } = React.useRef(wasControlled);
+  let wasControlled = typeof controlledIndex !== "undefined";
+  let { current: isControlled } = React.useRef(wasControlled);
 
-  const [descendants, setDescendants] =
-    useDescendantsInit<AccordionDescendant>();
+  let [descendants, setDescendants] = useDescendantsInit<AccordionDescendant>();
 
-  const id = useId(props.id);
+  let id = useId(props.id);
 
   // Define our default starting index
-  const [openPanels, setOpenPanels] = React.useState<AccordionIndex>(() => {
+  let [openPanels, setOpenPanels] = React.useState<AccordionIndex>(() => {
     switch (true) {
       case isControlled:
         return controlledIndex!;
@@ -139,7 +139,7 @@ const Accordion = React.forwardRef(function Accordion(
     );
   }
 
-  const onSelectPanel = React.useCallback(
+  let onSelectPanel = React.useCallback(
     (index: number) => {
       onChange && onChange(index);
 
@@ -178,7 +178,7 @@ const Accordion = React.forwardRef(function Accordion(
     [collapsible, isControlled, multiple, onChange]
   );
 
-  const context: InternalAccordionContextValue = React.useMemo(
+  let context: InternalAccordionContextValue = React.useMemo(
     () => ({
       accordionId: id,
       openPanels: isControlled ? controlledIndex! : openPanels,
@@ -342,35 +342,40 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   { as: Comp = "div", children, disabled = false, ...props },
   forwardedRef
 ) {
-  const { accordionId, openPanels, readOnly } =
+  let { accordionId, openPanels, readOnly } =
     React.useContext(AccordionContext);
-  const buttonRef: ButtonRef = React.useRef(null);
+  let buttonRef: ButtonRef = React.useRef(null);
 
-  const index = useDescendant(
-    {
-      element: buttonRef.current,
-      disabled,
-    },
-    AccordionDescendantContext
+  let [element, handleButtonRefSet] = useStatefulRefValue<HTMLElement | null>(
+    buttonRef,
+    null
   );
+  let descendant = React.useMemo(() => {
+    return {
+      element,
+      disabled,
+    };
+  }, [disabled, element]);
+  let index = useDescendant(descendant, AccordionDescendantContext);
 
   // We need unique IDs for the panel and button to point to one another
-  const itemId = makeId(accordionId, index);
-  const panelId = makeId("panel", itemId);
-  const buttonId = makeId("button", itemId);
+  let itemId = makeId(accordionId, index);
+  let panelId = makeId("panel", itemId);
+  let buttonId = makeId("button", itemId);
 
-  const state =
+  let state =
     (Array.isArray(openPanels)
       ? openPanels.includes(index) && AccordionStates.Open
       : openPanels === index && AccordionStates.Open) ||
     AccordionStates.Collapsed;
 
-  const context: InternalAccordionItemContextValue = {
-    disabled,
+  let context: InternalAccordionItemContextValue = {
     buttonId,
+    buttonRef,
+    disabled,
+    handleButtonRefSet,
     index,
     itemId,
-    buttonRef,
     panelId,
     state,
   };
@@ -450,12 +455,13 @@ const AccordionButton = React.forwardRef(function AccordionButton(
     disabled,
     buttonId,
     buttonRef: ownRef,
+    handleButtonRefSet,
     index,
     panelId,
     state,
   } = React.useContext(AccordionItemContext);
 
-  let ref = useComposedRefs(forwardedRef, ownRef);
+  let ref = useComposedRefs(forwardedRef, handleButtonRefSet);
 
   function handleClick(event: React.MouseEvent) {
     event.preventDefault();
@@ -472,7 +478,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
     key: "element",
     rotate: true,
     callback(element: HTMLElement) {
-      element && element.focus();
+      element?.focus();
     },
     filter: (button) => !button.disabled,
   });
@@ -569,7 +575,7 @@ const AccordionPanel = React.forwardRef(function AccordionPanel(
   { as: Comp = "div", children, ...props },
   forwardedRef
 ) {
-  const { disabled, panelId, buttonId, state } =
+  let { disabled, panelId, buttonId, state } =
     React.useContext(AccordionItemContext);
 
   return (
@@ -696,6 +702,7 @@ interface InternalAccordionItemContextValue {
   buttonId: string;
   index: number;
   itemId: string;
+  handleButtonRefSet(refValue: HTMLElement): void;
   buttonRef: ButtonRef;
   panelId: string;
   state: AccordionStates;

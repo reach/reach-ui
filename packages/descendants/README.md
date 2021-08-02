@@ -75,7 +75,7 @@ The solution most people turn to is to bail out of the element API and turn to a
 />;
 
 function Menu({ items }) {
-  const [activeIndex, setActiveIndex] = React.useState();
+  let [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {items.map((item, index) => (
@@ -94,7 +94,7 @@ function Menu({ items }) {
 
 function MenuItem({ index, activeIndex, onSelect, children }) {
   // and now we can style
-  const isActive = index === activeIndex;
+  let isActive = index === activeIndex;
   return (
     <div
       // and add an ID
@@ -180,7 +180,7 @@ We can use `React.cloneElement` to keep (most of) the normal React composition. 
 
 ```jsx
 function Menu({ children }) {
-  const [activeIndex, setActiveIndex] = React.useState();
+  let [activeIndex, setActiveIndex] = React.useState();
   return (
     <div data-menu aria-activedescendant={activeIndex}>
       {React.Children.map(children, (child, index) =>
@@ -192,7 +192,7 @@ function Menu({ children }) {
 
 function MenuItem({ index, activeIndex, onSelect, children }) {
   // index came from the clone
-  const isActive = index === activeIndex;
+  let isActive = index === activeIndex;
   return (
     <div id={index} data-highlighted={isActive ? "" : undefined}>
       {children}
@@ -297,14 +297,32 @@ function MenuList(props) {
 function MenuItem({ index: explicitIndex, ...props }) {
   let { activeIndex, setActiveIndex } = useContext(MenuContext);
   let ref = React.useRef(null);
-  let index = useDescendant(
-    {
-      // Assign the DOM node using a ref
-      element: ref.current,
+
+  // We need a ref to the element for our descendant object, but we also
+  // need to update state after the ref is placed. We can set the ref in a
+  // callback and use the stateful `element` to ensure our descendant is
+  // updated once we have DOM node.
+  let [element, setElement] = useState(null);
+  let handleRefSet = useCallback((refValue) => {
+    ref.current = refValue;
+    setState(refValue);
+  }, []);
+
+  // The descendant should be memoized to prevent endless render loops after
+  // the collection state  is updated
+  let descendant = React.useMemo(() => {
+    return {
+      // Assign the DOM node using a stateful reference. This should be safer
+      // than passing the ref directly.
+      element,
       // You can pass arbitrary data into a descendant object which can come
       // in handy for features like typeahead!
       key: props.label,
-    },
+    };
+  }, [element, props.label]);
+
+  let index = useDescendant(
+    descendant,
     // Tell the useDescendant hook to use a specific context.
     // This is key in case you have a compound component that needs index
     // tracking in separate correlating descendant components (like `Tabs`)
@@ -326,7 +344,8 @@ function MenuItem({ index: explicitIndex, ...props }) {
   return (
     <div
       role="menuitem"
-      ref={ref}
+      // Don't forget to pass the callback ref to the rendered element!
+      ref={handleRefSet}
       data-selected={isSelected ? "" : undefined}
       tabIndex={-1}
       onMouseEnter={select}

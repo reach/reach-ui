@@ -29,6 +29,7 @@ import {
 import { getComputedStyle } from "@reach/utils/computed-styles";
 import { cloneValidElement } from "@reach/utils/clone-valid-element";
 import { useControlledState } from "@reach/utils/use-controlled-state";
+import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { createNamedContext } from "@reach/utils/context";
 import { isBoolean, isNumber, isFunction } from "@reach/utils/type-check";
@@ -142,7 +143,7 @@ const Tabs = React.forwardRef(function Tabs(
             userInteractedRef.current = true;
             switch (keyboardActivation) {
               case TabsKeyboardActivation.Manual:
-                let tabElement = tabs[index] && tabs[index].element;
+                let tabElement = tabs[index]?.element;
                 if (tabElement && isFunction(tabElement.focus)) {
                   tabElement.focus();
                 }
@@ -304,7 +305,7 @@ const TabListImpl = React.forwardRef(function TabList(
   { children, as: Comp = "div", onKeyDown, ...props },
   forwardedRef
 ) {
-  const {
+  let {
     focusedIndex,
     isControlled,
     isRTL,
@@ -440,7 +441,7 @@ const Tab = React.forwardRef(function Tab(
   },
   forwardedRef
 ) {
-  const {
+  let {
     id: tabsId,
     onSelectTab,
     orientation,
@@ -448,20 +449,25 @@ const Tab = React.forwardRef(function Tab(
     userInteractedRef,
     setFocusedIndex,
   } = React.useContext(TabsContext);
-  const ownRef = React.useRef<HTMLElement | null>(null);
-  const ref = useComposedRefs(forwardedRef, ownRef);
-  const index = useDescendant(
-    {
-      element: ownRef.current!,
-      disabled: !!disabled,
-    },
-    TabsDescendantsContext,
-    indexProp
+  let ownRef = React.useRef<HTMLElement | null>(null);
+
+  let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
+    ownRef,
+    null
   );
-  const htmlType =
+  let ref = useComposedRefs(forwardedRef, handleRefSet);
+  let descendant = React.useMemo(() => {
+    return {
+      element,
+      disabled: !!disabled,
+    };
+  }, [disabled, element]);
+  let index = useDescendant(descendant, TabsDescendantsContext, indexProp);
+
+  let htmlType =
     Comp === "button" && props.type == null ? "button" : props.type;
 
-  const isSelected = index === selectedIndex;
+  let isSelected = index === selectedIndex;
 
   function onSelect() {
     onSelectTab(index);
@@ -603,17 +609,33 @@ if (__DEV__) {
  * @see Docs https://reach.tech/tabs#tabpanel
  */
 const TabPanel = React.forwardRef(function TabPanel(
-  { children, "aria-label": ariaLabel, as: Comp = "div", ...props },
+  {
+    children,
+    "aria-label": ariaLabel,
+    as: Comp = "div",
+    index: indexProp,
+    ...props
+  },
   forwardedRef
 ) {
-  let { selectedPanelRef, selectedIndex, id: tabsId } = React.useContext(
-    TabsContext
-  );
+  let {
+    selectedPanelRef,
+    selectedIndex,
+    id: tabsId,
+  } = React.useContext(TabsContext);
   let ownRef = React.useRef<HTMLElement | null>(null);
 
+  let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
+    ownRef,
+    null
+  );
+
+  let descendant = React.useMemo(() => ({ element }), [element]);
   let index = useDescendant(
-    { element: ownRef.current! },
-    TabPanelDescendantsContext
+    descendant,
+    TabPanelDescendantsContext,
+    indexProp,
+    true
   );
 
   let id = makeId(tabsId, "panel", index);
@@ -639,7 +661,7 @@ const TabPanel = React.forwardRef(function TabPanel(
 
   let ref = useComposedRefs(
     forwardedRef,
-    ownRef,
+    handleRefSet,
     isSelected ? selectedPanelRef : null
   );
 
@@ -674,6 +696,13 @@ interface TabPanelProps {
    * @see Docs https://reach.tech/tabs#tabpanel-children
    */
   children?: React.ReactNode;
+  /**
+   * If an explicit index is passed to a `Tab` component, the same index value
+   * should be passed to its corresponding `TabPanel`.
+   *
+   * @see Docs https://reach.tech/tabs#tabpanel-index
+   */
+  index?: number;
 }
 
 if (__DEV__) {
