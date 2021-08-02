@@ -339,7 +339,7 @@ if (__DEV__) {
  * @see Docs https://reach.tech/accordion#accordionitem
  */
 const AccordionItem = React.forwardRef(function AccordionItem(
-  { as: Comp = "div", children, disabled = false, ...props },
+  { as: Comp = "div", children, disabled = false, index: indexProp, ...props },
   forwardedRef
 ) {
   let { accordionId, openPanels, readOnly } =
@@ -356,7 +356,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
       disabled,
     };
   }, [disabled, element]);
-  let index = useDescendant(descendant, AccordionDescendantContext);
+  let index = useDescendant(descendant, AccordionDescendantContext, indexProp);
 
   // We need unique IDs for the panel and button to point to one another
   let itemId = makeId(accordionId, index);
@@ -416,6 +416,10 @@ interface AccordionItemProps {
    * @see Docs https://reach.tech/accordion#accordionitem-disabled
    */
   disabled?: boolean;
+  /**
+   * TODO: Document this!
+   */
+  index?: number;
 }
 
 if (__DEV__) {

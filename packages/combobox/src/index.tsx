@@ -755,7 +755,7 @@ if (__DEV__) {
  * @see Docs https://reach.tech/combobox#comboboxoption
  */
 export const ComboboxOption = React.forwardRef(function ComboboxOption(
-  { as: Comp = "li", children, value, onClick, ...props },
+  { as: Comp = "li", children, index: indexProp, value, onClick, ...props },
   forwardedRef
 ) {
   let {
@@ -776,7 +776,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
       value,
     };
   }, [value, element]);
-  let index = useDescendant(descendant, ComboboxDescendantContext);
+  let index = useDescendant(descendant, ComboboxDescendantContext, indexProp);
 
   let ref = useComposedRefs(forwardedRef, handleRefSet);
 
@@ -838,6 +838,10 @@ export interface ComboboxOptionProps {
   children?:
     | React.ReactNode
     | ((props: ComboboxOptionContextValue) => React.ReactNode);
+  /**
+   * TODO: Document this!
+   */
+  index?: number;
   /**
    * The value to match against when suggesting.
    *

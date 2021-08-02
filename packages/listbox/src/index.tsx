@@ -920,6 +920,8 @@ const ListboxOption = React.forwardRef(function ListboxOption(
     as: Comp = "li",
     children,
     disabled,
+    index: indexProp,
+    label: labelProp,
     onClick,
     onMouseDown,
     onMouseEnter,
@@ -928,7 +930,6 @@ const ListboxOption = React.forwardRef(function ListboxOption(
     onMouseUp,
     onTouchStart,
     value,
-    label: labelProp,
     ...props
   },
   forwardedRef
@@ -960,7 +961,7 @@ const ListboxOption = React.forwardRef(function ListboxOption(
       disabled: !!disabled,
     };
   }, [disabled, element, label, value]);
-  useDescendant(descendant, ListboxDescendantContext);
+  useDescendant(descendant, ListboxDescendantContext, indexProp);
 
   // After the ref is mounted to the DOM node, we check to see if we have an
   // explicit label prop before looking for the node's textContent for
@@ -1114,6 +1115,10 @@ interface ListboxOptionProps {
    * @see Docs https://reach.tech/listbox#listboxoption-value
    */
   value: ListboxValue;
+  /**
+   * TODO: Document this!
+   */
+  index?: number;
   /**
    * The option's human-readable label. This prop is optional but highly
    * encouraged if your option has multiple text nodes that may or may not

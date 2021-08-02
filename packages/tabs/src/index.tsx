@@ -631,12 +631,7 @@ const TabPanel = React.forwardRef(function TabPanel(
   );
 
   let descendant = React.useMemo(() => ({ element }), [element]);
-  let index = useDescendant(
-    descendant,
-    TabPanelDescendantsContext,
-    indexProp,
-    true
-  );
+  let index = useDescendant(descendant, TabPanelDescendantsContext, indexProp);
 
   let id = makeId(tabsId, "panel", index);
 
