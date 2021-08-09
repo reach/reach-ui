@@ -64,7 +64,7 @@ function useDescendant<DescendantType extends Descendant>(
 
     registerDescendant({
       ...descendant,
-      index,
+      index: index === -1 ? null : index,
     } as DescendantType);
     return () => {
       unregisterDescendant(descendant.element);
