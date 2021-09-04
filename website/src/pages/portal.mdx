@@ -62,9 +62,11 @@ Renders content inside of a portal at the end of the DOM tree.
 
 #### Portal Props
 
-| Prop                    | Type | Required |
-| ----------------------- | ---- | -------- |
-| [`children`](#children) | node | true     |
+| Prop                            | Type   | Required |
+| ------------------------------- | ------ | -------- |
+| [`children`](#children)         | node   | true     |
+| [`type`](#type)                 | string | false    |
+| [`containerRef`](#containerRef) | ref    | false    |
 
 ##### Portal children
 
@@ -83,3 +85,9 @@ Any content you want to render inside of the portal.
 _Type_: `string` default: `reach-portal`
 
 The DOM element type to render.
+
+##### Portal containerRef
+
+_containerRef_: `ref` default: `document.body`
+
+Ref to the container in where to render the portal. If not set the portal will be appended to the body of the document.
