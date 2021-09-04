@@ -82,12 +82,15 @@ Any content you want to render inside of the portal.
 
 ##### Portal type
 
-_Type_: `string` default: `reach-portal`
+`type?: string`
 
-The DOM element type to render.
+The DOM element type to render. If not set the portal will render a
+`reach-portal` custom element.
 
 ##### Portal containerRef
 
-_containerRef_: `ref` default: `document.body`
+`containerRef?: React.RefObject<Node>`
 
-Ref to the container in where to render the portal. If not set the portal will be appended to the body of the document.
+The container ref to which the portal will be appended. If not set the portal
+will be appended to the body of the component's owner document (typically this
+is the `document.body`).
