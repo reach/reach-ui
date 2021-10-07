@@ -18,6 +18,8 @@ function Example() {
   let [term, setTerm] = React.useState("");
   let [selections, setSelections] = React.useState([]);
   let results = useCityMatch(term);
+  let containerRef = React.useRef();
+  let [customTargetMode, setCustomTargetMode] = React.useState(false);
 
   const handleChange = (event) => {
     setTerm(event.target.value);
@@ -28,61 +30,77 @@ function Example() {
     setTerm("");
   };
 
+  const comboboxPopoverTargetRef = customTargetMode ? containerRef : undefined;
+
   return (
     <div>
       <h2>Tokenbox</h2>
-      <ExampleTokenbox onSelect={handleSelect}>
-        <ExampleTokenLabel
-          onRemove={(item) => {
-            setSelections(selections.filter((s) => s !== item));
-          }}
-          style={{
-            border: "1px solid #888",
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          {selections.map((selection) => (
-            <ExampleToken value={selection} />
-          ))}
-          <ExampleTokenInput
-            value={term}
-            onChange={handleChange}
-            autocomplete={false}
-            style={{
-              outline: "none",
-              border: "none",
-              flexGrow: 1,
-              margin: "0.25rem",
-              font: "inherit",
+
+      <label style={{ display: "block", marginBottom: "24px" }}>
+        <input
+          type="checkbox"
+          name="customTargetMode"
+          checked={customTargetMode}
+          onChange={(event) => setCustomTargetMode(event.target.checked)}
+        />
+        Set combobox container element as <code>targetRef</code> for suggestions
+        popover element
+      </label>
+
+      <div ref={containerRef}>
+        <ExampleTokenbox onSelect={handleSelect}>
+          <ExampleTokenLabel
+            onRemove={(item) => {
+              setSelections(selections.filter((s) => s !== item));
             }}
-          />
-        </ExampleTokenLabel>
-        {results && (
-          <ComboboxPopover>
-            {results.length === 0 && (
-              <p>
-                No Results{" "}
-                <button
-                  onClick={() => {
-                    setTerm("");
-                  }}
-                >
-                  clear
-                </button>
-              </p>
-            )}
-            <ComboboxList>
-              {results.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={`${result.city}, ${result.state}`}
-                />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        )}
-      </ExampleTokenbox>
+            style={{
+              border: "1px solid #888",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {selections.map((selection) => (
+              <ExampleToken value={selection} />
+            ))}
+            <ExampleTokenInput
+              value={term}
+              onChange={handleChange}
+              autocomplete={false}
+              style={{
+                outline: "none",
+                border: "none",
+                flexGrow: 1,
+                margin: "0.25rem",
+                font: "inherit",
+              }}
+            />
+          </ExampleTokenLabel>
+          {results && (
+            <ComboboxPopover portal={true} targetRef={comboboxPopoverTargetRef}>
+              {results.length === 0 && (
+                <p>
+                  No Results{" "}
+                  <button
+                    onClick={() => {
+                      setTerm("");
+                    }}
+                  >
+                    clear
+                  </button>
+                </p>
+              )}
+              <ComboboxList>
+                {results.slice(0, 10).map((result, index) => (
+                  <ComboboxOption
+                    key={index}
+                    value={`${result.city}, ${result.state}`}
+                  />
+                ))}
+              </ComboboxList>
+            </ComboboxPopover>
+          )}
+        </ExampleTokenbox>
+      </div>
     </div>
   );
 }
