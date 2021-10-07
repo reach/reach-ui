@@ -623,6 +623,7 @@ export const ComboboxPopover = React.forwardRef(function ComboboxPopover(
     onKeyDown,
     onBlur,
     position = positionMatchWidth,
+    targetRef,
     ...props
   },
   forwardedRef
@@ -654,7 +655,7 @@ export const ComboboxPopover = React.forwardRef(function ComboboxPopover(
       {...props}
       ref={ref}
       position={position}
-      targetRef={inputRef}
+      targetRef={targetRef ?? inputRef}
       {...sharedProps}
     />
   ) : (
