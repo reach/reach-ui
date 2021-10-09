@@ -26,7 +26,7 @@ function Example() {
               border: "solid 1px",
               padding: 10,
               background: "white",
-              width: 400,
+              maxWidth: 400,
             }}
           >
             <p>Huzzah!!! I am here! WASSUPPPPP</p>
