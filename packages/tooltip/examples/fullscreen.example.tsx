@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import * as React from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
