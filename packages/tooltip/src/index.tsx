@@ -582,7 +582,7 @@ interface TooltipContentProps {
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
-  containerRef: React.RefObject<HTMLElement>;
+  containerRef?: React.RefObject<Node>;
 }
 
 if (__DEV__) {
