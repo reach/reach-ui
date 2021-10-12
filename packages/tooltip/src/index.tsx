@@ -485,12 +485,13 @@ const TooltipPopup = React.forwardRef(function TooltipPopup(
     ariaLabel: DEPRECATED_ariaLabel,
     isVisible,
     id,
+    containerRef,
     ...props
   },
   forwardRef
 ) {
   return isVisible ? (
-    <Portal>
+    <Portal containerRef={containerRef}>
       <TooltipContent
         ref={forwardRef}
         label={label}
@@ -581,6 +582,7 @@ interface TooltipContentProps {
   label: React.ReactNode;
   isVisible?: boolean;
   triggerRect: DOMRect | null;
+  containerRef: React.RefObject<HTMLElement>;
 }
 
 if (__DEV__) {
