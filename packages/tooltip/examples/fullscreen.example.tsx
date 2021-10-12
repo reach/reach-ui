@@ -3,7 +3,7 @@ import * as React from "react";
 import Tooltip from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
-let name = "Fullscreen (TS)";
+let name = "Fullscreen using Portal containerRef (TS)";
 
 function Example() {
   const containerRef = React.useRef(null);
@@ -12,30 +12,38 @@ function Example() {
       <div
         ref={containerRef}
         style={{
-          margin: "50px",
-          background: "blue",
-          width: "100px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "50px auto",
+          padding: "20px",
+          background: "#ddd",
+          width: "300px",
           height: "100px",
         }}
       >
-        hello
-        <button
-          onClick={
-            // @ts-expect-error
-            () => containerRef.current.requestFullscreen()
-          }
-        >
-          fullscreen
-        </button>
         <Tooltip
-          label="Notifications"
-          aria-label="3 Notifications"
+          label="Enter Fullscreen"
+          aria-label="Enter Fullscreen"
           // @ts-expect-error
           containerRef={containerRef}
         >
-          <button style={{ fontSize: 25 }}>
-            <span>🔔</span>
-            <span>3</span>
+          <button
+            onClick={
+              // @ts-expect-error
+              () => containerRef.current.requestFullscreen()
+            }
+          >
+            Enter Fullscreen
+          </button>
+        </Tooltip>
+        <Tooltip
+          label="Exit Fullscreen"
+          aria-label="Exit Fullscreen"
+          containerRef={containerRef}
+        >
+          <button onClick={() => document.exitFullscreen()}>
+            Exit Fullscreen
           </button>
         </Tooltip>
       </div>
