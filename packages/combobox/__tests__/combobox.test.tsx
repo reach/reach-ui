@@ -14,7 +14,7 @@ import cities from "../examples/cities";
 
 describe("<Combobox />", () => {
   describe("rendering", () => {
-    it("renders as any HTML element", async () => {
+    it("renders as any HTML element", () => {
       function MyCombobox() {
         let [term, setTerm] = React.useState("");
         let results = useCityMatch(term);
@@ -45,18 +45,18 @@ describe("<Combobox />", () => {
         );
       }
 
-      let { getByTestId, getAllByRole } = render(<MyCombobox />);
+      let { getByTestId, getByRole, getAllByRole } = render(<MyCombobox />);
       expect(getByTestId("box").tagName).toBe("SPAN");
-      expect(getByTestId("input").tagName).toBe("TEXTAREA");
+      expect(getByRole("combobox").tagName).toBe("TEXTAREA");
 
       // Type to show the list
-      await userEvent.type(getByTestId("input"), "e");
+      userEvent.type(getByRole("combobox"), "e");
 
-      expect(getByTestId("list").tagName).toBe("DIV");
+      expect(getByRole("listbox").tagName).toBe("DIV");
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
     });
 
-    it("renders when using the useComboboxContext hook", async () => {
+    it("renders when using the useComboboxContext hook", () => {
       function CustomComboboxInput(props: ComboboxInputProps) {
         const { isExpanded } = useComboboxContext();
         return (
@@ -85,14 +85,14 @@ describe("<Combobox />", () => {
         );
       }
 
-      let { getByTestId, getAllByRole } = render(<MyCombobox />);
+      let { getByRole, getAllByRole } = render(<MyCombobox />);
 
       // Type to show the list
 
-      await userEvent.type(getByTestId("input"), "a");
+      userEvent.type(getByRole("combobox"), "a");
       //jest.advanceTimersByTime(100);
 
-      expect(getByTestId("list")).toBeTruthy();
+      expect(getByRole("listbox")).toBeTruthy();
       expect(getAllByRole("option")[0]).toBeTruthy();
     });
   });
@@ -195,16 +195,43 @@ describe("<Combobox />", () => {
   });
 
   describe("user events", () => {
-    it("should open a list on text entry", async () => {
+    it("should open a list on text entry", () => {
       let optionToSelect = "Eagle Pass, Texas";
-      let { getByTestId, getByText } = render(<BasicCombobox />);
+      let { getByRole, getByText } = render(<BasicCombobox />);
       let getByTextWithMarkup = withMarkup(getByText);
-      let input = getByTestId("input");
+      let input = getByRole("combobox");
 
-      await userEvent.type(input, "e");
+      userEvent.type(input, "e");
 
-      expect(getByTestId("list")).toBeInTheDocument();
+      expect(getByRole("listbox")).toBeInTheDocument();
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
+    });
+
+    it("should *not* open a list when input value changes without text entry", () => {
+      let optionToSelect = "Eagle Pass, Texas";
+
+      function EaglePassSelector() {
+        let [term, setTerm] = React.useState("");
+        return (
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                setTerm(optionToSelect);
+              }}
+            >
+              Select Eagle Pass
+            </button>
+            <ControlledCombobox term={term} setTerm={setTerm} />
+          </div>
+        );
+      }
+
+      let { getByRole, queryByRole } = render(<EaglePassSelector />);
+
+      let button = getByRole("button");
+      userEvent.click(button);
+      expect(queryByRole("listbox")).toBeFalsy();
     });
   });
 });
@@ -214,9 +241,9 @@ function BasicCombobox() {
   let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
-  const handleChange = (event: any) => {
+  function handleChange(event: any) {
     setTerm(event.target.value);
-  };
+  }
 
   return (
     <div>
@@ -241,6 +268,55 @@ function BasicCombobox() {
                 />
               ))}
             </ComboboxList>
+          </ComboboxPopover>
+        ) : (
+          <span>No Results!</span>
+        )}
+      </Combobox>
+    </div>
+  );
+}
+
+function ControlledCombobox({
+  term,
+  setTerm,
+}: {
+  term: string;
+  setTerm:
+    | ((term: string) => void)
+    | ((setter: (prevTerm: string) => string) => void);
+}) {
+  let results = useCityMatch(term);
+
+  function handleChange(event: any) {
+    setTerm(event.target.value);
+  }
+
+  return (
+    <div>
+      <h2>Clientside Search</h2>
+      <Combobox id="holy-smokes">
+        <ComboboxInput
+          aria-label="cool search"
+          data-testid="input"
+          name="awesome"
+          onChange={handleChange}
+          value={term}
+        />
+        {results ? (
+          <ComboboxPopover portal={false}>
+            {results.length === 0 ? (
+              <p>No results</p>
+            ) : (
+              <ComboboxList data-testid="list">
+                {results.slice(0, 10).map((result, index) => (
+                  <ComboboxOption
+                    key={index}
+                    value={`${result.city}, ${result.state}`}
+                  />
+                ))}
+              </ComboboxList>
+            )}
           </ComboboxPopover>
         ) : (
           <span>No Results!</span>
