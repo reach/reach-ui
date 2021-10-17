@@ -86,6 +86,5 @@ function Example() {
   );
 }
 
-Example.story = { name };
-export const Comp = Example;
-export default { title: "Combobox" };
+Example.storyName = name;
+export { Example };
