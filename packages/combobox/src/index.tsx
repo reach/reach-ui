@@ -1133,6 +1133,8 @@ function useKeyDown() {
   };
 }
 
+export { useKeyDown as unstable_useKeyDown };
+
 function useBlur() {
   let { state, transition, popoverRef, inputRef, buttonRef } =
     React.useContext(ComboboxContext);
