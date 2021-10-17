@@ -139,7 +139,7 @@ $ git log -p
 # If everything looks good, push to GitHub along with the new tag:
 $ git push origin main --follow-tags
 
-# Open up github.com/reach/reach-ui/actions and watch the build. There will
+# Open up https://github.com/reach/reach-ui/actions and watch the build. There will
 # be 2 builds, one for the push to the main branch and one for the
 # new tag. The tag build will run the build and all the tests and then
 # automatically publish to npm if everything passes. If there's a

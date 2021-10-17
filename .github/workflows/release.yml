@@ -1,27 +1,30 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
   release:
     name: Release
+    if: github.repository == 'reach/reach-ui'
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    if: ${{ startsWith(github.ref, 'refs/tags/v') && github.repository == 'reach/reach-ui' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node 14
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          version: 14.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Restore Lerna (Cache)
         uses: actions/cache@v2
@@ -30,8 +33,6 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-
-      - run: echo "RELEASE_TAG=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile
@@ -42,7 +43,7 @@ jobs:
       - name: Test
         run: yarn test
 
-      - run: echo "Publishing $RELEASE_TAG to npm ..."
+      - run: echo "Publishing to npm..."
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
 
       - name: Publish Packages
