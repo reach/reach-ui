@@ -1,6 +1,6 @@
 {
   "name": "@reach/dialog",
-  "version": "0.16.0",
+  "version": "0.16.2",
   "description": "Accessible React Modal Dialog.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "directory": "packages/dialog"
   },
   "dependencies": {
-    "@reach/portal": "0.16.0",
+    "@reach/portal": "0.16.2",
     "@reach/utils": "0.16.0",
     "prop-types": "^15.7.2",
     "react-focus-lock": "^2.5.2",
