@@ -47,4 +47,4 @@ jobs:
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
 
       - name: Publish Packages
-        run: lerna publish from-git --yes --pre-dist-tag next
+        run: npx lerna publish from-git --yes --pre-dist-tag next
