@@ -9,6 +9,16 @@ import {
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
+/**
+ * TODO: This example is buggy at the moment. The example itself and the bug it
+ * fixed was introduced in #783, but I merged it before testing thoroughly
+ * enough and it introduced what I believe are actually a more harmful
+ * regression in some cases where the popover doesn't open until the user
+ * presses the down or up key after initial input. Leaving the example and
+ * related test in place as a TODO.
+ * See https://github.com/reach/reach-ui/issues/755
+ */
+
 let name = "Simulated Change";
 
 function Example() {

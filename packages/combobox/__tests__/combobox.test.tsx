@@ -207,32 +207,32 @@ describe("<Combobox />", () => {
       expect(getByTextWithMarkup(optionToSelect)).toBeInTheDocument();
     });
 
-    it("should *not* open a list when input value changes without text entry", () => {
-      let optionToSelect = "Eagle Pass, Texas";
+    // it("should *not* open a list when input value changes without text entry", () => {
+    //   let optionToSelect = "Eagle Pass, Texas";
 
-      function EaglePassSelector() {
-        let [term, setTerm] = React.useState("");
-        return (
-          <div>
-            <button
-              type="button"
-              onClick={() => {
-                setTerm(optionToSelect);
-              }}
-            >
-              Select Eagle Pass
-            </button>
-            <ControlledCombobox term={term} setTerm={setTerm} />
-          </div>
-        );
-      }
+    //   function EaglePassSelector() {
+    //     let [term, setTerm] = React.useState("");
+    //     return (
+    //       <div>
+    //         <button
+    //           type="button"
+    //           onClick={() => {
+    //             setTerm(optionToSelect);
+    //           }}
+    //         >
+    //           Select Eagle Pass
+    //         </button>
+    //         <ControlledCombobox term={term} setTerm={setTerm} />
+    //       </div>
+    //     );
+    //   }
 
-      let { getByRole, queryByRole } = render(<EaglePassSelector />);
+    //   let { getByRole, queryByRole } = render(<EaglePassSelector />);
 
-      let button = getByRole("button");
-      userEvent.click(button);
-      expect(queryByRole("listbox")).toBeFalsy();
-    });
+    //   let button = getByRole("button");
+    //   userEvent.click(button);
+    //   expect(queryByRole("listbox")).toBeFalsy();
+    // });
   });
 });
 
@@ -277,54 +277,54 @@ function BasicCombobox() {
   );
 }
 
-function ControlledCombobox({
-  term,
-  setTerm,
-}: {
-  term: string;
-  setTerm:
-    | ((term: string) => void)
-    | ((setter: (prevTerm: string) => string) => void);
-}) {
-  let results = useCityMatch(term);
+// function ControlledCombobox({
+//   term,
+//   setTerm,
+// }: {
+//   term: string;
+//   setTerm:
+//     | ((term: string) => void)
+//     | ((setter: (prevTerm: string) => string) => void);
+// }) {
+//   let results = useCityMatch(term);
 
-  function handleChange(event: any) {
-    setTerm(event.target.value);
-  }
+//   function handleChange(event: any) {
+//     setTerm(event.target.value);
+//   }
 
-  return (
-    <div>
-      <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes">
-        <ComboboxInput
-          aria-label="cool search"
-          data-testid="input"
-          name="awesome"
-          onChange={handleChange}
-          value={term}
-        />
-        {results ? (
-          <ComboboxPopover portal={false}>
-            {results.length === 0 ? (
-              <p>No results</p>
-            ) : (
-              <ComboboxList data-testid="list">
-                {results.slice(0, 10).map((result, index) => (
-                  <ComboboxOption
-                    key={index}
-                    value={`${result.city}, ${result.state}`}
-                  />
-                ))}
-              </ComboboxList>
-            )}
-          </ComboboxPopover>
-        ) : (
-          <span>No Results!</span>
-        )}
-      </Combobox>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <h2>Clientside Search</h2>
+//       <Combobox id="holy-smokes">
+//         <ComboboxInput
+//           aria-label="cool search"
+//           data-testid="input"
+//           name="awesome"
+//           onChange={handleChange}
+//           value={term}
+//         />
+//         {results ? (
+//           <ComboboxPopover portal={false}>
+//             {results.length === 0 ? (
+//               <p>No results</p>
+//             ) : (
+//               <ComboboxList data-testid="list">
+//                 {results.slice(0, 10).map((result, index) => (
+//                   <ComboboxOption
+//                     key={index}
+//                     value={`${result.city}, ${result.state}`}
+//                   />
+//                 ))}
+//               </ComboboxList>
+//             )}
+//           </ComboboxPopover>
+//         ) : (
+//           <span>No Results!</span>
+//         )}
+//       </Combobox>
+//     </div>
+//   );
+// }
 
 function useCityMatch(term: string) {
   return term.trim() === ""

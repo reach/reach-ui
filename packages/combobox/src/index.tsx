@@ -70,11 +70,10 @@ const CLEAR = "CLEAR";
 // User is typing
 const CHANGE = "CHANGE";
 
-// Any input change that is not triggered by an actual onChange event.
-// For example an initial value or a controlled value that was changed.
-// Prevents sending the user to the NAVIGATING state
+// Initial input value change handler for syncing user state with state machine
+// Prevents initial change from sending the user to the NAVIGATING state
 // https://github.com/reach/reach-ui/issues/464
-const SIMULATED_CHANGE = "SIMULATED_CHANGE";
+const INITIAL_CHANGE = "INITIAL_CHANGE";
 
 // User is navigating w/ the keyboard
 const NAVIGATE = "NAVIGATE";
@@ -108,7 +107,7 @@ const stateChart: StateChart = {
         [BLUR]: IDLE,
         [CLEAR]: IDLE,
         [CHANGE]: SUGGESTING,
-        [SIMULATED_CHANGE]: IDLE,
+        [INITIAL_CHANGE]: IDLE,
         [FOCUS]: SUGGESTING,
         [NAVIGATE]: NAVIGATING,
         [OPEN_WITH_BUTTON]: SUGGESTING,
@@ -161,7 +160,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
   let nextState = { ...data, lastEventType: event.type };
   switch (event.type) {
     case CHANGE:
-    case SIMULATED_CHANGE:
+    case INITIAL_CHANGE:
       return {
         ...nextState,
         navigationValue: null,
@@ -429,8 +428,11 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   forwardedRef
 ) {
   // https://github.com/reach/reach-ui/issues/464
-  // https://github.com/reach/reach-ui/issues/755
-  let inputValueChangedRef = React.useRef(false);
+  let { current: initialControlledValue } = React.useRef(controlledValue);
+  let controlledValueChangedRef = React.useRef(false);
+  useUpdateEffect(() => {
+    controlledValueChangedRef.current = true;
+  }, [controlledValue]);
 
   let {
     data: { navigationValue, value, lastEventType },
@@ -469,13 +471,16 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     (value: ComboboxValue) => {
       if (value.trim() === "") {
         transition(CLEAR);
-      } else if (!inputValueChangedRef.current) {
-        transition(SIMULATED_CHANGE, { value });
+      } else if (
+        value === initialControlledValue &&
+        !controlledValueChangedRef.current
+      ) {
+        transition(INITIAL_CHANGE, { value });
       } else {
         transition(CHANGE, { value });
       }
     },
-    [transition]
+    [initialControlledValue, transition]
   );
 
   React.useEffect(() => {
@@ -490,9 +495,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     ) {
       handleValueChange(controlledValue!);
     }
-    // After we handled the changed value, we need to make sure the next
-    // controlled change won't trigger a CHANGE event. (instead of a SIMULATED_CHANGE)
-    inputValueChangedRef.current = false;
   }, [controlledValue, handleValueChange, isControlled, value]);
 
   // [*]... and when controlled, we don't trigger handleValueChange as the
@@ -500,7 +502,6 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   // onChange prop
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     let { value } = event.target;
-    inputValueChangedRef.current = true;
     if (!isControlled) {
       handleValueChange(value);
     }
@@ -1330,7 +1331,7 @@ type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 type MachineEventType =
   | "CLEAR"
   | "CHANGE"
-  | "SIMULATED_CHANGE"
+  | "INITIAL_CHANGE"
   | "NAVIGATE"
   | "SELECT_WITH_KEYBOARD"
   | "SELECT_WITH_CLICK"
@@ -1362,7 +1363,7 @@ interface StateData {
 type MachineEvent =
   | { type: "BLUR" }
   | { type: "CHANGE"; value: ComboboxValue }
-  | { type: "SIMULATED_CHANGE"; value: ComboboxValue }
+  | { type: "INITIAL_CHANGE"; value: ComboboxValue }
   | { type: "CLEAR" }
   | { type: "CLOSE_WITH_BUTTON" }
   | { type: "ESCAPE" }
