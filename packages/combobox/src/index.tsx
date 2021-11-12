@@ -188,7 +188,7 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case SELECT_WITH_CLICK:
       return {
         ...nextState,
-        value: event.value,
+        value: event.isControlled ? null : event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
@@ -312,6 +312,9 @@ export const Combobox = React.forwardRef(function Combobox(
   let id = useId(props.id);
   let listboxId = id ? makeId("listbox", id) : "listbox";
 
+  let isControlledRef = React.useRef<boolean>(false);
+  let setIsControlled = (val: boolean) => (isControlledRef.current = val);
+
   let context: InternalComboboxContextValue = {
     ariaLabel,
     ariaLabelledby,
@@ -328,6 +331,8 @@ export const Combobox = React.forwardRef(function Combobox(
     popoverRef,
     state,
     transition,
+    isControlled: isControlledRef.current,
+    setIsControlled,
   };
 
   useCheckStyles("combobox");
@@ -446,6 +451,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     ariaLabel,
     ariaLabelledby,
     persistSelectionRef,
+    setIsControlled,
   } = React.useContext(ComboboxContext);
 
   let ref = useComposedRefs(inputRef, forwardedRef);
@@ -459,6 +465,10 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   let handleBlur = useBlur();
 
   let isControlled = controlledValue != null;
+
+  React.useEffect(() => {
+    setIsControlled(isControlled);
+  }, [isControlled]);
 
   // Layout effect should be SSR-safe here because we don't actually do
   // anything with this ref that involves rendering until after we've
@@ -762,6 +772,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
     onSelect,
     data: { navigationValue },
     transition,
+    isControlled,
   } = React.useContext(ComboboxContext);
 
   let ownRef = React.useRef<HTMLElement | null>(null);
@@ -784,7 +795,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
 
   let handleClick = () => {
     onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { value });
+    transition(SELECT_WITH_CLICK, { value, isControlled });
   };
 
   return (
@@ -1320,6 +1331,8 @@ interface InternalComboboxContextValue {
   popoverRef: React.MutableRefObject<HTMLElement | undefined>;
   state: State;
   transition: Transition;
+  isControlled: boolean;
+  setIsControlled: (val: boolean) => void;
 }
 
 type Transition = (event: MachineEventType, payload?: any) => any;
@@ -1379,6 +1392,7 @@ type MachineEvent =
   | {
       type: "SELECT_WITH_CLICK";
       value: ComboboxValue;
+      isControlled: boolean;
     }
   | {
       type: "SELECT_WITH_KEYBOARD";
