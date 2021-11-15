@@ -313,7 +313,6 @@ export const Combobox = React.forwardRef(function Combobox(
   let listboxId = id ? makeId("listbox", id) : "listbox";
 
   let isControlledRef = React.useRef<boolean>(false);
-  let setIsControlled = (val: boolean) => (isControlledRef.current = val);
 
   let context: InternalComboboxContextValue = {
     ariaLabel,
@@ -331,8 +330,7 @@ export const Combobox = React.forwardRef(function Combobox(
     popoverRef,
     state,
     transition,
-    isControlled: isControlledRef.current,
-    setIsControlled,
+    isControlledRef,
   };
 
   useCheckStyles("combobox");
@@ -451,7 +449,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     ariaLabel,
     ariaLabelledby,
     persistSelectionRef,
-    setIsControlled,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let ref = useComposedRefs(inputRef, forwardedRef);
@@ -467,7 +465,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   let isControlled = controlledValue != null;
 
   React.useEffect(() => {
-    setIsControlled(isControlled);
+    isControlledRef.current = isControlled;
   }, [isControlled]);
 
   // Layout effect should be SSR-safe here because we don't actually do
@@ -772,7 +770,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
     onSelect,
     data: { navigationValue },
     transition,
-    isControlled,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let ownRef = React.useRef<HTMLElement | null>(null);
@@ -795,7 +793,10 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
 
   let handleClick = () => {
     onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { value, isControlled });
+    transition(SELECT_WITH_CLICK, {
+      value,
+      isControlled: isControlledRef.current,
+    });
   };
 
   return (
@@ -1331,8 +1332,7 @@ interface InternalComboboxContextValue {
   popoverRef: React.MutableRefObject<HTMLElement | undefined>;
   state: State;
   transition: Transition;
-  isControlled: boolean;
-  setIsControlled: (val: boolean) => void;
+  isControlledRef: React.MutableRefObject<boolean>;
 }
 
 type Transition = (event: MachineEventType, payload?: any) => any;
