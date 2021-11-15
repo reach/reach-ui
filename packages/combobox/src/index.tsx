@@ -312,7 +312,8 @@ export const Combobox = React.forwardRef(function Combobox(
   let id = useId(props.id);
   let listboxId = id ? makeId("listbox", id) : "listbox";
 
-  let [isControlled, setIsControlled] = React.useState(false);
+  let isControlledRef = React.useRef<boolean>(false);
+  let setIsControlled = (val: boolean) => (isControlledRef.current = val);
 
   let context: InternalComboboxContextValue = {
     ariaLabel,
@@ -330,7 +331,7 @@ export const Combobox = React.forwardRef(function Combobox(
     popoverRef,
     state,
     transition,
-    isControlled,
+    isControlled: isControlledRef.current,
     setIsControlled,
   };
 
