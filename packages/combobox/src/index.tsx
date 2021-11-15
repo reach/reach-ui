@@ -195,7 +195,8 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case SELECT_WITH_KEYBOARD:
       return {
         ...nextState,
-        value: data.navigationValue,
+        // if controlled, "set" the input to what it already has, and let the user do whatever they want
+        value: event.isControlled ? data.value : data.navigationValue,
         navigationValue: null,
       };
     case CLOSE_WITH_BUTTON:
@@ -1010,6 +1011,7 @@ function useKeyDown() {
     transition,
     autocompletePropRef,
     persistSelectionRef,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let options = useDescendants(ComboboxDescendantContext);
@@ -1139,7 +1141,9 @@ function useKeyDown() {
           // don't want to submit forms
           event.preventDefault();
           onSelect && onSelect(navigationValue);
-          transition(SELECT_WITH_KEYBOARD);
+          transition(SELECT_WITH_KEYBOARD, {
+            isControlled: isControlledRef.current,
+          });
         }
         break;
     }
@@ -1397,6 +1401,7 @@ type MachineEvent =
     }
   | {
       type: "SELECT_WITH_KEYBOARD";
+      isControlled: boolean;
     };
 
 type Reducer = (data: StateData, event: MachineEvent) => StateData;
