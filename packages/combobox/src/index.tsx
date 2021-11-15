@@ -188,7 +188,8 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case SELECT_WITH_CLICK:
       return {
         ...nextState,
-        value: event.isControlled ? null : event.value,
+        // if controlled, "set" the input to what it already has, and let the user do whatever they want
+        value: event.isControlled ? data.value : event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
