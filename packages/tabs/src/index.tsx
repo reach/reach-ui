@@ -78,126 +78,128 @@ enum TabsOrientation {
  *
  * @see Docs https://reach.tech/tabs#tabs
  */
-const Tabs = React.forwardRef(function Tabs(
-  {
-    as: Comp = "div",
-    children,
-    defaultIndex,
-    orientation = TabsOrientation.Horizontal,
-    index: controlledIndex = undefined,
-    keyboardActivation = TabsKeyboardActivation.Auto,
-    onChange,
-    readOnly = false,
-    ...props
-  },
-  ref
-) {
-  let isControlled = React.useRef(controlledIndex != null);
-  useControlledSwitchWarning(controlledIndex, "index", "Tabs");
+const Tabs = React.forwardRef(
+  (
+    {
+      as: Comp = "div",
+      children,
+      defaultIndex,
+      orientation = TabsOrientation.Horizontal,
+      index: controlledIndex = undefined,
+      keyboardActivation = TabsKeyboardActivation.Auto,
+      onChange,
+      readOnly = false,
+      ...props
+    },
+    ref
+  ) => {
+    let isControlled = React.useRef(controlledIndex != null);
+    useControlledSwitchWarning(controlledIndex, "index", "Tabs");
 
-  let _id = useId(props.id);
-  let id = props.id ?? makeId("tabs", _id);
+    let _id = useId(props.id);
+    let id = props.id ?? makeId("tabs", _id);
 
-  // We only manage focus if the user caused the update vs. a new controlled
-  // index coming in.
-  let userInteractedRef = React.useRef(false);
+    // We only manage focus if the user caused the update vs. a new controlled
+    // index coming in.
+    let userInteractedRef = React.useRef(false);
 
-  let selectedPanelRef = React.useRef<HTMLElement | null>(null);
+    let selectedPanelRef = React.useRef<HTMLElement | null>(null);
 
-  let isRTL = React.useRef(false);
+    let isRTL = React.useRef(false);
 
-  let [selectedIndex, setSelectedIndex] = useControlledState(
-    controlledIndex,
-    defaultIndex ?? 0
-  );
+    let [selectedIndex, setSelectedIndex] = useControlledState(
+      controlledIndex,
+      defaultIndex ?? 0
+    );
 
-  let [focusedIndex, setFocusedIndex] = React.useState(-1);
+    let [focusedIndex, setFocusedIndex] = React.useState(-1);
 
-  let [tabs, setTabs] = useDescendantsInit<TabDescendant>();
+    let [tabs, setTabs] = useDescendantsInit<TabDescendant>();
 
-  let context: InternalTabsContextValue = React.useMemo(() => {
-    return {
+    let context: InternalTabsContextValue = React.useMemo(() => {
+      return {
+        focusedIndex,
+        id,
+        isControlled: isControlled.current,
+        isRTL,
+        keyboardActivation,
+        onFocusPanel() {
+          if (
+            selectedPanelRef.current &&
+            isFunction(selectedPanelRef.current.focus)
+          ) {
+            selectedPanelRef.current.focus();
+          }
+        },
+        onSelectTab: readOnly
+          ? noop
+          : (index: number) => {
+              userInteractedRef.current = true;
+              onChange && onChange(index);
+              setSelectedIndex(index);
+            },
+        onSelectTabWithKeyboard: readOnly
+          ? noop
+          : (index: number) => {
+              userInteractedRef.current = true;
+              switch (keyboardActivation) {
+                case TabsKeyboardActivation.Manual:
+                  let tabElement = tabs[index]?.element;
+                  if (tabElement && isFunction(tabElement.focus)) {
+                    tabElement.focus();
+                  }
+                  return;
+                case TabsKeyboardActivation.Auto:
+                default:
+                  onChange && onChange(index);
+                  setSelectedIndex(index);
+                  return;
+              }
+            },
+        orientation,
+        selectedIndex,
+        selectedPanelRef,
+        setFocusedIndex,
+        setSelectedIndex,
+        userInteractedRef,
+      };
+    }, [
       focusedIndex,
       id,
-      isControlled: isControlled.current,
-      isRTL,
       keyboardActivation,
-      onFocusPanel() {
-        if (
-          selectedPanelRef.current &&
-          isFunction(selectedPanelRef.current.focus)
-        ) {
-          selectedPanelRef.current.focus();
-        }
-      },
-      onSelectTab: readOnly
-        ? noop
-        : (index: number) => {
-            userInteractedRef.current = true;
-            onChange && onChange(index);
-            setSelectedIndex(index);
-          },
-      onSelectTabWithKeyboard: readOnly
-        ? noop
-        : (index: number) => {
-            userInteractedRef.current = true;
-            switch (keyboardActivation) {
-              case TabsKeyboardActivation.Manual:
-                let tabElement = tabs[index]?.element;
-                if (tabElement && isFunction(tabElement.focus)) {
-                  tabElement.focus();
-                }
-                return;
-              case TabsKeyboardActivation.Auto:
-              default:
-                onChange && onChange(index);
-                setSelectedIndex(index);
-                return;
-            }
-          },
+      onChange,
       orientation,
+      readOnly,
       selectedIndex,
-      selectedPanelRef,
-      setFocusedIndex,
       setSelectedIndex,
-      userInteractedRef,
-    };
-  }, [
-    focusedIndex,
-    id,
-    keyboardActivation,
-    onChange,
-    orientation,
-    readOnly,
-    selectedIndex,
-    setSelectedIndex,
-    tabs,
-  ]);
+      tabs,
+    ]);
 
-  useCheckStyles("tabs");
+    useCheckStyles("tabs");
 
-  return (
-    <DescendantProvider
-      context={TabsDescendantsContext}
-      items={tabs}
-      set={setTabs}
-    >
-      <TabsContext.Provider value={context}>
-        <Comp
-          {...props}
-          ref={ref}
-          data-reach-tabs=""
-          data-orientation={orientation}
-          id={props.id}
-        >
-          {isFunction(children)
-            ? children({ focusedIndex, id, selectedIndex })
-            : children}
-        </Comp>
-      </TabsContext.Provider>
-    </DescendantProvider>
-  );
-}) as Polymorphic.ForwardRefComponent<"div", TabsProps>;
+    return (
+      <DescendantProvider
+        context={TabsDescendantsContext}
+        items={tabs}
+        set={setTabs}
+      >
+        <TabsContext.Provider value={context}>
+          <Comp
+            {...props}
+            ref={ref}
+            data-reach-tabs=""
+            data-orientation={orientation}
+            id={props.id}
+          >
+            {isFunction(children)
+              ? children({ focusedIndex, id, selectedIndex })
+              : children}
+          </Comp>
+        </TabsContext.Provider>
+      </DescendantProvider>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<"div", TabsProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tabs-props
@@ -301,89 +303,88 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tablist
  */
-const TabListImpl = React.forwardRef(function TabList(
-  { children, as: Comp = "div", onKeyDown, ...props },
-  forwardedRef
-) {
-  let {
-    focusedIndex,
-    isControlled,
-    isRTL,
-    keyboardActivation,
-    onSelectTabWithKeyboard,
-    orientation,
-    selectedIndex,
-    setSelectedIndex,
-  } = React.useContext(TabsContext);
-  let tabs = useDescendants(TabsDescendantsContext);
-
-  let ownRef = React.useRef<HTMLElement | null>(null);
-  let ref = useComposedRefs(forwardedRef, ownRef);
-
-  React.useEffect(() => {
-    if (
-      ownRef.current &&
-      ((ownRef.current.ownerDocument &&
-        ownRef.current.ownerDocument.dir === "rtl") ||
-        getComputedStyle(ownRef.current, "direction") === "rtl")
-    ) {
-      isRTL.current = true;
-    }
-  }, [isRTL]);
-
-  let handleKeyDown = composeEventHandlers(
-    onKeyDown,
-    useDescendantKeyDown(TabsDescendantsContext, {
-      currentIndex:
-        keyboardActivation === TabsKeyboardActivation.Manual
-          ? focusedIndex
-          : selectedIndex,
+const TabListImpl = React.forwardRef(
+  ({ children, as: Comp = "div", onKeyDown, ...props }, forwardedRef) => {
+    let {
+      focusedIndex,
+      isControlled,
+      isRTL,
+      keyboardActivation,
+      onSelectTabWithKeyboard,
       orientation,
-      rotate: true,
-      callback: onSelectTabWithKeyboard,
-      filter: (tab) => !tab.disabled,
-      rtl: isRTL.current,
-    })
-  );
+      selectedIndex,
+      setSelectedIndex,
+    } = React.useContext(TabsContext);
+    let tabs = useDescendants(TabsDescendantsContext);
 
-  useLayoutEffect(() => {
-    // In the event an uncontrolled component's selected index is disabled,
-    // (this should only happen if the first tab is disabled and no default
-    // index is set), we need to override the selection to the next selectable
-    // index value.
-    if (!isControlled && boolOrBoolString(tabs[selectedIndex]?.disabled)) {
-      let next = tabs.find((tab) => !tab.disabled);
-      if (next) {
-        setSelectedIndex(next.index);
+    let ownRef = React.useRef<HTMLElement | null>(null);
+    let ref = useComposedRefs(forwardedRef, ownRef);
+
+    React.useEffect(() => {
+      if (
+        ownRef.current &&
+        ((ownRef.current.ownerDocument &&
+          ownRef.current.ownerDocument.dir === "rtl") ||
+          getComputedStyle(ownRef.current, "direction") === "rtl")
+      ) {
+        isRTL.current = true;
       }
-    }
-  }, [tabs, isControlled, selectedIndex, setSelectedIndex]);
+    }, [isRTL]);
 
-  return (
-    <Comp
-      // The element that serves as the container for the set of tabs has role
-      // `tablist`
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      role="tablist"
-      // If the `tablist` element is vertically oriented, it has the property
-      // `aria-orientation` set to `"vertical"`. The default value of
-      // `aria-orientation` for a tablist element is `"horizontal"`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      aria-orientation={orientation}
-      {...props}
-      data-reach-tab-list=""
-      ref={ref}
-      onKeyDown={handleKeyDown}
-    >
-      {React.Children.map(children, (child, index) => {
-        // TODO: Remove in 1.0
-        return cloneValidElement(child, {
-          isSelected: index === selectedIndex,
-        });
-      })}
-    </Comp>
-  );
-}) as Polymorphic.ForwardRefComponent<"div", TabListProps>;
+    let handleKeyDown = composeEventHandlers(
+      onKeyDown,
+      useDescendantKeyDown(TabsDescendantsContext, {
+        currentIndex:
+          keyboardActivation === TabsKeyboardActivation.Manual
+            ? focusedIndex
+            : selectedIndex,
+        orientation,
+        rotate: true,
+        callback: onSelectTabWithKeyboard,
+        filter: (tab) => !tab.disabled,
+        rtl: isRTL.current,
+      })
+    );
+
+    useLayoutEffect(() => {
+      // In the event an uncontrolled component's selected index is disabled,
+      // (this should only happen if the first tab is disabled and no default
+      // index is set), we need to override the selection to the next selectable
+      // index value.
+      if (!isControlled && boolOrBoolString(tabs[selectedIndex]?.disabled)) {
+        let next = tabs.find((tab) => !tab.disabled);
+        if (next) {
+          setSelectedIndex(next.index);
+        }
+      }
+    }, [tabs, isControlled, selectedIndex, setSelectedIndex]);
+
+    return (
+      <Comp
+        // The element that serves as the container for the set of tabs has role
+        // `tablist`
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        role="tablist"
+        // If the `tablist` element is vertically oriented, it has the property
+        // `aria-orientation` set to `"vertical"`. The default value of
+        // `aria-orientation` for a tablist element is `"horizontal"`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        aria-orientation={orientation}
+        {...props}
+        data-reach-tab-list=""
+        ref={ref}
+        onKeyDown={handleKeyDown}
+      >
+        {React.Children.map(children, (child, index) => {
+          // TODO: Remove in 1.0
+          return cloneValidElement(child, {
+            isSelected: index === selectedIndex,
+          });
+        })}
+      </Comp>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<"div", TabListProps>;
 
 if (__DEV__) {
   TabListImpl.displayName = "TabList";
@@ -425,99 +426,101 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tab
  */
-const Tab = React.forwardRef(function Tab(
-  {
-    // TODO: Remove in 1.0
-    // @ts-ignore
-    isSelected: _,
+const Tab = React.forwardRef(
+  (
+    {
+      // TODO: Remove in 1.0
+      // @ts-ignore
+      isSelected: _,
 
-    children,
-    as: Comp = "button",
-    index: indexProp,
-    disabled,
-    onBlur,
-    onFocus,
-    ...props
-  },
-  forwardedRef
-) {
-  let {
-    id: tabsId,
-    onSelectTab,
-    orientation,
-    selectedIndex,
-    userInteractedRef,
-    setFocusedIndex,
-  } = React.useContext(TabsContext);
-  let ownRef = React.useRef<HTMLElement | null>(null);
+      children,
+      as: Comp = "button",
+      index: indexProp,
+      disabled,
+      onBlur,
+      onFocus,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    let {
+      id: tabsId,
+      onSelectTab,
+      orientation,
+      selectedIndex,
+      userInteractedRef,
+      setFocusedIndex,
+    } = React.useContext(TabsContext);
+    let ownRef = React.useRef<HTMLElement | null>(null);
 
-  let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
-    ownRef,
-    null
-  );
-  let ref = useComposedRefs(forwardedRef, handleRefSet);
-  let descendant = React.useMemo(() => {
-    return {
-      element,
-      disabled: !!disabled,
-    };
-  }, [disabled, element]);
-  let index = useDescendant(descendant, TabsDescendantsContext, indexProp);
+    let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
+      ownRef,
+      null
+    );
+    let ref = useComposedRefs(forwardedRef, handleRefSet);
+    let descendant = React.useMemo(() => {
+      return {
+        element,
+        disabled: !!disabled,
+      };
+    }, [disabled, element]);
+    let index = useDescendant(descendant, TabsDescendantsContext, indexProp);
 
-  let htmlType =
-    Comp === "button" && props.type == null ? "button" : props.type;
+    let htmlType =
+      Comp === "button" && props.type == null ? "button" : props.type;
 
-  let isSelected = index === selectedIndex;
+    let isSelected = index === selectedIndex;
 
-  function onSelect() {
-    onSelectTab(index);
-  }
-
-  useUpdateEffect(() => {
-    if (isSelected && ownRef.current && userInteractedRef.current) {
-      userInteractedRef.current = false;
-      if (isFunction(ownRef.current.focus)) {
-        ownRef.current.focus();
-      }
+    function onSelect() {
+      onSelectTab(index);
     }
-  }, [isSelected, userInteractedRef]);
 
-  return (
-    <Comp
-      // Each element with role `tab` has the property `aria-controls` referring
-      // to its associated `tabpanel` element.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      aria-controls={makeId(tabsId, "panel", index)}
-      aria-disabled={disabled}
-      // The active tab element has the state `aria-selected` set to `true` and
-      // all other tab elements have it set to `false`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      aria-selected={isSelected}
-      // Each element that serves as a tab has role `tab` and is contained
-      // within the element with role `tablist`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      role="tab"
-      tabIndex={isSelected ? 0 : -1}
-      {...props}
-      ref={ref}
-      data-reach-tab=""
-      data-orientation={orientation}
-      data-selected={isSelected ? "" : undefined}
-      disabled={disabled}
-      id={makeId(tabsId, "tab", index)}
-      onClick={onSelect}
-      onFocus={composeEventHandlers(onFocus, () => {
-        setFocusedIndex(index);
-      })}
-      onBlur={composeEventHandlers(onBlur, () => {
-        setFocusedIndex(-1);
-      })}
-      type={htmlType}
-    >
-      {children}
-    </Comp>
-  );
-}) as Polymorphic.ForwardRefComponent<"button", TabProps>;
+    useUpdateEffect(() => {
+      if (isSelected && ownRef.current && userInteractedRef.current) {
+        userInteractedRef.current = false;
+        if (isFunction(ownRef.current.focus)) {
+          ownRef.current.focus();
+        }
+      }
+    }, [isSelected, userInteractedRef]);
+
+    return (
+      <Comp
+        // Each element with role `tab` has the property `aria-controls` referring
+        // to its associated `tabpanel` element.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        aria-controls={makeId(tabsId, "panel", index)}
+        aria-disabled={disabled}
+        // The active tab element has the state `aria-selected` set to `true` and
+        // all other tab elements have it set to `false`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        aria-selected={isSelected}
+        // Each element that serves as a tab has role `tab` and is contained
+        // within the element with role `tablist`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        role="tab"
+        tabIndex={isSelected ? 0 : -1}
+        {...props}
+        ref={ref}
+        data-reach-tab=""
+        data-orientation={orientation}
+        data-selected={isSelected ? "" : undefined}
+        disabled={disabled}
+        id={makeId(tabsId, "tab", index)}
+        onClick={onSelect}
+        onFocus={composeEventHandlers(onFocus, () => {
+          setFocusedIndex(index);
+        })}
+        onBlur={composeEventHandlers(onBlur, () => {
+          setFocusedIndex(-1);
+        })}
+        type={htmlType}
+      >
+        {children}
+      </Comp>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<"button", TabProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tab-props
@@ -556,26 +559,25 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tabpanels
  */
-const TabPanelsImpl = React.forwardRef(function TabPanels(
-  { children, as: Comp = "div", ...props },
-  forwardedRef
-) {
-  let ownRef = React.useRef();
-  let ref = useComposedRefs(ownRef, forwardedRef);
-  let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
+const TabPanelsImpl = React.forwardRef(
+  ({ children, as: Comp = "div", ...props }, forwardedRef) => {
+    let ownRef = React.useRef();
+    let ref = useComposedRefs(ownRef, forwardedRef);
+    let [tabPanels, setTabPanels] = useDescendantsInit<TabPanelDescendant>();
 
-  return (
-    <DescendantProvider
-      context={TabPanelDescendantsContext}
-      items={tabPanels}
-      set={setTabPanels}
-    >
-      <Comp {...props} ref={ref} data-reach-tab-panels="">
-        {children}
-      </Comp>
-    </DescendantProvider>
-  );
-}) as Polymorphic.ForwardRefComponent<"div", TabPanelsProps>;
+    return (
+      <DescendantProvider
+        context={TabPanelDescendantsContext}
+        items={tabPanels}
+        set={setTabPanels}
+      >
+        <Comp {...props} ref={ref} data-reach-tab-panels="">
+          {children}
+        </Comp>
+      </DescendantProvider>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<"div", TabPanelsProps>;
 
 if (__DEV__) {
   TabPanelsImpl.displayName = "TabPanels";
@@ -608,78 +610,84 @@ if (__DEV__) {
  *
  * @see Docs https://reach.tech/tabs#tabpanel
  */
-const TabPanel = React.forwardRef(function TabPanel(
-  {
-    children,
-    "aria-label": ariaLabel,
-    as: Comp = "div",
-    index: indexProp,
-    ...props
-  },
-  forwardedRef
-) {
-  let {
-    selectedPanelRef,
-    selectedIndex,
-    id: tabsId,
-  } = React.useContext(TabsContext);
-  let ownRef = React.useRef<HTMLElement | null>(null);
+const TabPanel = React.forwardRef(
+  (
+    {
+      children,
+      "aria-label": ariaLabel,
+      as: Comp = "div",
+      index: indexProp,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    let {
+      selectedPanelRef,
+      selectedIndex,
+      id: tabsId,
+    } = React.useContext(TabsContext);
+    let ownRef = React.useRef<HTMLElement | null>(null);
 
-  let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
-    ownRef,
-    null
-  );
+    let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
+      ownRef,
+      null
+    );
 
-  let descendant = React.useMemo(() => ({ element }), [element]);
-  let index = useDescendant(descendant, TabPanelDescendantsContext, indexProp);
+    let descendant = React.useMemo(() => ({ element }), [element]);
+    let index = useDescendant(
+      descendant,
+      TabPanelDescendantsContext,
+      indexProp
+    );
 
-  let id = makeId(tabsId, "panel", index);
+    let id = makeId(tabsId, "panel", index);
 
-  // Because useDescendant will always return -1 on the first render,
-  // `isSelected` will briefly be false for all tabs. We set a tab panel's
-  // hidden attribute based `isSelected` being false, meaning that all tabs
-  // are initially hidden. This makes it impossible for consumers to do
-  // certain things, like focus an element inside the active tab panel when
-  // the page loads. So what we can do is track that a panel is "ready" to be
-  // hidden once effects are run (descendants work their magic in
-  // useLayoutEffect, so we can set our ref in useEffecct to run later). We
-  // can use a ref instead of state because we're always geting a re-render
-  // anyway thanks to descendants. This is a little more coupled to the
-  // implementation details of descendants than I'd like, but we'll add a test
-  // to (hopefully) catch any regressions.
-  let isSelected = index === selectedIndex;
-  let readyToHide = React.useRef(false);
-  let hidden = readyToHide.current ? !isSelected : false;
-  React.useEffect(() => {
-    readyToHide.current = true;
-  }, []);
+    // Because useDescendant will always return -1 on the first render,
+    // `isSelected` will briefly be false for all tabs. We set a tab panel's
+    // hidden attribute based `isSelected` being false, meaning that all tabs
+    // are initially hidden. This makes it impossible for consumers to do
+    // certain things, like focus an element inside the active tab panel when
+    // the page loads. So what we can do is track that a panel is "ready" to be
+    // hidden once effects are run (descendants work their magic in
+    // useLayoutEffect, so we can set our ref in useEffecct to run later). We
+    // can use a ref instead of state because we're always geting a re-render
+    // anyway thanks to descendants. This is a little more coupled to the
+    // implementation details of descendants than I'd like, but we'll add a test
+    // to (hopefully) catch any regressions.
+    let isSelected = index === selectedIndex;
+    let readyToHide = React.useRef(false);
+    let hidden = readyToHide.current ? !isSelected : false;
+    React.useEffect(() => {
+      readyToHide.current = true;
+    }, []);
 
-  let ref = useComposedRefs(
-    forwardedRef,
-    handleRefSet,
-    isSelected ? selectedPanelRef : null
-  );
+    let ref = useComposedRefs(
+      forwardedRef,
+      handleRefSet,
+      isSelected ? selectedPanelRef : null
+    );
 
-  return (
-    <Comp
-      // Each element with role `tabpanel` has the property `aria-labelledby`
-      // referring to its associated tab element.
-      aria-labelledby={makeId(tabsId, "tab", index)}
-      hidden={hidden}
-      // Each element that contains the content panel for a tab has role
-      // `tabpanel`.
-      // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
-      role="tabpanel"
-      tabIndex={isSelected ? 0 : -1}
-      {...props}
-      ref={ref}
-      data-reach-tab-panel=""
-      id={id}
-    >
-      {children}
-    </Comp>
-  );
-}) as Polymorphic.ForwardRefComponent<"div", TabPanelProps>;
+    return (
+      <Comp
+        // Each element with role `tabpanel` has the property `aria-labelledby`
+        // referring to its associated tab element.
+        aria-labelledby={makeId(tabsId, "tab", index)}
+        hidden={hidden}
+        // Each element that contains the content panel for a tab has role
+        // `tabpanel`.
+        // https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
+        role="tabpanel"
+        tabIndex={isSelected ? 0 : -1}
+        {...props}
+        ref={ref}
+        data-reach-tab-panel=""
+        id={id}
+      >
+        {children}
+      </Comp>
+    );
+  }
+) as Polymorphic.ForwardRefComponent<"div", TabPanelProps>;
 
 /**
  * @see Docs https://reach.tech/tabs#tabpanel-props
