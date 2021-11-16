@@ -9,7 +9,7 @@
     "url": "git+https://github.com/reach/reach-ui.git"
   },
   "scripts": {
-    "start": "start-storybook -p 9001 -c .storybook",
+    "start": "start-storybook -p 9001 -c .storybook --ci",
     "test:react-16": "USE_REACT_16=true jest",
     "test": "jest",
     "build": "yarn build:packages",
