@@ -44,6 +44,7 @@ import { Popover, positionMatchWidth } from "@reach/popover";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { PopoverProps } from "@reach/popover";
 import type { Descendant } from "@reach/descendants";
+import warning from "tiny-warning";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -188,14 +189,16 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case SELECT_WITH_CLICK:
       return {
         ...nextState,
-        // if controlled, "set" the input to what it already has, and let the user do whatever they want
+        // if controlled, "set" the input to what it already has, and let the
+        // user do whatever they want
         value: event.isControlled ? data.value : event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
       return {
         ...nextState,
-        // if controlled, "set" the input to what it already has, and let the user do whatever they want
+        // if controlled, "set" the input to what it already has, and let the
+        // user do whatever they want
         value: event.isControlled ? data.value : data.navigationValue,
         navigationValue: null,
       };
@@ -464,10 +467,23 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   let handleBlur = useBlur();
 
-  let isControlled = controlledValue != null;
+  let isControlled = typeof controlledValue !== "undefined";
+  let wasInitiallyControlled = typeof initialControlledValue !== "undefined";
+
+  if (__DEV__) {
+    warning(
+      !(!isControlled && wasInitiallyControlled),
+      "ComboboxInput is changing from controlled to uncontrolled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+    );
+    warning(
+      !(isControlled && !wasInitiallyControlled),
+      "ComboboxInput is changing from uncontrolled to controlled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+    );
+  }
 
   React.useEffect(() => {
     isControlledRef.current = isControlled;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isControlled]);
 
   // Layout effect should be SSR-safe here because we don't actually do
@@ -480,7 +496,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   let handleValueChange = React.useCallback(
     (value: ComboboxValue) => {
       if (value.trim() === "") {
-        transition(CLEAR);
+        transition(CLEAR, { isControlled });
       } else if (
         value === initialControlledValue &&
         !controlledValueChangedRef.current
@@ -490,7 +506,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
         transition(CHANGE, { value });
       }
     },
-    [initialControlledValue, transition]
+    [initialControlledValue, transition, isControlled]
   );
 
   React.useEffect(() => {
