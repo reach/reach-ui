@@ -44,6 +44,7 @@ import { Popover, positionMatchWidth } from "@reach/popover";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { PopoverProps } from "@reach/popover";
 import type { Descendant } from "@reach/descendants";
+import warning from "tiny-warning";
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -188,13 +189,17 @@ const reducer: Reducer = (data: StateData, event: MachineEvent) => {
     case SELECT_WITH_CLICK:
       return {
         ...nextState,
-        value: event.value,
+        // if controlled, "set" the input to what it already has, and let the
+        // user do whatever they want
+        value: event.isControlled ? data.value : event.value,
         navigationValue: null,
       };
     case SELECT_WITH_KEYBOARD:
       return {
         ...nextState,
-        value: data.navigationValue,
+        // if controlled, "set" the input to what it already has, and let the
+        // user do whatever they want
+        value: event.isControlled ? data.value : data.navigationValue,
         navigationValue: null,
       };
     case CLOSE_WITH_BUTTON:
@@ -312,6 +317,8 @@ export const Combobox = React.forwardRef(function Combobox(
   let id = useId(props.id);
   let listboxId = id ? makeId("listbox", id) : "listbox";
 
+  let isControlledRef = React.useRef<boolean>(false);
+
   let context: InternalComboboxContextValue = {
     ariaLabel,
     ariaLabelledby,
@@ -328,6 +335,7 @@ export const Combobox = React.forwardRef(function Combobox(
     popoverRef,
     state,
     transition,
+    isControlledRef,
   };
 
   useCheckStyles("combobox");
@@ -446,6 +454,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
     ariaLabel,
     ariaLabelledby,
     persistSelectionRef,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let ref = useComposedRefs(inputRef, forwardedRef);
@@ -458,7 +467,24 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
 
   let handleBlur = useBlur();
 
-  let isControlled = controlledValue != null;
+  let isControlled = typeof controlledValue !== "undefined";
+  let wasInitiallyControlled = typeof initialControlledValue !== "undefined";
+
+  if (__DEV__) {
+    warning(
+      !(!isControlled && wasInitiallyControlled),
+      "ComboboxInput is changing from controlled to uncontrolled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+    );
+    warning(
+      !(isControlled && !wasInitiallyControlled),
+      "ComboboxInput is changing from uncontrolled to controlled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+    );
+  }
+
+  React.useEffect(() => {
+    isControlledRef.current = isControlled;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isControlled]);
 
   // Layout effect should be SSR-safe here because we don't actually do
   // anything with this ref that involves rendering until after we've
@@ -470,7 +496,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
   let handleValueChange = React.useCallback(
     (value: ComboboxValue) => {
       if (value.trim() === "") {
-        transition(CLEAR);
+        transition(CLEAR, { isControlled });
       } else if (
         value === initialControlledValue &&
         !controlledValueChangedRef.current
@@ -480,7 +506,7 @@ export const ComboboxInput = React.forwardRef(function ComboboxInput(
         transition(CHANGE, { value });
       }
     },
-    [initialControlledValue, transition]
+    [initialControlledValue, transition, isControlled]
   );
 
   React.useEffect(() => {
@@ -762,6 +788,7 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
     onSelect,
     data: { navigationValue },
     transition,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let ownRef = React.useRef<HTMLElement | null>(null);
@@ -784,7 +811,10 @@ export const ComboboxOption = React.forwardRef(function ComboboxOption(
 
   let handleClick = () => {
     onSelect && onSelect(value);
-    transition(SELECT_WITH_CLICK, { value });
+    transition(SELECT_WITH_CLICK, {
+      value,
+      isControlled: isControlledRef.current,
+    });
   };
 
   return (
@@ -997,6 +1027,7 @@ function useKeyDown() {
     transition,
     autocompletePropRef,
     persistSelectionRef,
+    isControlledRef,
   } = React.useContext(ComboboxContext);
 
   let options = useDescendants(ComboboxDescendantContext);
@@ -1126,7 +1157,9 @@ function useKeyDown() {
           // don't want to submit forms
           event.preventDefault();
           onSelect && onSelect(navigationValue);
-          transition(SELECT_WITH_KEYBOARD);
+          transition(SELECT_WITH_KEYBOARD, {
+            isControlled: isControlledRef.current,
+          });
         }
         break;
     }
@@ -1320,6 +1353,7 @@ interface InternalComboboxContextValue {
   popoverRef: React.MutableRefObject<HTMLElement | undefined>;
   state: State;
   transition: Transition;
+  isControlledRef: React.MutableRefObject<boolean>;
 }
 
 type Transition = (event: MachineEventType, payload?: any) => any;
@@ -1379,9 +1413,11 @@ type MachineEvent =
   | {
       type: "SELECT_WITH_CLICK";
       value: ComboboxValue;
+      isControlled: boolean;
     }
   | {
       type: "SELECT_WITH_KEYBOARD";
+      isControlled: boolean;
     };
 
 type Reducer = (data: StateData, event: MachineEvent) => StateData;

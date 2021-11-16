@@ -19,6 +19,7 @@
     "@reach/portal": "0.16.2",
     "@reach/utils": "0.16.0",
     "prop-types": "^15.7.2",
+    "tiny-warning": "^1.0.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
