@@ -317,8 +317,8 @@ export const Combobox = React.forwardRef(
 
     let id = useId(props.id);
     let listboxId = id ? makeId("listbox", id) : "listbox";
-
     let isControlledRef = React.useRef<boolean>(false);
+    let isExpanded = popoverIsExpanded(state);
 
     let context: InternalComboboxContextValue = {
       ariaLabel,
@@ -328,7 +328,7 @@ export const Combobox = React.forwardRef(
       comboboxId: id,
       data,
       inputRef,
-      isExpanded: popoverIsExpanded(state),
+      isExpanded,
       listboxId,
       onSelect: onSelect || noop,
       openOnFocus,
@@ -352,12 +352,13 @@ export const Combobox = React.forwardRef(
             {...props}
             data-reach-combobox=""
             data-state={getDataState(state)}
+            data-expanded={isExpanded || undefined}
             ref={forwardedRef}
           >
             {isFunction(children)
               ? children({
                   id,
-                  isExpanded: popoverIsExpanded(state),
+                  isExpanded,
                   navigationValue: data.navigationValue ?? null,
                   state,
                 })
@@ -684,6 +685,7 @@ export const ComboboxPopover = React.forwardRef(
         as={Comp}
         {...props}
         ref={ref}
+        data-expanded={isExpanded || undefined}
         position={position}
         targetRef={inputRef}
         {...sharedProps}
