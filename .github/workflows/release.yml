@@ -40,9 +40,6 @@ jobs:
       - name: Build Packages
         run: yarn build
 
-      - name: Test
-        run: yarn test
-
       - run: echo "Publishing to npm..."
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
 
