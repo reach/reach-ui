@@ -1,5 +1,7 @@
 // Forked from https://github.com/bvaughn/highlight-words-core
 
+import { ComboboxObjectValue } from ".";
+
 /**
  * Creates an array of chunk objects representing both higlightable and non
  * highlightable pieces of text that match each search word.
@@ -178,4 +180,34 @@ export interface Chunk {
   highlight: boolean;
   start: number;
   end: number;
+}
+
+/**
+ * Accepts an object with primary text, secondary text and key
+ * Removes the key, and combines the primary text and secondary text
+ *
+ * @return String of combined primary text and secondary text
+ */
+export function convertobjectToSearchableString(
+  valueObject: ComboboxObjectValue
+) {
+  const notAllowedkeys = ["key"];
+  const combinedPrimaryAndSecondaryText = Object.keys(valueObject)
+    .filter((key) => !notAllowedkeys.includes(key))
+    .reduce((obj, key) => {
+      return obj.concat(" ", (valueObject as any)[key]);
+    }, "");
+  return combinedPrimaryAndSecondaryText;
+}
+/**
+ * Accepts an object or a string
+ *
+ * @return String of searchable primary and secondary text
+ */
+export function checkTypeOfInput(value: ComboboxObjectValue | string) {
+  if (typeof value === "string") {
+    return value;
+  } else {
+    return convertobjectToSearchableString(value);
+  }
 }

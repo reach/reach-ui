@@ -37,7 +37,7 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
-import { HighlightWords } from "./utils";
+import { checkTypeOfInput, HighlightWords } from "./utils";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
 
@@ -317,8 +317,8 @@ export const Combobox = React.forwardRef(
 
     let id = useId(props.id);
     let listboxId = id ? makeId("listbox", id) : "listbox";
+
     let isControlledRef = React.useRef<boolean>(false);
-    let isExpanded = popoverIsExpanded(state);
 
     let context: InternalComboboxContextValue = {
       ariaLabel,
@@ -328,7 +328,7 @@ export const Combobox = React.forwardRef(
       comboboxId: id,
       data,
       inputRef,
-      isExpanded,
+      isExpanded: popoverIsExpanded(state),
       listboxId,
       onSelect: onSelect || noop,
       openOnFocus,
@@ -352,13 +352,12 @@ export const Combobox = React.forwardRef(
             {...props}
             data-reach-combobox=""
             data-state={getDataState(state)}
-            data-expanded={isExpanded || undefined}
             ref={forwardedRef}
           >
             {isFunction(children)
               ? children({
                   id,
-                  isExpanded,
+                  isExpanded: popoverIsExpanded(state),
                   navigationValue: data.navigationValue ?? null,
                   state,
                 })
@@ -499,10 +498,10 @@ export const ComboboxInput = React.forwardRef(
 
     let handleValueChange = React.useCallback(
       (value: ComboboxValue) => {
-        if (value.trim() === "") {
+        if (checkTypeOfInput(value).trim() === "") {
           transition(CLEAR, { isControlled });
         } else if (
-          value === initialControlledValue &&
+          checkTypeOfInput(value) === initialControlledValue &&
           !controlledValueChangedRef.current
         ) {
           transition(INITIAL_CHANGE, { value });
@@ -521,7 +520,9 @@ export const ComboboxInput = React.forwardRef(
         isControlled &&
         controlledValue !== value &&
         // https://github.com/reach/reach-ui/issues/481
-        (controlledValue!.trim() === "" ? (value || "").trim() !== "" : true)
+        (controlledValue!.trim() === ""
+          ? (checkTypeOfInput(value as any) || "").trim() !== ""
+          : true)
       ) {
         handleValueChange(controlledValue!);
       }
@@ -572,7 +573,9 @@ export const ComboboxInput = React.forwardRef(
     return (
       <Comp
         aria-activedescendant={
-          navigationValue ? String(makeHash(navigationValue)) : undefined
+          navigationValue
+            ? String(makeHash(checkTypeOfInput(navigationValue)))
+            : undefined
         }
         aria-autocomplete="both"
         aria-controls={listboxId}
@@ -590,7 +593,7 @@ export const ComboboxInput = React.forwardRef(
         onClick={composeEventHandlers(onClick, handleClick)}
         onFocus={composeEventHandlers(onFocus, handleFocus)}
         onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
-        value={inputValue || ""}
+        value={(inputValue as any) || ""}
       />
     );
   }
@@ -628,7 +631,7 @@ export interface ComboboxInputProps {
   /**
    * @see Docs https://reach.tech/combobox#comboboxinput-value
    */
-  value?: ComboboxValue;
+  value?: string;
 }
 
 if (__DEV__) {
@@ -685,7 +688,6 @@ export const ComboboxPopover = React.forwardRef(
         as={Comp}
         {...props}
         ref={ref}
-        data-expanded={isExpanded || undefined}
         position={position}
         targetRef={inputRef}
         {...sharedProps}
@@ -801,7 +803,6 @@ export const ComboboxOption = React.forwardRef(
       transition,
       isControlledRef,
     } = React.useContext(ComboboxContext);
-
     let ownRef = React.useRef<HTMLElement | null>(null);
 
     let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -827,7 +828,6 @@ export const ComboboxOption = React.forwardRef(
         isControlled: isControlledRef.current,
       });
     };
-
     return (
       <OptionContext.Provider value={{ value, index }}>
         <Comp
@@ -836,7 +836,7 @@ export const ComboboxOption = React.forwardRef(
           {...props}
           data-reach-combobox-option=""
           ref={ref}
-          id={String(makeHash(value))}
+          id={String(makeHash(checkTypeOfInput(value)))}
           data-highlighted={isActive ? "" : undefined}
           // Without this the menu will close from `onBlur`, but with it the
           // element can be `document.activeElement` and then our focus checks in
@@ -889,13 +889,12 @@ export interface ComboboxOptionProps {
    *
    * @see Docs https://reach.tech/combobox#comboboxoption-value
    */
-  value: string;
+  value: ComboboxValue;
 }
 
 if (__DEV__) {
   ComboboxOption.displayName = "ComboboxOption";
 }
-
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -919,21 +918,19 @@ export function ComboboxOptionText() {
   let {
     data: { value: contextValue },
   } = React.useContext(ComboboxContext);
-
   let results = React.useMemo(
     () =>
       HighlightWords.findAll({
-        searchWords: escapeRegexp(contextValue || "").split(/\s+/),
-        textToHighlight: value,
+        searchWords: escapeRegexp(checkTypeOfInput(value) || "").split(/\s+/),
+        textToHighlight: checkTypeOfInput(value),
       }),
     [contextValue, value]
   );
-
   return (
     <>
       {results.length
         ? results.map((result, index) => {
-            let str = value.slice(result.start, result.end);
+            let str = checkTypeOfInput(value).slice(result.start, result.end);
             return (
               <span
                 key={index}
@@ -1369,7 +1366,12 @@ interface InternalComboboxContextValue {
 
 type Transition = (event: MachineEventType, payload?: any) => any;
 
-type ComboboxValue = string;
+export interface ComboboxObjectValue {
+  key: string | number;
+  primaryText: string;
+  secondaryText: string;
+}
+type ComboboxValue = string | ComboboxObjectValue;
 
 type State = "IDLE" | "SUGGESTING" | "NAVIGATING" | "INTERACTING";
 

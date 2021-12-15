@@ -10,6 +10,7 @@ export { Example as TokenInput } from "./token-input.example.js";
 export { Example as WithButton } from "./with-button.example.js";
 export { Example as WithCustomSelectDataTs } from "./with-custom-select-data.example.tsx";
 export { Example as WithUsecomboboxcontextHookTS } from "./with-usecomboboxcontext-hook.example.tsx";
+export { Example as WithPrimaryTextAndSecondaryText } from "./with-primary-secondary-text.tsx";
 
 export default {
   title: "Combobox",
