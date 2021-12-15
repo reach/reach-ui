@@ -1,6 +1,6 @@
 {
   "name": "@reach/alert-dialog",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "description": "Accessible React Alert Dialog.",
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
@@ -13,9 +13,9 @@
     "directory": "packages/alert-dialog"
   },
   "dependencies": {
-    "@reach/auto-id": "0.16.0",
-    "@reach/dialog": "0.16.2",
-    "@reach/utils": "0.16.0",
+    "@reach/auto-id": "0.17.0",
+    "@reach/dialog": "0.17.0",
+    "@reach/utils": "0.17.0",
     "invariant": "^2.2.4",
     "prop-types": "^15.7.2",
     "tslib": "^2.3.0"
