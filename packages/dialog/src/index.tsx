@@ -89,7 +89,7 @@ interface DialogOverlayProps extends DialogProps {
    * portal will be appended to the body of the component's owner document
    * (typically this is the `document.body`).
    *
-   * @see Docs https://reach.tech/dialog#dialog-portalTargetRef
+   * @see Docs https://reach.tech/dialog#dialogoverlay-portaltargetref
    */
   portalTargetRef?: React.RefObject<Node>;
   /**
