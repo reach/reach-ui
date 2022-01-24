@@ -13,6 +13,7 @@ export { Example as Dropdown } from "./dropdown.example.js";
 export { Example as LongContent } from "./long-content.example.js";
 export { Example as Nested } from "./nested.example.js";
 export { Example as NoTabbables } from "./no-tabbables.example.js";
+export { Example as WithCustomPortalTarget } from "./with-custom-portal-target.example.js";
 export { Example as WithDialogOverlay } from "./with-dialog-overlay.example.js";
 export { Example as WithTooltip } from "./with-tooltip.example.js";
 export { Example as WithWrappedComponents } from "./with-wrapped-components.example.js";

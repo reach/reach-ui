@@ -46,7 +46,7 @@ const overlayPropTypes = {
  * @see Docs https://reach.tech/dialog#dialogoverlay
  */
 const DialogOverlay = React.forwardRef(function DialogOverlay(
-  { as: Comp = "div", isOpen = true, ...props },
+  { as: Comp = "div", portalTargetRef, isOpen = true, ...props },
   forwardedRef
 ) {
   useCheckStyles("dialog");
@@ -68,7 +68,7 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
   }, [isOpen]);
 
   return isOpen ? (
-    <Portal data-reach-dialog-wrapper="">
+    <Portal data-reach-dialog-wrapper="" containerRef={portalTargetRef}>
       <DialogInner ref={forwardedRef} as={Comp} {...props} />
     </Portal>
   ) : null;
@@ -83,6 +83,15 @@ if (__DEV__) {
 }
 
 interface DialogOverlayProps extends DialogProps {
+  /**
+   * The DialogOverlay is always rendered in a portal.
+   * This props determined the container to which the portal will be appended. If not set the
+   * portal will be appended to the body of the component's owner document
+   * (typically this is the `document.body`).
+   *
+   * @see Docs https://reach.tech/dialog#dialog-portalTargetRef
+   */
+  portalTargetRef?: React.RefObject<Node>;
   /**
    * By default the dialog locks the focus inside it. Normally this is what you
    * want. This prop is provided so that this feature can be disabled. This,
@@ -332,7 +341,6 @@ interface DialogProps {
    * @see Docs https://reach.tech/dialog#dialog-children
    */
   children?: React.ReactNode;
-
   /**
    * By default the first focusable element will receive focus when the dialog
    * opens but you can provide a ref to focus instead.
