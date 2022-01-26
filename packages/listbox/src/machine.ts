@@ -228,9 +228,7 @@ function submitForm(data: ListboxStateData, event: any) {
   // sucker.
   let { hiddenInput } = event.refs;
   if (hiddenInput && hiddenInput.form) {
-    let submitButton = hiddenInput.form.querySelector(
-      "[type='submit'], button"
-    );
+    let submitButton = hiddenInput.form.querySelector("[type='submit'],button");
     submitButton && (submitButton as any).click();
   }
 }
