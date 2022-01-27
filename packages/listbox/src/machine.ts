@@ -229,7 +229,7 @@ function submitForm(data: ListboxStateData, event: any) {
   let { hiddenInput } = event.refs;
   if (hiddenInput && hiddenInput.form) {
     let submitButton = hiddenInput.form.querySelector(
-      'button:not([type]),[type="submit"]'
+      "button:not([type]),[type='submit']"
     );
     submitButton && (submitButton as any).click();
   }
