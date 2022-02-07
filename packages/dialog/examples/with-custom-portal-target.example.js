@@ -14,7 +14,7 @@ function Example() {
         aria-label="Announcement"
         isOpen={showDialog}
         onDismiss={() => setShowDialog(false)}
-        portalTargetRef={containerRef}
+        containerRef={containerRef}
       >
         <DialogContent aria-labelledby="Announcement">
           <p>This Dialog will be rendered within a custom DOM Node.</p>

@@ -327,7 +327,7 @@ Use the following CSS to target the overlay:
 | [`initialFocusRef`](#dialogoverlay-initialfocusref)                  | `ref`  | false    |
 | [`isOpen`](#dialogoverlay-isopen)                                    | `bool` | false    |
 | [`onDismiss`](#dialogoverlay-ondismiss)                              | `func` | false    |
-| [`portalTargetRef`](#dialogoverlay-portaltargetref)                  | `ref`  | false    |
+| [`containerRef`](#dialogoverlay-portaltargetref)                     | `ref`  | false    |
 
 ##### DialogOverlay `div` props
 
@@ -433,9 +433,9 @@ Same as [Dialog `isOpen`](#dialog-isopen).
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss).
 
-##### DialogOverlay `portalTargetRef`
+##### DialogOverlay `containerRef`
 
-`portalTargetRef?: React.RefObject<Node>`
+`containerRef?: React.RefObject<Node>`
 
 By default the DialogOverlay will be rendered to the `body` element via a portal. This prop allows you to set a custom node as the portal
 target as an alternative to the `body`.
@@ -454,7 +454,7 @@ function Example(props) {
       <DialogOverlay
         isOpen={showDialog}
         onDismiss={close}
-        portalTargetRef={containerRef}
+        containerRef={containerRef}
       >
         <DialogContent aria-labelledby="Announcement">
           <p>This Dialog will be rendered within a custom DOM Node.</p>
