@@ -3,14 +3,8 @@
 }
 
 [data-reach-skip-nav-link] {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  width: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  position: absolute;
+  position: fixed;
+  top: -100%;
 }
 
 [data-reach-skip-nav-link]:focus {
@@ -22,5 +16,4 @@
   z-index: 1;
   width: auto;
   height: auto;
-  clip: auto;
 }
