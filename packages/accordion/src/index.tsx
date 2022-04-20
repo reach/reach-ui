@@ -9,15 +9,15 @@
  */
 
 import * as React from "react";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { isBoolean, isNumber } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
 import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
+import { useControlledState } from "@reach/utils/use-controlled-state";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
-import warning from "tiny-warning";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -34,15 +34,10 @@ import type { Descendant } from "@reach/descendants";
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
   "AccordionDescendantContext"
 );
-const AccordionContext = createNamedContext<InternalAccordionContextValue>(
-  "AccordionContext",
-  {} as InternalAccordionContextValue
-);
-const AccordionItemContext =
-  createNamedContext<InternalAccordionItemContextValue>(
-    "AccordionItemContext",
-    {} as InternalAccordionItemContextValue
-  );
+const [AccordionProvider, useAccordionCtx] =
+  createContext<InternalAccordionContextValue>("Accordion");
+const [AccordionItemProvider, useAccordionItemCtx] =
+  createContext<InternalAccordionItemContextValue>("AccordionItem");
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -76,116 +71,72 @@ const Accordion = React.forwardRef(function Accordion(
   },
   forwardedRef
 ) {
-  /*
-   * You shouldn't switch between controlled/uncontrolled. We'll check for a
-   * controlled component and track any changes in a ref to show a warning.
-   */
-  let wasControlled = typeof controlledIndex !== "undefined";
-  let { current: isControlled } = React.useRef(wasControlled);
-
-  let [descendants, setDescendants] = useDescendantsInit<AccordionDescendant>();
-
-  let id = useId(props.id);
-
-  // Define our default starting index
-  let [openPanels, setOpenPanels] = React.useState<AccordionIndex>(() => {
-    switch (true) {
-      case isControlled:
-        return controlledIndex!;
-
-      // If we have a defaultIndex, we need to do a few checks
-      case defaultIndex != null:
-        /*
-         * If multiple is set to true, we need to make sure the `defaultIndex`
-         * is an array (and vice versa). We'll handle console warnings in
-         * our propTypes, but this will at least keep the component from
-         * blowing up.
-         */
+  let [openPanels, setOpenPanels] = useControlledState({
+    controlledValue: controlledIndex,
+    defaultValue: () => {
+      if (defaultIndex != null) {
+        // If multiple is set to true, we need to make sure the `defaultIndex`
+        // is an array (and vice versa).
         if (multiple) {
-          return Array.isArray(defaultIndex) ? defaultIndex : [defaultIndex!];
+          return Array.isArray(defaultIndex) ? defaultIndex : [defaultIndex];
         } else {
           return Array.isArray(defaultIndex)
             ? defaultIndex[0] ?? 0
             : defaultIndex!;
         }
+      }
 
-      /*
-       * Collapsible accordions with no defaultIndex will start with all
-       * panels collapsed. Otherwise the first panel will be our default.
-       */
-      case collapsible:
+      if (collapsible) {
+        // Collapsible accordions with no defaultIndex will start with all
+        // panels collapsed.
         return multiple ? [] : -1;
-      default:
-        return multiple ? [0] : 0;
-    }
+      }
+
+      // Otherwise the first panel will be our default.
+      return multiple ? [0] : 0;
+    },
+    calledFrom: "Tabs",
   });
 
-  if (__DEV__) {
-    warning(
-      !(!isControlled && wasControlled),
-      "Accordion is changing from controlled to uncontrolled. Accordion should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
-    );
-    warning(
-      !(isControlled && !wasControlled),
-      "Accordion is changing from uncontrolled to controlled. Accordion should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled Accordion for the lifetime of the component. Check the `index` prop being passed in."
-    );
-    warning(
-      !(isControlled && collapsible),
-      "The `collapsible` prop on Accordion has no effect when the state of the component is controlled."
-    );
-    warning(
-      !(isControlled && multiple),
-      "The `multiple` prop on Accordion has no effect when the state of the component is controlled."
-    );
-  }
+  let [descendants, setDescendants] = useDescendantsInit<AccordionDescendant>();
+
+  let id = useId(props.id);
 
   let onSelectPanel = React.useCallback(
     (index: number) => {
       onChange && onChange(index);
 
-      if (!isControlled) {
-        setOpenPanels((prevOpenPanels) => {
-          /*
-           * If we're dealing with an uncontrolled component, the index arg
-           * in selectChange will always be a number rather than an array.
-           */
-          index = index as number;
-          // multiple allowed
-          if (multiple) {
-            // state will always be an array here
-            prevOpenPanels = prevOpenPanels as number[];
-            if (
-              // User is clicking on an already-open button
-              prevOpenPanels.includes(index as number)
-            ) {
-              // Other panels are open OR accordion is allowed to collapse
-              if (prevOpenPanels.length > 1 || collapsible) {
-                // Close the panel by filtering it from the array
-                return prevOpenPanels.filter((i) => i !== index);
-              }
-            } else {
-              // Open the panel by adding it to the array.
-              return [...prevOpenPanels, index].sort();
+      setOpenPanels((prevOpenPanels) => {
+        /*
+         * If we're dealing with an uncontrolled component, the index arg
+         * in selectChange will always be a number rather than an array.
+         */
+        index = index as number;
+        // multiple allowed
+        if (multiple) {
+          // state will always be an array here
+          prevOpenPanels = prevOpenPanels as number[];
+          if (
+            // User is clicking on an already-open button
+            prevOpenPanels.includes(index as number)
+          ) {
+            // Other panels are open OR accordion is allowed to collapse
+            if (prevOpenPanels.length > 1 || collapsible) {
+              // Close the panel by filtering it from the array
+              return prevOpenPanels.filter((i) => i !== index);
             }
           } else {
-            prevOpenPanels = prevOpenPanels as number;
-            return prevOpenPanels === index && collapsible ? -1 : index;
+            // Open the panel by adding it to the array.
+            return [...prevOpenPanels, index].sort();
           }
-          return prevOpenPanels;
-        });
-      }
+        } else {
+          prevOpenPanels = prevOpenPanels as number;
+          return prevOpenPanels === index && collapsible ? -1 : index;
+        }
+        return prevOpenPanels;
+      });
     },
-    [collapsible, isControlled, multiple, onChange]
-  );
-
-  let context: InternalAccordionContextValue = React.useMemo(
-    () => ({
-      accordionId: id,
-      openPanels: isControlled ? controlledIndex! : openPanels,
-      onSelectPanel: readOnly ? noop : onSelectPanel,
-      readOnly,
-    }),
-    [openPanels, controlledIndex, id, isControlled, onSelectPanel, readOnly]
+    [collapsible, multiple, onChange, setOpenPanels]
   );
 
   useCheckStyles("accordion");
@@ -196,11 +147,16 @@ const Accordion = React.forwardRef(function Accordion(
       items={descendants}
       set={setDescendants}
     >
-      <AccordionContext.Provider value={context}>
+      <AccordionProvider
+        accordionId={id}
+        openPanels={openPanels}
+        onSelectPanel={readOnly ? noop : onSelectPanel}
+        readOnly={readOnly}
+      >
         <Comp {...props} ref={forwardedRef} data-reach-accordion="">
           {children}
         </Comp>
-      </AccordionContext.Provider>
+      </AccordionProvider>
     </DescendantProvider>
   );
 }) as Polymorphic.ForwardRefComponent<"div", AccordionProps>;
@@ -342,8 +298,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   { as: Comp = "div", children, disabled = false, index: indexProp, ...props },
   forwardedRef
 ) {
-  let { accordionId, openPanels, readOnly } =
-    React.useContext(AccordionContext);
+  let { accordionId, openPanels, readOnly } = useAccordionCtx("AccordionItem");
   let buttonRef: ButtonRef = React.useRef(null);
 
   let [element, handleButtonRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -381,7 +336,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   };
 
   return (
-    <AccordionItemContext.Provider value={context}>
+    <AccordionItemProvider {...context}>
       <Comp
         {...props}
         ref={forwardedRef}
@@ -392,7 +347,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
       >
         {children}
       </Comp>
-    </AccordionItemContext.Provider>
+    </AccordionItemProvider>
   );
 }) as Polymorphic.ForwardRefComponent<"div", AccordionItemProps>;
 
@@ -453,7 +408,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
   },
   forwardedRef
 ) {
-  let { onSelectPanel } = React.useContext(AccordionContext);
+  let { onSelectPanel } = useAccordionCtx("AccordionButton");
 
   let {
     disabled,
@@ -463,7 +418,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
     index,
     panelId,
     state,
-  } = React.useContext(AccordionItemContext);
+  } = useAccordionItemCtx("AccordionButton");
 
   let ref = useComposedRefs(forwardedRef, handleButtonRefSet);
 
@@ -580,7 +535,7 @@ const AccordionPanel = React.forwardRef(function AccordionPanel(
   forwardedRef
 ) {
   let { disabled, panelId, buttonId, state } =
-    React.useContext(AccordionItemContext);
+    useAccordionItemCtx("AccordionPanel");
 
   return (
     <Comp
@@ -640,7 +595,7 @@ if (__DEV__) {
  * @see Docs https://reach.tech/accordion#useaccordioncontext
  */
 function useAccordionContext(): AccordionContextValue {
-  let { openPanels, accordionId } = React.useContext(AccordionContext);
+  let { openPanels, accordionId } = useAccordionCtx("useAccordionContext");
   return React.useMemo(() => {
     let panels: number[] = [];
     return {
@@ -657,7 +612,7 @@ function useAccordionContext(): AccordionContextValue {
  * @see Docs https://reach.tech/accordion#useaccordionitemcontext
  */
 function useAccordionItemContext(): AccordionItemContextValue {
-  let { index, state } = React.useContext(AccordionItemContext);
+  let { index, state } = useAccordionItemCtx("useAccordionItemContext");
   return React.useMemo(
     () => ({
       index,

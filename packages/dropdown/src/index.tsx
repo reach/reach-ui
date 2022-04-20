@@ -12,7 +12,7 @@ import {
 import { isRightClick } from "@reach/utils/is-right-click";
 import { usePrevious } from "@reach/utils/use-previous";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { isFunction, isString } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
@@ -39,10 +39,8 @@ const SET_BUTTON_ID = "SET_BUTTON_ID";
 const DropdownDescendantContext = createDescendantContext<DropdownDescendant>(
   "DropdownDescendantContext"
 );
-const DropdownContext = createNamedContext<InternalDropdownContextValue>(
-  "DropdownContext",
-  {} as InternalDropdownContextValue
-);
+const [DropdownProvider, useDropdownContext] =
+  createContext<InternalDropdownContextValue>("Dropdown");
 
 const initialState: DropdownState = {
   // The button ID is needed for aria controls and can be set directly and
@@ -67,7 +65,7 @@ const initialState: DropdownState = {
 
 // Dropdown!
 
-const DropdownProvider: React.FC<DropdownProviderProps> = ({
+const DropdownProvider_: React.FC<DropdownProviderProps> = ({
   id,
   children,
 }) => {
@@ -104,21 +102,6 @@ const DropdownProvider: React.FC<DropdownProviderProps> = ({
   let readyToSelect = React.useRef(false);
   let mouseDownStartPosRef = React.useRef({ x: 0, y: 0 });
 
-  // Trying a new approach for splitting up contexts by stable/unstable
-  // references. We'll see how it goes!
-  let context: InternalDropdownContextValue = {
-    dispatch,
-    dropdownId,
-    dropdownRef,
-    mouseDownStartPosRef,
-    popoverRef,
-    readyToSelect,
-    selectCallbacks,
-    state,
-    triggerClickedRef,
-    triggerRef,
-  };
-
   // When the dropdown is open, focus is placed on the dropdown itself so that
   // keyboard navigation is still possible.
   React.useEffect(() => {
@@ -143,7 +126,18 @@ const DropdownProvider: React.FC<DropdownProviderProps> = ({
       items={descendants}
       set={setDescendants}
     >
-      <DropdownContext.Provider value={context}>
+      <DropdownProvider
+        dispatch={dispatch}
+        dropdownId={dropdownId}
+        dropdownRef={dropdownRef}
+        mouseDownStartPosRef={mouseDownStartPosRef}
+        popoverRef={popoverRef}
+        readyToSelect={readyToSelect}
+        selectCallbacks={selectCallbacks}
+        state={state}
+        triggerClickedRef={triggerClickedRef}
+        triggerRef={triggerRef}
+      >
         {isFunction(children)
           ? children({
               isExpanded: state.isExpanded,
@@ -151,7 +145,7 @@ const DropdownProvider: React.FC<DropdownProviderProps> = ({
               isOpen: state.isExpanded,
             })
           : children}
-      </DropdownContext.Provider>
+      </DropdownProvider>
     </DescendantProvider>
   );
 };
@@ -169,7 +163,7 @@ interface DropdownProviderProps {
 }
 
 if (__DEV__) {
-  DropdownProvider.displayName = "DropdownProvider";
+  DropdownProvider_.displayName = "DropdownProvider";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +185,7 @@ function useDropdownTrigger({
     triggerClickedRef,
     triggerRef,
     state: { triggerId, isExpanded },
-  } = useDropdownContext();
+  } = useDropdownContext("useDropdownTrigger");
   let ref = useComposedRefs(triggerRef, forwardedRef);
   let items = useDropdownDescendants();
   let firstNonDisabledIndex = React.useMemo(
@@ -310,7 +304,7 @@ function useDropdownItem({
     selectCallbacks,
     triggerRef,
     state: { selectionIndex, isExpanded },
-  } = useDropdownContext();
+  } = useDropdownContext("useDropdownItem");
   let ownRef = React.useRef<HTMLElement | null>(null);
   // After the ref is mounted to the DOM node, we check to see if we have an
   // explicit valueText prop before looking for the node's textContent for
@@ -571,7 +565,7 @@ function useDropdownItems({
     selectCallbacks,
     dropdownId,
     state: { isExpanded, triggerId, selectionIndex, typeaheadQuery },
-  } = useDropdownContext();
+  } = useDropdownContext("useDropdownItems");
 
   let items = useDropdownDescendants();
   let ref = useComposedRefs(dropdownRef, forwardedRef);
@@ -763,7 +757,7 @@ function useDropdownPopover({
     dropdownRef,
     popoverRef,
     state: { isExpanded },
-  } = useDropdownContext();
+  } = useDropdownContext("useDropdownPopover");
 
   let ref = useComposedRefs(popoverRef, forwardedRef);
 
@@ -876,7 +870,7 @@ function findItemFromTypeahead(
 }
 
 function useItemId(index: number | null) {
-  let { dropdownId } = React.useContext(DropdownContext);
+  let { dropdownId } = useDropdownContext("useItemId");
   return index != null && index > -1
     ? makeId(`option-${index}`, dropdownId)
     : undefined;
@@ -1002,10 +996,6 @@ function reducer(
   }
 }
 
-function useDropdownContext() {
-  return React.useContext(DropdownContext);
-}
-
 function useDropdownDescendants() {
   return useDescendants(DropdownDescendantContext);
 }
@@ -1051,7 +1041,7 @@ export type {
   DropdownProviderProps,
 };
 export {
-  DropdownProvider,
+  DropdownProvider_ as DropdownProvider,
   DropdownTrigger,
   DropdownItem,
   DropdownItems,

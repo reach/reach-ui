@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useForceUpdate } from "@reach/utils/use-force-update";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { createNamedContext } from "@reach/utils/context";
 import { noop } from "@reach/utils/noop";
 
 function createDescendantContext<DescendantType extends Descendant>(
@@ -10,12 +9,16 @@ function createDescendantContext<DescendantType extends Descendant>(
 ) {
   type T = DescendantContextValue<DescendantType>;
   const descendants: DescendantType[] = [];
-  return createNamedContext<T>(name, {
+  let ctx = React.createContext<T>({
     descendants,
     registerDescendant: noop,
     unregisterDescendant: noop,
     ...initialValue,
   });
+  if (__DEV__) {
+    ctx.displayName = name;
+  }
+  return ctx;
 }
 
 /**

@@ -568,43 +568,6 @@ Disables a tab when true. Clicking will not work and keyboard navigation will sk
 
 All other props are passed to the underlying `button` (or component passed to `as`).
 
-##### Tab `isSelected`
-
-Because TabList needs to know the order of the children, we use `cloneElement` to pass state internally. If you want to know if a tab is active, you can wrap it, and then inspect clone props passed in.
-
-> NOTE: We will deprecate this behavior in the future. We now prefer to use context to pass data down to descendants for `Tabs` for better composability. If you'd like your Tabs to be a bit more future proof, we suggest using a controlled `Tabs` component so that your app knows the state of your tabs.
-
-```jsx
-// jsx-demo
-(() => {
-  function CoolTab(props) {
-    // `isSelected` comes from `TabList` cloning the `CoolTab`.
-    const { isSelected, children } = props;
-
-    // make sure to forward *all* props received from TabList
-    return (
-      <Tab {...props}>
-        {isSelected ? "😎" : "😐"}
-        {children}
-      </Tab>
-    );
-  }
-
-  return (
-    <Tabs>
-      <TabList>
-        <CoolTab>One</CoolTab>
-        <CoolTab>Two</CoolTab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>1</TabPanel>
-        <TabPanel>2</TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
-})();
-```
-
 ### TabPanel
 
 The panel that displays when it's corresponding tab is active.

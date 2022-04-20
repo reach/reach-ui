@@ -34,7 +34,7 @@ import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { makeId } from "@reach/utils/make-id";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import invariant from "invariant";
@@ -43,10 +43,8 @@ import PropTypes from "prop-types";
 import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { DialogProps, DialogContentProps } from "@reach/dialog";
 
-let AlertDialogContext = createNamedContext<AlertDialogContextValue>(
-  "AlertDialogContext",
-  {} as AlertDialogContextValue
-);
+let [AlertDialogProvider, useAlertDialogCtx] =
+  createContext<AlertDialogContextValue>("AlertDialog");
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -72,13 +70,11 @@ const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   let descriptionId = id ? makeId("alert-dialog-description", id) : undefined;
 
   return (
-    <AlertDialogContext.Provider
-      value={{
-        labelId,
-        descriptionId,
-        overlayRef: ownRef,
-        leastDestructiveRef,
-      }}
+    <AlertDialogProvider
+      labelId={labelId}
+      descriptionId={descriptionId}
+      overlayRef={ownRef}
+      leastDestructiveRef={leastDestructiveRef}
     >
       <DialogOverlay
         {...props}
@@ -86,7 +82,7 @@ const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
         data-reach-alert-dialog-overlay
         initialFocusRef={leastDestructiveRef}
       />
-    </AlertDialogContext.Provider>
+    </AlertDialogProvider>
   );
 }) as Polymorphic.ForwardRefComponent<"div", AlertDialogProps>;
 
@@ -121,7 +117,7 @@ const AlertDialogContent = React.forwardRef(function AlertDialogContent(
   forwardedRef
 ) {
   let { descriptionId, labelId, leastDestructiveRef, overlayRef } =
-    React.useContext(AlertDialogContext);
+    useAlertDialogCtx("AlertDialogContent");
   React.useEffect(() => {
     let ownerDocument = getOwnerDocument(overlayRef.current)!;
     if (labelId) {
@@ -206,7 +202,7 @@ const AlertDialogLabel = React.forwardRef(function (
   { as: Comp = "div", ...props },
   forwardedRef
 ) {
-  const { labelId } = React.useContext(AlertDialogContext);
+  const { labelId } = useAlertDialogCtx("AlertDialogLabel");
   return (
     <Comp
       {...props}
@@ -239,7 +235,7 @@ const AlertDialogDescription = React.forwardRef(function AlertDialogDescription(
   { as: Comp = "div", ...props },
   forwardedRef
 ) {
-  const { descriptionId } = React.useContext(AlertDialogContext);
+  const { descriptionId } = useAlertDialogCtx("AlertDialogDescription");
   return (
     <Comp
       {...props}

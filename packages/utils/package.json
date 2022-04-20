@@ -68,7 +68,7 @@
       "compose-event-handlers.ts",
       "compose-refs.ts",
       "computed-styles.ts",
-      "context.ts",
+      "context.tsx",
       "dev-utils.ts",
       "get-document-dimensions.ts",
       "get-scroll-position.ts",

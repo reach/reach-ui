@@ -16,20 +16,18 @@
  */
 
 import * as React from "react";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { makeId } from "@reach/utils/make-id";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import { useControlledState } from "@reach/utils/use-controlled-state";
 import { useId } from "@reach/auto-id";
-import warning from "tiny-warning";
 import PropTypes from "prop-types";
 
 import type * as Polymorphic from "@reach/utils/polymorphic";
 
-const DisclosureContext = createNamedContext<DisclosureContextValue>(
-  "DisclosureContext",
-  {} as DisclosureContextValue
-);
+const [DisclosureProvider, useDisclosureCtx] =
+  createContext<DisclosureContextValue>("Disclosure");
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,65 +56,29 @@ const Disclosure: React.FC<DisclosureProps> = ({
   open: openProp,
   ...props
 }) => {
-  /*
-   * You shouldn't switch between controlled/uncontrolled. We'll check for a
-   * controlled component and track any changes in a ref to show a warning.
-   */
-  const wasControlled = openProp != null;
-  const { current: isControlled } = React.useRef(wasControlled);
+  let id = useId(props.id ?? "disclosure");
+  let panelId = makeId("panel", id);
 
-  const id =
-    useId(props.id != null ? String(props.id) : undefined) || "disclosure";
-  const panelId = makeId("panel", id);
-
-  // If a disclosure is uncontrolled, we set its initial state to `true` instead
-  // of using its default state prop. This is because we want disclosures to
-  // generally be accessible without JavaScript enabled. After the first render
-  // we will set state to the `defaultOpen` value.
-  const [open, setOpen] = React.useState(
-    isControlled ? (openProp as boolean) : true
-  );
-  React.useEffect(() => {
-    if (!isControlled) {
-      setOpen(defaultOpen);
-    }
-    // explicitly only run on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (__DEV__) {
-    warning(
-      !((isControlled && !wasControlled) || (!isControlled && wasControlled)),
-      "Disclosure is changing from controlled to uncontrolled. Disclosure should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled Disclosure for the lifetime of the component. Check the `open` prop being passed in."
-    );
-  }
+  let [open, setOpen] = useControlledState({
+    controlledValue: openProp,
+    defaultValue: defaultOpen,
+    calledFrom: "Disclosure",
+  });
 
   function onSelect() {
     onChange?.();
-    if (!isControlled) {
-      setOpen((open) => !open);
-    }
-  }
-
-  const context: DisclosureContextValue = {
-    disclosureId: id,
-    onSelect,
-    open,
-    panelId,
-  };
-
-  if (isControlled && openProp !== open) {
-    /*
-     * If the component is controlled, we'll sync internal state with the
-     * controlled state
-     */
-    setOpen(openProp as boolean);
+    setOpen((open) => !open);
   }
 
   return (
-    <DisclosureContext.Provider value={context}>
+    <DisclosureProvider
+      disclosureId={id}
+      onSelect={onSelect}
+      open={open}
+      panelId={panelId}
+    >
       {children}
-    </DisclosureContext.Provider>
+    </DisclosureProvider>
   );
 };
 
@@ -197,7 +159,7 @@ const DisclosureButton = React.forwardRef(function DisclosureButton(
   },
   forwardedRef
 ) {
-  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+  const { onSelect, open, panelId } = useDisclosureCtx("DisclosureButton");
   const ownRef = React.useRef<HTMLElement | null>(null);
 
   const ref = useComposedRefs(forwardedRef, ownRef);
@@ -268,7 +230,7 @@ const DisclosurePanel = React.forwardRef(function DisclosurePanel(
   { as: Comp = "div", children, ...props },
   forwardedRef
 ) {
-  const { panelId, open } = React.useContext(DisclosureContext);
+  const { panelId, open } = useDisclosureCtx("DisclosurePanel");
 
   return (
     <Comp
@@ -310,7 +272,9 @@ interface DisclosurePanelProps {
  * @see Docs https://reach.tech/disclosure#usedisclosurecontext
  */
 function useDisclosureContext() {
-  let { open, panelId, disclosureId } = React.useContext(DisclosureContext);
+  let { open, panelId, disclosureId } = useDisclosureCtx(
+    "useDisclosureContext"
+  );
   return React.useMemo(
     () => ({
       id: disclosureId,
@@ -325,7 +289,7 @@ function useDisclosureContext() {
 // Types
 
 interface DisclosureContextValue {
-  disclosureId: string;
+  disclosureId: string | number;
   onSelect(): void;
   open: boolean;
   panelId: string;

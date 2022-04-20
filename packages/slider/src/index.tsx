@@ -30,7 +30,7 @@ import { isRightClick } from "@reach/utils/is-right-click";
 import { useStableLayoutCallback } from "@reach/utils/use-stable-callback";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
 import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -68,11 +68,8 @@ const SLIDER_ORIENTATION_VERTICAL = SliderOrientation.Vertical;
 const SLIDER_HANDLE_ALIGN_CENTER = SliderHandleAlignment.Center;
 const SLIDER_HANDLE_ALIGN_CONTAIN = SliderHandleAlignment.Contain;
 
-const SliderContext = createNamedContext<ISliderContext>(
-  "SliderContext",
-  {} as ISliderContext
-);
-const useSliderContext = () => React.useContext(SliderContext);
+const [SliderProvider, useSliderContext] =
+  createContext<ISliderContext>("Slider");
 
 // These proptypes are shared between the composed SliderInput component and the
 // simplified Slider
@@ -322,10 +319,11 @@ const SliderInput = React.forwardRef(function SliderInput(
 
   let { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
-  let [_value, setValue] = useControlledState(
+  let [_value, setValue] = useControlledState({
     controlledValue,
-    defaultValue || min
-  );
+    defaultValue: defaultValue || min,
+    calledFrom: "SliderInput",
+  });
   let value = clamp(_value, min, max);
   let trackPercent = valueToPercent(value, min, max);
   let isVertical = orientation === SliderOrientation.Vertical;
@@ -439,30 +437,6 @@ const SliderInput = React.forwardRef(function SliderInput(
     : ariaValueTextProp;
 
   let rangeStyle = { [isVertical ? "height" : "width"]: `${trackPercent}%` };
-
-  let ctx: ISliderContext = {
-    ariaLabel: getAriaLabel ? getAriaLabel(value) : ariaLabel,
-    ariaLabelledBy,
-    ariaValueText,
-    handleDimensions,
-    handleKeyDown,
-    handlePosition,
-    handleRef,
-    hasFocus,
-    onKeyDown,
-    setHasFocus,
-    sliderId: id,
-    sliderMax: max,
-    sliderMin: min,
-    value,
-    disabled: !!disabled,
-    isVertical,
-    orientation,
-    trackPercent,
-    trackRef,
-    rangeStyle,
-    updateValue,
-  };
 
   // Slide events!
   // We will try to use pointer events if they are supported to leverage
@@ -670,7 +644,29 @@ const SliderInput = React.forwardRef(function SliderInput(
   useCheckStyles("slider");
 
   return (
-    <SliderContext.Provider value={ctx}>
+    <SliderProvider
+      ariaLabel={getAriaLabel ? getAriaLabel(value) : ariaLabel}
+      ariaLabelledBy={ariaLabelledBy}
+      ariaValueText={ariaValueText}
+      handleDimensions={handleDimensions}
+      handleKeyDown={handleKeyDown}
+      handlePosition={handlePosition}
+      handleRef={handleRef}
+      hasFocus={hasFocus}
+      onKeyDown={onKeyDown}
+      setHasFocus={setHasFocus}
+      sliderId={id}
+      sliderMax={max}
+      sliderMin={min}
+      value={value}
+      disabled={!!disabled}
+      isVertical={isVertical}
+      orientation={orientation}
+      trackPercent={trackPercent}
+      trackRef={trackRef}
+      rangeStyle={rangeStyle}
+      updateValue={updateValue}
+    >
       <Comp
         {...rest}
         ref={ref}
@@ -703,7 +699,7 @@ const SliderInput = React.forwardRef(function SliderInput(
           />
         )}
       </Comp>
-    </SliderContext.Provider>
+    </SliderProvider>
   );
 }) as Polymorphic.ForwardRefComponent<
   "div",
@@ -744,7 +740,7 @@ const SliderTrackImpl = React.forwardRef(function SliderTrack(
   { as: Comp = "div", children, style = {}, ...props },
   forwardedRef
 ) {
-  const { disabled, orientation, trackRef } = useSliderContext();
+  const { disabled, orientation, trackRef } = useSliderContext("SliderTrack");
   const ref = useComposedRefs(trackRef, forwardedRef);
 
   return (
@@ -805,7 +801,7 @@ const SliderRangeImpl = React.forwardRef(function SliderRange(
   { as: Comp = "div", children, style = {}, ...props },
   forwardedRef
 ) {
-  let { disabled, orientation, rangeStyle } = useSliderContext();
+  let { disabled, orientation, rangeStyle } = useSliderContext("SliderRange");
   return (
     <Comp
       ref={forwardedRef}
@@ -916,7 +912,7 @@ const SliderHandleImpl = React.forwardRef(function SliderHandle(
     sliderMin,
     sliderMax,
     value,
-  } = useSliderContext();
+  } = useSliderContext("SliderHandle");
 
   const ref = useComposedRefs(handleRef, forwardedRef);
 
@@ -1018,7 +1014,7 @@ const SliderMarkerImpl = React.forwardRef(function SliderMarker(
     sliderMin,
     sliderMax,
     value: sliderValue,
-  } = useSliderContext();
+  } = useSliderContext("SliderMarker");
 
   let inRange = !(value < sliderMin || value > sliderMax);
   let absoluteStartPosition = `${valueToPercent(value, sliderMin, sliderMax)}%`;
@@ -1189,10 +1185,8 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     let ownerDocument = getOwnerDocument(ref.current)!;
     let ownerWindow = ownerDocument.defaultView || window;
     if (ref.current) {
-      const {
-        height: _newHeight,
-        width: _newWidth,
-      } = ownerWindow.getComputedStyle(ref.current);
+      const { height: _newHeight, width: _newWidth } =
+        ownerWindow.getComputedStyle(ref.current);
       let newHeight = parseFloat(_newHeight);
       let newWidth = parseFloat(_newWidth);
 
