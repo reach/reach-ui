@@ -26,6 +26,7 @@ const Portal: React.FC<PortalProps> = ({
   children,
   type = "reach-portal",
   containerRef,
+  unstable_skipInitialRender,
 }) => {
   let mountNode = React.useRef<HTMLDivElement | null>(null);
   let portalNode = React.useRef<HTMLElement | null>(null);
@@ -72,6 +73,15 @@ const Portal: React.FC<PortalProps> = ({
     };
   }, [type, forceUpdate, containerRef]);
 
+  let [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (unstable_skipInitialRender && !hydrated) {
+    return;
+  }
+
   return portalNode.current ? (
     createPortal(children, portalNode.current)
   ) : (
@@ -103,6 +113,7 @@ type PortalProps = {
    * @see Docs https://reach.tech/portal#portal-containerRef
    */
   containerRef?: React.RefObject<Node>;
+  unstable_skipInitialRender?: boolean;
 };
 
 if (__DEV__) {
