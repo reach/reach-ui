@@ -59,27 +59,11 @@ export function render<
   element: React.ReactElement<any>,
   options: RenderOptions = {}
 ): RenderResult<P, T> {
-  const {
+  let { baseElement, strict = false } = options;
+  let result = tlRender(element, {
     baseElement,
-    strict = false,
-    wrapper: InnerWrapper = React.Fragment,
-  } = options;
-
-  const Mode = strict ? React.StrictMode : React.Fragment;
-
-  const Wrapper: React.FC = ({ children }) => {
-    return (
-      <Mode>
-        <InnerWrapper>{children}</InnerWrapper>
-      </Mode>
-    );
-  };
-  Wrapper.propTypes = { children: PropTypes.node };
-
-  const result = (tlRender(element, {
-    baseElement,
-    wrapper: Wrapper,
-  }) as unknown) as RenderResult<P, T>;
+    wrapper: strict ? React.StrictMode : React.Fragment,
+  }) as unknown as RenderResult<P, T>;
 
   // These handy functions courtesy of https://github.com/mui-org/material-ui
   result.setProps = function setProps(props: P) {

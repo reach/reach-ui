@@ -16,11 +16,26 @@ const alias = packages.reduce((memo, pkg) => {
 
 module.exports = {
   stories: ["../packages/**/*/*.story.@(js|ts|tsx)"],
+  features: {
+    postcss: false,
+  },
   addons: [
     "@storybook/addon-actions/register",
     "@storybook/addon-docs/register",
     "@storybook/addon-links/register",
-    "@storybook/addon-postcss",
+    // TODO: Unsure why this isn't working, but we can rely on the standard CSS
+    // loaders until I figure it out.
+    // [
+    //   "@storybook/addon-postcss",
+    //   {
+    //     name: "@storybook/addon-postcss",
+    //     options: {
+    //       postcssLoaderOptions: {
+    //         implementation: require("postcss"),
+    //       },
+    //     },
+    //   },
+    // ],
   ],
   webpackFinal: async (config) => {
     config.resolve = {
