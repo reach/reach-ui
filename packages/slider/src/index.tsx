@@ -34,10 +34,7 @@ import { createContext } from "@reach/utils/context";
 import { isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
-import {
-  useCheckStyles,
-  useControlledSwitchWarning,
-} from "@reach/utils/dev-utils";
+import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
 import warning from "tiny-warning";
@@ -296,8 +293,6 @@ const SliderInput = React.forwardRef(function SliderInput(
   },
   forwardedRef
 ) {
-  useControlledSwitchWarning(controlledValue, "value", __componentName);
-
   warning(
     !DEPRECATED_getValueText,
     "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
