@@ -796,6 +796,7 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
       targetRef={buttonRef as any}
       position={position}
       unstable_observableRefs={unstable_observableRefs}
+      unstable_skipInitialPortalRender
     />
   ) : (
     <Comp {...commonProps} />

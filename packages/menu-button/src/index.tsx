@@ -422,6 +422,7 @@ const MenuPopover = React.forwardRef(
         as={Comp}
         targetRef={targetRef as any}
         position={position}
+        unstable_skipInitialPortalRender
       />
     ) : (
       <Comp {...props} {...sharedProps} />
@@ -475,7 +476,7 @@ if (__DEV__) {
 function useMenuButtonContext(): MenuContextValue {
   let {
     state: { isExpanded },
-  } = useDropdownContext();
+  } = useDropdownContext("useMenuButtonContext");
   return React.useMemo(() => ({ isExpanded }), [isExpanded]);
 }
 

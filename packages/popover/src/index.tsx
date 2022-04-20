@@ -16,9 +16,12 @@ import type * as Polymorphic from "@reach/utils/polymorphic";
 /**
  * Popover
  */
-const Popover = React.forwardRef(function Popover(props, ref) {
+const Popover = React.forwardRef(function Popover(
+  { unstable_skipInitialPortalRender, ...props },
+  ref
+) {
   return (
-    <Portal>
+    <Portal unstable_skipInitialRender={unstable_skipInitialPortalRender}>
       <PopoverImpl ref={ref} {...props} />
     </Portal>
   );
@@ -43,6 +46,7 @@ interface PopoverProps {
    * anywhere in public yet!
    */
   unstable_observableRefs?: React.RefObject<PossibleNode>[];
+  unstable_skipInitialPortalRender?: boolean;
 }
 
 if (__DEV__) {

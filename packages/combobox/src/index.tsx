@@ -688,6 +688,7 @@ export const ComboboxPopover = React.forwardRef(
         data-expanded={isExpanded || undefined}
         position={position}
         targetRef={inputRef}
+        unstable_skipInitialPortalRender
         {...sharedProps}
       />
     ) : (
@@ -696,7 +697,8 @@ export const ComboboxPopover = React.forwardRef(
   }
 ) as Polymorphic.ForwardRefComponent<
   "div",
-  ComboboxPopoverProps & Partial<PopoverProps>
+  ComboboxPopoverProps &
+    Partial<Omit<PopoverProps, "unstable_skipInitialRender">>
 >;
 
 if (__DEV__) {

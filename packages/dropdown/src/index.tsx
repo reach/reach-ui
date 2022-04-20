@@ -830,6 +830,7 @@ const DropdownPopover = React.forwardRef(
         as={Comp}
         targetRef={targetRef as any}
         position={position}
+        unstable_skipInitialPortalRender
       />
     ) : (
       <Comp {...props} {...sharedProps} />
