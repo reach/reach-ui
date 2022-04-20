@@ -31,14 +31,11 @@ import { cloneValidElement } from "@reach/utils/clone-valid-element";
 import { useControlledState } from "@reach/utils/use-controlled-state";
 import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { isBoolean, isNumber, isFunction } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
-import {
-  useCheckStyles,
-  useControlledSwitchWarning,
-} from "@reach/utils/dev-utils";
+import { useCheckStyles } from "@reach/utils/dev-utils";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { useUpdateEffect } from "@reach/utils/use-update-effect";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
@@ -54,10 +51,8 @@ const TabsDescendantsContext = createDescendantContext<TabDescendant>(
 const TabPanelDescendantsContext = createDescendantContext<TabPanelDescendant>(
   "TabPanelDescendantsContext"
 );
-const TabsContext = createNamedContext(
-  "TabsContext",
-  {} as InternalTabsContextValue
-);
+const [TabsProvider, useTabsCtx] =
+  createContext<InternalTabsContextValue>("Tabs");
 
 enum TabsKeyboardActivation {
   Auto = "auto",
@@ -93,8 +88,7 @@ const Tabs = React.forwardRef(
     },
     ref
   ) => {
-    let isControlled = React.useRef(controlledIndex != null);
-    useControlledSwitchWarning(controlledIndex, "index", "Tabs");
+    let { current: isControlled } = React.useRef(controlledIndex !== undefined);
 
     let _id = useId(props.id);
     let id = props.id ?? makeId("tabs", _id);
@@ -117,64 +111,41 @@ const Tabs = React.forwardRef(
 
     let [tabs, setTabs] = useDescendantsInit<TabDescendant>();
 
-    let context: InternalTabsContextValue = React.useMemo(() => {
-      return {
-        focusedIndex,
-        id,
-        isControlled: isControlled.current,
-        isRTL,
-        keyboardActivation,
-        onFocusPanel() {
-          if (
-            selectedPanelRef.current &&
-            isFunction(selectedPanelRef.current.focus)
-          ) {
-            selectedPanelRef.current.focus();
-          }
-        },
-        onSelectTab: readOnly
-          ? noop
-          : (index: number) => {
-              userInteractedRef.current = true;
-              onChange && onChange(index);
-              setSelectedIndex(index);
-            },
-        onSelectTabWithKeyboard: readOnly
-          ? noop
-          : (index: number) => {
-              userInteractedRef.current = true;
-              switch (keyboardActivation) {
-                case TabsKeyboardActivation.Manual:
-                  let tabElement = tabs[index]?.element;
-                  if (tabElement && isFunction(tabElement.focus)) {
-                    tabElement.focus();
-                  }
-                  return;
-                case TabsKeyboardActivation.Auto:
-                default:
-                  onChange && onChange(index);
-                  setSelectedIndex(index);
-                  return;
-              }
-            },
-        orientation,
-        selectedIndex,
-        selectedPanelRef,
-        setFocusedIndex,
-        setSelectedIndex,
-        userInteractedRef,
-      };
-    }, [
-      focusedIndex,
-      id,
-      keyboardActivation,
-      onChange,
-      orientation,
-      readOnly,
-      selectedIndex,
-      setSelectedIndex,
-      tabs,
-    ]);
+    let onFocusPanel = React.useCallback(() => {
+      if (
+        selectedPanelRef.current &&
+        isFunction(selectedPanelRef.current.focus)
+      ) {
+        selectedPanelRef.current.focus();
+      }
+    }, []);
+    let onSelectTab = React.useCallback(
+      (index: number) => {
+        userInteractedRef.current = true;
+        onChange && onChange(index);
+        setSelectedIndex(index);
+      },
+      [onChange, setSelectedIndex]
+    );
+    let onSelectTabWithKeyboard = React.useCallback(
+      (index: number) => {
+        userInteractedRef.current = true;
+        switch (keyboardActivation) {
+          case TabsKeyboardActivation.Manual:
+            let tabElement = tabs[index]?.element;
+            if (tabElement && isFunction(tabElement.focus)) {
+              tabElement.focus();
+            }
+            return;
+          case TabsKeyboardActivation.Auto:
+          default:
+            onChange && onChange(index);
+            setSelectedIndex(index);
+            return;
+        }
+      },
+      [keyboardActivation, onChange, setSelectedIndex, tabs]
+    );
 
     useCheckStyles("tabs");
 
@@ -184,7 +155,22 @@ const Tabs = React.forwardRef(
         items={tabs}
         set={setTabs}
       >
-        <TabsContext.Provider value={context}>
+        <TabsProvider
+          focusedIndex={focusedIndex}
+          id={id}
+          isControlled={isControlled}
+          isRTL={isRTL}
+          keyboardActivation={keyboardActivation}
+          onFocusPanel={onFocusPanel}
+          onSelectTab={readOnly ? noop : onSelectTab}
+          onSelectTabWithKeyboard={readOnly ? noop : onSelectTabWithKeyboard}
+          orientation={orientation}
+          selectedIndex={selectedIndex}
+          selectedPanelRef={selectedPanelRef}
+          setFocusedIndex={setFocusedIndex}
+          setSelectedIndex={setSelectedIndex}
+          userInteractedRef={userInteractedRef}
+        >
           <Comp
             {...props}
             ref={ref}
@@ -196,7 +182,7 @@ const Tabs = React.forwardRef(
               ? children({ focusedIndex, id, selectedIndex })
               : children}
           </Comp>
-        </TabsContext.Provider>
+        </TabsProvider>
       </DescendantProvider>
     );
   }
@@ -315,7 +301,7 @@ const TabListImpl = React.forwardRef(
       orientation,
       selectedIndex,
       setSelectedIndex,
-    } = React.useContext(TabsContext);
+    } = useTabsCtx("TabList");
     let tabs = useDescendants(TabsDescendantsContext);
 
     let ownRef = React.useRef<HTMLElement | null>(null);
@@ -451,7 +437,7 @@ const Tab = React.forwardRef(
       selectedIndex,
       userInteractedRef,
       setFocusedIndex,
-    } = React.useContext(TabsContext);
+    } = useTabsCtx("Tab");
     let ownRef = React.useRef<HTMLElement | null>(null);
 
     let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -626,7 +612,7 @@ const TabPanel = React.forwardRef(
       selectedPanelRef,
       selectedIndex,
       id: tabsId,
-    } = React.useContext(TabsContext);
+    } = useTabsCtx("TabPanel");
     let ownRef = React.useRef<HTMLElement | null>(null);
 
     let [element, handleRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -725,7 +711,7 @@ if (__DEV__) {
  * @see Docs https://reach.tech/tabs#usetabscontext
  */
 function useTabsContext(): TabsContextValue {
-  let { focusedIndex, id, selectedIndex } = React.useContext(TabsContext);
+  let { focusedIndex, id, selectedIndex } = useTabsCtx("useTabsContext");
   return React.useMemo(
     () => ({
       focusedIndex,
