@@ -16,7 +16,7 @@
  */
 
 import * as React from "react";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { makeId } from "@reach/utils/make-id";
 import { useComposedRefs } from "@reach/utils/compose-refs";
 import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
@@ -26,10 +26,8 @@ import PropTypes from "prop-types";
 
 import type * as Polymorphic from "@reach/utils/polymorphic";
 
-const DisclosureContext = createNamedContext<DisclosureContextValue>(
-  "DisclosureContext",
-  {} as DisclosureContextValue
-);
+const [DisclosureProvider, useDisclosureCtx] =
+  createContext<DisclosureContextValue>("Disclosure");
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -72,17 +70,15 @@ const Disclosure: React.FC<DisclosureProps> = ({
     setOpen((open) => !open);
   }
 
-  let context: DisclosureContextValue = {
-    disclosureId: id,
-    onSelect,
-    open,
-    panelId,
-  };
-
   return (
-    <DisclosureContext.Provider value={context}>
+    <DisclosureProvider
+      disclosureId={id}
+      onSelect={onSelect}
+      open={open}
+      panelId={panelId}
+    >
       {children}
-    </DisclosureContext.Provider>
+    </DisclosureProvider>
   );
 };
 
@@ -163,7 +159,7 @@ const DisclosureButton = React.forwardRef(function DisclosureButton(
   },
   forwardedRef
 ) {
-  const { onSelect, open, panelId } = React.useContext(DisclosureContext);
+  const { onSelect, open, panelId } = useDisclosureCtx("DisclosureButton");
   const ownRef = React.useRef<HTMLElement | null>(null);
 
   const ref = useComposedRefs(forwardedRef, ownRef);
@@ -234,7 +230,7 @@ const DisclosurePanel = React.forwardRef(function DisclosurePanel(
   { as: Comp = "div", children, ...props },
   forwardedRef
 ) {
-  const { panelId, open } = React.useContext(DisclosureContext);
+  const { panelId, open } = useDisclosureCtx("DisclosurePanel");
 
   return (
     <Comp
@@ -276,7 +272,9 @@ interface DisclosurePanelProps {
  * @see Docs https://reach.tech/disclosure#usedisclosurecontext
  */
 function useDisclosureContext() {
-  let { open, panelId, disclosureId } = React.useContext(DisclosureContext);
+  let { open, panelId, disclosureId } = useDisclosureCtx(
+    "useDisclosureContext"
+  );
   return React.useMemo(
     () => ({
       id: disclosureId,

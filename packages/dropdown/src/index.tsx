@@ -40,7 +40,7 @@ const DropdownDescendantContext = createDescendantContext<DropdownDescendant>(
   "DropdownDescendantContext"
 );
 const [DropdownProvider, useDropdownContext] =
-  createContext<InternalDropdownContextValue>("DropdownContext");
+  createContext<InternalDropdownContextValue>("Dropdown");
 
 const initialState: DropdownState = {
   // The button ID is needed for aria controls and can be set directly and
