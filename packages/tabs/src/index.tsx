@@ -27,7 +27,6 @@ import {
   useDescendants,
 } from "@reach/descendants";
 import { getComputedStyle } from "@reach/utils/computed-styles";
-import { cloneValidElement } from "@reach/utils/clone-valid-element";
 import { useControlledState } from "@reach/utils/use-controlled-state";
 import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
@@ -362,12 +361,7 @@ const TabListImpl = React.forwardRef(
         ref={ref}
         onKeyDown={handleKeyDown}
       >
-        {React.Children.map(children, (child, index) => {
-          // TODO: Remove in 1.0
-          return cloneValidElement(child, {
-            isSelected: index === selectedIndex,
-          });
-        })}
+        {children}
       </Comp>
     );
   }
