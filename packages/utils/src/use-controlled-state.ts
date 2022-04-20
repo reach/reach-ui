@@ -33,7 +33,9 @@ export function useControlledState<T = any>({
     );
   }
 
-  let [valueState, setValue] = useState(defaultValue);
+  let [valueState, setValue] = useState(
+    isControlled ? controlledValue! : defaultValue
+  );
   let set: React.Dispatch<React.SetStateAction<T>> = useCallback((n) => {
     if (!isControlled) {
       setValue(n);
