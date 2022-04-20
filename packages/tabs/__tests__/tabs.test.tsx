@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fireEvent } from "$test/utils";
+import { render, fireEvent, userEvent } from "$test/utils";
 import styled from "styled-components";
 import {
   Tabs,
@@ -464,7 +464,7 @@ describe("<Tabs />", () => {
     });
 
     it("focuses the correct tab with manual keyboard navigation", () => {
-      const { getByRole } = render(
+      const { getByRole, getByText } = render(
         <div>
           <Tabs keyboardActivation={TabsKeyboardActivation.Manual}>
             <TabList>
@@ -491,10 +491,31 @@ describe("<Tabs />", () => {
 
       expect(tabList).toBeTruthy();
 
-      // TODO: Fails, but works in the browser. Figure out why and fix it.
-      // fireEvent.click(getByText("Tab 1"));
-      // fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
-      // expect(getByText("Tab 2")).toHaveFocus();
+      userEvent.click(getByText("Tab 1"));
+
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(getByText("Tab 2")).toHaveFocus();
+      expect(getByText("Panel 1")).toBeVisible();
+      expect(getByText("Panel 2")).not.toBeVisible();
+
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(getByText("Tab 3")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "ArrowRight", code: 39 });
+      expect(getByText("Tab 1")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      expect(getByText("Tab 3")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      fireEvent.keyDown(tabList, { key: "ArrowLeft", code: 37 });
+      expect(getByText("Tab 1")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "End", code: 35 });
+      expect(getByText("Tab 3")).toHaveFocus();
+
+      fireEvent.keyDown(tabList, { key: "Home", code: 36 });
+      expect(getByText("Tab 1")).toHaveFocus();
     });
 
     it("correctly calls focus and blur events on Tab component", () => {
