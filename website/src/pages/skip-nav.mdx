@@ -64,11 +64,11 @@ Renders a link that remains hidden until focused to skip to the main content.
 
 #### SkipNavLink Props
 
-| Prop                                   | Type    | Required | Default          |
-| -------------------------------------- | ------- | -------- | ---------------- |
-| [`a` props](#skipnavlink-anchor-props) | Cool    |          | n/a              |
-| [`contentId`](#skipnavlink-contentid)  | `string`| false    | 'reach-skip-nav' |
-| [`children`](#skipnavlink-children)    | `node`  | false    | n/a              |
+| Prop                                   | Type     | Required | Default          |
+| -------------------------------------- | -------- | -------- | ---------------- |
+| [`a` props](#skipnavlink-anchor-props) |          |          | n/a              |
+| [`contentId`](#skipnavlink-contentid)  | `string` | false    | 'reach-skip-nav' |
+| [`children`](#skipnavlink-children)    | `node`   | false    | n/a              |
 
 ##### SkipNavLink anchor props
 
@@ -76,7 +76,7 @@ Element props are spread to the underlying link.
 
 #### SkipNavLink `contentId`
 
-You can pass an id that connects the skip link to the element where it should link to. You can use this instead of using `SkipNavContent`. For example: 
+You can pass an id that connects the skip link to the element where it should link to. You can use this instead of using `SkipNavContent`. For example:
 
 ```jsx
 <SkipNavLink contentId="main" />
