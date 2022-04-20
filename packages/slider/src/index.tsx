@@ -322,10 +322,11 @@ const SliderInput = React.forwardRef(function SliderInput(
 
   let { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
-  let [_value, setValue] = useControlledState(
+  let [_value, setValue] = useControlledState({
     controlledValue,
-    defaultValue || min
-  );
+    defaultValue: defaultValue || min,
+    calledFrom: "SliderInput",
+  });
   let value = clamp(_value, min, max);
   let trackPercent = valueToPercent(value, min, max);
   let isVertical = orientation === SliderOrientation.Vertical;
@@ -1189,10 +1190,8 @@ function useDimensions(ref: React.RefObject<HTMLElement | null>) {
     let ownerDocument = getOwnerDocument(ref.current)!;
     let ownerWindow = ownerDocument.defaultView || window;
     if (ref.current) {
-      const {
-        height: _newHeight,
-        width: _newWidth,
-      } = ownerWindow.getComputedStyle(ref.current);
+      const { height: _newHeight, width: _newWidth } =
+        ownerWindow.getComputedStyle(ref.current);
       let newHeight = parseFloat(_newHeight);
       let newWidth = parseFloat(_newWidth);
 

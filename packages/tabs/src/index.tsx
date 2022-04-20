@@ -107,10 +107,11 @@ const Tabs = React.forwardRef(
 
     let isRTL = React.useRef(false);
 
-    let [selectedIndex, setSelectedIndex] = useControlledState(
-      controlledIndex,
-      defaultIndex ?? 0
-    );
+    let [selectedIndex, setSelectedIndex] = useControlledState({
+      controlledValue: controlledIndex,
+      defaultValue: defaultIndex ?? 0,
+      calledFrom: "Tabs",
+    });
 
     let [focusedIndex, setFocusedIndex] = React.useState(-1);
 
