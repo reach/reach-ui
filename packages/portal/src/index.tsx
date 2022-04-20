@@ -22,11 +22,10 @@ import warning from "tiny-warning";
  *
  * @see Docs https://reach.tech/portal#portal
  */
-const Portal: React.FC<PortalProps> = ({
+const PortalImpl: React.FC<PortalProps> = ({
   children,
   type = "reach-portal",
   containerRef,
-  unstable_skipInitialRender,
 }) => {
   let mountNode = React.useRef<HTMLDivElement | null>(null);
   let portalNode = React.useRef<HTMLElement | null>(null);
@@ -73,20 +72,27 @@ const Portal: React.FC<PortalProps> = ({
     };
   }, [type, forceUpdate, containerRef]);
 
-  let [hydrated, setHydrated] = React.useState(false);
-  React.useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  if (unstable_skipInitialRender && !hydrated) {
-    return;
-  }
-
   return portalNode.current ? (
     createPortal(children, portalNode.current)
   ) : (
     <span ref={mountNode} />
   );
+};
+
+const Portal: React.FC<PortalProps> = ({
+  unstable_skipInitialRender,
+  ...props
+}) => {
+  let [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => {
+    if (unstable_skipInitialRender) {
+      setHydrated(true);
+    }
+  }, [unstable_skipInitialRender]);
+  if (unstable_skipInitialRender && !hydrated) {
+    return null;
+  }
+  return <PortalImpl {...props} />;
 };
 
 /**
