@@ -59,7 +59,9 @@ import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-i
 
 let serverHandoffComplete = false;
 let id = 0;
-const genId = () => ++id;
+function genId() {
+  return ++id;
+}
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
@@ -75,21 +77,28 @@ const genId = () => ++id;
  * @see Docs https://reach.tech/auto-id
  */
 function useId(idFromProps: string): string;
+function useId(idFromProps: number): number;
+function useId(idFromProps: string | number): string | number;
 function useId(idFromProps: string | undefined | null): string | undefined;
+function useId(idFromProps: number | undefined | null): number | undefined;
+function useId(
+  idFromProps: string | number | undefined | null
+): string | number | undefined;
 function useId(): string | undefined;
 
-function useId(providedId?: string | undefined | null) {
-  // TODO: Remove when updating internal deps to React 18
+function useId(providedId?: number | string | undefined | null) {
+  // TODO: Remove error flag when updating internal deps to React 18. None of
+  // our tricks will play well with concurrent rendering anyway.
   // @ts-expect-error
   if (typeof React.useId === "function") {
     // @ts-expect-error
     let id = React.useId(providedId);
-    return providedId != null ? providedId : String(id);
+    return providedId != null ? providedId : id;
   }
 
   // If this instance isn't part of the initial render, we don't have to do the
   // double render/patch-up dance. We can just generate the ID and return it.
-  let initialId = providedId || (serverHandoffComplete ? genId() : null);
+  let initialId = providedId ?? (serverHandoffComplete ? genId() : null);
   let [id, setId] = React.useState(initialId);
 
   useLayoutEffect(() => {
@@ -112,7 +121,7 @@ function useId(providedId?: string | undefined | null) {
     }
   }, []);
 
-  return providedId != null ? providedId : id != null ? String(id) : undefined;
+  return providedId ?? id ?? undefined;
 }
 
 export { useId };
