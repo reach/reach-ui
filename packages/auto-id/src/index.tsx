@@ -61,6 +61,8 @@ let serverHandoffComplete = false;
 let id = 0;
 const genId = () => ++id;
 
+/* eslint-disable react-hooks/rules-of-hooks */
+
 /**
  * useId
  *
@@ -73,25 +75,29 @@ const genId = () => ++id;
  * @see Docs https://reach.tech/auto-id
  */
 function useId(idFromProps: string): string;
-function useId(idFromProps: string | undefined): string | undefined;
-function useId(idFromProps?: null): string | undefined;
-function useId(idFromProps?: string | null) {
-  /*
-   * If this instance isn't part of the initial render, we don't have to do the
-   * double render/patch-up dance. We can just generate the ID and return it.
-   */
-  const initialId = idFromProps || (serverHandoffComplete ? genId() : null);
+function useId(idFromProps: string | undefined | null): string | undefined;
+function useId(): string | undefined;
 
-  const [id, setId] = React.useState(initialId);
+function useId(providedId?: string | undefined | null) {
+  // TODO: Remove when updating internal deps to React 18
+  // @ts-expect-error
+  if (typeof React.useId === "function") {
+    // @ts-expect-error
+    let id = React.useId(providedId);
+    return providedId != null ? providedId : String(id);
+  }
+
+  // If this instance isn't part of the initial render, we don't have to do the
+  // double render/patch-up dance. We can just generate the ID and return it.
+  let initialId = providedId || (serverHandoffComplete ? genId() : null);
+  let [id, setId] = React.useState(initialId);
 
   useLayoutEffect(() => {
     if (id === null) {
-      /*
-       * Patch the ID after render. We do this in `useLayoutEffect` to avoid any
-       * rendering flicker, though it'll make the first render slower (unlikely
-       * to matter, but you're welcome to measure your app and let us know if
-       * it's a problem).
-       */
+      // Patch the ID after render. We do this in `useLayoutEffect` to avoid any
+      // rendering flicker, though it'll make the first render slower (unlikely
+      // to matter, but you're welcome to measure your app and let us know if
+      // it's a problem).
       setId(genId());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,15 +105,14 @@ function useId(idFromProps?: string | null) {
 
   React.useEffect(() => {
     if (serverHandoffComplete === false) {
-      /*
-       * Flag all future uses of `useId` to skip the update dance. This is in
-       * `useEffect` because it goes after `useLayoutEffect`, ensuring we don't
-       * accidentally bail out of the patch-up dance prematurely.
-       */
+      // Flag all future uses of `useId` to skip the update dance. This is in
+      // `useEffect` because it goes after `useLayoutEffect`, ensuring we don't
+      // accidentally bail out of the patch-up dance prematurely.
       serverHandoffComplete = true;
     }
   }, []);
-  return id != null ? String(id) : undefined;
+
+  return providedId != null ? providedId : id != null ? String(id) : undefined;
 }
 
 export { useId };
