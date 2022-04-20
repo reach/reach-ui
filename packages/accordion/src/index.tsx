@@ -9,7 +9,7 @@
  */
 
 import * as React from "react";
-import { createNamedContext } from "@reach/utils/context";
+import { createContext } from "@reach/utils/context";
 import { isBoolean, isNumber } from "@reach/utils/type-check";
 import { makeId } from "@reach/utils/make-id";
 import { noop } from "@reach/utils/noop";
@@ -34,15 +34,10 @@ import type { Descendant } from "@reach/descendants";
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
   "AccordionDescendantContext"
 );
-const AccordionContext = createNamedContext<InternalAccordionContextValue>(
-  "AccordionContext",
-  {} as InternalAccordionContextValue
-);
-const AccordionItemContext =
-  createNamedContext<InternalAccordionItemContextValue>(
-    "AccordionItemContext",
-    {} as InternalAccordionItemContextValue
-  );
+const [AccordionProvider, useAccordionCtx] =
+  createContext<InternalAccordionContextValue>("Accordion");
+const [AccordionItemProvider, useAccordionItemCtx] =
+  createContext<InternalAccordionItemContextValue>("AccordionItem");
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -144,16 +139,6 @@ const Accordion = React.forwardRef(function Accordion(
     [collapsible, multiple, onChange, setOpenPanels]
   );
 
-  let context: InternalAccordionContextValue = React.useMemo(
-    () => ({
-      accordionId: id,
-      openPanels,
-      onSelectPanel: readOnly ? noop : onSelectPanel,
-      readOnly,
-    }),
-    [openPanels, id, onSelectPanel, readOnly]
-  );
-
   useCheckStyles("accordion");
 
   return (
@@ -162,11 +147,16 @@ const Accordion = React.forwardRef(function Accordion(
       items={descendants}
       set={setDescendants}
     >
-      <AccordionContext.Provider value={context}>
+      <AccordionProvider
+        accordionId={id}
+        openPanels={openPanels}
+        onSelectPanel={readOnly ? noop : onSelectPanel}
+        readOnly={readOnly}
+      >
         <Comp {...props} ref={forwardedRef} data-reach-accordion="">
           {children}
         </Comp>
-      </AccordionContext.Provider>
+      </AccordionProvider>
     </DescendantProvider>
   );
 }) as Polymorphic.ForwardRefComponent<"div", AccordionProps>;
@@ -308,8 +298,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   { as: Comp = "div", children, disabled = false, index: indexProp, ...props },
   forwardedRef
 ) {
-  let { accordionId, openPanels, readOnly } =
-    React.useContext(AccordionContext);
+  let { accordionId, openPanels, readOnly } = useAccordionCtx("AccordionItem");
   let buttonRef: ButtonRef = React.useRef(null);
 
   let [element, handleButtonRefSet] = useStatefulRefValue<HTMLElement | null>(
@@ -347,7 +336,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
   };
 
   return (
-    <AccordionItemContext.Provider value={context}>
+    <AccordionItemProvider {...context}>
       <Comp
         {...props}
         ref={forwardedRef}
@@ -358,7 +347,7 @@ const AccordionItem = React.forwardRef(function AccordionItem(
       >
         {children}
       </Comp>
-    </AccordionItemContext.Provider>
+    </AccordionItemProvider>
   );
 }) as Polymorphic.ForwardRefComponent<"div", AccordionItemProps>;
 
@@ -419,7 +408,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
   },
   forwardedRef
 ) {
-  let { onSelectPanel } = React.useContext(AccordionContext);
+  let { onSelectPanel } = useAccordionCtx("AccordionButton");
 
   let {
     disabled,
@@ -429,7 +418,7 @@ const AccordionButton = React.forwardRef(function AccordionButton(
     index,
     panelId,
     state,
-  } = React.useContext(AccordionItemContext);
+  } = useAccordionItemCtx("AccordionButton");
 
   let ref = useComposedRefs(forwardedRef, handleButtonRefSet);
 
@@ -546,7 +535,7 @@ const AccordionPanel = React.forwardRef(function AccordionPanel(
   forwardedRef
 ) {
   let { disabled, panelId, buttonId, state } =
-    React.useContext(AccordionItemContext);
+    useAccordionItemCtx("AccordionPanel");
 
   return (
     <Comp
@@ -606,7 +595,7 @@ if (__DEV__) {
  * @see Docs https://reach.tech/accordion#useaccordioncontext
  */
 function useAccordionContext(): AccordionContextValue {
-  let { openPanels, accordionId } = React.useContext(AccordionContext);
+  let { openPanels, accordionId } = useAccordionCtx("useAccordionContext");
   return React.useMemo(() => {
     let panels: number[] = [];
     return {
@@ -623,7 +612,7 @@ function useAccordionContext(): AccordionContextValue {
  * @see Docs https://reach.tech/accordion#useaccordionitemcontext
  */
 function useAccordionItemContext(): AccordionItemContextValue {
-  let { index, state } = React.useContext(AccordionItemContext);
+  let { index, state } = useAccordionItemCtx("useAccordionItemContext");
   return React.useMemo(
     () => ({
       index,
