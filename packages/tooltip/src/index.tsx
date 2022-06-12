@@ -229,7 +229,7 @@ function clearContextId() {
  *
  * @param params
  */
-function useTooltip<ElementType extends HTMLElement>({
+function useTooltip<ElementType extends HTMLElement | SVGSVGElement>({
   id: idProp,
   onPointerEnter,
   onPointerMove,
@@ -661,7 +661,7 @@ function useDisabledTriggerOnSafari({
 }: {
   disabled: boolean | undefined;
   isVisible: boolean;
-  ref: React.RefObject<HTMLElement>;
+  ref: React.RefObject<HTMLElement | SVGSVGElement>;
 }) {
   React.useEffect(() => {
     if (
@@ -768,7 +768,7 @@ function isTooltipVisible(id: string, initial?: boolean) {
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
 
-interface TriggerParams<ElementType extends HTMLElement> {
+interface TriggerParams<ElementType extends HTMLElement | SVGSVGElement> {
   "aria-describedby"?: string | undefined;
   "data-state": string;
   "data-reach-tooltip-trigger": string;
