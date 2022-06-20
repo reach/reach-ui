@@ -346,16 +346,18 @@ If you want access to the listbox's current value and associated label, or its e
 ```jsx
 <ListboxInput>
   {({ value, valueLabel, isExpanded }) => (
-    <ListboxButton>
-      <span data-value={value}>{valueLabel}</span>
-    </ListboxButton>
-    <ListboxPopover>
-      <ListboxList>
-        <ListboxOption value="apple">Apple 🍏</ListboxOption>
-        <ListboxOption value="orange">Orange 🍊</ListboxOption>
-        <ListboxOption value="banana">Banana 🍌</ListboxOption>
-      </ListboxList>
-    </ListboxPopover>
+    <>
+      <ListboxButton>
+        <span data-value={value}>{valueLabel}</span>
+      </ListboxButton>
+      <ListboxPopover>
+        <ListboxList>
+          <ListboxOption value='apple'>Apple 🍏</ListboxOption>
+          <ListboxOption value='orange'>Orange 🍊</ListboxOption>
+          <ListboxOption value='banana'>Banana 🍌</ListboxOption>
+        </ListboxList>
+      </ListboxPopover>
+    </>
   )}
 </ListboxInput>
 ```
