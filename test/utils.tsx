@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import { act } from "react-dom/test-utils";
 import {
   render as tlRender,
@@ -130,4 +129,5 @@ export function simulateEnterKeyClick(
 type Query = (f: MatcherFunction) => HTMLElement | null;
 
 export * from "@testing-library/react";
-export { act, userEvent, fireDomEvent, RenderOptions, RenderResult };
+export { act, userEvent, fireDomEvent };
+export type { RenderOptions, RenderResult };

@@ -1,0 +1,20 @@
+{
+  "pipeline": {
+    "@reach-internal/dev#build": {
+      "outputs": ["dist/**"]
+    },
+    "build": {
+      "dependsOn": ["@reach-internal/dev#build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    }
+  }
+}
