@@ -1,47 +1,47 @@
-name: Release
+# name: Release
 
-on:
-  release:
-    types: [published]
+# on:
+#   release:
+#     types: [published]
 
-jobs:
-  release:
-    name: Release
-    if: github.repository == 'reach/reach-ui'
-    runs-on: ubuntu-latest
+# jobs:
+#   release:
+#     name: Release
+#     if: github.repository == 'reach/reach-ui'
+#     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x]
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
 
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#     env:
+#       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
 
-      - name: Restore Lerna (Cache)
-        uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+#       - name: Restore Lerna (Cache)
+#         uses: actions/cache@v2
+#         with:
+#           path: |
+#             node_modules
+#             */*/node_modules
+#           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile
+#       - name: Install Dependencies
+#         run: yarn --frozen-lockfile
 
-      - name: Build Packages
-        run: yarn build
+#       - name: Build Packages
+#         run: yarn build
 
-      - run: echo "Publishing to npm..."
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+#       - run: echo "Publishing to npm..."
+#       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
 
-      - name: Publish Packages
-        run: npx lerna publish from-git --yes --pre-dist-tag next
+#       - name: Publish Packages
+#         run: npx lerna publish from-git --yes --pre-dist-tag next
