@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 
-const packagesDir = path.resolve(__dirname, "../packages");
+const packagesDir = path.resolve(__dirname, "../../packages");
 const packages = fs.readdirSync(packagesDir);
 
 const alias = packages.reduce((memo, pkg) => {
@@ -15,19 +15,19 @@ const alias = packages.reduce((memo, pkg) => {
 }, {});
 
 module.exports = {
-  stories: ["../packages/**/*/*.story.@(js|ts|tsx)"],
+  stories: ["../stories/**/*.story.@(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
     "@storybook/addon-docs/register",
     "@storybook/addon-links/register",
-    {
-      name: "@storybook/addon-postcss",
-      options: {
-        postcssLoaderOptions: {
-          implementation: require("postcss"),
-        },
-      },
-    },
+    // {
+    //   name: "@storybook/addon-postcss",
+    //   options: {
+    //     postcssLoaderOptions: {
+    //       implementation: require("postcss"),
+    //     },
+    //   },
+    // },
   ],
   webpackFinal: async (config) => {
     config.resolve = {
@@ -37,12 +37,6 @@ module.exports = {
         ...alias,
       },
     };
-    config.plugins = [
-      ...config.plugins,
-      new webpack.DefinePlugin({
-        __DEV__: process.env.NODE_ENV === "development",
-      }),
-    ];
     return config;
   },
 };

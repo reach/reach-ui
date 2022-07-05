@@ -1,0 +1,19 @@
+[data-reach-slider-marker] > span {
+  position: absolute;
+  font-size: 12px;
+}
+
+[data-reach-slider-marker][data-orientation="horizontal"] > span {
+  top: calc(100% + 5px);
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+[data-reach-slider-marker][data-orientation="vertical"] > span {
+  left: calc(100% + 5px);
+  top: 50%;
+  text-align: right;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
