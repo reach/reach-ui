@@ -1,15 +1,19 @@
 import * as React from "react";
-import { render, act } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
-import { Listbox, ListboxOption, ListboxProps } from "@reach/listbox";
+import { cleanup, render, act } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
+import { Listbox, ListboxOption } from "@reach/listbox";
+import type { ListboxProps } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Listbox /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container } = render(<FancyListbox />);
-    let results: AxeResults = null as any;
+    let results: AxeCore.AxeResults = null as any;
     await act(async () => {
       results = await axe(container);
     });

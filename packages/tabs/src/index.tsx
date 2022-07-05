@@ -17,7 +17,6 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -26,23 +25,25 @@ import {
   useDescendantsInit,
   useDescendants,
 } from "@reach/descendants";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { getComputedStyle } from "@reach/utils/computed-styles";
-import { useControlledState } from "@reach/utils/use-controlled-state";
-import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { createContext } from "@reach/utils/context";
-import { isBoolean, isNumber, isFunction } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { useUpdateEffect } from "@reach/utils/use-update-effect";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
-import { useId } from "@reach/auto-id";
-
 import type { Descendant } from "@reach/descendants";
-import type * as Polymorphic from "@reach/utils/polymorphic";
+import {
+  getOwnerDocument,
+  getComputedStyle,
+  useControlledState,
+  useStatefulRefValue,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  createContext,
+  isBoolean,
+  isNumber,
+  isFunction,
+  makeId,
+  noop,
+  useCheckStyles,
+  useComposedRefs,
+  composeEventHandlers,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
+import { useId } from "@reach/auto-id";
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(
   "TabsDescendantsContext"
@@ -212,7 +213,7 @@ interface TabsProps {
    *
    * @see Docs https://reach.tech/tabs#tabs-keyboardactivation
    */
-  keyboardActivation?: TabsKeyboardActivation;
+  keyboardActivation?: TabsKeyboardActivation | "auto" | "manual";
   /**
    * @see Docs https://reach.tech/tabs#tabs-readonly
    */
@@ -232,7 +233,7 @@ interface TabsProps {
    * @see Docs https://reach.tech/tabs#tabs-orientation
    * @see MDN  https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties
    */
-  orientation?: TabsOrientation;
+  orientation?: TabsOrientation | "horizontal" | "vertical";
   /**
    * Calls back with the tab index whenever the user changes tabs, allowing your
    * app to synchronize with it.
@@ -242,36 +243,7 @@ interface TabsProps {
   onChange?: (index: number) => void;
 }
 
-if (__DEV__) {
-  Tabs.displayName = "Tabs";
-  Tabs.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
-    onChange: PropTypes.func,
-    orientation: PropTypes.oneOf(Object.values(TabsOrientation)),
-    index: (props, name, compName, location, propName) => {
-      let val = props[name];
-      if (
-        props.index > -1 &&
-        props.onChange == null &&
-        props.readOnly !== true
-      ) {
-        return new Error(
-          "You provided a value prop to `" +
-            compName +
-            "` without an `onChange` handler. This will render a read-only tabs element. If the tabs should be mutable use `defaultIndex`. Otherwise, set `onChange`."
-        );
-      } else if (val != null && !isNumber(val)) {
-        return new Error(
-          `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`number\`, received \`${
-            Array.isArray(val) ? "array" : typeof val
-          }\`.`
-        );
-      }
-      return null;
-    },
-    defaultIndex: PropTypes.number,
-  };
-}
+Tabs.displayName = "Tabs";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -360,13 +332,7 @@ const TabListImpl = React.forwardRef(
   }
 ) as Polymorphic.ForwardRefComponent<"div", TabListProps>;
 
-if (__DEV__) {
-  TabListImpl.displayName = "TabList";
-  TabListImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
-}
+TabListImpl.displayName = "TabList";
 
 const TabList = React.memo(TabListImpl) as Polymorphic.MemoComponent<
   "div",
@@ -387,9 +353,7 @@ interface TabListProps {
   children?: React.ReactNode;
 }
 
-if (__DEV__) {
-  TabList.displayName = "TabList";
-}
+TabList.displayName = "TabList";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -506,13 +470,7 @@ interface TabProps {
   index?: number;
 }
 
-if (__DEV__) {
-  Tab.displayName = "Tab";
-  Tab.propTypes = {
-    children: PropTypes.node,
-    disabled: PropTypes.bool,
-  };
-}
+Tab.displayName = "Tab";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -543,13 +501,7 @@ const TabPanelsImpl = React.forwardRef(
   }
 ) as Polymorphic.ForwardRefComponent<"div", TabPanelsProps>;
 
-if (__DEV__) {
-  TabPanelsImpl.displayName = "TabPanels";
-  TabPanelsImpl.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
-}
+TabPanelsImpl.displayName = "TabPanels";
 
 const TabPanels = React.memo(TabPanelsImpl) as Polymorphic.MemoComponent<
   "div",
@@ -561,9 +513,7 @@ const TabPanels = React.memo(TabPanelsImpl) as Polymorphic.MemoComponent<
  */
 interface TabPanelsProps extends TabListProps {}
 
-if (__DEV__) {
-  TabPanels.displayName = "TabPanels";
-}
+TabPanels.displayName = "TabPanels";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -672,13 +622,7 @@ interface TabPanelProps {
   index?: number;
 }
 
-if (__DEV__) {
-  TabPanel.displayName = "TabPanel";
-  TabPanel.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
-}
+TabPanel.displayName = "TabPanel";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -719,11 +663,11 @@ interface InternalTabsContextValue {
   id: string;
   isControlled: boolean;
   isRTL: React.MutableRefObject<boolean>;
-  keyboardActivation: TabsKeyboardActivation;
+  keyboardActivation: TabsKeyboardActivation | "auto" | "manual";
   onFocusPanel: () => void;
   onSelectTab: (index: number) => void;
   onSelectTabWithKeyboard: (index: number) => void;
-  orientation: TabsOrientation;
+  orientation: TabsOrientation | "horizontal" | "vertical";
   selectedIndex: number;
   selectedPanelRef: React.MutableRefObject<HTMLElement | null>;
   setFocusedIndex: React.Dispatch<React.SetStateAction<number>>;

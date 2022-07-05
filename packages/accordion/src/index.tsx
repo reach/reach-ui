@@ -9,15 +9,17 @@
  */
 
 import * as React from "react";
-import { createContext } from "@reach/utils/context";
-import { isBoolean, isNumber } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { useControlledState } from "@reach/utils/use-controlled-state";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
-import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
+import {
+  createContext,
+  makeId,
+  noop,
+  useCheckStyles,
+  useComposedRefs,
+  useControlledState,
+  composeEventHandlers,
+  useStatefulRefValue,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -26,9 +28,7 @@ import {
   useDescendantsInit,
 } from "@reach/descendants";
 import { useId } from "@reach/auto-id";
-import PropTypes from "prop-types";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { Descendant } from "@reach/descendants";
 
 const AccordionDescendantContext = createDescendantContext<AccordionDescendant>(
@@ -232,60 +232,7 @@ interface AccordionProps {
   multiple?: boolean;
 }
 
-if (__DEV__) {
-  Accordion.displayName = "Accordion";
-  Accordion.propTypes = {
-    children: PropTypes.node.isRequired,
-    defaultIndex: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.arrayOf(PropTypes.number),
-    ]) as any,
-    index: (props, name, compName, location, propName) => {
-      let val = props[name];
-      if (props[name] != null && props.onChange == null && !props.readOnly) {
-        return new Error(
-          "You provided an `index` prop to `Accordion` without an `onChange` handler. This will render a read-only accordion element. If the accordion should be functional, remove the `index` value to render an uncontrolled accordion or set an `onChange` handler to set an index when a change occurs. If the accordion is intended to have a fixed state, use the `readOnly` prop with a `defaultIndex` instead of an `index`."
-        );
-      }
-      if (props[name] != null && props.defaultIndex != null) {
-        return new Error(
-          "You provided an `index` prop as well as a `defaultIndex` prop to `Accordion`. If you want a controlled component, use the index prop with an onChange handler. If you want an uncontrolled component, remove the index prop and use `defaultIndex` instead."
-        );
-      }
-      if (Array.isArray(props[name])) {
-        return props[name].some((i: any) => !isNumber(i))
-          ? new Error(
-              "You provided an array as an index in `Accordion` but one or more of the values are not numeric. Please check to make sure all indices are valid numbers."
-            )
-          : null;
-      } else if (props[name] != null && !isNumber(props[name])) {
-        return new Error(
-          `Invalid prop "${propName}" supplied to "${compName}". Expected "number", received "${
-            Array.isArray(val) ? "array" : typeof val
-          }".`
-        );
-      }
-      return null;
-    },
-    multiple: (props, name, compName, location, propName) => {
-      if (!props[name] && Array.isArray(props.defaultIndex)) {
-        return new Error(
-          `The "${propName}" prop supplied to "${compName}" is not set or set to "false", but an array of indices was provided to the "defaultIndex" prop. "${compName}" can only have more than one default index if the "${propName}" prop is set to "true".`
-        );
-      } else if (props[name] != null && !isBoolean(props[name])) {
-        return new Error(
-          `Invalid prop "${propName}" supplied to "${compName}". Expected "boolean", received "${
-            Array.isArray(props[name]) ? "array" : typeof props[name]
-          }".`
-        );
-      }
-      return null;
-    },
-    onChange: PropTypes.func,
-    readOnly: PropTypes.bool,
-    collapsible: PropTypes.bool,
-  };
-}
+Accordion.displayName = "Accordion";
 
 /**
  * AccordionItem
@@ -377,12 +324,7 @@ interface AccordionItemProps {
   index?: number;
 }
 
-if (__DEV__) {
-  AccordionItem.displayName = "AccordionItem";
-  AccordionItem.propTypes = {
-    disabled: PropTypes.bool,
-  };
-}
+AccordionItem.displayName = "AccordionItem";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -512,13 +454,7 @@ interface AccordionButtonProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  AccordionButton.displayName = "AccordionButton";
-  AccordionButton.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
-}
+AccordionButton.displayName = "AccordionButton";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -579,12 +515,7 @@ interface AccordionPanelProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  AccordionPanel.displayName = "AccordionPanel";
-  AccordionPanel.propTypes = {
-    children: PropTypes.node,
-  };
-}
+AccordionPanel.displayName = "AccordionPanel";
 
 ////////////////////////////////////////////////////////////////////////////////
 

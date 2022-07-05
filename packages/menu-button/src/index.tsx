@@ -12,8 +12,6 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
-import warning from "tiny-warning";
 import { Popover } from "@reach/popover";
 import {
   DropdownProvider,
@@ -23,12 +21,11 @@ import {
   useDropdownTrigger,
   useDropdownContext,
 } from "@reach/dropdown";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
+import { noop, useCheckStyles } from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import { isFragment } from "react-is";
 
 import type { Position } from "@reach/popover";
-import type * as Polymorphic from "@reach/utils/polymorphic";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -89,12 +86,7 @@ interface MenuProps {
   id?: string;
 }
 
-if (__DEV__) {
-  Menu.displayName = "Menu";
-  Menu.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-  };
-}
+Menu.displayName = "Menu";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -147,12 +139,7 @@ interface MenuButtonProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  MenuButton.displayName = "MenuButton";
-  MenuButton.propTypes = {
-    children: PropTypes.node,
-  };
-}
+MenuButton.displayName = "MenuButton";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -178,6 +165,8 @@ const MenuItemImpl = React.forwardRef(
     );
   }
 ) as Polymorphic.ForwardRefComponent<"div", MenuItemImplProps>;
+
+MenuItemImpl.displayName = "MenuItemImpl";
 
 interface MenuItemImplProps {
   /**
@@ -221,13 +210,7 @@ const MenuItem = React.forwardRef(({ as = "div", ...props }, forwardedRef) => {
  */
 type MenuItemProps = Omit<MenuItemImplProps, "isLink">;
 
-if (__DEV__) {
-  MenuItem.displayName = "MenuItem";
-  MenuItem.propTypes = {
-    as: PropTypes.any,
-    onSelect: PropTypes.func.isRequired,
-  };
-}
+MenuItem.displayName = "MenuItem";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -283,12 +266,7 @@ interface MenuItemsProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  MenuItems.displayName = "MenuItems";
-  MenuItems.propTypes = {
-    children: PropTypes.node,
-  };
-}
+MenuItems.displayName = "MenuItems";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -314,10 +292,16 @@ const MenuLink = React.forwardRef(
     },
     forwardedRef
   ) => {
-    useDevWarning(
-      !component,
-      "[@reach/menu-button]: Please use the `as` prop instead of `component`"
-    );
+    if (process.env.NODE === "development") {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      React.useEffect(() => {
+        if (component) {
+          console.warn(
+            "[@reach/menu-button]: Please use the `as` prop instead of `component`"
+          );
+        }
+      }, [component]);
+    }
 
     return (
       <MenuItemImpl
@@ -339,12 +323,7 @@ type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
   onSelect?(): void;
 };
 
-if (__DEV__) {
-  MenuLink.displayName = "MenuLink";
-  MenuLink.propTypes = {
-    as: PropTypes.any,
-  };
-}
+MenuLink.displayName = "MenuLink";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -385,12 +364,7 @@ interface MenuListProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  MenuList.displayName = "MenuList";
-  MenuList.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-}
+MenuList.displayName = "MenuList";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -459,12 +433,7 @@ interface MenuPopoverProps {
   position?: Position;
 }
 
-if (__DEV__) {
-  MenuPopover.displayName = "MenuPopover";
-  MenuPopover.propTypes = {
-    children: PropTypes.node,
-  };
-}
+MenuPopover.displayName = "MenuPopover";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -478,22 +447,6 @@ function useMenuButtonContext(): MenuContextValue {
     state: { isExpanded },
   } = useDropdownContext("useMenuButtonContext");
   return React.useMemo(() => ({ isExpanded }), [isExpanded]);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-function useDevWarning(condition: any, message: string) {
-  if (__DEV__) {
-    /* eslint-disable react-hooks/rules-of-hooks */
-    let messageRef = React.useRef(message);
-    React.useEffect(() => {
-      messageRef.current = message;
-    }, [message]);
-    React.useEffect(() => {
-      warning(condition, messageRef.current);
-    }, [condition]);
-    /* eslint-enable react-hooks/rules-of-hooks */
-  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

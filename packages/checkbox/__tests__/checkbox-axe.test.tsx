@@ -1,47 +1,74 @@
 import * as React from "react";
+import type {
+  CustomCheckboxContainerProps,
+  CustomCheckboxInputProps,
+} from "@reach/checkbox";
 import {
   MixedCheckbox,
   CustomCheckboxContainer,
   CustomCheckboxInput,
-  CustomCheckboxContainerProps,
-  CustomCheckboxInputProps,
 } from "@reach/checkbox";
-import { render, fireEvent } from "$test/utils";
+import { act, cleanup, render, fireEvent } from "@reach-internal/test/utils";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
+
+afterEach(cleanup);
 
 describe("<MixedCheckbox />", () => {
   it("Should not have ARIA violations after render", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container } = render(<BasicMixedCheckbox />);
-    await expect(container).toHaveNoAxeViolations();
+    let results: AxeCore.AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
 
   it("Should not have ARIA violations after initial click", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container, getByTestId } = render(<BasicMixedCheckbox />);
     fireEvent.click(getByTestId("checkbox"));
-    await expect(container).toHaveNoAxeViolations();
+    let results: AxeCore.AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
 });
 
 describe("<CustomCheckbox />", () => {
   it("Should not have ARIA violations after render", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container } = render(<BasicCustomCheckbox />);
-    await expect(container).toHaveNoAxeViolations();
+    let results: AxeCore.AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
 
   it("Should not have ARIA violations after initial click (1)", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-1"));
-    await expect(container).toHaveNoAxeViolations();
+    let results: AxeCore.AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
 
   it("Should not have ARIA violations after initial click (2)", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container, getByTestId } = render(<BasicCustomCheckbox />);
     fireEvent.click(getByTestId("checkbox-2"));
-    await expect(container).toHaveNoAxeViolations();
+    let results: AxeCore.AxeResults = null as any;
+    await act(async () => {
+      results = await axe(container);
+    });
+    expect(results).toHaveNoViolations();
   });
   // TODO: Write tests for custom checkbox
 });
@@ -55,7 +82,7 @@ function BasicMixedCheckbox() {
         id="whatever-input"
         value="whatever"
         checked={checked}
-        onChange={(event) => {
+        onChange={(event: any) => {
           setChecked(event.target.checked);
         }}
       />
@@ -116,9 +143,9 @@ function MyCustomCheckbox({
           height: "60%",
           top: "50%",
           left: "50%",
-          transform: `translate(-50%, -50%) scaleX(${
-            !!checked ? 1 : 0
-          }) scaleY(${checked === true ? 1 : checked === "mixed" ? 0.4 : 0})`,
+          transform: `translate(-50%, -50%) scaleX(${checked ? 1 : 0}) scaleY(${
+            checked === true ? 1 : checked === "mixed" ? 0.4 : 0
+          })`,
           transition: "transform 200ms ease-out, background 200ms ease-out",
           zIndex: 1,
           background:

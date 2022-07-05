@@ -9,11 +9,12 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import observeRect from "@reach/observe-rect";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { isBoolean, isFunction } from "@reach/utils/type-check";
-import warning from "tiny-warning";
+import {
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  isBoolean,
+  isFunction,
+} from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -48,14 +49,7 @@ type RectProps = UseRectOptions & {
   }): JSX.Element;
 };
 
-if (__DEV__) {
-  Rect.displayName = "Rect";
-  Rect.propTypes = {
-    children: PropTypes.func.isRequired,
-    observe: PropTypes.bool,
-    onChange: PropTypes.func,
-  };
-}
+Rect.displayName = "Rect";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -94,25 +88,26 @@ function useRect<T extends Element = HTMLElement>(
     onChange = deprecated_onChange;
   }
 
-  if (__DEV__) {
+  if (process.env.NODE_ENV === "development") {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
-      warning(
-        !isBoolean(observeOrOptions),
-        "Passing `observe` as the second argument to `useRect` is deprecated and will be removed in a future version of Reach UI. Instead, you can pass an object of options with an `observe` property as the second argument (`useRect(ref, { observe })`).\n" +
-          "See https://reach.tech/rect#userect-observe"
-      );
+      if (isBoolean(observeOrOptions)) {
+        console.warn(
+          "Passing `observe` as the second argument to `useRect` is deprecated and will be removed in a future version of Reach UI. Instead, you can pass an object of options with an `observe` property as the second argument (`useRect(ref, { observe })`).\n" +
+            "See https://reach.tech/rect#userect-observe"
+        );
+      }
     }, [observeOrOptions]);
+  }
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useEffect(() => {
-      warning(
-        !isFunction(deprecated_onChange),
+  React.useEffect(() => {
+    if (isFunction(deprecated_onChange)) {
+      console.warn(
         "Passing `onChange` as the third argument to `useRect` is deprecated and will be removed in a future version of Reach UI. Instead, you can pass an object of options with an `onChange` property as the second argument (`useRect(ref, { onChange })`).\n" +
           "See https://reach.tech/rect#userect-onchange"
       );
-    }, [deprecated_onChange]);
-  }
+    }
+  }, [deprecated_onChange]);
 
   let [element, setElement] = React.useState(nodeRef.current);
   let initialRectIsSet = React.useRef(false);
@@ -151,9 +146,7 @@ function useRect<T extends Element = HTMLElement>(
     }
 
     if (!elem) {
-      if (__DEV__) {
-        console.warn("You need to place the ref");
-      }
+      console.warn("You need to place the ref");
       return;
     }
 

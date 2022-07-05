@@ -25,9 +25,9 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
+import type { PopoverProps } from "@reach/popover";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -36,36 +36,35 @@ import {
   useDescendants,
   useDescendantsInit,
 } from "@reach/descendants";
-import { isRightClick } from "@reach/utils/is-right-click";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { useStableCallback } from "@reach/utils/use-stable-callback";
-import { createNamedContext } from "@reach/utils/context";
-import { isBoolean, isFunction, isString } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
+import type { Descendant } from "@reach/descendants";
 import {
+  composeEventHandlers,
+  createNamedContext,
+  isBoolean,
+  isFunction,
+  isRightClick,
+  isString,
+  makeId,
   useCheckStyles,
+  useComposedRefs,
   useControlledSwitchWarning,
-} from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
-import { useCreateMachine, useMachine } from "@reach/machine";
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  useStableCallback,
+  useStatefulRefValue,
+} from "@reach/utils";
+import type { Polymorphic, DistributiveOmit } from "@reach/utils";
+import { useMachine, useCreateMachine } from "@reach/machine";
+import type { StateMachine } from "@reach/machine";
 import {
   createMachineDefinition,
   ListboxEvents,
   ListboxStates,
 } from "./machine";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
-import type { Descendant } from "@reach/descendants";
-import type { DistributiveOmit } from "@reach/utils/types";
-import type { StateMachine } from "@reach/machine";
 import type {
   ListboxNodeRefs,
   ListboxStateData,
   ListboxEvent,
 } from "./machine";
-import type { PopoverProps } from "@reach/popover";
 
 const DEBUG = false;
 
@@ -324,19 +323,7 @@ const ListboxInput = React.forwardRef(function ListboxInput(
   ListboxInputProps & { __componentName?: string }
 >;
 
-if (__DEV__) {
-  ListboxInput.displayName = "ListboxInput";
-  ListboxInput.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-    defaultValue: PropTypes.string,
-    disabled: PropTypes.bool,
-    form: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func,
-    required: PropTypes.bool,
-    value: PropTypes.string,
-  };
-}
+ListboxInput.displayName = "ListboxInput";
 
 /**
  * @see Docs https://reach.tech/listbox#listboxinput-props
@@ -430,15 +417,7 @@ const Listbox = React.forwardRef(function Listbox(
   );
 }) as Polymorphic.ForwardRefComponent<"div", ListboxProps>;
 
-if (__DEV__) {
-  Listbox.displayName = "Listbox";
-  Listbox.propTypes = {
-    ...ListboxInput.propTypes,
-    arrow: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
-    button: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    children: PropTypes.node,
-  };
-}
+Listbox.displayName = "Listbox";
 
 /**
  * @see Docs https://reach.tech/listbox#listbox-props
@@ -597,13 +576,7 @@ const ListboxButtonImpl = React.forwardRef(function ListboxButton(
   );
 }) as Polymorphic.ForwardRefComponent<"span", ListboxButtonProps>;
 
-if (__DEV__) {
-  ListboxButtonImpl.displayName = "ListboxButton";
-  ListboxButtonImpl.propTypes = {
-    arrow: PropTypes.oneOfType([PropTypes.node, PropTypes.bool]),
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  };
-}
+ListboxButtonImpl.displayName = "ListboxButton";
 
 const ListboxButton = React.memo(
   ListboxButtonImpl
@@ -705,12 +678,7 @@ const ListboxArrowImpl = React.forwardRef(function ListboxArrow(
   );
 }) as Polymorphic.ForwardRefComponent<"span", ListboxArrowProps>;
 
-if (__DEV__) {
-  ListboxArrowImpl.displayName = "ListboxArrow";
-  ListboxArrowImpl.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-  };
-}
+ListboxArrowImpl.displayName = "ListboxArrow";
 
 const ListboxArrow = React.memo(ListboxArrowImpl) as Polymorphic.MemoComponent<
   "span",
@@ -803,14 +771,7 @@ const ListboxPopoverImpl = React.forwardRef(function ListboxPopover(
   );
 }) as Polymorphic.ForwardRefComponent<"div", ListboxPopoverProps>;
 
-if (__DEV__) {
-  ListboxPopoverImpl.displayName = "ListboxPopover";
-  ListboxPopoverImpl.propTypes = {
-    children: PropTypes.node.isRequired,
-    portal: PropTypes.bool,
-    position: PropTypes.func,
-  };
-}
+ListboxPopoverImpl.displayName = "ListboxPopover";
 
 const ListboxPopover = React.memo(
   ListboxPopoverImpl
@@ -897,10 +858,7 @@ const ListboxList = React.forwardRef(function ListboxList(
   );
 }) as Polymorphic.ForwardRefComponent<"ul", ListboxListProps>;
 
-if (__DEV__) {
-  ListboxList.displayName = "ListboxList";
-  ListboxList.propTypes = {};
-}
+ListboxList.displayName = "ListboxList";
 
 /**
  * @see Docs https://reach.tech/listbox#listboxlist-props
@@ -935,10 +893,6 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   },
   forwardedRef
 ) {
-  if (__DEV__ && !value) {
-    throw Error(`A ListboxOption must have a value prop.`);
-  }
-
   let {
     highlightedOptionRef,
     selectedOptionRef,
@@ -1096,14 +1050,7 @@ const ListboxOption = React.forwardRef(function ListboxOption(
   );
 }) as Polymorphic.ForwardRefComponent<"li", ListboxOptionProps>;
 
-if (__DEV__) {
-  ListboxOption.displayName = "ListboxOption";
-  ListboxOption.propTypes = {
-    disabled: PropTypes.bool,
-    label: PropTypes.string,
-    value: PropTypes.string.isRequired,
-  };
-}
+ListboxOption.displayName = "ListboxOption";
 
 /**
  * @see Docs https://reach.tech/listbox#listboxoption-props
@@ -1173,12 +1120,7 @@ const ListboxGroup = React.forwardRef(function ListboxGroup(
   );
 }) as Polymorphic.ForwardRefComponent<"div", ListboxGroupProps>;
 
-if (__DEV__) {
-  ListboxGroup.displayName = "ListboxGroup";
-  ListboxGroup.propTypes = {
-    label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  };
-}
+ListboxGroup.displayName = "ListboxGroup";
 
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props
@@ -1219,10 +1161,7 @@ const ListboxGroupLabel = React.forwardRef(function ListboxGroupLabel(
   );
 }) as Polymorphic.ForwardRefComponent<"span", ListboxGroupLabelProps>;
 
-if (__DEV__) {
-  ListboxGroupLabel.displayName = "ListboxGroupLabel";
-  ListboxGroupLabel.propTypes = {};
-}
+ListboxGroupLabel.displayName = "ListboxGroupLabel";
 
 /**
  * @see Docs https://reach.tech/listbox#listboxgroup-props

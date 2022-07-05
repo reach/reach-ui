@@ -1,14 +1,17 @@
 import * as React from "react";
-import { axe } from "jest-axe";
-import { render, act } from "$test/utils";
-import { AxeResults } from "$test/types";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
+import { cleanup, render, act } from "@reach-internal/test/utils";
 import { Dialog } from "@reach/dialog";
+import { expect, describe, afterEach, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Dialog /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     const { container } = render(<BasicOpenDialog />);
-    let results: AxeResults = null as any;
+    let results: AxeCore.AxeResults = null as any;
     await act(async () => {
       results = await axe(container);
     });

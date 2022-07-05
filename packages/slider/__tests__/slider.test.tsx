@@ -1,29 +1,20 @@
 import * as React from "react";
-// import renderer from "react-test-renderer";
-// import { act } from "react-dom/test-utils";
-import { render, fireEvent } from "$test/utils";
+import { cleanup, render, fireEvent } from "@reach-internal/test/utils";
 import {
-  Slider,
   SliderHandle,
   SliderInput,
   SliderMarker,
   SliderTrack,
   SliderRange,
-  // SLIDER_HANDLE_ALIGN_CENTER,
-  // SLIDER_HANDLE_ALIGN_CONTAIN,
-  // SLIDER_ORIENTATION_HORIZONTAL,
-  // SLIDER_ORIENTATION_VERTICAL
 } from "@reach/slider";
+import { afterEach, describe, expect, it } from "vitest";
+
+afterEach(cleanup);
 
 const getCurrentValue = (el: HTMLElement) =>
   Number(el.getAttribute("aria-valuenow"));
 
 describe("<Slider />", () => {
-  describe("rendering", () => {});
-
-  //   describe("a11y", () => {
-  //   });
-
   describe("user events", () => {
     it("updates marker state as value is exceeded", () => {
       const min = 0;

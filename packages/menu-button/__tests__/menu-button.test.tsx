@@ -1,12 +1,13 @@
 import * as React from "react";
 import {
+  cleanup,
   render,
   screen,
   fireEvent,
   simulateMouseClick,
   simulateSpaceKeyClick,
   simulateEnterKeyClick,
-} from "$test/utils";
+} from "@reach-internal/test/utils";
 import {
   Menu,
   MenuList,
@@ -14,6 +15,9 @@ import {
   MenuItem,
   MenuLink,
 } from "@reach/menu-button";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 let noop = () => {};
 
@@ -187,8 +191,8 @@ describe("<MenuButton /> with <MenuItem />", () => {
 // });
 
 function renderTestMenu() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>
@@ -219,8 +223,8 @@ function renderTestMenu() {
 }
 
 function renderTestMenuWithLinks() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>
@@ -255,8 +259,8 @@ function renderTestMenuWithLinks() {
 }
 
 function renderTestMenuWithLinksAndItems() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>

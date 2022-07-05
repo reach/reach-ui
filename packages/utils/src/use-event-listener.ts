@@ -20,7 +20,7 @@ export function useEventListener<K extends keyof WindowEventMap>(
   useEffect(() => {
     const isSupported = element && element.addEventListener;
     if (!isSupported) {
-      if (__DEV__) {
+      if (process.env.NODE_ENV === "development") {
         console.warn("Event listener not supported on the element provided");
       }
       return;

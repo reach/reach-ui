@@ -16,15 +16,15 @@
  */
 
 import * as React from "react";
-import { createContext } from "@reach/utils/context";
-import { makeId } from "@reach/utils/make-id";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
-import { useControlledState } from "@reach/utils/use-controlled-state";
+import {
+  createContext,
+  makeId,
+  useComposedRefs,
+  composeEventHandlers,
+  useControlledState,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import { useId } from "@reach/auto-id";
-import PropTypes from "prop-types";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
 
 const [DisclosureProvider, useDisclosureCtx] =
   createContext<DisclosureContextValue>("Disclosure");
@@ -127,15 +127,7 @@ interface DisclosureProps {
   open?: boolean;
 }
 
-if (__DEV__) {
-  Disclosure.displayName = "Disclosure";
-  Disclosure.propTypes = {
-    children: PropTypes.node.isRequired,
-    defaultOpen: PropTypes.bool,
-    onChange: PropTypes.func,
-    open: PropTypes.bool,
-  };
-}
+Disclosure.displayName = "Disclosure";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -208,13 +200,7 @@ interface DisclosureButtonProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  DisclosureButton.displayName = "DisclosureButton";
-  DisclosureButton.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
-}
+DisclosureButton.displayName = "DisclosureButton";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -246,10 +232,7 @@ const DisclosurePanel = React.forwardRef(function DisclosurePanel(
   );
 }) as Polymorphic.ForwardRefComponent<"div", DisclosurePanelProps>;
 
-if (__DEV__) {
-  DisclosurePanel.displayName = "DisclosurePanel";
-  DisclosurePanel.propTypes = {};
-}
+DisclosurePanel.displayName = "DisclosurePanel";
 
 /**
  * @see Docs https://reach.tech/disclosure#disclosurepanel-props

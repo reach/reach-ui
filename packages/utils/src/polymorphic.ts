@@ -76,4 +76,3 @@ export type {
   Merge,
   OwnProps,
 };
-export default {};

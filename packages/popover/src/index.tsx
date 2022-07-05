@@ -5,11 +5,12 @@
 import * as React from "react";
 import { Portal } from "@reach/portal";
 import { useRect, PRect } from "@reach/rect";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import tabbable from "tabbable";
+import { getOwnerDocument, useComposedRefs } from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
+import { tabbable } from "tabbable";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
+// TODO: tabbable types incorrectly exclude `document` as a param. Open a PR to
+// fix and get rid of `as any` casting.
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -49,9 +50,7 @@ interface PopoverProps {
   unstable_skipInitialPortalRender?: boolean;
 }
 
-if (__DEV__) {
-  Popover.displayName = "Popover";
-}
+Popover.displayName = "Popover";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -97,9 +96,7 @@ const PopoverImpl = React.forwardRef(function PopoverImpl(
   );
 }) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
-if (__DEV__) {
-  PopoverImpl.displayName = "PopoverImpl";
-}
+PopoverImpl.displayName = "PopoverImpl";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -246,7 +243,7 @@ function useSimulateTabNavigationForReactTree<
   }, []);
 
   function getElementAfterTrigger() {
-    const elements = tabbable(ownerDocument);
+    const elements = tabbable(ownerDocument as any);
     const targetIndex =
       elements && triggerRef.current
         ? elements.indexOf(triggerRef.current)
@@ -324,7 +321,7 @@ function useSimulateTabNavigationForReactTree<
 
   function tabbedToBrowserChrome(event: KeyboardEvent) {
     const elements = popoverRef.current
-      ? tabbable(ownerDocument).filter(
+      ? tabbable(ownerDocument as any).filter(
           (element) => !popoverRef.current!.contains(element)
         )
       : null;
@@ -334,10 +331,10 @@ function useSimulateTabNavigationForReactTree<
   function shiftTabbedToBrowserChrome(event: KeyboardEvent) {
     // we're assuming the popover will never contain the first tabbable
     // element, and it better not, because the trigger needs to be tabbable!
-    return event.target === tabbable(ownerDocument)[0];
+    return event.target === tabbable(ownerDocument as any)[0];
   }
 
-  let restoreTabIndexTuplés: [HTMLElement, number][] = [];
+  let restoreTabIndexTuplés: [HTMLElement | SVGElement, number][] = [];
 
   function disableTabbablesInPopover() {
     const elements = popoverRef.current && tabbable(popoverRef.current);

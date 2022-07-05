@@ -1,12 +1,15 @@
 import * as React from "react";
-import { render } from "$test/utils";
 import VisuallyHidden from "@reach/visually-hidden";
+import { describe, it, expect, afterEach } from "vitest";
+import { render, cleanup } from "@reach-internal/test/utils";
+
+afterEach(cleanup);
 
 describe("<VisuallyHidden />", () => {
   describe("rendering", () => {
     it("renders as any HTML element", async () => {
-      const hiddenMessage = "Hidden Message";
-      const { getByText } = render(
+      let hiddenMessage = "Hidden Message";
+      let { getByText } = render(
         <VisuallyHidden as="div">{hiddenMessage}</VisuallyHidden>
       );
       let visuallyHidden = getByText(hiddenMessage);

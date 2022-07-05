@@ -12,32 +12,40 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/listbox"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
-    "@reach/auto-id": "0.17.0",
-    "@reach/descendants": "0.17.0",
-    "@reach/machine": "0.17.0",
-    "@reach/popover": "0.17.0",
-    "@reach/utils": "0.17.0",
-    "prop-types": "^15.7.2"
+    "@reach/auto-id": "workspace:*",
+    "@reach/descendants": "workspace:*",
+    "@reach/machine": "workspace:*",
+    "@reach/popover": "workspace:*",
+    "@reach/utils": "workspace:*",
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
+    "@reach-internal/dev": "workspace:*",
+    "@reach-internal/test": "workspace:*",
+    "@reach-internal/tsconfig": "workspace:*",
+    "@types/reach-ui": "workspace:*",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "tsup": "^6.1.3"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/reach-listbox.cjs.js",
-  "module": "dist/reach-listbox.esm.js",
-  "types": "dist/reach-listbox.cjs.d.ts",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "files": [
+    "CHANGELOG.md",
+    "LICENSE",
     "README.md",
     "dist",
     "styles.css"
   ],
-  "eslintIgnore": [
-    "node_modules",
-    "dist"
-  ]
+  "publishConfig": {
+    "access": "public"
+  }
 }

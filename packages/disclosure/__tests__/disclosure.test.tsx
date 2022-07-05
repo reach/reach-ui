@@ -1,10 +1,13 @@
 import * as React from "react";
-import { render, fireEvent } from "$test/utils";
+import { cleanup, render, fireEvent } from "@reach-internal/test/utils";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@reach/disclosure";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Disclosure />", () => {
   describe("rendering", () => {
@@ -144,7 +147,7 @@ describe("<Disclosure />", () => {
     });
 
     it("calls onChange when the button is clicked", () => {
-      let callback = jest.fn();
+      let callback = vi.fn();
       let { getByText } = render(
         <Disclosure onChange={callback}>
           <DisclosureButton>Click Button</DisclosureButton>

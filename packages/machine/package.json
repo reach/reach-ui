@@ -12,28 +12,35 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/machine"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
-    "@reach/utils": "0.17.0",
-    "@xstate/fsm": "1.4.0",
-    "tslib": "^2.3.0"
+    "@reach/utils": "workspace:*",
+    "@xstate/fsm": "1.4.0"
   },
   "devDependencies": {
+    "@reach-internal/dev": "workspace:*",
+    "@reach-internal/test": "workspace:*",
+    "@reach-internal/tsconfig": "workspace:*",
+    "@types/reach-ui": "workspace:*",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "tsup": "^6.1.3"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/reach-machine.cjs.js",
-  "module": "dist/reach-machine.esm.js",
-  "types": "dist/reach-machine.cjs.d.ts",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "files": [
+    "CHANGELOG.md",
+    "LICENSE",
     "README.md",
     "dist"
   ],
-  "eslintIgnore": [
-    "node_modules",
-    "dist"
-  ]
+  "publishConfig": {
+    "access": "public"
+  }
 }

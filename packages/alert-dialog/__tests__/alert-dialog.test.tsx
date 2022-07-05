@@ -1,10 +1,13 @@
 import * as React from "react";
-import { render, fireEvent, act } from "$test/utils";
+import { cleanup, render, fireEvent, act } from "@reach-internal/test/utils";
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
 } from "@reach/alert-dialog";
+import { describe, it, expect, afterEach } from "vitest";
+
+afterEach(cleanup);
 
 describe("<AlertDialog />", () => {
   describe("rendering", () => {

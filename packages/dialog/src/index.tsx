@@ -12,26 +12,17 @@
 
 import * as React from "react";
 import { Portal } from "@reach/portal";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { isString } from "@reach/utils/type-check";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  composeEventHandlers,
+  getOwnerDocument,
+  isString,
+  noop,
+  useCheckStyles,
+  useComposedRefs,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import PropTypes from "prop-types";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
-
-const overlayPropTypes = {
-  allowPinchZoom: PropTypes.bool,
-  dangerouslyBypassFocusLock: PropTypes.bool,
-  dangerouslyBypassScrollLock: PropTypes.bool,
-  // TODO:
-  initialFocusRef: () => null,
-  onDismiss: PropTypes.func,
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -74,13 +65,7 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
   ) : null;
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-  DialogOverlay.propTypes = {
-    ...overlayPropTypes,
-    isOpen: PropTypes.bool,
-  };
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 interface DialogOverlayProps extends DialogProps {
   /**
@@ -145,7 +130,8 @@ const DialogInner = React.forwardRef(function DialogInner(
 ) {
   let lockFocusAcrossFramesIsDefined =
     unstable_lockFocusAcrossFrames !== undefined;
-  if (__DEV__) {
+
+  if (process.env.NODE_ENV === "development") {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (lockFocusAcrossFramesIsDefined) {
@@ -220,12 +206,7 @@ const DialogInner = React.forwardRef(function DialogInner(
   );
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-  DialogOverlay.propTypes = {
-    ...overlayPropTypes,
-  };
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -275,13 +256,7 @@ interface DialogContentProps {
   children?: React.ReactNode;
 }
 
-if (__DEV__) {
-  DialogContent.displayName = "DialogContent";
-  DialogContent.propTypes = {
-    "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType,
-  };
-}
+DialogContent.displayName = "DialogContent";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -382,15 +357,7 @@ interface DialogProps {
   unstable_lockFocusAcrossFrames?: boolean;
 }
 
-if (__DEV__) {
-  Dialog.displayName = "Dialog";
-  Dialog.propTypes = {
-    isOpen: PropTypes.bool,
-    onDismiss: PropTypes.func,
-    "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType,
-  };
-}
+Dialog.displayName = "Dialog";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -400,7 +367,7 @@ function createAriaHider(dialogNode: HTMLElement) {
   let ownerDocument = getOwnerDocument(dialogNode)!;
 
   if (!dialogNode) {
-    if (__DEV__) {
+    if (process.env.NODE_ENV === "development") {
       console.warn(
         "A ref has not yet been attached to a dialog node when attempting to call `createAriaHider`."
       );

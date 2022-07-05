@@ -1,13 +1,20 @@
 import * as React from "react";
-import { render, fireEvent, act, screen } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
+import {
+  cleanup,
+  render,
+  fireEvent,
+  act,
+  screen,
+} from "@reach-internal/test/utils";
 import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Tooltip />", () => {
   describe("rendering", () => {
     it("renders as any HTML element", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
 
       let tooltipText = "Look at me";
       let { getByText } = render(
@@ -21,59 +28,20 @@ describe("<Tooltip />", () => {
       let trigger = getByText("Trigger");
       act(() => {
         fireEvent.mouseOver(trigger);
-        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+        vi.advanceTimersByTime(MOUSE_REST_TIMEOUT);
       });
 
       let tooltip = getByText(tooltipText);
       expect(tooltip.tagName).toBe("SPAN");
 
       act(() => void leaveTooltip(trigger));
-      jest.useRealTimers();
-    });
-  });
-
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      let { container, getByText } = render(
-        <div data-testid="tooltip">
-          <Tooltip label="Content">
-            <button>Trigger</button>
-          </Tooltip>
-        </div>
-      );
-
-      let trigger = getByText("Trigger");
-
-      // We need to use real timers to stop axe from timing out, then revert
-      // back to fake timers to continue our tests.
-      jest.useRealTimers();
-      let results: AxeResults = null as any;
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-
-      jest.useFakeTimers();
-      act(() => {
-        fireEvent.mouseOver(trigger);
-        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
-      });
-      jest.useRealTimers();
-
-      await act(async () => {
-        results = await axe(container);
-      });
-      expect(results).toHaveNoViolations();
-
-      jest.useFakeTimers();
-      act(() => void leaveTooltip(trigger));
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 
   describe("user events", () => {
     it("shows/hides on hover", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let tooltipText = "Look at me";
 
       let { getByText, queryByText } = render(
@@ -87,7 +55,7 @@ describe("<Tooltip />", () => {
 
       act(() => {
         fireEvent.mouseOver(trigger);
-        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+        vi.advanceTimersByTime(MOUSE_REST_TIMEOUT);
       });
 
       expect(queryByText(tooltipText)).toBeTruthy();
@@ -96,11 +64,11 @@ describe("<Tooltip />", () => {
 
       expect(queryByText(tooltipText)).toBeFalsy();
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it("shows/hides when trigger is focused/blurred", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let tooltipText = "Look at me";
       let { getByText, queryByText } = render(
         <Tooltip label={tooltipText}>
@@ -117,11 +85,11 @@ describe("<Tooltip />", () => {
       act(() => void blurTooltip(trigger));
       expect(queryByText(tooltipText)).toBeFalsy();
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it("shows without timeout when one tooltip is already visible", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let { getByText } = render(
         <>
           <Tooltip label="First">
@@ -138,7 +106,7 @@ describe("<Tooltip />", () => {
 
       act(() => {
         fireEvent.mouseOver(firstTrigger);
-        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+        vi.advanceTimersByTime(MOUSE_REST_TIMEOUT);
       });
 
       expect(screen.queryByText("First Trigger")).toBeTruthy();
@@ -151,11 +119,11 @@ describe("<Tooltip />", () => {
       expect(screen.queryByText("Second Trigger")).toBeTruthy();
 
       act(() => void leaveTooltip(secondTrigger));
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it("hides on ESC", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let tooltipText = "Look at me";
       let { getByText, queryByText } = render(
         <Tooltip label={tooltipText}>
@@ -167,7 +135,7 @@ describe("<Tooltip />", () => {
 
       act(() => {
         fireEvent.focus(trigger);
-        jest.advanceTimersByTime(MOUSE_REST_TIMEOUT);
+        vi.advanceTimersByTime(MOUSE_REST_TIMEOUT);
       });
       expect(queryByText(tooltipText)).toBeTruthy();
 
@@ -175,17 +143,17 @@ describe("<Tooltip />", () => {
       expect(queryByText(tooltipText)).toBeFalsy();
 
       act(() => void leaveTooltip(trigger));
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 });
 
 function leaveTooltip(element: HTMLElement) {
   fireEvent.mouseLeave(element);
-  jest.advanceTimersByTime(LEAVE_TIMEOUT);
+  vi.advanceTimersByTime(LEAVE_TIMEOUT);
 }
 
 function blurTooltip(element: HTMLElement) {
   fireEvent.blur(element);
-  jest.advanceTimersByTime(LEAVE_TIMEOUT);
+  vi.advanceTimersByTime(LEAVE_TIMEOUT);
 }

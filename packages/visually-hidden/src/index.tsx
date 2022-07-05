@@ -11,9 +11,7 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
+import type { Polymorphic } from "@reach/utils";
 
 /**
  * VisuallyHidden
@@ -47,6 +45,7 @@ const VisuallyHidden = React.forwardRef<any, any>(function VisuallyHidden(
     />
   );
 }) as Polymorphic.ForwardRefComponent<"span", VisuallyHiddenProps>;
+VisuallyHidden.displayName = "VisuallyHidden";
 
 /**
  * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
@@ -56,14 +55,6 @@ interface VisuallyHiddenProps {
    * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
    */
   children: React.ReactNode;
-}
-
-if (__DEV__) {
-  VisuallyHidden.displayName = "VisuallyHidden";
-  VisuallyHidden.propTypes = {
-    as: PropTypes.any,
-    children: PropTypes.node,
-  };
 }
 
 ////////////////////////////////////////////////////////////////////////////////

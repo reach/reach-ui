@@ -12,7 +12,6 @@ export * from "./is-right-click";
 export * from "./make-id";
 export * from "./noop";
 export * from "./owner-document";
-export * from "./polymorphic";
 export * from "./type-check";
 export * from "./use-constant";
 export * from "./use-controlled-state";
@@ -25,3 +24,7 @@ export * from "./use-previous";
 export * from "./use-stable-callback";
 export * from "./use-stateful-ref-value";
 export * from "./use-update-effect";
+export * from "./types";
+
+import type * as Polymorphic from "./polymorphic";
+export type { Polymorphic };

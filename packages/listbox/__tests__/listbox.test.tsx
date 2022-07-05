@@ -1,5 +1,11 @@
 import * as React from "react";
-import { render, act, fireEvent, keyType } from "$test/utils";
+import {
+  cleanup,
+  render,
+  act,
+  fireEvent,
+  keyType,
+} from "@reach-internal/test/utils";
 import {
   Listbox,
   ListboxButton,
@@ -11,6 +17,9 @@ import {
 } from "@reach/listbox";
 import VisuallyHidden from "@reach/visually-hidden";
 import { spy } from "sinon";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 // NOTE: Render portal'd listboxes in an `act` call, as they update React state
 //       when mounted.
@@ -120,7 +129,7 @@ describe("<Listbox />", () => {
     //     });
 
     //     // May use small timeout or requestAnimationFrame
-    //     jest.advanceTimersByTime(10);
+    //     vi.advanceTimersByTime(10);
     //     expect(getByRole("listbox")).toHaveFocus();
     //   });
 
@@ -345,7 +354,7 @@ describe("<Listbox />", () => {
     });
 
     it("should update the value when the user types while idle", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let { getByRole, container } = render(
         <Listbox name="taco" portal={false}>
           <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -369,7 +378,7 @@ describe("<Listbox />", () => {
       expect(input).toHaveValue("asada");
 
       act(() => {
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
         keyType(getByRole("button"), "p");
       });
       // starts searching from the beginning of the list
@@ -379,11 +388,11 @@ describe("<Listbox />", () => {
       act(() => void keyType(getByRole("button"), "a"));
       expect(input).toHaveValue("pastor");
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it("should update the selection when the user types while expanded", () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       let { getByRole, getAllByText } = render(
         <Listbox portal={false}>
           <ListboxOption value="pollo">Pollo</ListboxOption>
@@ -426,7 +435,7 @@ describe("<Listbox />", () => {
       );
 
       act(() => {
-        jest.advanceTimersByTime(5000);
+        vi.advanceTimersByTime(5000);
         act(() => void keyType(getByRole("button"), "p"));
       });
       // starts searching from the beginning of the list
@@ -448,7 +457,7 @@ describe("<Listbox />", () => {
     // TODO: it("should prevent scrolling on `PageDown`", () => {});
     // TODO: it("should call onChange", () => {});
 
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });
 

@@ -1,18 +1,15 @@
 import * as React from "react";
-import { render } from "$test/utils";
-import { axe } from "jest-axe";
-import {
-  Slider,
-  // SLIDER_HANDLE_ALIGN_CENTER,
-  // SLIDER_HANDLE_ALIGN_CONTAIN,
-  // SLIDER_ORIENTATION_HORIZONTAL,
-  // SLIDER_ORIENTATION_VERTICAL
-} from "@reach/slider";
+import { cleanup, render } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
+import { Slider } from "@reach/slider";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Slider /> with axe", () => {
   describe("a11y", () => {
     it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       const { container } = render(<Slider aria-label="basic slider" />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();

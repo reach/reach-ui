@@ -5,15 +5,13 @@ import {
   interpret,
   InterpreterStatus,
 } from "@xstate/fsm";
-import { isString } from "@reach/utils/type-check";
-import { useConstant } from "@reach/utils/use-constant";
-
-import type { DistributiveOmit } from "@reach/utils/types";
 import type {
   EventObject as MachineEvent,
   StateMachine,
   Typestate,
 } from "@xstate/fsm";
+import { isString, useConstant } from "@reach/utils";
+import type { DistributiveOmit } from "@reach/utils";
 
 const getServiceState = <
   TContext extends object,
@@ -92,7 +90,7 @@ export function useMachine<
       } as TE);
       lastEventType.current = event.type;
 
-      if (__DEV__) {
+      if (process.env.NODE_ENV === "development") {
         if (DEBUG) {
           console.group("Event Sent");
           console.log("Event:", event);
@@ -119,7 +117,7 @@ export function useMachine<
   }, [service]);
 
   React.useEffect(() => {
-    if (__DEV__) {
+    if (process.env.NODE_ENV === "development") {
       if (DEBUG && state.changed) {
         console.group("State Updated");
         console.log("State:", state);

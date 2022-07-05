@@ -25,12 +25,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import { usePrevious } from "@reach/utils/use-previous";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import PropTypes from "prop-types";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
+import { getOwnerDocument, useComposedRefs, usePrevious } from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 
 /*
  * Singleton state is fine because you don't server render
@@ -98,13 +94,7 @@ interface AlertProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  Alert.displayName = "Alert";
-  Alert.propTypes = {
-    children: PropTypes.node,
-    type: PropTypes.oneOf(["assertive", "polite"]),
-  };
-}
+Alert.displayName = "Alert";
 
 ////////////////////////////////////////////////////////////////////////////////
 

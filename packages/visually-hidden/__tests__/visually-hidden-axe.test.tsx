@@ -1,11 +1,14 @@
 import * as React from "react";
-import { render } from "$test/utils";
-import { axe } from "jest-axe";
+import { vi, describe, it, expect, afterEach } from "vitest";
+import { render, cleanup } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
 import VisuallyHidden from "@reach/visually-hidden";
+
+afterEach(cleanup);
 
 describe("<VisuallyHidden /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     const { container } = render(
       <button onClick={() => void null}>
         <VisuallyHidden>Click Me</VisuallyHidden>

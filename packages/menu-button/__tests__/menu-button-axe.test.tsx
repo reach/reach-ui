@@ -1,6 +1,11 @@
 import * as React from "react";
-import { render, screen, simulateMouseClick } from "$test/utils";
-import { axe } from "jest-axe";
+import {
+  cleanup,
+  render,
+  screen,
+  simulateMouseClick,
+} from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
 import {
   Menu,
   MenuList,
@@ -8,11 +13,14 @@ import {
   MenuItem,
   MenuLink,
 } from "@reach/menu-button";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<MenuButton /> with axe", () => {
   describe("with <MenuItem />", () => {
     it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       let { container, list, button } = renderTestMenu();
 
       let results = await axe(container);
@@ -33,7 +41,7 @@ describe("<MenuButton /> with axe", () => {
 
   describe("with <MenuLink />", () => {
     it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       let { container, list, button } = renderTestMenuWithLinks();
 
       let results = await axe(container);
@@ -54,7 +62,7 @@ describe("<MenuButton /> with axe", () => {
 
   describe("with <MenuItem /> and <MenuLink />", () => {
     it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       let { container, list, button } = renderTestMenuWithLinksAndItems();
 
       let results = await axe(container);
@@ -75,8 +83,8 @@ describe("<MenuButton /> with axe", () => {
 });
 
 function renderTestMenu() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>
@@ -107,8 +115,8 @@ function renderTestMenu() {
 }
 
 function renderTestMenuWithLinks() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>
@@ -143,8 +151,8 @@ function renderTestMenuWithLinks() {
 }
 
 function renderTestMenuWithLinksAndItems() {
-  let cb1 = jest.fn();
-  let cb2 = jest.fn();
+  let cb1 = vi.fn();
+  let cb2 = vi.fn();
   let { getByRole, container } = render(
     <Menu>
       <MenuButton>

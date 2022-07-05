@@ -1,16 +1,19 @@
 import * as React from "react";
-import { render, fireEvent } from "$test/utils";
-import { axe } from "jest-axe";
+import { render, fireEvent, cleanup } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
 import {
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
 } from "@reach/accordion";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Accordion /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { getByText, container } = render(
       <Accordion data-testid="wrapper">
         <AccordionItem data-testid="item1">
