@@ -21,7 +21,6 @@
     "@reach-internal/dev": "workspace:*",
     "@reach-internal/test": "workspace:*",
     "@reach-internal/tsconfig": "workspace:*",
-    "@types/reach-ui": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tsup": "^6.1.3"

@@ -26,7 +26,6 @@
     "@reach-internal/dev": "workspace:*",
     "@reach-internal/test": "workspace:*",
     "@reach-internal/tsconfig": "workspace:*",
-    "@types/reach-ui": "workspace:*",
     "latinize": "0.3.0",
     "match-sorter": "^6.3.1",
     "react": "^17.0.2",
