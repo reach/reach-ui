@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "React Library",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "lib": ["ES2015", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "target": "ES2015"
+  }
+}

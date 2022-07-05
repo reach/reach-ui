@@ -1,0 +1,18 @@
+{
+  "name": "@reach-internal/dev",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/internal-dev.cjs",
+  "types": "dist/internal-dev.cjs",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@reach-internal/tsconfig": "workspace:*",
+    "tsup": "^6.1.3"
+  },
+  "peerDependencies": {
+    "tsup": "^6.1.3"
+  }
+}
