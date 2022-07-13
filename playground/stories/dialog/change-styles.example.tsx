@@ -25,7 +25,10 @@ function Example() {
       {transitions(
         (styles, item) =>
           item && (
-            <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+            <AnimatedDialogOverlay
+              style={{ opacity: styles.opacity }}
+              onDismiss={() => setShowDialog(false)}
+            >
               <AnimatedDialogContent
                 aria-labelledby="dialog-title"
                 style={{
