@@ -1,6 +1,12 @@
 import * as React from "react";
-import { useFakeTimers, SinonFakeTimers } from "sinon";
-import { fireEvent, render, act, userEvent, cleanup } from "@reach-internal/test/utils";
+import type { SinonFakeTimers } from "sinon";
+import { useFakeTimers } from "sinon";
+import {
+  fireEvent,
+  render,
+  userEvent,
+  cleanup,
+} from "@reach-internal/test/utils";
 import { Dialog } from "@reach/dialog";
 import { expect, describe, beforeEach, afterEach, it } from "vitest";
 
@@ -61,11 +67,15 @@ describe("<Dialog />", () => {
       expect(queryByTestId("inner")).toBeNull();
     });
 
+    // Verified working in real manual test. TODO: Figure out what's borked in
+    // Vitest upgrade
     it.todo("closes the dialog when overlay is clicked", () => {
+      const user = userEvent.setup();
       const { baseElement, queryByTestId } = render(<BasicOpenDialog />);
-      act(() => {
-        userEvent.click(getOverlay(baseElement) as Element);
-      });
+
+      expect(queryByTestId("inner")).toBeTruthy();
+      user.click(getOverlay(baseElement)!);
+
       expect(queryByTestId("inner")).toBeNull();
     });
   });
