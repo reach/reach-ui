@@ -27,6 +27,8 @@ import { isFragment } from "react-is";
 
 import type { Position } from "@reach/popover";
 
+declare const __DEV__: boolean;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -292,7 +294,7 @@ const MenuLink = React.forwardRef(
     },
     forwardedRef
   ) => {
-    if (process.env.NODE === "development") {
+    if (__DEV__) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       React.useEffect(() => {
         if (component) {

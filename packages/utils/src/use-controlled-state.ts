@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import type * as React from "react";
 
+declare const __DEV__: boolean;
+
 /**
  * Check if a component is controlled or uncontrolled and return the correct
  * state value and setter accordingly. If the component state is controlled by
@@ -21,7 +23,7 @@ export function useControlledState<T = any>({
   let wasControlled = controlledValue !== undefined;
   let isControlledRef = useRef(wasControlled);
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     if (!isControlledRef.current && wasControlled) {
       console.warn(
         `${calledFrom} is changing from controlled to uncontrolled. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`

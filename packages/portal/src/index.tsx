@@ -18,6 +18,8 @@ import {
 } from "@reach/utils";
 import { createPortal } from "react-dom";
 
+declare const __DEV__: boolean;
+
 /**
  * Portal
  *
@@ -32,7 +34,7 @@ const PortalImpl: React.FC<PortalProps> = ({
   let portalNode = React.useRef<HTMLElement | null>(null);
   let forceUpdate = useForceUpdate();
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (containerRef != null) {

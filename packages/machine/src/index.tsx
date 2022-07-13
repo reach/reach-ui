@@ -13,6 +13,8 @@ import type {
 import { isString, useConstant } from "@reach/utils";
 import type { DistributiveOmit } from "@reach/utils";
 
+declare const __DEV__: boolean;
+
 const getServiceState = <
   TContext extends object,
   TEvent extends MachineEvent = MachineEvent,
@@ -90,7 +92,7 @@ export function useMachine<
       } as TE);
       lastEventType.current = event.type;
 
-      if (process.env.NODE_ENV === "development") {
+      if (__DEV__) {
         if (DEBUG) {
           console.group("Event Sent");
           console.log("Event:", event);
@@ -117,7 +119,7 @@ export function useMachine<
   }, [service]);
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
+    if (__DEV__) {
       if (DEBUG && state.changed) {
         console.group("State Updated");
         console.log("State:", state);

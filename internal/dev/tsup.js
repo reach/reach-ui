@@ -16,7 +16,7 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       external,
       banner: { js: banner },
       define: {
-        "process.env.NODE_ENV": "'development'",
+        __DEV__: "true",
       },
     },
 
@@ -32,7 +32,7 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       // @ts-ignore
       drop: ["console"],
       define: {
-        "process.env.NODE_ENV": "'production'",
+        __DEV__: "false",
       },
     },
 
@@ -44,7 +44,7 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       external,
       banner: { js: banner },
       define: {
-        "process.env.NODE_ENV": "'development'",
+        __DEV__: "true",
       },
     },
   ]);

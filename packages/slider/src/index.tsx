@@ -40,6 +40,8 @@ import {
 } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
 
+declare const __DEV__: boolean;
+
 // TODO: Remove in 1.0
 type SliderAlignment = "center" | "contain";
 
@@ -776,7 +778,7 @@ const SliderRange = React.memo(SliderRangeImpl) as Polymorphic.MemoComponent<
 // TODO: Remove in 1.0
 const SliderTrackHighlightImpl = React.forwardRef(
   function SliderTrackHighlightImpl(props, ref) {
-    if (process.env.NODE_ENV === "development") {
+    if (__DEV__) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       React.useEffect(() => {
         console.warn(

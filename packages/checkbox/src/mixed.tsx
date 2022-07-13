@@ -43,6 +43,7 @@ import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 // Used for development only, not recommended for production code!
 const DEBUG = false;
+declare const __DEV__: boolean;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -337,7 +338,7 @@ function useMixedCheckbox(
     }
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (!ref.current) {
@@ -412,7 +413,7 @@ function useControlledSwitchWarning(
    */
   let isControlled = controlPropValue != null;
   let { current: wasControlled } = React.useRef(isControlled);
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (!isControlled && wasControlled) {

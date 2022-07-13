@@ -23,6 +23,8 @@ import type { Polymorphic } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 
+declare const __DEV__: boolean;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -130,7 +132,7 @@ const DialogInner = React.forwardRef(function DialogInner(
   let lockFocusAcrossFramesIsDefined =
     unstable_lockFocusAcrossFrames !== undefined;
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (lockFocusAcrossFramesIsDefined) {
@@ -366,7 +368,7 @@ function createAriaHider(dialogNode: HTMLElement) {
   let ownerDocument = getOwnerDocument(dialogNode)!;
 
   if (!dialogNode) {
-    if (process.env.NODE_ENV === "development") {
+    if (__DEV__) {
       console.warn(
         "A ref has not yet been attached to a dialog node when attempting to call `createAriaHider`."
       );

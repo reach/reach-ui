@@ -45,6 +45,8 @@ import { Popover, positionMatchWidth } from "@reach/popover";
 import type { PopoverProps } from "@reach/popover";
 import type { Descendant } from "@reach/descendants";
 
+declare const __DEV__: boolean;
+
 ////////////////////////////////////////////////////////////////////////////////
 // States
 
@@ -466,7 +468,7 @@ export const ComboboxInput = React.forwardRef(
     let isControlled = typeof controlledValue !== "undefined";
     let wasInitiallyControlled = typeof initialControlledValue !== "undefined";
 
-    if (process.env.NODE_ENV === "development") {
+    if (__DEV__) {
       if (!isControlled && wasInitiallyControlled) {
         console.warn(
           "ComboboxInput is changing from controlled to uncontrolled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."

@@ -55,6 +55,8 @@ import { Portal } from "@reach/portal";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
 
+declare const __DEV__: boolean;
+
 const MOUSE_REST_TIMEOUT = 100;
 const LEAVE_TIMEOUT = 500;
 
@@ -416,7 +418,7 @@ const Tooltip = React.forwardRef(function (
 ) {
   let child = React.Children.only(children) as any;
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (DEPRECATED_ariaLabel) {
@@ -424,7 +426,7 @@ const Tooltip = React.forwardRef(function (
           "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
         );
       }
-    }, []);
+    }, [DEPRECATED_ariaLabel]);
   }
 
   // We need to pass some properties from the child into useTooltip

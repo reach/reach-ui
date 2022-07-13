@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useEffect } from "react";
 
+declare const __DEV__: boolean;
+
 let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
@@ -10,7 +12,7 @@ let checkedPkgs: { [key: string]: boolean } = {};
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
 export function checkStyles(packageName: string): void {
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // only check once per package
     if (checkedPkgs[packageName]) return;
     checkedPkgs[packageName] = true;
@@ -46,7 +48,7 @@ export function checkStyles(packageName: string): void {
  * @example useCheckStyles("dialog") will check for styles for @reach/dialog
  */
 export function useCheckStyles(packageName: string): void {
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     let name = useRef(packageName);
     useEffect(() => void (name.current = packageName), [packageName]);
     useEffect(() => checkStyles(name.current), []);
@@ -69,7 +71,7 @@ export function useControlledSwitchWarning(
   controlledPropName: string,
   componentName: string
 ): void {
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     let controlledRef = useRef(controlledValue != null);
     let nameCache = useRef({ componentName, controlledPropName });
     useEffect(() => {

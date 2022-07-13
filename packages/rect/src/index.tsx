@@ -16,6 +16,8 @@ import {
   isFunction,
 } from "@reach/utils";
 
+declare const __DEV__: boolean;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -88,7 +90,7 @@ function useRect<T extends Element = HTMLElement>(
     onChange = deprecated_onChange;
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (isBoolean(observeOrOptions)) {

@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 
+declare const __DEV__: boolean;
+
 /**
  * Adds a DOM event listener
  *
@@ -20,7 +22,7 @@ export function useEventListener<K extends keyof WindowEventMap>(
   useEffect(() => {
     const isSupported = element && element.addEventListener;
     if (!isSupported) {
-      if (process.env.NODE_ENV === "development") {
+      if (__DEV__) {
         console.warn("Event listener not supported on the element provided");
       }
       return;
