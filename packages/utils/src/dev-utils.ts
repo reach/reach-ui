@@ -49,9 +49,14 @@ export function checkStyles(packageName: string): void {
  */
 export function useCheckStyles(packageName: string): void {
   if (__DEV__) {
-    let name = useRef(packageName);
-    useEffect(() => void (name.current = packageName), [packageName]);
-    useEffect(() => checkStyles(name.current), []);
+    let warned = useRef(false);
+    useEffect(() => {
+      if (!warned.current) {
+        warned.current = true;
+        checkStyles(packageName);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
   }
 }
 
