@@ -49,6 +49,7 @@ importers:
       css.escape: ^1.5.1
       dom-accessibility-api: ^0.5.14
       eslint: ^8.19.0
+      eslint-config-chance: ^2.0.1
       eslint-import-resolver-node: ^0.3.6
       eslint-import-resolver-typescript: ^3.1.5
       eslint-plugin-import: ^2.26.0
@@ -122,6 +123,7 @@ importers:
       css.escape: 1.5.1
       dom-accessibility-api: 0.5.14
       eslint: 8.19.0
+      eslint-config-chance: 2.0.1_eslint@8.19.0
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 3.1.5_q2xwze32dd33a2fc2qubwr4ie4
       eslint-plugin-import: 2.26.0_hizesclve6syzht6v774pf56gy
@@ -5160,7 +5162,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -6560,6 +6562,14 @@ packages:
       optionator: 0.8.3
     optionalDependencies:
       source-map: 0.6.1
+    dev: false
+
+  /eslint-config-chance/2.0.1_eslint@8.19.0:
+    resolution: {integrity: sha512-8dD/WWqt6iCirUfz3WXHJoRa+QRFqTEpM+Tvv1/bVxGtOAg42JwHdvOugm4JFGIr+1Vz3nfZEik4hrXEblM31A==}
+    peerDependencies:
+      eslint: ^8.14.0
+    dependencies:
+      eslint: 8.19.0
     dev: false
 
   /eslint-import-resolver-node/0.3.6:
@@ -10182,17 +10192,6 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dev: false
-
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: false
 
   /promise.allsettled/1.0.5:
