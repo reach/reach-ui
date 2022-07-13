@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - dev
-      - repo-reorg # TODO: remove
   pull_request:
     paths-ignore:
       - ".codesandbox/**"
@@ -35,7 +34,7 @@ jobs:
           version: 7
           run_install: |
             - recursive: true
-              args: [--frozen-lockfile, --strict-peer-dependencies, --enable-pre-post-scripts]
+              args: [--frozen-lockfile, --strict-peer-dependencies]
 
       - name: Build Packages
         run: pnpm build
