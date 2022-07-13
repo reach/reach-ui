@@ -49,7 +49,7 @@ importers:
       css.escape: ^1.5.1
       dom-accessibility-api: ^0.5.14
       eslint: ^8.19.0
-      eslint-config-chance: ^2.0.1
+      eslint-config-chance: ^2.0.2
       eslint-import-resolver-node: ^0.3.6
       eslint-import-resolver-typescript: ^3.1.5
       eslint-plugin-import: ^2.26.0
@@ -123,7 +123,7 @@ importers:
       css.escape: 1.5.1
       dom-accessibility-api: 0.5.14
       eslint: 8.19.0
-      eslint-config-chance: 2.0.1_eslint@8.19.0
+      eslint-config-chance: 2.0.2_eslint@8.19.0
       eslint-import-resolver-node: 0.3.6
       eslint-import-resolver-typescript: 3.1.5_q2xwze32dd33a2fc2qubwr4ie4
       eslint-plugin-import: 2.26.0_hizesclve6syzht6v774pf56gy
@@ -6564,8 +6564,8 @@ packages:
       source-map: 0.6.1
     dev: false
 
-  /eslint-config-chance/2.0.1_eslint@8.19.0:
-    resolution: {integrity: sha512-8dD/WWqt6iCirUfz3WXHJoRa+QRFqTEpM+Tvv1/bVxGtOAg42JwHdvOugm4JFGIr+1Vz3nfZEik4hrXEblM31A==}
+  /eslint-config-chance/2.0.2_eslint@8.19.0:
+    resolution: {integrity: sha512-tEMRcPqzjRcNmRHs3qIoxIsLm7VqAMA2FaxrcLnih1GSIIaazG07EG5elEV9TVa9ZqybPG7+Ex94oHdO2egpUA==}
     peerDependencies:
       eslint: ^8.14.0
     dependencies:
