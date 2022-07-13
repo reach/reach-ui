@@ -28,9 +28,7 @@ function Example() {
         onClick={() =>
           dispatch({
             type: "ADD_MESSAGE",
-            payload: `${
-              messageCount + 1
-            }. Enim sapien fusce leo dignissim suspendisse urna nulla, vulputate pulvinar curabitur viverra fringilla.`,
+            payload: `Message #${messageCount + 1}`,
           })
         }
       >

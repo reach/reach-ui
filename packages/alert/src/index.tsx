@@ -25,7 +25,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import { getOwnerDocument, useComposedRefs, usePrevious } from "@reach/utils";
+import { getOwnerDocument, useComposedRefs } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
 
 /*
@@ -51,6 +51,17 @@ let renderTimer: number | null;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const AlertRendered = React.forwardRef(function AlertRendered(
+  { as: Comp = "div", children, ...props },
+  forwardedRef
+) {
+  return (
+    <Comp ref={forwardedRef} {...props}>
+      {children}
+    </Comp>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", Omit<AlertProps, "type">>;
+
 /**
  * Alert
  *
@@ -60,24 +71,12 @@ let renderTimer: number | null;
  *
  * @see Docs https://reach.tech/alert
  */
-const Alert = React.forwardRef(function Alert(
-  { as: Comp = "div", children, type: regionType = "polite", ...props },
-  forwardedRef
-) {
-  const ownRef = React.useRef<HTMLDivElement>(null);
-  const ref = useComposedRefs(forwardedRef, ownRef);
-  const child = React.useMemo(
-    () => (
-      <Comp {...props} ref={ref} data-reach-alert>
-        {children}
-      </Comp>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [children, props]
-  );
-  useMirrorEffects(regionType, child, ownRef);
-
-  return child;
+const Alert = React.forwardRef(function Alert(props, forwardedRef) {
+  let ownRef = React.useRef<HTMLDivElement>(null);
+  let ref = useComposedRefs(forwardedRef, ownRef);
+  useMirrorEffects(ownRef, props);
+  let { type: _, ...rest } = props;
+  return <AlertRendered ref={ref} {...rest} data-reach-alert="" aria-hidden />;
 }) as Polymorphic.ForwardRefComponent<"div", AlertProps>;
 
 /**
@@ -165,44 +164,33 @@ function renderAlerts() {
 }
 
 function useMirrorEffects(
-  regionType: RegionTypes,
-  element: JSX.Element,
-  ref: React.RefObject<Element>
+  ref: React.RefObject<Element>,
+  {
+    type: regionType = "polite",
+    ...props
+  }: React.ComponentPropsWithoutRef<"div"> & AlertProps
 ) {
-  const prevType = usePrevious<RegionTypes>(regionType);
-  const mirror = React.useRef<Mirror | null>(null);
-  const mounted = React.useRef(false);
+  let mirror = React.useRef<Mirror | null>(null);
   React.useEffect(() => {
-    const ownerDocument = getOwnerDocument(ref.current)!;
-
-    if (!mounted.current) {
-      mounted.current = true;
-      mirror.current = createMirror(regionType, ownerDocument);
-      mirror.current.mount(element);
-    } else if (prevType !== regionType) {
-      mirror.current && mirror.current.unmount();
-      mirror.current = createMirror(regionType, ownerDocument);
-      mirror.current.mount(element);
-    } else {
-      mirror.current && mirror.current.update(element);
-    }
-  }, [element, regionType, prevType, ref]);
-
-  React.useEffect(() => {
+    let ownerDocument = getOwnerDocument(ref.current);
+    if (!ownerDocument) return;
+    mirror.current = createMirror(regionType, ownerDocument);
+    mirror.current.mount(<AlertRendered {...props} />);
     return () => {
-      mirror.current && mirror.current.unmount();
+      mirror.current?.unmount();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref, regionType, ...Object.values(props)]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
-type Mirror = {
-  mount: (element: JSX.Element) => void;
-  update: (element: JSX.Element) => void;
-  unmount: () => void;
-};
+interface Mirror {
+  mount(element: JSX.Element): void;
+  update(element: JSX.Element): void;
+  unmount(): void;
+}
 
 type RegionTypes = "polite" | "assertive";
 
