@@ -1124,7 +1124,10 @@ function useKeyDown() {
         }
 
         if (state === IDLE) {
-          transition(NAVIGATE);
+          // Opening a closed list
+          transition(NAVIGATE, {
+            persistSelection: persistSelectionRef.current,
+          });
         } else {
           let prev = getPreviousOption();
           transition(NAVIGATE, { value: prev ? prev.value : null });
