@@ -17,33 +17,31 @@ on:
 jobs:
   test:
     name: Test
+    if: github.repository == 'reach/reach-ui'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node 14
-        uses: actions/setup-node@v1
+        actions/setup-node@v3
         with:
           version: 14.x
 
-      - name: Restore Lerna (Cache)
-        uses: actions/cache@v2
+      - name: Install dependencies
+      - uses: pnpm/action-setup@v2.2.2
         with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile
+          version: 7
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies, --enable-pre-post-scripts]
 
       - name: Build Packages
-        run: yarn build
+        run: pnpm build
 
       - name: Run Tests
-        run: yarn test
+        run: pnpm test
 
   # TODO: Create separate workflow for website
   # website:
