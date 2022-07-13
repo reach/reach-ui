@@ -4,11 +4,14 @@ on:
   push:
     branches:
       - main
-      - develop
+      - dev
   pull_request:
-    branches:
-      - main
-      - develop
+    paths-ignore:
+      - ".codesandbox/**"
+      - "playground/**"
+      - "scripts/**"
+      - "website/**"
+      - "**/*.md"
 
 jobs:
   test:
