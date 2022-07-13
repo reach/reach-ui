@@ -9,7 +9,7 @@
     "url": "git+https://github.com/reach/reach-ui.git"
   },
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build && node scripts/postbuild.js",
     "test:react-16": "USE_REACT_16=true vitest",
     "test:react-18": "USE_REACT_18=true vitest",
     "test": "vitest",

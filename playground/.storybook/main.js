@@ -18,7 +18,6 @@ module.exports = {
   stories: ["../stories/**/*.story.@(js|ts|tsx)"],
   addons: [
     "@storybook/addon-actions/register",
-    "@storybook/addon-docs/register",
     "@storybook/addon-links/register",
     // {
     //   name: "@storybook/addon-postcss",
