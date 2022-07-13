@@ -524,6 +524,22 @@ export const ComboboxInput = React.forwardRef(
       }
     }, [controlledValue, handleValueChange, isControlled, value]);
 
+    // If a form is reset, we'll need to manually clear the value since we are
+    // controlling it internally.
+    React.useEffect(() => {
+      let form = inputRef.current?.form;
+      if (!form) return;
+
+      function handleReset(event: Event) {
+        transition(CLEAR, { isControlled });
+      }
+
+      form.addEventListener("reset", handleReset);
+      return () => {
+        form?.removeEventListener("reset", handleReset);
+      };
+    }, [inputRef, isControlled, transition]);
+
     // [*]... and when controlled, we don't trigger handleValueChange as the
     // user types, instead the developer controls it with the normal input
     // onChange prop
@@ -1237,8 +1253,7 @@ function makeHash(str: string) {
     return hash;
   }
   for (let i = 0; i < str.length; i++) {
-    var char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
+    hash = (hash << 5) - hash + str.charCodeAt(i);
     hash = hash & hash;
   }
   return hash;
