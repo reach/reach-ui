@@ -305,7 +305,7 @@ function MenuItem({ index: explicitIndex, ...props }) {
   let [element, setElement] = useState(null);
   let handleRefSet = useCallback((refValue) => {
     ref.current = refValue;
-    setState(refValue);
+    setElement(refValue);
   }, []);
 
   // The descendant should be memoized to prevent endless render loops after
