@@ -28,7 +28,21 @@ module.exports = {
     //   },
     // },
   ],
-  webpackFinal: async (config) => {
+  core: {
+    builder: "webpack5",
+  },
+  /**
+   *
+   * @param {webpack.Configuration} config
+   * @returns {Promise<webpack.Configuration>}
+   */
+  async webpackFinal(config) {
+    config.plugins = [
+      ...(config.plugins || []),
+      new webpack.DefinePlugin({
+        __DEV__: "true",
+      }),
+    ];
     config.resolve = {
       ...config.resolve,
       alias: {

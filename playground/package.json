@@ -43,6 +43,7 @@
     "@storybook/addon-links": "^6.5.9",
     "@storybook/addons": "^6.5.9",
     "@storybook/builder-webpack5": "^6.5.9",
+    "@storybook/manager-webpack5": "^6.5.9",
     "@storybook/react": "^6.5.9",
     "@types/react": "^17.0.47",
     "@types/react-dom": "^17.0.17",
@@ -58,6 +59,12 @@
     "react-is": "^17.0.2",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "webpack": "5"
+  },
+  "pnpm": {
+    "overrides": {
+      "webpack": "5"
+    }
   }
 }
