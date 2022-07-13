@@ -9,43 +9,43 @@ import {
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
-let name = "Basic (TS)";
+let name = "Basic";
 
-function Example() {
+function showOpts<R>(
+  results: R[],
+  render: (props: { result: R; index: number }) => React.ReactNode
+) {
+  return results.slice(0, 10).map((result, index) => render({ result, index }));
+}
+
+function MyCombobox() {
   let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
-  const handleChange = (event: any) => {
-    setTerm(event.target.value);
-  };
-
   return (
     <div>
-      <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes" aria-label="choose a city">
+      <Combobox data-testid="box" as="span">
         <ComboboxInput
-          name="awesome"
-          onChange={handleChange}
-          style={inputStyle}
+          data-testid="input"
+          as="textarea"
+          onChange={(event: any) => setTerm(event.target.value)}
         />
-        {results && (
-          <ComboboxPopover style={popupStyle}>
-            <p>
-              <button>Hi</button>
-            </p>
-            <ComboboxList>
-              {results.slice(0, 10).map((result, index) => (
-                <ComboboxOption
-                  key={index}
-                  value={`${result.city}, ${result.state}`}
-                />
+        {results ? (
+          <ComboboxPopover portal={false}>
+            <ComboboxList data-testid="list" as="ul">
+              {showOpts(results, ({ result, index }) => (
+                <ComboboxOption as="li" key={index} value={result.city} />
               ))}
             </ComboboxList>
           </ComboboxPopover>
-        )}
+        ) : null}
       </Combobox>
     </div>
   );
+}
+
+function Example() {
+  return <MyCombobox />;
 }
 
 Example.storyName = name;

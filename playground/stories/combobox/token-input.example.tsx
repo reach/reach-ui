@@ -6,27 +6,28 @@ import {
   ComboboxOption,
   ComboboxPopover,
 } from "@reach/combobox";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import type { ComboboxProps, ComboboxInputProps } from "@reach/combobox";
+import { composeEventHandlers } from "@reach/utils";
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
 let name = "Token Input";
 
-const Context = React.createContext();
+const Context = React.createContext<ContextType>(null!);
 
 function Example() {
   let [term, setTerm] = React.useState("");
-  let [selections, setSelections] = React.useState([]);
+  let [selections, setSelections] = React.useState<string[]>([]);
   let results = useCityMatch(term);
 
-  const handleChange = (event) => {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTerm(event.target.value);
-  };
+  }
 
-  const handleSelect = (value) => {
+  function handleSelect(value: string) {
     setSelections(selections.concat([value]));
     setTerm("");
-  };
+  }
 
   return (
     <div>
@@ -43,7 +44,7 @@ function Example() {
           }}
         >
           {selections.map((selection) => (
-            <ExampleToken value={selection} />
+            <ExampleToken value={selection} key={selection} />
           ))}
           <ExampleTokenInput
             value={term}
@@ -92,16 +93,24 @@ export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
-  const selectionsRef = React.useRef([]);
+function ExampleTokenLabel({
+  onRemove,
+  onKeyDown,
+  ...props
+}: React.ComponentPropsWithoutRef<"label"> & {
+  onRemove: ContextType["onRemove"];
+}) {
+  const selectionsRef = React.useRef<string[]>([]);
   const [selectionNavIndex, setSelectionNavIndex] = React.useState(-1);
 
   React.useLayoutEffect(() => {
     selectionsRef.current = [];
-    return () => (selectionsRef.current = []);
+    return () => {
+      selectionsRef.current = [];
+    };
   });
 
-  const handleKeyDown = (event) => {
+  function handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === "ArrowLeft") {
       if (selectionNavIndex > 0) {
         setSelectionNavIndex(selectionNavIndex - 1);
@@ -109,9 +118,9 @@ function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
         setSelectionNavIndex(selectionsRef.current.length - 1);
       }
     }
-  };
+  }
 
-  const context = {
+  const context: ContextType = {
     onRemove,
     selectionsRef,
     selectionNavIndex,
@@ -127,7 +136,10 @@ function ExampleTokenLabel({ onRemove, onKeyDown, ...props }) {
   );
 }
 
-function ExampleToken({ value, ...props }) {
+function ExampleToken({
+  value,
+  ...props
+}: React.ComponentPropsWithRef<"span"> & { value: string }) {
   const { selectionsRef } = React.useContext(Context);
   // NEXT: need to know my index so that I can be highlighted on ArrowLeft!
 
@@ -142,21 +154,27 @@ function ExampleToken({ value, ...props }) {
   );
 }
 
-function ExampleTokenbox({ onSelect, ...props }) {
+function ExampleTokenbox({ onSelect, ...props }: ComboboxProps) {
   const handleSelect = () => {};
   return (
     <Combobox
-      onSelect={composeEventHandlers(onSelect, handleSelect)}
+      onSelect={(val) => {
+        onSelect?.(val);
+        handleSelect();
+      }}
       aria-label="choose a city"
       {...props}
     />
   );
 }
 
-function ExampleTokenInput({ onKeyDown, ...props }) {
+function ExampleTokenInput({
+  onKeyDown,
+  ...props
+}: ComboboxInputProps & React.ComponentPropsWithoutRef<"input">) {
   const { onRemove, selectionsRef } = React.useContext(Context);
-  const handleKeyDown = (event) => {
-    const { value } = event.target;
+  function handleKeyDown(event: React.KeyboardEvent) {
+    const { value } = event.target as HTMLInputElement;
     if (
       event.key === "Backspace" &&
       value === "" &&
@@ -164,7 +182,7 @@ function ExampleTokenInput({ onKeyDown, ...props }) {
     ) {
       onRemove(selectionsRef.current[selectionsRef.current.length - 1]);
     }
-  };
+  }
   return (
     <ComboboxInput
       onKeyDown={composeEventHandlers(onKeyDown, handleKeyDown)}
@@ -173,7 +191,7 @@ function ExampleTokenInput({ onKeyDown, ...props }) {
   );
 }
 
-const selectionStyle = {
+const selectionStyle: React.CSSProperties = {
   fontSize: "11px",
   background: "#eee",
   border: "solid 1px #aaa",
@@ -182,3 +200,9 @@ const selectionStyle = {
   padding: "0.2rem 0.5rem",
   userSelect: "none",
 };
+
+interface ContextType {
+  onRemove(item: string): void;
+  selectionsRef: React.MutableRefObject<string[]>;
+  selectionNavIndex: number;
+}

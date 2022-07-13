@@ -1,11 +1,11 @@
 import * as React from "react";
+import type { ComboboxInputProps } from "@reach/combobox";
 import {
   Combobox,
   ComboboxInput,
   ComboboxList,
   ComboboxOption,
   ComboboxPopover,
-  ComboboxInputProps,
   useComboboxContext,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";

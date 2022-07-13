@@ -15,9 +15,9 @@ function Example() {
   let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
-  const handleChange = (event) => {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTerm(event.target.value);
-  };
+  }
 
   return (
     <div>

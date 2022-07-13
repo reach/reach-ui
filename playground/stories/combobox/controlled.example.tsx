@@ -15,13 +15,13 @@ function Example() {
   let [term, setTerm] = React.useState("");
   let [selection, setSelection] = React.useState("");
   let results = useCityMatch(term);
-  let ref = React.useRef();
+  let ref = React.useRef(null);
 
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     setTerm(event.target.value);
   };
 
-  const handleSelect = (value) => {
+  const handleSelect = (value: string) => {
     setSelection(value);
     setTerm("");
   };
@@ -47,6 +47,7 @@ function Example() {
                 <button
                   onClick={() => {
                     setTerm("");
+                    // @ts-ignore
                     ref.current.focus();
                   }}
                 >
@@ -74,3 +75,5 @@ function Example() {
 
 Example.storyName = name;
 export { Example };
+
+////////////////////////////////////////////////////////////////////////////////

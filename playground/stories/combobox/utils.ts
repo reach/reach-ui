@@ -1,8 +1,9 @@
 import * as React from "react";
 import { matchSorter } from "match-sorter";
 import cities from "./cities";
+import type { City } from "./cities";
 
-export function useCityMatch(term: string) {
+export function useCityMatch(term: string): City[] | null {
   let throttledTerm = useThrottle(term, 100);
   return React.useMemo(
     () =>

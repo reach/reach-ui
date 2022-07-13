@@ -3,32 +3,35 @@ import {
   Combobox,
   ComboboxInput,
   ComboboxList,
-  ComboboxOption,
   ComboboxPopover,
+  ComboboxOption,
+  ComboboxButton,
 } from "@reach/combobox";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { useCityMatch } from "./utils";
 import "@reach/combobox/styles.css";
 
-let name = "Basic";
+let name = "With Button";
 
 function Example() {
   let [term, setTerm] = React.useState("");
   let results = useCityMatch(term);
 
-  const handleChange = (event) => {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTerm(event.target.value);
-  };
+  }
 
   return (
     <div>
-      <h2>Clientside Search</h2>
-      <Combobox id="holy-smokes" aria-label="choose a city">
-        <ComboboxInput onChange={handleChange} style={inputStyle} />
+      <h2>No Portal</h2>
+      <Combobox aria-label="choose a city">
+        <ComboboxInput style={{ width: "300px" }} onChange={handleChange} />
+        <ComboboxButton>
+          <VisuallyHidden>Toggle the list of cities</VisuallyHidden>
+          <span aria-hidden>▾</span>
+        </ComboboxButton>
         {results && (
-          <ComboboxPopover style={popupStyle}>
-            <p>
-              <button>Hi</button>
-            </p>
+          <ComboboxPopover>
             <ComboboxList>
               {results.slice(0, 10).map((result, index) => (
                 <ComboboxOption
@@ -46,16 +49,3 @@ function Example() {
 
 Example.storyName = name;
 export { Example };
-
-////////////////////////////////////////////////////////////////////////////////
-
-const inputStyle = {
-  width: 400,
-  fontSize: "100%",
-  padding: "0.33rem",
-};
-
-const popupStyle = {
-  boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-  border: "none",
-};

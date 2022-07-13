@@ -25,16 +25,16 @@ function Example() {
   let [term, setTerm] = React.useState("Detroit");
   let [selection, setSelection] = React.useState("");
   let results = useCityMatch(term);
-  let ref = React.useRef();
+  let ref = React.useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (event) => {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTerm(event.target.value);
-  };
+  }
 
-  const handleSelect = (value) => {
+  function handleSelect(value: string) {
     setSelection(value);
     setTerm("");
-  };
+  }
 
   const handleSimulateChange = () => {
     setTerm("New York");
@@ -71,7 +71,7 @@ function Example() {
                 <button
                   onClick={() => {
                     setTerm("");
-                    ref.current.focus();
+                    ref.current?.focus();
                   }}
                 >
                   clear

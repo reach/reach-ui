@@ -14,11 +14,11 @@ function Example() {
   let [term, setTerm] = React.useState("");
   let [selection, setSelection] = React.useState("");
 
-  function handleChange(event) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTerm(event.target.value);
   }
 
-  function handleSelect(value) {
+  function handleSelect(value: string) {
     setSelection(value);
     setTerm(value);
   }

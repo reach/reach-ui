@@ -22,6 +22,8 @@ afterEach(cleanup);
 
 describe("<Combobox />", () => {
   describe("rendering", () => {
+    // TODO: Test isn't working because the listbox isn't opening for some
+    // reason. Verified that this is fine IRL. Figure out the failure!
     it.todo("renders as any HTML element", () => {
       function MyCombobox() {
         let [term, setTerm] = React.useState("");
@@ -64,6 +66,8 @@ describe("<Combobox />", () => {
       expect(getAllByRole("option")[0].tagName).toBe("DIV");
     });
 
+    // TODO: Test isn't working because the listbox isn't opening for some
+    // reason. Verified that this is fine IRL. Figure out the failure!
     it.todo("renders when using the useComboboxContext hook", () => {
       function CustomComboboxInput(props: ComboboxInputProps) {
         const { isExpanded } = useComboboxContext();
@@ -203,6 +207,8 @@ describe("<Combobox />", () => {
   });
 
   describe("user events", () => {
+    // TODO: Test isn't working because the listbox isn't opening for some
+    // reason. Verified that this is fine IRL. Figure out the failure!
     it.todo("should open a list on text entry", () => {
       let optionToSelect = "Eagle Pass, Texas";
       let { getByRole, getByText } = render(<BasicCombobox />);
