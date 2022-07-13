@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    paths-ignore:
+      - ".codesandbox/**"
+      - "playground/**"
+      - "scripts/**"
+      - "website/**"
+      - "**/*.md"
+
+jobs:
+  test:
+    name: Test
+    if: github.repository == 'reach/reach-ui'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Run Tests
+        run: pnpm test
