@@ -100,16 +100,17 @@ function useRect<T extends Element = HTMLElement>(
         );
       }
     }, [observeOrOptions]);
-  }
 
-  React.useEffect(() => {
-    if (isFunction(deprecated_onChange)) {
-      console.warn(
-        "Passing `onChange` as the third argument to `useRect` is deprecated and will be removed in a future version of Reach UI. Instead, you can pass an object of options with an `onChange` property as the second argument (`useRect(ref, { onChange })`).\n" +
-          "See https://reach.tech/rect#userect-onchange"
-      );
-    }
-  }, [deprecated_onChange]);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (isFunction(deprecated_onChange)) {
+        console.warn(
+          "Passing `onChange` as the third argument to `useRect` is deprecated and will be removed in a future version of Reach UI. Instead, you can pass an object of options with an `onChange` property as the second argument (`useRect(ref, { onChange })`).\n" +
+            "See https://reach.tech/rect#userect-onchange"
+        );
+      }
+    }, [deprecated_onChange]);
+  }
 
   let [element, setElement] = React.useState(nodeRef.current);
   let initialRectIsSet = React.useRef(false);
