@@ -20,6 +20,9 @@ if (process.env.USE_REACT_16 === "true") {
 export default defineConfig({
   plugins: [tsconfigPaths()],
   resolve,
+  define: {
+    __DEV__: true,
+  },
   test: {
     environment: "jsdom",
     coverage: {

@@ -55,9 +55,6 @@ export function render<
   element: React.ReactElement<any>,
   options: RenderOptions = {}
 ): RenderResult<P, T> {
-  let useId = React.useId;
-  console.log({ useId });
-
   let { baseElement, strict = false } = options;
   let result = tlRender(element, {
     baseElement,
