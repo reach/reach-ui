@@ -1,22 +1,8 @@
-import fs from "fs";
-import path from "path";
-import { defineConfig } from "tsup";
-import type { Options } from "tsup";
-import type { TsupConfig } from "./types";
+const fs = require("fs");
+const path = require("path");
+const { defineConfig } = require("tsup");
 
-export function getTsupConfig(
-  entry: string | string[],
-  {
-    packageName,
-    packageVersion,
-    external = [],
-  }: {
-    packageName: string;
-    packageVersion: string;
-    external?: string[];
-    define?: Record<string, string>;
-  }
-): TsupConfig {
+function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
   entry = Array.isArray(entry) ? entry : [entry];
   external = [...new Set(["react", "react-dom"]), ...external];
   let banner = createBanner(packageName, packageVersion);
@@ -64,11 +50,18 @@ export function getTsupConfig(
   ]);
 }
 
-function getOutExtension(env: "dev" | "prod"): Options["outExtension"] {
+/**
+ * @param {"dev" | "prod"} env
+ */
+function getOutExtension(env) {
   return ({ format }) => ({ js: `.${format}.${env}.js` });
 }
 
-function createBanner(packageName: string, version: string) {
+/**
+ * @param {string} packageName
+ * @param {string} version
+ */
+function createBanner(packageName, version) {
   return `/**
   * ${packageName} v${version}
   *
@@ -82,10 +75,7 @@ function createBanner(packageName: string, version: string) {
 `;
 }
 
-export function getPackageInfo(packageRoot: string): {
-  version: string;
-  name: string;
-} {
+function getPackageInfo(packageRoot) {
   let packageJson = fs.readFileSync(
     path.join(packageRoot, "package.json"),
     "utf8"
@@ -93,3 +83,8 @@ export function getPackageInfo(packageRoot: string): {
   let { version, name } = JSON.parse(packageJson);
   return { version, name };
 }
+
+module.exports = {
+  getTsupConfig,
+  getPackageInfo,
+};

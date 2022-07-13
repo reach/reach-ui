@@ -2,11 +2,7 @@
   "name": "@reach-internal/dev",
   "version": "0.0.0",
   "private": true,
-  "main": "dist/internal-dev.cjs",
-  "types": "dist/internal-dev.cjs",
-  "scripts": {
-    "build": "tsup"
-  },
+  "scripts": {},
   "dependencies": {},
   "devDependencies": {
     "@reach-internal/tsconfig": "workspace:*",
