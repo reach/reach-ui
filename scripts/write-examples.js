@@ -1,15 +1,14 @@
-import { constants } from "fs";
-import * as fs from "fs/promises";
+import * as fs from "fs";
+import * as path from "path";
 import chalk from "chalk";
 import camelCase from "lodash/camelCase.js";
-import * as path from "path";
 
 writeExampleIndex();
 
 async function writeExampleIndex() {
   try {
     let cwd = process.cwd();
-    let packages = await fs.readdir(path.resolve(cwd, "packages"));
+    let packages = await fs.promises.readdir(path.resolve(cwd, "packages"));
 
     for (let pkg of packages) {
       let packageName = ucFirst(camelCase(pkg));
@@ -24,7 +23,7 @@ async function writeExampleIndex() {
       if (await directoryExists(examplesPath)) {
         let contents = "";
         let foundExample = false;
-        let examples = await fs.readdir(examplesPath);
+        let examples = await fs.promises.readdir(examplesPath);
         for (let example of examples) {
           let ext = path.extname(example);
           if (
@@ -43,7 +42,7 @@ async function writeExampleIndex() {
 
         if (foundExample) {
           contents += `\nexport default {\n  title: "${componentName}",\n};\n`;
-          await fs.writeFile(
+          await fs.promises.writeFile(
             path.resolve(examplesPath, "index.story.js"),
             contents
           );
@@ -64,8 +63,8 @@ async function writeExampleIndex() {
  */
 async function directoryExists(path) {
   try {
-    await fs.access(path, constants.F_OK);
-    return (await fs.lstat(path)).isDirectory();
+    await fs.promises.access(path, fs.constants.F_OK);
+    return (await fs.promises.lstat(path)).isDirectory();
   } catch (err) {
     return false;
   }

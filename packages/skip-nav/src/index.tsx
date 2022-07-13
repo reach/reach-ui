@@ -1,7 +1,6 @@
 import * as React from "react";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
+import { useCheckStyles } from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 
 // The user may want to provide their own ID (maybe there are multiple nav
 // menus on a page a use might want to skip at various points in tabbing?).
@@ -55,9 +54,7 @@ interface SkipNavLinkProps {
   contentId?: string;
 }
 
-if (__DEV__) {
-  SkipNavLink.displayName = "SkipNavLink";
-}
+SkipNavLink.displayName = "SkipNavLink";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -114,9 +111,7 @@ interface SkipNavContentProps {
   id?: string;
 }
 
-if (__DEV__) {
-  SkipNavContent.displayName = "SkipNavContent";
-}
+SkipNavContent.displayName = "SkipNavContent";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports

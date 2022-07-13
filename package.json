@@ -1,7 +1,6 @@
 {
   "name": "reach-ui",
   "description": "The accessible foundation of your React apps and design systems",
-  "private": true,
   "author": "React Training <hello@reacttraining.com>",
   "license": "MIT",
   "repository": {
@@ -9,81 +8,70 @@
     "url": "git+https://github.com/reach/reach-ui.git"
   },
   "scripts": {
-    "start": "start-storybook -p 9001 -c .storybook --ci",
-    "test:react-16": "USE_REACT_16=true jest",
-    "test": "jest",
-    "build": "yarn build:packages",
-    "build:packages": "preconstruct build",
-    "ver": "lerna version --no-push --exact",
-    "changes": "dotenv lerna-changelog",
-    "clean": "git clean -e '!/.env' -e '!/website-deploy-key' -e '!/website-deploy-key.pub' -fdX .",
-    "lint:packages": "eslint packages",
-    "lint": "yarn lint:packages",
-    "fix": "manypkg fix && preconstruct fix",
-    "dev": "preconstruct dev && yarn start",
-    "pc": "preconstruct",
-    "postinstall": "manypkg check && preconstruct dev",
-    "prepare": "husky install",
-    "release": "lerna publish from-git --yes --pre-dist-tag next"
+    "build": "turbo run build && node scripts/postbuild.js",
+    "test:react-16": "USE_REACT_16=true vitest",
+    "test:react-18": "USE_REACT_18=true vitest",
+    "test": "vitest",
+    "lint": "eslint packages",
+    "dev": "pnpm --filter reach-storybook start"
   },
   "dependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7",
-    "@manypkg/cli": "0.19.1",
-    "@preconstruct/cli": "^2.1.5",
-    "@reach/router": "^1.3.4",
-    "@react-spring/web": "^9.4.4",
-    "@storybook/addon-actions": "^6.4.22",
-    "@storybook/addon-docs": "^6.4.22",
-    "@storybook/addon-links": "^6.4.22",
-    "@storybook/addon-postcss": "^2.0.0",
-    "@storybook/addons": "^6.4.22",
-    "@storybook/react": "^6.4.22",
-    "@testing-library/dom": "^8.13.0",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/react-hooks": "^8.0.0",
-    "@testing-library/user-event": "^13.1.9",
-    "@types/eslint": "^8.4.1",
-    "@types/invariant": "^2.2.35",
-    "@types/jest": "^27.4.1",
+    "@reach-internal/test": "workspace:*",
+    "@reach/accordion": "workspace:*",
+    "@reach/alert": "workspace:*",
+    "@reach/alert-dialog": "workspace:*",
+    "@reach/auto-id": "workspace:*",
+    "@reach/checkbox": "workspace:*",
+    "@reach/combobox": "workspace:*",
+    "@reach/descendants": "workspace:*",
+    "@reach/dialog": "workspace:*",
+    "@reach/disclosure": "workspace:*",
+    "@reach/dropdown": "workspace:*",
+    "@reach/machine": "workspace:*",
+    "@reach/menu-button": "workspace:*",
+    "@reach/listbox": "workspace:*",
+    "@reach/popover": "workspace:*",
+    "@reach/portal": "workspace:*",
+    "@reach/rect": "workspace:*",
+    "@reach/skip-nav": "workspace:*",
+    "@reach/slider": "workspace:*",
+    "@reach/tabs": "workspace:*",
+    "@reach/tooltip": "workspace:*",
+    "@reach/utils": "workspace:*",
+    "@reach/visually-hidden": "workspace:*",
+    "@reach/window-size": "workspace:*",
+    "@reach-internal/tsconfig": "workspace:*",
+    "@testing-library/dom": "^8.14.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.2.1",
+    "@types/aria-query": "^5.0.0",
+    "@types/css": "^0.0.33",
     "@types/lodash": "^4.14.182",
-    "@types/node": "^14.x",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11",
+    "@types/prop-types": "^15.7.5",
+    "@types/react": "^17.0.47",
+    "@types/react-dom": "^17.0.17",
     "@types/react-is": "^17.0.3",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/react-test-renderer": "^17.0.1",
     "@types/sinon": "^10.0.11",
-    "@types/styled-components": "^5.1.25",
-    "@types/tabbable": "^3.1.2",
-    "@types/warning": "^3.0.0",
-    "autoprefixer": "^10.2.6",
-    "babel-jest": "^27.0.6",
-    "babel-loader": "^8.2.5",
-    "babel-plugin-annotate-pure-calls": "0.4.0",
-    "babel-plugin-dev-expression": "0.2.3",
-    "babel-plugin-macros": "^3.1.0",
-    "cross-env": "^7.0.3",
-    "dotenv-cli": "^4.0.0",
-    "eslint": "^8.13.0",
-    "eslint-config-react-app": "^7.0.1",
-    "husky": "^6.0.0",
-    "jest": "^27.5.1",
-    "jest-axe": "^6.0.0",
-    "jest-watch-typeahead": "^1.0.0",
-    "lerna": "^4.0.0",
-    "lerna-changelog": "^1.0.1",
+    "@typescript-eslint/parser": "^5.30.3",
+    "@typescript-eslint/eslint-plugin": "^5.30.3",
+    "aria-query": "^5.0.0",
+    "axe-core": "^4.4.2",
+    "chalk": "^5.0.1",
+    "css": "^3.0.0",
+    "css.escape": "^1.5.1",
+    "dom-accessibility-api": "^0.5.14",
+    "eslint": "^8.19.0",
+    "eslint-config-chance": "^2.0.2",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-import-resolver-typescript": "^3.1.5",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "jsdom": "^20.0.0",
     "lodash": "^4.17.21",
-    "match-sorter": "^6.3.1",
-    "postcss": "^8.4.12",
-    "postcss-preset-env": "^7.4.3",
-    "prettier": "^2.6.2",
-    "pretty-quick": "^3.1.3",
-    "prop-types": "^15.7.2",
+    "prettier": "^2.7.1",
+    "pretty-format": "^28.1.1",
     "react": "^17.0.2",
     "react-16": "npm:react@^16.14.0",
     "react-18": "npm:react@^18.0.0",
@@ -93,72 +81,13 @@
     "react-is": "^17.0.2",
     "react-is-16": "npm:react-is@^16.13.1",
     "react-is-18": "npm:react-is@^18.0.0",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-test-renderer": "^17.0.2",
-    "react-test-renderer-16": "npm:react-test-renderer@^16.13.1",
-    "react-test-renderer-18": "npm:react-test-renderer@^18.0.0",
+    "redent": "^3.0.0",
     "sinon": "^11.1.1",
-    "styled-components": "^5.3.5",
-    "ts-jest": "^27.1.4",
-    "typescript": "^4.6.3"
-  },
-  "resolutions": {
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "changelog": {
-    "labels": {
-      "Type: Breaking Change": "🔨 Breaking Changes",
-      "Type: Bug": "🐛 Bugfixes",
-      "Type: Documentation": "📝 Documentation",
-      "Type: Feature": "🚀 Features",
-      "Type: Enhancement": "✨ Enhancements",
-      "Type: Housekeeping": "🏡 Housekeeping"
-    }
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "globals": {
-      "__DEV__": "readonly"
-    },
-    "rules": {
-      "import/first": 0,
-      "import/no-anonymous-default-export": 0,
-      "jsx-a11y/no-static-element-interactions": [
-        1,
-        {
-          "handlers": [
-            "onClick",
-            "onMouseDown",
-            "onMouseUp",
-            "onKeyPress",
-            "onKeyDown",
-            "onKeyUp"
-          ]
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules",
-    "packages/*/**/dist"
-  ],
-  "prettier": {},
-  "preconstruct": {
-    "packages": [
-      "packages/*"
-    ]
+    "turbo": "^1.3.1",
+    "typescript": "^4.7.4",
+    "vitest": "^0.16.0",
+    "vitest-axe": "0.0.7",
+    "vitest-dom": "0.0.4",
+    "vitest-tsconfig-paths": "^3.4.1"
   }
 }

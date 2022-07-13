@@ -32,19 +32,20 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import * as React from "react";
-import { createNamedContext } from "@reach/utils/context";
-import { isFunction } from "@reach/utils/type-check";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  createNamedContext,
+  isFunction,
+  useCheckStyles,
+  useComposedRefs,
+  composeEventHandlers,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import {
   internal_checkedPropToStateValue as checkedPropToStateValue,
   internal_useControlledSwitchWarning as useControlledSwitchWarning,
   useMixedCheckbox,
 } from "./mixed";
-import PropTypes from "prop-types";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { MixedOrBool, UseMixedCheckboxProps } from "./mixed";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -195,18 +196,7 @@ interface CustomCheckboxContainerProps {
   onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-if (__DEV__) {
-  CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
-  CustomCheckboxContainer.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const]),
-    ]),
-    defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool,
-    onChange: PropTypes.func,
-  };
-}
+CustomCheckboxContainer.displayName = "CustomCheckboxContainer";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -278,10 +268,7 @@ interface CustomCheckboxInputProps {
   value?: React.ComponentProps<"input">["value"];
 }
 
-if (__DEV__) {
-  CustomCheckboxInput.displayName = "CustomCheckboxInput";
-  CustomCheckboxInput.propTypes = {};
-}
+CustomCheckboxInput.displayName = "CustomCheckboxInput";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -370,19 +357,7 @@ interface CustomCheckboxProps {
   value?: React.ComponentProps<"input">["value"];
 }
 
-if (__DEV__) {
-  CustomCheckbox.displayName = "CustomCheckbox";
-  CustomCheckbox.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const]),
-    ]),
-    disabled: PropTypes.bool,
-    name: PropTypes.string,
-    onChange: PropTypes.func,
-    value: PropTypes.string,
-  };
-}
+CustomCheckbox.displayName = "CustomCheckbox";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types

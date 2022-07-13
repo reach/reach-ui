@@ -1,33 +1,14 @@
 {
-  "include": ["packages", "types", "scripts"],
+  "extends": "@reach-internal/tsconfig/dom.json",
+  "include": ["**/*"],
+  "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "alwaysStrict": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "jsx": "react-jsx",
     "baseUrl": ".",
-    "emitDecoratorMetadata": false,
-    "esModuleInterop": true,
-    "experimentalDecorators": false,
-    "importHelpers": true,
-    "jsx": "react",
-    "lib": ["dom", "esnext"],
-    "moduleResolution": "node",
-    "noFallthroughCasesInSwitch": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": false,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "pretty": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "stripInternal": true,
-    "target": "es5",
-    "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {
-      "$test/*": ["test/*"]
+      "~/*": ["./*"]
     }
   }
 }

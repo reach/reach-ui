@@ -42,19 +42,20 @@
 
 import * as React from "react";
 import { useId } from "@reach/auto-id";
-import { getDocumentDimensions } from "@reach/utils/get-document-dimensions";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { makeId } from "@reach/utils/make-id";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  getDocumentDimensions,
+  getOwnerDocument,
+  makeId,
+  useCheckStyles,
+  useComposedRefs,
+  composeEventHandlers,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import { Portal } from "@reach/portal";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";
-import warning from "tiny-warning";
-import PropTypes from "prop-types";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
+declare const __DEV__: boolean;
 
 const MOUSE_REST_TIMEOUT = 100;
 const LEAVE_TIMEOUT = 500;
@@ -417,10 +418,16 @@ const Tooltip = React.forwardRef(function (
 ) {
   let child = React.Children.only(children) as any;
 
-  warning(
-    !DEPRECATED_ariaLabel,
-    "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
-  );
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (DEPRECATED_ariaLabel) {
+        console.warn(
+          "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
+        );
+      }
+    }, [DEPRECATED_ariaLabel]);
+  }
 
   // We need to pass some properties from the child into useTooltip
   // to make sure users can maintain control over the trigger's ref and events
@@ -461,14 +468,7 @@ interface TooltipProps
   DEBUG_STYLE?: boolean;
 }
 
-if (__DEV__) {
-  Tooltip.displayName = "Tooltip";
-  Tooltip.propTypes = {
-    children: PropTypes.node.isRequired,
-    label: PropTypes.node.isRequired,
-    ariaLabel: PropTypes.string,
-  };
-}
+Tooltip.displayName = "Tooltip";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -507,14 +507,7 @@ interface TooltipPopupProps extends TooltipContentProps {
   children?: React.ReactNode;
 }
 
-if (__DEV__) {
-  TooltipPopup.displayName = "TooltipPopup";
-  TooltipPopup.propTypes = {
-    label: PropTypes.node.isRequired,
-    ariaLabel: PropTypes.string,
-    position: PropTypes.func,
-  };
-}
+TooltipPopup.displayName = "TooltipPopup";
 
 /**
  * TooltipContent
@@ -583,10 +576,7 @@ interface TooltipContentProps {
   triggerRect: DOMRect | null;
 }
 
-if (__DEV__) {
-  TooltipContent.displayName = "TooltipContent";
-  TooltipContent.propTypes = {};
-}
+TooltipContent.displayName = "TooltipContent";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -773,17 +763,17 @@ interface TriggerParams<ElementType extends HTMLElement> {
   "data-state": string;
   "data-reach-tooltip-trigger": string;
   ref: React.Ref<ElementType>;
-  onPointerEnter: React.ReactEventHandler;
-  onPointerDown: React.ReactEventHandler;
-  onPointerMove: React.ReactEventHandler;
-  onPointerLeave: React.ReactEventHandler;
-  onMouseEnter?: React.ReactEventHandler;
-  onMouseDown?: React.ReactEventHandler;
-  onMouseMove?: React.ReactEventHandler;
-  onMouseLeave?: React.ReactEventHandler;
-  onFocus: React.ReactEventHandler;
-  onBlur: React.ReactEventHandler;
-  onKeyDown: React.ReactEventHandler;
+  onPointerEnter: React.PointerEventHandler<ElementType>;
+  onPointerDown: React.PointerEventHandler<ElementType>;
+  onPointerMove: React.PointerEventHandler<ElementType>;
+  onPointerLeave: React.PointerEventHandler<ElementType>;
+  onMouseEnter?: React.MouseEventHandler<ElementType>;
+  onMouseDown?: React.MouseEventHandler<ElementType>;
+  onMouseMove?: React.MouseEventHandler<ElementType>;
+  onMouseLeave?: React.MouseEventHandler<ElementType>;
+  onFocus: React.FocusEventHandler<ElementType>;
+  onBlur: React.FocusEventHandler<ElementType>;
+  onKeyDown: React.KeyboardEventHandler<ElementType>;
 }
 
 interface TooltipParams {

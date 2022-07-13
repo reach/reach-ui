@@ -12,10 +12,13 @@
  */
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { useForceUpdate } from "@reach/utils/use-force-update";
+import {
+  useForceUpdate,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+} from "@reach/utils";
 import { createPortal } from "react-dom";
-import warning from "tiny-warning";
+
+declare const __DEV__: boolean;
 
 /**
  * Portal
@@ -35,22 +38,22 @@ const PortalImpl: React.FC<PortalProps> = ({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
       if (containerRef != null) {
-        warning(
-          typeof containerRef === "object" && "current" in containerRef,
-          "@reach/portal: Invalid value passed to the `containerRef` of a " +
-            "`Portal`. The portal will be appended to the document body, but if " +
-            "you want to attach it to another DOM node you must pass a valid " +
-            "React ref object to `containerRef`."
-        );
-
-        warning(
-          containerRef ? containerRef.current != null : true,
-          "@reach/portal: A ref was passed to the `containerRef` prop of a " +
-            "`Portal`, but no DOM node was attached to it. Be sure to pass the " +
-            "ref to a DOM component.\n\nIf you are forwarding the ref from " +
-            "another component, be sure to use the React.forwardRef API. " +
-            "See https://reactjs.org/docs/forwarding-refs.html."
-        );
+        if (typeof containerRef !== "object" || !("current" in containerRef)) {
+          console.warn(
+            "@reach/portal: Invalid value passed to the `containerRef` of a " +
+              "`Portal`. The portal will be appended to the document body, but if " +
+              "you want to attach it to another DOM node you must pass a valid " +
+              "React ref object to `containerRef`."
+          );
+        } else if (containerRef.current == null) {
+          console.warn(
+            "@reach/portal: A ref was passed to the `containerRef` prop of a " +
+              "`Portal`, but no DOM node was attached to it. Be sure to pass the " +
+              "ref to a DOM component.\n\nIf you are forwarding the ref from " +
+              "another component, be sure to use the React.forwardRef API. " +
+              "See https://reactjs.org/docs/forwarding-refs.html."
+          );
+        }
       }
     }, [containerRef]);
   }
@@ -122,9 +125,7 @@ type PortalProps = {
   unstable_skipInitialRender?: boolean;
 };
 
-if (__DEV__) {
-  Portal.displayName = "Portal";
-}
+Portal.displayName = "Portal";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports

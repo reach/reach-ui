@@ -12,26 +12,18 @@
 
 import * as React from "react";
 import { Portal } from "@reach/portal";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { isString } from "@reach/utils/type-check";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  composeEventHandlers,
+  getOwnerDocument,
+  noop,
+  useCheckStyles,
+  useComposedRefs,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
-import PropTypes from "prop-types";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
-
-const overlayPropTypes = {
-  allowPinchZoom: PropTypes.bool,
-  dangerouslyBypassFocusLock: PropTypes.bool,
-  dangerouslyBypassScrollLock: PropTypes.bool,
-  // TODO:
-  initialFocusRef: () => null,
-  onDismiss: PropTypes.func,
-};
+declare const __DEV__: boolean;
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -74,13 +66,7 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
   ) : null;
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-  DialogOverlay.propTypes = {
-    ...overlayPropTypes,
-    isOpen: PropTypes.bool,
-  };
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 interface DialogOverlayProps extends DialogProps {
   /**
@@ -145,6 +131,7 @@ const DialogInner = React.forwardRef(function DialogInner(
 ) {
   let lockFocusAcrossFramesIsDefined =
     unstable_lockFocusAcrossFrames !== undefined;
+
   if (__DEV__) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     React.useEffect(() => {
@@ -220,12 +207,7 @@ const DialogInner = React.forwardRef(function DialogInner(
   );
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
-if (__DEV__) {
-  DialogOverlay.displayName = "DialogOverlay";
-  DialogOverlay.propTypes = {
-    ...overlayPropTypes,
-  };
-}
+DialogOverlay.displayName = "DialogOverlay";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -275,13 +257,7 @@ interface DialogContentProps {
   children?: React.ReactNode;
 }
 
-if (__DEV__) {
-  DialogContent.displayName = "DialogContent";
-  DialogContent.propTypes = {
-    "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType,
-  };
-}
+DialogContent.displayName = "DialogContent";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -382,15 +358,7 @@ interface DialogProps {
   unstable_lockFocusAcrossFrames?: boolean;
 }
 
-if (__DEV__) {
-  Dialog.displayName = "Dialog";
-  Dialog.propTypes = {
-    isOpen: PropTypes.bool,
-    onDismiss: PropTypes.func,
-    "aria-label": ariaLabelType,
-    "aria-labelledby": ariaLabelType,
-  };
-}
+Dialog.displayName = "Dialog";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -436,40 +404,6 @@ function createAriaHider(dialogNode: HTMLElement) {
       }
     });
   };
-}
-
-function ariaLabelType(
-  props: { [key: string]: any },
-  propName: string,
-  compName: string,
-  location: string,
-  propFullName: string
-) {
-  const details =
-    "\nSee https://www.w3.org/TR/wai-aria/#aria-label for details.";
-  if (!props["aria-label"] && !props["aria-labelledby"]) {
-    return new Error(
-      `A <${compName}> must have either an \`aria-label\` or \`aria-labelledby\` prop.
-      ${details}`
-    );
-  }
-  if (props["aria-label"] && props["aria-labelledby"]) {
-    return new Error(
-      "You provided both `aria-label` and `aria-labelledby` props to a <" +
-        compName +
-        ">. If the a label for this component is visible on the screen, that label's component should be given a unique ID prop, and that ID should be passed as the `aria-labelledby` prop into <" +
-        compName +
-        ">. If the label cannot be determined programmatically from the content of the element, an alternative label should be provided as the `aria-label` prop, which will be used as an `aria-label` on the HTML tag." +
-        details
-    );
-  } else if (props[propName] != null && !isString(props[propName])) {
-    return new Error(
-      `Invalid prop \`${propName}\` supplied to \`${compName}\`. Expected \`string\`, received \`${
-        Array.isArray(propFullName) ? "array" : typeof propFullName
-      }\`.`
-    );
-  }
-  return null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

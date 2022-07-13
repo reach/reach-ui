@@ -1,32 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, useEffect } from "react";
 
-let checkedPkgs: { [key: string]: boolean } = {};
+declare const __DEV__: boolean;
 
-/**
- * Just a lil state logger
- *
- * @param state
- * @param DEBUG
- */
-export function useStateLogger(state: string, DEBUG = false): void {
-  if (__DEV__) {
-    let debugRef = useRef(DEBUG);
-    useEffect(() => {
-      debugRef.current = DEBUG;
-    }, [DEBUG]);
-    useEffect(() => {
-      if (debugRef.current) {
-        console.group("State Updated");
-        console.log(
-          "%c" + state,
-          "font-weight: normal; font-size: 120%; font-style: italic;"
-        );
-        console.groupEnd();
-      }
-    }, [state]);
-  }
-}
+let checkedPkgs: { [key: string]: boolean } = {};
 
 /**
  * When in dev mode, checks that styles for a given `@reach` package are loaded.
@@ -36,20 +13,11 @@ export function useStateLogger(state: string, DEBUG = false): void {
  */
 export function checkStyles(packageName: string): void {
   if (__DEV__) {
-    // In CJS files, process.env.NODE_ENV is stripped from our build, but we
-    // need it to prevent style checks from clogging up user logs while testing.
-    // This is a workaround until we can tweak the build a bit to accommodate.
-    let { NODE_ENV: environment } =
-      typeof process !== "undefined"
-        ? process.env
-        : { NODE_ENV: "development" };
-
     // only check once per package
     if (checkedPkgs[packageName]) return;
     checkedPkgs[packageName] = true;
 
     if (
-      environment === "development" &&
       parseInt(
         window
           .getComputedStyle(document.body)
@@ -59,13 +27,13 @@ export function checkStyles(packageName: string): void {
     ) {
       console.warn(
         `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
-  
+
       import "@reach/${packageName}/styles.css";
-  
+
     Otherwise you'll need to include them some other way:
-  
+
       <link rel="stylesheet" type="text/css" href="node_modules/@reach/${packageName}/styles.css" />
-  
+
     For more information visit https://ui.reach.tech/styling.
     `
       );
@@ -81,9 +49,14 @@ export function checkStyles(packageName: string): void {
  */
 export function useCheckStyles(packageName: string): void {
   if (__DEV__) {
-    let name = useRef(packageName);
-    useEffect(() => void (name.current = packageName), [packageName]);
-    useEffect(() => checkStyles(name.current), []);
+    let warned = useRef(false);
+    useEffect(() => {
+      if (!warned.current) {
+        warned.current = true;
+        checkStyles(packageName);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
   }
 }
 

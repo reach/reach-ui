@@ -33,14 +33,15 @@
 import * as React from "react";
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useId } from "@reach/auto-id";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createContext } from "@reach/utils/context";
-import { makeId } from "@reach/utils/make-id";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import invariant from "invariant";
-import PropTypes from "prop-types";
+import {
+  createContext,
+  getOwnerDocument,
+  makeId,
+  useComposedRefs,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
+import invariant from "tiny-invariant";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { DialogProps, DialogContentProps } from "@reach/dialog";
 
 let [AlertDialogProvider, useAlertDialogCtx] =
@@ -86,15 +87,7 @@ const AlertDialogOverlay = React.forwardRef(function AlertDialogOverlay(
   );
 }) as Polymorphic.ForwardRefComponent<"div", AlertDialogProps>;
 
-if (__DEV__) {
-  AlertDialogOverlay.displayName = "AlertDialogOverlay";
-  AlertDialogOverlay.propTypes = {
-    isOpen: PropTypes.bool,
-    onDismiss: PropTypes.func,
-    leastDestructiveRef: () => null,
-    children: PropTypes.node,
-  };
-}
+AlertDialogOverlay.displayName = "AlertDialogOverlay";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -178,12 +171,7 @@ interface AlertDialogContentProps extends DialogContentProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  AlertDialogContent.displayName = "AlertDialogContent";
-  AlertDialogContent.propTypes = {
-    children: PropTypes.node,
-  };
-}
+AlertDialogContent.displayName = "AlertDialogContent";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -213,9 +201,7 @@ const AlertDialogLabel = React.forwardRef(function (
   );
 }) as Polymorphic.ForwardRefComponent<"div", AlertDialogLabelProps>;
 
-if (__DEV__) {
-  AlertDialogLabel.displayName = "AlertDialogLabel";
-}
+AlertDialogLabel.displayName = "AlertDialogLabel";
 
 interface AlertDialogLabelProps {}
 
@@ -246,9 +232,7 @@ const AlertDialogDescription = React.forwardRef(function AlertDialogDescription(
   );
 }) as Polymorphic.ForwardRefComponent<"div", AlertDialogDescriptionProps>;
 
-if (__DEV__) {
-  AlertDialogDescription.displayName = "AlertDialogDescription";
-}
+AlertDialogDescription.displayName = "AlertDialogDescription";
 
 interface AlertDialogDescriptionProps {}
 
@@ -309,15 +293,7 @@ interface AlertDialogProps extends DialogProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  AlertDialog.displayName = "AlertDialog";
-  AlertDialog.propTypes = {
-    isOpen: PropTypes.bool,
-    onDismiss: PropTypes.func,
-    leastDestructiveRef: () => null,
-    children: PropTypes.node,
-  };
-}
+AlertDialog.displayName = "AlertDialog";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types

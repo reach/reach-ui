@@ -1,24 +1,27 @@
 import * as React from "react";
-import { axe } from "jest-axe";
-import { render, fireEvent, act } from "$test/utils";
-import { AxeResults } from "$test/types";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
+import { cleanup, render, fireEvent, act } from "@reach-internal/test/utils";
 import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
 } from "@reach/alert-dialog";
+import { describe, it, expect, vi, afterEach } from "vitest";
+
+afterEach(cleanup);
 
 describe("<AlertDialog /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container, getByText, getByTestId } = render(<BasicAlertDialog />);
-    let results: AxeResults = null as any;
+    let results: AxeCore.AxeResults = null as any;
     await act(async () => {
       results = await axe(container);
     });
     expect(results).toHaveNoViolations();
 
-    let newResults: AxeResults = null as any;
+    let newResults: AxeCore.AxeResults = null as any;
     act(() => void fireEvent.click(getByText("Show Dialog")));
     await act(async () => {
       newResults = await axe(getByTestId("dialog"));

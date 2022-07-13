@@ -1,12 +1,16 @@
 import * as React from "react";
-import { act, render } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
+import { cleanup, act, render } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@reach/tabs";
+
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Tabs /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     const { container } = render(
       <div>
         <Tabs>
@@ -30,7 +34,7 @@ describe("<Tabs /> with axe", () => {
       </div>
     );
 
-    let results: AxeResults = null as any;
+    let results: AxeCore.AxeResults = null as any;
     await act(async () => {
       results = await axe(container);
     });

@@ -1,18 +1,21 @@
 import * as React from "react";
-import { render, act, fireEvent } from "$test/utils";
-import { AxeResults } from "$test/types";
-import { axe } from "jest-axe";
+import { render, act, fireEvent, cleanup } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
+import type { AxeCore } from "vitest-axe";
 import { Alert } from "@reach/alert";
 import { VisuallyHidden } from "@reach/visually-hidden";
-import { usePrevious } from "@reach/utils/use-previous";
+import { usePrevious } from "@reach/utils";
+import { describe, it, vi, expect, afterEach } from "vitest";
 
 const MESSAGE_TIMEOUT = 5000;
 
+afterEach(cleanup);
+
 describe("<Alert /> with axe", () => {
   it("Should not have ARIA violations", async () => {
-    jest.useRealTimers();
+    vi.useRealTimers();
     let { container, getByTestId } = render(<AlertApp />);
-    let results: AxeResults = null as any;
+    let results: AxeCore.AxeResults = null as any;
     await act(async () => {
       results = await axe(container);
     });

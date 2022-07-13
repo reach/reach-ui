@@ -32,18 +32,18 @@
  */
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  composeEventHandlers,
+  useIsomorphicLayoutEffect,
+  useComposedRefs,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
-import warning from "tiny-warning";
-import PropTypes from "prop-types";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 // Used for development only, not recommended for production code!
 const DEBUG = false;
+declare const __DEV__: boolean;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -235,16 +235,7 @@ interface MixedCheckboxProps {
   onChange?: React.ComponentProps<"input">["onChange"];
 }
 
-if (__DEV__) {
-  MixedCheckbox.displayName = "MixedCheckbox";
-  MixedCheckbox.propTypes = {
-    checked: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.oneOf(["mixed" as const]),
-    ]),
-    onChange: PropTypes.func,
-  };
-}
+MixedCheckbox.displayName = "MixedCheckbox";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -347,10 +338,16 @@ function useMixedCheckbox(
     }
   }
 
-  useRefDevWarning(
-    ref,
-    `A ref was not assigned to an input element in ${functionOrComponentName}.`
-  );
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (!ref.current) {
+        console.warn(
+          `A ref was not assigned to an input element in ${functionOrComponentName}.`
+        );
+      }
+    }, [ref, functionOrComponentName]);
+  }
 
   React.useEffect(() => {
     if (isControlled) {
@@ -416,18 +413,21 @@ function useControlledSwitchWarning(
    */
   let isControlled = controlPropValue != null;
   let { current: wasControlled } = React.useRef(isControlled);
-  React.useEffect(() => {
-    if (__DEV__) {
-      warning(
-        !(!isControlled && wasControlled),
-        `${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-      );
-      warning(
-        !(isControlled && !wasControlled),
-        `${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-      );
-    }
-  }, [componentName, controlPropName, isControlled, wasControlled]);
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (!isControlled && wasControlled) {
+        console.warn(
+          `${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
+        );
+      }
+      if (isControlled && !wasControlled) {
+        console.warn(
+          `${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
+        );
+      }
+    }, [componentName, controlPropName, isControlled, wasControlled]);
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -490,17 +490,3 @@ export {
   checkedPropToStateValue as internal_checkedPropToStateValue,
   useControlledSwitchWarning as internal_useControlledSwitchWarning,
 };
-
-function useRefDevWarning(ref: React.RefObject<any>, message: string) {
-  if (__DEV__) {
-    /* eslint-disable react-hooks/rules-of-hooks */
-    let messageRef = React.useRef(message);
-    React.useEffect(() => {
-      messageRef.current = message;
-    }, [message]);
-    React.useEffect(() => {
-      warning(ref.current, messageRef.current);
-    }, [ref]);
-    /* eslint-enable react-hooks/rules-of-hooks */
-  }
-}

@@ -1,12 +1,15 @@
 import * as React from "react";
-import { render /* act, fireEvent */ } from "$test/utils";
-import { axe } from "jest-axe";
+import { cleanup, render } from "@reach-internal/test/utils";
+import { axe } from "vitest-axe";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<SkipNavLink />", () => {
   describe("a11y", () => {
     it("Should not have ARIA violations", async () => {
-      jest.useRealTimers();
+      vi.useRealTimers();
       let { container } = render(<Layout />);
       expect(await axe(container)).toHaveNoViolations();
     });
@@ -31,7 +34,7 @@ function Layout({ skipNavId }: { skipNavId?: string }) {
         <SkipNavContent id={skipNavId} data-testid="content" />
         <main data-testid="main">
           <h1>Welcome to the good stuff!</h1>
-          <button onClick={jest.fn}>Focus me</button>
+          <button onClick={vi.fn}>Focus me</button>
         </main>
       </div>
     </div>

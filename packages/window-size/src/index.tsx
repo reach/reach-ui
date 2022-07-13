@@ -6,9 +6,10 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
-import { canUseDOM } from "@reach/utils/can-use-dom";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import {
+  canUseDOM,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+} from "@reach/utils";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -38,12 +39,7 @@ type WindowSizeProps = {
   }) => React.ReactElement<any, any>;
 };
 
-if (__DEV__) {
-  WindowSize.displayName = "WindowSize";
-  WindowSize.propTypes = {
-    children: PropTypes.func.isRequired,
-  };
-}
+WindowSize.displayName = "WindowSize";
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -1,11 +1,14 @@
 import * as React from "react";
-import { render, fireEvent } from "$test/utils";
+import { render, fireEvent, cleanup } from "@reach-internal/test/utils";
 import {
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
 } from "@reach/accordion";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 describe("<Accordion />", () => {
   describe("a11y", () => {
@@ -166,7 +169,7 @@ describe("<Accordion />", () => {
       });
 
       it("should call `onChange`", () => {
-        let mockOnChange = jest.fn();
+        let mockOnChange = vi.fn();
         let { buttons } = renderTestAccordion((props) => (
           <Accordion {...props} onChange={mockOnChange} />
         ));
@@ -236,7 +239,7 @@ describe("<Accordion />", () => {
 
 function renderTestAccordion(wrapper?: React.ComponentType<any>) {
   let Outer = wrapper || Accordion;
-  let { getByText, getByTestId, container } = render(
+  let rendered = render(
     <Outer data-testid="wrapper">
       <AccordionItem data-testid="item1">
         <AccordionButton>Button One</AccordionButton>
@@ -252,6 +255,7 @@ function renderTestAccordion(wrapper?: React.ComponentType<any>) {
       </AccordionItem>
     </Outer>
   );
+  let { getByText, getByTestId, container } = rendered;
   return {
     container,
     wrapper: getByTestId("wrapper"),

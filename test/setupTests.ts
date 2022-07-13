@@ -1,31 +1,22 @@
-import "@testing-library/jest-dom/extend-expect";
-import "jest-axe/extend-expect";
-import { axe, toHaveNoViolations } from "jest-axe";
-import { act } from "react-dom/test-utils";
-import { AxeResults } from "./types";
+import "vitest-axe/extend-expect";
+import "vitest-dom/extend-expect";
+import * as axeMatchers from "vitest-axe/matchers";
+import * as domMatchers from "vitest-dom/matchers";
+import { beforeAll, expect, vi } from "vitest";
 
-expect.extend({
-  /**
-   * Wrapper for axe's `expect.toHaveNoViolations` to simplify individual test
-   * implementation for most cases.
-   *
-   * @param received
-   */
-  async toHaveNoAxeViolations(received: Element) {
-    const check = toHaveNoViolations.toHaveNoViolations.bind(this);
-    let axeResults: AxeResults | null;
-    await act(async () => {
-      axeResults = await axe(received);
-    });
-    return check(axeResults!);
-  },
-});
+expect.extend(axeMatchers);
+expect.extend(domMatchers);
 
-beforeEach(() => {
-  jest.unmock("@reach/auto-id");
-  jest.unmock("@reach/rect");
-  const autoId = require("@reach/auto-id");
-  const rect = require("@reach/rect");
-  autoId.useId = (fallback: string) => fallback || "REACH-ID";
-  rect.useRect = () => ({ height: 1, width: 1, x: 0, y: 0 });
+beforeAll(() => {
+  vi.mock("@reach/auto-id", () => {
+    return {
+      useId: (fallback: string) => fallback || "REACH-ID",
+    };
+  });
+
+  vi.mock("@reach/rect", () => {
+    return {
+      useRect: () => ({ height: 1, width: 1, x: 0, y: 0 }),
+    };
+  });
 });

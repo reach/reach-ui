@@ -1,7 +1,9 @@
 import * as React from "react";
-import { useForceUpdate } from "@reach/utils/use-force-update";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { noop } from "@reach/utils/noop";
+import {
+  useForceUpdate,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  noop,
+} from "@reach/utils";
 
 function createDescendantContext<DescendantType extends Descendant>(
   name: string,
@@ -15,9 +17,7 @@ function createDescendantContext<DescendantType extends Descendant>(
     unregisterDescendant: noop,
     ...initialValue,
   });
-  if (__DEV__) {
-    ctx.displayName = name;
-  }
+  ctx.displayName = name;
   return ctx;
 }
 

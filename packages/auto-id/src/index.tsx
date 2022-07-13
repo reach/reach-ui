@@ -55,7 +55,7 @@
  */
 
 import * as React from "react";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
+import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
 
 let serverHandoffComplete = false;
 let id = 0;

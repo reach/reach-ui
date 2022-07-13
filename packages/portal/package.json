@@ -12,28 +12,34 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/portal"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
-    "@reach/utils": "0.17.0",
-    "tiny-warning": "^1.0.3",
-    "tslib": "^2.3.0"
+    "@reach/utils": "workspace:*"
   },
   "devDependencies": {
+    "@reach-internal/dev": "workspace:*",
+    "@reach-internal/test": "workspace:*",
+    "@reach-internal/tsconfig": "workspace:*",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "tsup": "^6.1.3"
   },
   "peerDependencies": {
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "dist/reach-portal.cjs.js",
-  "module": "dist/reach-portal.esm.js",
-  "types": "dist/reach-portal.cjs.d.ts",
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "files": [
+    "CHANGELOG.md",
+    "LICENSE",
     "README.md",
-    "dist"
+    "dist",
+    "styles.css"
   ],
-  "eslintIgnore": [
-    "node_modules",
-    "dist"
-  ]
+  "publishConfig": {
+    "access": "public"
+  }
 }

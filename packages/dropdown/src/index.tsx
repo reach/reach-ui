@@ -9,19 +9,22 @@ import {
   useDescendantsInit,
   useDescendantKeyDown,
 } from "@reach/descendants";
-import { isRightClick } from "@reach/utils/is-right-click";
-import { usePrevious } from "@reach/utils/use-previous";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createContext } from "@reach/utils/context";
-import { isFunction, isString } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
-import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  composeEventHandlers,
+  createContext,
+  getOwnerDocument,
+  isFunction,
+  isString,
+  isRightClick,
+  useComposedRefs,
+  usePrevious,
+  useStatefulRefValue,
+  makeId,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 
 import type { Descendant } from "@reach/descendants";
 import type { Position } from "@reach/popover";
-import type * as Polymorphic from "@reach/utils/polymorphic";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Actions
@@ -162,9 +165,7 @@ interface DropdownProviderProps {
   id?: string;
 }
 
-if (__DEV__) {
-  DropdownProvider_.displayName = "DropdownProvider";
-}
+DropdownProvider_.displayName = "DropdownProvider";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -270,9 +271,7 @@ interface DropdownTriggerProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  DropdownTrigger.displayName = "DropdownTrigger";
-}
+DropdownTrigger.displayName = "DropdownTrigger";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -543,9 +542,7 @@ interface DropdownItemProps {
   disabled?: boolean;
 }
 
-if (__DEV__) {
-  DropdownItem.displayName = "DropdownItem";
-}
+DropdownItem.displayName = "DropdownItem";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -734,9 +731,7 @@ interface DropdownItemsProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  DropdownItems.displayName = "DropdownItems";
-}
+DropdownItems.displayName = "DropdownItems";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -844,9 +839,7 @@ interface DropdownPopoverProps {
   position?: Position;
 }
 
-if (__DEV__) {
-  DropdownPopover.displayName = "DropdownPopover";
-}
+DropdownPopover.displayName = "DropdownPopover";
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -23,23 +23,24 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 import * as React from "react";
-import PropTypes from "prop-types";
 import { useId } from "@reach/auto-id";
-import { useControlledState } from "@reach/utils/use-controlled-state";
-import { isRightClick } from "@reach/utils/is-right-click";
-import { useStableLayoutCallback } from "@reach/utils/use-stable-callback";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { getOwnerDocument } from "@reach/utils/owner-document";
-import { createContext } from "@reach/utils/context";
-import { isFunction } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
-import warning from "tiny-warning";
+import {
+  composeEventHandlers,
+  createContext,
+  getOwnerDocument,
+  isFunction,
+  isRightClick,
+  makeId,
+  noop,
+  useComposedRefs,
+  useControlledState,
+  useCheckStyles,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  useStableLayoutCallback,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 
-import type * as Polymorphic from "@reach/utils/polymorphic";
+declare const __DEV__: boolean;
 
 // TODO: Remove in 1.0
 type SliderAlignment = "center" | "contain";
@@ -67,30 +68,6 @@ const SLIDER_HANDLE_ALIGN_CONTAIN = SliderHandleAlignment.Contain;
 
 const [SliderProvider, useSliderContext] =
   createContext<ISliderContext>("Slider");
-
-// These proptypes are shared between the composed SliderInput component and the
-// simplified Slider
-const sliderPropTypes = {
-  defaultValue: PropTypes.number,
-  disabled: PropTypes.bool,
-  getAriaLabel: PropTypes.func,
-  getAriaValueText: PropTypes.func,
-  getValueText: PropTypes.func,
-  handleAlignment: PropTypes.oneOf([
-    SliderHandleAlignment.Center,
-    SliderHandleAlignment.Contain,
-  ]),
-  min: PropTypes.number,
-  max: PropTypes.number,
-  name: PropTypes.string,
-  orientation: PropTypes.oneOf([
-    SliderOrientation.Horizontal,
-    SliderOrientation.Vertical,
-  ]),
-  onChange: PropTypes.func,
-  step: PropTypes.number,
-  value: PropTypes.number,
-};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -240,13 +217,7 @@ interface SliderProps {
   step?: number;
 }
 
-if (__DEV__) {
-  Slider.displayName = "Slider";
-  Slider.propTypes = {
-    ...sliderPropTypes,
-    children: PropTypes.node,
-  };
-}
+Slider.displayName = "Slider";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -293,10 +264,17 @@ const SliderInput = React.forwardRef(function SliderInput(
   },
   forwardedRef
 ) {
-  warning(
-    !DEPRECATED_getValueText,
-    "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
-  );
+  if (__DEV__) {
+    let depecratedPropIsSet = !!DEPRECATED_getValueText;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (depecratedPropIsSet) {
+        console.warn(
+          "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
+        );
+      }
+    }, [depecratedPropIsSet]);
+  }
 
   let touchId: TouchIdRef = React.useRef();
 
@@ -716,13 +694,7 @@ type SliderInputProps = Omit<SliderProps, "children"> & {
   children: React.ReactNode | SliderChildrenRender;
 };
 
-if (__DEV__) {
-  SliderInput.displayName = "SliderInput";
-  SliderInput.propTypes = {
-    ...sliderPropTypes,
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-  };
-}
+SliderInput.displayName = "SliderInput";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -752,12 +724,7 @@ const SliderTrackImpl = React.forwardRef(function SliderTrack(
   );
 }) as Polymorphic.ForwardRefComponent<"div", SliderTrackProps>;
 
-if (__DEV__) {
-  SliderTrackImpl.displayName = "SliderTrack";
-  SliderTrackImpl.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-}
+SliderTrackImpl.displayName = "SliderTrack";
 
 const SliderTrack = React.memo(SliderTrackImpl) as Polymorphic.MemoComponent<
   "div",
@@ -778,9 +745,7 @@ interface SliderTrackProps {
   children: React.ReactNode;
 }
 
-if (__DEV__) {
-  SliderTrack.displayName = "SliderTrack";
-}
+SliderTrack.displayName = "SliderTrack";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -809,10 +774,7 @@ const SliderRangeImpl = React.forwardRef(function SliderRange(
   );
 }) as Polymorphic.ForwardRefComponent<"div", SliderRangeProps>;
 
-if (__DEV__) {
-  SliderRangeImpl.displayName = "SliderRange";
-  SliderRangeImpl.propTypes = {};
-}
+SliderRangeImpl.displayName = "SliderRange";
 
 const SliderRange = React.memo(SliderRangeImpl) as Polymorphic.MemoComponent<
   "div",
@@ -825,8 +787,7 @@ const SliderTrackHighlightImpl = React.forwardRef(
     if (__DEV__) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       React.useEffect(() => {
-        warning(
-          false,
+        console.warn(
           "`SliderTrackHighlight` has been deprecated in favor of `SliderRange` and will be dropped from a future version of Reach UI."
         );
       }, []);
@@ -841,10 +802,7 @@ const SliderTrackHighlightImpl = React.forwardRef(
   }
 ) as Polymorphic.ForwardRefComponent<"div", SliderRangeProps>;
 
-if (__DEV__) {
-  SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
-  SliderTrackHighlightImpl.propTypes = SliderRangeImpl.propTypes;
-}
+SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
 
 export interface SliderTrackHighlightProps extends SliderRangeProps {}
 
@@ -867,9 +825,7 @@ export const SliderTrackHighlight = React.memo(
  */
 interface SliderRangeProps {}
 
-if (__DEV__) {
-  SliderRange.displayName = "SliderRange";
-}
+SliderRange.displayName = "SliderRange";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -967,10 +923,7 @@ const SliderHandleImpl = React.forwardRef(function SliderHandle(
   );
 }) as Polymorphic.ForwardRefComponent<"div", SliderHandleProps>;
 
-if (__DEV__) {
-  SliderHandleImpl.displayName = "SliderHandle";
-  SliderHandleImpl.propTypes = {};
-}
+SliderHandleImpl.displayName = "SliderHandle";
 
 const SliderHandle = React.memo(SliderHandleImpl) as Polymorphic.MemoComponent<
   "div",
@@ -984,9 +937,7 @@ const SliderHandle = React.memo(SliderHandleImpl) as Polymorphic.MemoComponent<
  */
 interface SliderHandleProps {}
 
-if (__DEV__) {
-  SliderHandle.displayName = "SliderHandle";
-}
+SliderHandle.displayName = "SliderHandle";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1042,12 +993,7 @@ const SliderMarkerImpl = React.forwardRef(function SliderMarker(
   ) : null;
 }) as Polymorphic.ForwardRefComponent<"div", SliderMarkerProps>;
 
-if (__DEV__) {
-  SliderMarkerImpl.displayName = "SliderMarker";
-  SliderMarkerImpl.propTypes = {
-    value: PropTypes.number.isRequired,
-  };
-}
+SliderMarkerImpl.displayName = "SliderMarker";
 
 const SliderMarker = React.memo(SliderMarkerImpl) as Polymorphic.MemoComponent<
   "div",
@@ -1066,9 +1012,7 @@ interface SliderMarkerProps {
   value: number;
 }
 
-if (__DEV__) {
-  SliderMarker.displayName = "SliderMarker";
-}
+SliderMarker.displayName = "SliderMarker";
 
 ////////////////////////////////////////////////////////////////////////////////
 

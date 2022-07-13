@@ -19,17 +19,19 @@
  */
 
 import * as React from "react";
-import PropTypes from "prop-types";
-import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils/use-isomorphic-layout-effect";
-import { createNamedContext } from "@reach/utils/context";
-import { isFunction } from "@reach/utils/type-check";
-import { makeId } from "@reach/utils/make-id";
-import { noop } from "@reach/utils/noop";
-import { useCheckStyles } from "@reach/utils/dev-utils";
-import { useComposedRefs } from "@reach/utils/compose-refs";
-import { useUpdateEffect } from "@reach/utils/use-update-effect";
-import { useStatefulRefValue } from "@reach/utils/use-stateful-ref-value";
-import { composeEventHandlers } from "@reach/utils/compose-event-handlers";
+import {
+  createNamedContext,
+  composeEventHandlers,
+  isFunction,
+  makeId,
+  noop,
+  useCheckStyles,
+  useComposedRefs,
+  useIsomorphicLayoutEffect as useLayoutEffect,
+  useStatefulRefValue,
+  useUpdateEffect,
+} from "@reach/utils";
+import type { Polymorphic } from "@reach/utils";
 import {
   createDescendantContext,
   DescendantProvider,
@@ -40,11 +42,10 @@ import {
 import { HighlightWords } from "./utils";
 import { useId } from "@reach/auto-id";
 import { Popover, positionMatchWidth } from "@reach/popover";
-
-import type * as Polymorphic from "@reach/utils/polymorphic";
 import type { PopoverProps } from "@reach/popover";
 import type { Descendant } from "@reach/descendants";
-import warning from "tiny-warning";
+
+declare const __DEV__: boolean;
 
 ////////////////////////////////////////////////////////////////////////////////
 // States
@@ -405,14 +406,7 @@ export interface ComboboxProps {
   "aria-labelledby"?: string;
 }
 
-if (__DEV__) {
-  Combobox.displayName = "Combobox";
-  Combobox.propTypes = {
-    as: PropTypes.any,
-    onSelect: PropTypes.func,
-    openOnFocus: PropTypes.bool,
-  };
-}
+Combobox.displayName = "Combobox";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -475,14 +469,17 @@ export const ComboboxInput = React.forwardRef(
     let wasInitiallyControlled = typeof initialControlledValue !== "undefined";
 
     if (__DEV__) {
-      warning(
-        !(!isControlled && wasInitiallyControlled),
-        "ComboboxInput is changing from controlled to uncontrolled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
-      );
-      warning(
-        !(isControlled && !wasInitiallyControlled),
-        "ComboboxInput is changing from uncontrolled to controlled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
-      );
+      if (!isControlled && wasInitiallyControlled) {
+        console.warn(
+          "ComboboxInput is changing from controlled to uncontrolled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+        );
+      }
+
+      if (isControlled && !wasInitiallyControlled) {
+        console.warn(
+          "ComboboxInput is changing from uncontrolled to controlled. ComboboxInput should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ComboboxInput for the lifetime of the component. Check the `value` prop being passed in."
+        );
+      }
     }
 
     React.useEffect(() => {
@@ -631,9 +628,7 @@ export interface ComboboxInputProps {
   value?: ComboboxValue;
 }
 
-if (__DEV__) {
-  ComboboxInput.displayName = "ComboboxInput";
-}
+ComboboxInput.displayName = "ComboboxInput";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -701,9 +696,7 @@ export const ComboboxPopover = React.forwardRef(
     Partial<Omit<PopoverProps, "unstable_skipInitialRender">>
 >;
 
-if (__DEV__) {
-  ComboboxPopover.displayName = "ComboboxPopover";
-}
+ComboboxPopover.displayName = "ComboboxPopover";
 
 /**
  * @see Docs https://reach.tech/combobox#comboboxpopover-props
@@ -779,9 +772,7 @@ export interface ComboboxListProps {
   persistSelection?: boolean;
 }
 
-if (__DEV__) {
-  ComboboxList.displayName = "ComboboxList";
-}
+ComboboxList.displayName = "ComboboxList";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -894,9 +885,7 @@ export interface ComboboxOptionProps {
   value: string;
 }
 
-if (__DEV__) {
-  ComboboxOption.displayName = "ComboboxOption";
-}
+ComboboxOption.displayName = "ComboboxOption";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -952,9 +941,7 @@ export function ComboboxOptionText() {
   );
 }
 
-if (__DEV__) {
-  ComboboxOptionText.displayName = "ComboboxOptionText";
-}
+ComboboxOptionText.displayName = "ComboboxOptionText";
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -994,9 +981,7 @@ export const ComboboxButton = React.forwardRef(
 
 export interface ComboboxButtonProps {}
 
-if (__DEV__) {
-  ComboboxButton.displayName = "ComboboxButton";
-}
+ComboboxButton.displayName = "ComboboxButton";
 
 ////////////////////////////////////////////////////////////////////////////////
 

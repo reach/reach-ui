@@ -3,8 +3,7 @@ import {
   RenderOptions as TLRenderOptions,
   RenderResult as TLRenderResult,
 } from "@testing-library/react";
-import { axe } from "jest-axe";
-import { ThenArg } from "@reach/utils/types";
+import { axe } from "./vitest-axe";
 
 export type EventElement = Document | Element | Window;
 
@@ -20,4 +19,9 @@ export type RenderResult<
   forceUpdate(): RenderResult<P, T>;
 };
 
-export type AxeResults = ThenArg<ReturnType<typeof axe>>;
+export type AxeResults = Awaited<ReturnType<typeof axe>>;
+
+export interface MatcherResult {
+  message(): string;
+  pass: boolean;
+}

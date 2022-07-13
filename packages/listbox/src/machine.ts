@@ -1,5 +1,5 @@
 import { assign } from "@reach/machine";
-import { getOwnerDocument } from "@reach/utils/owner-document";
+import { getOwnerDocument } from "@reach/utils";
 
 import type { ListboxDescendant, ListboxValue } from "./index";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";

@@ -6,9 +6,7 @@ export function createNamedContext<ContextValueType>(
   defaultValue: ContextValueType
 ): React.Context<ContextValueType> {
   let Ctx = React.createContext<ContextValueType>(defaultValue);
-  if (__DEV__) {
-    Ctx.displayName = name;
-  }
+  Ctx.displayName = name;
   return Ctx;
 }
 
@@ -48,10 +46,7 @@ export function createContext<ContextValueType extends object | null>(
     );
   }
 
-  if (__DEV__) {
-    Ctx.displayName = `${rootName}Context`;
-    Provider.displayName = `${rootName}Provider`;
-  }
-
+  Ctx.displayName = `${rootName}Context`;
+  Provider.displayName = `${rootName}Provider`;
   return [Provider, useContext];
 }

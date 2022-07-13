@@ -1,5 +1,6 @@
 import { HighlightWords } from "../src/utils";
 import latinize from "latinize";
+import { describe, expect, it } from "vitest";
 
 describe("<Combobox /> : utils", () => {
   describe("HighlightWords", () => {

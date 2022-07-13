@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 
+declare const __DEV__: boolean;
+
 /**
  * Adds a DOM event listener
  *

@@ -1,0 +1,4 @@
+{
+  "extends": "@reach-internal/tsconfig/base.json",
+  "include": ["."]
+}

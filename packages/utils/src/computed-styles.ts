@@ -4,7 +4,6 @@ import { getOwnerWindow } from "./owner-document";
  * Get computed style properties of a DOM element.
  *
  * @param element
- * @param styleProp
  */
 export function getComputedStyles(
   element: Element
