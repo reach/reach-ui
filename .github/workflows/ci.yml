@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - repo-reorg # TODO: remove
   pull_request:
     paths-ignore:
       - ".codesandbox/**"
