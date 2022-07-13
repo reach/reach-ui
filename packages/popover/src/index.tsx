@@ -72,7 +72,7 @@ const PopoverImpl = React.forwardRef(function PopoverImpl(
 ) {
   const popoverRef = React.useRef<HTMLDivElement>(null);
   const popoverRect = useRect(popoverRef, { observe: !props.hidden });
-  const targetRect = useRect(targetRef, { observe: !props.hidden });
+  const targetRect = useRect(targetRef, { observe: true });
   const ref = useComposedRefs(popoverRef, forwardedRef);
 
   useSimulateTabNavigationForReactTree(targetRef as any, popoverRef);
