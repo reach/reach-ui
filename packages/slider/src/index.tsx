@@ -264,10 +264,16 @@ const SliderInput = React.forwardRef(function SliderInput(
   },
   forwardedRef
 ) {
-  if (DEPRECATED_getValueText) {
-    console.warn(
-      "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
-    );
+  if (__DEV__) {
+    let depecratedPropIsSet = !!DEPRECATED_getValueText;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(() => {
+      if (depecratedPropIsSet) {
+        console.warn(
+          "The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
+        );
+      }
+    }, [depecratedPropIsSet]);
   }
 
   let touchId: TouchIdRef = React.useRef();
