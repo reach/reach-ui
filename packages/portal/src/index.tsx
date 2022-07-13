@@ -45,9 +45,7 @@ const PortalImpl: React.FC<PortalProps> = ({
               "you want to attach it to another DOM node you must pass a valid " +
               "React ref object to `containerRef`."
           );
-        }
-
-        if (containerRef.current == null) {
+        } else if (containerRef.current == null) {
           console.warn(
             "@reach/portal: A ref was passed to the `containerRef` prop of a " +
               "`Portal`, but no DOM node was attached to it. Be sure to pass the " +
