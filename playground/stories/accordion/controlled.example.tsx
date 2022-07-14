@@ -21,9 +21,14 @@ function Example() {
 
   return (
     <>
+      <p aria-hidden>
+        Note: the first button is not an accordion header! It is here to
+        demonstrate the controlled state behavior.
+      </p>
       <button onClick={() => toggleItem(0)}>
         {activeItems.includes(0) ? "Close" : "Open"} Numero Uno
       </button>
+      <hr />
       <Accordion index={activeItems} onChange={toggleItem}>
         <AccordionItem>
           <h3>
