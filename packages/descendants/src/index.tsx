@@ -5,6 +5,8 @@ import {
   noop,
 } from "@reach/utils";
 
+declare const __DEV__: boolean;
+
 function createDescendantContext<DescendantType extends Descendant>(
   name: string,
   initialValue = {}
@@ -118,8 +120,22 @@ function DescendantProvider<DescendantType extends Descendant>({
           return [{ ...rest, element, index: 0 } as DescendantType];
         }
 
-        if (items.find((item) => item.element === element)) {
-          return updateIndices(items);
+        if (__DEV__) {
+          if (items.find((item) => item.element === element)) {
+            console.warn(
+              "[reach-ui]: `useDescendant` was called with an element that was " +
+                "already registered.\n\n" +
+                "If you are using the `@reach/descendants` package directly, " +
+                "make sure to only register descendants once. Registering a descendant " +
+                "more than once will lead to bugs in your app.\n\n" +
+                "If you are using another `reach-ui` package, this is probably our bug!\n\n" +
+                "To report a bug, open a new issue:\n\n" +
+                "  https://github.com/reach/reach-ui/issues/new?assignees=&labels=&template=Bug_report.md\n\n" +
+                "IMPORTANT: this check will only run in the development build, so if you " +
+                "see this warning please be aware that your app may crash when deployed."
+            );
+            return updateIndices(items);
+          }
         }
 
         let index = findDOMIndex(items, element);
