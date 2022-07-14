@@ -61,6 +61,7 @@ export enum ListboxEvents {
   // Uncontrolled value changes come from specific events (click, key, etc.)
   // ValueChange > Value change may have come from somewhere else
   ValueChange = "VALUE_CHANGE",
+  ResetValue = "RESET_VALUE",
 
   PopoverPointerDown = "POPOVER_POINTER_DOWN",
   PopoverPointerUp = "POPOVER_POINTER_UP",
@@ -80,6 +81,10 @@ let clearTypeahead = assign<ListboxStateData>({
 
 let assignValue = assign<ListboxStateData, any>({
   value: (_, event) => event.value,
+});
+
+let resetValue = assign<ListboxStateData, any>({
+  value: (data, event) => data.initialValue,
 });
 
 let navigate = assign<ListboxStateData, any>({
@@ -176,6 +181,10 @@ function focusButton(data: ListboxStateData, event: any) {
 
 function listboxIsNotDisabled(data: ListboxStateData, event: any) {
   return !event.disabled;
+}
+
+function listboxIsNotControlled(data: ListboxStateData, event: ListboxEvent) {
+  return "isControlled" in event ? !event.isControlled : false;
 }
 
 function optionIsNavigable(data: ListboxStateData, event: ListboxEvent) {
@@ -284,9 +293,6 @@ let commonEvents = {
 
 /**
  * Initializer for our state machine.
- *
- * @param initial
- * @param props
  */
 export const createMachineDefinition = ({
   value,
@@ -296,6 +302,9 @@ export const createMachineDefinition = ({
   id: "listbox",
   initial: ListboxStates.Idle,
   context: {
+    // Note: initialValue should never change. It is stored in context for
+    // certain events.
+    initialValue: value,
     value,
     options: [],
     navigationValue: null,
@@ -337,6 +346,10 @@ export const createMachineDefinition = ({
         [ListboxEvents.KeyDownEnter]: {
           actions: [submitForm],
           cond: listboxIsNotDisabled,
+        },
+        [ListboxEvents.ResetValue]: {
+          actions: [resetValue, selectOption],
+          cond: listboxIsNotControlled,
         },
       },
     },
@@ -916,6 +929,7 @@ export type ListboxEvent = ListboxEventBase &
         value: ListboxValue;
         callback?: ((newValue: ListboxValue) => void) | null | undefined;
       }
+    | { type: ListboxEvents.ResetValue; isControlled: boolean }
     | {
         type: ListboxEvents.KeyDownNavigate;
         value: ListboxValue | null;
@@ -989,6 +1003,7 @@ export type ListboxState = {
 export type ListboxStateData = {
   navigationValue: ListboxValue | null;
   typeaheadQuery: string | null;
+  initialValue: ListboxValue | null;
   value: ListboxValue | null;
   options: ListboxDescendant[];
 };

@@ -270,6 +270,25 @@ const ListboxInput = React.forwardRef(function ListboxInput(
     };
   }, [send, isExpanded]);
 
+  // If a form is reset, we'll need to manually clear the value since we are
+  // controlling it internally.
+  React.useEffect(() => {
+    let form = hiddenInputRef.current?.form;
+    if (!form) return;
+
+    function handleReset(event: Event) {
+      send({
+        type: ListboxEvents.ResetValue,
+        isControlled: isControlled.current,
+      });
+    }
+
+    form.addEventListener("reset", handleReset);
+    return () => {
+      form?.removeEventListener("reset", handleReset);
+    };
+  }, [inputRef, isControlled, send]);
+
   useCheckStyles("listbox");
 
   return (

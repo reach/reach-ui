@@ -7,7 +7,7 @@ export { Example as GroupedComposedLabel } from "./listbox/grouped-composed-labe
 export { Example as GroupedTS } from "./listbox/grouped.example";
 export { Example as PositionOverActive } from "./listbox/position-over-active.example";
 export { Example as Styled } from "./listbox/styled.example";
-export { Example as WithForm } from "./listbox/with-form.example";
+export { Example as WithForm } from "./listbox/in-form.example";
 export { Example as WithNestedTabbables } from "./listbox/with-nested-tabbables.example";
 export { Example as WithUselistboxcontextHook } from "./listbox/with-uselistboxcontext-hook.example";
 

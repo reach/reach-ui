@@ -6,7 +6,7 @@ import { Taco } from "./common";
 // TODO: Need to check out moving focus on iOS in a form
 // https://twitter.com/HipsterSmoothie/status/1237522273902313472
 
-let name = "With a Form (TS)";
+let name = "In a Form";
 
 function Example() {
   let [formData, setFormData] = React.useState({});
@@ -64,6 +64,7 @@ function Example() {
         </div>
         <div>
           <button>Submit</button>
+          <button type="reset">Reset</button>
         </div>
       </form>
       <hr />
