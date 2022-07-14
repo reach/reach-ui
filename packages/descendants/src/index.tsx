@@ -13,8 +13,7 @@ function createDescendantContext<DescendantType extends Descendant>(
   const descendants: DescendantType[] = [];
   let ctx = React.createContext<T>({
     descendants,
-    registerDescendant: noop,
-    unregisterDescendant: noop,
+    registerDescendant: () => noop,
     ...initialValue,
   });
   ctx.displayName = name;
@@ -50,8 +49,7 @@ function useDescendant<DescendantType extends Descendant>(
   indexProp?: number
 ) {
   let forceUpdate = useForceUpdate();
-  let { registerDescendant, unregisterDescendant, descendants } =
-    React.useContext(context);
+  let { registerDescendant, descendants } = React.useContext(context);
 
   // This will initially return -1 because we haven't registered the descendant
   // on the first render. After we register, this will then return the correct
@@ -64,20 +62,12 @@ function useDescendant<DescendantType extends Descendant>(
   // Prevent any flashing
   useLayoutEffect(() => {
     if (!descendant.element) forceUpdate();
-
-    registerDescendant({
-      ...descendant,
-      index: index === -1 ? null : index,
-    } as DescendantType);
-    return () => {
-      unregisterDescendant(descendant.element);
-    };
+    return registerDescendant({ ...descendant, index } as DescendantType);
   }, [
     descendant,
     forceUpdate,
     index,
     registerDescendant,
-    unregisterDescendant,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(descendant),
   ]);
@@ -112,94 +102,47 @@ function DescendantProvider<DescendantType extends Descendant>({
       index: explicitIndex,
       ...rest
     }: Omit<DescendantType, "index"> & { index?: number | undefined }) => {
-      if (!element) {
-        return;
-      }
+      if (!element) return noop;
 
       set((items) => {
-        let newItems: DescendantType[];
-        if (explicitIndex != null) {
-          return [
-            ...items,
-            {
-              ...rest,
-              element,
-              index: explicitIndex,
-            } as DescendantType,
-          ].sort((a, b) => a.index - b.index);
-        } else if (items.length === 0) {
-          // If there are no items, register at index 0 and bail.
-          newItems = [
-            {
-              ...rest,
-              element,
-              index: 0,
-            } as DescendantType,
-          ];
-        } else if (items.find((item) => item.element === element)) {
-          // If the element is already registered, just use the same array
-          newItems = items;
-        } else {
-          // When registering a descendant, we need to make sure we insert in
-          // into the array in the same order that it appears in the DOM. So as
-          // new descendants are added or maybe some are removed, we always know
-          // that the array is up-to-date and correct.
-          //
-          // So here we look at our registered descendants and see if the new
-          // element we are adding appears earlier than an existing descendant's
-          // DOM node via `node.compareDocumentPosition`. If it does, we insert
-          // the new element at this index. Because `registerDescendant` will be
-          // called in an effect every time the descendants state value changes,
-          // we should be sure that this index is accurate when descendent
-          // elements come or go from our component.
-          let index = items.findIndex((item) => {
-            if (!item.element || !element) {
-              return false;
-            }
-            // Does this element's DOM node appear before another item in the
-            // array in our DOM tree? If so, return true to grab the index at
-            // this point in the array so we know where to insert the new
-            // element.
-            return Boolean(
-              item.element.compareDocumentPosition(element as Node) &
-                Node.DOCUMENT_POSITION_PRECEDING
-            );
-          });
-
-          let newItem = {
-            ...rest,
-            element,
-            index,
-          } as DescendantType;
-
-          // If an index is not found we will push the element to the end.
-          if (index === -1) {
-            newItems = [...items, newItem];
-          } else {
-            newItems = [
-              ...items.slice(0, index),
-              newItem,
-              ...items.slice(index),
-            ];
-          }
+        if (explicitIndex != null && explicitIndex !== -1) {
+          return insertAt(
+            items,
+            { element, index: explicitIndex, ...rest } as DescendantType,
+            explicitIndex
+          );
         }
-        return newItems.map((item, index) => ({ ...item, index }));
+
+        if (items.length === 0) {
+          // If there are no items, register at index 0 and bail.
+          return [{ ...rest, element, index: 0 } as DescendantType];
+        }
+
+        if (items.find((item) => item.element === element)) {
+          return updateIndices(items);
+        }
+
+        let index = findDOMIndex(items, element);
+        let newItems: DescendantType[];
+        if (index === -1) {
+          newItems = [
+            ...items,
+            { ...rest, element, index: items.length } as DescendantType,
+          ];
+        } else {
+          newItems = insertAt(
+            items,
+            { ...rest, element, index } as DescendantType,
+            index
+          );
+        }
+        return newItems;
       });
-    },
-    // set is a state setter initialized by the useDescendantsInit hook.
-    // We can safely ignore the lint warning here because it will not change
-    // between renders.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
 
-  let unregisterDescendant = React.useCallback(
-    (element: DescendantType["element"]) => {
-      if (!element) {
-        return;
-      }
-
-      set((items) => items.filter((item) => element !== item.element));
+      return () => {
+        if (!element) return;
+        set((items) => items.filter((item) => element !== item.element));
+      };
     },
     // set is a state setter initialized by the useDescendantsInit hook.
     // We can safely ignore the lint warning here because it will not change
@@ -214,9 +157,8 @@ function DescendantProvider<DescendantType extends Descendant>({
         return {
           descendants: items,
           registerDescendant,
-          unregisterDescendant,
         };
-      }, [items, registerDescendant, unregisterDescendant])}
+      }, [items, registerDescendant])}
     >
       {children}
     </Ctx.Provider>
@@ -381,6 +323,65 @@ function useDescendantKeyDown<
   };
 }
 
+function isElementPreceding(a: Element, b: Element) {
+  return Boolean(
+    b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
+  );
+}
+
+function findDOMIndex<DescendantType extends Descendant>(
+  items: DescendantType[],
+  element: Element
+) {
+  if (!element) return -1;
+  if (!items.length) return -1;
+
+  let length = items.length;
+  // Most of the times, the new item will be added at the end of the list, so we
+  // do a findeIndex in reverse order, instead of wasting time searching the
+  // index from the beginning.
+  while (length--) {
+    let currentElement = items[length].element;
+    if (!currentElement) continue;
+    if (isElementPreceding(currentElement, element)) {
+      return length + 1;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Copy an array of items with a new item added at a specific index.
+ * @param array The source array
+ * @param item The item to insert into the array
+ * @param index The index to insert the item at
+ * @returns A copy of the array with the item inserted at the specified index
+ */
+function insertAt<T extends any[]>(
+  array: T,
+  item: T[number],
+  index?: number
+): T {
+  if (index == null || !(index in array)) {
+    return [...array, item] as T;
+  }
+  return [...array.slice(0, index), item, ...array.slice(index)] as T;
+}
+
+function updateIndices<DescendantType extends Descendant>(
+  items: DescendantType[]
+): DescendantType[] {
+  return items
+    .sort((a, b) =>
+      !a.element || !b.element
+        ? 0
+        : isElementPreceding(a.element, b.element)
+        ? -1
+        : 1
+    )
+    .map((item, index) => ({ ...item, index }));
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
@@ -393,8 +394,7 @@ type Descendant<ElementType = HTMLElement> = {
 
 interface DescendantContextValue<DescendantType extends Descendant> {
   descendants: DescendantType[];
-  registerDescendant(descendant: DescendantType): void;
-  unregisterDescendant(element: DescendantType["element"]): void;
+  registerDescendant(descendant: DescendantType): () => void;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
