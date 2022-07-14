@@ -3,7 +3,7 @@ import VisuallyHidden from "@reach/visually-hidden";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
-let name = "Dynamic content";
+let name = "Dynamic content [BUG]";
 
 function Example() {
   let [guestCount, setGuestCount] = React.useState(1);
