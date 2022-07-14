@@ -1,6 +1,7 @@
 export { Example as Basic } from "./listbox/basic.example";
 export { Example as Composed } from "./listbox/composed.example";
 export { Example as Controlled } from "./listbox/controlled.example";
+export { Example as Dynamic } from "./listbox/dynamic-content.example";
 export { Example as FocusOnSelect } from "./listbox/focus-on-select.example";
 export { Example as GroupedComposedLabel } from "./listbox/grouped-composed-label.example";
 export { Example as GroupedTS } from "./listbox/grouped.example";
