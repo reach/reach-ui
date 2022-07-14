@@ -47,7 +47,6 @@ import {
   ListboxGroup,
   ListboxGroupLabel,
 } from "@reach/listbox";
-import { Component } from "@reach/component-component";
 import { Dialog, DialogOverlay, DialogContent } from "@reach/dialog";
 import {
   Menu,
@@ -148,7 +147,6 @@ function MyPageLayout({ children }) {
                   ComboboxOption,
                   ComboboxOptionText,
                   ComboboxPopover,
-                  Component,
                   CustomCheckbox,
                   CustomCheckboxContainer,
                   CustomCheckboxInput,

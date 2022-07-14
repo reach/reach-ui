@@ -234,10 +234,6 @@ function Nav({ media }) {
 
               <NavList>
                 <NavLink to="/auto-id">Auto ID</NavLink>
-                <NavLink to="/component-component">
-                  Component<span aria-hidden>²</span>
-                  <VisuallyHidden> Component</VisuallyHidden>
-                </NavLink>
                 <NavLink to="/rect">Rect</NavLink>
                 <NavLink to="/window-size">Window Size</NavLink>
               </NavList>

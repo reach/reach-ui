@@ -1989,11 +1989,6 @@
     prop-types "^15.7.2"
     tslib "^2.3.0"
 
-"@reach/component-component@file:../packages/component-component":
-  version "0.15.0"
-  dependencies:
-    prop-types "^15.7.2"
-
 "@reach/descendants@0.15.2":
   version "0.15.2"
   resolved "https://registry.yarnpkg.com/@reach/descendants/-/descendants-0.15.2.tgz#b0641f0bc864d91271364678dea51cf86b2e5c66"
