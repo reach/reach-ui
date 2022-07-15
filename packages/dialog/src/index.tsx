@@ -12,6 +12,7 @@
 
 import * as React from "react";
 import { Portal } from "@reach/portal";
+import type { PortalProps } from "@reach/portal";
 import {
   composeEventHandlers,
   getOwnerDocument,
@@ -28,19 +29,19 @@ declare const __DEV__: boolean;
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * DialogOverlay
+ * DialogWrapper
  *
- * Low-level component if you need more control over the styles or rendering of
- * the dialog overlay.
+ * Low-level component if you need direct access to the portaled dialog wrapper.
  *
- * Note: You must render a `DialogContent` inside.
+ * Note: You must render a `DialogInner` inside.
  *
- * @see Docs https://reach.tech/dialog#dialogoverlay
+ * @see Docs https://reach.tech/dialog#dialogwrapper
  */
-const DialogOverlay = React.forwardRef(function DialogOverlay(
-  { as: Comp = "div", isOpen = true, ...props },
-  forwardedRef
-) {
+function DialogWrapper({
+  isOpen = true,
+  children,
+  ...props
+}: DialogWrapperProps) {
   useCheckStyles("dialog");
 
   // We want to ignore the immediate focus of a tooltip so it doesn't pop
@@ -60,58 +61,33 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
   }, [isOpen]);
 
   return isOpen ? (
-    <Portal data-reach-dialog-wrapper="">
-      <DialogInner ref={forwardedRef} as={Comp} {...props} />
+    <Portal data-reach-dialog-wrapper="" {...props}>
+      {children}
     </Portal>
   ) : null;
-}) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
+}
 
-DialogOverlay.displayName = "DialogOverlay";
+DialogWrapper.displayName = "DialogWrapper";
 
-interface DialogOverlayProps extends DialogProps {
+interface DialogWrapperProps extends PortalProps {
   /**
-   * By default the dialog locks the focus inside it. Normally this is what you
-   * want. This prop is provided so that this feature can be disabled. This,
-   * however, is strongly discouraged.
+   * Controls whether or not the dialog is open.
    *
-   * The reason it is provided is not to disable the focus lock entirely.
-   * Rather, there are certain situations where you may need more control on how
-   * the focus lock works. This should be complemented by setting up a focus
-   * lock yourself that would allow more flexibility for your specific use case.
-   *
-   * If you do set this prop to `true`, make sure you set up your own
-   * `FocusLock` component. You can likely use
-   * `react-focus-lock`, which is what Reach uses internally by default. It has
-   * various settings to allow more customization, but it takes care of a lot of
-   * hard work that you probably don't want or need to do.
-   *
-   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassfocuslock
-   * @see https://github.com/theKashey/react-focus-lock
-   * @see https://github.com/reach/reach-ui/issues/615
+   * @see Docs https://reach.tech/dialog#dialogwrapper-isopen
    */
-  dangerouslyBypassFocusLock?: boolean;
-  /**
-   * By default the dialog locks scrolling with `react-remove-scroll`, which
-   * also injects some styles on the body element to remove the scrollbar while
-   * maintaining its gap to prevent jank when the dialog's open state is
-   * toggled. This is almost always what you want in a dialog, but in some cases
-   * you may have the need to customize this behavior further.
-   *
-   * This prop will disable `react-remove-scroll` and allow you to compose your
-   * own scroll lock component to meet your needs. Like the
-   * `dangerouslyBypassFocusLock` prop, this is generally discouraged and should
-   * only be used if a proper fallback for managing scroll behavior is provided.
-   *
-   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassscrolllock
-   * @see https://github.com/theKashey/react-remove-scroll
-   */
-  dangerouslyBypassScrollLock?: boolean;
+  isOpen?: boolean;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogInner
+ *
+ * Low-level component if you need direct access to the portaled dialog wrapper.
+ *
+ * Note: Must be rendered inside of a `DialogWrapper`.
+ *
+ * @see Docs https://reach.tech/dialog#dialoginner
  */
 const DialogInner = React.forwardRef(function DialogInner(
   {
@@ -192,7 +168,7 @@ const DialogInner = React.forwardRef(function DialogInner(
         <Comp
           {...props}
           ref={ref}
-          data-reach-dialog-overlay=""
+          data-reach-dialog-inner=""
           /*
            * We can ignore the `no-static-element-interactions` warning here
            * because our overlay is only designed to capture any outside
@@ -207,7 +183,77 @@ const DialogInner = React.forwardRef(function DialogInner(
   );
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
+DialogInner.displayName = "DialogInner";
+
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * DialogOverlay
+ *
+ * Low-level component if you need more control over the styles or rendering of
+ * the dialog overlay.
+ *
+ * Note: You must render a `DialogContent` inside.
+ *
+ * @see Docs https://reach.tech/dialog#dialogoverlay
+ */
+const DialogOverlay = React.forwardRef(function DialogOverlay(
+  { as: Comp = "div", isOpen = true, ...props },
+  forwardedRef
+) {
+  return (
+    <DialogWrapper isOpen={isOpen}>
+      <DialogInner
+        data-reach-dialog-overlay=""
+        ref={forwardedRef}
+        as={Comp}
+        {...props}
+      />
+    </DialogWrapper>
+  );
+}) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
+
 DialogOverlay.displayName = "DialogOverlay";
+
+interface DialogOverlayProps extends DialogProps {
+  /**
+   * By default the dialog locks the focus inside it. Normally this is what you
+   * want. This prop is provided so that this feature can be disabled. This,
+   * however, is strongly discouraged.
+   *
+   * The reason it is provided is not to disable the focus lock entirely.
+   * Rather, there are certain situations where you may need more control on how
+   * the focus lock works. This should be complemented by setting up a focus
+   * lock yourself that would allow more flexibility for your specific use case.
+   *
+   * If you do set this prop to `true`, make sure you set up your own
+   * `FocusLock` component. You can likely use
+   * `react-focus-lock`, which is what Reach uses internally by default. It has
+   * various settings to allow more customization, but it takes care of a lot of
+   * hard work that you probably don't want or need to do.
+   *
+   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassfocuslock
+   * @see https://github.com/theKashey/react-focus-lock
+   * @see https://github.com/reach/reach-ui/issues/615
+   */
+  dangerouslyBypassFocusLock?: boolean;
+  /**
+   * By default the dialog locks scrolling with `react-remove-scroll`, which
+   * also injects some styles on the body element to remove the scrollbar while
+   * maintaining its gap to prevent jank when the dialog's open state is
+   * toggled. This is almost always what you want in a dialog, but in some cases
+   * you may have the need to customize this behavior further.
+   *
+   * This prop will disable `react-remove-scroll` and allow you to compose your
+   * own scroll lock component to meet your needs. Like the
+   * `dangerouslyBypassFocusLock` prop, this is generally discouraged and should
+   * only be used if a proper fallback for managing scroll behavior is provided.
+   *
+   * @see Docs https://reach.tech/dialog#dialogoverlay-dangerouslybypassscrolllock
+   * @see https://github.com/theKashey/react-remove-scroll
+   */
+  dangerouslyBypassScrollLock?: boolean;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -409,6 +455,12 @@ function createAriaHider(dialogNode: HTMLElement) {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export type { DialogContentProps, DialogOverlayProps, DialogProps };
-export { Dialog, DialogContent, DialogOverlay };
+export type {
+  DialogWrapperProps,
+  DialogContentProps,
+  DialogOverlayProps,
+  DialogOverlayProps as DialogInnerProps,
+  DialogProps,
+};
+export { DialogWrapper, Dialog, DialogContent, DialogInner, DialogOverlay };
 export default Dialog;

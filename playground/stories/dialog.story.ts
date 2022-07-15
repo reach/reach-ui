@@ -4,6 +4,7 @@ export { Example as Autofocus } from "./dialog/autofocus.example";
 export { Example as Basic } from "./dialog/basic.example";
 export { Example as ChangeStyles } from "./dialog/change-styles.example";
 export { Example as CustomFocusLock } from "./dialog/custom-focus-lock.example";
+export { Example as CustomPortalNode } from "./dialog/custom-portal-node.example";
 export { Example as DestroyTrigger } from "./dialog/destroy-trigger.example";
 export { Example as Dismiss } from "./dialog/dismiss.example";
 export { Example as Dropdown } from "./dialog/dropdown.example";

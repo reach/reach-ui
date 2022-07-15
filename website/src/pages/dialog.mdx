@@ -12,6 +12,8 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
   <TOCList>
     <TOCLink href="#dialog">Dialog</TOCLink>
     <TOCLink href="#dialogoverlay">DialogOverlay</TOCLink>
+    <TOCLink href="#dialogwrapper">DialogWrapper</TOCLink>
+    <TOCLink href="#dialoginner">DialogInner</TOCLink>
     <TOCLink href="#dialogcontent">DialogContent</TOCLink>
   </TOCList>
 </TOC>
@@ -283,7 +285,6 @@ function Example(props) {
   return (
     <div>
       <button onClick={open}>Show Dialog</button>
-
       <DialogOverlay
         style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
         isOpen={showDialog}
@@ -431,6 +432,84 @@ Same as [Dialog `isOpen`](#dialog-isopen).
 ##### DialogOverlay `onDismiss`
 
 Same as [Dialog `onDismiss`](#dialog-ondismiss).
+
+### DialogWrapper
+
+Low-level component if you need direct access to the portaled dialog wrapper.
+
+Note: You must render a `DialogInner` inside.
+
+```jsx
+// jsx-demo
+function Example() {
+  const [showDialog, setShowDialog] = React.useState(false);
+  const open = () => setShowDialog(true);
+  const close = () => setShowDialog(false);
+  return (
+    <div>
+      <button onClick={open}>Show Dialog</button>
+      <DialogWrapper isOpen={showDialog} containerRef={portalContainerRef}>
+        <DialogInner
+          aria-label="Announcement"
+          onDismiss={close}
+          allowPinchZoom
+          style={{
+            background: "hsla(0, 0%, 0%, 0.33)",
+            position: "fixed",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            overflow: "auto",
+          }}
+        >
+          <DialogContent>
+            <p>This is an important announcement!</p>
+            <button onClick={close}>Close Dialog</button>
+          </DialogContent>
+        </DialogInner>
+      </DialogWrapper>
+    </div>
+  );
+}
+```
+
+#### DialogWrapper Props
+
+| Prop                                         | Type   | Required |
+| -------------------------------------------- | ------ | -------- |
+| [`Portal` props](#dialogportal-portal-props) |        |          |
+| [`isOpen`](#dialogportal-isopen)             | `bool` | false    |
+
+##### DialogWrapper `Portal` props
+
+Any props not listed above will be spread onto the underlying [`<Portal />`](./portal#portalprops).
+
+```jsx
+<DialogWrapper containerRef={domRef}>
+  <DialogInner>
+    <DialogContent>
+      <p>The underlying portal will render into another DOM element</p>
+    </DialogContent>
+  </DialogInner>
+</DialogWrapper>
+```
+
+##### DialogWrapper `isOpen`
+
+`isOpen?: boolean`
+
+Controls whether or not the dialog is open.
+
+### DialogInner
+
+Low-level component if you need direct access to the portaled dialog wrapper.
+
+Note: Must be rendered inside of a `DialogWrapper`.
+
+#### DialogInner Props
+
+All props for [`DialogOverlay`](#dialogoverlay-props) can also be passed to `DialogInner`.
 
 ### DialogContent
 
