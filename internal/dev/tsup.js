@@ -48,6 +48,7 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       define: {
         __DEV__: "true",
       },
+      target: "es2020",
     },
   ]);
 }
