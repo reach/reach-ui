@@ -10,10 +10,10 @@ Creates and appends a DOM node to the end of `document.body` and renders a React
 import { Portal } from "@reach/portal";
 
 function Example() {
-  return (
-    <Portal>
-      <div>Stuff goes here</div>
-    </Portal>
-  );
+	return (
+		<Portal>
+			<div>Stuff goes here</div>
+		</Portal>
+	);
 }
 ```

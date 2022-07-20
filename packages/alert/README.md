@@ -10,27 +10,27 @@ The Alert component will announce to assistive technologies whatever you render 
 
 ```jsx
 function Example(props) {
-  const [messages, setMessages] = React.useState([]);
-  return (
-    <div>
-      <button
-        onClick={() => {
-          setMessages((prevMessages) =>
-            prevMessages.concat([`Message #${prevMessages.length + 1}`])
-          );
-          setTimeout(() => {
-            setMessages((prevMessages) => prevMessages.slice(1));
-          }, 5000);
-        }}
-      >
-        Add a message
-      </button>
-      <div>
-        {messages.map((message, index) => (
-          <Alert key={index}>{message}</Alert>
-        ))}
-      </div>
-    </div>
-  );
+	const [messages, setMessages] = React.useState([]);
+	return (
+		<div>
+			<button
+				onClick={() => {
+					setMessages((prevMessages) =>
+						prevMessages.concat([`Message #${prevMessages.length + 1}`])
+					);
+					setTimeout(() => {
+						setMessages((prevMessages) => prevMessages.slice(1));
+					}, 5000);
+				}}
+			>
+				Add a message
+			</button>
+			<div>
+				{messages.map((message, index) => (
+					<Alert key={index}>{message}</Alert>
+				))}
+			</div>
+		</div>
+	);
 }
 ```

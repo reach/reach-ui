@@ -1,51 +1,51 @@
 {
-  "name": "@reach/combobox",
-  "version": "0.17.0",
-  "description": "Accessible React Combobox (Autocomplete).",
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "sideEffects": [
-    "*.css"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reach/reach-ui.git",
-    "directory": "packages/combobox"
-  },
-  "scripts": {
-    "build": "tsup"
-  },
-  "dependencies": {
-    "@reach/auto-id": "workspace:*",
-    "@reach/descendants": "workspace:*",
-    "@reach/popover": "workspace:*",
-    "@reach/portal": "workspace:*",
-    "@reach/utils": "workspace:*"
-  },
-  "devDependencies": {
-    "@reach-internal/dev": "workspace:*",
-    "@reach-internal/test": "workspace:*",
-    "@reach-internal/tsconfig": "workspace:*",
-    "latinize": "0.3.0",
-    "match-sorter": "^6.3.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "tsup": "^6.1.3"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0 || 17.x",
-    "react-dom": "^16.8.0 || 17.x"
-  },
-  "main": "./src/combobox.tsx",
-  "types": "./src/combobox.tsx",
-  "files": [
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md",
-    "dist",
-    "styles.css"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@reach/combobox",
+	"version": "0.17.0",
+	"description": "Accessible React Combobox (Autocomplete).",
+	"author": "React Training <hello@reacttraining.com>",
+	"license": "MIT",
+	"sideEffects": [
+		"*.css"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reach/reach-ui.git",
+		"directory": "packages/combobox"
+	},
+	"scripts": {
+		"build": "tsup"
+	},
+	"dependencies": {
+		"@reach/auto-id": "workspace:*",
+		"@reach/descendants": "workspace:*",
+		"@reach/popover": "workspace:*",
+		"@reach/portal": "workspace:*",
+		"@reach/utils": "workspace:*"
+	},
+	"devDependencies": {
+		"@reach-internal/dev": "workspace:*",
+		"@reach-internal/test": "workspace:*",
+		"@reach-internal/tsconfig": "workspace:*",
+		"latinize": "0.3.0",
+		"match-sorter": "^6.3.1",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"tsup": "^6.1.3"
+	},
+	"peerDependencies": {
+		"react": "^16.8.0 || 17.x",
+		"react-dom": "^16.8.0 || 17.x"
+	},
+	"main": "./src/combobox.tsx",
+	"types": "./src/combobox.tsx",
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"dist",
+		"styles.css"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }

@@ -20,29 +20,29 @@ _Touch Events_: Touch events are currently not supported. There's not a lot of r
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <div>
-      <Tooltip label="Notifications">
-        <button style={{ fontSize: 25 }}>
-          <span>🔔</span>
-        </button>
-      </Tooltip>
-      <Tooltip label="Settings">
-        <button style={{ fontSize: 25 }}>
-          <span aria-hidden>⚙️</span>
-        </button>
-      </Tooltip>
+	return (
+		<div>
+			<Tooltip label="Notifications">
+				<button style={{ fontSize: 25 }}>
+					<span>🔔</span>
+				</button>
+			</Tooltip>
+			<Tooltip label="Settings">
+				<button style={{ fontSize: 25 }}>
+					<span aria-hidden>⚙️</span>
+				</button>
+			</Tooltip>
 
-      <div style={{ float: "right" }}>
-        <Tooltip label="Notifications" aria-label="3 Notifications">
-          <button style={{ fontSize: 25 }}>
-            <span>🔔</span>
-            <span>3</span>
-          </button>
-        </Tooltip>
-      </div>
-    </div>
-  );
+			<div style={{ float: "right" }}>
+				<Tooltip label="Notifications" aria-label="3 Notifications">
+					<button style={{ fontSize: 25 }}>
+						<span>🔔</span>
+						<span>3</span>
+					</button>
+				</Tooltip>
+			</div>
+		</div>
+	);
 }
 ```
 
@@ -66,11 +66,11 @@ import "@reach/tooltip/styles.css";
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tooltip label="Save">
-      <button style={{ fontSize: 25 }}>💾</button>
-    </Tooltip>
-  );
+	return (
+		<Tooltip label="Save">
+			<button style={{ fontSize: 25 }}>💾</button>
+		</Tooltip>
+	);
 }
 ```
 
@@ -79,16 +79,16 @@ Sometimes the button contains information that is relevant to the user, like a b
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tooltip
-      // What the tooltip renders
-      label="Notifications"
-      // What the screen reader announces
-      aria-label="3 Notifications"
-    >
-      <button style={{ fontSize: 25 }}>🔔 3</button>
-    </Tooltip>
-  );
+	return (
+		<Tooltip
+			// What the tooltip renders
+			label="Notifications"
+			// What the screen reader announces
+			aria-label="3 Notifications"
+		>
+			<button style={{ fontSize: 25 }}>🔔 3</button>
+		</Tooltip>
+	);
 }
 ```
 
@@ -97,20 +97,20 @@ All props passed to `Tooltip` will go to the popover.
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tooltip
-      label="Fall in love all over again"
-      style={{
-        background: "hsla(0, 0%, 0%, 0.75)",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
-        padding: "0.5em 1em",
-      }}
-    >
-      <button style={{ fontSize: 25 }}>❤️</button>
-    </Tooltip>
-  );
+	return (
+		<Tooltip
+			label="Fall in love all over again"
+			style={{
+				background: "hsla(0, 0%, 0%, 0.75)",
+				color: "white",
+				border: "none",
+				borderRadius: "4px",
+				padding: "0.5em 1em",
+			}}
+		>
+			<button style={{ fontSize: 25 }}>❤️</button>
+		</Tooltip>
+	);
 }
 ```
 
@@ -142,93 +142,93 @@ You may want to drop down to this lower level API if you need animation or you w
 ```jsx
 // jsx-demo
 (() => {
-  // Center the tooltip, but collisions will win
-  const centered = (triggerRect, tooltipRect) => {
-    const triggerCenter = triggerRect.left + triggerRect.width / 2;
-    const left = triggerCenter - tooltipRect.width / 2;
-    const maxLeft = window.innerWidth - tooltipRect.width - 2;
-    return {
-      left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
-      top: triggerRect.bottom + 8 + window.scrollY,
-    };
-  };
+	// Center the tooltip, but collisions will win
+	const centered = (triggerRect, tooltipRect) => {
+		const triggerCenter = triggerRect.left + triggerRect.width / 2;
+		const left = triggerCenter - tooltipRect.width / 2;
+		const maxLeft = window.innerWidth - tooltipRect.width - 2;
+		return {
+			left: Math.min(Math.max(2, left), maxLeft) + window.scrollX,
+			top: triggerRect.bottom + 8 + window.scrollY,
+		};
+	};
 
-  function TriangleTooltip({ children, label, "aria-label": ariaLabel }) {
-    // get the props from useTooltip
-    const [trigger, tooltip] = useTooltip();
+	function TriangleTooltip({ children, label, "aria-label": ariaLabel }) {
+		// get the props from useTooltip
+		const [trigger, tooltip] = useTooltip();
 
-    // destructure off what we need to position the triangle
-    const { isVisible, triggerRect } = tooltip;
+		// destructure off what we need to position the triangle
+		const { isVisible, triggerRect } = tooltip;
 
-    return (
-      <React.Fragment>
-        {React.cloneElement(children, trigger)}
+		return (
+			<React.Fragment>
+				{React.cloneElement(children, trigger)}
 
-        {isVisible && (
-          // The Triangle. We position it relative to the trigger, not the popup
-          // so that collisions don't have a triangle pointing off to nowhere.
-          // Using a Portal may seem a little extreme, but we can keep the
-          // positioning logic simpler here instead of needing to consider
-          // the popup's position relative to the trigger and collisions
-          <Portal>
-            <div
-              style={{
-                position: "absolute",
-                left:
-                  triggerRect && triggerRect.left - 10 + triggerRect.width / 2,
-                top: triggerRect && triggerRect.bottom + window.scrollY,
-                width: 0,
-                height: 0,
-                borderLeft: "10px solid transparent",
-                borderRight: "10px solid transparent",
-                borderBottom: "10px solid black",
-              }}
-            />
-          </Portal>
-        )}
-        <TooltipPopup
-          {...tooltip}
-          label={label}
-          aria-label={ariaLabel}
-          style={{
-            background: "black",
-            color: "white",
-            border: "none",
-            borderRadius: "3px",
-            padding: "0.5em 1em",
-          }}
-          position={centered}
-        />
-      </React.Fragment>
-    );
-  }
+				{isVisible && (
+					// The Triangle. We position it relative to the trigger, not the popup
+					// so that collisions don't have a triangle pointing off to nowhere.
+					// Using a Portal may seem a little extreme, but we can keep the
+					// positioning logic simpler here instead of needing to consider
+					// the popup's position relative to the trigger and collisions
+					<Portal>
+						<div
+							style={{
+								position: "absolute",
+								left:
+									triggerRect && triggerRect.left - 10 + triggerRect.width / 2,
+								top: triggerRect && triggerRect.bottom + window.scrollY,
+								width: 0,
+								height: 0,
+								borderLeft: "10px solid transparent",
+								borderRight: "10px solid transparent",
+								borderBottom: "10px solid black",
+							}}
+						/>
+					</Portal>
+				)}
+				<TooltipPopup
+					{...tooltip}
+					label={label}
+					aria-label={ariaLabel}
+					style={{
+						background: "black",
+						color: "white",
+						border: "none",
+						borderRadius: "3px",
+						padding: "0.5em 1em",
+					}}
+					position={centered}
+				/>
+			</React.Fragment>
+		);
+	}
 
-  return (
-    <div>
-      <TriangleTooltip label="Notifications Really Long to Trigger Collision">
-        <button style={{ fontSize: 25 }}>
-          <span aria-hidden>🔔</span>
-        </button>
-      </TriangleTooltip>
-      <TriangleTooltip label="Settings">
-        <button style={{ fontSize: 25 }}>
-          <span aria-hidden>⚙️</span>
-        </button>
-      </TriangleTooltip>
+	return (
+		<div>
+			<TriangleTooltip label="Notifications Really Long to Trigger Collision">
+				<button style={{ fontSize: 25 }}>
+					<span aria-hidden>🔔</span>
+				</button>
+			</TriangleTooltip>
+			<TriangleTooltip label="Settings">
+				<button style={{ fontSize: 25 }}>
+					<span aria-hidden>⚙️</span>
+				</button>
+			</TriangleTooltip>
 
-      <div style={{ float: "right" }}>
-        <TriangleTooltip
-          label="Notifications Really Long to Trigger Collision"
-          aria-label="3 Notifications"
-        >
-          <button style={{ fontSize: 25 }}>
-            <span>🔔</span>
-            <span>3</span>
-          </button>
-        </TriangleTooltip>
-      </div>
-    </div>
-  );
+			<div style={{ float: "right" }}>
+				<TriangleTooltip
+					label="Notifications Really Long to Trigger Collision"
+					aria-label="3 Notifications"
+				>
+					<button style={{ fontSize: 25 }}>
+						<span>🔔</span>
+						<span>3</span>
+					</button>
+				</TriangleTooltip>
+			</div>
+		</div>
+	);
 })();
 ```
 
@@ -245,34 +245,34 @@ animated.TooltipPopup = animated(TooltipPopup);
 animated.TooltipContent = animated(TooltipPopup);
 
 function AnimatedTooltip({ children, ...rest }) {
-  const [trigger, tooltip, isVisible] = useTooltip();
+	const [trigger, tooltip, isVisible] = useTooltip();
 
-  const transitions = useTransition(isVisible, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-    config: { mass: 1, tension: 500, friction: 40 },
-  });
+	const transitions = useTransition(isVisible, {
+		from: { opacity: 0 },
+		enter: { opacity: 1 },
+		leave: { opacity: 0 },
+		config: { mass: 1, tension: 500, friction: 40 },
+	});
 
-  return (
-    <React.Fragment>
-      {React.cloneElement(children, trigger)}
-      {transitions(
-        (styles, item) =>
-          item && (
-            <animated.TooltipContent {...tooltip} {...rest} style={styles} />
-          )
-      )}
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			{React.cloneElement(children, trigger)}
+			{transitions(
+				(styles, item) =>
+					item && (
+						<animated.TooltipContent {...tooltip} {...rest} style={styles} />
+					)
+			)}
+		</React.Fragment>
+	);
 }
 
 // Now you can replace `Tooltip` with `AnimatedTooltip`
 function App() {
-  return (
-    <AnimatedTooltip label="Compose Message">
-      <button>📝</button>
-    </AnimatedTooltip>
-  );
+	return (
+		<AnimatedTooltip label="Compose Message">
+			<button>📝</button>
+		</AnimatedTooltip>
+	);
 }
 ```

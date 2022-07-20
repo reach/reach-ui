@@ -2,17 +2,17 @@ import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
-  title="Window Size"
-  description="Measure the current window dimensions in React"
+	title="Window Size"
+	description="Measure the current window dimensions in React"
 />
 
 # Window Size
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#usewindowsize">useWindowSize</TOCLink>
-    <TOCLink href="#windowsize">WindowSize</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#usewindowsize">useWindowSize</TOCLink>
+		<TOCLink href="#windowsize">WindowSize</TOCLink>
+	</TOCList>
 </TOC>
 
 Measure the current window dimensions.
@@ -38,16 +38,16 @@ import WindowSize, { useWindowSize } from "@reach/window-size";
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <WindowSize>
-      {(size) => (
-        <div>
-          <p>Resize your window.</p>
-          <pre>{JSON.stringify(size, null, 2)}</pre>
-        </div>
-      )}
-    </WindowSize>
-  );
+	return (
+		<WindowSize>
+			{(size) => (
+				<div>
+					<p>Resize your window.</p>
+					<pre>{JSON.stringify(size, null, 2)}</pre>
+				</div>
+			)}
+		</WindowSize>
+	);
 }
 ```
 
@@ -70,13 +70,13 @@ A hook that observes and returns the measurements of the browser window.
 ```jsx
 // jsx-demo
 function Example() {
-  const { width, height } = useWindowSize();
-  return (
-    <div>
-      <p>Resize your window.</p>
-      <pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
-    </div>
-  );
+	const { width, height } = useWindowSize();
+	return (
+		<div>
+			<p>Resize your window.</p>
+			<pre>Window size: {JSON.stringify({ width, height }, null, 2)}</pre>
+		</div>
+	);
 }
 ```
 
@@ -84,7 +84,7 @@ function Example() {
 
 ```ts
 function useWindowSize(): {
-  width: number;
-  height: number;
+	width: number;
+	height: number;
 };
 ```

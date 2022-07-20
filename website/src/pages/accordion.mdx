@@ -8,14 +8,14 @@ import { Pipe } from "../components/Pipe";
 # Accordion
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#accordion-1">Accordion</TOCLink>
-    <TOCLink href="#accordionitem">AccordionItem</TOCLink>
-    <TOCLink href="#accordionbutton">AccordionButton</TOCLink>
-    <TOCLink href="#accordionpanel">AccordionPanel</TOCLink>
-    <TOCLink href="#useaccordioncontext">useAccordionContext</TOCLink>
-    <TOCLink href="#useaccordionitemcontext">useAccordionItemContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#accordion-1">Accordion</TOCLink>
+		<TOCLink href="#accordionitem">AccordionItem</TOCLink>
+		<TOCLink href="#accordionbutton">AccordionButton</TOCLink>
+		<TOCLink href="#accordionpanel">AccordionPanel</TOCLink>
+		<TOCLink href="#useaccordioncontext">useAccordionContext</TOCLink>
+		<TOCLink href="#useaccordionitemcontext">useAccordionItemContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/accordion
@@ -39,10 +39,10 @@ yarn add @reach/accordion
 
 ```js
 import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
+	Accordion,
+	AccordionItem,
+	AccordionButton,
+	AccordionPanel,
 } from "@reach/accordion";
 import "@reach/accordion/styles.css";
 ```
@@ -52,31 +52,31 @@ import "@reach/accordion/styles.css";
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Accordion>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 1: Do a thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Here are some detailed instructions about doing a thing. I am very
-          complex and probably contain a lot of content, so a user can hide or
-          show me by clicking the button above.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 2: Do another thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Here are some detailed instructions about doing yet another thing.
-          There are a lot of things someone might want to do, so I am only going
-          to talk about doing that other thing. I'll let my fellow accordion
-          items go into detail about even more things.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  );
+	return (
+		<Accordion>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 1: Do a thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Here are some detailed instructions about doing a thing. I am very
+					complex and probably contain a lot of content, so a user can hide or
+					show me by clicking the button above.
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 2: Do another thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Here are some detailed instructions about doing yet another thing.
+					There are a lot of things someone might want to do, so I am only going
+					to talk about doing that other thing. I'll let my fellow accordion
+					items go into detail about even more things.
+				</AccordionPanel>
+			</AccordionItem>
+		</Accordion>
+	);
 }
 ```
 
@@ -90,12 +90,12 @@ You can abstract a solution in a variety of ways. Perhaps you write an `Accordio
 
 ```jsx
 function AccordionHeader({ headingLevel = 2, props }) {
-  let Comp = "h" + headingLevel;
-  return (
-    <Comp>
-      <AccordionButton {...props} />
-    </Comp>
-  );
+	let Comp = "h" + headingLevel;
+	return (
+		<Comp>
+			<AccordionButton {...props} />
+		</Comp>
+	);
 }
 ```
 
@@ -104,70 +104,70 @@ You can also create a context-aware heading component so that the heading level 
 ```jsx
 // jsx-demo
 (() => {
-  const HeadingContext = createContext(2);
+	const HeadingContext = createContext(2);
 
-  function MyAccordionSection(props) {
-    return (
-      <div>
-        <Heading>How to do a thing</Heading>
-        <p>
-          Below I am going to explain how you might do a thing, in two very
-          important steps.
-        </p>
-        <Accordion>
-          <ContextAwareAccordionItem>
-            <AccordionHeader>Step 1: Do a thing</AccordionHeader>
-            <AccordionPanel>
-              Here are some detailed instructions about doing a thing. I am very
-              complex and probably contain a lot of content, so a user can hide
-              or show me by clicking the button above.
-            </AccordionPanel>
-          </ContextAwareAccordionItem>
-          <AccordionItem>
-            <AccordionHeader>Step 2: Do another thing</AccordionHeader>
-            <AccordionPanel>
-              Here are some detailed instructions about doing yet another thing.
-              There are a lot of things someone might want to do, so I am only
-              going to talk about doing that other thing. I'll let my fellow
-              accordion items go into detail about even more things.
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </div>
-    );
-  }
+	function MyAccordionSection(props) {
+		return (
+			<div>
+				<Heading>How to do a thing</Heading>
+				<p>
+					Below I am going to explain how you might do a thing, in two very
+					important steps.
+				</p>
+				<Accordion>
+					<ContextAwareAccordionItem>
+						<AccordionHeader>Step 1: Do a thing</AccordionHeader>
+						<AccordionPanel>
+							Here are some detailed instructions about doing a thing. I am very
+							complex and probably contain a lot of content, so a user can hide
+							or show me by clicking the button above.
+						</AccordionPanel>
+					</ContextAwareAccordionItem>
+					<AccordionItem>
+						<AccordionHeader>Step 2: Do another thing</AccordionHeader>
+						<AccordionPanel>
+							Here are some detailed instructions about doing yet another thing.
+							There are a lot of things someone might want to do, so I am only
+							going to talk about doing that other thing. I'll let my fellow
+							accordion items go into detail about even more things.
+						</AccordionPanel>
+					</AccordionItem>
+				</Accordion>
+			</div>
+		);
+	}
 
-  function AccordionHeader(props) {
-    return (
-      <Heading>
-        <AccordionButton {...props} />
-      </Heading>
-    );
-  }
+	function AccordionHeader(props) {
+		return (
+			<Heading>
+				<AccordionButton {...props} />
+			</Heading>
+		);
+	}
 
-  function ContextAwareAccordionItem(props) {
-    return (
-      <Section>
-        <AccordionItem {...props} />
-      </Section>
-    );
-  }
+	function ContextAwareAccordionItem(props) {
+		return (
+			<Section>
+				<AccordionItem {...props} />
+			</Section>
+		);
+	}
 
-  function Heading(props) {
-    let Comp = "h" + Math.min(useContext(HeadingContext), 6);
-    return <Comp {...props} />;
-  }
+	function Heading(props) {
+		let Comp = "h" + Math.min(useContext(HeadingContext), 6);
+		return <Comp {...props} />;
+	}
 
-  function Section(props) {
-    let headingLevel = useContext(HeadingContext);
-    return (
-      <HeadingContext.Provider value={headingLevel + 1}>
-        {props.children}
-      </HeadingContext.Provider>
-    );
-  }
+	function Section(props) {
+		let headingLevel = useContext(HeadingContext);
+		return (
+			<HeadingContext.Provider value={headingLevel + 1}>
+				{props.children}
+			</HeadingContext.Provider>
+		);
+	}
 
-  return <MyAccordionSection />;
+	return <MyAccordionSection />;
 })();
 ```
 
@@ -179,18 +179,18 @@ The wrapper component for all other accordion components. Each accordion compone
 
 ```jsx
 <Accordion index={index} onChange={(value) => setIndex(value)}>
-  <AccordionItem>
-    <h3>
-      <AccordionButton>Step 1: Do a thing</AccordionButton>
-    </h3>
-    <AccordionPanel>...</AccordionPanel>
-  </AccordionItem>
-  <AccordionItem>
-    <h3>
-      <AccordionButton>Step 2: Do another thing</AccordionButton>
-    </h3>
-    <AccordionPanel>...</AccordionPanel>
-  </AccordionItem>
+	<AccordionItem>
+		<h3>
+			<AccordionButton>Step 1: Do a thing</AccordionButton>
+		</h3>
+		<AccordionPanel>...</AccordionPanel>
+	</AccordionItem>
+	<AccordionItem>
+		<h3>
+			<AccordionButton>Step 2: Do another thing</AccordionButton>
+		</h3>
+		<AccordionPanel>...</AccordionPanel>
+	</AccordionItem>
 </Accordion>
 ```
 
@@ -210,30 +210,30 @@ You can use the `collapsible` prop to dictate that an accordion should allow all
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Accordion collapsible>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 1: Do a thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
-          dui sem accumsan cras congue mi varius egestas interdum, molestie
-          blandit sociosqu sodales diam metus erat venenatis.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 2: Do another thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
-          aenean, natoque fermentum nostra tempus ornare nam diam est, neque
-          risus aliquam sapien vestibulum sociis integer eros.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  );
+	return (
+		<Accordion collapsible>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 1: Do a thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
+					dui sem accumsan cras congue mi varius egestas interdum, molestie
+					blandit sociosqu sodales diam metus erat venenatis.
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 2: Do another thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
+					aenean, natoque fermentum nostra tempus ornare nam diam est, neque
+					risus aliquam sapien vestibulum sociis integer eros.
+				</AccordionPanel>
+			</AccordionItem>
+		</Accordion>
+	);
 }
 ```
 
@@ -242,30 +242,30 @@ The `multiple` prop dictates that any number of panels may be open at the same t
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Accordion multiple>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 1: Do a thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
-          dui sem accumsan cras congue mi varius egestas interdum, molestie
-          blandit sociosqu sodales diam metus erat venenatis.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 2: Do another thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
-          aenean, natoque fermentum nostra tempus ornare nam diam est, neque
-          risus aliquam sapien vestibulum sociis integer eros.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  );
+	return (
+		<Accordion multiple>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 1: Do a thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
+					dui sem accumsan cras congue mi varius egestas interdum, molestie
+					blandit sociosqu sodales diam metus erat venenatis.
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 2: Do another thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
+					aenean, natoque fermentum nostra tempus ornare nam diam est, neque
+					risus aliquam sapien vestibulum sociis integer eros.
+				</AccordionPanel>
+			</AccordionItem>
+		</Accordion>
+	);
 }
 ```
 
@@ -274,30 +274,30 @@ Using both props together dictates that any number of panels in an accordion can
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Accordion collapsible multiple>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 1: Do a thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
-          dui sem accumsan cras congue mi varius egestas interdum, molestie
-          blandit sociosqu sodales diam metus erat venenatis.
-        </AccordionPanel>
-      </AccordionItem>
-      <AccordionItem>
-        <h3>
-          <AccordionButton>Step 2: Do another thing</AccordionButton>
-        </h3>
-        <AccordionPanel>
-          Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
-          aenean, natoque fermentum nostra tempus ornare nam diam est, neque
-          risus aliquam sapien vestibulum sociis integer eros.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  );
+	return (
+		<Accordion collapsible multiple>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 1: Do a thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Integer ad iaculis semper aenean nibh quisque hac eget volutpat, at
+					dui sem accumsan cras congue mi varius egestas interdum, molestie
+					blandit sociosqu sodales diam metus erat venenatis.
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem>
+				<h3>
+					<AccordionButton>Step 2: Do another thing</AccordionButton>
+				</h3>
+				<AccordionPanel>
+					Hendrerit faucibus litora justo aliquet inceptos gravida felis vel
+					aenean, natoque fermentum nostra tempus ornare nam diam est, neque
+					risus aliquam sapien vestibulum sociis integer eros.
+				</AccordionPanel>
+			</AccordionItem>
+		</Accordion>
+	);
 }
 ```
 
@@ -308,11 +308,11 @@ If you want to control the accordion's open panels, you can do so by passing [`i
 ```jsx
 const [index, setIndex] = React.useState(0);
 return (
-  <Accordion index={index} onChange={(value) => setIndex(value)}>
-    <AccordionItem {...items[0].props} />
-    <AccordionItem {...items[1].props} />
-    <AccordionItem {...items[2].props} />
-  </Accordion>
+	<Accordion index={index} onChange={(value) => setIndex(value)}>
+		<AccordionItem {...items[0].props} />
+		<AccordionItem {...items[1].props} />
+		<AccordionItem {...items[2].props} />
+	</Accordion>
 );
 ```
 
@@ -321,19 +321,19 @@ In a controlled accordion, multiple items can be set to `open` by passing an arr
 ```jsx
 const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
-  if (indices.includes(toggledIndex)) {
-    setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
-  } else {
-    setIndices([...indices, toggledIndex].sort());
-  }
+	if (indices.includes(toggledIndex)) {
+		setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
+	} else {
+		setIndices([...indices, toggledIndex].sort());
+	}
 }
 
 return (
-  <Accordion index={indices} onChange={toggleItem}>
-    <AccordionItem {...items[0].props} />
-    <AccordionItem {...items[1].props} />
-    <AccordionItem {...items[2].props} />
-  </Accordion>
+	<Accordion index={indices} onChange={toggleItem}>
+		<AccordionItem {...items[0].props} />
+		<AccordionItem {...items[1].props} />
+		<AccordionItem {...items[2].props} />
+	</Accordion>
 );
 ```
 
@@ -366,14 +366,14 @@ A string representing an HTML element or a React component that will tell the `A
 
 ```jsx
 <Accordion>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel />
-  </AccordionItem>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel />
-  </AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel />
+	</AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel />
+	</AccordionItem>
 </Accordion>
 ```
 
@@ -391,14 +391,14 @@ A default value for the open panel's index or indices in an uncontrolled accordi
 
 ```jsx
 <Accordion defaultIndex={1}>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel>I will be closed on the initial render!</AccordionPanel>
-  </AccordionItem>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel>I will be open on the initial render!</AccordionPanel>
-  </AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel>I will be closed on the initial render!</AccordionPanel>
+	</AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel>I will be open on the initial render!</AccordionPanel>
+	</AccordionItem>
 </Accordion>
 ```
 
@@ -410,14 +410,14 @@ You can only pass an array of indices to `defaultIndex` if you also set `multipl
 
 ```jsx
 <Accordion defaultIndex={[0, 1]} multiple>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel>I will be open on the initial render!</AccordionPanel>
-  </AccordionItem>
-  <AccordionItem>
-    <AccordionButton />
-    <AccordionPanel>I will also be open on the initial render!</AccordionPanel>
-  </AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel>I will be open on the initial render!</AccordionPanel>
+	</AccordionItem>
+	<AccordionItem>
+		<AccordionButton />
+		<AccordionPanel>I will also be open on the initial render!</AccordionPanel>
+	</AccordionItem>
 </Accordion>
 ```
 
@@ -430,19 +430,19 @@ The index or array of indices for open accordion panels. The `index` prop should
 ```jsx
 const [indices, setIndices] = React.useState([0, 2]);
 function toggleItem(toggledIndex) {
-  if (indices.includes(toggledIndex)) {
-    setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
-  } else {
-    setIndices([...indices, toggledIndex].sort());
-  }
+	if (indices.includes(toggledIndex)) {
+		setIndices(indices.filter((currentIndex) => currentIndex !== toggledIndex));
+	} else {
+		setIndices([...indices, toggledIndex].sort());
+	}
 }
 
 return (
-  <Accordion index={indices} onChange={toggleItem}>
-    <AccordionItem {...items[0].props} />
-    <AccordionItem {...items[1].props} />
-    <AccordionItem {...items[2].props} />
-  </Accordion>
+	<Accordion index={indices} onChange={toggleItem}>
+		<AccordionItem {...items[0].props} />
+		<AccordionItem {...items[1].props} />
+		<AccordionItem {...items[2].props} />
+	</Accordion>
 );
 ```
 
@@ -476,19 +476,19 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-item] {
-  /* styles for all accordion items */
+	/* styles for all accordion items */
 }
 [data-reach-accordion-item][data-state="open"] {
-  /* styles for all open accordion items */
+	/* styles for all open accordion items */
 }
 [data-reach-accordion-item][data-state="collapsed"] {
-  /* styles for all collapsed accordion items */
+	/* styles for all collapsed accordion items */
 }
 [data-reach-accordion-item][data-disabled] {
-  /* styles for all disabled accordion items */
+	/* styles for all disabled accordion items */
 }
 [data-reach-accordion-item][data-read-only] {
-  /* styles for all read-only accordion items */
+	/* styles for all read-only accordion items */
 }
 ```
 
@@ -516,18 +516,18 @@ An `AccordionItem` expects to receive an `AccordionButton` and `AccordionPanel` 
 
 ```jsx
 <Accordion defaultIndex={[0, 1]} multiple>
-  <AccordionItem>
-    <AccordionButton>Step 1: Do this important thing</AccordionButton>
-    <AccordionPanel>Detailed instructions about step 1.</AccordionPanel>
-  </AccordionItem>
-  <AccordionItem>
-    <AccordionButton>Step 2: Do this other important thing</AccordionButton>
-    <AccordionPanel>Detailed instructions about step 1.</AccordionPanel>
-    {/* the following component will not collapse! */}
-    <SomeCalloutBox>
-      Important: you should always consult the user manual before doing step 2!
-    </SomeCalloutBox>
-  </AccordionItem>
+	<AccordionItem>
+		<AccordionButton>Step 1: Do this important thing</AccordionButton>
+		<AccordionPanel>Detailed instructions about step 1.</AccordionPanel>
+	</AccordionItem>
+	<AccordionItem>
+		<AccordionButton>Step 2: Do this other important thing</AccordionButton>
+		<AccordionPanel>Detailed instructions about step 1.</AccordionPanel>
+		{/* the following component will not collapse! */}
+		<SomeCalloutBox>
+			Important: you should always consult the user manual before doing step 2!
+		</SomeCalloutBox>
+	</AccordionItem>
 </Accordion>
 ```
 
@@ -547,13 +547,13 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-button] {
-  /* styles for buttons in all accordion items */
+	/* styles for buttons in all accordion items */
 }
 [data-reach-accordion-button][aria-expanded] {
-  /* styles for buttons in open accordion items */
+	/* styles for buttons in open accordion items */
 }
 [data-reach-accordion-button][disabled] {
-  /* styles for all buttons in disabled accordion items */
+	/* styles for all buttons in disabled accordion items */
 }
 ```
 
@@ -583,94 +583,94 @@ If you need to group interactive elements within an accordion's button, we recom
 ```jsx
 // jsx-demo
 (() => {
-  function Example() {
-    return (
-      <Accordion>
-        <AccordionItem>
-          <GroupedAccordionHeader>Option 1</GroupedAccordionHeader>
-          <StyledAccordionPanel>
-            Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
-            consectetur pretium, lacus nunc consequat id viverra facilisi ligula
-            eleifend, congue gravida malesuada proin scelerisque luctus est
-            convallis.
-          </StyledAccordionPanel>
-        </AccordionItem>
-        <AccordionItem>
-          <GroupedAccordionHeader>Option 2</GroupedAccordionHeader>
-          <StyledAccordionPanel>
-            Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
-            consectetur pretium, lacus nunc consequat id viverra facilisi ligula
-            eleifend, congue gravida malesuada proin scelerisque luctus est
-            convallis.
-          </StyledAccordionPanel>
-        </AccordionItem>
-        <AccordionItem>
-          <GroupedAccordionHeader>Option 3</GroupedAccordionHeader>
-          <StyledAccordionPanel>
-            Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
-            consectetur pretium, lacus nunc consequat id viverra facilisi ligula
-            eleifend, congue gravida malesuada proin scelerisque luctus est
-            convallis.
-          </StyledAccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    );
-  }
+	function Example() {
+		return (
+			<Accordion>
+				<AccordionItem>
+					<GroupedAccordionHeader>Option 1</GroupedAccordionHeader>
+					<StyledAccordionPanel>
+						Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
+						consectetur pretium, lacus nunc consequat id viverra facilisi ligula
+						eleifend, congue gravida malesuada proin scelerisque luctus est
+						convallis.
+					</StyledAccordionPanel>
+				</AccordionItem>
+				<AccordionItem>
+					<GroupedAccordionHeader>Option 2</GroupedAccordionHeader>
+					<StyledAccordionPanel>
+						Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
+						consectetur pretium, lacus nunc consequat id viverra facilisi ligula
+						eleifend, congue gravida malesuada proin scelerisque luctus est
+						convallis.
+					</StyledAccordionPanel>
+				</AccordionItem>
+				<AccordionItem>
+					<GroupedAccordionHeader>Option 3</GroupedAccordionHeader>
+					<StyledAccordionPanel>
+						Ante rhoncus facilisis iaculis nostra faucibus vehicula ac
+						consectetur pretium, lacus nunc consequat id viverra facilisi ligula
+						eleifend, congue gravida malesuada proin scelerisque luctus est
+						convallis.
+					</StyledAccordionPanel>
+				</AccordionItem>
+			</Accordion>
+		);
+	}
 
-  function StyledAccordionPanel(props) {
-    return <AccordionPanel style={{ padding: 10 }} {...props} />;
-  }
+	function StyledAccordionPanel(props) {
+		return <AccordionPanel style={{ padding: 10 }} {...props} />;
+	}
 
-  function GroupedAccordionHeader({ children }) {
-    return (
-      <div
-        style={{
-          alignItems: "center",
-          background: "#eee",
-          border: "1px solid #888",
-          borderRadius: 3,
-          margin: "9px 0",
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "4px 10px",
-        }}
-      >
-        <AccordionButton
-          style={{
-            appearance: "none",
-            background: 0,
-            border: 0,
-            boxShadow: "none",
-            color: "inherit",
-            display: "block",
-            textAlign: "inherit",
-            flexGrow: 1,
-            flexShrink: 0,
-            font: "inherit",
-            fontWeight: "bolder",
-            margin: 0,
-            padding: "10px 0",
-          }}
-        >
-          {children}
-        </AccordionButton>
-        <Menu>
-          <MenuButton style={{ margin: 0 }}>
-            <span>Actions</span>
-          </MenuButton>
-          <MenuList>
-            <MenuItem onSelect={() => console.log("Download")}>
-              Download
-            </MenuItem>
-            <MenuItem onSelect={() => console.log("Copy")}>
-              Create a Copy
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </div>
-    );
-  }
-  return <Example />;
+	function GroupedAccordionHeader({ children }) {
+		return (
+			<div
+				style={{
+					alignItems: "center",
+					background: "#eee",
+					border: "1px solid #888",
+					borderRadius: 3,
+					margin: "9px 0",
+					display: "flex",
+					justifyContent: "space-between",
+					padding: "4px 10px",
+				}}
+			>
+				<AccordionButton
+					style={{
+						appearance: "none",
+						background: 0,
+						border: 0,
+						boxShadow: "none",
+						color: "inherit",
+						display: "block",
+						textAlign: "inherit",
+						flexGrow: 1,
+						flexShrink: 0,
+						font: "inherit",
+						fontWeight: "bolder",
+						margin: 0,
+						padding: "10px 0",
+					}}
+				>
+					{children}
+				</AccordionButton>
+				<Menu>
+					<MenuButton style={{ margin: 0 }}>
+						<span>Actions</span>
+					</MenuButton>
+					<MenuList>
+						<MenuItem onSelect={() => console.log("Download")}>
+							Download
+						</MenuItem>
+						<MenuItem onSelect={() => console.log("Copy")}>
+							Create a Copy
+						</MenuItem>
+					</MenuList>
+				</Menu>
+			</div>
+		);
+	}
+	return <Example />;
 })();
 ```
 
@@ -686,16 +686,16 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-accordion-panel] {
-  /* styles for all accordion panels */
+	/* styles for all accordion panels */
 }
 [data-reach-accordion-panel][data-state="open"] {
-  /* styles for all open accordion panels */
+	/* styles for all open accordion panels */
 }
 [data-reach-accordion-panel][data-state="collapsed"] {
-  /* styles for all collapsed accordion panels */
+	/* styles for all collapsed accordion panels */
 }
 [data-reach-accordion-panel][data-disabled] {
-  /* styles for all disabled accordion panels */
+	/* styles for all disabled accordion panels */
 }
 ```
 

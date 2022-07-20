@@ -1,53 +1,53 @@
 {
-  "name": "reach-ui-template",
-  "version": "1.0.0",
-  "description": "Use this template to explore or recreate bugs for Reach UI",
-  "keywords": [
-    "reach ui",
-    "react",
-    "accessibility"
-  ],
-  "main": "src/index.js",
-  "dependencies": {
-    "@reach/accordion": "latest",
-    "@reach/alert": "latest",
-    "@reach/alert-dialog": "latest",
-    "@reach/auto-id": "latest",
-    "@reach/checkbox": "latest",
-    "@reach/combobox": "latest",
-    "@reach/descendants": "latest",
-    "@reach/dialog": "latest",
-    "@reach/disclosure": "latest",
-    "@reach/menu-button": "latest",
-    "@reach/popover": "latest",
-    "@reach/portal": "latest",
-    "@reach/rect": "latest",
-    "@reach/skip-nav": "latest",
-    "@reach/slider": "latest",
-    "@reach/tabs": "latest",
-    "@reach/tooltip": "latest",
-    "@reach/utils": "latest",
-    "@reach/visually-hidden": "latest",
-    "@reach/window-size": "latest",
-    "@types/react": "^17.0.47",
-    "@types/react-dom": "^17.0.17",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3"
-  },
-  "devDependencies": {
-    "typescript": "4.3.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+	"name": "reach-ui-template",
+	"version": "1.0.0",
+	"description": "Use this template to explore or recreate bugs for Reach UI",
+	"keywords": [
+		"reach ui",
+		"react",
+		"accessibility"
+	],
+	"main": "src/index.js",
+	"dependencies": {
+		"@reach/accordion": "latest",
+		"@reach/alert": "latest",
+		"@reach/alert-dialog": "latest",
+		"@reach/auto-id": "latest",
+		"@reach/checkbox": "latest",
+		"@reach/combobox": "latest",
+		"@reach/descendants": "latest",
+		"@reach/dialog": "latest",
+		"@reach/disclosure": "latest",
+		"@reach/menu-button": "latest",
+		"@reach/popover": "latest",
+		"@reach/portal": "latest",
+		"@reach/rect": "latest",
+		"@reach/skip-nav": "latest",
+		"@reach/slider": "latest",
+		"@reach/tabs": "latest",
+		"@reach/tooltip": "latest",
+		"@reach/utils": "latest",
+		"@reach/visually-hidden": "latest",
+		"@reach/window-size": "latest",
+		"@types/react": "^17.0.47",
+		"@types/react-dom": "^17.0.17",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"react-scripts": "4.0.3"
+	},
+	"devDependencies": {
+		"typescript": "4.3.4"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test --env=jsdom",
+		"eject": "react-scripts eject"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	]
 }

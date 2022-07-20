@@ -1,8 +1,8 @@
 import SEO from "../components/SEO";
 
 <SEO
-  title="Styling"
-  description="Guidelines for styling components in Reach UI"
+	title="Styling"
+	description="Guidelines for styling components in Reach UI"
 />
 
 # Styling
@@ -30,7 +30,7 @@ Here's an example:
 
 ```css
 :root {
-  --reach-dialog: 1;
+	--reach-dialog: 1;
 }
 ```
 
@@ -38,8 +38,8 @@ If you still see the warning when running tests in Jest, you can skip them by mo
 
 ```js
 jest.mock("@reach/utils", () => ({
-  ...jest.requireActual("@reach/utils"),
-  checkStyles: jest.fn()
+	...jest.requireActual("@reach/utils"),
+	checkStyles: jest.fn(),
 }));
 ```
 
@@ -69,9 +69,9 @@ Include those files however you include the rest of your stylesheets. Alternativ
 
 ```html
 <link
-  rel="stylesheet"
-  type="text/css"
-  href="https://unpkg.com/@reach/<package-name>@<version>/styles.css"
+	rel="stylesheet"
+	type="text/css"
+	href="https://unpkg.com/@reach/<package-name>@<version>/styles.css"
 />
 ```
 
@@ -113,7 +113,7 @@ Each component has a `data-reach-*` attribute on the underlying DOM element that
 
 ```css
 [data-reach-menu-item] {
-  color: blue;
+	color: blue;
 }
 ```
 
@@ -123,6 +123,6 @@ There are certain states an element can go into like "selected". To target these
 
 ```css
 [data-reach-menu-item][data-selected] {
-  background: red;
+	background: red;
 }
 ```

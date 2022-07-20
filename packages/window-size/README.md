@@ -10,14 +10,14 @@ Measure the current window dimensions.
 import WindowSize, { useWindowSize } from "@reach/window-size";
 
 function Example() {
-  const { width, height } = useWindowSize();
-  return (
-    <div>
-      <p>
-        Looks like a pretty{" "}
-        {width <= 400 ? "small" : width >= 1000 ? "large" : "normal"} screen!
-      </p>
-    </div>
-  );
+	const { width, height } = useWindowSize();
+	return (
+		<div>
+			<p>
+				Looks like a pretty{" "}
+				{width <= 400 ? "small" : width >= 1000 ? "large" : "normal"} screen!
+			</p>
+		</div>
+	);
 }
 ```

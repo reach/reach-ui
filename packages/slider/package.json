@@ -1,46 +1,46 @@
 {
-  "name": "@reach/slider",
-  "version": "0.17.0",
-  "description": "Accessible React Slider Component",
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "sideEffects": [
-    "*.css"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reach/reach-ui.git",
-    "directory": "packages/slider"
-  },
-  "scripts": {
-    "build": "tsup"
-  },
-  "dependencies": {
-    "@reach/auto-id": "workspace:*",
-    "@reach/utils": "workspace:*"
-  },
-  "devDependencies": {
-    "@reach-internal/dev": "workspace:*",
-    "@reach-internal/test": "workspace:*",
-    "@reach-internal/tsconfig": "workspace:*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "tsup": "^6.1.3"
-  },
-  "peerDependencies": {
-    "react": "^16.9.0 || 17.x",
-    "react-dom": "^16.9.0 || 17.x"
-  },
-  "main": "./src/slider.tsx",
-  "types": "./src/slider.tsx",
-  "files": [
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md",
-    "dist",
-    "styles.css"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@reach/slider",
+	"version": "0.17.0",
+	"description": "Accessible React Slider Component",
+	"author": "React Training <hello@reacttraining.com>",
+	"license": "MIT",
+	"sideEffects": [
+		"*.css"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reach/reach-ui.git",
+		"directory": "packages/slider"
+	},
+	"scripts": {
+		"build": "tsup"
+	},
+	"dependencies": {
+		"@reach/auto-id": "workspace:*",
+		"@reach/utils": "workspace:*"
+	},
+	"devDependencies": {
+		"@reach-internal/dev": "workspace:*",
+		"@reach-internal/test": "workspace:*",
+		"@reach-internal/tsconfig": "workspace:*",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"tsup": "^6.1.3"
+	},
+	"peerDependencies": {
+		"react": "^16.9.0 || 17.x",
+		"react-dom": "^16.9.0 || 17.x"
+	},
+	"main": "./src/slider.tsx",
+	"types": "./src/slider.tsx",
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"dist",
+		"styles.css"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }

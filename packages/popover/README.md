@@ -7,27 +7,27 @@ import * as React from "react";
 import { Popover, positionDefault } from "@reach/popover";
 
 function Example() {
-  const ref = React.useRef(null);
-  const [value, setValue] = React.useState("");
-  return (
-    <div>
-      <label>
-        <span>Type for a special message</span>
-        <input
-          type="text"
-          ref={ref}
-          onChange={(event) => setValue(event.target.value)}
-        />
-      </label>
+	const ref = React.useRef(null);
+	const [value, setValue] = React.useState("");
+	return (
+		<div>
+			<label>
+				<span>Type for a special message</span>
+				<input
+					type="text"
+					ref={ref}
+					onChange={(event) => setValue(event.target.value)}
+				/>
+			</label>
 
-      {value.length > 0 && (
-        <Popover targetRef={ref} position={positionDefault}>
-          <div>
-            <p>Whoa! Look at me!</p>
-          </div>
-        </Popover>
-      )}
-    </div>
-  );
+			{value.length > 0 && (
+				<Popover targetRef={ref} position={positionDefault}>
+					<div>
+						<p>Whoa! Look at me!</p>
+					</div>
+				</Popover>
+			)}
+		</div>
+	);
 }
 ```

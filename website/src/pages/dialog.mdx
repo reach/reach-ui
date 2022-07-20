@@ -2,20 +2,20 @@ import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
-  title="Dialog (Modal)"
-  description="An accessible modal dialog component for React"
+	title="Dialog (Modal)"
+	description="An accessible modal dialog component for React"
 />
 
 # Dialog (Modal)
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#dialog">Dialog</TOCLink>
-    <TOCLink href="#dialogoverlay">DialogOverlay</TOCLink>
-    <TOCLink href="#dialogwrapper">DialogWrapper</TOCLink>
-    <TOCLink href="#dialoginner">DialogInner</TOCLink>
-    <TOCLink href="#dialogcontent">DialogContent</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#dialog">Dialog</TOCLink>
+		<TOCLink href="#dialogoverlay">DialogOverlay</TOCLink>
+		<TOCLink href="#dialogwrapper">DialogWrapper</TOCLink>
+		<TOCLink href="#dialoginner">DialogInner</TOCLink>
+		<TOCLink href="#dialogcontent">DialogContent</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/dialog
@@ -26,23 +26,23 @@ An accessible dialog or "modal" window.
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Open Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Open Dialog</button>
 
-      <Dialog isOpen={showDialog} onDismiss={close}>
-        <button className="close-button" onClick={close}>
-          <VisuallyHidden>Close</VisuallyHidden>
-          <span aria-hidden>×</span>
-        </button>
-        <p>Hello there. I am a dialog</p>
-      </Dialog>
-    </div>
-  );
+			<Dialog isOpen={showDialog} onDismiss={close}>
+				<button className="close-button" onClick={close}>
+					<VisuallyHidden>Close</VisuallyHidden>
+					<span aria-hidden>×</span>
+				</button>
+				<p>Hello there. I am a dialog</p>
+			</Dialog>
+		</div>
+	);
 }
 ```
 
@@ -69,7 +69,7 @@ High-level component to render a modal dialog window over the top of the page (o
 
 ```jsx
 <Dialog>
-  <p>Some Content</p>
+	<p>Some Content</p>
 </Dialog>
 ```
 
@@ -91,20 +91,20 @@ Any props not listed above will be spread onto the underlying `DialogContent` el
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
 
-      <Dialog style={{ color: "red" }} isOpen={showDialog} onDismiss={close}>
-        <p>My text is red because the style prop got applied to the div</p>
-        <button onClick={close}>Okay</button>
-      </Dialog>
-    </div>
-  );
+			<Dialog style={{ color: "red" }} isOpen={showDialog} onDismiss={close}>
+				<p>My text is red because the style prop got applied to the div</p>
+				<button onClick={close}>Okay</button>
+			</Dialog>
+		</div>
+	);
 }
 ```
 
@@ -116,10 +116,10 @@ Handle zoom/pinch gestures on iOS devices when scroll locking is enabled. Defaul
 
 ```jsx
 <Dialog allowPinchZoom={true}>
-  <p>
-    I will allow zoom and pinch gestures on iOS devices even when scrolling is
-    locked!
-  </p>
+	<p>
+		I will allow zoom and pinch gestures on iOS devices even when scrolling is
+		locked!
+	</p>
 </Dialog>
 ```
 
@@ -131,7 +131,7 @@ Accepts any renderable content.
 
 ```jsx
 <Dialog>
-  <p>Anything you want, you got it.</p>
+	<p>Anything you want, you got it.</p>
 </Dialog>
 ```
 
@@ -144,23 +144,23 @@ By default the first focusable element will receive focus when the dialog opens 
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const buttonRef = React.useRef();
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const buttonRef = React.useRef();
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
-      <Dialog isOpen={showDialog} initialFocusRef={buttonRef} onDismiss={close}>
-        <p>Pass the button ref to Dialog and the button.</p>
-        <button onClick={close}>Not me</button>
-        <button ref={buttonRef} onClick={close}>
-          Got me!
-        </button>
-      </Dialog>
-    </div>
-  );
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
+			<Dialog isOpen={showDialog} initialFocusRef={buttonRef} onDismiss={close}>
+				<p>Pass the button ref to Dialog and the button.</p>
+				<button onClick={close}>Not me</button>
+				<button ref={buttonRef} onClick={close}>
+					Got me!
+				</button>
+			</Dialog>
+		</div>
+	);
 }
 ```
 
@@ -187,25 +187,25 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
 
-      {showDialog && (
-        <Dialog onDismiss={close}>
-          <p>
-            I don’t use <code>isOpen</code>, I just render when I should and not
-            when I shouldn’t.
-          </p>
-          <button onClick={close}>Okay</button>
-        </Dialog>
-      )}
-    </div>
-  );
+			{showDialog && (
+				<Dialog onDismiss={close}>
+					<p>
+						I don’t use <code>isOpen</code>, I just render when I should and not
+						when I shouldn’t.
+					</p>
+					<button onClick={close}>Okay</button>
+				</Dialog>
+			)}
+		</div>
+	);
 }
 ```
 
@@ -220,52 +220,52 @@ The only time you shouldn't close the dialog on dismiss is when the dialog requi
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
 
-      <Dialog isOpen={showDialog} onDismiss={close}>
-        <p>
-          It is your job to close this with state when the user clicks outside
-          or presses escape.
-        </p>
-        <button onClick={close}>Okay</button>
-      </Dialog>
-    </div>
-  );
+			<Dialog isOpen={showDialog} onDismiss={close}>
+				<p>
+					It is your job to close this with state when the user clicks outside
+					or presses escape.
+				</p>
+				<button onClick={close}>Okay</button>
+			</Dialog>
+		</div>
+	);
 }
 ```
 
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const [showWarning, setShowWarning] = React.useState(false);
-  const open = () => {
-    setShowDialog(true);
-    setShowWarning(false);
-  };
-  const close = () => setShowDialog(false);
-  const dismiss = () => setShowWarning(true);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const [showWarning, setShowWarning] = React.useState(false);
+	const open = () => {
+		setShowDialog(true);
+		setShowWarning(false);
+	};
+	const close = () => setShowDialog(false);
+	const dismiss = () => setShowWarning(true);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
 
-      <Dialog isOpen={showDialog} onDismiss={dismiss}>
-        {showWarning && (
-          <p style={{ color: "red" }}>You must make a choice, sorry :(</p>
-        )}
-        <p>Which router should survive the merge?</p>
-        <button onClick={close}>React Router</button>{" "}
-        <button onClick={close}>@reach/router</button>
-      </Dialog>
-    </div>
-  );
+			<Dialog isOpen={showDialog} onDismiss={dismiss}>
+				{showWarning && (
+					<p style={{ color: "red" }}>You must make a choice, sorry :(</p>
+				)}
+				<p>Which router should survive the merge?</p>
+				<button onClick={close}>React Router</button>{" "}
+				<button onClick={close}>@reach/router</button>
+			</Dialog>
+		</div>
+	);
 }
 ```
 
@@ -278,30 +278,30 @@ Note: You must render a `DialogContent` inside.
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
-      <DialogOverlay
-        style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
-        isOpen={showDialog}
-        onDismiss={close}
-      >
-        <DialogContent
-          style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
-        >
-          <p>
-            The overlay styles are a white fade instead of the default black
-            fade.
-          </p>
-          <button onClick={close}>Very nice.</button>
-        </DialogContent>
-      </DialogOverlay>
-    </div>
-  );
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
+			<DialogOverlay
+				style={{ background: "hsla(0, 100%, 100%, 0.9)" }}
+				isOpen={showDialog}
+				onDismiss={close}
+			>
+				<DialogContent
+					style={{ boxShadow: "0px 10px 50px hsla(0, 0%, 0%, 0.33)" }}
+				>
+					<p>
+						The overlay styles are a white fade instead of the default black
+						fade.
+					</p>
+					<button onClick={close}>Very nice.</button>
+				</DialogContent>
+			</DialogOverlay>
+		</div>
+	);
 }
 ```
 
@@ -335,7 +335,7 @@ Any props not listed above will be spread onto the underlying `div`.
 
 ```jsx
 <DialogOverlay className="light-modal">
-  <p>The underlying element will receive a class</p>
+	<p>The underlying element will receive a class</p>
 </DialogOverlay>
 ```
 
@@ -351,7 +351,7 @@ Should be a `DialogContent` component.
 
 ```jsx
 <DialogOverlay>
-  <DialogContent>Hey!</DialogContent>
+	<DialogContent>Hey!</DialogContent>
 </DialogOverlay>
 ```
 
@@ -367,25 +367,25 @@ If you do set this prop to `true`, make sure you set up your own `FocusLock` com
 
 ```jsx
 function DialogWithCustomFocusLock() {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
-      <DialogOverlay
-        isOpen={showDialog}
-        onDismiss={close}
-        dangerouslyBypassFocusLock
-      >
-        <MyCustomFocusLock>
-          <DialogContent aria-label="Announcement">
-            This is an important announcement!
-          </DialogContent>
-        </MyCustomFocusLock>
-      </DialogOverlay>
-    </div>
-  );
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
+			<DialogOverlay
+				isOpen={showDialog}
+				onDismiss={close}
+				dangerouslyBypassFocusLock
+			>
+				<MyCustomFocusLock>
+					<DialogContent aria-label="Announcement">
+						This is an important announcement!
+					</DialogContent>
+				</MyCustomFocusLock>
+			</DialogOverlay>
+		</div>
+	);
 }
 ```
 
@@ -399,25 +399,25 @@ This prop will disable `react-remove-scroll` and allow you to compose your own s
 
 ```jsx
 function DialogWithCustomScrollLock() {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
-      <DialogOverlay
-        isOpen={showDialog}
-        onDismiss={close}
-        dangerouslyBypassScrollLock
-      >
-        <MyCustomScrollLock>
-          <DialogContent aria-label="Announcement">
-            This is an important announcement!
-          </DialogContent>
-        </MyCustomScrollLock>
-      </DialogOverlay>
-    </div>
-  );
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
+			<DialogOverlay
+				isOpen={showDialog}
+				onDismiss={close}
+				dangerouslyBypassScrollLock
+			>
+				<MyCustomScrollLock>
+					<DialogContent aria-label="Announcement">
+						This is an important announcement!
+					</DialogContent>
+				</MyCustomScrollLock>
+			</DialogOverlay>
+		</div>
+	);
 }
 ```
 
@@ -442,35 +442,35 @@ Note: You must render a `DialogInner` inside.
 ```jsx
 // jsx-demo
 function Example() {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
-      <DialogWrapper isOpen={showDialog} containerRef={portalContainerRef}>
-        <DialogInner
-          aria-label="Announcement"
-          onDismiss={close}
-          allowPinchZoom
-          style={{
-            background: "hsla(0, 0%, 0%, 0.33)",
-            position: "fixed",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            overflow: "auto",
-          }}
-        >
-          <DialogContent>
-            <p>This is an important announcement!</p>
-            <button onClick={close}>Close Dialog</button>
-          </DialogContent>
-        </DialogInner>
-      </DialogWrapper>
-    </div>
-  );
+	const [showDialog, setShowDialog] = React.useState(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
+			<DialogWrapper isOpen={showDialog} containerRef={portalContainerRef}>
+				<DialogInner
+					aria-label="Announcement"
+					onDismiss={close}
+					allowPinchZoom
+					style={{
+						background: "hsla(0, 0%, 0%, 0.33)",
+						position: "fixed",
+						top: 0,
+						right: 0,
+						bottom: 0,
+						left: 0,
+						overflow: "auto",
+					}}
+				>
+					<DialogContent>
+						<p>This is an important announcement!</p>
+						<button onClick={close}>Close Dialog</button>
+					</DialogContent>
+				</DialogInner>
+			</DialogWrapper>
+		</div>
+	);
 }
 ```
 
@@ -487,11 +487,11 @@ Any props not listed above will be spread onto the underlying [`<Portal />`](./p
 
 ```jsx
 <DialogWrapper containerRef={domRef}>
-  <DialogInner>
-    <DialogContent>
-      <p>The underlying portal will render into another DOM element</p>
-    </DialogContent>
-  </DialogInner>
+	<DialogInner>
+		<DialogContent>
+			<p>The underlying portal will render into another DOM element</p>
+		</DialogContent>
+	</DialogInner>
 </DialogWrapper>
 ```
 
@@ -522,32 +522,32 @@ Note: You only need to use this when you are also styling `DialogOverlay`, other
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const buttonRef = React.useRef();
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const buttonRef = React.useRef();
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Show Dialog</button>
+	return (
+		<div>
+			<button onClick={open}>Show Dialog</button>
 
-      <DialogOverlay isOpen={showDialog} onDismiss={close}>
-        <DialogContent
-          style={{
-            border: "solid 5px hsla(0, 0%, 0%, 0.5)",
-            borderRadius: "10px",
-          }}
-        >
-          <p>I have a nice border now.</p>
-          <p>
-            Note that we could have used the simpler <code>Dialog</code>{" "}
-            instead.
-          </p>
-          <button onClick={close}>Got it.</button>
-        </DialogContent>
-      </DialogOverlay>
-    </div>
-  );
+			<DialogOverlay isOpen={showDialog} onDismiss={close}>
+				<DialogContent
+					style={{
+						border: "solid 5px hsla(0, 0%, 0%, 0.5)",
+						borderRadius: "10px",
+					}}
+				>
+					<p>I have a nice border now.</p>
+					<p>
+						Note that we could have used the simpler <code>Dialog</code>{" "}
+						instead.
+					</p>
+					<button onClick={close}>Got it.</button>
+				</DialogContent>
+			</DialogOverlay>
+		</div>
+	);
 }
 ```
 
@@ -575,7 +575,7 @@ Any props not listed above will be spread onto the underlying `div`.
 
 ```jsx
 <DialogContent className="nice-border">
-  <p>The underlying element will receive a class</p>
+	<p>The underlying element will receive a class</p>
 </DialogContent>
 ```
 
@@ -587,7 +587,7 @@ Accepts any renderable content.
 
 ```jsx
 <DialogContent>
-  <p>Anything you want, you got it.</p>
+	<p>Anything you want, you got it.</p>
 </DialogContent>
 ```
 
@@ -598,50 +598,50 @@ If you'd like to animate the content, give [React Spring](https://github.com/drc
 ```jsx
 // jsx-demo
 (() => {
-  const AnimatedDialogOverlay = animated(DialogOverlay);
-  const AnimatedDialogContent = animated(DialogContent);
+	const AnimatedDialogOverlay = animated(DialogOverlay);
+	const AnimatedDialogContent = animated(DialogContent);
 
-  function Example(props) {
-    const [showDialog, setShowDialog] = React.useState(false);
-    const transitions = useTransition(showDialog, {
-      from: { opacity: 0, y: -10 },
-      enter: { opacity: 1, y: 0 },
-      leave: { opacity: 0, y: 10 },
-    });
-    return (
-      <div>
-        <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-        {transitions(
-          (styles, item) =>
-            item && (
-              <AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
-                <AnimatedDialogContent
-                  aria-labelledby="dialog-title"
-                  style={{
-                    transform: styles.y.to(
-                      (value) => `translate3d(0px, ${value}px, 0px)`
-                    ),
-                    border: "4px solid hsla(0, 0%, 0%, 0.5)",
-                    borderRadius: 10,
-                  }}
-                >
-                  <button onClick={() => setShowDialog(false)}>
-                    Close Dialog
-                  </button>
-                  <h2 id="dialog-title">Animated Dialog</h2>
-                  <p>React Spring makes it too easy!</p>
-                  <input type="text" />
-                  <br />
-                  <input type="text" />
-                  <button>Ayyyyyy</button>
-                </AnimatedDialogContent>
-              </AnimatedDialogOverlay>
-            )
-        )}
-      </div>
-    );
-  }
-  return <Example />;
+	function Example(props) {
+		const [showDialog, setShowDialog] = React.useState(false);
+		const transitions = useTransition(showDialog, {
+			from: { opacity: 0, y: -10 },
+			enter: { opacity: 1, y: 0 },
+			leave: { opacity: 0, y: 10 },
+		});
+		return (
+			<div>
+				<button onClick={() => setShowDialog(true)}>Show Dialog</button>
+				{transitions(
+					(styles, item) =>
+						item && (
+							<AnimatedDialogOverlay style={{ opacity: styles.opacity }}>
+								<AnimatedDialogContent
+									aria-labelledby="dialog-title"
+									style={{
+										transform: styles.y.to(
+											(value) => `translate3d(0px, ${value}px, 0px)`
+										),
+										border: "4px solid hsla(0, 0%, 0%, 0.5)",
+										borderRadius: 10,
+									}}
+								>
+									<button onClick={() => setShowDialog(false)}>
+										Close Dialog
+									</button>
+									<h2 id="dialog-title">Animated Dialog</h2>
+									<p>React Spring makes it too easy!</p>
+									<input type="text" />
+									<br />
+									<input type="text" />
+									<button>Ayyyyyy</button>
+								</AnimatedDialogContent>
+							</AnimatedDialogOverlay>
+						)
+				)}
+			</div>
+		);
+	}
+	return <Example />;
 })();
 ```
 
@@ -663,12 +663,12 @@ Alternatively, a design may not include a visible label on the screen, but this 
 
 ```jsx
 function Example(props) {
-  return (
-    <Dialog aria-label="Warning about next steps">
-      <p>This might take a while! Are you sure?</p>
-      <button>Go Forward</button> <button>Go Back</button>
-    </Dialog>
-  );
+	return (
+		<Dialog aria-label="Warning about next steps">
+			<p>This might take a while! Are you sure?</p>
+			<button>Go Forward</button> <button>Go Back</button>
+		</Dialog>
+	);
 }
 ```
 
@@ -676,14 +676,14 @@ function Example(props) {
 
 ```jsx
 function Example(props) {
-  const labelId = `label--${useId(props.id)}`;
-  return (
-    <Dialog aria-labelledby={labelId}>
-      <h1 id={labelId}>Next Steps</h1>
-      <p>Follow these steps carefully!</p>
-      <button>Go Forward</button> <button>Go Back</button>
-    </Dialog>
-  );
+	const labelId = `label--${useId(props.id)}`;
+	return (
+		<Dialog aria-labelledby={labelId}>
+			<h1 id={labelId}>Next Steps</h1>
+			<p>Follow these steps carefully!</p>
+			<button>Go Forward</button> <button>Go Back</button>
+		</Dialog>
+	);
 }
 ```
 

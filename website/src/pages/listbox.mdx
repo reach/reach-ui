@@ -4,25 +4,25 @@ import { PropTable } from "../components/PropTable";
 import { listboxDefs } from "../componentDefs";
 
 <SEO
-  title="Listbox"
-  description="Accessible listbox dropdown component for React"
+	title="Listbox"
+	description="Accessible listbox dropdown component for React"
 />
 
 # Listbox
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#listbox-1">Listbox</TOCLink>
-    <TOCLink href="#listboxinput">ListboxInput</TOCLink>
-    <TOCLink href="#listboxbutton">ListboxButton</TOCLink>
-    <TOCLink href="#listboxarrow">ListboxArrow</TOCLink>
-    <TOCLink href="#listboxpopover">ListboxPopover</TOCLink>
-    <TOCLink href="#listboxlist">ListboxList</TOCLink>
-    <TOCLink href="#listboxoption">ListboxOption</TOCLink>
-    <TOCLink href="#listboxgroup">ListboxGroup</TOCLink>
-    <TOCLink href="#listboxgrouplabel">ListboxGroupLabel</TOCLink>
-    <TOCLink href="#uselistboxcontext">useListboxContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#listbox-1">Listbox</TOCLink>
+		<TOCLink href="#listboxinput">ListboxInput</TOCLink>
+		<TOCLink href="#listboxbutton">ListboxButton</TOCLink>
+		<TOCLink href="#listboxarrow">ListboxArrow</TOCLink>
+		<TOCLink href="#listboxpopover">ListboxPopover</TOCLink>
+		<TOCLink href="#listboxlist">ListboxList</TOCLink>
+		<TOCLink href="#listboxoption">ListboxOption</TOCLink>
+		<TOCLink href="#listboxgroup">ListboxGroup</TOCLink>
+		<TOCLink href="#listboxgrouplabel">ListboxGroupLabel</TOCLink>
+		<TOCLink href="#uselistboxcontext">useListboxContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/listbox
@@ -33,49 +33,49 @@ A listbox presents a list of selectable options in a popover, which is toggled o
 ```jsx
 // jsx-demo
 (() => {
-  function BasicExample() {
-    let labelId = `taco-label--${useId()}`;
-    return (
-      <div>
-        <VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
-        <Listbox aria-labelledby={labelId}>
-          <ListboxOption value="default">Choose a taco</ListboxOption>
-          <ListboxOption value="asada">Carne Asada</ListboxOption>
-          <ListboxOption value="pollo" label="Pollo" disabled>
-            Pollo <Tag>Sold Out!</Tag>
-          </ListboxOption>
-          <div style={{ background: "#ccc" }}>
-            <ListboxOption value="pastor" label="Pastor">
-              Pastor <Tag>Fan favorite!</Tag>
-            </ListboxOption>
-          </div>
-          <ListboxOption value="lengua">Lengua</ListboxOption>
-        </Listbox>
-      </div>
-    );
-  }
+	function BasicExample() {
+		let labelId = `taco-label--${useId()}`;
+		return (
+			<div>
+				<VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
+				<Listbox aria-labelledby={labelId}>
+					<ListboxOption value="default">Choose a taco</ListboxOption>
+					<ListboxOption value="asada">Carne Asada</ListboxOption>
+					<ListboxOption value="pollo" label="Pollo" disabled>
+						Pollo <Tag>Sold Out!</Tag>
+					</ListboxOption>
+					<div style={{ background: "#ccc" }}>
+						<ListboxOption value="pastor" label="Pastor">
+							Pastor <Tag>Fan favorite!</Tag>
+						</ListboxOption>
+					</div>
+					<ListboxOption value="lengua">Lengua</ListboxOption>
+				</Listbox>
+			</div>
+		);
+	}
 
-  function Tag(props) {
-    return (
-      <span
-        style={{
-          display: "inline-block",
-          lineHeight: 1,
-          fontSize: 11,
-          textTransform: "uppercase",
-          fontWeight: "bolder",
-          marginLeft: 6,
-          padding: 4,
-          background: "crimson",
-          borderRadius: 2,
-          color: "#fff",
-        }}
-        {...props}
-      />
-    );
-  }
+	function Tag(props) {
+		return (
+			<span
+				style={{
+					display: "inline-block",
+					lineHeight: 1,
+					fontSize: 11,
+					textTransform: "uppercase",
+					fontWeight: "bolder",
+					marginLeft: 6,
+					padding: 4,
+					background: "crimson",
+					borderRadius: 2,
+					color: "#fff",
+				}}
+				{...props}
+			/>
+		);
+	}
 
-  return <BasicExample />;
+	return <BasicExample />;
 })();
 ```
 
@@ -84,42 +84,42 @@ You can use `Listbox` as a simple standalone component, or compose its parts wit
 ```jsx
 // jsx-demo
 (() => {
-  function ComposedExample() {
-    let labelId = `taco-label--${useId()}`;
-    let [value, setValue] = React.useState("pollo");
-    return (
-      <div>
-        <VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
-        <ListboxInput
-          aria-labelledby={labelId}
-          value={value}
-          onChange={(value) => setValue(value)}
-        >
-          <ListboxButton arrow="▼" />
-          <ListboxPopover>
-            <ListboxList>
-              <ListboxOption value="default">Choose a taco</ListboxOption>
-              <ListboxOption value="asada">Carne Asada</ListboxOption>
-              <ListboxOption value="pollo">Pollo</ListboxOption>
-              <ListboxOption value="pastor">Pastor</ListboxOption>
-              <ListboxOption value="lengua">Lengua</ListboxOption>
-            </ListboxList>
-            <div
-              style={{
-                padding: "10px 10px 0",
-                marginTop: 10,
-                borderTop: "1px solid gray",
-              }}
-            >
-              <p>I really like tacos. I hope you enjoy them as well!</p>
-            </div>
-          </ListboxPopover>
-        </ListboxInput>
-      </div>
-    );
-  }
+	function ComposedExample() {
+		let labelId = `taco-label--${useId()}`;
+		let [value, setValue] = React.useState("pollo");
+		return (
+			<div>
+				<VisuallyHidden id={labelId}>Choose a taco</VisuallyHidden>
+				<ListboxInput
+					aria-labelledby={labelId}
+					value={value}
+					onChange={(value) => setValue(value)}
+				>
+					<ListboxButton arrow="▼" />
+					<ListboxPopover>
+						<ListboxList>
+							<ListboxOption value="default">Choose a taco</ListboxOption>
+							<ListboxOption value="asada">Carne Asada</ListboxOption>
+							<ListboxOption value="pollo">Pollo</ListboxOption>
+							<ListboxOption value="pastor">Pastor</ListboxOption>
+							<ListboxOption value="lengua">Lengua</ListboxOption>
+						</ListboxList>
+						<div
+							style={{
+								padding: "10px 10px 0",
+								marginTop: 10,
+								borderTop: "1px solid gray",
+							}}
+						>
+							<p>I really like tacos. I hope you enjoy them as well!</p>
+						</div>
+					</ListboxPopover>
+				</ListboxInput>
+			</div>
+		);
+	}
 
-  return <ComposedExample />;
+	return <ComposedExample />;
 })();
 ```
 
@@ -135,12 +135,12 @@ yarn add @reach/listbox
 
 ```js
 import {
-  Listbox,
-  ListboxInput,
-  ListboxButton,
-  ListboxPopover,
-  ListboxList,
-  ListboxOption,
+	Listbox,
+	ListboxInput,
+	ListboxButton,
+	ListboxPopover,
+	ListboxList,
+	ListboxOption,
 } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 ```
@@ -150,31 +150,31 @@ import "@reach/listbox/styles.css";
 ```jsx
 // Basic listbox
 function Example() {
-  return (
-    <Listbox defaultValue="popeyes">
-      <ListboxOption value="bojangles">Bojangles'</ListboxOption>
-      <ListboxOption value="churchs">Church's</ListboxOption>
-      <ListboxOption value="kfc">KFC</ListboxOption>
-      <ListboxOption value="popeyes">Popeyes</ListboxOption>
-    </Listbox>
-  );
+	return (
+		<Listbox defaultValue="popeyes">
+			<ListboxOption value="bojangles">Bojangles'</ListboxOption>
+			<ListboxOption value="churchs">Church's</ListboxOption>
+			<ListboxOption value="kfc">KFC</ListboxOption>
+			<ListboxOption value="popeyes">Popeyes</ListboxOption>
+		</Listbox>
+	);
 }
 
 // Composed listbox components
 function ExampleComposed() {
-  return (
-    <ListboxInput defaultValue="popeyes">
-      <ListboxButton />
-      <ListboxPopover>
-        <ListboxList>
-          <ListboxOption value="bojangles">Bojangles'</ListboxOption>
-          <ListboxOption value="churchs">Church's</ListboxOption>
-          <ListboxOption value="kfc">KFC</ListboxOption>
-          <ListboxOption value="popeyes">Popeyes</ListboxOption>
-        </ListboxList>
-      </ListboxPopover>
-    </ListboxInput>
-  );
+	return (
+		<ListboxInput defaultValue="popeyes">
+			<ListboxButton />
+			<ListboxPopover>
+				<ListboxList>
+					<ListboxOption value="bojangles">Bojangles'</ListboxOption>
+					<ListboxOption value="churchs">Church's</ListboxOption>
+					<ListboxOption value="kfc">KFC</ListboxOption>
+					<ListboxOption value="popeyes">Popeyes</ListboxOption>
+				</ListboxList>
+			</ListboxPopover>
+		</ListboxInput>
+	);
 }
 ```
 
@@ -186,13 +186,13 @@ The wrapper component for the high-level listbox API.
 
 ```jsx
 <div>
-  <span id="my-label">Choose a topic</span>
-  <Listbox aria-labelledby="my-label" defaultValue="comedy">
-    <ListboxOption value="drama">Drama</ListboxOption>
-    <ListboxOption value="comedy">Comedy</ListboxOption>
-    <ListboxOption value="suspense">Suspense</ListboxOption>
-    <ListboxOption value="horror">Horror</ListboxOption>
-  </Listbox>
+	<span id="my-label">Choose a topic</span>
+	<Listbox aria-labelledby="my-label" defaultValue="comedy">
+		<ListboxOption value="drama">Drama</ListboxOption>
+		<ListboxOption value="comedy">Comedy</ListboxOption>
+		<ListboxOption value="suspense">Suspense</ListboxOption>
+		<ListboxOption value="horror">Horror</ListboxOption>
+	</Listbox>
 </div>
 ```
 
@@ -203,15 +203,15 @@ If you want to control the state of the listbox's value, you can do so by passin
 ```jsx
 const [value, setValue] = React.useState("comedy");
 return (
-  <div>
-    <span id="my-label">Choose a movie genre</span>
-    <Listbox aria-labelledby="my-label" value={value} onChange={setValue}>
-      <ListboxOption value="drama">Drama</ListboxOption>
-      <ListboxOption value="comedy">Comedy</ListboxOption>
-      <ListboxOption value="suspense">Suspense</ListboxOption>
-      <ListboxOption value="horror">Horror</ListboxOption>
-    </Listbox>
-  </div>
+	<div>
+		<span id="my-label">Choose a movie genre</span>
+		<Listbox aria-labelledby="my-label" value={value} onChange={setValue}>
+			<ListboxOption value="drama">Drama</ListboxOption>
+			<ListboxOption value="comedy">Comedy</ListboxOption>
+			<ListboxOption value="suspense">Suspense</ListboxOption>
+			<ListboxOption value="horror">Horror</ListboxOption>
+		</Listbox>
+	</div>
 );
 ```
 
@@ -300,18 +300,18 @@ The top-level component and context provider for the listbox.
 
 ```jsx
 <div>
-  <span id="my-label">Choose a topic</span>
-  <ListboxInput aria-labelledby="my-label" defaultValue="comedy">
-    <ListboxButton />
-    <ListboxPopover>
-      <ListboxList>
-        <ListboxOption value="drama">Drama</ListboxOption>
-        <ListboxOption value="comedy">Comedy</ListboxOption>
-        <ListboxOption value="suspense">Suspense</ListboxOption>
-        <ListboxOption value="horror">Horror</ListboxOption>
-      </ListboxList>
-    </ListboxPopover>
-  </ListboxInput>
+	<span id="my-label">Choose a topic</span>
+	<ListboxInput aria-labelledby="my-label" defaultValue="comedy">
+		<ListboxButton />
+		<ListboxPopover>
+			<ListboxList>
+				<ListboxOption value="drama">Drama</ListboxOption>
+				<ListboxOption value="comedy">Comedy</ListboxOption>
+				<ListboxOption value="suspense">Suspense</ListboxOption>
+				<ListboxOption value="horror">Horror</ListboxOption>
+			</ListboxList>
+		</ListboxPopover>
+	</ListboxInput>
 </div>
 ```
 
@@ -331,8 +331,8 @@ Please see the [styling guide](/styling).
 #### ListboxInput Props
 
 <PropTable
-  componentName="ListboxInput"
-  propDefs={listboxDefs.ListboxInput.propDefs}
+	componentName="ListboxInput"
+	propDefs={listboxDefs.ListboxInput.propDefs}
 />
 
 ##### ListboxInput `children`
@@ -345,20 +345,20 @@ If you want access to the listbox's current value and associated label, or its e
 
 ```jsx
 <ListboxInput>
-  {({ value, valueLabel, isExpanded }) => (
-    <>
-      <ListboxButton>
-        <span data-value={value}>{valueLabel}</span>
-      </ListboxButton>
-      <ListboxPopover>
-        <ListboxList>
-          <ListboxOption value='apple'>Apple 🍏</ListboxOption>
-          <ListboxOption value='orange'>Orange 🍊</ListboxOption>
-          <ListboxOption value='banana'>Banana 🍌</ListboxOption>
-        </ListboxList>
-      </ListboxPopover>
-    </>
-  )}
+	{({ value, valueLabel, isExpanded }) => (
+		<>
+			<ListboxButton>
+				<span data-value={value}>{valueLabel}</span>
+			</ListboxButton>
+			<ListboxPopover>
+				<ListboxList>
+					<ListboxOption value="apple">Apple 🍏</ListboxOption>
+					<ListboxOption value="orange">Orange 🍊</ListboxOption>
+					<ListboxOption value="banana">Banana 🍌</ListboxOption>
+				</ListboxList>
+			</ListboxPopover>
+		</>
+	)}
 </ListboxInput>
 ```
 
@@ -424,8 +424,8 @@ Please see the [styling guide](/styling).
 #### ListboxButton Props
 
 <PropTable
-  componentName="ListboxButton"
-  propDefs={listboxDefs.ListboxButton.propDefs}
+	componentName="ListboxButton"
+	propDefs={listboxDefs.ListboxButton.propDefs}
 />
 
 ##### ListboxButton `arrow`
@@ -450,18 +450,18 @@ It's important to note that the ListboxButton's default inner content cannot be 
 let options = { one: "One option", two: "Another option" };
 let [value, setValue] = React.useState(options.one);
 return (
-  <ListboxInput>
-    <ListboxButton>{options[value]}</ListboxButton>
-    <ListboxPopover>
-      <ListboxList>
-        {Object.keys(options).map((option) => (
-          <ListboxOption key={option} value={option} label={options[option]}>
-            {options[option]}
-          </ListboxOption>
-        ))}
-      </ListboxList>
-    </ListboxPopover>
-  </ListboxInput>
+	<ListboxInput>
+		<ListboxButton>{options[value]}</ListboxButton>
+		<ListboxPopover>
+			<ListboxList>
+				{Object.keys(options).map((option) => (
+					<ListboxOption key={option} value={option} label={options[option]}>
+						{options[option]}
+					</ListboxOption>
+				))}
+			</ListboxList>
+		</ListboxPopover>
+	</ListboxInput>
 );
 ```
 
@@ -485,8 +485,8 @@ Please see the [styling guide](/styling).
 #### ListboxArrow Props
 
 <PropTable
-  componentName="ListboxArrow"
-  propDefs={listboxDefs.ListboxArrow.propDefs}
+	componentName="ListboxArrow"
+	propDefs={listboxDefs.ListboxArrow.propDefs}
 />
 
 ##### ListboxArrow `children`
@@ -513,8 +513,8 @@ Please see the [styling guide](/styling).
 #### ListboxPopover Props
 
 <PropTable
-  componentName="ListboxPopover"
-  propDefs={listboxDefs.ListboxPopover.propDefs}
+	componentName="ListboxPopover"
+	propDefs={listboxDefs.ListboxPopover.propDefs}
 />
 
 ##### ListboxPopover `children`
@@ -558,24 +558,24 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-listbox-option] {
-  /* styles for all listbox options */
+	/* styles for all listbox options */
 }
 [data-reach-listbox-option][data-current-selected] {
-  /* styles for the option matching the current value of the input */
+	/* styles for the option matching the current value of the input */
 }
 [data-reach-listbox-option][data-current-nav] {
-  /* styles for the option matching the user's navigation selection */
+	/* styles for the option matching the user's navigation selection */
 }
 [data-reach-listbox-option][aria-disabled="true"] {
-  /* styles for disabled listbox options */
+	/* styles for disabled listbox options */
 }
 ```
 
 #### ListboxOption Props
 
 <PropTable
-  componentName="ListboxOption"
-  propDefs={listboxDefs.ListboxOption.propDefs}
+	componentName="ListboxOption"
+	propDefs={listboxDefs.ListboxOption.propDefs}
 />
 
 ##### ListboxOption `disabled`
@@ -614,8 +614,8 @@ Please see the [styling guide](/styling).
 #### ListboxGroup Props
 
 <PropTable
-  componentName="ListboxGroup"
-  propDefs={listboxDefs.ListboxGroup.propDefs}
+	componentName="ListboxGroup"
+	propDefs={listboxDefs.ListboxGroup.propDefs}
 />
 
 ##### ListboxGroup `label`
@@ -630,10 +630,10 @@ A label identifier for a `ListboxGroup`. This can be used in lieu of the `label`
 
 ```jsx
 <ListboxGroup>
-  <ListboxGroupLabel>Veggies</ListboxGroupLabel>
-  <ListboxOption value="broccoli">Broccoli 🥦</ListboxOption>
-  <ListboxOption value="carrot">Carrot 🥕</ListboxOption>
-  <ListboxOption value="tomato">Tomato 🍅</ListboxOption>
+	<ListboxGroupLabel>Veggies</ListboxGroupLabel>
+	<ListboxOption value="broccoli">Broccoli 🥦</ListboxOption>
+	<ListboxOption value="carrot">Carrot 🥕</ListboxOption>
+	<ListboxOption value="tomato">Tomato 🍅</ListboxOption>
 </ListboxGroup>
 ```
 

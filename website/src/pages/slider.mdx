@@ -4,21 +4,21 @@ import { Pipe } from "../components/Pipe";
 import { Note } from "../components/Note";
 
 <SEO
-  title="Slider (range)"
-  description="Accessible slider component for React"
+	title="Slider (range)"
+	description="Accessible slider component for React"
 />
 
 # Slider (Range)
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#slider">Slider</TOCLink>
-    <TOCLink href="#sliderinput">SliderInput</TOCLink>
-    <TOCLink href="#slidertrack">SliderTrack</TOCLink>
-    <TOCLink href="#sliderrange">SliderRange</TOCLink>
-    <TOCLink href="#slidermarker">SliderMarker</TOCLink>
-    <TOCLink href="#sliderhandle">SliderHandle</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#slider">Slider</TOCLink>
+		<TOCLink href="#sliderinput">SliderInput</TOCLink>
+		<TOCLink href="#slidertrack">SliderTrack</TOCLink>
+		<TOCLink href="#sliderrange">SliderRange</TOCLink>
+		<TOCLink href="#slidermarker">SliderMarker</TOCLink>
+		<TOCLink href="#sliderhandle">SliderHandle</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/slider
@@ -33,24 +33,24 @@ You can use `Slider` as a simple standalone component, or compose its parts with
 ```jsx
 // jsx-demo
 function Example() {
-  return <Slider />;
+	return <Slider />;
 }
 ```
 
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <div>
-      <SliderInput>
-        <SliderTrack>
-          <SliderRange />
-          <SliderMarker value={50} />
-          <SliderHandle />
-        </SliderTrack>
-      </SliderInput>
-    </div>
-  );
+	return (
+		<div>
+			<SliderInput>
+				<SliderTrack>
+					<SliderRange />
+					<SliderMarker value={50} />
+					<SliderHandle />
+				</SliderTrack>
+			</SliderInput>
+		</div>
+	);
 }
 ```
 
@@ -66,12 +66,12 @@ yarn add @reach/slider
 
 ```js
 import {
-  Slider,
-  SliderInput,
-  SliderTrack,
-  SliderRange,
-  SliderHandle,
-  SliderMarker,
+	Slider,
+	SliderInput,
+	SliderTrack,
+	SliderRange,
+	SliderHandle,
+	SliderMarker,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 ```
@@ -81,19 +81,19 @@ import "@reach/slider/styles.css";
 ```jsx
 // Basic slider
 function Example() {
-  return <Slider min={0} max={200} step={10} />;
+	return <Slider min={0} max={200} step={10} />;
 }
 
 // Composed slider components
 function ExampleComposed() {
-  return (
-    <SliderInput min={0} max={200} step={10}>
-      <SliderTrack>
-        <SliderRange />
-        <SliderHandle />
-      </SliderTrack>
-    </SliderInput>
-  );
+	return (
+		<SliderInput min={0} max={200} step={10}>
+			<SliderTrack>
+				<SliderRange />
+				<SliderHandle />
+			</SliderTrack>
+		</SliderInput>
+	);
 }
 ```
 
@@ -161,11 +161,11 @@ Please see the [styling guide](/styling).
 
 ```jsx
 <Slider min={0} max={100}>
-  {new Array(11).fill("x").map((x, index) => (
-    <SliderMarker value={index * 10}>
-      <span>{index * 10}</span>
-    </SliderMarker>
-  ))}
+	{new Array(11).fill("x").map((x, index) => (
+		<SliderMarker value={index * 10}>
+			<span>{index * 10}</span>
+		</SliderMarker>
+	))}
 </Slider>
 ```
 
@@ -295,13 +295,13 @@ Please see the [styling guide](/styling).
 The (typically) highlighted portion of the track that represents the space between the slider's `min` value and its current value.
 
 <Note>
-  <p>
-    <strong>NOTE:</strong> This component was named{" "}
-    <code>SliderTrackHighlight</code> in a previous version of Reach UI. That
-    component will be dropped in a future version. We recommend updating your
-    projects to replace <code>SliderTrackHighlight</code> with{" "}
-    <code>SliderRange</code>.
-  </p>
+	<p>
+		<strong>NOTE:</strong> This component was named{" "}
+		<code>SliderTrackHighlight</code> in a previous version of Reach UI. That
+		component will be dropped in a future version. We recommend updating your
+		projects to replace <code>SliderTrackHighlight</code> with{" "}
+		<code>SliderRange</code>.
+	</p>
 </Note>
 
 #### SliderRange CSS Selectors
@@ -333,10 +333,10 @@ Please see the [styling guide](/styling).
 [data-reach-slider-marker][data-orientation="(horizontal|vertical)"] {
 }
 [data-reach-slider-marker][data-state="(under|at|over)-value"] {
-  /* marker is under, at, or over the slider value */
+	/* marker is under, at, or over the slider value */
 }
 [data-reach-slider-marker][data-value="VALUE_REF"] {
-  /* marker is under, at, or over the slider value */
+	/* marker is under, at, or over the slider value */
 }
 ```
 

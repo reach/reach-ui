@@ -1,9 +1,9 @@
 {
-  "name": "@reach-internal/tsconfig",
-  "version": "0.0.0",
-  "private": true,
-  "files": [
-    "base.json",
-    "react-library.json"
-  ]
+	"name": "@reach-internal/tsconfig",
+	"version": "0.0.0",
+	"private": true,
+	"files": [
+		"base.json",
+		"react-library.json"
+	]
 }

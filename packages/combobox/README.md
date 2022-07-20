@@ -10,31 +10,31 @@ A combobox is the combination of an `<input type="text" />` and a list. The list
 
 ```js
 import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxOptionText,
+	Combobox,
+	ComboboxInput,
+	ComboboxPopover,
+	ComboboxList,
+	ComboboxOption,
+	ComboboxOptionText,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
 function Example() {
-  return (
-    <div>
-      <Combobox>
-        <ComboboxInput aria-labelledby="demo" />
-        <ComboboxPopover>
-          <ComboboxList aria-labelledby="demo">
-            <ComboboxOption value="Apple" />
-            <ComboboxOption value="Banana" />
-            <ComboboxOption value="Orange" />
-            <ComboboxOption value="Pineapple" />
-            <ComboboxOption value="Kiwi" />
-          </ComboboxList>
-        </ComboboxPopover>
-      </Combobox>
-    </div>
-  );
+	return (
+		<div>
+			<Combobox>
+				<ComboboxInput aria-labelledby="demo" />
+				<ComboboxPopover>
+					<ComboboxList aria-labelledby="demo">
+						<ComboboxOption value="Apple" />
+						<ComboboxOption value="Banana" />
+						<ComboboxOption value="Orange" />
+						<ComboboxOption value="Pineapple" />
+						<ComboboxOption value="Kiwi" />
+					</ComboboxList>
+				</ComboboxPopover>
+			</Combobox>
+		</div>
+	);
 }
 ```

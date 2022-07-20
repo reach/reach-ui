@@ -20,13 +20,13 @@ import { VisuallyHidden } from "@reach/visually-hidden";
 import "@reach/tooltip/styles.css";
 
 function Example() {
-  return (
-    <Tooltip label="Save">
-      <button>
-        <VisuallyHidden>Save</VisuallyHidden>
-        <span aria-hidden>💾</span>
-      </button>
-    </Tooltip>
-  );
+	return (
+		<Tooltip label="Save">
+			<button>
+				<VisuallyHidden>Save</VisuallyHidden>
+				<span aria-hidden>💾</span>
+			</button>
+		</Tooltip>
+	);
 }
 ```

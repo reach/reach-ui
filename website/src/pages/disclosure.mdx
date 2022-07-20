@@ -4,19 +4,19 @@ import { AsPropWarning } from "../components/AsPropWarning";
 import { Pipe } from "../components/Pipe";
 
 <SEO
-  title="Disclosure"
-  description="Accessible disclosure component for React"
+	title="Disclosure"
+	description="Accessible disclosure component for React"
 />
 
 # Disclosure
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#disclosure-1">Disclosure</TOCLink>
-    <TOCLink href="#disclosurebutton">DisclosureButton</TOCLink>
-    <TOCLink href="#disclosurepanel">DisclosurePanel</TOCLink>
-    <TOCLink href="#usedisclosurecontext">useDisclosureContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#disclosure-1">Disclosure</TOCLink>
+		<TOCLink href="#disclosurebutton">DisclosureButton</TOCLink>
+		<TOCLink href="#disclosurepanel">DisclosurePanel</TOCLink>
+		<TOCLink href="#usedisclosurecontext">useDisclosureContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/disclosure
@@ -38,9 +38,9 @@ yarn add @reach/disclosure
 
 ```js
 import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
 } from "@reach/disclosure";
 ```
 
@@ -49,12 +49,12 @@ import {
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Disclosure>
-      <DisclosureButton>Find out what lies beneath</DisclosureButton>
-      <DisclosurePanel>Here I am! I am the buried treasure!</DisclosurePanel>
-    </Disclosure>
-  );
+	return (
+		<Disclosure>
+			<DisclosureButton>Find out what lies beneath</DisclosureButton>
+			<DisclosurePanel>Here I am! I am the buried treasure!</DisclosurePanel>
+		</Disclosure>
+	);
 }
 ```
 
@@ -66,8 +66,8 @@ The wrapper component and context provider for a disclosure's button and panel c
 
 ```jsx
 <Disclosure>
-  <DisclosureButton>Do a thing</DisclosureButton>
-  <DisclosurePanel>...</DisclosurePanel>
+	<DisclosureButton>Do a thing</DisclosureButton>
+	<DisclosurePanel>...</DisclosurePanel>
 </Disclosure>
 ```
 
@@ -75,10 +75,10 @@ It is important to note that the `Disclosure` component doesn't actually render 
 
 ```jsx
 <Disclosure>
-  <div style={{ padding: 10 }}>
-    <DisclosureButton>Do a thing</DisclosureButton>
-    <DisclosurePanel>...</DisclosurePanel>
-  </div>
+	<div style={{ padding: 10 }}>
+		<DisclosureButton>Do a thing</DisclosureButton>
+		<DisclosurePanel>...</DisclosurePanel>
+	</div>
 </Disclosure>
 ```
 
@@ -89,10 +89,10 @@ If you want to control the disclosure's value, you can do so by passing [`open`]
 ```jsx
 const [isOpen, setOpen] = React.useState(false);
 return (
-  <Disclosure open={isOpen} onChange={() => setOpen(!isOpen)}>
-    <DisclosureButton />
-    <DisclosurePanel />
-  </Disclosure>
+	<Disclosure open={isOpen} onChange={() => setOpen(!isOpen)}>
+		<DisclosureButton />
+		<DisclosurePanel />
+	</Disclosure>
 );
 ```
 
@@ -114,27 +114,27 @@ return (
 
 ```jsx
 <div>
-  {/* OK! */}
-  <Disclosure>
-    <DisclosureButton>Click Me</DisclosureButton>
-    <DisclosurePanel>Collapse or open this content!</DisclosurePanel>
-  </Disclosure>
+	{/* OK! */}
+	<Disclosure>
+		<DisclosureButton>Click Me</DisclosureButton>
+		<DisclosurePanel>Collapse or open this content!</DisclosurePanel>
+	</Disclosure>
 
-  {/* Also OK! */}
-  <Disclosure>
-    <div>
-      <DisclosureButton>Click Me</DisclosureButton>
-      <DisclosurePanel>Collapse or open this content!</DisclosurePanel>
-    </div>
-  </Disclosure>
+	{/* Also OK! */}
+	<Disclosure>
+		<div>
+			<DisclosureButton>Click Me</DisclosureButton>
+			<DisclosurePanel>Collapse or open this content!</DisclosurePanel>
+		</div>
+	</Disclosure>
 
-  {/* Probably confusing, you should avoid! */}
-  <Disclosure>
-    <div>Mary had a little lamb, little lamb, blah blah blah</div>
-    <DisclosureButton>Click Me</DisclosureButton>
-    <DisclosurePanel>Collapse or open this content!</DisclosurePanel>
-    <blockquote>You miss 100% of the shots you don't take</blockquote>
-  </Disclosure>
+	{/* Probably confusing, you should avoid! */}
+	<Disclosure>
+		<div>Mary had a little lamb, little lamb, blah blah blah</div>
+		<DisclosureButton>Click Me</DisclosureButton>
+		<DisclosurePanel>Collapse or open this content!</DisclosurePanel>
+		<blockquote>You miss 100% of the shots you don't take</blockquote>
+	</Disclosure>
 </div>
 ```
 
@@ -154,12 +154,12 @@ Since the Disclosure component itself does not render a DOM element, an `id` pro
 
 ```jsx
 <Disclosure id="awesome-disclosure">
-  <div>
-    {" "}
-    {/* no ID passed here! */}
-    <DisclosureButton /> {/* <button id="awesome-disclosure--button" /> */}
-    <DisclosurePanel /> {/* <div id="awesome-disclosure--panel" /> */}
-  </div>
+	<div>
+		{" "}
+		{/* no ID passed here! */}
+		<DisclosureButton /> {/* <button id="awesome-disclosure--button" /> */}
+		<DisclosurePanel /> {/* <div id="awesome-disclosure--panel" /> */}
+	</div>
 </Disclosure>
 ```
 
@@ -178,14 +178,14 @@ The controlled open state of the disclosure. The `open` prop should be used alon
 ```jsx
 const [open, setOpen] = React.useState(false);
 return (
-  <Disclosure open={open} onChange={() => setOpen(!open)}>
-    <DisclosureButton>I have a secret</DisclosureButton>
-    <DisclosurePanel>
-      Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
-      pretium, lacus nunc consequat id viverra facilisi ligula eleifend, congue
-      gravida malesuada proin scelerisque luctus est convallis.
-    </DisclosurePanel>
-  </Disclosure>
+	<Disclosure open={open} onChange={() => setOpen(!open)}>
+		<DisclosureButton>I have a secret</DisclosureButton>
+		<DisclosurePanel>
+			Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
+			pretium, lacus nunc consequat id viverra facilisi ligula eleifend, congue
+			gravida malesuada proin scelerisque luctus est convallis.
+		</DisclosurePanel>
+	</Disclosure>
 );
 ```
 

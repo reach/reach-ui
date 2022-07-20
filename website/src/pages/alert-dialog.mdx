@@ -2,20 +2,20 @@ import SEO from "../components/SEO";
 import { TOC, TOCList, TOCLink } from "../components/TOC";
 
 <SEO
-  title="Alert Dialog"
-  description="Accessible alert dialog component for React"
+	title="Alert Dialog"
+	description="Accessible alert dialog component for React"
 />
 
 # Alert Dialog
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#alertdialog">AlertDialog</TOCLink>
-    <TOCLink href="#alertdialoglabel">AlertDialogLabel</TOCLink>
-    <TOCLink href="#alertdialogdescription">AlertDialogDescription</TOCLink>
-    <TOCLink href="#alertdialogoverlay">AlertDialogOverlay</TOCLink>
-    <TOCLink href="#alertdialogcontent">AlertDialogContent</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#alertdialog">AlertDialog</TOCLink>
+		<TOCLink href="#alertdialoglabel">AlertDialogLabel</TOCLink>
+		<TOCLink href="#alertdialogdescription">AlertDialogDescription</TOCLink>
+		<TOCLink href="#alertdialogoverlay">AlertDialogOverlay</TOCLink>
+		<TOCLink href="#alertdialogcontent">AlertDialogContent</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/alert-dialog
@@ -34,35 +34,35 @@ This is built on top of [Dialog](/dialog), so `AlertDialog` spreads its props an
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const cancelRef = React.useRef();
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const [showDialog, setShowDialog] = React.useState(false);
+	const cancelRef = React.useRef();
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Delete something</button>
+	return (
+		<div>
+			<button onClick={open}>Delete something</button>
 
-      {showDialog && (
-        <AlertDialog leastDestructiveRef={cancelRef}>
-          <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+			{showDialog && (
+				<AlertDialog leastDestructiveRef={cancelRef}>
+					<AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-          <AlertDialogDescription>
-            Are you sure you want to delete something? This action is permanent,
-            and we're totally not just flipping a field called "deleted" to
-            "true" in our database, we're actually deleting something.
-          </AlertDialogDescription>
+					<AlertDialogDescription>
+						Are you sure you want to delete something? This action is permanent,
+						and we're totally not just flipping a field called "deleted" to
+						"true" in our database, we're actually deleting something.
+					</AlertDialogDescription>
 
-          <div className="alert-buttons">
-            <button onClick={close}>Yes, delete</button>{" "}
-            <button ref={cancelRef} onClick={close}>
-              Nevermind, don't delete.
-            </button>
-          </div>
-        </AlertDialog>
-      )}
-    </div>
-  );
+					<div className="alert-buttons">
+						<button onClick={close}>Yes, delete</button>{" "}
+						<button ref={cancelRef} onClick={close}>
+							Nevermind, don't delete.
+						</button>
+					</div>
+				</AlertDialog>
+			)}
+		</div>
+	);
 }
 ```
 
@@ -78,11 +78,11 @@ yarn add @reach/alert-dialog
 
 ```js
 import {
-  AlertDialog,
-  AlertDialogLabel,
-  AlertDialogDescription,
-  AlertDialogOverlay,
-  AlertDialogContent,
+	AlertDialog,
+	AlertDialogLabel,
+	AlertDialogDescription,
+	AlertDialogOverlay,
+	AlertDialogContent,
 } from "@reach/alert-dialog";
 ```
 
@@ -94,8 +94,8 @@ High-level component to render an alert dialog.
 
 ```jsx
 <AlertDialog leastDestructiveRef={someRef}>
-  <AlertDialogLabel />
-  <AlertDialogContent />
+	<AlertDialogLabel />
+	<AlertDialogContent />
 </AlertDialog>
 ```
 
@@ -117,9 +117,9 @@ See [documentation for `Dialog` props](/dialog#dialog-props) for more informatio
 
 ```jsx
 <AlertDialog style={{ color: "red" }}>
-  <AlertDialogLabel>
-    My text is red because the style prop got applied to the div underneath
-  </AlertDialogLabel>
+	<AlertDialogLabel>
+		My text is red because the style prop got applied to the div underneath
+	</AlertDialogLabel>
 </AlertDialog>
 ```
 
@@ -143,11 +143,11 @@ Note, however, that the dialog will not render to the DOM when `isOpen={false}`,
 
 ```jsx
 {
-  state.confirmDelete && (
-    <AlertDialog isOpen={true}>
-      <AlertDialogLabel>I will be open</AlertDialogLabel>
-    </AlertDialog>
-  );
+	state.confirmDelete && (
+		<AlertDialog isOpen={true}>
+			<AlertDialogLabel>I will be open</AlertDialogLabel>
+		</AlertDialog>
+	);
 }
 ```
 
@@ -164,43 +164,43 @@ When the user clicks outside the modal or hits the escape key, this function wil
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const cancelRef = React.useRef();
+	const [showDialog, setShowDialog] = React.useState(false);
+	const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true);
-  const destroyStuff = () => {
-    console.log("Destroyed!");
-    setShowDialog(false);
-  };
-  // make sure `close` and the `onClick` of the
-  // `leastDestructiveRef` are identical, best to just
-  // pass them both the same function
-  const close = () => setShowDialog(false);
+	const open = () => setShowDialog(true);
+	const destroyStuff = () => {
+		console.log("Destroyed!");
+		setShowDialog(false);
+	};
+	// make sure `close` and the `onClick` of the
+	// `leastDestructiveRef` are identical, best to just
+	// pass them both the same function
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Delete something</button>
+	return (
+		<div>
+			<button onClick={open}>Delete something</button>
 
-      {showDialog && (
-        <AlertDialog onDismiss={close} leastDestructiveRef={cancelRef}>
-          <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+			{showDialog && (
+				<AlertDialog onDismiss={close} leastDestructiveRef={cancelRef}>
+					<AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-          <AlertDialogDescription>
-            Are you sure you want to delete something? This action is permanent,
-            and we're totally not just flipping a field called "deleted" to
-            "true" in our database, we're actually deleting something.
-          </AlertDialogDescription>
+					<AlertDialogDescription>
+						Are you sure you want to delete something? This action is permanent,
+						and we're totally not just flipping a field called "deleted" to
+						"true" in our database, we're actually deleting something.
+					</AlertDialogDescription>
 
-          <div className="alert-buttons">
-            <button onClick={destroyStuff}>Yes, delete</button>{" "}
-            <button ref={cancelRef} onClick={close}>
-              Nevermind, don't delete.
-            </button>
-          </div>
-        </AlertDialog>
-      )}
-    </div>
-  );
+					<div className="alert-buttons">
+						<button onClick={destroyStuff}>Yes, delete</button>{" "}
+						<button ref={cancelRef} onClick={close}>
+							Nevermind, don't delete.
+						</button>
+					</div>
+				</AlertDialog>
+			)}
+		</div>
+	);
 }
 ```
 
@@ -213,37 +213,37 @@ To prevent accidental data loss, an alert dialog should focus the least destruct
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
+	const [showDialog, setShowDialog] = React.useState(false);
 
-  // we'll pass this ref to both AlertDialog and our button
-  const cancelRef = React.useRef();
+	// we'll pass this ref to both AlertDialog and our button
+	const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Publish something</button>
+	return (
+		<div>
+			<button onClick={open}>Publish something</button>
 
-      {showDialog && (
-        <AlertDialog leastDestructiveRef={cancelRef}>
-          <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+			{showDialog && (
+				<AlertDialog leastDestructiveRef={cancelRef}>
+					<AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-          <AlertDialogDescription>
-            Are you sure you want to publish this thing?
-          </AlertDialogDescription>
+					<AlertDialogDescription>
+						Are you sure you want to publish this thing?
+					</AlertDialogDescription>
 
-          <div className="alert-buttons">
-            <button onClick={this.close}>Yes, publish and keep editing</button>{" "}
-            <button onClick={this.close}>Yes, publish and view</button>{" "}
-            <button ref={cancelRef} onClick={close}>
-              Don't publish, keep working
-            </button>
-          </div>
-        </AlertDialog>
-      )}
-    </div>
-  );
+					<div className="alert-buttons">
+						<button onClick={this.close}>Yes, publish and keep editing</button>{" "}
+						<button onClick={this.close}>Yes, publish and view</button>{" "}
+						<button ref={cancelRef} onClick={close}>
+							Don't publish, keep working
+						</button>
+					</div>
+				</AlertDialog>
+			)}
+		</div>
+	);
 }
 ```
 
@@ -255,14 +255,14 @@ Accepts any renderable content but should generally be restricted to `AlertDialo
 
 ```jsx
 <AlertDialog>
-  <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+	<AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-  <AlertDialogDescription>A longer message</AlertDialogDescription>
+	<AlertDialogDescription>A longer message</AlertDialogDescription>
 
-  <div>
-    <button onClick={destroyStuff}>A Destructive Action</button>{" "}
-    <button ref={leastDestructiveRef}>Least Destructive Action</button>
-  </div>
+	<div>
+		<button onClick={destroyStuff}>A Destructive Action</button>{" "}
+		<button ref={leastDestructiveRef}>Least Destructive Action</button>
+	</div>
 </AlertDialog>
 ```
 
@@ -335,41 +335,41 @@ Note: You must render an `AlertDialogContent` inside.
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [showDialog, setShowDialog] = React.useState(false);
+	const [showDialog, setShowDialog] = React.useState(false);
 
-  // we'll pass this ref to both AlertDialog and our button
-  const cancelRef = React.useRef();
+	// we'll pass this ref to both AlertDialog and our button
+	const cancelRef = React.useRef();
 
-  const open = () => setShowDialog(true);
-  const close = () => setShowDialog(false);
+	const open = () => setShowDialog(true);
+	const close = () => setShowDialog(false);
 
-  return (
-    <div>
-      <button onClick={open}>Delete something</button>
+	return (
+		<div>
+			<button onClick={open}>Delete something</button>
 
-      {showDialog && (
-        <AlertDialogOverlay
-          style={{ background: "hsla(0, 50%, 50%, 0.85)" }}
-          leastDestructiveRef={cancelRef}
-        >
-          <AlertDialogContent style={{ background: "#f0f0f0" }}>
-            <AlertDialogLabel>Please Confirm!</AlertDialogLabel>
+			{showDialog && (
+				<AlertDialogOverlay
+					style={{ background: "hsla(0, 50%, 50%, 0.85)" }}
+					leastDestructiveRef={cancelRef}
+				>
+					<AlertDialogContent style={{ background: "#f0f0f0" }}>
+						<AlertDialogLabel>Please Confirm!</AlertDialogLabel>
 
-            <AlertDialogDescription>
-              Are you sure you want delete stuff, it will be permanent.
-            </AlertDialogDescription>
+						<AlertDialogDescription>
+							Are you sure you want delete stuff, it will be permanent.
+						</AlertDialogDescription>
 
-            <div className="alert-buttons">
-              <button onClick={close}>Yes, delete</button>{" "}
-              <button ref={cancelRef} onClick={close}>
-                Nevermind
-              </button>
-            </div>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      )}
-    </div>
-  );
+						<div className="alert-buttons">
+							<button onClick={close}>Yes, delete</button>{" "}
+							<button ref={cancelRef} onClick={close}>
+								Nevermind
+							</button>
+						</div>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			)}
+		</div>
+	);
 }
 ```
 
@@ -430,7 +430,7 @@ Should be an `AlertDialogContent`.
 
 ```jsx
 <AlertDialogOverlay>
-  <AlertDialogContent />
+	<AlertDialogContent />
 </AlertDialogOverlay>
 ```
 
@@ -444,7 +444,7 @@ Note: You only need to use this when you are also styling `AlertDialogOverlay`, 
 
 ```jsx
 <AlertDialogOverlay style={someSpecificStyles}>
-  <AlertDialogContent className={orAClassName} />
+	<AlertDialogContent className={orAClassName} />
 </AlertDialogOverlay>
 ```
 

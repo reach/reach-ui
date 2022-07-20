@@ -53,9 +53,9 @@ Additionally, `MenuItem` needs to know if it is the active descendant so it can 
 
 ```jsx
 <Menu>
-  <MenuItem onSelect={download}>Download</MenuItem>
-  <MenuItem onSelect={save}>Save</MenuItem>
-  <MenuItem onSelect={preview}>Preview</MenuItem>
+	<MenuItem onSelect={download}>Download</MenuItem>
+	<MenuItem onSelect={save}>Save</MenuItem>
+	<MenuItem onSelect={preview}>Preview</MenuItem>
 </Menu>
 ```
 
@@ -67,43 +67,43 @@ The solution most people turn to is to bail out of the element API and turn to a
 
 ```jsx
 <Menu
-  items={[
-    { label: "Download", onSelect: download },
-    { label: "Save", onSelect: save },
-    { label: "Preview", onSelect: preview },
-  ]}
+	items={[
+		{ label: "Download", onSelect: download },
+		{ label: "Save", onSelect: save },
+		{ label: "Preview", onSelect: preview },
+	]}
 />;
 
 function Menu({ items }) {
-  let [activeIndex, setActiveIndex] = React.useState();
-  return (
-    <div data-menu aria-activedescendant={activeIndex}>
-      {items.map((item, index) => (
-        <MenuItem
-          // easy to tell the index
-          index={index}
-          activeIndex={activeIndex}
-          onSelect={item.onSelect}
-        >
-          {item.label}
-        </MenuItem>
-      ))}
-    </div>
-  );
+	let [activeIndex, setActiveIndex] = React.useState();
+	return (
+		<div data-menu aria-activedescendant={activeIndex}>
+			{items.map((item, index) => (
+				<MenuItem
+					// easy to tell the index
+					index={index}
+					activeIndex={activeIndex}
+					onSelect={item.onSelect}
+				>
+					{item.label}
+				</MenuItem>
+			))}
+		</div>
+	);
 }
 
 function MenuItem({ index, activeIndex, onSelect, children }) {
-  // and now we can style
-  let isActive = index === activeIndex;
-  return (
-    <div
-      // and add an ID
-      id={index}
-      data-highlighted={isActive ? "" : undefined}
-    >
-      {children}
-    </div>
-  );
+	// and now we can style
+	let isActive = index === activeIndex;
+	return (
+		<div
+			// and add an ID
+			id={index}
+			data-highlighted={isActive ? "" : undefined}
+		>
+			{children}
+		</div>
+	);
 }
 ```
 
@@ -113,38 +113,38 @@ What happens when we want to add a className to all, one, or just a few of the e
 
 ```jsx
 <Menu
-  options={[
-    { label: "Download", onSelect: download },
-    { label: "Save", onSelect: save },
-    { label: "Preview", onSelect: preview },
-  ]}
-  // stuff like this
-  optionClassNames="cool"
-  // or shoot, we need more than classNames
-  optionsProps={{
-    className: "cool",
-    onMouseEnter: handler,
-  }}
-  // dangit we need to do it differently depending on the option
-  getOptionProps={(option, index) => {
-    return index === 2 ? "bg-blue" : "bg-white";
-  }}
-  // ah forget it, here you do it, enjoy the branching!
-  renderOption={(option, index) => (
-    <MenuItem
-      className={index === 2 ? "bg-blue" : "bg-white"}
-      aria-label={index === 2 ? "Preview Invoice" : undefined}
-    >
-      {index === 0 ? (
-        <DownloadIcon />
-      ) : index === 1 ? (
-        <SaveIcon />
-      ) : index === 2 ? (
-        <PreviewIcon />
-      ) : null}
-      {option.label}
-    </MenuItem>
-  )}
+	options={[
+		{ label: "Download", onSelect: download },
+		{ label: "Save", onSelect: save },
+		{ label: "Preview", onSelect: preview },
+	]}
+	// stuff like this
+	optionClassNames="cool"
+	// or shoot, we need more than classNames
+	optionsProps={{
+		className: "cool",
+		onMouseEnter: handler,
+	}}
+	// dangit we need to do it differently depending on the option
+	getOptionProps={(option, index) => {
+		return index === 2 ? "bg-blue" : "bg-white";
+	}}
+	// ah forget it, here you do it, enjoy the branching!
+	renderOption={(option, index) => (
+		<MenuItem
+			className={index === 2 ? "bg-blue" : "bg-white"}
+			aria-label={index === 2 ? "Preview Invoice" : undefined}
+		>
+			{index === 0 ? (
+				<DownloadIcon />
+			) : index === 1 ? (
+				<SaveIcon />
+			) : index === 2 ? (
+				<PreviewIcon />
+			) : null}
+			{option.label}
+		</MenuItem>
+	)}
 />
 ```
 
@@ -156,19 +156,19 @@ Had we stuck to elements, we could have done this:
 
 ```jsx
 <Menu>
-  <MenuItem className="bg-white" onSelect={download}>
-    <DownloadIcon /> Download
-  </MenuItem>
-  <MenuItem className="bg-white" onSelect={save}>
-    <SaveIcon /> Save
-  </MenuItem>
-  <MenuItem
-    className="bg-white"
-    onSelect={preview}
-    aria-label="Preview Invoice"
-  >
-    <PreviewIcon /> Preview
-  </MenuItem>
+	<MenuItem className="bg-white" onSelect={download}>
+		<DownloadIcon /> Download
+	</MenuItem>
+	<MenuItem className="bg-white" onSelect={save}>
+		<SaveIcon /> Save
+	</MenuItem>
+	<MenuItem
+		className="bg-white"
+		onSelect={preview}
+		aria-label="Preview Invoice"
+	>
+		<PreviewIcon /> Preview
+	</MenuItem>
 </Menu>
 ```
 
@@ -180,24 +180,24 @@ We can use `React.cloneElement` to keep (most of) the normal React composition. 
 
 ```jsx
 function Menu({ children }) {
-  let [activeIndex, setActiveIndex] = React.useState();
-  return (
-    <div data-menu aria-activedescendant={activeIndex}>
-      {React.Children.map(children, (child, index) =>
-        React.cloneElement(child, { index, activeIndex })
-      )}
-    </div>
-  );
+	let [activeIndex, setActiveIndex] = React.useState();
+	return (
+		<div data-menu aria-activedescendant={activeIndex}>
+			{React.Children.map(children, (child, index) =>
+				React.cloneElement(child, { index, activeIndex })
+			)}
+		</div>
+	);
 }
 
 function MenuItem({ index, activeIndex, onSelect, children }) {
-  // index came from the clone
-  let isActive = index === activeIndex;
-  return (
-    <div id={index} data-highlighted={isActive ? "" : undefined}>
-      {children}
-    </div>
-  );
+	// index came from the clone
+	let isActive = index === activeIndex;
+	return (
+		<div id={index} data-highlighted={isActive ? "" : undefined}>
+			{children}
+		</div>
+	);
 }
 ```
 
@@ -209,10 +209,10 @@ What if we need to put a div around one of the items?
 
 ```jsx
 <Menu>
-  <div>
-    <MenuItem />
-  </div>
-  <MenuItem />
+	<div>
+		<MenuItem />
+	</div>
+	<MenuItem />
 </Menu>
 ```
 
@@ -222,12 +222,12 @@ A recursive type check could help a little, but it still limits composition, wha
 
 ```jsx
 function BlueItem(props) {
-  return <MenuItem {...props} className="bg-blue" />;
+	return <MenuItem {...props} className="bg-blue" />;
 }
 
 <Menu>
-  <MenuItem />
-  <BlueItem />
+	<MenuItem />
+	<BlueItem />
 </Menu>;
 ```
 
@@ -247,111 +247,111 @@ The `descendants` package provides these key tools:
 
 ```jsx
 import {
-  createDescendantContext,
-  DescendantProvider,
-  useDescendant,
-  useDescendantsInit,
+	createDescendantContext,
+	DescendantProvider,
+	useDescendant,
+	useDescendantsInit,
 } from "@reach/descendants";
 
 let DescendantContext = createDescendantContext("DescendantContext");
 let MenuContext = createContext();
 
 function Menu({ id, children }) {
-  // We could be less explicit here and set this up in the DescendantProvider,
-  // but you may want to do something with `descendants` in your top-level
-  // component and we don't want to force creating an arbitrary child
-  // component just so we can consume the context.
-  let [descendants, setDescendants] = useDescendantsInit();
-  let [activeIndex, setActiveIndex] = React.useState(-1);
-  return (
-    <DescendantProvider
-      context={DescendantContext}
-      items={descendants}
-      set={setDescendants}
-    >
-      <MenuContext.Provider
-        value={{ buttonId: `button-${useId(id)}`, activeIndex, setActiveIndex }}
-      >
-        {children}
-      </MenuContext.Provider>
-    </DescendantProvider>
-  );
+	// We could be less explicit here and set this up in the DescendantProvider,
+	// but you may want to do something with `descendants` in your top-level
+	// component and we don't want to force creating an arbitrary child
+	// component just so we can consume the context.
+	let [descendants, setDescendants] = useDescendantsInit();
+	let [activeIndex, setActiveIndex] = React.useState(-1);
+	return (
+		<DescendantProvider
+			context={DescendantContext}
+			items={descendants}
+			set={setDescendants}
+		>
+			<MenuContext.Provider
+				value={{ buttonId: `button-${useId(id)}`, activeIndex, setActiveIndex }}
+			>
+				{children}
+			</MenuContext.Provider>
+		</DescendantProvider>
+	);
 }
 
 function MenuList(props) {
-  let { buttonId, activeIndex } = useContext(MenuContext);
-  return (
-    <Popover>
-      <div
-        role="menu"
-        aria-labelledby={buttonId}
-        aria-activedescendant={activeIndex}
-        tabIndex={-1}
-      >
-        {children}
-      </div>
-    </Popover>
-  );
+	let { buttonId, activeIndex } = useContext(MenuContext);
+	return (
+		<Popover>
+			<div
+				role="menu"
+				aria-labelledby={buttonId}
+				aria-activedescendant={activeIndex}
+				tabIndex={-1}
+			>
+				{children}
+			</div>
+		</Popover>
+	);
 }
 
 function MenuItem({ index: explicitIndex, ...props }) {
-  let { activeIndex, setActiveIndex } = useContext(MenuContext);
-  let ref = React.useRef(null);
+	let { activeIndex, setActiveIndex } = useContext(MenuContext);
+	let ref = React.useRef(null);
 
-  // We need a ref to the element for our descendant object, but we also
-  // need to update state after the ref is placed. We can set the ref in a
-  // callback and use the stateful `element` to ensure our descendant is
-  // updated once we have DOM node.
-  let [element, setElement] = useState(null);
-  let handleRefSet = useCallback((refValue) => {
-    ref.current = refValue;
-    setElement(refValue);
-  }, []);
+	// We need a ref to the element for our descendant object, but we also
+	// need to update state after the ref is placed. We can set the ref in a
+	// callback and use the stateful `element` to ensure our descendant is
+	// updated once we have DOM node.
+	let [element, setElement] = useState(null);
+	let handleRefSet = useCallback((refValue) => {
+		ref.current = refValue;
+		setElement(refValue);
+	}, []);
 
-  // The descendant should be memoized to prevent endless render loops after
-  // the collection state  is updated
-  let descendant = React.useMemo(() => {
-    return {
-      // Assign the DOM node using a stateful reference. This should be safer
-      // than passing the ref directly.
-      element,
-      // You can pass arbitrary data into a descendant object which can come
-      // in handy for features like typeahead!
-      key: props.label,
-    };
-  }, [element, props.label]);
+	// The descendant should be memoized to prevent endless render loops after
+	// the collection state  is updated
+	let descendant = React.useMemo(() => {
+		return {
+			// Assign the DOM node using a stateful reference. This should be safer
+			// than passing the ref directly.
+			element,
+			// You can pass arbitrary data into a descendant object which can come
+			// in handy for features like typeahead!
+			key: props.label,
+		};
+	}, [element, props.label]);
 
-  let index = useDescendant(
-    descendant,
-    // Tell the useDescendant hook to use a specific context.
-    // This is key in case you have a compound component that needs index
-    // tracking in separate correlating descendant components (like `Tabs`)
-    DescendantContext,
-    // If you want to declare a specific index value, you can pass it as the
-    // third argument here. This is almost never needed but we provide it as an
-    // escape hatch for special circumstances.
-    explicitIndex
-  );
+	let index = useDescendant(
+		descendant,
+		// Tell the useDescendant hook to use a specific context.
+		// This is key in case you have a compound component that needs index
+		// tracking in separate correlating descendant components (like `Tabs`)
+		DescendantContext,
+		// If you want to declare a specific index value, you can pass it as the
+		// third argument here. This is almost never needed but we provide it as an
+		// escape hatch for special circumstances.
+		explicitIndex
+	);
 
-  // Now we know the index, so let's use it!
-  let isSelected = index === activeIndex;
-  function select() {
-    if (!isSelected) {
-      setActiveIndex(index);
-    }
-  }
+	// Now we know the index, so let's use it!
+	let isSelected = index === activeIndex;
+	function select() {
+		if (!isSelected) {
+			setActiveIndex(index);
+		}
+	}
 
-  return (
-    <div
-      role="menuitem"
-      // Don't forget to pass the callback ref to the rendered element!
-      ref={handleRefSet}
-      data-selected={isSelected ? "" : undefined}
-      tabIndex={-1}
-      onMouseEnter={select}
-      {...props}
-    />
-  );
+	return (
+		<div
+			role="menuitem"
+			// Don't forget to pass the callback ref to the rendered element!
+			ref={handleRefSet}
+			data-selected={isSelected ? "" : undefined}
+			tabIndex={-1}
+			onMouseEnter={select}
+			{...props}
+		/>
+	);
 }
 ```
 
@@ -365,60 +365,60 @@ The key tradeoff here is that descendants won't be available on the first render
 
 ```jsx
 function Comp() {
-  <Listbox>
-    {/*
+	<Listbox>
+		{/*
     The button needs to know which value is selected to render its label!
     The label will be empty on the server if we depend on descendant hooks
     */}
-    <ListboxButton />
-    <ListboxList>
-      <ListboxOption value="Apple" />
-      <ListboxOption value="Orange" />
-      <ListboxOption value="Banana" />
-    </ListboxList>
-  </Listbox>;
+		<ListboxButton />
+		<ListboxList>
+			<ListboxOption value="Apple" />
+			<ListboxOption value="Orange" />
+			<ListboxOption value="Banana" />
+		</ListboxList>
+	</Listbox>;
 }
 
 function CompSSR() {
-  // This limits composition, but now you have your data in one place at the top
-  let options = ["Apple", "Orange", "Banana"];
-  let [activeOption, setActiveOption] = React.useState(options[0]);
-  <Listbox onChange={setActiveOption} selected={activeOption}>
-    {/* The button needs to know which value is selected to render its label! */}
-    <ListboxButton>{activeOption}</ListboxButton>
-    <ListboxList>
-      {options.map((option) => (
-        <ListboxOption value={option} key={option} />
-      ))}
-    </ListboxList>
-  </Listbox>;
+	// This limits composition, but now you have your data in one place at the top
+	let options = ["Apple", "Orange", "Banana"];
+	let [activeOption, setActiveOption] = React.useState(options[0]);
+	<Listbox onChange={setActiveOption} selected={activeOption}>
+		{/* The button needs to know which value is selected to render its label! */}
+		<ListboxButton>{activeOption}</ListboxButton>
+		<ListboxList>
+			{options.map((option) => (
+				<ListboxOption value={option} key={option} />
+			))}
+		</ListboxList>
+	</Listbox>;
 }
 
 function ComposableSSR() {
-  // You can manage state at the top and still get back some composition, you'll
-  // just have to deal with a bit of repitition
-  let [activeOption, setActiveOption] = React.useState("Apple");
-  <Listbox onChange={setActiveOption} selected={activeOption}>
-    {/* The button needs to know which value is selected to render its label! */}
-    <ListboxButton>{activeOption}</ListboxButton>
-    <ListboxList>
-      <ListboxOption value="Apple">
-        Apple <span aria-hidden>🍎</span>
-      </ListboxOption>
-      <ListboxOption
-        value="Orange"
-        aria-labelledby="orange-label"
-        aria-describedby="orange-description"
-      >
-        <span id="orange-label">
-          Orange <span aria-hidden>🍊</span>
-        </span>
-        <span id="orange-description">Fun fact: Oranges are delicious!</span>
-      </ListboxOption>
-      <ListboxOption value="Banana">
-        Banana <span aria-hidden>🍌</span>
-      </ListboxOption>
-    </ListboxList>
-  </Listbox>;
+	// You can manage state at the top and still get back some composition, you'll
+	// just have to deal with a bit of repitition
+	let [activeOption, setActiveOption] = React.useState("Apple");
+	<Listbox onChange={setActiveOption} selected={activeOption}>
+		{/* The button needs to know which value is selected to render its label! */}
+		<ListboxButton>{activeOption}</ListboxButton>
+		<ListboxList>
+			<ListboxOption value="Apple">
+				Apple <span aria-hidden>🍎</span>
+			</ListboxOption>
+			<ListboxOption
+				value="Orange"
+				aria-labelledby="orange-label"
+				aria-describedby="orange-description"
+			>
+				<span id="orange-label">
+					Orange <span aria-hidden>🍊</span>
+				</span>
+				<span id="orange-description">Fun fact: Oranges are delicious!</span>
+			</ListboxOption>
+			<ListboxOption value="Banana">
+				Banana <span aria-hidden>🍌</span>
+			</ListboxOption>
+		</ListboxList>
+	</Listbox>;
 }
 ```

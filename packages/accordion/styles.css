@@ -1,7 +1,7 @@
 :root {
-  --reach-accordion: 1;
+	--reach-accordion: 1;
 }
 
 [data-reach-accordion-button][disabled] {
-  cursor: not-allowed;
+	cursor: not-allowed;
 }

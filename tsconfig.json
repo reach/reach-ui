@@ -1,14 +1,14 @@
 {
-  "extends": "@reach-internal/tsconfig/dom.json",
-  "include": ["**/*"],
-  "exclude": ["dist", "build", "node_modules"],
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext",
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    }
-  }
+	"extends": "@reach-internal/tsconfig/dom.json",
+	"include": ["**/*"],
+	"exclude": ["dist", "build", "node_modules"],
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "ESNext",
+		"jsx": "react-jsx",
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./*"]
+		}
+	}
 }

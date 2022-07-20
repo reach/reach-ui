@@ -55,7 +55,7 @@ let name = "Basic";
 
 // The example to render (always name the function `Example`)
 function Example() {
-  return <div>Cool cool cool</div>;
+	return <div>Cool cool cool</div>;
 }
 
 // Assign the name to the example and then export it as a named constant

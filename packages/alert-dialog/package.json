@@ -1,44 +1,44 @@
 {
-  "name": "@reach/alert-dialog",
-  "version": "0.17.0",
-  "description": "Accessible React Alert Dialog.",
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reach/reach-ui.git",
-    "directory": "packages/alert-dialog"
-  },
-  "scripts": {
-    "build": "tsup"
-  },
-  "dependencies": {
-    "@reach/auto-id": "workspace:*",
-    "@reach/dialog": "workspace:*",
-    "@reach/utils": "workspace:*",
-    "tiny-invariant": "^1.2.0"
-  },
-  "devDependencies": {
-    "@reach-internal/dev": "workspace:*",
-    "@reach-internal/test": "workspace:*",
-    "@reach-internal/tsconfig": "workspace:*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "tsup": "^6.1.3"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0 || 17.x",
-    "react-dom": "^16.8.0 || 17.x"
-  },
-  "main": "./src/alert-dialog.tsx",
-  "types": "./src/alert-dialog.tsx",
-  "files": [
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@reach/alert-dialog",
+	"version": "0.17.0",
+	"description": "Accessible React Alert Dialog.",
+	"author": "React Training <hello@reacttraining.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reach/reach-ui.git",
+		"directory": "packages/alert-dialog"
+	},
+	"scripts": {
+		"build": "tsup"
+	},
+	"dependencies": {
+		"@reach/auto-id": "workspace:*",
+		"@reach/dialog": "workspace:*",
+		"@reach/utils": "workspace:*",
+		"tiny-invariant": "^1.2.0"
+	},
+	"devDependencies": {
+		"@reach-internal/dev": "workspace:*",
+		"@reach-internal/test": "workspace:*",
+		"@reach-internal/tsconfig": "workspace:*",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"tsup": "^6.1.3"
+	},
+	"peerDependencies": {
+		"react": "^16.8.0 || 17.x",
+		"react-dom": "^16.8.0 || 17.x"
+	},
+	"main": "./src/alert-dialog.tsx",
+	"types": "./src/alert-dialog.tsx",
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }

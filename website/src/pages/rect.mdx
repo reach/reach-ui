@@ -6,10 +6,10 @@ import { TOC, TOCList, TOCLink } from "../components/TOC";
 # Rect
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#userect">useRect</TOCLink>
-    <TOCLink href="#rect-1">Rect</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#userect">useRect</TOCLink>
+		<TOCLink href="#rect-1">Rect</TOCLink>
+	</TOCList>
 </TOC>
 
 Measures DOM elements (aka. bounding client rect). See also [Element.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
@@ -54,34 +54,34 @@ If `observe` is false, the element's `DOMRect` will no longer be observed.
 ```jsx
 // jsx-demo
 function Example() {
-  const [observe, setObserve] = React.useState(true);
-  // your own ref
-  const ref = React.useRef();
+	const [observe, setObserve] = React.useState(true);
+	// your own ref
+	const ref = React.useRef();
 
-  // pass it in to be observered
-  const rect = useRect(ref, { observe });
+	// pass it in to be observered
+	const rect = useRect(ref, { observe });
 
-  return (
-    <div>
-      <button onClick={() => setObserve(!observe)}>
-        {observe ? "Stop" : "Start"} observing
-      </button>
-      <pre>{JSON.stringify(rect, null, 2)}</pre>
-      <div
-        // and then place the ref
-        ref={ref}
-        contentEditable
-        style={{
-          display: "inline-block",
-          padding: 10,
-          border: "solid 1px",
-        }}
-        dangerouslySetInnerHTML={{
-          __html: "Edit this to change the size!",
-        }}
-      />
-    </div>
-  );
+	return (
+		<div>
+			<button onClick={() => setObserve(!observe)}>
+				{observe ? "Stop" : "Start"} observing
+			</button>
+			<pre>{JSON.stringify(rect, null, 2)}</pre>
+			<div
+				// and then place the ref
+				ref={ref}
+				contentEditable
+				style={{
+					display: "inline-block",
+					padding: 10,
+					border: "solid 1px",
+				}}
+				dangerouslySetInnerHTML={{
+					__html: "Edit this to change the size!",
+				}}
+			/>
+		</div>
+	);
 }
 ```
 
@@ -93,13 +93,13 @@ Calls back whenever the `rect` of the element changes.
 
 ```jsx
 function Example() {
-  const ref = React.useRef();
-  useRect(ref, {
-    onChange(rect) {
-      console.log(rect);
-    },
-  });
-  return <div ref={ref} />;
+	const ref = React.useRef();
+	useRect(ref, {
+		onChange(rect) {
+			console.log(rect);
+		},
+	});
+	return <div ref={ref} />;
 }
 ```
 
@@ -131,15 +131,15 @@ Same as [`useRect`'s `observe` option](#userect-observe). While observing, the `
 
 ```jsx
 <Rect observe={false}>
-  {({ rect, ref }) => (
-    <div ref={ref}>
-      <div>Will not measure the element when false</div>
-      <div>
-        Edit this code and change it to <code>true</code>
-      </div>
-      <pre>{JSON.stringify(rect, null, 2)}</pre>
-    </div>
-  )}
+	{({ rect, ref }) => (
+		<div ref={ref}>
+			<div>Will not measure the element when false</div>
+			<div>
+				Edit this code and change it to <code>true</code>
+			</div>
+			<pre>{JSON.stringify(rect, null, 2)}</pre>
+		</div>
+	)}
 </Rect>
 ```
 

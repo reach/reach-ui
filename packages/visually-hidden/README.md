@@ -12,11 +12,11 @@ In the following example, screen readers will announce "Save" and will ignore th
 import { VisuallyHidden } from "@reach/visually-hidden";
 
 function Example() {
-  return (
-    <button>
-      <VisuallyHidden>Save</VisuallyHidden>
-      <span aria-hidden>💾</span>
-    </button>
-  );
+	return (
+		<button>
+			<VisuallyHidden>Save</VisuallyHidden>
+			<span aria-hidden>💾</span>
+		</button>
+	);
 }
 ```

@@ -1,42 +1,42 @@
 {
-  "name": "@reach/alert",
-  "version": "0.17.0",
-  "description": "Screen-reader-friendly alert messages.",
-  "author": "React Training <hello@reacttraining.com>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reach/reach-ui.git",
-    "directory": "packages/alert"
-  },
-  "scripts": {
-    "build": "tsup"
-  },
-  "dependencies": {
-    "@reach/utils": "workspace:*",
-    "@reach/visually-hidden": "workspace:*"
-  },
-  "devDependencies": {
-    "@reach-internal/dev": "workspace:*",
-    "@reach-internal/test": "workspace:*",
-    "@reach-internal/tsconfig": "workspace:*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "tsup": "^6.1.3"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0 || 17.x",
-    "react-dom": "^16.8.0 || 17.x"
-  },
-  "main": "./src/alert.tsx",
-  "types": "./src/alert.tsx",
-  "files": [
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@reach/alert",
+	"version": "0.17.0",
+	"description": "Screen-reader-friendly alert messages.",
+	"author": "React Training <hello@reacttraining.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/reach/reach-ui.git",
+		"directory": "packages/alert"
+	},
+	"scripts": {
+		"build": "tsup"
+	},
+	"dependencies": {
+		"@reach/utils": "workspace:*",
+		"@reach/visually-hidden": "workspace:*"
+	},
+	"devDependencies": {
+		"@reach-internal/dev": "workspace:*",
+		"@reach-internal/test": "workspace:*",
+		"@reach-internal/tsconfig": "workspace:*",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"tsup": "^6.1.3"
+	},
+	"peerDependencies": {
+		"react": "^16.8.0 || 17.x",
+		"react-dom": "^16.8.0 || 17.x"
+	},
+	"main": "./src/alert.tsx",
+	"types": "./src/alert.tsx",
+	"files": [
+		"CHANGELOG.md",
+		"LICENSE",
+		"README.md",
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public"
+	}
 }

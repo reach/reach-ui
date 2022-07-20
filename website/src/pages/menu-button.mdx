@@ -4,23 +4,23 @@ import { AsPropWarning } from "../components/AsPropWarning";
 import { Pipe } from "../components/Pipe";
 
 <SEO
-  title="Menu Button"
-  description="An accessible component for the common dropdown menu button design pattern in React"
+	title="Menu Button"
+	description="An accessible component for the common dropdown menu button design pattern in React"
 />
 
 # Menu Button
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#menu">Menu</TOCLink>
-    <TOCLink href="#menubutton">MenuButton</TOCLink>
-    <TOCLink href="#menulist">MenuList</TOCLink>
-    <TOCLink href="#menupopover">MenuPopover</TOCLink>
-    <TOCLink href="#menuitems">MenuItems</TOCLink>
-    <TOCLink href="#menuitem">MenuItem</TOCLink>
-    <TOCLink href="#menulink">MenuLink</TOCLink>
-    <TOCLink href="#usemenubuttoncontext">useMenuButtonContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#menu">Menu</TOCLink>
+		<TOCLink href="#menubutton">MenuButton</TOCLink>
+		<TOCLink href="#menulist">MenuList</TOCLink>
+		<TOCLink href="#menupopover">MenuPopover</TOCLink>
+		<TOCLink href="#menuitems">MenuItems</TOCLink>
+		<TOCLink href="#menuitem">MenuItem</TOCLink>
+		<TOCLink href="#menulink">MenuLink</TOCLink>
+		<TOCLink href="#usemenubuttoncontext">useMenuButtonContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/menu-button
@@ -33,24 +33,24 @@ Please note that the buttons on this page are styled by this website. They are j
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Menu>
-      <MenuButton>
-        Actions <span aria-hidden>▾</span>
-      </MenuButton>
-      <MenuList>
-        <MenuItem onSelect={() => alert("Download")}>Download</MenuItem>
-        <MenuItem onSelect={() => alert("Copy")}>Create a Copy</MenuItem>
-        <MenuItem onSelect={() => alert("Mark as Draft")}>
-          Mark as Draft
-        </MenuItem>
-        <MenuItem onSelect={() => alert("Delete")}>Delete</MenuItem>
-        <MenuLink as="a" href="https://reacttraining.com/workshops/">
-          Attend a Workshop
-        </MenuLink>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton>
+				Actions <span aria-hidden>▾</span>
+			</MenuButton>
+			<MenuList>
+				<MenuItem onSelect={() => alert("Download")}>Download</MenuItem>
+				<MenuItem onSelect={() => alert("Copy")}>Create a Copy</MenuItem>
+				<MenuItem onSelect={() => alert("Mark as Draft")}>
+					Mark as Draft
+				</MenuItem>
+				<MenuItem onSelect={() => alert("Delete")}>Delete</MenuItem>
+				<MenuLink as="a" href="https://reacttraining.com/workshops/">
+					Attend a Workshop
+				</MenuLink>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -66,13 +66,13 @@ yarn add @reach/menu-button
 
 ```js
 import {
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  MenuPopover,
-  MenuLink,
+	Menu,
+	MenuList,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+	MenuPopover,
+	MenuLink,
 } from "@reach/menu-button";
 import "@reach/menu-button/styles.css";
 ```
@@ -118,15 +118,15 @@ Requires two children: a `MenuButton` and a `MenuList`.
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Menu>
-      <MenuButton>Actions</MenuButton>
-      <MenuList>
-        <MenuItem>Download</MenuItem>
-        <MenuLink to="view">View</MenuLink>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton>Actions</MenuButton>
+			<MenuList>
+				<MenuItem>Download</MenuItem>
+				<MenuLink to="view">View</MenuLink>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -135,21 +135,21 @@ Alternatively, you can provide a render callback. This is helpful if you need to
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Menu>
-      {({ isExpanded }) => (
-        <React.Fragment>
-          <MenuButton>
-            {isExpanded ? "Close" : "Open"} <span aria-hidden="true">▾</span>
-          </MenuButton>
-          <MenuList>
-            <MenuItem>Download</MenuItem>
-            <MenuItem>Create a Copy</MenuItem>
-          </MenuList>
-        </React.Fragment>
-      )}
-    </Menu>
-  );
+	return (
+		<Menu>
+			{({ isExpanded }) => (
+				<React.Fragment>
+					<MenuButton>
+						{isExpanded ? "Close" : "Open"} <span aria-hidden="true">▾</span>
+					</MenuButton>
+					<MenuList>
+						<MenuItem>Download</MenuItem>
+						<MenuItem>Create a Copy</MenuItem>
+					</MenuList>
+				</React.Fragment>
+			)}
+		</Menu>
+	);
 }
 ```
 
@@ -167,8 +167,8 @@ Wraps a DOM `button` that toggles the opening and closing of the dropdown menu. 
 
 ```jsx
 <Menu>
-  <MenuButton>Profile</MenuButton>
-  {/* ... */}
+	<MenuButton>Profile</MenuButton>
+	{/* ... */}
 </Menu>
 ```
 
@@ -180,7 +180,7 @@ A `<MenuButton>` wraps a normal `<button>` and no styles are applied to it, so a
 
 ```css
 button {
-  /* your normal button styles will be applied */
+	/* your normal button styles will be applied */
 }
 ```
 
@@ -188,7 +188,7 @@ You can use the `[data-reach-menu-button]` selector to style only the dropdown b
 
 ```css
 [data-reach-menu-button] {
-  color: blue;
+	color: blue;
 }
 ```
 
@@ -196,8 +196,8 @@ If you'd like to target when the menu is open use `aria-expanded`:
 
 ```css
 [data-reach-menu-button][aria-expanded="true"] {
-  background: #000;
-  color: white;
+	background: #000;
+	color: white;
 }
 ```
 
@@ -216,15 +216,15 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 ```jsx
 <Menu>
-  <MenuButton
-    className="button-primary"
-    style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
-  >
-    Actions <span aria-hidden>▾</span>
-  </MenuButton>
-  <MenuList>
-    <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
-  </MenuList>
+	<MenuButton
+		className="button-primary"
+		style={{ boxShadow: "2px 2px 2px hsla(0, 0%, 0%, 0.25)" }}
+	>
+		Actions <span aria-hidden>▾</span>
+	</MenuButton>
+	<MenuList>
+		<MenuItem onSelect={() => {}}>Do nothing</MenuItem>
+	</MenuList>
 </Menu>
 ```
 
@@ -244,10 +244,10 @@ Accepts any renderable content.
 
 ```jsx
 <MenuButton>
-  Actions{" "}
-  <span aria-hidden>
-    <Gear />
-  </span>
+	Actions{" "}
+	<span aria-hidden>
+		<Gear />
+	</span>
 </MenuButton>
 ```
 
@@ -257,10 +257,10 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 ```jsx
 <Menu>
-  {/* ... */}
-  <MenuList>
-    <MenuItem onSelect={() => {}}>Download</MenuItem>
-  </MenuList>
+	{/* ... */}
+	<MenuList>
+		<MenuItem onSelect={() => {}}>Download</MenuItem>
+	</MenuList>
 </Menu>
 ```
 
@@ -268,7 +268,7 @@ Wraps a DOM element that renders the menu items. Must be rendered inside of a `<
 
 ```css
 [data-reach-menu-list] {
-  padding: 20px 10px;
+	padding: 20px 10px;
 }
 ```
 
@@ -287,18 +287,18 @@ All props are spread to the underlying element. Here we apply a `className` the 
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Menu>
-      <MenuButton>
-        Actions <span aria-hidden>▾</span>
-      </MenuButton>
-      <MenuList className="slide-down">
-        <MenuItem onSelect={() => {}}>Start Video</MenuItem>
-        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
-        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton>
+				Actions <span aria-hidden>▾</span>
+			</MenuButton>
+			<MenuList className="slide-down">
+				<MenuItem onSelect={() => {}}>Start Video</MenuItem>
+				<MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+				<MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -306,20 +306,20 @@ The stylesheet contains these rules to create the animation.
 
 ```css
 @keyframes slide-down {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .slide-down[data-reach-menu-list],
 .slide-down[data-reach-menu-items] {
-  border-radius: 5px;
-  animation: slide-down 0.2s ease;
+	border-radius: 5px;
+	animation: slide-down 0.2s ease;
 }
 ```
 
@@ -331,8 +331,8 @@ Can contain only `MenuItem` or a `MenuLink`
 
 ```jsx
 <MenuList>
-  <MenuItem />
-  <MenuLink />
+	<MenuItem />
+	<MenuLink />
 </MenuList>
 ```
 
@@ -348,14 +348,14 @@ A low-level wrapper for the popover that appears when a menu button is open. You
 
 ```jsx
 <Menu>
-  {/* ... */}
-  <MenuPopover>
-    <div className="arbitrary-element">
-      <MenuItems>
-        <MenuItem onSelect={() => {}}>Download</MenuItem>
-      </MenuItems>
-    </div>
-  </MenuPopover>
+	{/* ... */}
+	<MenuPopover>
+		<div className="arbitrary-element">
+			<MenuItems>
+				<MenuItem onSelect={() => {}}>Download</MenuItem>
+			</MenuItems>
+		</div>
+	</MenuPopover>
 </Menu>
 ```
 
@@ -411,7 +411,7 @@ Handles menu selection. Must be a direct child of a `<MenuList>`.
 
 ```jsx
 <MenuList>
-  <MenuItem onSelect={() => alert("download!")}>Download</MenuItem>
+	<MenuItem onSelect={() => alert("download!")}>Download</MenuItem>
 </MenuList>
 ```
 
@@ -421,7 +421,7 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-menu-item] {
-  padding: 20px 10px;
+	padding: 20px 10px;
 }
 ```
 
@@ -429,7 +429,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 ```css
 [data-reach-menu-item][data-selected] {
-  background: red;
+	background: red;
 }
 ```
 
@@ -437,28 +437,28 @@ The following example has this css applied:
 
 ```css
 .red-highlight[data-reach-menu-item][data-selected] {
-  background: red;
+	background: red;
 }
 ```
 
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Menu>
-      <MenuButton>
-        Actions <span aria-hidden>▾</span>
-      </MenuButton>
-      <MenuList>
-        <MenuItem className="red-highlight" onSelect={() => {}}>
-          Start Video
-        </MenuItem>
-        <MenuItem className="red-highlight" onSelect={() => {}}>
-          Start Screenshare
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton>
+				Actions <span aria-hidden>▾</span>
+			</MenuButton>
+			<MenuList>
+				<MenuItem className="red-highlight" onSelect={() => {}}>
+					Start Video
+				</MenuItem>
+				<MenuItem className="red-highlight" onSelect={() => {}}>
+					Start Screenshare
+				</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -481,24 +481,24 @@ In this example the `onFocus` prop is passed down to the element.
 ```jsx
 // jsx-demo
 function Example(props) {
-  const [focusCount, setFocusCount] = React.useState(0);
-  return (
-    <Menu>
-      <MenuButton>Actions</MenuButton>
-      <MenuList>
-        <MenuItem
-          onFocus={() => {
-            setFocusCount((prevFocusCount) => prevFocusCount + 1);
-          }}
-          onSelect={() => {}}
-        >
-          Focused {focusCount} Times
-        </MenuItem>
-        <MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
-        <MenuItem onSelect={() => {}}>Send a Message</MenuItem>
-      </MenuList>
-    </Menu>
-  );
+	const [focusCount, setFocusCount] = React.useState(0);
+	return (
+		<Menu>
+			<MenuButton>Actions</MenuButton>
+			<MenuList>
+				<MenuItem
+					onFocus={() => {
+						setFocusCount((prevFocusCount) => prevFocusCount + 1);
+					}}
+					onSelect={() => {}}
+				>
+					Focused {focusCount} Times
+				</MenuItem>
+				<MenuItem onSelect={() => {}}>Start Screenshare</MenuItem>
+				<MenuItem onSelect={() => {}}>Send a Message</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -512,33 +512,33 @@ You can pass another element or use this prop to render a styled component.
 
 ```jsx
 const StyledItem = styled.div`
-  &[data-selected] {
-    background: palevioletred;
-  }
+	&[data-selected] {
+		background: palevioletred;
+	}
 `;
 
 function Example() {
-  return (
-    <Menu>
-      <MenuButton id="example-button">
-        Actions <span aria-hidden="true">▾</span>
-      </MenuButton>
-      <MenuList>
-        <MenuItem as={StyledItem} onSelect={action("Download")}>
-          Download
-        </MenuItem>
-        <MenuItem as={StyledItem} onSelect={action("Copy")}>
-          Create a Copy
-        </MenuItem>
-        <MenuItem as={StyledItem} onSelect={action("Mark as Draft")}>
-          Mark as Draft
-        </MenuItem>
-        <MenuItem as={StyledItem} onSelect={action("Delete")}>
-          Delete
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton id="example-button">
+				Actions <span aria-hidden="true">▾</span>
+			</MenuButton>
+			<MenuList>
+				<MenuItem as={StyledItem} onSelect={action("Download")}>
+					Download
+				</MenuItem>
+				<MenuItem as={StyledItem} onSelect={action("Copy")}>
+					Create a Copy
+				</MenuItem>
+				<MenuItem as={StyledItem} onSelect={action("Mark as Draft")}>
+					Mark as Draft
+				</MenuItem>
+				<MenuItem as={StyledItem} onSelect={action("Delete")}>
+					Delete
+				</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -551,26 +551,26 @@ You can put any type of content inside of a `<MenuItem>`.
 ```jsx
 // jsx-demo
 function Example(props) {
-  return (
-    <Menu>
-      <MenuButton>
-        Your Cats <span aria-hidden>▾</span>
-      </MenuButton>
-      <MenuList className="kittys">
-        <MenuItem onSelect={() => {}}>
-          <img
-            src="https://placekitten.com/100/100"
-            alt="Fluffybuns the destroyer"
-          />
-          <span>Fluffybuns the Destroyer</span>
-        </MenuItem>
-        <MenuItem onSelect={() => {}}>
-          <img src="https://placekitten.com/120/120" alt="Simon the pensive" />
-          <span>Simon the pensive</span>
-        </MenuItem>
-      </MenuList>
-    </Menu>
-  );
+	return (
+		<Menu>
+			<MenuButton>
+				Your Cats <span aria-hidden>▾</span>
+			</MenuButton>
+			<MenuList className="kittys">
+				<MenuItem onSelect={() => {}}>
+					<img
+						src="https://placekitten.com/100/100"
+						alt="Fluffybuns the destroyer"
+					/>
+					<span>Fluffybuns the Destroyer</span>
+				</MenuItem>
+				<MenuItem onSelect={() => {}}>
+					<img src="https://placekitten.com/120/120" alt="Simon the pensive" />
+					<span>Simon the pensive</span>
+				</MenuItem>
+			</MenuList>
+		</Menu>
+	);
 }
 ```
 
@@ -595,13 +595,13 @@ Must be a direct child of a `<MenuList>`.
 ```jsx
 import { Link } from "@reach/router";
 <MenuList>
-  <MenuLink as={Link} to="somewhere/else">
-    Somewhere w/ Reach Router
-  </MenuLink>
-  <MenuLink href="https://reactjs.org">Official React Site</MenuLink>
-  <MenuLink as={GatsbyLink} to="/somewhere/with/gatsby">
-    Some Gatsby Page
-  </MenuLink>
+	<MenuLink as={Link} to="somewhere/else">
+		Somewhere w/ Reach Router
+	</MenuLink>
+	<MenuLink href="https://reactjs.org">Official React Site</MenuLink>
+	<MenuLink as={GatsbyLink} to="/somewhere/with/gatsby">
+		Some Gatsby Page
+	</MenuLink>
 </MenuList>;
 ```
 
@@ -611,7 +611,7 @@ Please see the [styling guide](/styling).
 
 ```css
 [data-reach-menu-item] {
-  padding: 20px 10px;
+	padding: 20px 10px;
 }
 ```
 
@@ -619,7 +619,7 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 ```css
 [data-reach-menu-item][data-selected] {
-  background: red;
+	background: red;
 }
 ```
 
@@ -658,14 +658,14 @@ While `MenuLink` should always render an HTML anchor tag, this is useful to pass
 ```jsx
 import { Link } from "react-router";
 <Menu>
-  <MenuButton>Products</MenuButton>
-  <MenuList>
-    <MenuLink as={Link} to="/settings">
-      Settings
-    </MenuLink>
-    <MenuLink href="https://reacttraining.com/workshops">Workshops</MenuLink>
-    <MenuLink href="https://reacttraining.com/courses">Online Courses</MenuLink>
-  </MenuList>
+	<MenuButton>Products</MenuButton>
+	<MenuList>
+		<MenuLink as={Link} to="/settings">
+			Settings
+		</MenuLink>
+		<MenuLink href="https://reacttraining.com/workshops">Workshops</MenuLink>
+		<MenuLink href="https://reacttraining.com/courses">Online Courses</MenuLink>
+	</MenuList>
 </Menu>;
 ```
 
@@ -684,8 +684,8 @@ You can render any kind of content inside of a MenuLink.
 
 ```jsx
 <MenuLink>
-  <ProfileImage userId="4" />
-  <UserName>Ryan Florence</UserName>
+	<ProfileImage userId="4" />
+	<UserName>Ryan Florence</UserName>
 </MenuLink>
 ```
 
@@ -717,46 +717,46 @@ Note the callbacks given to `setState` in the following demo app where focus is 
 
 ```jsx
 function Example(props) {
-  const screen1FocusRef = React.useRef();
-  const screen2ButtonFocusRef = React.useRef();
-  React.useEffect(() => {
-    requestAnimationFrame(() => {
-      if (screen === 1) {
-        screen1FocusRef.current.focus();
-      }
-      if (screen === 2) {
-        screen2ButtonFocusRef.current.focus();
-      }
-    });
-  }, [screen]);
+	const screen1FocusRef = React.useRef();
+	const screen2ButtonFocusRef = React.useRef();
+	React.useEffect(() => {
+		requestAnimationFrame(() => {
+			if (screen === 1) {
+				screen1FocusRef.current.focus();
+			}
+			if (screen === 2) {
+				screen2ButtonFocusRef.current.focus();
+			}
+		});
+	}, [screen]);
 
-  const [screen, setScreen] = React.useState(1);
-  if (screen === 1) {
-    return (
-      <div ref={screen1FocusRef} tabIndex="-1">
-        <h4>Screen One</h4>
-        <Menu>
-          <MenuButton>Actions</MenuButton>
-          <MenuList>
-            <MenuItem onSelect={() => setScreen(2)}>Go to screen 2</MenuItem>
-            <MenuItem onSelect={() => {}}>Do nothing</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu />
-      </div>
-    );
-  }
-  if (screen === 2) {
-    return (
-      <div>
-        <h4>Screen 2</h4>
-        <button ref={screen2ButtonFocusRef} onClick={() => setScreen(1)}>
-          Back to screen 1
-        </button>
-      </div>
-    );
-  }
-  return null;
+	const [screen, setScreen] = React.useState(1);
+	if (screen === 1) {
+		return (
+			<div ref={screen1FocusRef} tabIndex="-1">
+				<h4>Screen One</h4>
+				<Menu>
+					<MenuButton>Actions</MenuButton>
+					<MenuList>
+						<MenuItem onSelect={() => setScreen(2)}>Go to screen 2</MenuItem>
+						<MenuItem onSelect={() => {}}>Do nothing</MenuItem>
+					</MenuList>
+				</Menu>
+				<Menu />
+			</div>
+		);
+	}
+	if (screen === 2) {
+		return (
+			<div>
+				<h4>Screen 2</h4>
+				<button ref={screen2ButtonFocusRef} onClick={() => setScreen(1)}>
+					Back to screen 1
+				</button>
+			</div>
+		);
+	}
+	return null;
 }
 ```
 
@@ -766,7 +766,7 @@ If you add an icon to indicate to users the button is a dropdown menu, use `aria
 
 ```jsx
 <MenuButton>
-  Actions <span aria-hidden>▾</span>
+	Actions <span aria-hidden>▾</span>
 </MenuButton>
 ```
 
@@ -807,20 +807,20 @@ You may want to pass your own click handler to a MenuButton, MenuItem or MenuLin
 
 ```jsx
 <Menu>
-  <MenuButton>Actions</MenuButton>
-  <MenuList>
-    <MenuItem
-      onClick={(event) => {
-        if (!userLoggedIn) {
-          event.preventDefault();
-          openDialog();
-        }
-      }}
-      onSelect={() => alert("Download")}
-    >
-      Download
-    </MenuItem>
-  </MenuList>
+	<MenuButton>Actions</MenuButton>
+	<MenuList>
+		<MenuItem
+			onClick={(event) => {
+				if (!userLoggedIn) {
+					event.preventDefault();
+					openDialog();
+				}
+			}}
+			onSelect={() => alert("Download")}
+		>
+			Download
+		</MenuItem>
+	</MenuList>
 </Menu>
 ```
 

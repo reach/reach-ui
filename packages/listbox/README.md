@@ -12,24 +12,24 @@ import { Listbox, ListboxOption } from "@reach/listbox";
 import "@reach/listbox/styles.css";
 
 function Example(props) {
-  let [value, setValue] = React.useState("default");
-  return (
-    <Listbox value={value} onChange={(value) => setValue(value)}>
-      <ListboxOption value="default">🌮 Choose a taco</ListboxOption>
-      <hr />
-      <ListboxOption value="asada" valueText="Carne Asada">
-        🌮 Carne Asada
-      </ListboxOption>
-      <ListboxOption value="pollo" valueText="Pollo">
-        🌮 Pollo
-      </ListboxOption>
-      <ListboxOption value="pastor" valueText="Pastor">
-        🌮 Pastor
-      </ListboxOption>
-      <ListboxOption value="lengua" valueText="Lengua">
-        🌮 Lengua
-      </ListboxOption>
-    </Listbox>
-  );
+	let [value, setValue] = React.useState("default");
+	return (
+		<Listbox value={value} onChange={(value) => setValue(value)}>
+			<ListboxOption value="default">🌮 Choose a taco</ListboxOption>
+			<hr />
+			<ListboxOption value="asada" valueText="Carne Asada">
+				🌮 Carne Asada
+			</ListboxOption>
+			<ListboxOption value="pollo" valueText="Pollo">
+				🌮 Pollo
+			</ListboxOption>
+			<ListboxOption value="pastor" valueText="Pastor">
+				🌮 Pastor
+			</ListboxOption>
+			<ListboxOption value="lengua" valueText="Lengua">
+				🌮 Lengua
+			</ListboxOption>
+		</Listbox>
+	);
 }
 ```

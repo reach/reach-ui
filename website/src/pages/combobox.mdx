@@ -4,23 +4,23 @@ import { AsPropWarning } from "../components/AsPropWarning";
 import { Pipe } from "../components/Pipe";
 
 <SEO
-  title="Combobox"
-  description="Accessible combobox (autocomplete or autosuggest) component for React"
+	title="Combobox"
+	description="Accessible combobox (autocomplete or autosuggest) component for React"
 />
 
 # Combobox
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#combobox-1">Combobox</TOCLink>
-    <TOCLink href="#comboboxinput">ComboboxInput</TOCLink>
-    <TOCLink href="#comboboxpopover">ComboboxPopover</TOCLink>
-    <TOCLink href="#comboboxlist">ComboboxList</TOCLink>
-    <TOCLink href="#comboboxoption">ComboboxOption</TOCLink>
-    <TOCLink href="#comboboxoptiontext">ComboboxOptionText</TOCLink>
-    <TOCLink href="#usecomboboxcontext">useComboboxContext</TOCLink>
-    <TOCLink href="#usecomboboxoptioncontext">useComboboxOptionContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#combobox-1">Combobox</TOCLink>
+		<TOCLink href="#comboboxinput">ComboboxInput</TOCLink>
+		<TOCLink href="#comboboxpopover">ComboboxPopover</TOCLink>
+		<TOCLink href="#comboboxlist">ComboboxList</TOCLink>
+		<TOCLink href="#comboboxoption">ComboboxOption</TOCLink>
+		<TOCLink href="#comboboxoptiontext">ComboboxOptionText</TOCLink>
+		<TOCLink href="#usecomboboxcontext">useComboboxContext</TOCLink>
+		<TOCLink href="#usecomboboxoptioncontext">useComboboxOptionContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/combobox
@@ -42,12 +42,12 @@ yarn add @reach/combobox
 
 ```js
 import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-  ComboboxOptionText,
+	Combobox,
+	ComboboxInput,
+	ComboboxPopover,
+	ComboboxList,
+	ComboboxOption,
+	ComboboxOptionText,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 ```
@@ -62,13 +62,13 @@ For instance, instead of adding `aria-label` to `<ComboboxInput>`, we can add it
 
 ```jsx
 <Combobox aria-label="choose a fruit">
-  <ComboboxInput />
-  <ComboboxPopover>
-    <ComboboxList>
-      <ComboboxOption value="Apple" />
-      <ComboboxOption value="Banana" />
-    </ComboboxList>
-  </ComboboxPopover>
+	<ComboboxInput />
+	<ComboboxPopover>
+		<ComboboxList>
+			<ComboboxOption value="Apple" />
+			<ComboboxOption value="Banana" />
+		</ComboboxList>
+	</ComboboxPopover>
 </Combobox>
 ```
 
@@ -87,23 +87,23 @@ Like a `<table><tr><td/></tr></table>`, a full combobox is made up of multiple c
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <div>
-      <h4 id="demo">Basic, Fixed List Combobox</h4>
-      <Combobox aria-labelledby="demo">
-        <ComboboxInput />
-        <ComboboxPopover>
-          <ComboboxList>
-            <ComboboxOption value="Apple" />
-            <ComboboxOption value="Banana" />
-            <ComboboxOption value="Orange" />
-            <ComboboxOption value="Pineapple" />
-            <ComboboxOption value="Kiwi" />
-          </ComboboxList>
-        </ComboboxPopover>
-      </Combobox>
-    </div>
-  );
+	return (
+		<div>
+			<h4 id="demo">Basic, Fixed List Combobox</h4>
+			<Combobox aria-labelledby="demo">
+				<ComboboxInput />
+				<ComboboxPopover>
+					<ComboboxList>
+						<ComboboxOption value="Apple" />
+						<ComboboxOption value="Banana" />
+						<ComboboxOption value="Orange" />
+						<ComboboxOption value="Pineapple" />
+						<ComboboxOption value="Kiwi" />
+					</ComboboxList>
+				</ComboboxPopover>
+			</Combobox>
+		</div>
+	);
 }
 ```
 
@@ -114,33 +114,33 @@ Sometimes your items need to be more than just text, in these cases you can pass
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Combobox aria-label="custom option demo">
-      <ComboboxInput
-        placeholder="Custom Option Rendering"
-        style={{ width: 300 }}
-      />
-      <ComboboxPopover>
-        <ComboboxList>
-          <ComboboxOption value="Apple">
-            🍎 <ComboboxOptionText />
-          </ComboboxOption>
-          <ComboboxOption value="Banana">
-            🍌 <ComboboxOptionText />
-          </ComboboxOption>
-          <ComboboxOption value="Orange">
-            🍊 <ComboboxOptionText />
-          </ComboboxOption>
-          <ComboboxOption value="Pineapple">
-            🍍 <ComboboxOptionText />
-          </ComboboxOption>
-          <ComboboxOption value="Kiwi">
-            🥝 <ComboboxOptionText />
-          </ComboboxOption>
-        </ComboboxList>
-      </ComboboxPopover>
-    </Combobox>
-  );
+	return (
+		<Combobox aria-label="custom option demo">
+			<ComboboxInput
+				placeholder="Custom Option Rendering"
+				style={{ width: 300 }}
+			/>
+			<ComboboxPopover>
+				<ComboboxList>
+					<ComboboxOption value="Apple">
+						🍎 <ComboboxOptionText />
+					</ComboboxOption>
+					<ComboboxOption value="Banana">
+						🍌 <ComboboxOptionText />
+					</ComboboxOption>
+					<ComboboxOption value="Orange">
+						🍊 <ComboboxOptionText />
+					</ComboboxOption>
+					<ComboboxOption value="Pineapple">
+						🍍 <ComboboxOptionText />
+					</ComboboxOption>
+					<ComboboxOption value="Kiwi">
+						🥝 <ComboboxOptionText />
+					</ComboboxOption>
+				</ComboboxList>
+			</ComboboxPopover>
+		</Combobox>
+	);
 }
 ```
 
@@ -157,56 +157,56 @@ There is nothing special about managing state for a combobox, it's like managing
 ```jsx
 // jsx-demo
 (() => {
-  function Example() {
-    const [term, setTerm] = React.useState("");
-    const results = useCityMatch(term);
-    const handleChange = (event) => setTerm(event.target.value);
+	function Example() {
+		const [term, setTerm] = React.useState("");
+		const results = useCityMatch(term);
+		const handleChange = (event) => setTerm(event.target.value);
 
-    return (
-      <div>
-        <h4>Clientside Search</h4>
-        <Combobox aria-label="Cities">
-          <ComboboxInput
-            className="city-search-input"
-            onChange={handleChange}
-          />
-          {results && (
-            <ComboboxPopover className="shadow-popup">
-              {results.length > 0 ? (
-                <ComboboxList>
-                  {results.slice(0, 10).map((result, index) => (
-                    <ComboboxOption
-                      key={index}
-                      value={`${result.city}, ${result.state}`}
-                    />
-                  ))}
-                </ComboboxList>
-              ) : (
-                <span style={{ display: "block", margin: 8 }}>
-                  No results found
-                </span>
-              )}
-            </ComboboxPopover>
-          )}
-        </Combobox>
-      </div>
-    );
-  }
+		return (
+			<div>
+				<h4>Clientside Search</h4>
+				<Combobox aria-label="Cities">
+					<ComboboxInput
+						className="city-search-input"
+						onChange={handleChange}
+					/>
+					{results && (
+						<ComboboxPopover className="shadow-popup">
+							{results.length > 0 ? (
+								<ComboboxList>
+									{results.slice(0, 10).map((result, index) => (
+										<ComboboxOption
+											key={index}
+											value={`${result.city}, ${result.state}`}
+										/>
+									))}
+								</ComboboxList>
+							) : (
+								<span style={{ display: "block", margin: 8 }}>
+									No results found
+								</span>
+							)}
+						</ComboboxPopover>
+					)}
+				</Combobox>
+			</div>
+		);
+	}
 
-  function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100);
-    return React.useMemo(
-      () =>
-        term.trim() === ""
-          ? null
-          : matchSorter(cities, term, {
-              keys: [(item) => `${item.city}, ${item.state}`],
-            }),
-      [throttledTerm]
-    );
-  }
+	function useCityMatch(term) {
+		const throttledTerm = useThrottle(term, 100);
+		return React.useMemo(
+			() =>
+				term.trim() === ""
+					? null
+					: matchSorter(cities, term, {
+							keys: [(item) => `${item.city}, ${item.state}`],
+					  }),
+			[throttledTerm]
+		);
+	}
 
-  return <Example />;
+	return <Example />;
 })();
 ```
 
@@ -217,69 +217,69 @@ This is the same demo as above, except this time we're going to a server to get 
 ```jsx
 // jsx-demo
 (() => {
-  function Example() {
-    const [searchTerm, setSearchTerm] = React.useState("");
-    const cities = useCitySearch(searchTerm);
-    const handleSearchTermChange = (event) => {
-      setSearchTerm(event.target.value);
-    };
+	function Example() {
+		const [searchTerm, setSearchTerm] = React.useState("");
+		const cities = useCitySearch(searchTerm);
+		const handleSearchTermChange = (event) => {
+			setSearchTerm(event.target.value);
+		};
 
-    return (
-      <Combobox aria-label="Cities">
-        <ComboboxInput
-          className="city-search-input"
-          onChange={handleSearchTermChange}
-        />
-        {cities && (
-          <ComboboxPopover className="shadow-popup">
-            {cities.length > 0 ? (
-              <ComboboxList>
-                {cities.map((city) => {
-                  const str = `${city.city}, ${city.state}`;
-                  return <ComboboxOption key={str} value={str} />;
-                })}
-              </ComboboxList>
-            ) : (
-              <span style={{ display: "block", margin: 8 }}>
-                No results found
-              </span>
-            )}
-          </ComboboxPopover>
-        )}
-      </Combobox>
-    );
-  }
+		return (
+			<Combobox aria-label="Cities">
+				<ComboboxInput
+					className="city-search-input"
+					onChange={handleSearchTermChange}
+				/>
+				{cities && (
+					<ComboboxPopover className="shadow-popup">
+						{cities.length > 0 ? (
+							<ComboboxList>
+								{cities.map((city) => {
+									const str = `${city.city}, ${city.state}`;
+									return <ComboboxOption key={str} value={str} />;
+								})}
+							</ComboboxList>
+						) : (
+							<span style={{ display: "block", margin: 8 }}>
+								No results found
+							</span>
+						)}
+					</ComboboxPopover>
+				)}
+			</Combobox>
+		);
+	}
 
-  function useCitySearch(searchTerm) {
-    const [cities, setCities] = React.useState([]);
+	function useCitySearch(searchTerm) {
+		const [cities, setCities] = React.useState([]);
 
-    React.useEffect(() => {
-      if (searchTerm.trim() !== "") {
-        let isFresh = true;
-        fetchCities(searchTerm).then((cities) => {
-          if (isFresh) setCities(cities);
-        });
-        return () => (isFresh = false);
-      }
-    }, [searchTerm]);
+		React.useEffect(() => {
+			if (searchTerm.trim() !== "") {
+				let isFresh = true;
+				fetchCities(searchTerm).then((cities) => {
+					if (isFresh) setCities(cities);
+				});
+				return () => (isFresh = false);
+			}
+		}, [searchTerm]);
 
-    return cities;
-  }
+		return cities;
+	}
 
-  const cache = {};
-  function fetchCities(value) {
-    if (cache[value]) {
-      return Promise.resolve(cache[value]);
-    }
-    return fetch("https://city-search.chaance.vercel.app/api?" + value)
-      .then((res) => res.json())
-      .then((result) => {
-        cache[value] = result;
-        return result;
-      });
-  }
+	const cache = {};
+	function fetchCities(value) {
+		if (cache[value]) {
+			return Promise.resolve(cache[value]);
+		}
+		return fetch("https://city-search.chaance.vercel.app/api?" + value)
+			.then((res) => res.json())
+			.then((result) => {
+				cache[value] = result;
+				return result;
+			});
+	}
 
-  return <Example />;
+	return <Example />;
 })();
 ```
 
@@ -292,82 +292,82 @@ You can even have other interactive elements inside the popover, it won't close 
 ```jsx
 // jsx-demo
 (() => {
-  function Example() {
-    const [term, setTerm] = React.useState("");
-    const results = useCityMatch(term);
-    const handleChange = (event) => setTerm(event.target.value);
+	function Example() {
+		const [term, setTerm] = React.useState("");
+		const results = useCityMatch(term);
+		const handleChange = (event) => setTerm(event.target.value);
 
-    return (
-      <div>
-        <h4>Lots of stuff going on</h4>
-        <Combobox>
-          <ComboboxInput
-            onChange={handleChange}
-            style={{ width: 300, margin: 0 }}
-          />
-          {results && (
-            <ComboboxPopover style={{ width: 300 }}>
-              {results.length > 0 ? (
-                <ComboboxList>
-                  <h5 style={heading}>Top 3 results!</h5>
-                  {results.slice(0, 3).map((result, index) => (
-                    <ComboboxOption
-                      key={index}
-                      value={`${result.city}, ${result.state}`}
-                    />
-                  ))}
-                  {results.length > 3 && (
-                    <React.Fragment>
-                      <h5 style={heading}>The Rest</h5>
-                      {results.slice(3, 10).map((result, index) => (
-                        <ComboboxOption
-                          key={index}
-                          value={`${result.city}, ${result.state}`}
-                        />
-                      ))}
-                    </React.Fragment>
-                  )}
-                </ComboboxList>
-              ) : (
-                <div>
-                  <p style={{ padding: 10, textAlign: "center" }}>
-                    No results 😞
-                  </p>
-                </div>
-              )}
-              <p style={{ textAlign: "center", padding: 10 }}>
-                <button>Create a new record</button>
-              </p>
-            </ComboboxPopover>
-          )}
-        </Combobox>
-      </div>
-    );
-  }
+		return (
+			<div>
+				<h4>Lots of stuff going on</h4>
+				<Combobox>
+					<ComboboxInput
+						onChange={handleChange}
+						style={{ width: 300, margin: 0 }}
+					/>
+					{results && (
+						<ComboboxPopover style={{ width: 300 }}>
+							{results.length > 0 ? (
+								<ComboboxList>
+									<h5 style={heading}>Top 3 results!</h5>
+									{results.slice(0, 3).map((result, index) => (
+										<ComboboxOption
+											key={index}
+											value={`${result.city}, ${result.state}`}
+										/>
+									))}
+									{results.length > 3 && (
+										<React.Fragment>
+											<h5 style={heading}>The Rest</h5>
+											{results.slice(3, 10).map((result, index) => (
+												<ComboboxOption
+													key={index}
+													value={`${result.city}, ${result.state}`}
+												/>
+											))}
+										</React.Fragment>
+									)}
+								</ComboboxList>
+							) : (
+								<div>
+									<p style={{ padding: 10, textAlign: "center" }}>
+										No results 😞
+									</p>
+								</div>
+							)}
+							<p style={{ textAlign: "center", padding: 10 }}>
+								<button>Create a new record</button>
+							</p>
+						</ComboboxPopover>
+					)}
+				</Combobox>
+			</div>
+		);
+	}
 
-  function useCityMatch(term) {
-    const throttledTerm = useThrottle(term, 100);
-    return React.useMemo(
-      () =>
-        term.trim() === ""
-          ? null
-          : matchSorter(cities, term, {
-              keys: [(item) => `${item.city}, ${item.state}`],
-            }),
-      [throttledTerm]
-    );
-  }
+	function useCityMatch(term) {
+		const throttledTerm = useThrottle(term, 100);
+		return React.useMemo(
+			() =>
+				term.trim() === ""
+					? null
+					: matchSorter(cities, term, {
+							keys: [(item) => `${item.city}, ${item.state}`],
+					  }),
+			[throttledTerm]
+		);
+	}
 
-  const heading = {
-    fontSize: "100%",
-    color: "red",
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    margin: 0,
-    padding: 5,
-  };
+	const heading = {
+		fontSize: "100%",
+		color: "red",
+		fontWeight: "bold",
+		textTransform: "uppercase",
+		margin: 0,
+		padding: 5,
+	};
 
-  return <Example />;
+	return <Example />;
 })();
 ```
 
@@ -378,58 +378,58 @@ This demo shows how you can control a lot about the styling. It uses `portal={fa
 ```jsx
 // jsx-demo
 (() => {
-  function Example() {
-    let [term, setTerm] = React.useState("");
-    let results = useCityMatch(term);
-    const handleChange = (event) => setTerm(event.target.value);
+	function Example() {
+		let [term, setTerm] = React.useState("");
+		let results = useCityMatch(term);
+		const handleChange = (event) => setTerm(event.target.value);
 
-    return (
-      <Combobox className="pink">
-        <ComboboxInput onChange={handleChange} />
-        {results && (
-          <ComboboxPopover portal={false}>
-            <hr />
-            {results.length > 0 ? (
-              <ComboboxList>
-                {results.slice(0, 10).map((result, index) => (
-                  <ComboboxOption
-                    key={index}
-                    value={`${result.city}, ${result.state}`}
-                  />
-                ))}
-              </ComboboxList>
-            ) : (
-              <p
-                style={{
-                  margin: 0,
-                  color: "#454545",
-                  padding: "0.25rem 1rem 0.75rem 1rem",
-                  fontStyle: "italic",
-                }}
-              >
-                No results :(
-              </p>
-            )}
-          </ComboboxPopover>
-        )}
-      </Combobox>
-    );
-  }
+		return (
+			<Combobox className="pink">
+				<ComboboxInput onChange={handleChange} />
+				{results && (
+					<ComboboxPopover portal={false}>
+						<hr />
+						{results.length > 0 ? (
+							<ComboboxList>
+								{results.slice(0, 10).map((result, index) => (
+									<ComboboxOption
+										key={index}
+										value={`${result.city}, ${result.state}`}
+									/>
+								))}
+							</ComboboxList>
+						) : (
+							<p
+								style={{
+									margin: 0,
+									color: "#454545",
+									padding: "0.25rem 1rem 0.75rem 1rem",
+									fontStyle: "italic",
+								}}
+							>
+								No results :(
+							</p>
+						)}
+					</ComboboxPopover>
+				)}
+			</Combobox>
+		);
+	}
 
-  function useCityMatch(term) {
-    let throttledTerm = useThrottle(term, 100);
-    return React.useMemo(
-      () =>
-        term.trim() === ""
-          ? null
-          : matchSorter(cities, term, {
-              keys: [(item) => `${item.city}, ${item.state}`],
-            }),
-      [throttledTerm]
-    );
-  }
+	function useCityMatch(term) {
+		let throttledTerm = useThrottle(term, 100);
+		return React.useMemo(
+			() =>
+				term.trim() === ""
+					? null
+					: matchSorter(cities, term, {
+							keys: [(item) => `${item.city}, ${item.state}`],
+					  }),
+			[throttledTerm]
+		);
+	}
 
-  return <Example />;
+	return <Example />;
 })();
 ```
 
@@ -699,7 +699,7 @@ So given an option like this:
 
 ```jsx
 <ComboboxOption value="Seattle">
-  🌧 <ComboboxOptionText />
+	🌧 <ComboboxOptionText />
 </ComboboxOption>
 ```
 

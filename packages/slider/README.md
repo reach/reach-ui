@@ -8,27 +8,27 @@ A UI input component where the user selects a value from within a given range. A
 
 ```jsx
 import {
-  Slider,
-  SliderInput,
-  SliderTrack,
-  SliderRange,
-  SliderHandle,
-  SliderMarker,
+	Slider,
+	SliderInput,
+	SliderTrack,
+	SliderRange,
+	SliderHandle,
+	SliderMarker,
 } from "@reach/slider";
 import "@reach/slider/styles.css";
 
 function Example() {
-  return <Slider min={0} max={200} step={10} />;
+	return <Slider min={0} max={200} step={10} />;
 }
 
 function ExampleComposed() {
-  return (
-    <SliderInput min={0} max={200} step={10}>
-      <SliderTrack>
-        <SliderRange />
-        <SliderHandle />
-      </SliderTrack>
-    </SliderInput>
-  );
+	return (
+		<SliderInput min={0} max={200} step={10}>
+			<SliderTrack>
+				<SliderRange />
+				<SliderHandle />
+			</SliderTrack>
+		</SliderInput>
+	);
 }
 ```

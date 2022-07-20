@@ -10,20 +10,20 @@ Measures DOM elements (aka. bounding client rect). See also [Element.getBounding
 import { Rect, useRect } from "@reach/rect";
 
 function Example() {
-  const ref = React.useRef();
-  const rect = useRect(ref);
+	const ref = React.useRef();
+	const rect = useRect(ref);
 
-  return (
-    <div>
-      <pre>{JSON.stringify(rect, null, 2)}</pre>
-      <div
-        ref={ref}
-        contentEditable
-        dangerouslySetInnerHTML={{
-          __html: "Edit this to change the size!",
-        }}
-      />
-    </div>
-  );
+	return (
+		<div>
+			<pre>{JSON.stringify(rect, null, 2)}</pre>
+			<div
+				ref={ref}
+				contentEditable
+				dangerouslySetInnerHTML={{
+					__html: "Edit this to change the size!",
+				}}
+			/>
+		</div>
+	);
 }
 ```

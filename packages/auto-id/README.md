@@ -12,12 +12,12 @@ A string can be supplied as an argument to be `useId` in lieu of the auto-genera
 import { useId } from "@reach/auto-id";
 
 function FormField(props) {
-  const id = useId(props.id);
-  return (
-    <React.Fragment>
-      <label htmlFor={id}>{props.label}</label>
-      <input type={props.type} name={props.name} id={id} />
-    </React.Fragment>
-  );
+	const id = useId(props.id);
+	return (
+		<React.Fragment>
+			<label htmlFor={id}>{props.label}</label>
+			<input type={props.type} name={props.name} id={id} />
+		</React.Fragment>
+	);
 }
 ```

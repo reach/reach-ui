@@ -7,14 +7,14 @@ import { Pipe } from "../components/Pipe";
 # Tabs
 
 <TOC>
-  <TOCList>
-    <TOCLink href="#tabs-1">Tabs</TOCLink>
-    <TOCLink href="#tablist">TabList</TOCLink>
-    <TOCLink href="#tab">Tab</TOCLink>
-    <TOCLink href="#tabpanels">TabPanels</TOCLink>
-    <TOCLink href="#tabpanel">TabPanel</TOCLink>
-    <TOCLink href="#usetabscontext">useTabsContext</TOCLink>
-  </TOCList>
+	<TOCList>
+		<TOCLink href="#tabs-1">Tabs</TOCLink>
+		<TOCLink href="#tablist">TabList</TOCLink>
+		<TOCLink href="#tab">Tab</TOCLink>
+		<TOCLink href="#tabpanels">TabPanels</TOCLink>
+		<TOCLink href="#tabpanel">TabPanel</TOCLink>
+		<TOCLink href="#usetabscontext">useTabsContext</TOCLink>
+	</TOCList>
 </TOC>
 
 - Source: https://github.com/reach/reach-ui/tree/main/packages/tabs
@@ -29,27 +29,27 @@ You can render any other elements you want inside of `Tabs`, but `TabList` shoul
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tabs>
-      <TabList>
-        <Tab>One</Tab>
-        <Tab>Two</Tab>
-        <Tab>Three</Tab>
-      </TabList>
+	return (
+		<Tabs>
+			<TabList>
+				<Tab>One</Tab>
+				<Tab>Two</Tab>
+				<Tab>Three</Tab>
+			</TabList>
 
-      <TabPanels>
-        <TabPanel>
-          <p>one!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>two!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>three!</p>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
+			<TabPanels>
+				<TabPanel>
+					<p>one!</p>
+				</TabPanel>
+				<TabPanel>
+					<p>two!</p>
+				</TabPanel>
+				<TabPanel>
+					<p>three!</p>
+				</TabPanel>
+			</TabPanels>
+		</Tabs>
+	);
 }
 ```
 
@@ -113,19 +113,19 @@ Tabs expects `<TabList>` and `<TabPanels>` as children. The order doesn't matter
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tabs>
-      <div>Random</div>
-      <TabPanels>
-        <TabPanel>Uno</TabPanel>
-        <TabPanel>Dos</TabPanel>
-      </TabPanels>
-      <TabList>
-        <Tab>Uno</Tab>
-        <Tab>Dos</Tab>
-      </TabList>
-    </Tabs>
-  );
+	return (
+		<Tabs>
+			<div>Random</div>
+			<TabPanels>
+				<TabPanel>Uno</TabPanel>
+				<TabPanel>Dos</TabPanel>
+			</TabPanels>
+			<TabList>
+				<Tab>Uno</Tab>
+				<Tab>Dos</Tab>
+			</TabList>
+		</Tabs>
+	);
 }
 ```
 
@@ -133,35 +133,35 @@ You can also pass a render function to access data relevant to nested components
 
 ```jsx
 function Example() {
-  return (
-    <Tabs keyboardActivation="manual">
-      {({ selectedIndex, focusedIndex }) => {
-        let getTabStyle = (index) => ({
-          borderBottom: `4px solid ${
-            selectedIndex === index
-              ? "red"
-              : focusedIndex === index
-              ? "blue"
-              : "black"
-          }`,
-        });
-        return (
-          <React.Fragment>
-            <TabList>
-              <Tab style={getTabStyle(0)}>Uno</Tab>
-              <Tab style={getTabStyle(1)}>Dos</Tab>
-              <Tab style={getTabStyle(2)}>Tres</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>Uno</TabPanel>
-              <TabPanel>Dos</TabPanel>
-              <TabPanel>Tres</TabPanel>
-            </TabPanels>
-          </React.Fragment>
-        );
-      }}
-    </Tabs>
-  );
+	return (
+		<Tabs keyboardActivation="manual">
+			{({ selectedIndex, focusedIndex }) => {
+				let getTabStyle = (index) => ({
+					borderBottom: `4px solid ${
+						selectedIndex === index
+							? "red"
+							: focusedIndex === index
+							? "blue"
+							: "black"
+					}`,
+				});
+				return (
+					<React.Fragment>
+						<TabList>
+							<Tab style={getTabStyle(0)}>Uno</Tab>
+							<Tab style={getTabStyle(1)}>Dos</Tab>
+							<Tab style={getTabStyle(2)}>Tres</Tab>
+						</TabList>
+						<TabPanels>
+							<TabPanel>Uno</TabPanel>
+							<TabPanel>Dos</TabPanel>
+							<TabPanel>Tres</TabPanel>
+						</TabPanels>
+					</React.Fragment>
+				);
+			}}
+		</Tabs>
+	);
 }
 ```
 
@@ -174,25 +174,25 @@ Starts the tabs at a specific index.
 ```jsx
 // jsx-demo
 function Example() {
-  return (
-    <Tabs defaultIndex={1}>
-      <TabPanels>
-        <TabPanel>
-          <img src="https://placekitten.com/400/200" alt="A picture of a cat" />
-        </TabPanel>
-        <TabPanel>
-          <img
-            src="https://www.placecage.com/400/200"
-            alt="A picture of Nicolas Cage"
-          />
-        </TabPanel>
-      </TabPanels>
-      <TabList>
-        <Tab>Kitten</Tab>
-        <Tab>Cage</Tab>
-      </TabList>
-    </Tabs>
-  );
+	return (
+		<Tabs defaultIndex={1}>
+			<TabPanels>
+				<TabPanel>
+					<img src="https://placekitten.com/400/200" alt="A picture of a cat" />
+				</TabPanel>
+				<TabPanel>
+					<img
+						src="https://www.placecage.com/400/200"
+						alt="A picture of Nicolas Cage"
+					/>
+				</TabPanel>
+			</TabPanels>
+			<TabList>
+				<Tab>Kitten</Tab>
+				<Tab>Cage</Tab>
+			</TabList>
+		</Tabs>
+	);
 }
 ```
 
@@ -205,46 +205,46 @@ Like form inputs, a tab's state can be controlled by the owner. Make sure to inc
 ```jsx
 // jsx-demo
 function Example() {
-  const [tabIndex, setTabIndex] = React.useState(0);
+	const [tabIndex, setTabIndex] = React.useState(0);
 
-  const handleSliderChange = (event) => {
-    setTabIndex(parseInt(event.target.value, 10));
-  };
+	const handleSliderChange = (event) => {
+		setTabIndex(parseInt(event.target.value, 10));
+	};
 
-  const handleTabsChange = (index) => {
-    setTabIndex(index);
-  };
+	const handleTabsChange = (index) => {
+		setTabIndex(index);
+	};
 
-  return (
-    <div>
-      <input
-        type="range"
-        min="0"
-        max="2"
-        value={tabIndex}
-        onChange={handleSliderChange}
-      />
+	return (
+		<div>
+			<input
+				type="range"
+				min="0"
+				max="2"
+				value={tabIndex}
+				onChange={handleSliderChange}
+			/>
 
-      <Tabs index={tabIndex} onChange={handleTabsChange}>
-        <TabList>
-          <Tab>One</Tab>
-          <Tab>Two</Tab>
-          <Tab>Three</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <p>Click the tabs or pull the slider around</p>
-          </TabPanel>
-          <TabPanel>
-            <p>Yeah yeah. What's up?</p>
-          </TabPanel>
-          <TabPanel>
-            <p>Oh, hello there.</p>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </div>
-  );
+			<Tabs index={tabIndex} onChange={handleTabsChange}>
+				<TabList>
+					<Tab>One</Tab>
+					<Tab>Two</Tab>
+					<Tab>Three</Tab>
+				</TabList>
+				<TabPanels>
+					<TabPanel>
+						<p>Click the tabs or pull the slider around</p>
+					</TabPanel>
+					<TabPanel>
+						<p>Yeah yeah. What's up?</p>
+					</TabPanel>
+					<TabPanel>
+						<p>Oh, hello there.</p>
+					</TabPanel>
+				</TabPanels>
+			</Tabs>
+		</div>
+	);
 }
 ```
 
@@ -260,9 +260,9 @@ Describes the activation mode when navigating a tablist with a keyboard. When se
 import { TabsKeyboardActivation } from "@reach/tabs";
 
 function MyTabs() {
-  return (
-    <Tabs keyboardActivation={TabsKeyboardActivation.Manual}>{/* ... */}</Tabs>
-  );
+	return (
+		<Tabs keyboardActivation={TabsKeyboardActivation.Manual}>{/* ... */}</Tabs>
+	);
 }
 ```
 
@@ -275,29 +275,29 @@ Calls back with the tab index whenever the user changes tabs, allowing your app 
 ```jsx
 // jsx-demo
 function Example() {
-  const colors = ["firebrick", "goldenrod", "dodgerblue"];
-  const [tabIndex, setTabIndex] = React.useState(0);
-  const backgroundColor = colors[tabIndex];
-  return (
-    <Tabs
-      onChange={(index) => setTabIndex(index)}
-      style={{
-        color: "white",
-        background: backgroundColor,
-      }}
-    >
-      <TabList>
-        <Tab>Red</Tab>
-        <Tab>Yellow</Tab>
-        <Tab>Blue</Tab>
-      </TabList>
-      <TabPanels style={{ padding: 20 }}>
-        <TabPanel>The Primary Colors</TabPanel>
-        <TabPanel>Are 1, 2, 3</TabPanel>
-        <TabPanel>Red, yellow and blue.</TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
+	const colors = ["firebrick", "goldenrod", "dodgerblue"];
+	const [tabIndex, setTabIndex] = React.useState(0);
+	const backgroundColor = colors[tabIndex];
+	return (
+		<Tabs
+			onChange={(index) => setTabIndex(index)}
+			style={{
+				color: "white",
+				background: backgroundColor,
+			}}
+		>
+			<TabList>
+				<Tab>Red</Tab>
+				<Tab>Yellow</Tab>
+				<Tab>Blue</Tab>
+			</TabList>
+			<TabPanels style={{ padding: 20 }}>
+				<TabPanel>The Primary Colors</TabPanel>
+				<TabPanel>Are 1, 2, 3</TabPanel>
+				<TabPanel>Red, yellow and blue.</TabPanel>
+			</TabPanels>
+		</Tabs>
+	);
 }
 ```
 
@@ -312,28 +312,28 @@ Changing the orientation will change how the arrow keys navigate between tabs. A
 ```jsx
 // jsx-demo
 function Example() {
-  // Try changing the orientation!
-  return (
-    <Tabs orientation="vertical">
-      <TabList>
-        <Tab>One</Tab>
-        <Tab>Two</Tab>
-        <Tab>Three</Tab>
-      </TabList>
+	// Try changing the orientation!
+	return (
+		<Tabs orientation="vertical">
+			<TabList>
+				<Tab>One</Tab>
+				<Tab>Two</Tab>
+				<Tab>Three</Tab>
+			</TabList>
 
-      <TabPanels>
-        <TabPanel>
-          <p>one!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>two!</p>
-        </TabPanel>
-        <TabPanel>
-          <p>three!</p>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
+			<TabPanels>
+				<TabPanel>
+					<p>one!</p>
+				</TabPanel>
+				<TabPanel>
+					<p>two!</p>
+				</TabPanel>
+				<TabPanel>
+					<p>three!</p>
+				</TabPanel>
+			</TabPanels>
+		</Tabs>
+	);
 }
 ```
 
@@ -343,7 +343,7 @@ function Example() {
 import { TabsOrientation } from "@reach/tabs";
 
 function MyTabs() {
-  return <Tabs orientation={TabsOrientation.Vertical}>{/* ... */}</Tabs>;
+	return <Tabs orientation={TabsOrientation.Vertical}>{/* ... */}</Tabs>;
 }
 ```
 
@@ -357,8 +357,8 @@ The parent component of the tabs.
 
 ```jsx
 <TabList>
-  <Tab>Tacos</Tab>
-  <Tab>Tortas</Tab>
+	<Tab>Tacos</Tab>
+	<Tab>Tortas</Tab>
 </TabList>
 ```
 
@@ -387,8 +387,8 @@ Please see the [styling guide](/styling).
 
 ```jsx
 <TabList>
-  <Tab>One</Tab>
-  <Tab>Two</Tab>
+	<Tab>One</Tab>
+	<Tab>Two</Tab>
 </TabList>
 ```
 
@@ -398,16 +398,16 @@ But, you can also wrap `Tab` as long as you forward the props (because data is p
 const RedTab = (props) => <Tab {...props} style={{ color: "red" }} />;
 
 const TabPage = () => (
-  <Tabs>
-    <TabList>
-      <RedTab>This is red</RedTab>
-      <Tab>This is normal</Tab>
-    </TabList>
-    <TabPanels>
-      <TabPanel>...</TabPanel>
-      <TabPanel>...</TabPanel>
-    </TabPanels>
-  </Tabs>
+	<Tabs>
+		<TabList>
+			<RedTab>This is red</RedTab>
+			<Tab>This is normal</Tab>
+		</TabList>
+		<TabPanels>
+			<TabPanel>...</TabPanel>
+			<TabPanel>...</TabPanel>
+		</TabPanels>
+	</Tabs>
 );
 ```
 
@@ -431,8 +431,8 @@ The parent component of the panels.
 
 ```jsx
 <TabPanels>
-  <TabPanel>My favorite</TabPanel>
-  <TabPanel>My other favorite</TabPanel>
+	<TabPanel>My favorite</TabPanel>
+	<TabPanel>My other favorite</TabPanel>
 </TabPanels>
 ```
 
@@ -471,8 +471,8 @@ Tabs will render a `div` unless you specify a different element.
 
 ```jsx
 <TabPanels>
-  <TabPanel>One</TabPanel>
-  <TabPanel>Two</TabPanel>
+	<TabPanel>One</TabPanel>
+	<TabPanel>Two</TabPanel>
 </TabPanels>
 ```
 
@@ -480,20 +480,20 @@ But, you can also wrap `TabPanel` as long as you forward the props (because data
 
 ```jsx
 const BoldPanel = (props) => (
-  <TabPanel {...props} style={{ fontWeight: "bold" }} />
+	<TabPanel {...props} style={{ fontWeight: "bold" }} />
 );
 
 const TabPage = () => (
-  <Tabs>
-    <TabList>
-      <Tab>...</Tab>
-      <Tab>...</Tab>
-    </TabList>
-    <TabPanels>
-      <BoldPanel>...</BoldPanel>
-      <TabPanel>...</TabPanel>
-    </TabPanels>
-  </Tabs>
+	<Tabs>
+		<TabList>
+			<Tab>...</Tab>
+			<Tab>...</Tab>
+		</TabList>
+		<TabPanels>
+			<BoldPanel>...</BoldPanel>
+			<TabPanel>...</TabPanel>
+		</TabPanels>
+	</Tabs>
 );
 ```
 
@@ -550,7 +550,7 @@ Tab will render a `button` unless you specify a different element.
 
 ```jsx
 <Tab>
-  <HouseIcon /> Home
+	<HouseIcon /> Home
 </Tab>
 ```
 
@@ -574,8 +574,8 @@ The panel that displays when it's corresponding tab is active.
 
 ```jsx
 <TabPanel>
-  <h2>The Best Food</h2>
-  <p>The best food is either Mexican or Indian.</p>
+	<h2>The Best Food</h2>
+	<p>The best food is either Mexican or Indian.</p>
 </TabPanel>
 ```
 
@@ -615,8 +615,8 @@ TabPanel will render a `div` unless you specify a different element.
 
 ```jsx
 <TabPanel>
-  <h2>Whatever you want</h2>
-  <p>In here</p>
+	<h2>Whatever you want</h2>
+	<p>In here</p>
 </TabPanel>
 ```
 
@@ -633,44 +633,44 @@ A hook that exposes data for a given `Tabs` component to its descendants.
 ```jsx
 // jsx-demo
 (() => {
-  function CustomTab({ index, ...props }) {
-    const { selectedIndex, focusedIndex } = useTabsContext();
-    return (
-      <Tab
-        style={{
-          borderBottom: `4px solid ${
-            selectedIndex === index
-              ? "red"
-              : focusedIndex === index
-              ? "blue"
-              : "black"
-          }`,
-        }}
-        {...props}
-      />
-    );
-  }
+	function CustomTab({ index, ...props }) {
+		const { selectedIndex, focusedIndex } = useTabsContext();
+		return (
+			<Tab
+				style={{
+					borderBottom: `4px solid ${
+						selectedIndex === index
+							? "red"
+							: focusedIndex === index
+							? "blue"
+							: "black"
+					}`,
+				}}
+				{...props}
+			/>
+		);
+	}
 
-  return (
-    <Tabs keyboardActivation="manual">
-      <TabList>
-        <CustomTab index={0}>Uno</CustomTab>
-        <CustomTab index={1}>Dos</CustomTab>
-        <CustomTab index={2}>Tres</CustomTab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>
-          <p>Uno</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Dos</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Tres</p>
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
+	return (
+		<Tabs keyboardActivation="manual">
+			<TabList>
+				<CustomTab index={0}>Uno</CustomTab>
+				<CustomTab index={1}>Dos</CustomTab>
+				<CustomTab index={2}>Tres</CustomTab>
+			</TabList>
+			<TabPanels>
+				<TabPanel>
+					<p>Uno</p>
+				</TabPanel>
+				<TabPanel>
+					<p>Dos</p>
+				</TabPanel>
+				<TabPanel>
+					<p>Tres</p>
+				</TabPanel>
+			</TabPanels>
+		</Tabs>
+	);
 })();
 ```
 
@@ -685,35 +685,35 @@ If you'd like to drive your tabs with data you can create a `DataTabs` component
 ```jsx
 // jsx-demo
 (() => {
-  function DataTabs({ data }) {
-    return (
-      <Tabs>
-        <TabList>
-          {data.map((tab, index) => (
-            <Tab key={index}>{tab.label}</Tab>
-          ))}
-        </TabList>
-        <TabPanels>
-          {data.map((tab, index) => (
-            <TabPanel key={index}>{tab.content}</TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
-    );
-  }
+	function DataTabs({ data }) {
+		return (
+			<Tabs>
+				<TabList>
+					{data.map((tab, index) => (
+						<Tab key={index}>{tab.label}</Tab>
+					))}
+				</TabList>
+				<TabPanels>
+					{data.map((tab, index) => (
+						<TabPanel key={index}>{tab.content}</TabPanel>
+					))}
+				</TabPanels>
+			</Tabs>
+		);
+	}
 
-  // now if you have an array of data...
-  const tabData = [
-    { label: "Taco", content: "Perhaps the greatest dish ever invented." },
-    {
-      label: "Burrito",
-      content:
-        "Perhaps the greatest dish ever invented but bigger and with rice.",
-    },
-  ];
+	// now if you have an array of data...
+	const tabData = [
+		{ label: "Taco", content: "Perhaps the greatest dish ever invented." },
+		{
+			label: "Burrito",
+			content:
+				"Perhaps the greatest dish ever invented but bigger and with rice.",
+		},
+	];
 
-  // you can just pass it in:
-  return <DataTabs data={tabData} />;
+	// you can just pass it in:
+	return <DataTabs data={tabData} />;
 })();
 ```
 
@@ -724,104 +724,104 @@ With a little composition we can animate the selected tab bar.
 ```jsx
 // jsx-demo
 (() => {
-  const HORIZONTAL_PADDING = 8;
-  const AnimatedContext = React.createContext();
+	const HORIZONTAL_PADDING = 8;
+	const AnimatedContext = React.createContext();
 
-  function AnimatedTabs({ color, children, ...rest }) {
-    // some state to store the position we want to animate to
-    const [activeRect, setActiveRect] = React.useState(null);
-    const ref = React.useRef();
-    const rect = useRect(ref);
+	function AnimatedTabs({ color, children, ...rest }) {
+		// some state to store the position we want to animate to
+		const [activeRect, setActiveRect] = React.useState(null);
+		const ref = React.useRef();
+		const rect = useRect(ref);
 
-    return (
-      // put the function to change the styles on context so an active Tab
-      // can call it, then style it up
-      <AnimatedContext.Provider value={setActiveRect}>
-        {/* make sure to forward props since we're wrapping Tabs */}
-        <Tabs
-          {...rest}
-          ref={ref}
-          style={{ ...rest.style, position: "relative" }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              height: 2,
-              background: color,
-              transition: "all 300ms ease",
-              left:
-                (activeRect && activeRect.left) -
-                (rect && rect.left) +
-                HORIZONTAL_PADDING,
-              top: (activeRect && activeRect.bottom) - (rect && rect.top),
-              // subtract both sides of horizontal padding to center the div
-              width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
-            }}
-          />
-          {children}
-        </Tabs>
-      </AnimatedContext.Provider>
-    );
-  }
+		return (
+			// put the function to change the styles on context so an active Tab
+			// can call it, then style it up
+			<AnimatedContext.Provider value={setActiveRect}>
+				{/* make sure to forward props since we're wrapping Tabs */}
+				<Tabs
+					{...rest}
+					ref={ref}
+					style={{ ...rest.style, position: "relative" }}
+				>
+					<div
+						style={{
+							position: "absolute",
+							height: 2,
+							background: color,
+							transition: "all 300ms ease",
+							left:
+								(activeRect && activeRect.left) -
+								(rect && rect.left) +
+								HORIZONTAL_PADDING,
+							top: (activeRect && activeRect.bottom) - (rect && rect.top),
+							// subtract both sides of horizontal padding to center the div
+							width: activeRect && activeRect.width - HORIZONTAL_PADDING * 2,
+						}}
+					/>
+					{children}
+				</Tabs>
+			</AnimatedContext.Provider>
+		);
+	}
 
-  function AnimatedTab({ index, ...props }) {
-    // get the currently selected index from useTabsContext
-    const { selectedIndex } = useTabsContext();
-    const isSelected = selectedIndex === index;
+	function AnimatedTab({ index, ...props }) {
+		// get the currently selected index from useTabsContext
+		const { selectedIndex } = useTabsContext();
+		const isSelected = selectedIndex === index;
 
-    // measure the size of our element, only listen to rect if active
-    const ref = React.useRef();
-    const rect = useRect(ref, { observe: isSelected });
+		// measure the size of our element, only listen to rect if active
+		const ref = React.useRef();
+		const rect = useRect(ref, { observe: isSelected });
 
-    // get the style changing function from context
-    const setActiveRect = useContext(AnimatedContext);
+		// get the style changing function from context
+		const setActiveRect = useContext(AnimatedContext);
 
-    // callup to set styles whenever we're active
-    React.useLayoutEffect(() => {
-      if (isSelected) {
-        setActiveRect(rect);
-      }
-    }, [isSelected, rect, setActiveRect]);
+		// callup to set styles whenever we're active
+		React.useLayoutEffect(() => {
+			if (isSelected) {
+				setActiveRect(rect);
+			}
+		}, [isSelected, rect, setActiveRect]);
 
-    return (
-      <Tab
-        ref={ref}
-        {...props}
-        style={{
-          ...props.style,
-          border: "none",
-          padding: `4px ${HORIZONTAL_PADDING}px`,
-        }}
-      />
-    );
-  }
+		return (
+			<Tab
+				ref={ref}
+				{...props}
+				style={{
+					...props.style,
+					border: "none",
+					padding: `4px ${HORIZONTAL_PADDING}px`,
+				}}
+			/>
+		);
+	}
 
-  return (
-    <AnimatedTabs color="red" style={{ width: 400 }}>
-      <TabList style={{ justifyContent: "space-around" }}>
-        <AnimatedTab index={0} style={{ flex: 1 }}>
-          The First
-        </AnimatedTab>
-        <AnimatedTab index={1} style={{ flex: 2 }}>
-          This has longer text
-        </AnimatedTab>
-        <AnimatedTab index={2} style={{ flex: 1 }}>
-          Three
-        </AnimatedTab>
-      </TabList>
-      <TabPanels style={{ padding: 10 }}>
-        <TabPanel>
-          <p>Check it out! It's ~animated~</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Yeah yeah. What's up?</p>
-        </TabPanel>
-        <TabPanel>
-          <p>Oh, hello there.</p>
-        </TabPanel>
-      </TabPanels>
-    </AnimatedTabs>
-  );
+	return (
+		<AnimatedTabs color="red" style={{ width: 400 }}>
+			<TabList style={{ justifyContent: "space-around" }}>
+				<AnimatedTab index={0} style={{ flex: 1 }}>
+					The First
+				</AnimatedTab>
+				<AnimatedTab index={1} style={{ flex: 2 }}>
+					This has longer text
+				</AnimatedTab>
+				<AnimatedTab index={2} style={{ flex: 1 }}>
+					Three
+				</AnimatedTab>
+			</TabList>
+			<TabPanels style={{ padding: 10 }}>
+				<TabPanel>
+					<p>Check it out! It's ~animated~</p>
+				</TabPanel>
+				<TabPanel>
+					<p>Yeah yeah. What's up?</p>
+				</TabPanel>
+				<TabPanel>
+					<p>Oh, hello there.</p>
+				</TabPanel>
+			</TabPanels>
+		</AnimatedTabs>
+	);
 })();
 ```
 

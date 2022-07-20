@@ -13,16 +13,16 @@ import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
 
 ReactDOM.return(
-  <React.Fragment>
-    {/* put the link at the top of your app */}
-    <SkipNavLink />
-    <div>
-      <YourNav />
-      {/* and the content next to your main content */}
-      <SkipNavContent />
-      <YourMainContent />
-    </div>
-  </React.Fragment>,
-  rootNode
+	<React.Fragment>
+		{/* put the link at the top of your app */}
+		<SkipNavLink />
+		<div>
+			<YourNav />
+			{/* and the content next to your main content */}
+			<SkipNavContent />
+			<YourMainContent />
+		</div>
+	</React.Fragment>,
+	rootNode
 );
 ```
