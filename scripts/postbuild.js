@@ -1,6 +1,6 @@
-import * as fsp from "fs/promises";
-import * as url from "url";
-import * as path from "path";
+import * as fsp from "node:fs/promises";
+import * as url from "node:url";
+import * as path from "node:path";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, "../");

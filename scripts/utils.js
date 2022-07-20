@@ -1,4 +1,4 @@
-import * as fsp from "fs/promises";
+import * as fsp from "node:fs/promises";
 import * as prettier from "prettier";
 
 export const jsonfile = {
@@ -20,7 +20,11 @@ export const jsonfile = {
 
   async writeFile(file, obj, options = {}) {
     let str = stringify(obj, options);
-    await fsp.writeFile(file, prettier.format(str), options);
+    await fsp.writeFile(
+      file,
+      prettier.format(str, { parser: "json" }),
+      options
+    );
   },
 };
 
