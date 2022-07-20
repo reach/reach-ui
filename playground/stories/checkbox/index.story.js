@@ -7,5 +7,5 @@ export { Example as Disabled } from "./disabled.example.js";
 export { Example as HookTS } from "./hook.example.tsx";
 
 export default {
-  title: "Checkbox",
+	title: "Checkbox",
 };

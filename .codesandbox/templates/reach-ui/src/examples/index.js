@@ -8,22 +8,22 @@ import * as MenuButton from "./menu-button";
 //   <Reach.MenuButton.Basic />
 
 let Example = {
-  Alert: {},
-  AlertDialog: {},
-  AutoID: {},
-  Combobox: {},
-  ComponentComponent: {},
-  Dialog: {},
-  MenuButton,
-  Popover: {},
-  Portal: {},
-  Rect: {},
-  SkipNav: {},
-  Slider: {},
-  Tabs: {},
-  Tooltip: {},
-  VisuallyHidden: {},
-  WindowSize: {}
+	Alert: {},
+	AlertDialog: {},
+	AutoID: {},
+	Combobox: {},
+	ComponentComponent: {},
+	Dialog: {},
+	MenuButton,
+	Popover: {},
+	Portal: {},
+	Rect: {},
+	SkipNav: {},
+	Slider: {},
+	Tabs: {},
+	Tooltip: {},
+	VisuallyHidden: {},
+	WindowSize: {},
 };
 
 export default Example;

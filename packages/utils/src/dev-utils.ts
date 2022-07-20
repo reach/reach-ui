@@ -12,21 +12,21 @@ let checkedPkgs: { [key: string]: boolean } = {};
  * @example checkStyles("dialog") will check for styles for @reach/dialog
  */
 export function checkStyles(packageName: string): void {
-  if (__DEV__) {
-    // only check once per package
-    if (checkedPkgs[packageName]) return;
-    checkedPkgs[packageName] = true;
+	if (__DEV__) {
+		// only check once per package
+		if (checkedPkgs[packageName]) return;
+		checkedPkgs[packageName] = true;
 
-    if (
-      parseInt(
-        window
-          .getComputedStyle(document.body)
-          .getPropertyValue(`--reach-${packageName}`),
-        10
-      ) !== 1
-    ) {
-      console.warn(
-        `@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
+		if (
+			parseInt(
+				window
+					.getComputedStyle(document.body)
+					.getPropertyValue(`--reach-${packageName}`),
+				10
+			) !== 1
+		) {
+			console.warn(
+				`@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
 
       import "@reach/${packageName}/styles.css";
 
@@ -36,9 +36,9 @@ export function checkStyles(packageName: string): void {
 
     For more information visit https://ui.reach.tech/styling.
     `
-      );
-    }
-  }
+			);
+		}
+	}
 }
 
 /**
@@ -48,16 +48,16 @@ export function checkStyles(packageName: string): void {
  * @example useCheckStyles("dialog") will check for styles for @reach/dialog
  */
 export function useCheckStyles(packageName: string): void {
-  if (__DEV__) {
-    let warned = useRef(false);
-    useEffect(() => {
-      if (!warned.current) {
-        warned.current = true;
-        checkStyles(packageName);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-  }
+	if (__DEV__) {
+		let warned = useRef(false);
+		useEffect(() => {
+			if (!warned.current) {
+				warned.current = true;
+				checkStyles(packageName);
+			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []);
+	}
 }
 
 /**
@@ -72,31 +72,31 @@ export function useCheckStyles(packageName: string): void {
  * @param componentName
  */
 export function useControlledSwitchWarning(
-  controlledValue: any,
-  controlledPropName: string,
-  componentName: string
+	controlledValue: any,
+	controlledPropName: string,
+	componentName: string
 ): void {
-  if (__DEV__) {
-    let controlledRef = useRef(controlledValue != null);
-    let nameCache = useRef({ componentName, controlledPropName });
-    useEffect(() => {
-      nameCache.current = { componentName, controlledPropName };
-    }, [componentName, controlledPropName]);
+	if (__DEV__) {
+		let controlledRef = useRef(controlledValue != null);
+		let nameCache = useRef({ componentName, controlledPropName });
+		useEffect(() => {
+			nameCache.current = { componentName, controlledPropName };
+		}, [componentName, controlledPropName]);
 
-    useEffect(() => {
-      let { current: wasControlled } = controlledRef;
-      let { componentName, controlledPropName } = nameCache.current;
-      let isControlled = controlledValue != null;
-      if (wasControlled !== isControlled) {
-        console.error(
-          `A component is changing an ${
-            wasControlled ? "" : "un"
-          }controlled \`${controlledPropName}\` state of ${componentName} to be ${
-            wasControlled ? "un" : ""
-          }controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled ${componentName} element for the lifetime of the component.
+		useEffect(() => {
+			let { current: wasControlled } = controlledRef;
+			let { componentName, controlledPropName } = nameCache.current;
+			let isControlled = controlledValue != null;
+			if (wasControlled !== isControlled) {
+				console.error(
+					`A component is changing an ${
+						wasControlled ? "" : "un"
+					}controlled \`${controlledPropName}\` state of ${componentName} to be ${
+						wasControlled ? "un" : ""
+					}controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled ${componentName} element for the lifetime of the component.
       More info: https://fb.me/react-controlled-components`
-        );
-      }
-    }, [controlledValue]);
-  }
+				);
+			}
+		}, [controlledValue]);
+	}
 }

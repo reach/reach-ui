@@ -13,6 +13,7 @@
     "test:react-18": "USE_REACT_18=true vitest",
     "test": "vitest",
     "lint": "eslint packages",
+		"format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "dev": "pnpm --filter reach-storybook start"
   },
   "dependencies": {

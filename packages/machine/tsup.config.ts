@@ -5,7 +5,7 @@ type TsupConfig = ReturnType<typeof defineConfig>;
 
 let { name: packageName, version: packageVersion } = getPackageInfo(__dirname);
 let cfg: TsupConfig = getTsupConfig("src/machine.ts", {
-  packageName,
-  packageVersion,
+	packageName,
+	packageVersion,
 });
 export default cfg;

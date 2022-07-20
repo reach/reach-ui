@@ -4,33 +4,33 @@ import cities from "./cities";
 import type { City } from "./cities";
 
 export function useCityMatch(term: string): City[] | null {
-  let throttledTerm = useThrottle(term, 100);
-  return React.useMemo(
-    () =>
-      term.trim() === ""
-        ? null
-        : matchSorter(cities, term, {
-            keys: [(item) => `${item.city}, ${item.state}`],
-          }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [throttledTerm]
-  );
+	let throttledTerm = useThrottle(term, 100);
+	return React.useMemo(
+		() =>
+			term.trim() === ""
+				? null
+				: matchSorter(cities, term, {
+						keys: [(item) => `${item.city}, ${item.state}`],
+				  }),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[throttledTerm]
+	);
 }
 
 export function useThrottle(value: any, limit: number) {
-  const [throttledValue, setThrottledValue] = React.useState(value);
-  const lastRan = React.useRef(Date.now());
+	const [throttledValue, setThrottledValue] = React.useState(value);
+	const lastRan = React.useRef(Date.now());
 
-  React.useEffect(() => {
-    const handler = window.setTimeout(() => {
-      if (Date.now() - lastRan.current >= limit) {
-        setThrottledValue(value);
-        lastRan.current = Date.now();
-      }
-    }, limit - (Date.now() - lastRan.current));
+	React.useEffect(() => {
+		const handler = window.setTimeout(() => {
+			if (Date.now() - lastRan.current >= limit) {
+				setThrottledValue(value);
+				lastRan.current = Date.now();
+			}
+		}, limit - (Date.now() - lastRan.current));
 
-    return () => window.clearTimeout(handler);
-  }, [value, limit]);
+		return () => window.clearTimeout(handler);
+	}, [value, limit]);
 
-  return throttledValue;
+	return throttledValue;
 }

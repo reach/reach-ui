@@ -20,30 +20,30 @@ import type { Polymorphic } from "@reach/utils";
  * It is the logical opposite of the `aria-hidden` attribute.
  */
 const VisuallyHidden = React.forwardRef<any, any>(function VisuallyHidden(
-  { as: Comp = "span", style = {}, ...props },
-  ref
+	{ as: Comp = "span", style = {}, ...props },
+	ref
 ) {
-  return (
-    <Comp
-      ref={ref}
-      style={{
-        border: 0,
-        clip: "rect(0 0 0 0)",
-        height: "1px",
-        margin: "-1px",
-        overflow: "hidden",
-        padding: 0,
-        position: "absolute",
-        width: "1px",
+	return (
+		<Comp
+			ref={ref}
+			style={{
+				border: 0,
+				clip: "rect(0 0 0 0)",
+				height: "1px",
+				margin: "-1px",
+				overflow: "hidden",
+				padding: 0,
+				position: "absolute",
+				width: "1px",
 
-        // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
-        whiteSpace: "nowrap",
-        wordWrap: "normal",
-        ...style,
-      }}
-      {...props}
-    />
-  );
+				// https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+				whiteSpace: "nowrap",
+				wordWrap: "normal",
+				...style,
+			}}
+			{...props}
+		/>
+	);
 }) as Polymorphic.ForwardRefComponent<"span", VisuallyHiddenProps>;
 VisuallyHidden.displayName = "VisuallyHidden";
 
@@ -51,10 +51,10 @@ VisuallyHidden.displayName = "VisuallyHidden";
  * @see Docs https://reach.tech/visually-hidden#visuallyhidden-props
  */
 interface VisuallyHiddenProps {
-  /**
-   * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
-   */
-  children: React.ReactNode;
+	/**
+	 * @see Docs https://reach.tech/visually-hidden#visuallyhidden-children
+	 */
+	children: React.ReactNode;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

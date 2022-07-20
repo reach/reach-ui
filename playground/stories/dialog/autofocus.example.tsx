@@ -5,22 +5,22 @@ import "@reach/dialog/styles.css";
 let name = "Autofocus";
 
 function Example() {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const button = React.useRef(null);
-  return (
-    <div>
-      <button onClick={() => setShowDialog(true)}>Show Dialog</button>
-      <Dialog
-        aria-label="Announcement"
-        isOpen={showDialog}
-        onDismiss={() => setShowDialog(false)}
-        initialFocusRef={button}
-      >
-        <button onClick={() => setShowDialog(false)}>Close Dialog</button>
-        <button ref={button}>Auto focused</button>
-      </Dialog>
-    </div>
-  );
+	const [showDialog, setShowDialog] = React.useState(false);
+	const button = React.useRef(null);
+	return (
+		<div>
+			<button onClick={() => setShowDialog(true)}>Show Dialog</button>
+			<Dialog
+				aria-label="Announcement"
+				isOpen={showDialog}
+				onDismiss={() => setShowDialog(false)}
+				initialFocusRef={button}
+			>
+				<button onClick={() => setShowDialog(false)}>Close Dialog</button>
+				<button ref={button}>Auto focused</button>
+			</Dialog>
+		</div>
+	);
 }
 
 Example.storyName = name;

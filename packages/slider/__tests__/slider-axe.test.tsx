@@ -10,12 +10,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 afterEach(cleanup);
 
 describe("<Slider /> with axe", () => {
-  describe("a11y", () => {
-    it("Should not have ARIA violations", async () => {
-      vi.useRealTimers();
-      const { container } = render(<Slider aria-label="basic slider" />);
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-    });
-  });
+	describe("a11y", () => {
+		it("Should not have ARIA violations", async () => {
+			vi.useRealTimers();
+			const { container } = render(<Slider aria-label="basic slider" />);
+			const results = await axe(container);
+			expect(results).toHaveNoViolations();
+		});
+	});
 });

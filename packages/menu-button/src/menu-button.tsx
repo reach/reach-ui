@@ -14,12 +14,12 @@
 import * as React from "react";
 import { Popover } from "@reach/popover";
 import {
-  DropdownProvider,
-  useDropdownItem,
-  useDropdownItems,
-  useDropdownPopover,
-  useDropdownTrigger,
-  useDropdownContext,
+	DropdownProvider,
+	useDropdownItem,
+	useDropdownItems,
+	useDropdownPopover,
+	useDropdownTrigger,
+	useDropdownContext,
 } from "@reach/dropdown";
 import { noop, useCheckStyles } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
@@ -39,53 +39,53 @@ declare const __DEV__: boolean;
  * @see Docs https://reach.tech/menu-button#menu
  */
 const Menu = React.forwardRef(
-  ({ as: Comp = React.Fragment, id, children, ...rest }, forwardedRef) => {
-    useCheckStyles("menu-button");
-    let parentIsFragment = React.useMemo(() => {
-      try {
-        // To test if the component renders a fragment we need to actually
-        // render it, but this may throw an error since we can't predict what is
-        // actually provided. There's technically a small chance that this could
-        // get it wrong but I don't think it's too likely in practice.
-        return isFragment(<Comp />);
-      } catch (err) {
-        return false;
-      }
-    }, [Comp]);
-    let props = parentIsFragment
-      ? {}
-      : {
-          ref: forwardedRef,
-          id,
-          "data-reach-menu": "",
-          ...rest,
-        };
-    return (
-      <Comp {...props}>
-        <DropdownProvider id={id} children={children} />
-      </Comp>
-    );
-  }
+	({ as: Comp = React.Fragment, id, children, ...rest }, forwardedRef) => {
+		useCheckStyles("menu-button");
+		let parentIsFragment = React.useMemo(() => {
+			try {
+				// To test if the component renders a fragment we need to actually
+				// render it, but this may throw an error since we can't predict what is
+				// actually provided. There's technically a small chance that this could
+				// get it wrong but I don't think it's too likely in practice.
+				return isFragment(<Comp />);
+			} catch (err) {
+				return false;
+			}
+		}, [Comp]);
+		let props = parentIsFragment
+			? {}
+			: {
+					ref: forwardedRef,
+					id,
+					"data-reach-menu": "",
+					...rest,
+			  };
+		return (
+			<Comp {...props}>
+				<DropdownProvider id={id} children={children} />
+			</Comp>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<any, MenuProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menu-props
  */
 interface MenuProps {
-  /**
-   * Requires two children: a `<MenuButton>` and a `<MenuList>`.
-   *
-   * @see Docs https://reach.tech/menu-button#menu-children
-   */
-  children:
-    | React.ReactNode
-    | ((
-        props: MenuContextValue & {
-          // TODO: Remove in 1.0
-          isOpen: boolean;
-        }
-      ) => React.ReactNode);
-  id?: string;
+	/**
+	 * Requires two children: a `<MenuButton>` and a `<MenuList>`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menu-children
+	 */
+	children:
+		| React.ReactNode
+		| ((
+				props: MenuContextValue & {
+					// TODO: Remove in 1.0
+					isOpen: boolean;
+				}
+		  ) => React.ReactNode);
+	id?: string;
 }
 
 Menu.displayName = "Menu";
@@ -101,44 +101,44 @@ Menu.displayName = "Menu";
  * @see Docs https://reach.tech/menu-button#menubutton
  */
 const MenuButton = React.forwardRef(
-  ({ as: Comp = "button", ...rest }, forwardedRef) => {
-    let {
-      data: { isExpanded, controls },
-      props,
-    } = useDropdownTrigger({ ...rest, ref: forwardedRef });
+	({ as: Comp = "button", ...rest }, forwardedRef) => {
+		let {
+			data: { isExpanded, controls },
+			props,
+		} = useDropdownTrigger({ ...rest, ref: forwardedRef });
 
-    return (
-      <Comp
-        // When the menu is displayed, the element with role `button` has
-        // `aria-expanded` set to `true`. When the menu is hidden, it is
-        // recommended that `aria-expanded` is not present.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        aria-expanded={isExpanded ? true : undefined}
-        // The element with role `button` has `aria-haspopup` set to either
-        // `"menu"` or `true`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        aria-haspopup
-        // Optionally, the element with role `button` has a value specified for
-        // `aria-controls` that refers to the element with role `menu`.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        aria-controls={controls}
-        {...props}
-        data-reach-menu-button=""
-      />
-    );
-  }
+		return (
+			<Comp
+				// When the menu is displayed, the element with role `button` has
+				// `aria-expanded` set to `true`. When the menu is hidden, it is
+				// recommended that `aria-expanded` is not present.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+				aria-expanded={isExpanded ? true : undefined}
+				// The element with role `button` has `aria-haspopup` set to either
+				// `"menu"` or `true`.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+				aria-haspopup
+				// Optionally, the element with role `button` has a value specified for
+				// `aria-controls` that refers to the element with role `menu`.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+				aria-controls={controls}
+				{...props}
+				data-reach-menu-button=""
+			/>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"button", MenuButtonProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menubutton-props
  */
 interface MenuButtonProps {
-  /**
-   * Accepts any renderable content.
-   *
-   * @see Docs https://reach.tech/menu-button#menubutton-children
-   */
-  children: React.ReactNode;
+	/**
+	 * Accepts any renderable content.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menubutton-children
+	 */
+	children: React.ReactNode;
 }
 
 MenuButton.displayName = "MenuButton";
@@ -151,47 +151,47 @@ MenuButton.displayName = "MenuButton";
  * MenuItem and MenuLink share most of the same functionality captured here.
  */
 const MenuItemImpl = React.forwardRef(
-  ({ as: Comp = "div", ...rest }, forwardedRef) => {
-    let {
-      data: { disabled },
-      props,
-    } = useDropdownItem({ ...rest, ref: forwardedRef });
+	({ as: Comp = "div", ...rest }, forwardedRef) => {
+		let {
+			data: { disabled },
+			props,
+		} = useDropdownItem({ ...rest, ref: forwardedRef });
 
-    return (
-      <Comp
-        role="menuitem"
-        {...props}
-        aria-disabled={disabled || undefined}
-        data-reach-menu-item=""
-      />
-    );
-  }
+		return (
+			<Comp
+				role="menuitem"
+				{...props}
+				aria-disabled={disabled || undefined}
+				data-reach-menu-item=""
+			/>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"div", MenuItemImplProps>;
 
 MenuItemImpl.displayName = "MenuItemImpl";
 
 interface MenuItemImplProps {
-  /**
-   * You can put any type of content inside of a `<MenuItem>`.
-   *
-   * @see Docs https://reach.tech/menu-button#menuitem-children
-   */
-  children: React.ReactNode;
-  /**
-   * Callback that fires when a `MenuItem` is selected.
-   *
-   * @see Docs https://reach.tech/menu-button#menuitem-onselect
-   */
-  onSelect(): void;
-  index?: number;
-  isLink?: boolean;
-  valueText?: string;
-  /**
-   * Whether or not the item is disabled from selection and navigation.
-   *
-   * @see Docs https://reach.tech/menu-button#menuitem-disabled
-   */
-  disabled?: boolean;
+	/**
+	 * You can put any type of content inside of a `<MenuItem>`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menuitem-children
+	 */
+	children: React.ReactNode;
+	/**
+	 * Callback that fires when a `MenuItem` is selected.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menuitem-onselect
+	 */
+	onSelect(): void;
+	index?: number;
+	isLink?: boolean;
+	valueText?: string;
+	/**
+	 * Whether or not the item is disabled from selection and navigation.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menuitem-disabled
+	 */
+	disabled?: boolean;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +204,7 @@ interface MenuItemImplProps {
  * @see Docs https://reach.tech/menu-button#menuitem
  */
 const MenuItem = React.forwardRef(({ as = "div", ...props }, forwardedRef) => {
-  return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
+	return <MenuItemImpl {...props} ref={forwardedRef} as={as} />;
 }) as Polymorphic.ForwardRefComponent<"div", MenuItemProps>;
 
 /**
@@ -226,46 +226,46 @@ MenuItem.displayName = "MenuItem";
  * @see Docs https://reach.tech/menu-button#menuitems
  */
 const MenuItems = React.forwardRef(
-  ({ as: Comp = "div", ...rest }, forwardedRef) => {
-    let {
-      data: { activeDescendant, triggerId },
-      props,
-    } = useDropdownItems({ ...rest, ref: forwardedRef });
+	({ as: Comp = "div", ...rest }, forwardedRef) => {
+		let {
+			data: { activeDescendant, triggerId },
+			props,
+		} = useDropdownItems({ ...rest, ref: forwardedRef });
 
-    return (
-      // TODO: Should probably file a but in jsx-a11y, but this is correct
-      // according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-      // eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
-      <Comp
-        // Refers to the descendant menuitem element that is visually indicated
-        // as focused.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-        aria-activedescendant={activeDescendant}
-        // Refers to the element that contains the accessible name for the
-        // `menu`. The menu is labeled by the menu button.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
-        aria-labelledby={triggerId || undefined}
-        // The element that contains the menu items displayed by activating the
-        // button has role menu.
-        // https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
-        role="menu"
-        {...props}
-        data-reach-menu-items=""
-      />
-    );
-  }
+		return (
+			// TODO: Should probably file a but in jsx-a11y, but this is correct
+			// according to https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+			// eslint-disable-next-line jsx-a11y/aria-activedescendant-has-tabindex
+			<Comp
+				// Refers to the descendant menuitem element that is visually indicated
+				// as focused.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+				aria-activedescendant={activeDescendant}
+				// Refers to the element that contains the accessible name for the
+				// `menu`. The menu is labeled by the menu button.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/examples/menu-button/menu-button-actions-active-descendant.html
+				aria-labelledby={triggerId || undefined}
+				// The element that contains the menu items displayed by activating the
+				// button has role menu.
+				// https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
+				role="menu"
+				{...props}
+				data-reach-menu-items=""
+			/>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"div", MenuItemsProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menuitems-props
  */
 interface MenuItemsProps {
-  /**
-   * Can contain only `MenuItem` or a `MenuLink`.
-   *
-   * @see Docs https://reach.tech/menu-button#menuitems-children
-   */
-  children: React.ReactNode;
+	/**
+	 * Can contain only `MenuItem` or a `MenuLink`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menuitems-children
+	 */
+	children: React.ReactNode;
 }
 
 MenuItems.displayName = "MenuItems";
@@ -284,45 +284,45 @@ MenuItems.displayName = "MenuItems";
  * @see Docs https://reach.tech/menu-button#menulink
  */
 const MenuLink = React.forwardRef(
-  (
-    {
-      as = "a",
-      // @ts-ignore
-      component,
-      onSelect,
-      ...props
-    },
-    forwardedRef
-  ) => {
-    if (__DEV__) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      React.useEffect(() => {
-        if (component) {
-          console.warn(
-            "[@reach/menu-button]: Please use the `as` prop instead of `component`"
-          );
-        }
-      }, [component]);
-    }
+	(
+		{
+			as = "a",
+			// @ts-ignore
+			component,
+			onSelect,
+			...props
+		},
+		forwardedRef
+	) => {
+		if (__DEV__) {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			React.useEffect(() => {
+				if (component) {
+					console.warn(
+						"[@reach/menu-button]: Please use the `as` prop instead of `component`"
+					);
+				}
+			}, [component]);
+		}
 
-    return (
-      <MenuItemImpl
-        {...props}
-        ref={forwardedRef}
-        data-reach-menu-link=""
-        as={as}
-        isLink={true}
-        onSelect={onSelect || noop}
-      />
-    );
-  }
+		return (
+			<MenuItemImpl
+				{...props}
+				ref={forwardedRef}
+				data-reach-menu-link=""
+				as={as}
+				isLink={true}
+				onSelect={onSelect || noop}
+			/>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"a", MenuLinkProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menulink-props
  */
 type MenuLinkProps = Omit<MenuItemImplProps, "isLink" | "onSelect"> & {
-  onSelect?(): void;
+	onSelect?(): void;
 };
 
 MenuLink.displayName = "MenuLink";
@@ -338,32 +338,32 @@ MenuLink.displayName = "MenuLink";
  * @see Docs https://reach.tech/menu-button#menulist
  */
 const MenuList = React.forwardRef(
-  ({ portal = true, ...props }, forwardedRef) => {
-    return (
-      <MenuPopover portal={portal}>
-        <MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
-      </MenuPopover>
-    );
-  }
+	({ portal = true, ...props }, forwardedRef) => {
+		return (
+			<MenuPopover portal={portal}>
+				<MenuItems {...props} ref={forwardedRef} data-reach-menu-list="" />
+			</MenuPopover>
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"div", MenuListProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menulist-props
  */
 interface MenuListProps {
-  /**
-   * Whether or not the popover should be rendered inside a portal. Defaults to
-   * `true`.
-   *
-   * @see Docs https://reach.tech/menu-button#menulist-portal
-   */
-  portal?: boolean;
-  /**
-   * Can contain only `MenuItem` or a `MenuLink`.
-   *
-   * @see Docs https://reach.tech/menu-button#menulist-children
-   */
-  children: React.ReactNode;
+	/**
+	 * Whether or not the popover should be rendered inside a portal. Defaults to
+	 * `true`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menulist-portal
+	 */
+	portal?: boolean;
+	/**
+	 * Can contain only `MenuItem` or a `MenuLink`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menulist-children
+	 */
+	children: React.ReactNode;
 }
 
 MenuList.displayName = "MenuList";
@@ -381,58 +381,58 @@ MenuList.displayName = "MenuList";
  * @see Docs https://reach.tech/menu-button#menupopover
  */
 const MenuPopover = React.forwardRef(
-  ({ as: Comp = "div", ...rest }, forwardedRef) => {
-    let {
-      data: { portal, targetRef, position },
-      props,
-    } = useDropdownPopover({ ...rest, ref: forwardedRef });
+	({ as: Comp = "div", ...rest }, forwardedRef) => {
+		let {
+			data: { portal, targetRef, position },
+			props,
+		} = useDropdownPopover({ ...rest, ref: forwardedRef });
 
-    let sharedProps = {
-      "data-reach-menu-popover": "",
-    };
+		let sharedProps = {
+			"data-reach-menu-popover": "",
+		};
 
-    return portal ? (
-      <Popover
-        {...props}
-        {...sharedProps}
-        as={Comp}
-        targetRef={targetRef as any}
-        position={position}
-        unstable_skipInitialPortalRender
-      />
-    ) : (
-      <Comp {...props} {...sharedProps} />
-    );
-  }
+		return portal ? (
+			<Popover
+				{...props}
+				{...sharedProps}
+				as={Comp}
+				targetRef={targetRef as any}
+				position={position}
+				unstable_skipInitialPortalRender
+			/>
+		) : (
+			<Comp {...props} {...sharedProps} />
+		);
+	}
 ) as Polymorphic.ForwardRefComponent<"div", MenuPopoverProps>;
 
 /**
  * @see Docs https://reach.tech/menu-button#menupopover-props
  */
 interface MenuPopoverProps {
-  /**
-   * Must contain a `MenuItems`
-   *
-   * @see Docs https://reach.tech/menu-button#menupopover-children
-   */
-  children: React.ReactNode;
-  /**
-   * Whether or not the popover should be rendered inside a portal. Defaults to
-   * `true`.
-   *
-   * @see Docs https://reach.tech/menu-button#menupopover-portal
-   */
-  portal?: boolean;
-  /**
-   * A function used to determine the position of the popover in relation to the
-   * menu button. By default, the menu button will attempt to position the
-   * popover below the button aligned with its left edge. If this positioning
-   * results in collisions with any side of the window, the popover will be
-   * anchored to a different side to avoid those collisions if possible.
-   *
-   * @see Docs https://reach.tech/menu-button#menupopover-position
-   */
-  position?: Position;
+	/**
+	 * Must contain a `MenuItems`
+	 *
+	 * @see Docs https://reach.tech/menu-button#menupopover-children
+	 */
+	children: React.ReactNode;
+	/**
+	 * Whether or not the popover should be rendered inside a portal. Defaults to
+	 * `true`.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menupopover-portal
+	 */
+	portal?: boolean;
+	/**
+	 * A function used to determine the position of the popover in relation to the
+	 * menu button. By default, the menu button will attempt to position the
+	 * popover below the button aligned with its left edge. If this positioning
+	 * results in collisions with any side of the window, the popover will be
+	 * anchored to a different side to avoid those collisions if possible.
+	 *
+	 * @see Docs https://reach.tech/menu-button#menupopover-position
+	 */
+	position?: Position;
 }
 
 MenuPopover.displayName = "MenuPopover";
@@ -445,40 +445,40 @@ MenuPopover.displayName = "MenuPopover";
  * @see Docs https://reach.tech/menu-button#usemenubuttoncontext
  */
 function useMenuButtonContext(): MenuContextValue {
-  let {
-    state: { isExpanded },
-  } = useDropdownContext("useMenuButtonContext");
-  return React.useMemo(() => ({ isExpanded }), [isExpanded]);
+	let {
+		state: { isExpanded },
+	} = useDropdownContext("useMenuButtonContext");
+	return React.useMemo(() => ({ isExpanded }), [isExpanded]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
 interface MenuContextValue {
-  isExpanded: boolean;
-  // id: string | undefined;
+	isExpanded: boolean;
+	// id: string | undefined;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
 export type {
-  MenuButtonProps,
-  MenuContextValue,
-  MenuItemProps,
-  MenuItemsProps,
-  MenuLinkProps,
-  MenuListProps,
-  MenuPopoverProps,
-  MenuProps,
+	MenuButtonProps,
+	MenuContextValue,
+	MenuItemProps,
+	MenuItemsProps,
+	MenuLinkProps,
+	MenuListProps,
+	MenuPopoverProps,
+	MenuProps,
 };
 export {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  MenuLink,
-  MenuList,
-  MenuPopover,
-  useMenuButtonContext,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+	MenuLink,
+	MenuList,
+	MenuPopover,
+	useMenuButtonContext,
 };

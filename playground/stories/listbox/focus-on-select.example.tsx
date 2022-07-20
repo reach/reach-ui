@@ -13,41 +13,41 @@ let name = "Move Focus on Item Select";
 // in onChange as expected, since we're managing focus internally.
 
 function Example() {
-  let inputRef = React.useRef<HTMLInputElement | null>(null);
-  return (
-    <div>
-      <VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
-      <Listbox
-        aria-labelledby="taco-label"
-        onChange={(newValue) => {
-          inputRef.current?.focus();
-          action("value changed")(newValue);
-        }}
-      >
-        <ListboxOption value="asada">
-          Carne Asada <Taco />
-        </ListboxOption>
-        <ListboxOption value="pollo" label="Pollo" disabled>
-          Pollo <Taco /> <Tag>Sold Out!</Tag>
-        </ListboxOption>
-        <div style={{ background: "#ccc" }}>
-          <ListboxOption value="pastor" label="Pastor">
-            Pastor <Taco /> <Tag>Fan favorite!</Tag>
-          </ListboxOption>
-        </div>
-        <ListboxOption value="lengua">
-          Lengua <Taco />
-        </ListboxOption>
-      </Listbox>
-      <hr />
-      <div>
-        <label>
-          <span>Why do you love this taco so much?</span>
-          <input ref={inputRef} type="text" />
-        </label>
-      </div>
-    </div>
-  );
+	let inputRef = React.useRef<HTMLInputElement | null>(null);
+	return (
+		<div>
+			<VisuallyHidden id="taco-label">Choose a taco</VisuallyHidden>
+			<Listbox
+				aria-labelledby="taco-label"
+				onChange={(newValue) => {
+					inputRef.current?.focus();
+					action("value changed")(newValue);
+				}}
+			>
+				<ListboxOption value="asada">
+					Carne Asada <Taco />
+				</ListboxOption>
+				<ListboxOption value="pollo" label="Pollo" disabled>
+					Pollo <Taco /> <Tag>Sold Out!</Tag>
+				</ListboxOption>
+				<div style={{ background: "#ccc" }}>
+					<ListboxOption value="pastor" label="Pastor">
+						Pastor <Taco /> <Tag>Fan favorite!</Tag>
+					</ListboxOption>
+				</div>
+				<ListboxOption value="lengua">
+					Lengua <Taco />
+				</ListboxOption>
+			</Listbox>
+			<hr />
+			<div>
+				<label>
+					<span>Why do you love this taco so much?</span>
+					<input ref={inputRef} type="text" />
+				</label>
+			</div>
+		</div>
+	);
 }
 
 Example.storyName = name;

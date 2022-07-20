@@ -4,10 +4,10 @@
  * TODO: Remove in 1.0 (we used this in public examples)
  */
 export function getScrollbarOffset() {
-  try {
-    if (window.innerWidth > document.documentElement.clientWidth) {
-      return window.innerWidth - document.documentElement.clientWidth;
-    }
-  } catch (err) {}
-  return 0;
+	try {
+		if (window.innerWidth > document.documentElement.clientWidth) {
+			return window.innerWidth - document.documentElement.clientWidth;
+		}
+	} catch (err) {}
+	return 0;
 }

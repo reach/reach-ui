@@ -9,24 +9,24 @@ import type * as React from "react";
  * passed as a dependency.
  */
 function createStableCallbackHook<T extends (...args: any[]) => any>(
-  useEffectHook: (
-    effect: React.EffectCallback,
-    deps?: React.DependencyList | undefined
-  ) => void,
-  callback: T | null | undefined
+	useEffectHook: (
+		effect: React.EffectCallback,
+		deps?: React.DependencyList | undefined
+	) => void,
+	callback: T | null | undefined
 ): T {
-  let callbackRef = useRef(callback);
-  useEffectHook(() => {
-    callbackRef.current = callback;
-  });
+	let callbackRef = useRef(callback);
+	useEffectHook(() => {
+		callbackRef.current = callback;
+	});
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useCallback(
-    ((...args) => {
-      callbackRef.current && callbackRef.current(...args);
-    }) as T,
-    []
-  );
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	return useCallback(
+		((...args) => {
+			callbackRef.current && callbackRef.current(...args);
+		}) as T,
+		[]
+	);
 }
 
 /**
@@ -35,9 +35,9 @@ function createStableCallbackHook<T extends (...args: any[]) => any>(
  * as a dependency.
  */
 export function useStableCallback<T extends (...args: any[]) => any>(
-  callback: T | null | undefined
+	callback: T | null | undefined
 ): T {
-  return createStableCallbackHook(useEffect, callback);
+	return createStableCallbackHook(useEffect, callback);
 }
 
 /**
@@ -50,7 +50,7 @@ export function useStableCallback<T extends (...args: any[]) => any>(
  * needed.
  */
 export function useStableLayoutCallback<T extends (...args: any[]) => any>(
-  callback: T | null | undefined
+	callback: T | null | undefined
 ): T {
-  return createStableCallbackHook(useLayoutEffect, callback);
+	return createStableCallbackHook(useLayoutEffect, callback);
 }

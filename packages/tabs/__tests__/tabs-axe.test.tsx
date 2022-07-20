@@ -12,35 +12,35 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 afterEach(cleanup);
 
 describe("<Tabs /> with axe", () => {
-  it("Should not have ARIA violations", async () => {
-    vi.useRealTimers();
-    const { container } = render(
-      <div>
-        <Tabs>
-          <TabList>
-            <Tab>Tab 1</Tab>
-            <Tab>Tab 2</Tab>
-            <Tab>Tab 3</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <p>Panel 1</p>
-            </TabPanel>
-            <TabPanel>
-              <p>Panel 2</p>
-            </TabPanel>
-            <TabPanel>
-              <p>Panel 3</p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </div>
-    );
+	it("Should not have ARIA violations", async () => {
+		vi.useRealTimers();
+		const { container } = render(
+			<div>
+				<Tabs>
+					<TabList>
+						<Tab>Tab 1</Tab>
+						<Tab>Tab 2</Tab>
+						<Tab>Tab 3</Tab>
+					</TabList>
+					<TabPanels>
+						<TabPanel>
+							<p>Panel 1</p>
+						</TabPanel>
+						<TabPanel>
+							<p>Panel 2</p>
+						</TabPanel>
+						<TabPanel>
+							<p>Panel 3</p>
+						</TabPanel>
+					</TabPanels>
+				</Tabs>
+			</div>
+		);
 
-    let results: AxeCore.AxeResults = null as any;
-    await act(async () => {
-      results = await axe(container);
-    });
-    expect(results).toHaveNoViolations();
-  });
+		let results: AxeCore.AxeResults = null as any;
+		await act(async () => {
+			results = await axe(container);
+		});
+		expect(results).toHaveNoViolations();
+	});
 });

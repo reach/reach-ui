@@ -33,18 +33,18 @@ import type { Polymorphic } from "@reach/utils";
  * an alert (SRs don't read them on first load anyway)
  */
 let keys: RegionKeys = {
-  polite: -1,
-  assertive: -1,
+	polite: -1,
+	assertive: -1,
 };
 
 let elements: ElementTypes = {
-  polite: {},
-  assertive: {},
+	polite: {},
+	assertive: {},
 };
 
 let liveRegions: RegionElements = {
-  polite: null,
-  assertive: null,
+	polite: null,
+	assertive: null,
 };
 
 let renderTimer: number | null;
@@ -52,14 +52,14 @@ let renderTimer: number | null;
 ////////////////////////////////////////////////////////////////////////////////
 
 const AlertRendered = React.forwardRef(function AlertRendered(
-  { as: Comp = "div", children, ...props },
-  forwardedRef
+	{ as: Comp = "div", children, ...props },
+	forwardedRef
 ) {
-  return (
-    <Comp ref={forwardedRef} {...props}>
-      {children}
-    </Comp>
-  );
+	return (
+		<Comp ref={forwardedRef} {...props}>
+			{children}
+		</Comp>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", Omit<AlertProps, "type">>;
 
 /**
@@ -72,25 +72,25 @@ const AlertRendered = React.forwardRef(function AlertRendered(
  * @see Docs https://reach.tech/alert
  */
 const Alert = React.forwardRef(function Alert(props, forwardedRef) {
-  let ownRef = React.useRef<HTMLDivElement>(null);
-  let ref = useComposedRefs(forwardedRef, ownRef);
-  useMirrorEffects(ownRef, props);
-  let { type: _, ...rest } = props;
-  return <AlertRendered ref={ref} {...rest} data-reach-alert="" aria-hidden />;
+	let ownRef = React.useRef<HTMLDivElement>(null);
+	let ref = useComposedRefs(forwardedRef, ownRef);
+	useMirrorEffects(ownRef, props);
+	let { type: _, ...rest } = props;
+	return <AlertRendered ref={ref} {...rest} data-reach-alert="" aria-hidden />;
 }) as Polymorphic.ForwardRefComponent<"div", AlertProps>;
 
 /**
  * @see Docs https://reach.tech/alert#alert-props
  */
 interface AlertProps {
-  /**
-   * Controls whether the assistive technology should read immediately
-   * ("assertive") or wait until the user is idle ("polite").
-   *
-   * @see Docs https://reach.tech/alert#alert-type
-   */
-  type?: "assertive" | "polite";
-  children: React.ReactNode;
+	/**
+	 * Controls whether the assistive technology should read immediately
+	 * ("assertive") or wait until the user is idle ("polite").
+	 *
+	 * @see Docs https://reach.tech/alert#alert-type
+	 */
+	type?: "assertive" | "polite";
+	children: React.ReactNode;
 }
 
 Alert.displayName = "Alert";
@@ -98,114 +98,114 @@ Alert.displayName = "Alert";
 ////////////////////////////////////////////////////////////////////////////////
 
 function createMirror(type: "polite" | "assertive", doc: Document): Mirror {
-  let key = ++keys[type];
+	let key = ++keys[type];
 
-  let mount = (element: JSX.Element) => {
-    if (liveRegions[type]) {
-      elements[type][key] = element;
-      renderAlerts();
-    } else {
-      let node = doc.createElement("div");
-      node.setAttribute(`data-reach-live-${type}`, "true");
-      liveRegions[type] = node;
-      doc.body.appendChild(liveRegions[type]!);
-      mount(element);
-    }
-  };
+	let mount = (element: JSX.Element) => {
+		if (liveRegions[type]) {
+			elements[type][key] = element;
+			renderAlerts();
+		} else {
+			let node = doc.createElement("div");
+			node.setAttribute(`data-reach-live-${type}`, "true");
+			liveRegions[type] = node;
+			doc.body.appendChild(liveRegions[type]!);
+			mount(element);
+		}
+	};
 
-  let update = (element: JSX.Element) => {
-    elements[type][key] = element;
-    renderAlerts();
-  };
+	let update = (element: JSX.Element) => {
+		elements[type][key] = element;
+		renderAlerts();
+	};
 
-  let unmount = () => {
-    delete elements[type][key];
-    renderAlerts();
-  };
+	let unmount = () => {
+		delete elements[type][key];
+		renderAlerts();
+	};
 
-  return { mount, update, unmount };
+	return { mount, update, unmount };
 }
 
 function renderAlerts() {
-  if (renderTimer != null) {
-    window.clearTimeout(renderTimer);
-  }
-  renderTimer = window.setTimeout(() => {
-    Object.keys(elements).forEach((elementType) => {
-      let regionType: RegionTypes = elementType as RegionTypes;
-      let container = liveRegions[regionType]!;
-      if (container) {
-        ReactDOM.render(
-          <VisuallyHidden as="div">
-            <div
-              // The status role is a type of live region and a container whose
-              // content is advisory information for the user that is not
-              // important enough to justify an alert, and is often presented as
-              // a status bar. When the role is added to an element, the browser
-              // will send out an accessible status event to assistive
-              // technology products which can then notify the user about it.
-              // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_status_role
-              role={regionType === "assertive" ? "alert" : "status"}
-              aria-live={regionType}
-            >
-              {Object.keys(elements[regionType]).map((key) =>
-                React.cloneElement(elements[regionType][key], {
-                  key,
-                  ref: null,
-                })
-              )}
-            </div>
-          </VisuallyHidden>,
-          liveRegions[regionType]
-        );
-      }
-    });
-  }, 500);
+	if (renderTimer != null) {
+		window.clearTimeout(renderTimer);
+	}
+	renderTimer = window.setTimeout(() => {
+		Object.keys(elements).forEach((elementType) => {
+			let regionType: RegionTypes = elementType as RegionTypes;
+			let container = liveRegions[regionType]!;
+			if (container) {
+				ReactDOM.render(
+					<VisuallyHidden as="div">
+						<div
+							// The status role is a type of live region and a container whose
+							// content is advisory information for the user that is not
+							// important enough to justify an alert, and is often presented as
+							// a status bar. When the role is added to an element, the browser
+							// will send out an accessible status event to assistive
+							// technology products which can then notify the user about it.
+							// https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_status_role
+							role={regionType === "assertive" ? "alert" : "status"}
+							aria-live={regionType}
+						>
+							{Object.keys(elements[regionType]).map((key) =>
+								React.cloneElement(elements[regionType][key], {
+									key,
+									ref: null,
+								})
+							)}
+						</div>
+					</VisuallyHidden>,
+					liveRegions[regionType]
+				);
+			}
+		});
+	}, 500);
 }
 
 function useMirrorEffects(
-  ref: React.RefObject<Element>,
-  {
-    type: regionType = "polite",
-    ...props
-  }: React.ComponentPropsWithoutRef<"div"> & AlertProps
+	ref: React.RefObject<Element>,
+	{
+		type: regionType = "polite",
+		...props
+	}: React.ComponentPropsWithoutRef<"div"> & AlertProps
 ) {
-  let mirror = React.useRef<Mirror | null>(null);
-  React.useEffect(() => {
-    let ownerDocument = getOwnerDocument(ref.current);
-    if (!ownerDocument) return;
-    mirror.current = createMirror(regionType, ownerDocument);
-    mirror.current.mount(<AlertRendered {...props} />);
-    return () => {
-      mirror.current?.unmount();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref, regionType, ...Object.values(props)]);
+	let mirror = React.useRef<Mirror | null>(null);
+	React.useEffect(() => {
+		let ownerDocument = getOwnerDocument(ref.current);
+		if (!ownerDocument) return;
+		mirror.current = createMirror(regionType, ownerDocument);
+		mirror.current.mount(<AlertRendered {...props} />);
+		return () => {
+			mirror.current?.unmount();
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ref, regionType, ...Object.values(props)]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
 interface Mirror {
-  mount(element: JSX.Element): void;
-  update(element: JSX.Element): void;
-  unmount(): void;
+	mount(element: JSX.Element): void;
+	update(element: JSX.Element): void;
+	unmount(): void;
 }
 
 type RegionTypes = "polite" | "assertive";
 
 type ElementTypes = {
-  [key in RegionTypes]: {
-    [key: string]: JSX.Element;
-  };
+	[key in RegionTypes]: {
+		[key: string]: JSX.Element;
+	};
 };
 
 type RegionElements<T extends HTMLElement = HTMLDivElement> = {
-  [key in RegionTypes]: T | null;
+	[key in RegionTypes]: T | null;
 };
 
 type RegionKeys = {
-  [key in RegionTypes]: number;
+	[key in RegionTypes]: number;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

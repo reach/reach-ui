@@ -7,10 +7,10 @@ import * as React from "react";
  * of the weird mechanics of using refs with TS.
  */
 export type AssignableRef<ValueType> =
-  | {
-      bivarianceHack(instance: ValueType | null): void;
-    }["bivarianceHack"]
-  | React.MutableRefObject<ValueType | null>;
+	| {
+			bivarianceHack(instance: ValueType | null): void;
+	  }["bivarianceHack"]
+	| React.MutableRefObject<ValueType | null>;
 
 /**
  * Type can be either a single `ValueType` or an array of `ValueType`
@@ -43,12 +43,12 @@ export type SingleOrArray<ValueType> = ValueType[] | ValueType;
  * @link http://www.typescriptlang.org/docs/handbook/advanced-types.html#distributive-conditional-types
  */
 export type DistributiveOmit<
-  BaseType,
-  Key extends PropertyKey
+	BaseType,
+	Key extends PropertyKey
 > = BaseType extends any ? Omit<BaseType, Key> : never;
 
 export type ElementTagNameMap = HTMLElementTagNameMap &
-  Pick<
-    SVGElementTagNameMap,
-    Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap>
-  >;
+	Pick<
+		SVGElementTagNameMap,
+		Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap>
+	>;

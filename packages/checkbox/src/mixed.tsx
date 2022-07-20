@@ -33,9 +33,9 @@
 
 import * as React from "react";
 import {
-  composeEventHandlers,
-  useIsomorphicLayoutEffect,
-  useComposedRefs,
+	composeEventHandlers,
+	useIsomorphicLayoutEffect,
+	useComposedRefs,
 } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
@@ -49,20 +49,20 @@ declare const __DEV__: boolean;
 // States
 
 enum MixedCheckboxStates {
-  Checked = "checked",
-  Mixed = "mixed",
-  Unchecked = "unchecked",
+	Checked = "checked",
+	Mixed = "mixed",
+	Unchecked = "unchecked",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 
 enum MixedCheckboxEvents {
-  GetDerivedData = "GET_DERIVED_DATA",
-  Mount = "MOUNT",
-  Set = "SET",
-  Toggle = "TOGGLE",
-  Unmount = "UNMOUNT",
+	GetDerivedData = "GET_DERIVED_DATA",
+	Mount = "MOUNT",
+	Set = "SET",
+	Toggle = "TOGGLE",
+	Unmount = "UNMOUNT",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ enum MixedCheckboxEvents {
  * @param context
  */
 function checkToggleAllowed(data: MixedCheckboxData) {
-  return !!(data && !data.isControlled && !data.disabled);
+	return !!(data && !data.isControlled && !data.disabled);
 }
 
 /**
@@ -85,55 +85,55 @@ function checkToggleAllowed(data: MixedCheckboxData) {
  * @param state
  */
 function getCheckSetCondition(state: string) {
-  return function (data: MixedCheckboxData, event: any) {
-    return data && data.isControlled && event.state === state;
-  };
+	return function (data: MixedCheckboxData, event: any) {
+		return data && data.isControlled && event.state === state;
+	};
 }
 
 /**
  * Assign refs to the machine's context data
  */
 const assignRefs = assign(
-  (data: MixedCheckboxData, event: MixedCheckboxEvent) => {
-    return {
-      ...data,
-      refs: event.refs,
-    };
-  }
+	(data: MixedCheckboxData, event: MixedCheckboxEvent) => {
+		return {
+			...data,
+			refs: event.refs,
+		};
+	}
 );
 
 ////////////////////////////////////////////////////////////////////////////////
 // State Machine
 
 const commonEvents = {
-  [MixedCheckboxEvents.Mount]: {
-    actions: assignRefs,
-  },
-  [MixedCheckboxEvents.GetDerivedData]: {
-    actions: [
-      assignRefs,
-      assign((data: MixedCheckboxData, event: any) => {
-        return {
-          ...data,
-          ...event.data,
-        };
-      }),
-    ],
-  },
-  [MixedCheckboxEvents.Set]: [
-    {
-      target: MixedCheckboxStates.Checked,
-      cond: getCheckSetCondition(MixedCheckboxStates.Checked),
-    },
-    {
-      target: MixedCheckboxStates.Unchecked,
-      cond: getCheckSetCondition(MixedCheckboxStates.Unchecked),
-    },
-    {
-      target: MixedCheckboxStates.Mixed,
-      cond: getCheckSetCondition(MixedCheckboxStates.Mixed),
-    },
-  ],
+	[MixedCheckboxEvents.Mount]: {
+		actions: assignRefs,
+	},
+	[MixedCheckboxEvents.GetDerivedData]: {
+		actions: [
+			assignRefs,
+			assign((data: MixedCheckboxData, event: any) => {
+				return {
+					...data,
+					...event.data,
+				};
+			}),
+		],
+	},
+	[MixedCheckboxEvents.Set]: [
+		{
+			target: MixedCheckboxStates.Checked,
+			cond: getCheckSetCondition(MixedCheckboxStates.Checked),
+		},
+		{
+			target: MixedCheckboxStates.Unchecked,
+			cond: getCheckSetCondition(MixedCheckboxStates.Unchecked),
+		},
+		{
+			target: MixedCheckboxStates.Mixed,
+			cond: getCheckSetCondition(MixedCheckboxStates.Mixed),
+		},
+	],
 };
 
 /**
@@ -143,53 +143,53 @@ const commonEvents = {
  * @param props
  */
 const createMachineDefinition = (
-  initial: MixedCheckboxStates,
-  props: {
-    disabled: boolean;
-    isControlled: boolean;
-  }
+	initial: MixedCheckboxStates,
+	props: {
+		disabled: boolean;
+		isControlled: boolean;
+	}
 ): StateMachine.Config<MixedCheckboxData, MixedCheckboxEvent> => ({
-  id: "mixed-checkbox",
-  initial,
-  context: {
-    disabled: props.disabled,
-    isControlled: props.isControlled,
-    refs: {
-      input: null,
-    },
-  },
-  states: {
-    [MixedCheckboxStates.Unchecked]: {
-      entry: assignRefs,
-      on: {
-        [MixedCheckboxEvents.Toggle]: {
-          target: MixedCheckboxStates.Checked,
-          cond: checkToggleAllowed,
-        },
-        ...commonEvents,
-      },
-    },
-    [MixedCheckboxStates.Checked]: {
-      entry: assignRefs,
-      on: {
-        [MixedCheckboxEvents.Toggle]: {
-          target: MixedCheckboxStates.Unchecked,
-          cond: checkToggleAllowed,
-        },
-        ...commonEvents,
-      },
-    },
-    [MixedCheckboxStates.Mixed]: {
-      entry: assignRefs,
-      on: {
-        [MixedCheckboxEvents.Toggle]: {
-          target: MixedCheckboxStates.Checked,
-          cond: checkToggleAllowed,
-        },
-        ...commonEvents,
-      },
-    },
-  },
+	id: "mixed-checkbox",
+	initial,
+	context: {
+		disabled: props.disabled,
+		isControlled: props.isControlled,
+		refs: {
+			input: null,
+		},
+	},
+	states: {
+		[MixedCheckboxStates.Unchecked]: {
+			entry: assignRefs,
+			on: {
+				[MixedCheckboxEvents.Toggle]: {
+					target: MixedCheckboxStates.Checked,
+					cond: checkToggleAllowed,
+				},
+				...commonEvents,
+			},
+		},
+		[MixedCheckboxStates.Checked]: {
+			entry: assignRefs,
+			on: {
+				[MixedCheckboxEvents.Toggle]: {
+					target: MixedCheckboxStates.Unchecked,
+					cond: checkToggleAllowed,
+				},
+				...commonEvents,
+			},
+		},
+		[MixedCheckboxStates.Mixed]: {
+			entry: assignRefs,
+			on: {
+				[MixedCheckboxEvents.Toggle]: {
+					target: MixedCheckboxStates.Checked,
+					cond: checkToggleAllowed,
+				},
+				...commonEvents,
+			},
+		},
+	},
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -203,36 +203,36 @@ const createMachineDefinition = (
  * @see Docs https://reach.tech/checkbox#mixedcheckbox-1
  */
 const MixedCheckbox = React.forwardRef(function MixedCheckbox(
-  { as: Comp = "input", checked, defaultChecked, disabled, onChange, ...props },
-  forwardedRef
+	{ as: Comp = "input", checked, defaultChecked, disabled, onChange, ...props },
+	forwardedRef
 ) {
-  let ownRef: MixedCheckboxInputRef = React.useRef(null);
-  let ref = useComposedRefs(forwardedRef, ownRef);
-  let [inputProps] = useMixedCheckbox(
-    ownRef,
-    {
-      onChange,
-      checked,
-      defaultChecked,
-      disabled,
-    },
-    "MixedCheckbox"
-  );
+	let ownRef: MixedCheckboxInputRef = React.useRef(null);
+	let ref = useComposedRefs(forwardedRef, ownRef);
+	let [inputProps] = useMixedCheckbox(
+		ownRef,
+		{
+			onChange,
+			checked,
+			defaultChecked,
+			disabled,
+		},
+		"MixedCheckbox"
+	);
 
-  useControlledSwitchWarning(checked, "checked", "MixedCheckbox");
+	useControlledSwitchWarning(checked, "checked", "MixedCheckbox");
 
-  return (
-    <Comp {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
-  );
+	return (
+		<Comp {...props} {...inputProps} data-reach-mixed-checkbox="" ref={ref} />
+	);
 }) as Polymorphic.ForwardRefComponent<"input", MixedCheckboxProps>;
 
 interface MixedCheckboxProps {
-  /**
-   * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
-   * state.
-   */
-  checked?: MixedOrBool;
-  onChange?: React.ComponentProps<"input">["onChange"];
+	/**
+	 * Whether or not the checkbox is checked or in a `mixed` (indeterminate)
+	 * state.
+	 */
+	checked?: MixedOrBool;
+	onChange?: React.ComponentProps<"input">["onChange"];
 }
 
 MixedCheckbox.displayName = "MixedCheckbox";
@@ -240,18 +240,18 @@ MixedCheckbox.displayName = "MixedCheckbox";
 ////////////////////////////////////////////////////////////////////////////////
 
 type MixedCheckboxArgs = {
-  checked?: MixedOrBool;
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+	checked?: MixedOrBool;
+	defaultChecked?: boolean;
+	disabled?: boolean;
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
 };
 
 type UseMixedCheckboxProps = Required<
-  Pick<
-    React.ComponentProps<"input">,
-    "checked" | "disabled" | "onChange" | "onClick" | "type"
-  >
+	Pick<
+		React.ComponentProps<"input">,
+		"checked" | "disabled" | "onChange" | "onClick" | "type"
+	>
 > & { "aria-checked": MixedOrBool };
 
 /**
@@ -266,112 +266,112 @@ type UseMixedCheckboxProps = Required<
  * @param args
  */
 function useMixedCheckbox(
-  ref: MixedCheckboxInputRef,
-  args?: MixedCheckboxArgs,
-  functionOrComponentName: string = "useMixedCheckbox"
+	ref: MixedCheckboxInputRef,
+	args?: MixedCheckboxArgs,
+	functionOrComponentName: string = "useMixedCheckbox"
 ): [UseMixedCheckboxProps, { checked: MixedOrBool }] {
-  let {
-    checked: controlledChecked,
-    defaultChecked,
-    disabled,
-    onChange,
-    onClick,
-  } = args || {};
+	let {
+		checked: controlledChecked,
+		defaultChecked,
+		disabled,
+		onChange,
+		onClick,
+	} = args || {};
 
-  let isControlled = controlledChecked != null;
+	let isControlled = controlledChecked != null;
 
-  let machine = useCreateMachine(
-    createMachineDefinition(
-      checkedPropToStateValue(
-        isControlled ? controlledChecked! : defaultChecked
-      ),
-      {
-        disabled: !!disabled,
-        isControlled,
-      }
-    )
-  );
+	let machine = useCreateMachine(
+		createMachineDefinition(
+			checkedPropToStateValue(
+				isControlled ? controlledChecked! : defaultChecked
+			),
+			{
+				disabled: !!disabled,
+				isControlled,
+			}
+		)
+	);
 
-  let [current, send] = useMachine(machine, { input: ref }, DEBUG);
+	let [current, send] = useMachine(machine, { input: ref }, DEBUG);
 
-  let props: UseMixedCheckboxProps = {
-    "aria-checked": stateValueToAriaChecked(current.value),
-    checked: stateValueToChecked(current.value),
-    disabled: !!disabled,
-    onChange: composeEventHandlers(onChange, handleChange),
-    onClick: composeEventHandlers(onClick, handleClick),
-    type: "checkbox",
-  };
+	let props: UseMixedCheckboxProps = {
+		"aria-checked": stateValueToAriaChecked(current.value),
+		checked: stateValueToChecked(current.value),
+		disabled: !!disabled,
+		onChange: composeEventHandlers(onChange, handleChange),
+		onClick: composeEventHandlers(onClick, handleClick),
+		type: "checkbox",
+	};
 
-  let contextData = {
-    checked: stateValueToAriaChecked(current.value),
-  };
+	let contextData = {
+		checked: stateValueToAriaChecked(current.value),
+	};
 
-  function handleChange() {
-    /*
-     * If the component is not controlled by the app, we will send the toggle
-     * event when the input change handler is called and let our state machine
-     * dictate the next state. Othewise we'll call onChange directly and react
-     * to any resulting state changes as a side effect.
-     */
-    if (!isControlled) {
-      send(MixedCheckboxEvents.Toggle);
-    }
-  }
+	function handleChange() {
+		/*
+		 * If the component is not controlled by the app, we will send the toggle
+		 * event when the input change handler is called and let our state machine
+		 * dictate the next state. Othewise we'll call onChange directly and react
+		 * to any resulting state changes as a side effect.
+		 */
+		if (!isControlled) {
+			send(MixedCheckboxEvents.Toggle);
+		}
+	}
 
-  function handleClick() {
-    /*
-     * A controlled checkbox will have a checked="mixed" prop, but the
-     * underlying input element will receive checked="false" and
-     * aria-checked="mixed". A user click will change the underlying
-     * element's indeterminate property back to false even if the state
-     * doesn't change. This does not trigger a re-render, so our check won't
-     * work in a normal effect. We'll check again on every user click and
-     * update the node imperatively if the state doesn't change.
-     */
-    syncDomNodeWithState();
-  }
+	function handleClick() {
+		/*
+		 * A controlled checkbox will have a checked="mixed" prop, but the
+		 * underlying input element will receive checked="false" and
+		 * aria-checked="mixed". A user click will change the underlying
+		 * element's indeterminate property back to false even if the state
+		 * doesn't change. This does not trigger a re-render, so our check won't
+		 * work in a normal effect. We'll check again on every user click and
+		 * update the node imperatively if the state doesn't change.
+		 */
+		syncDomNodeWithState();
+	}
 
-  function syncDomNodeWithState() {
-    if (ref.current) {
-      ref.current.indeterminate = current.value === MixedCheckboxStates.Mixed;
-    }
-  }
+	function syncDomNodeWithState() {
+		if (ref.current) {
+			ref.current.indeterminate = current.value === MixedCheckboxStates.Mixed;
+		}
+	}
 
-  if (__DEV__) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useEffect(() => {
-      if (!ref.current) {
-        console.warn(
-          `A ref was not assigned to an input element in ${functionOrComponentName}.`
-        );
-      }
-    }, [ref, functionOrComponentName]);
-  }
+	if (__DEV__) {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		React.useEffect(() => {
+			if (!ref.current) {
+				console.warn(
+					`A ref was not assigned to an input element in ${functionOrComponentName}.`
+				);
+			}
+		}, [ref, functionOrComponentName]);
+	}
 
-  React.useEffect(() => {
-    if (isControlled) {
-      send({
-        type: MixedCheckboxEvents.Set,
-        state: checkedPropToStateValue(controlledChecked),
-      });
-    }
-  }, [isControlled, controlledChecked, send]);
+	React.useEffect(() => {
+		if (isControlled) {
+			send({
+				type: MixedCheckboxEvents.Set,
+				state: checkedPropToStateValue(controlledChecked),
+			});
+		}
+	}, [isControlled, controlledChecked, send]);
 
-  // Prevent flashing before mixed marker is displayed and check on every render
-  useIsomorphicLayoutEffect(syncDomNodeWithState);
+	// Prevent flashing before mixed marker is displayed and check on every render
+	useIsomorphicLayoutEffect(syncDomNodeWithState);
 
-  React.useEffect(() => {
-    send({
-      type: MixedCheckboxEvents.GetDerivedData,
-      data: {
-        disabled,
-        isControlled,
-      },
-    });
-  }, [disabled, isControlled, send]);
+	React.useEffect(() => {
+		send({
+			type: MixedCheckboxEvents.GetDerivedData,
+			data: {
+				disabled,
+				isControlled,
+			},
+		});
+	}, [disabled, isControlled, send]);
 
-  return [props, contextData];
+	return [props, contextData];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -382,52 +382,52 @@ function useMixedCheckbox(
  */
 
 function checkedPropToStateValue(checked?: MixedOrBool) {
-  return checked === true
-    ? MixedCheckboxStates.Checked
-    : checked === "mixed"
-    ? MixedCheckboxStates.Mixed
-    : MixedCheckboxStates.Unchecked;
+	return checked === true
+		? MixedCheckboxStates.Checked
+		: checked === "mixed"
+		? MixedCheckboxStates.Mixed
+		: MixedCheckboxStates.Unchecked;
 }
 
 function stateValueToAriaChecked(state: string): MixedOrBool {
-  return state === MixedCheckboxStates.Checked
-    ? true
-    : state === MixedCheckboxStates.Mixed
-    ? "mixed"
-    : false;
+	return state === MixedCheckboxStates.Checked
+		? true
+		: state === MixedCheckboxStates.Mixed
+		? "mixed"
+		: false;
 }
 
 function stateValueToChecked(state: string) {
-  return state === MixedCheckboxStates.Checked ? true : false;
+	return state === MixedCheckboxStates.Checked ? true : false;
 }
 
 // TODO: Move to @reach/utils
 function useControlledSwitchWarning(
-  controlPropValue: any,
-  controlPropName: string,
-  componentName: string
+	controlPropValue: any,
+	controlPropName: string,
+	componentName: string
 ) {
-  /*
-   * Determine whether or not the component is controlled and warn the developer
-   * if this changes unexpectedly.
-   */
-  let isControlled = controlPropValue != null;
-  let { current: wasControlled } = React.useRef(isControlled);
-  if (__DEV__) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useEffect(() => {
-      if (!isControlled && wasControlled) {
-        console.warn(
-          `${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-        );
-      }
-      if (isControlled && !wasControlled) {
-        console.warn(
-          `${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
-        );
-      }
-    }, [componentName, controlPropName, isControlled, wasControlled]);
-  }
+	/*
+	 * Determine whether or not the component is controlled and warn the developer
+	 * if this changes unexpectedly.
+	 */
+	let isControlled = controlPropValue != null;
+	let { current: wasControlled } = React.useRef(isControlled);
+	if (__DEV__) {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		React.useEffect(() => {
+			if (!isControlled && wasControlled) {
+				console.warn(
+					`${componentName} is changing from controlled to uncontrolled. ${componentName} should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
+				);
+			}
+			if (isControlled && !wasControlled) {
+				console.warn(
+					`${componentName} is changing from uncontrolled to controlled. ${componentName} should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled ${componentName} for the lifetime of the component. Check the \`${controlPropName}\` prop being passed in.`
+				);
+			}
+		}, [componentName, controlPropName, isControlled, wasControlled]);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -436,41 +436,41 @@ function useControlledSwitchWarning(
 type MixedOrBool = boolean | "mixed";
 
 interface MixedCheckboxData {
-  disabled: boolean;
-  isControlled: boolean;
-  refs: MixedCheckboxNodeRefs;
+	disabled: boolean;
+	isControlled: boolean;
+	refs: MixedCheckboxNodeRefs;
 }
 
 /**
  * Shared partial interface for all of our event objects.
  */
 interface MixedCheckboxEventBase extends MachineEventWithRefs {
-  refs: MixedCheckboxNodeRefs;
+	refs: MixedCheckboxNodeRefs;
 }
 
 /**
  * Event object for the checkbox state machine.
  */
 type MixedCheckboxEvent = MixedCheckboxEventBase &
-  (
-    | {
-        type: MixedCheckboxEvents.Toggle;
-      }
-    | {
-        type: MixedCheckboxEvents.Set;
-        state: MixedCheckboxStates;
-      }
-    | {
-        type: MixedCheckboxEvents.GetDerivedData;
-        data: Partial<MixedCheckboxData>;
-      }
-  );
+	(
+		| {
+				type: MixedCheckboxEvents.Toggle;
+		  }
+		| {
+				type: MixedCheckboxEvents.Set;
+				state: MixedCheckboxStates;
+		  }
+		| {
+				type: MixedCheckboxEvents.GetDerivedData;
+				data: Partial<MixedCheckboxData>;
+		  }
+	);
 
 /**
  * DOM nodes for all of the refs used in the mixed checkbox state machine.
  */
 type MixedCheckboxNodeRefs = {
-  input: HTMLInputElement | null;
+	input: HTMLInputElement | null;
 };
 
 /**
@@ -483,10 +483,10 @@ type MixedCheckboxInputRef = React.RefObject<MixedCheckboxNodeRefs["input"]>;
 
 export type { MixedCheckboxProps, MixedOrBool, UseMixedCheckboxProps };
 export {
-  MixedCheckbox,
-  MixedCheckboxEvents,
-  MixedCheckboxStates,
-  useMixedCheckbox,
-  checkedPropToStateValue as internal_checkedPropToStateValue,
-  useControlledSwitchWarning as internal_useControlledSwitchWarning,
+	MixedCheckbox,
+	MixedCheckboxEvents,
+	MixedCheckboxStates,
+	useMixedCheckbox,
+	checkedPropToStateValue as internal_checkedPropToStateValue,
+	useControlledSwitchWarning as internal_useControlledSwitchWarning,
 };

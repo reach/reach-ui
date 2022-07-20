@@ -26,5 +26,5 @@ import { canUseDOM } from "./can-use-dom";
  * @param deps
  */
 export const useIsomorphicLayoutEffect = canUseDOM()
-  ? useLayoutEffect
-  : useEffect;
+	? useLayoutEffect
+	: useEffect;

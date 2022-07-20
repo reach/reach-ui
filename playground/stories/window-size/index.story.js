@@ -3,5 +3,5 @@ export { Example as BasicTS } from "./basic.example.tsx";
 export { Example as Hook } from "./hook.example.js";
 
 export default {
-  title: "WindowSize",
+	title: "WindowSize",
 };

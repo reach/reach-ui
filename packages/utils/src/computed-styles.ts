@@ -6,13 +6,13 @@ import { getOwnerWindow } from "./owner-document";
  * @param element
  */
 export function getComputedStyles(
-  element: Element
+	element: Element
 ): CSSStyleDeclaration | null {
-  let ownerWindow = getOwnerWindow(element);
-  if (ownerWindow) {
-    return ownerWindow.getComputedStyle(element, null);
-  }
-  return null;
+	let ownerWindow = getOwnerWindow(element);
+	if (ownerWindow) {
+		return ownerWindow.getComputedStyle(element, null);
+	}
+	return null;
 }
 
 /**
@@ -22,5 +22,5 @@ export function getComputedStyles(
  * @param styleProp
  */
 export function getComputedStyle(element: Element, styleProp: string) {
-  return getComputedStyles(element)?.getPropertyValue(styleProp) || null;
+	return getComputedStyles(element)?.getPropertyValue(styleProp) || null;
 }

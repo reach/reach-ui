@@ -20,252 +20,252 @@ import "@reach/listbox/styles.css";
 import "../styles/app.scss";
 
 const NavLink = React.forwardRef(function NavLink({ children, ...props }, ref) {
-  return (
-    <li style={{ margin: 0, padding: 0 }}>
-      {props.href ? (
-        <a
-          ref={ref}
-          className="NavLink"
-          target="_blank"
-          rel="noopener"
-          {...props}
-        >
-          {children} <span aria-hidden>↗</span>
-        </a>
-      ) : (
-        <Link ref={ref} className="NavLink" {...props}>
-          {children}
-        </Link>
-      )}
-    </li>
-  );
+	return (
+		<li style={{ margin: 0, padding: 0 }}>
+			{props.href ? (
+				<a
+					ref={ref}
+					className="NavLink"
+					target="_blank"
+					rel="noopener"
+					{...props}
+				>
+					{children} <span aria-hidden>↗</span>
+				</a>
+			) : (
+				<Link ref={ref} className="NavLink" {...props}>
+					{children}
+				</Link>
+			)}
+		</li>
+	);
 });
 
 function NavList({ children }) {
-  return (
-    <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>{children}</ul>
-  );
+	return (
+		<ul style={{ margin: 0, padding: 0, listStyle: "none" }}>{children}</ul>
+	);
 }
 
 function Bar() {
-  return (
-    <div
-      style={{
-        height: 3,
-        background: "white",
-        margin: "3px 0",
-      }}
-    />
-  );
+	return (
+		<div
+			style={{
+				height: 3,
+				background: "white",
+				margin: "3px 0",
+			}}
+		/>
+	);
 }
 
 function HamburgerButton({ style = {}, children, ...props }) {
-  return (
-    <button
-      id="hamburger"
-      style={{
-        width: 40,
-        height: 40,
-        padding: 8,
-        position: "absolute",
-        left: 10,
-        top: 10,
-        border: "none",
-        font: "inherit",
-        textTransform: "none",
-        fontSize: "80%",
-        borderRadius: "50%",
-        zIndex: 1,
-        ...style,
-      }}
-      {...props}
-    >
-      <div aria-hidden="true">
-        <Bar />
-        <Bar />
-        <Bar />
-      </div>
-      <VisuallyHidden>{children}</VisuallyHidden>
-    </button>
-  );
+	return (
+		<button
+			id="hamburger"
+			style={{
+				width: 40,
+				height: 40,
+				padding: 8,
+				position: "absolute",
+				left: 10,
+				top: 10,
+				border: "none",
+				font: "inherit",
+				textTransform: "none",
+				fontSize: "80%",
+				borderRadius: "50%",
+				zIndex: 1,
+				...style,
+			}}
+			{...props}
+		>
+			<div aria-hidden="true">
+				<Bar />
+				<Bar />
+				<Bar />
+			</div>
+			<VisuallyHidden>{children}</VisuallyHidden>
+		</button>
+	);
 }
 
 function NavTag(props) {
-  return (
-    <span
-      style={{
-        fontSize: 13,
-        letterSpacing: 1.2,
-        textTransform: "uppercase",
-        padding: `0 0.25em`,
-        marginLeft: "0.5em",
-        display: "inlineBlock",
-        background: `rgba(255,255,255,0.15)`,
-        borderRadius: 3,
-      }}
-      {...props}
-    />
-  );
+	return (
+		<span
+			style={{
+				fontSize: 13,
+				letterSpacing: 1.2,
+				textTransform: "uppercase",
+				padding: `0 0.25em`,
+				marginLeft: "0.5em",
+				display: "inlineBlock",
+				background: `rgba(255,255,255,0.15)`,
+				borderRadius: 3,
+			}}
+			{...props}
+		/>
+	);
 }
 
 // eslint-disable-next-line no-unused-vars
 function BetaTag() {
-  return (
-    <NavTag>
-      <VisuallyHidden>Currently in </VisuallyHidden>Beta
-    </NavTag>
-  );
+	return (
+		<NavTag>
+			<VisuallyHidden>Currently in </VisuallyHidden>Beta
+		</NavTag>
+	);
 }
 
 function Footer({ style = {}, ...props }) {
-  return (
-    <footer
-      style={{
-        marginTop: 100,
-        color: "hsla(0, 100%, 100%, 0.75)",
-        textAlign: "center",
-        fontSize: "80%",
-        padding: 5,
-        ...style,
-      }}
-      {...props}
-    >
-      &copy; {new Date().getFullYear()} React Training
-    </footer>
-  );
+	return (
+		<footer
+			style={{
+				marginTop: 100,
+				color: "hsla(0, 100%, 100%, 0.75)",
+				textAlign: "center",
+				fontSize: "80%",
+				padding: 5,
+				...style,
+			}}
+			{...props}
+		>
+			&copy; {new Date().getFullYear()} React Training
+		</footer>
+	);
 }
 
 function Header({ children, style = {}, ...props }) {
-  return (
-    <header style={{ flex: 1, ...style }} {...props}>
-      <div style={{ padding: "30px 50px 20px 20px" }}>
-        <Logo />
-      </div>
+	return (
+		<header style={{ flex: 1, ...style }} {...props}>
+			<div style={{ padding: "30px 50px 20px 20px" }}>
+				<Logo />
+			</div>
 
-      <div style={{ height: 10 }} aria-hidden />
+			<div style={{ height: 10 }} aria-hidden />
 
-      {children}
-    </header>
-  );
+			{children}
+		</header>
+	);
 }
 
 function Nav({ media }) {
-  const [isOpen, setIsOpen] = React.useState(null);
-  const navNode = React.useRef(null);
-  React.useEffect(() => void setIsOpen(!media.small), [media]);
+	const [isOpen, setIsOpen] = React.useState(null);
+	const navNode = React.useRef(null);
+	React.useEffect(() => void setIsOpen(!media.small), [media]);
 
-  return (
-    <React.Fragment>
-      {media && media.small && (
-        <HamburgerButton
-          onFocus={(event) => event.stopPropagation()}
-          onClick={() => {
-            setIsOpen((isOpen) => {
-              let nextState = !isOpen;
-              if (nextState && navNode.current) {
-                navNode.current.focus();
-              }
-              return nextState;
-            });
-          }}
-        >
-          Toggle Nav
-        </HamburgerButton>
-      )}
-      <div
-        id="nav"
-        style={{
-          left: isOpen == null ? undefined : isOpen ? 0 : -250,
-        }}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => media.small && setIsOpen(false)}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            minHeight: "100%",
-          }}
-        >
-          <Header>
-            <nav>
-              <NavList>
-                <NavLink to="/" ref={navNode}>
-                  Home
-                </NavLink>
-                <NavLink to="/funding">Funding</NavLink>
-                <NavLink href="https://spectrum.chat/reach">
-                  Spectrum Community
-                </NavLink>
-                <NavLink href="https://github.com/reach/reach-ui">
-                  GitHub
-                </NavLink>
-              </NavList>
+	return (
+		<React.Fragment>
+			{media && media.small && (
+				<HamburgerButton
+					onFocus={(event) => event.stopPropagation()}
+					onClick={() => {
+						setIsOpen((isOpen) => {
+							let nextState = !isOpen;
+							if (nextState && navNode.current) {
+								navNode.current.focus();
+							}
+							return nextState;
+						});
+					}}
+				>
+					Toggle Nav
+				</HamburgerButton>
+			)}
+			<div
+				id="nav"
+				style={{
+					left: isOpen == null ? undefined : isOpen ? 0 : -250,
+				}}
+				onFocus={() => setIsOpen(true)}
+				onBlur={() => media.small && setIsOpen(false)}
+			>
+				<div
+					style={{
+						display: "flex",
+						flexDirection: "column",
+						width: "100%",
+						minHeight: "100%",
+					}}
+				>
+					<Header>
+						<nav>
+							<NavList>
+								<NavLink to="/" ref={navNode}>
+									Home
+								</NavLink>
+								<NavLink to="/funding">Funding</NavLink>
+								<NavLink href="https://spectrum.chat/reach">
+									Spectrum Community
+								</NavLink>
+								<NavLink href="https://github.com/reach/reach-ui">
+									GitHub
+								</NavLink>
+							</NavList>
 
-              <hr aria-hidden />
+							<hr aria-hidden />
 
-              <NavList>
-                <NavLink to="/animation">Animation</NavLink>
-                <NavLink to="/styling">Styling</NavLink>
-              </NavList>
+							<NavList>
+								<NavLink to="/animation">Animation</NavLink>
+								<NavLink to="/styling">Styling</NavLink>
+							</NavList>
 
-              <hr aria-hidden />
+							<hr aria-hidden />
 
-              <NavList>
-                <NavLink to="/accordion">Accordion</NavLink>
-                <NavLink to="/alert">Alert</NavLink>
-                <NavLink to="/alert-dialog">Alert Dialog</NavLink>
-                <NavLink to="/checkbox">Checkbox</NavLink>
-                <NavLink to="/combobox">Combobox</NavLink>
-                <NavLink to="/dialog">Dialog (Modal)</NavLink>
-                <NavLink to="/disclosure">Disclosure</NavLink>
-                <NavLink to="/listbox">Listbox</NavLink>
-                <NavLink to="/menu-button">Menu Button</NavLink>
-                <NavLink to="/portal">Portal</NavLink>
-                <NavLink to="/skip-nav">Skip Nav</NavLink>
-                <NavLink to="/slider">Slider</NavLink>
-                <NavLink to="/tabs">Tabs</NavLink>
-                <NavLink to="/tooltip">Tooltip</NavLink>
-                <NavLink to="/visually-hidden">Visually Hidden</NavLink>
-              </NavList>
+							<NavList>
+								<NavLink to="/accordion">Accordion</NavLink>
+								<NavLink to="/alert">Alert</NavLink>
+								<NavLink to="/alert-dialog">Alert Dialog</NavLink>
+								<NavLink to="/checkbox">Checkbox</NavLink>
+								<NavLink to="/combobox">Combobox</NavLink>
+								<NavLink to="/dialog">Dialog (Modal)</NavLink>
+								<NavLink to="/disclosure">Disclosure</NavLink>
+								<NavLink to="/listbox">Listbox</NavLink>
+								<NavLink to="/menu-button">Menu Button</NavLink>
+								<NavLink to="/portal">Portal</NavLink>
+								<NavLink to="/skip-nav">Skip Nav</NavLink>
+								<NavLink to="/slider">Slider</NavLink>
+								<NavLink to="/tabs">Tabs</NavLink>
+								<NavLink to="/tooltip">Tooltip</NavLink>
+								<NavLink to="/visually-hidden">Visually Hidden</NavLink>
+							</NavList>
 
-              <hr aria-hidden />
+							<hr aria-hidden />
 
-              <NavList>
-                <NavLink to="/auto-id">Auto ID</NavLink>
-                <NavLink to="/rect">Rect</NavLink>
-                <NavLink to="/window-size">Window Size</NavLink>
-              </NavList>
-            </nav>
-          </Header>
-          <Footer />
-        </div>
-      </div>
-    </React.Fragment>
-  );
+							<NavList>
+								<NavLink to="/auto-id">Auto ID</NavLink>
+								<NavLink to="/rect">Rect</NavLink>
+								<NavLink to="/window-size">Window Size</NavLink>
+							</NavList>
+						</nav>
+					</Header>
+					<Footer />
+				</div>
+			</div>
+		</React.Fragment>
+	);
 }
 
 function Layout({ children }) {
-  let media = useMatchMedia({ small: "(max-width: 800px)" });
+	let media = useMatchMedia({ small: "(max-width: 800px)" });
 
-  return (
-    <React.Fragment>
-      <SEO />
-      <SkipNavLink style={{ zIndex: 2 }} />
+	return (
+		<React.Fragment>
+			<SEO />
+			<SkipNavLink style={{ zIndex: 2 }} />
 
-      <div id="container">
-        <Nav media={media} />
-        <SkipNavContent>
-          <div id="content">{children}</div>
-        </SkipNavContent>
-      </div>
-    </React.Fragment>
-  );
+			<div id="container">
+				<Nav media={media} />
+				<SkipNavContent>
+					<div id="content">{children}</div>
+				</SkipNavContent>
+			</div>
+		</React.Fragment>
+	);
 }
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
+	children: PropTypes.node.isRequired,
 };
 
 export default Layout;

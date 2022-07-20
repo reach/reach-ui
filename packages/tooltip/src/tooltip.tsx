@@ -43,12 +43,12 @@
 import * as React from "react";
 import { useId } from "@reach/auto-id";
 import {
-  getDocumentDimensions,
-  getOwnerDocument,
-  makeId,
-  useCheckStyles,
-  useComposedRefs,
-  composeEventHandlers,
+	getDocumentDimensions,
+	getOwnerDocument,
+	makeId,
+	useCheckStyles,
+	useComposedRefs,
+	composeEventHandlers,
 } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
 import { Portal } from "@reach/portal";
@@ -64,93 +64,93 @@ const LEAVE_TIMEOUT = 500;
 // States
 
 enum TooltipStates {
-  // Nothing goin' on
-  Idle = "IDLE",
+	// Nothing goin' on
+	Idle = "IDLE",
 
-  // We're considering showing the tooltip, but we're gonna wait a sec
-  Focused = "FOCUSED",
+	// We're considering showing the tooltip, but we're gonna wait a sec
+	Focused = "FOCUSED",
 
-  // It's on!
-  Visible = "VISIBLE",
+	// It's on!
+	Visible = "VISIBLE",
 
-  // Focus has left, but we want to keep it visible for a sec
-  LeavingVisible = "LEAVING_VISIBLE",
+	// Focus has left, but we want to keep it visible for a sec
+	LeavingVisible = "LEAVING_VISIBLE",
 
-  // The user clicked the tool, so we want to hide the thing, we can't just use
-  // IDLE because we need to ignore mousemove, etc.
-  Dismissed = "DISMISSED",
+	// The user clicked the tool, so we want to hide the thing, we can't just use
+	// IDLE because we need to ignore mousemove, etc.
+	Dismissed = "DISMISSED",
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Events
 
 enum TooltipEvents {
-  Blur = "BLUR",
-  Focus = "FOCUS",
-  GlobalMouseMove = "GLOBAL_MOUSE_MOVE",
-  MouseDown = "MOUSE_DOWN",
-  MouseEnter = "MOUSE_ENTER",
-  MouseLeave = "MOUSE_LEAVE",
-  MouseMove = "MOUSE_MOVE",
-  Rest = "REST",
-  SelectWithKeyboard = "SELECT_WITH_KEYBOARD",
-  TimeComplete = "TIME_COMPLETE",
+	Blur = "BLUR",
+	Focus = "FOCUS",
+	GlobalMouseMove = "GLOBAL_MOUSE_MOVE",
+	MouseDown = "MOUSE_DOWN",
+	MouseEnter = "MOUSE_ENTER",
+	MouseLeave = "MOUSE_LEAVE",
+	MouseMove = "MOUSE_MOVE",
+	Rest = "REST",
+	SelectWithKeyboard = "SELECT_WITH_KEYBOARD",
+	TimeComplete = "TIME_COMPLETE",
 }
 
 const chart: StateChart = {
-  initial: TooltipStates.Idle,
-  states: {
-    [TooltipStates.Idle]: {
-      enter: clearContextId,
-      on: {
-        [TooltipEvents.MouseEnter]: TooltipStates.Focused,
-        [TooltipEvents.Focus]: TooltipStates.Visible,
-      },
-    },
-    [TooltipStates.Focused]: {
-      enter: startRestTimer,
-      leave: clearRestTimer,
-      on: {
-        [TooltipEvents.MouseMove]: TooltipStates.Focused,
-        [TooltipEvents.MouseLeave]: TooltipStates.Idle,
-        [TooltipEvents.MouseDown]: TooltipStates.Dismissed,
-        [TooltipEvents.Blur]: TooltipStates.Idle,
-        [TooltipEvents.Rest]: TooltipStates.Visible,
-      },
-    },
-    [TooltipStates.Visible]: {
-      on: {
-        [TooltipEvents.Focus]: TooltipStates.Focused,
-        [TooltipEvents.MouseEnter]: TooltipStates.Focused,
-        [TooltipEvents.MouseLeave]: TooltipStates.LeavingVisible,
-        [TooltipEvents.Blur]: TooltipStates.LeavingVisible,
-        [TooltipEvents.MouseDown]: TooltipStates.Dismissed,
-        [TooltipEvents.SelectWithKeyboard]: TooltipStates.Dismissed,
-        [TooltipEvents.GlobalMouseMove]: TooltipStates.LeavingVisible,
-      },
-    },
-    [TooltipStates.LeavingVisible]: {
-      enter: startLeavingVisibleTimer,
-      leave: () => {
-        clearLeavingVisibleTimer();
-        clearContextId();
-      },
-      on: {
-        [TooltipEvents.MouseEnter]: TooltipStates.Visible,
-        [TooltipEvents.Focus]: TooltipStates.Visible,
-        [TooltipEvents.TimeComplete]: TooltipStates.Idle,
-      },
-    },
-    [TooltipStates.Dismissed]: {
-      leave: () => {
-        clearContextId();
-      },
-      on: {
-        [TooltipEvents.MouseLeave]: TooltipStates.Idle,
-        [TooltipEvents.Blur]: TooltipStates.Idle,
-      },
-    },
-  },
+	initial: TooltipStates.Idle,
+	states: {
+		[TooltipStates.Idle]: {
+			enter: clearContextId,
+			on: {
+				[TooltipEvents.MouseEnter]: TooltipStates.Focused,
+				[TooltipEvents.Focus]: TooltipStates.Visible,
+			},
+		},
+		[TooltipStates.Focused]: {
+			enter: startRestTimer,
+			leave: clearRestTimer,
+			on: {
+				[TooltipEvents.MouseMove]: TooltipStates.Focused,
+				[TooltipEvents.MouseLeave]: TooltipStates.Idle,
+				[TooltipEvents.MouseDown]: TooltipStates.Dismissed,
+				[TooltipEvents.Blur]: TooltipStates.Idle,
+				[TooltipEvents.Rest]: TooltipStates.Visible,
+			},
+		},
+		[TooltipStates.Visible]: {
+			on: {
+				[TooltipEvents.Focus]: TooltipStates.Focused,
+				[TooltipEvents.MouseEnter]: TooltipStates.Focused,
+				[TooltipEvents.MouseLeave]: TooltipStates.LeavingVisible,
+				[TooltipEvents.Blur]: TooltipStates.LeavingVisible,
+				[TooltipEvents.MouseDown]: TooltipStates.Dismissed,
+				[TooltipEvents.SelectWithKeyboard]: TooltipStates.Dismissed,
+				[TooltipEvents.GlobalMouseMove]: TooltipStates.LeavingVisible,
+			},
+		},
+		[TooltipStates.LeavingVisible]: {
+			enter: startLeavingVisibleTimer,
+			leave: () => {
+				clearLeavingVisibleTimer();
+				clearContextId();
+			},
+			on: {
+				[TooltipEvents.MouseEnter]: TooltipStates.Visible,
+				[TooltipEvents.Focus]: TooltipStates.Visible,
+				[TooltipEvents.TimeComplete]: TooltipStates.Idle,
+			},
+		},
+		[TooltipStates.Dismissed]: {
+			leave: () => {
+				clearContextId();
+			},
+			on: {
+				[TooltipEvents.MouseLeave]: TooltipStates.Idle,
+				[TooltipEvents.Blur]: TooltipStates.Idle,
+			},
+		},
+	},
 };
 
 /*
@@ -158,8 +158,8 @@ const chart: StateChart = {
  * is the id of the current tooltip being interacted with.
  */
 let state: StateObject = {
-  value: chart.initial,
-  context: { id: null },
+	value: chart.initial,
+	context: { id: null },
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -174,14 +174,14 @@ let state: StateObject = {
 let subscriptions: Function[] = [];
 
 function subscribe(fn: Function) {
-  subscriptions.push(fn);
-  return () => {
-    subscriptions.splice(subscriptions.indexOf(fn), 1);
-  };
+	subscriptions.push(fn);
+	return () => {
+		subscriptions.splice(subscriptions.indexOf(fn), 1);
+	};
 }
 
 function notify() {
-  subscriptions.forEach((fn) => fn(state));
+	subscriptions.forEach((fn) => fn(state));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -192,35 +192,35 @@ function notify() {
 let restTimeout: number;
 
 function startRestTimer() {
-  window.clearTimeout(restTimeout);
-  restTimeout = window.setTimeout(() => {
-    send({ type: TooltipEvents.Rest });
-  }, MOUSE_REST_TIMEOUT);
+	window.clearTimeout(restTimeout);
+	restTimeout = window.setTimeout(() => {
+		send({ type: TooltipEvents.Rest });
+	}, MOUSE_REST_TIMEOUT);
 }
 
 function clearRestTimer() {
-  window.clearTimeout(restTimeout);
+	window.clearTimeout(restTimeout);
 }
 
 // Manages the delay to hide the tooltip after rest leaves.
 let leavingVisibleTimer: number;
 
 function startLeavingVisibleTimer() {
-  window.clearTimeout(leavingVisibleTimer);
-  leavingVisibleTimer = window.setTimeout(
-    () => send({ type: TooltipEvents.TimeComplete }),
-    LEAVE_TIMEOUT
-  );
+	window.clearTimeout(leavingVisibleTimer);
+	leavingVisibleTimer = window.setTimeout(
+		() => send({ type: TooltipEvents.TimeComplete }),
+		LEAVE_TIMEOUT
+	);
 }
 
 function clearLeavingVisibleTimer() {
-  window.clearTimeout(leavingVisibleTimer);
+	window.clearTimeout(leavingVisibleTimer);
 }
 
 // allows us to come on back later w/o entering something else first after the
 // user leaves or dismisses
 function clearContextId() {
-  state.context.id = null;
+	state.context.id = null;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -231,170 +231,170 @@ function clearContextId() {
  * @param params
  */
 function useTooltip<ElementType extends HTMLElement | SVGElement>({
-  id: idProp,
-  onPointerEnter,
-  onPointerMove,
-  onPointerLeave,
-  onPointerDown,
-  onMouseEnter,
-  onMouseMove,
-  onMouseLeave,
-  onMouseDown,
-  onFocus,
-  onBlur,
-  onKeyDown,
-  disabled,
-  ref: forwardedRef,
-  DEBUG_STYLE,
+	id: idProp,
+	onPointerEnter,
+	onPointerMove,
+	onPointerLeave,
+	onPointerDown,
+	onMouseEnter,
+	onMouseMove,
+	onMouseLeave,
+	onMouseDown,
+	onFocus,
+	onBlur,
+	onKeyDown,
+	disabled,
+	ref: forwardedRef,
+	DEBUG_STYLE,
 }: {
-  ref?: React.Ref<ElementType>;
-  disabled?: boolean;
-  DEBUG_STYLE?: boolean;
+	ref?: React.Ref<ElementType>;
+	disabled?: boolean;
+	DEBUG_STYLE?: boolean;
 } & React.HTMLAttributes<ElementType> = {}): [
-  TriggerParams<ElementType>,
-  TooltipParams,
-  boolean
+	TriggerParams<ElementType>,
+	TooltipParams,
+	boolean
 ] {
-  let id = String(useId(idProp));
+	let id = String(useId(idProp));
 
-  let [isVisible, setIsVisible] = React.useState(
-    DEBUG_STYLE ? true : isTooltipVisible(id, true)
-  );
+	let [isVisible, setIsVisible] = React.useState(
+		DEBUG_STYLE ? true : isTooltipVisible(id, true)
+	);
 
-  // hopefully they always pass a ref if they ever pass one
-  let ownRef = React.useRef<ElementType | null>(null);
+	// hopefully they always pass a ref if they ever pass one
+	let ownRef = React.useRef<ElementType | null>(null);
 
-  let ref = useComposedRefs(forwardedRef, ownRef);
-  let triggerRect = useRect(ownRef, { observe: isVisible });
+	let ref = useComposedRefs(forwardedRef, ownRef);
+	let triggerRect = useRect(ownRef, { observe: isVisible });
 
-  React.useEffect(() => {
-    return subscribe(() => {
-      setIsVisible(isTooltipVisible(id));
-    });
-  }, [id]);
+	React.useEffect(() => {
+		return subscribe(() => {
+			setIsVisible(isTooltipVisible(id));
+		});
+	}, [id]);
 
-  useCheckStyles("tooltip");
+	useCheckStyles("tooltip");
 
-  React.useEffect(() => {
-    let ownerDocument = getOwnerDocument(ownRef.current)!;
-    function listener(event: KeyboardEvent) {
-      if (
-        (event.key === "Escape" || event.key === "Esc") &&
-        state.value === TooltipStates.Visible
-      ) {
-        send({ type: TooltipEvents.SelectWithKeyboard });
-      }
-    }
-    ownerDocument.addEventListener("keydown", listener);
-    return () => ownerDocument.removeEventListener("keydown", listener);
-  }, []);
+	React.useEffect(() => {
+		let ownerDocument = getOwnerDocument(ownRef.current)!;
+		function listener(event: KeyboardEvent) {
+			if (
+				(event.key === "Escape" || event.key === "Esc") &&
+				state.value === TooltipStates.Visible
+			) {
+				send({ type: TooltipEvents.SelectWithKeyboard });
+			}
+		}
+		ownerDocument.addEventListener("keydown", listener);
+		return () => ownerDocument.removeEventListener("keydown", listener);
+	}, []);
 
-  useDisabledTriggerOnSafari({ disabled, isVisible, ref: ownRef });
+	useDisabledTriggerOnSafari({ disabled, isVisible, ref: ownRef });
 
-  function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
-    theirHandler: ((event: EventType) => any) | undefined,
-    ourHandler: (event: EventType) => any
-  ) {
-    // Use internal MouseEvent handler only if PointerEvent is not supported
-    if (typeof window !== "undefined" && "PointerEvent" in window) {
-      return theirHandler;
-    }
+	function wrapMouseEvent<EventType extends React.SyntheticEvent | Event>(
+		theirHandler: ((event: EventType) => any) | undefined,
+		ourHandler: (event: EventType) => any
+	) {
+		// Use internal MouseEvent handler only if PointerEvent is not supported
+		if (typeof window !== "undefined" && "PointerEvent" in window) {
+			return theirHandler;
+		}
 
-    return composeEventHandlers(theirHandler, ourHandler);
-  }
+		return composeEventHandlers(theirHandler, ourHandler);
+	}
 
-  function wrapPointerEventHandler(
-    handler: (event: React.PointerEvent) => any
-  ) {
-    return function onPointerEvent(event: React.PointerEvent) {
-      // Handle pointer events only from mouse device
-      if (event.pointerType !== "mouse") {
-        return;
-      }
-      handler(event);
-    };
-  }
+	function wrapPointerEventHandler(
+		handler: (event: React.PointerEvent) => any
+	) {
+		return function onPointerEvent(event: React.PointerEvent) {
+			// Handle pointer events only from mouse device
+			if (event.pointerType !== "mouse") {
+				return;
+			}
+			handler(event);
+		};
+	}
 
-  function handleMouseEnter() {
-    send({ type: TooltipEvents.MouseEnter, id });
-  }
+	function handleMouseEnter() {
+		send({ type: TooltipEvents.MouseEnter, id });
+	}
 
-  function handleMouseMove() {
-    send({ type: TooltipEvents.MouseMove, id });
-  }
+	function handleMouseMove() {
+		send({ type: TooltipEvents.MouseMove, id });
+	}
 
-  function handleMouseLeave() {
-    send({ type: TooltipEvents.MouseLeave });
-  }
+	function handleMouseLeave() {
+		send({ type: TooltipEvents.MouseLeave });
+	}
 
-  function handleMouseDown() {
-    // Allow quick click from one tool to another
-    if (state.context.id === id) {
-      send({ type: TooltipEvents.MouseDown });
-    }
-  }
+	function handleMouseDown() {
+		// Allow quick click from one tool to another
+		if (state.context.id === id) {
+			send({ type: TooltipEvents.MouseDown });
+		}
+	}
 
-  function handleFocus() {
-    // @ts-ignore
-    if (window.__REACH_DISABLE_TOOLTIPS) {
-      return;
-    }
-    send({ type: TooltipEvents.Focus, id });
-  }
+	function handleFocus() {
+		// @ts-ignore
+		if (window.__REACH_DISABLE_TOOLTIPS) {
+			return;
+		}
+		send({ type: TooltipEvents.Focus, id });
+	}
 
-  function handleBlur() {
-    // Allow quick click from one tool to another
-    if (state.context.id === id) {
-      send({ type: TooltipEvents.Blur });
-    }
-  }
+	function handleBlur() {
+		// Allow quick click from one tool to another
+		if (state.context.id === id) {
+			send({ type: TooltipEvents.Blur });
+		}
+	}
 
-  function handleKeyDown(event: React.KeyboardEvent<ElementType>) {
-    if (event.key === "Enter" || event.key === " ") {
-      send({ type: TooltipEvents.SelectWithKeyboard });
-    }
-  }
+	function handleKeyDown(event: React.KeyboardEvent<ElementType>) {
+		if (event.key === "Enter" || event.key === " ") {
+			send({ type: TooltipEvents.SelectWithKeyboard });
+		}
+	}
 
-  let trigger: TriggerParams<ElementType> = {
-    // The element that triggers the tooltip references the tooltip element with
-    // `aria-describedby`.
-    // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
-    "aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
-    "data-state": isVisible ? "tooltip-visible" : "tooltip-hidden",
-    "data-reach-tooltip-trigger": "",
-    ref,
-    onPointerEnter: composeEventHandlers(
-      onPointerEnter,
-      wrapPointerEventHandler(handleMouseEnter)
-    ),
-    onPointerMove: composeEventHandlers(
-      onPointerMove,
-      wrapPointerEventHandler(handleMouseMove)
-    ),
-    onPointerLeave: composeEventHandlers(
-      onPointerLeave,
-      wrapPointerEventHandler(handleMouseLeave)
-    ),
-    onPointerDown: composeEventHandlers(
-      onPointerDown,
-      wrapPointerEventHandler(handleMouseDown)
-    ),
-    onMouseEnter: wrapMouseEvent(onMouseEnter, handleMouseEnter),
-    onMouseMove: wrapMouseEvent(onMouseMove, handleMouseMove),
-    onMouseLeave: wrapMouseEvent(onMouseLeave, handleMouseLeave),
-    onMouseDown: wrapMouseEvent(onMouseDown, handleMouseDown),
-    onFocus: composeEventHandlers(onFocus, handleFocus),
-    onBlur: composeEventHandlers(onBlur, handleBlur),
-    onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
-  };
+	let trigger: TriggerParams<ElementType> = {
+		// The element that triggers the tooltip references the tooltip element with
+		// `aria-describedby`.
+		// https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip
+		"aria-describedby": isVisible ? makeId("tooltip", id) : undefined,
+		"data-state": isVisible ? "tooltip-visible" : "tooltip-hidden",
+		"data-reach-tooltip-trigger": "",
+		ref,
+		onPointerEnter: composeEventHandlers(
+			onPointerEnter,
+			wrapPointerEventHandler(handleMouseEnter)
+		),
+		onPointerMove: composeEventHandlers(
+			onPointerMove,
+			wrapPointerEventHandler(handleMouseMove)
+		),
+		onPointerLeave: composeEventHandlers(
+			onPointerLeave,
+			wrapPointerEventHandler(handleMouseLeave)
+		),
+		onPointerDown: composeEventHandlers(
+			onPointerDown,
+			wrapPointerEventHandler(handleMouseDown)
+		),
+		onMouseEnter: wrapMouseEvent(onMouseEnter, handleMouseEnter),
+		onMouseMove: wrapMouseEvent(onMouseMove, handleMouseMove),
+		onMouseLeave: wrapMouseEvent(onMouseLeave, handleMouseLeave),
+		onMouseDown: wrapMouseEvent(onMouseDown, handleMouseDown),
+		onFocus: composeEventHandlers(onFocus, handleFocus),
+		onBlur: composeEventHandlers(onBlur, handleBlur),
+		onKeyDown: composeEventHandlers(onKeyDown, handleKeyDown),
+	};
 
-  let tooltip: TooltipParams = {
-    id,
-    triggerRect,
-    isVisible,
-  };
+	let tooltip: TooltipParams = {
+		id,
+		triggerRect,
+		isVisible,
+	};
 
-  return [trigger, tooltip, isVisible];
+	return [trigger, tooltip, isVisible];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -405,67 +405,67 @@ function useTooltip<ElementType extends HTMLElement | SVGElement>({
  * @see Docs https://reach.tech/tooltip#tooltip
  */
 const Tooltip = React.forwardRef(function (
-  {
-    children,
-    label,
-    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-    ariaLabel: DEPRECATED_ariaLabel,
-    id,
-    DEBUG_STYLE,
-    ...props
-  },
-  forwardedRef
+	{
+		children,
+		label,
+		// TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+		ariaLabel: DEPRECATED_ariaLabel,
+		id,
+		DEBUG_STYLE,
+		...props
+	},
+	forwardedRef
 ) {
-  let child = React.Children.only(children) as any;
+	let child = React.Children.only(children) as any;
 
-  if (__DEV__) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    React.useEffect(() => {
-      if (DEPRECATED_ariaLabel) {
-        console.warn(
-          "The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
-        );
-      }
-    }, [DEPRECATED_ariaLabel]);
-  }
+	if (__DEV__) {
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		React.useEffect(() => {
+			if (DEPRECATED_ariaLabel) {
+				console.warn(
+					"The `ariaLabel prop is deprecated and will be removed from @reach/tooltip in a future version of Reach UI. Please use `aria-label` instead."
+				);
+			}
+		}, [DEPRECATED_ariaLabel]);
+	}
 
-  // We need to pass some properties from the child into useTooltip
-  // to make sure users can maintain control over the trigger's ref and events
-  let [trigger, tooltip] = useTooltip({
-    id,
-    onPointerEnter: child.props.onPointerEnter,
-    onPointerMove: child.props.onPointerMove,
-    onPointerLeave: child.props.onPointerLeave,
-    onPointerDown: child.props.onPointerDown,
-    onMouseEnter: child.props.onMouseEnter,
-    onMouseMove: child.props.onMouseMove,
-    onMouseLeave: child.props.onMouseLeave,
-    onMouseDown: child.props.onMouseDown,
-    onFocus: child.props.onFocus,
-    onBlur: child.props.onBlur,
-    onKeyDown: child.props.onKeyDown,
-    disabled: child.props.disabled,
-    ref: child.ref,
-    DEBUG_STYLE,
-  });
-  return (
-    <React.Fragment>
-      {React.cloneElement(child, trigger as any)}
-      <TooltipPopup
-        ref={forwardedRef}
-        label={label}
-        aria-label={DEPRECATED_ariaLabel}
-        {...tooltip}
-        {...props}
-      />
-    </React.Fragment>
-  );
+	// We need to pass some properties from the child into useTooltip
+	// to make sure users can maintain control over the trigger's ref and events
+	let [trigger, tooltip] = useTooltip({
+		id,
+		onPointerEnter: child.props.onPointerEnter,
+		onPointerMove: child.props.onPointerMove,
+		onPointerLeave: child.props.onPointerLeave,
+		onPointerDown: child.props.onPointerDown,
+		onMouseEnter: child.props.onMouseEnter,
+		onMouseMove: child.props.onMouseMove,
+		onMouseLeave: child.props.onMouseLeave,
+		onMouseDown: child.props.onMouseDown,
+		onFocus: child.props.onFocus,
+		onBlur: child.props.onBlur,
+		onKeyDown: child.props.onKeyDown,
+		disabled: child.props.disabled,
+		ref: child.ref,
+		DEBUG_STYLE,
+	});
+	return (
+		<React.Fragment>
+			{React.cloneElement(child, trigger as any)}
+			<TooltipPopup
+				ref={forwardedRef}
+				label={label}
+				aria-label={DEPRECATED_ariaLabel}
+				{...tooltip}
+				{...props}
+			/>
+		</React.Fragment>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", TooltipProps>;
 
 interface TooltipProps
-  extends Omit<TooltipContentProps, "triggerRect" | "isVisible"> {
-  children: React.ReactNode;
-  DEBUG_STYLE?: boolean;
+	extends Omit<TooltipContentProps, "triggerRect" | "isVisible"> {
+	children: React.ReactNode;
+	DEBUG_STYLE?: boolean;
 }
 
 Tooltip.displayName = "Tooltip";
@@ -478,33 +478,33 @@ Tooltip.displayName = "Tooltip";
  * @see Docs https://reach.tech/tooltip#tooltippopup
  */
 const TooltipPopup = React.forwardRef(function TooltipPopup(
-  {
-    // could use children but we want to encourage simple strings
-    label,
-    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-    ariaLabel: DEPRECATED_ariaLabel,
-    isVisible,
-    id,
-    ...props
-  },
-  forwardRef
+	{
+		// could use children but we want to encourage simple strings
+		label,
+		// TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+		ariaLabel: DEPRECATED_ariaLabel,
+		isVisible,
+		id,
+		...props
+	},
+	forwardRef
 ) {
-  return isVisible ? (
-    <Portal>
-      <TooltipContent
-        ref={forwardRef}
-        label={label}
-        aria-label={DEPRECATED_ariaLabel}
-        isVisible={isVisible}
-        {...props}
-        id={makeId("tooltip", String(id))}
-      />
-    </Portal>
-  ) : null;
+	return isVisible ? (
+		<Portal>
+			<TooltipContent
+				ref={forwardRef}
+				label={label}
+				aria-label={DEPRECATED_ariaLabel}
+				isVisible={isVisible}
+				{...props}
+				id={makeId("tooltip", String(id))}
+			/>
+		</Portal>
+	) : null;
 }) as Polymorphic.ForwardRefComponent<"div", TooltipPopupProps>;
 
 interface TooltipPopupProps extends TooltipContentProps {
-  children?: React.ReactNode;
+	children?: React.ReactNode;
 }
 
 TooltipPopup.displayName = "TooltipPopup";
@@ -517,63 +517,63 @@ TooltipPopup.displayName = "TooltipPopup";
  * @see Docs https://reach.tech/tooltip#tooltipcontent
  */
 const TooltipContent = React.forwardRef(function TooltipContent(
-  {
-    // TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
-    ariaLabel,
-    "aria-label": realAriaLabel,
-    as: Comp = "div",
-    id,
-    isVisible,
-    label,
-    position = positionTooltip,
-    style,
-    triggerRect,
-    ...props
-  },
-  forwardedRef
+	{
+		// TODO: Remove `ariaLabel` prop in 1.0 and just use `aria-label`
+		ariaLabel,
+		"aria-label": realAriaLabel,
+		as: Comp = "div",
+		id,
+		isVisible,
+		label,
+		position = positionTooltip,
+		style,
+		triggerRect,
+		...props
+	},
+	forwardedRef
 ) {
-  // The element that serves as the tooltip container has role tooltip.
-  // https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip When an app passes
-  // an `aria-label`, we actually want to implement `role="tooltip"` on a
-  // visually hidden element inside of the trigger. In these cases we want the
-  // screen reader user to know both the content in the tooltip, but also the
-  // content in the badge. For screen reader users, the only content announced
-  // to them is whatever is in the tooltip.
-  let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
+	// The element that serves as the tooltip container has role tooltip.
+	// https://www.w3.org/TR/wai-aria-practices-1.2/#tooltip When an app passes
+	// an `aria-label`, we actually want to implement `role="tooltip"` on a
+	// visually hidden element inside of the trigger. In these cases we want the
+	// screen reader user to know both the content in the tooltip, but also the
+	// content in the badge. For screen reader users, the only content announced
+	// to them is whatever is in the tooltip.
+	let hasAriaLabel = (realAriaLabel || ariaLabel) != null;
 
-  let ownRef = React.useRef(null);
-  let ref = useComposedRefs(forwardedRef, ownRef);
-  let tooltipRect = useRect(ownRef, { observe: isVisible });
-  return (
-    <React.Fragment>
-      <Comp
-        role={hasAriaLabel ? undefined : "tooltip"}
-        {...props}
-        ref={ref}
-        data-reach-tooltip=""
-        id={hasAriaLabel ? undefined : id}
-        style={{
-          ...style,
-          ...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
-        }}
-      >
-        {label}
-      </Comp>
-      {hasAriaLabel && (
-        <VisuallyHidden role="tooltip" id={id}>
-          {realAriaLabel || ariaLabel}
-        </VisuallyHidden>
-      )}
-    </React.Fragment>
-  );
+	let ownRef = React.useRef(null);
+	let ref = useComposedRefs(forwardedRef, ownRef);
+	let tooltipRect = useRect(ownRef, { observe: isVisible });
+	return (
+		<React.Fragment>
+			<Comp
+				role={hasAriaLabel ? undefined : "tooltip"}
+				{...props}
+				ref={ref}
+				data-reach-tooltip=""
+				id={hasAriaLabel ? undefined : id}
+				style={{
+					...style,
+					...getStyles(position, triggerRect as PRect, tooltipRect as PRect),
+				}}
+			>
+				{label}
+			</Comp>
+			{hasAriaLabel && (
+				<VisuallyHidden role="tooltip" id={id}>
+					{realAriaLabel || ariaLabel}
+				</VisuallyHidden>
+			)}
+		</React.Fragment>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", TooltipContentProps>;
 
 interface TooltipContentProps {
-  ariaLabel?: string;
-  position?: Position;
-  label: React.ReactNode;
-  isVisible?: boolean;
-  triggerRect: DOMRect | null;
+	ariaLabel?: string;
+	position?: Position;
+	label: React.ReactNode;
+	isVisible?: boolean;
+	triggerRect: DOMRect | null;
 }
 
 TooltipContent.displayName = "TooltipContent";
@@ -581,15 +581,15 @@ TooltipContent.displayName = "TooltipContent";
 ////////////////////////////////////////////////////////////////////////////////
 
 function getStyles(
-  position: Position,
-  triggerRect: PRect,
-  tooltipRect: PRect
+	position: Position,
+	triggerRect: PRect,
+	tooltipRect: PRect
 ): React.CSSProperties {
-  let haventMeasuredTooltipYet = !tooltipRect;
-  if (haventMeasuredTooltipYet) {
-    return { visibility: "hidden" };
-  }
-  return position(triggerRect, tooltipRect);
+	let haventMeasuredTooltipYet = !tooltipRect;
+	if (haventMeasuredTooltipYet) {
+		return { visibility: "hidden" };
+	}
+	return position(triggerRect, tooltipRect);
 }
 
 // Default offset from the trigger (e.g., if the tooltip is positioned above,
@@ -598,37 +598,37 @@ function getStyles(
 const OFFSET_DEFAULT = 8;
 
 export const positionTooltip: Position = (
-  triggerRect,
-  tooltipRect,
-  offset = OFFSET_DEFAULT
+	triggerRect,
+	tooltipRect,
+	offset = OFFSET_DEFAULT
 ) => {
-  let { width: windowWidth, height: windowHeight } = getDocumentDimensions();
-  if (!triggerRect || !tooltipRect) {
-    return {};
-  }
+	let { width: windowWidth, height: windowHeight } = getDocumentDimensions();
+	if (!triggerRect || !tooltipRect) {
+		return {};
+	}
 
-  let collisions = {
-    top: triggerRect.top - tooltipRect.height < 0,
-    right: windowWidth < triggerRect.left + tooltipRect.width,
-    bottom: windowHeight < triggerRect.bottom + tooltipRect.height + offset,
-    left: triggerRect.left - tooltipRect.width < 0,
-  };
+	let collisions = {
+		top: triggerRect.top - tooltipRect.height < 0,
+		right: windowWidth < triggerRect.left + tooltipRect.width,
+		bottom: windowHeight < triggerRect.bottom + tooltipRect.height + offset,
+		left: triggerRect.left - tooltipRect.width < 0,
+	};
 
-  let directionRight = collisions.right && !collisions.left;
-  let directionUp = collisions.bottom && !collisions.top;
+	let directionRight = collisions.right && !collisions.left;
+	let directionUp = collisions.bottom && !collisions.top;
 
-  return {
-    left: directionRight
-      ? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
-      : `${triggerRect.left + window.pageXOffset}px`,
-    top: directionUp
-      ? `${
-          triggerRect.top - offset - tooltipRect.height + window.pageYOffset
-        }px`
-      : `${
-          triggerRect.top + offset + triggerRect.height + window.pageYOffset
-        }px`,
-  };
+	return {
+		left: directionRight
+			? `${triggerRect.right - tooltipRect.width + window.pageXOffset}px`
+			: `${triggerRect.left + window.pageXOffset}px`,
+		top: directionUp
+			? `${
+					triggerRect.top - offset - tooltipRect.height + window.pageYOffset
+			  }px`
+			: `${
+					triggerRect.top + offset + triggerRect.height + window.pageYOffset
+			  }px`,
+	};
 };
 
 /**
@@ -645,47 +645,47 @@ export const positionTooltip: Position = (
  * @see https://github.com/w3c/aria-practices/issues/128#issuecomment-588625727
  */
 function useDisabledTriggerOnSafari({
-  disabled,
-  isVisible,
-  ref,
+	disabled,
+	isVisible,
+	ref,
 }: {
-  disabled: boolean | undefined;
-  isVisible: boolean;
-  ref: React.RefObject<HTMLElement | SVGElement>;
+	disabled: boolean | undefined;
+	isVisible: boolean;
+	ref: React.RefObject<HTMLElement | SVGElement>;
 }) {
-  React.useEffect(() => {
-    if (
-      !(typeof window !== "undefined" && "PointerEvent" in window) ||
-      !disabled ||
-      !isVisible
-    ) {
-      return;
-    }
+	React.useEffect(() => {
+		if (
+			!(typeof window !== "undefined" && "PointerEvent" in window) ||
+			!disabled ||
+			!isVisible
+		) {
+			return;
+		}
 
-    let ownerDocument = getOwnerDocument(ref.current)!;
+		let ownerDocument = getOwnerDocument(ref.current)!;
 
-    function handleMouseMove(event: MouseEvent) {
-      if (!isVisible) {
-        return;
-      }
+		function handleMouseMove(event: MouseEvent) {
+			if (!isVisible) {
+				return;
+			}
 
-      if (
-        event.target instanceof Element &&
-        event.target.closest(
-          "[data-reach-tooltip-trigger][data-state='tooltip-visible']"
-        )
-      ) {
-        return;
-      }
+			if (
+				event.target instanceof Element &&
+				event.target.closest(
+					"[data-reach-tooltip-trigger][data-state='tooltip-visible']"
+				)
+			) {
+				return;
+			}
 
-      send({ type: TooltipEvents.GlobalMouseMove });
-    }
+			send({ type: TooltipEvents.GlobalMouseMove });
+		}
 
-    ownerDocument.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      ownerDocument.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [disabled, isVisible, ref]);
+		ownerDocument.addEventListener("mousemove", handleMouseMove);
+		return () => {
+			ownerDocument.removeEventListener("mousemove", handleMouseMove);
+		};
+	}, [disabled, isVisible, ref]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -701,149 +701,149 @@ function useDisabledTriggerOnSafari({
  * @param payload
  */
 function send(event: MachineEvent): void {
-  let { value, context, changed } = transition(state, event);
-  if (changed) {
-    state = { value, context };
-    notify();
-  }
+	let { value, context, changed } = transition(state, event);
+	if (changed) {
+		state = { value, context };
+		notify();
+	}
 }
 
 function transition(
-  currentState: StateObject,
-  event: MachineEvent
+	currentState: StateObject,
+	event: MachineEvent
 ): StateObject & { changed: boolean } {
-  let stateDef = chart.states[currentState.value];
-  let nextState = stateDef && stateDef.on && stateDef.on[event.type];
+	let stateDef = chart.states[currentState.value];
+	let nextState = stateDef && stateDef.on && stateDef.on[event.type];
 
-  // Really useful for debugging
-  // console.log({ event, state, nextState, contextId: context.id });
-  // !nextState && console.log("no transition taken");
+	// Really useful for debugging
+	// console.log({ event, state, nextState, contextId: context.id });
+	// !nextState && console.log("no transition taken");
 
-  if (!nextState) {
-    return { ...currentState, changed: false };
-  }
+	if (!nextState) {
+		return { ...currentState, changed: false };
+	}
 
-  if (stateDef && stateDef.leave) {
-    stateDef.leave(currentState.context, event);
-  }
+	if (stateDef && stateDef.leave) {
+		stateDef.leave(currentState.context, event);
+	}
 
-  const { type: _, ...payload } = event;
-  // TODO: Use actions instead of directly setting context
-  let context = { ...state.context, ...payload };
+	const { type: _, ...payload } = event;
+	// TODO: Use actions instead of directly setting context
+	let context = { ...state.context, ...payload };
 
-  let nextStateValue =
-    typeof nextState === "string" ? nextState : nextState.target;
-  let nextDef = chart.states[nextStateValue];
-  if (nextDef && nextDef.enter) {
-    nextDef.enter(currentState.context, event);
-  }
+	let nextStateValue =
+		typeof nextState === "string" ? nextState : nextState.target;
+	let nextDef = chart.states[nextStateValue];
+	if (nextDef && nextDef.enter) {
+		nextDef.enter(currentState.context, event);
+	}
 
-  return {
-    value: nextStateValue,
-    context,
-    changed: true,
-  };
+	return {
+		value: nextStateValue,
+		context,
+		changed: true,
+	};
 }
 
 function isTooltipVisible(id: string, initial?: boolean) {
-  return (
-    state.context.id === id &&
-    (initial
-      ? state.value === TooltipStates.Visible
-      : state.value === TooltipStates.Visible ||
-        state.value === TooltipStates.LeavingVisible)
-  );
+	return (
+		state.context.id === id &&
+		(initial
+			? state.value === TooltipStates.Visible
+			: state.value === TooltipStates.Visible ||
+			  state.value === TooltipStates.LeavingVisible)
+	);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // TYPES
 
 interface TriggerParams<ElementType extends HTMLElement | SVGElement> {
-  "aria-describedby"?: string | undefined;
-  "data-state": string;
-  "data-reach-tooltip-trigger": string;
-  ref: React.Ref<ElementType>;
-  onPointerEnter: React.PointerEventHandler<ElementType>;
-  onPointerDown: React.PointerEventHandler<ElementType>;
-  onPointerMove: React.PointerEventHandler<ElementType>;
-  onPointerLeave: React.PointerEventHandler<ElementType>;
-  onMouseEnter?: React.MouseEventHandler<ElementType>;
-  onMouseDown?: React.MouseEventHandler<ElementType>;
-  onMouseMove?: React.MouseEventHandler<ElementType>;
-  onMouseLeave?: React.MouseEventHandler<ElementType>;
-  onFocus: React.FocusEventHandler<ElementType>;
-  onBlur: React.FocusEventHandler<ElementType>;
-  onKeyDown: React.KeyboardEventHandler<ElementType>;
+	"aria-describedby"?: string | undefined;
+	"data-state": string;
+	"data-reach-tooltip-trigger": string;
+	ref: React.Ref<ElementType>;
+	onPointerEnter: React.PointerEventHandler<ElementType>;
+	onPointerDown: React.PointerEventHandler<ElementType>;
+	onPointerMove: React.PointerEventHandler<ElementType>;
+	onPointerLeave: React.PointerEventHandler<ElementType>;
+	onMouseEnter?: React.MouseEventHandler<ElementType>;
+	onMouseDown?: React.MouseEventHandler<ElementType>;
+	onMouseMove?: React.MouseEventHandler<ElementType>;
+	onMouseLeave?: React.MouseEventHandler<ElementType>;
+	onFocus: React.FocusEventHandler<ElementType>;
+	onBlur: React.FocusEventHandler<ElementType>;
+	onKeyDown: React.KeyboardEventHandler<ElementType>;
 }
 
 interface TooltipParams {
-  id: string;
-  triggerRect: DOMRect | null;
-  isVisible: boolean;
+	id: string;
+	triggerRect: DOMRect | null;
+	isVisible: boolean;
 }
 
 type StateObject = { value: TooltipStates; context: StateContext };
 
 type MachineEvent =
-  | { type: TooltipEvents.Blur }
-  | { type: TooltipEvents.Focus; id: string | null }
-  | { type: TooltipEvents.GlobalMouseMove }
-  | { type: TooltipEvents.MouseDown }
-  | { type: TooltipEvents.MouseEnter; id: string | null }
-  | { type: TooltipEvents.MouseLeave }
-  | { type: TooltipEvents.MouseMove; id: string | null }
-  | { type: TooltipEvents.Rest }
-  | { type: TooltipEvents.SelectWithKeyboard }
-  | { type: TooltipEvents.TimeComplete };
+	| { type: TooltipEvents.Blur }
+	| { type: TooltipEvents.Focus; id: string | null }
+	| { type: TooltipEvents.GlobalMouseMove }
+	| { type: TooltipEvents.MouseDown }
+	| { type: TooltipEvents.MouseEnter; id: string | null }
+	| { type: TooltipEvents.MouseLeave }
+	| { type: TooltipEvents.MouseMove; id: string | null }
+	| { type: TooltipEvents.Rest }
+	| { type: TooltipEvents.SelectWithKeyboard }
+	| { type: TooltipEvents.TimeComplete };
 
 interface StateChart {
-  initial: TooltipStates;
-  states: {
-    [key in TooltipStates]: {
-      enter?: ActionFunction;
-      leave?: ActionFunction;
-      on: {
-        [key in TooltipEvents]?:
-          | TooltipStates
-          | {
-              target: TooltipStates;
-              cond?: (context: StateContext, event: MachineEvent) => boolean;
-              actions?: ActionFunction[];
-            };
-      };
-    };
-  };
+	initial: TooltipStates;
+	states: {
+		[key in TooltipStates]: {
+			enter?: ActionFunction;
+			leave?: ActionFunction;
+			on: {
+				[key in TooltipEvents]?:
+					| TooltipStates
+					| {
+							target: TooltipStates;
+							cond?: (context: StateContext, event: MachineEvent) => boolean;
+							actions?: ActionFunction[];
+					  };
+			};
+		};
+	};
 }
 
 type ActionFunction = (context: StateContext, event: MachineEvent) => void;
 
 type StateContext = {
-  id?: string | null;
+	id?: string | null;
 };
 
 type Position = (
-  targetRect?: PRect | null,
-  popoverRect?: PRect | null
+	targetRect?: PRect | null,
+	popoverRect?: PRect | null
 ) => React.CSSProperties;
 
 type PRect = Partial<DOMRect> & {
-  readonly bottom: number;
-  readonly height: number;
-  readonly left: number;
-  readonly right: number;
-  readonly top: number;
-  readonly width: number;
+	readonly bottom: number;
+	readonly height: number;
+	readonly left: number;
+	readonly right: number;
+	readonly top: number;
+	readonly width: number;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
 export type {
-  Position,
-  TooltipContentProps,
-  TooltipParams,
-  TooltipPopupProps,
-  TooltipProps,
-  TriggerParams,
+	Position,
+	TooltipContentProps,
+	TooltipParams,
+	TooltipPopupProps,
+	TooltipProps,
+	TriggerParams,
 };
 export { MOUSE_REST_TIMEOUT, LEAVE_TIMEOUT, Tooltip, TooltipPopup, useTooltip };

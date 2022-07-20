@@ -7,17 +7,17 @@ import { canUseDOM } from "./can-use-dom";
  * @param element
  */
 export function getOwnerDocument<T extends Element>(
-  element: T | null | undefined
+	element: T | null | undefined
 ) {
-  return canUseDOM() ? (element ? element.ownerDocument : document) : null;
+	return canUseDOM() ? (element ? element.ownerDocument : document) : null;
 }
 
 /**
  * TODO: Remove in 1.0
  */
 export function getOwnerWindow<T extends Element>(
-  element: T | null | undefined
+	element: T | null | undefined
 ) {
-  let ownerDocument = getOwnerDocument(element);
-  return ownerDocument ? ownerDocument.defaultView || window : null;
+	let ownerDocument = getOwnerDocument(element);
+	return ownerDocument ? ownerDocument.defaultView || window : null;
 }

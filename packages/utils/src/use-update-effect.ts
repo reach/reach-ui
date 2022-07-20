@@ -8,16 +8,16 @@ import type * as React from "react";
  * @param deps Effect dependency list
  */
 export function useUpdateEffect(
-  effect: React.EffectCallback,
-  deps?: React.DependencyList
+	effect: React.EffectCallback,
+	deps?: React.DependencyList
 ) {
-  const mounted = useRef(false);
-  useEffect(() => {
-    if (mounted.current) {
-      effect();
-    } else {
-      mounted.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+	const mounted = useRef(false);
+	useEffect(() => {
+		if (mounted.current) {
+			effect();
+		} else {
+			mounted.current = true;
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, deps);
 }

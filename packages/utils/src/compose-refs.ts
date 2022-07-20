@@ -9,19 +9,19 @@ import type { AssignableRef } from "./types";
  * @param value
  */
 export function assignRef<RefValueType = any>(
-  ref: AssignableRef<RefValueType> | null | undefined,
-  value: any
+	ref: AssignableRef<RefValueType> | null | undefined,
+	value: any
 ) {
-  if (ref == null) return;
-  if (isFunction(ref)) {
-    ref(value);
-  } else {
-    try {
-      ref.current = value;
-    } catch (error) {
-      throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
-    }
-  }
+	if (ref == null) return;
+	if (isFunction(ref)) {
+		ref(value);
+	} else {
+		try {
+			ref.current = value;
+		} catch (error) {
+			throw new Error(`Cannot assign value "${value}" to ref "${ref}"`);
+		}
+	}
 }
 
 /**
@@ -32,12 +32,12 @@ export function assignRef<RefValueType = any>(
  * @param refs Refs to fork
  */
 export function useComposedRefs<RefValueType = any>(
-  ...refs: (AssignableRef<RefValueType> | null | undefined)[]
+	...refs: (AssignableRef<RefValueType> | null | undefined)[]
 ) {
-  return useCallback((node: any) => {
-    for (let ref of refs) {
-      assignRef(ref, node);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, refs);
+	return useCallback((node: any) => {
+		for (let ref of refs) {
+			assignRef(ref, node);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, refs);
 }

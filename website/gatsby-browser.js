@@ -6,13 +6,13 @@
  * This is a workaround for now.
  */
 exports.onInitialClientRender = () => {
-  let rootEl = document.getElementById("gatsby-focus-wrapper");
-  if (rootEl) {
-    rootEl.removeAttribute("role");
-    // rootEl.removeAttribute("tabindex");
-    // rootEl.removeAttribute("style");
-    requestAnimationFrame(() => {
-      document.body.focus();
-    });
-  }
+	let rootEl = document.getElementById("gatsby-focus-wrapper");
+	if (rootEl) {
+		rootEl.removeAttribute("role");
+		// rootEl.removeAttribute("tabindex");
+		// rootEl.removeAttribute("style");
+		requestAnimationFrame(() => {
+			document.body.focus();
+		});
+	}
 };

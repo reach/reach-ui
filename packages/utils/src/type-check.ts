@@ -4,7 +4,7 @@
  * @param value
  */
 export function isBoolean(value: any): value is boolean {
-  return typeof value === "boolean";
+	return typeof value === "boolean";
 }
 
 /**
@@ -13,8 +13,8 @@ export function isBoolean(value: any): value is boolean {
  * @param value
  */
 export function isFunction(value: any): value is Function {
-  // eslint-disable-next-line eqeqeq
-  return !!(value && {}.toString.call(value) == "[object Function]");
+	// eslint-disable-next-line eqeqeq
+	return !!(value && {}.toString.call(value) == "[object Function]");
 }
 
 /**
@@ -23,7 +23,7 @@ export function isFunction(value: any): value is Function {
  * @param value
  */
 export function isNumber(value: any): value is number {
-  return typeof value === "number" && !isNaN(value);
+	return typeof value === "number" && !isNaN(value);
 }
 
 /**
@@ -32,5 +32,5 @@ export function isNumber(value: any): value is number {
  * @param value
  */
 export function isString(value: any): value is string {
-  return typeof value === "string";
+	return typeof value === "string";
 }

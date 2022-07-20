@@ -16,42 +16,42 @@ let defaultId = "reach-skip-nav";
  * @see Docs https://reach.tech/skip-nav#skipnavlink
  */
 const SkipNavLink = React.forwardRef(function SkipNavLink(
-  { as: Comp = "a", children = "Skip to content", contentId, ...props },
-  forwardedRef
+	{ as: Comp = "a", children = "Skip to content", contentId, ...props },
+	forwardedRef
 ) {
-  let id = contentId || defaultId;
-  useCheckStyles("skip-nav");
-  return (
-    <Comp
-      {...props}
-      ref={forwardedRef}
-      href={`#${id}`}
-      // TODO: Remove in 1.0 (kept for back compat)
-      data-reach-skip-link=""
-      data-reach-skip-nav-link=""
-    >
-      {children}
-    </Comp>
-  );
+	let id = contentId || defaultId;
+	useCheckStyles("skip-nav");
+	return (
+		<Comp
+			{...props}
+			ref={forwardedRef}
+			href={`#${id}`}
+			// TODO: Remove in 1.0 (kept for back compat)
+			data-reach-skip-link=""
+			data-reach-skip-nav-link=""
+		>
+			{children}
+		</Comp>
+	);
 }) as Polymorphic.ForwardRefComponent<"a", SkipNavLinkProps>;
 
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavlink-props
  */
 interface SkipNavLinkProps {
-  /**
-   * Allows you to change the text for your preferred phrase or localization.
-   *
-   * @see Docs https://reach.tech/skip-nav#skipnavlink-children
-   */
-  children?: React.ReactNode;
-  /**
-   * An alternative ID for `SkipNavContent`. If used, the same value must be
-   * provided to the `id` prop in `SkipNavContent`.
-   *
-   * @see Docs https://reach.tech/skip-nav#skipnavlink-contentid
-   */
-  contentId?: string;
+	/**
+	 * Allows you to change the text for your preferred phrase or localization.
+	 *
+	 * @see Docs https://reach.tech/skip-nav#skipnavlink-children
+	 */
+	children?: React.ReactNode;
+	/**
+	 * An alternative ID for `SkipNavContent`. If used, the same value must be
+	 * provided to the `id` prop in `SkipNavContent`.
+	 *
+	 * @see Docs https://reach.tech/skip-nav#skipnavlink-contentid
+	 */
+	contentId?: string;
 }
 
 SkipNavLink.displayName = "SkipNavLink";
@@ -66,49 +66,49 @@ SkipNavLink.displayName = "SkipNavLink";
  * @see Docs https://reach.tech/skip-nav#skipnavcontent
  */
 const SkipNavContent = React.forwardRef(function SkipNavContent(
-  { as: Comp = "div", id: idProp, ...props },
-  forwardedRef
+	{ as: Comp = "div", id: idProp, ...props },
+	forwardedRef
 ) {
-  let id = idProp || defaultId;
-  return (
-    <Comp
-      {...props}
-      ref={forwardedRef}
-      id={id}
-      data-reach-skip-nav-content=""
-    />
-  );
+	let id = idProp || defaultId;
+	return (
+		<Comp
+			{...props}
+			ref={forwardedRef}
+			id={id}
+			data-reach-skip-nav-content=""
+		/>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", SkipNavContentProps>;
 
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavcontent-props
  */
 interface SkipNavContentProps {
-  /**
-   * You can place the `SkipNavContent` element as a sibling to your main
-   * content or as a wrapper.
-   *
-   * Keep in mind it renders a `div`, so it may mess with your CSS depending on
-   * where it’s placed.
-   *
-   * @example
-   *   <SkipNavContent />
-   *   <YourMainContent />
-   *   // vs.
-   *   <SkipNavContent>
-   *     <YourMainContent/>
-   *   </SkipNavContent>
-   *
-   * @see Docs https://reach.tech/skip-nav#skipnavcontent-children
-   */
-  children?: React.ReactNode;
-  /**
-   * An alternative ID. If used, the same value must be provided to the
-   * `contentId` prop in `SkipNavLink`.
-   *
-   * @see Docs https://reach.tech/skip-nav#skipnavcontent-id
-   */
-  id?: string;
+	/**
+	 * You can place the `SkipNavContent` element as a sibling to your main
+	 * content or as a wrapper.
+	 *
+	 * Keep in mind it renders a `div`, so it may mess with your CSS depending on
+	 * where it’s placed.
+	 *
+	 * @example
+	 *   <SkipNavContent />
+	 *   <YourMainContent />
+	 *   // vs.
+	 *   <SkipNavContent>
+	 *     <YourMainContent/>
+	 *   </SkipNavContent>
+	 *
+	 * @see Docs https://reach.tech/skip-nav#skipnavcontent-children
+	 */
+	children?: React.ReactNode;
+	/**
+	 * An alternative ID. If used, the same value must be provided to the
+	 * `contentId` prop in `SkipNavLink`.
+	 *
+	 * @see Docs https://reach.tech/skip-nav#skipnavcontent-id
+	 */
+	id?: string;
 }
 
 SkipNavContent.displayName = "SkipNavContent";

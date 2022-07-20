@@ -7,26 +7,26 @@ import { render, cleanup } from "@reach-internal/test/utils";
 import { vi, it, expect, describe, afterEach } from "vitest";
 
 const { useId } = await vi.importActual<typeof import("../src/auto-id")>(
-  "@reach/auto-id"
+	"@reach/auto-id"
 );
 
 afterEach(cleanup);
 
 describe("useId with axe", () => {
-  it("should provide a valid ID for a11y", async () => {
-    vi.useRealTimers();
-    let { container } = render(<TestInput />);
-    let results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
+	it("should provide a valid ID for a11y", async () => {
+		vi.useRealTimers();
+		let { container } = render(<TestInput />);
+		let results = await axe(container);
+		expect(results).toHaveNoViolations();
+	});
 });
 
 function TestInput() {
-  let id = `name--${useId()}`;
-  return (
-    <div>
-      <label htmlFor={id}>Name</label>
-      <input name="name" id={id} type="text" />
-    </div>
-  );
+	let id = `name--${useId()}`;
+	return (
+		<div>
+			<label htmlFor={id}>Name</label>
+			<input name="name" id={id} type="text" />
+		</div>
+	);
 }

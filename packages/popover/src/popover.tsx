@@ -18,36 +18,36 @@ import { tabbable } from "tabbable";
  * Popover
  */
 const Popover = React.forwardRef(function Popover(
-  { unstable_skipInitialPortalRender, ...props },
-  ref
+	{ unstable_skipInitialPortalRender, ...props },
+	ref
 ) {
-  return (
-    <Portal unstable_skipInitialRender={unstable_skipInitialPortalRender}>
-      <PopoverImpl ref={ref} {...props} />
-    </Portal>
-  );
+	return (
+		<Portal unstable_skipInitialRender={unstable_skipInitialPortalRender}>
+			<PopoverImpl ref={ref} {...props} />
+		</Portal>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
 interface PopoverProps {
-  children: React.ReactNode;
-  targetRef: React.RefObject<PossibleNode>;
-  position?: Position;
-  /**
-   * Render the popover markup, but hide it – used by MenuButton so that it
-   * can have an `aria-controls` attribute even when its menu isn't open, and
-   * used inside `Popover` as a hint that we can tell `useRect` to stop
-   * observing for better performance.
-   */
-  hidden?: boolean;
-  /**
-   * Testing this API so we might accept additional nodes that apps can use to
-   * determine the position of the popover. One example where it may be useful
-   * is for positioning the popover of a listbox where the cursor rests on top
-   * of the selected option. Pretty sure this will change so don't use it
-   * anywhere in public yet!
-   */
-  unstable_observableRefs?: React.RefObject<PossibleNode>[];
-  unstable_skipInitialPortalRender?: boolean;
+	children: React.ReactNode;
+	targetRef: React.RefObject<PossibleNode>;
+	position?: Position;
+	/**
+	 * Render the popover markup, but hide it – used by MenuButton so that it
+	 * can have an `aria-controls` attribute even when its menu isn't open, and
+	 * used inside `Popover` as a hint that we can tell `useRect` to stop
+	 * observing for better performance.
+	 */
+	hidden?: boolean;
+	/**
+	 * Testing this API so we might accept additional nodes that apps can use to
+	 * determine the position of the popover. One example where it may be useful
+	 * is for positioning the popover of a listbox where the cursor rests on top
+	 * of the selected option. Pretty sure this will change so don't use it
+	 * anywhere in public yet!
+	 */
+	unstable_observableRefs?: React.RefObject<PossibleNode>[];
+	unstable_skipInitialPortalRender?: boolean;
 }
 
 Popover.displayName = "Popover";
@@ -61,39 +61,39 @@ Popover.displayName = "Popover";
  * up, so useRect needs to live down here not up in Popover
  */
 const PopoverImpl = React.forwardRef(function PopoverImpl(
-  {
-    as: Comp = "div",
-    targetRef,
-    position = positionDefault,
-    unstable_observableRefs = [],
-    ...props
-  },
-  forwardedRef
+	{
+		as: Comp = "div",
+		targetRef,
+		position = positionDefault,
+		unstable_observableRefs = [],
+		...props
+	},
+	forwardedRef
 ) {
-  const popoverRef = React.useRef<HTMLDivElement>(null);
-  const popoverRect = useRect(popoverRef, { observe: !props.hidden });
-  const targetRect = useRect(targetRef, { observe: true });
-  const ref = useComposedRefs(popoverRef, forwardedRef);
+	const popoverRef = React.useRef<HTMLDivElement>(null);
+	const popoverRect = useRect(popoverRef, { observe: !props.hidden });
+	const targetRect = useRect(targetRef, { observe: true });
+	const ref = useComposedRefs(popoverRef, forwardedRef);
 
-  useSimulateTabNavigationForReactTree(targetRef as any, popoverRef);
+	useSimulateTabNavigationForReactTree(targetRef as any, popoverRef);
 
-  return (
-    <Comp
-      data-reach-popover=""
-      ref={ref}
-      {...props}
-      style={{
-        position: "absolute",
-        ...getStyles(
-          position,
-          targetRect,
-          popoverRect,
-          ...unstable_observableRefs
-        ),
-        ...props.style,
-      }}
-    />
-  );
+	return (
+		<Comp
+			data-reach-popover=""
+			ref={ref}
+			{...props}
+			style={{
+				position: "absolute",
+				...getStyles(
+					position,
+					targetRect,
+					popoverRect,
+					...unstable_observableRefs
+				),
+				...props.style,
+			}}
+		/>
+	);
 }) as Polymorphic.ForwardRefComponent<"div", PopoverProps>;
 
 PopoverImpl.displayName = "PopoverImpl";
@@ -101,97 +101,97 @@ PopoverImpl.displayName = "PopoverImpl";
 ////////////////////////////////////////////////////////////////////////////////
 
 function getStyles(
-  position: Position,
-  targetRect: PRect | null,
-  popoverRect: PRect | null,
-  ...unstable_observableRefs: React.RefObject<PossibleNode>[]
+	position: Position,
+	targetRect: PRect | null,
+	popoverRect: PRect | null,
+	...unstable_observableRefs: React.RefObject<PossibleNode>[]
 ): React.CSSProperties {
-  return popoverRect
-    ? position(
-        targetRect,
-        popoverRect,
-        ...unstable_observableRefs.map((ref) => ref.current)
-      )
-    : { visibility: "hidden" };
+	return popoverRect
+		? position(
+				targetRect,
+				popoverRect,
+				...unstable_observableRefs.map((ref) => ref.current)
+		  )
+		: { visibility: "hidden" };
 }
 
 function getTopPosition(
-  targetRect: PRect,
-  popoverRect: PRect,
-  isDirectionUp: boolean
+	targetRect: PRect,
+	popoverRect: PRect,
+	isDirectionUp: boolean
 ) {
-  return {
-    top: isDirectionUp
-      ? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
-      : `${targetRect.top + targetRect.height + window.pageYOffset}px`,
-  };
+	return {
+		top: isDirectionUp
+			? `${targetRect.top - popoverRect.height + window.pageYOffset}px`
+			: `${targetRect.top + targetRect.height + window.pageYOffset}px`,
+	};
 }
 
 const positionDefault: Position = (targetRect, popoverRect) => {
-  if (!targetRect || !popoverRect) {
-    return {};
-  }
+	if (!targetRect || !popoverRect) {
+		return {};
+	}
 
-  const { directionRight, directionUp } = getCollisions(
-    targetRect,
-    popoverRect
-  );
-  return {
-    left: directionRight
-      ? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
-      : `${targetRect.left + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect, directionUp),
-  };
+	const { directionRight, directionUp } = getCollisions(
+		targetRect,
+		popoverRect
+	);
+	return {
+		left: directionRight
+			? `${targetRect.right - popoverRect.width + window.pageXOffset}px`
+			: `${targetRect.left + window.pageXOffset}px`,
+		...getTopPosition(targetRect, popoverRect, directionUp),
+	};
 };
 
 const positionRight: Position = (targetRect, popoverRect) => {
-  if (!targetRect || !popoverRect) {
-    return {};
-  }
+	if (!targetRect || !popoverRect) {
+		return {};
+	}
 
-  const { directionLeft, directionUp } = getCollisions(targetRect, popoverRect);
-  return {
-    left: directionLeft
-      ? `${targetRect.left + window.pageXOffset}px`
-      : `${targetRect.right - popoverRect.width + window.pageXOffset}px`,
-    ...getTopPosition(targetRect, popoverRect, directionUp),
-  };
+	const { directionLeft, directionUp } = getCollisions(targetRect, popoverRect);
+	return {
+		left: directionLeft
+			? `${targetRect.left + window.pageXOffset}px`
+			: `${targetRect.right - popoverRect.width + window.pageXOffset}px`,
+		...getTopPosition(targetRect, popoverRect, directionUp),
+	};
 };
 
 const positionMatchWidth: Position = (targetRect, popoverRect) => {
-  if (!targetRect || !popoverRect) {
-    return {};
-  }
+	if (!targetRect || !popoverRect) {
+		return {};
+	}
 
-  const { directionUp } = getCollisions(targetRect, popoverRect);
-  return {
-    width: targetRect.width,
-    left: targetRect.left,
-    ...getTopPosition(targetRect, popoverRect, directionUp),
-  };
+	const { directionUp } = getCollisions(targetRect, popoverRect);
+	return {
+		width: targetRect.width,
+		left: targetRect.left,
+		...getTopPosition(targetRect, popoverRect, directionUp),
+	};
 };
 
 function getCollisions(
-  targetRect: PRect,
-  popoverRect: PRect,
-  offsetLeft: number = 0,
-  offsetBottom: number = 0
+	targetRect: PRect,
+	popoverRect: PRect,
+	offsetLeft: number = 0,
+	offsetBottom: number = 0
 ) {
-  const collisions = {
-    top: targetRect.top - popoverRect.height < 0,
-    right: window.innerWidth < targetRect.left + popoverRect.width - offsetLeft,
-    bottom:
-      window.innerHeight <
-      targetRect.bottom + popoverRect.height - offsetBottom,
-    left: targetRect.left + targetRect.width - popoverRect.width < 0,
-  };
+	const collisions = {
+		top: targetRect.top - popoverRect.height < 0,
+		right: window.innerWidth < targetRect.left + popoverRect.width - offsetLeft,
+		bottom:
+			window.innerHeight <
+			targetRect.bottom + popoverRect.height - offsetBottom,
+		left: targetRect.left + targetRect.width - popoverRect.width < 0,
+	};
 
-  const directionRight = collisions.right && !collisions.left;
-  const directionLeft = collisions.left && !collisions.right;
-  const directionUp = collisions.bottom && !collisions.top;
-  const directionDown = collisions.top && !collisions.bottom;
+	const directionRight = collisions.right && !collisions.left;
+	const directionLeft = collisions.left && !collisions.right;
+	const directionUp = collisions.bottom && !collisions.top;
+	const directionDown = collisions.top && !collisions.bottom;
 
-  return { directionRight, directionLeft, directionUp, directionDown };
+	return { directionRight, directionLeft, directionUp, directionDown };
 }
 
 // Heads up, my jQuery past haunts this function. This hook scopes the tab
@@ -201,167 +201,167 @@ function getCollisions(
 // (We call targetRef, triggerRef inside this function to avoid confusion with
 // event.target)
 function useSimulateTabNavigationForReactTree<
-  T extends HTMLElement,
-  P extends HTMLElement
+	T extends HTMLElement,
+	P extends HTMLElement
 >(triggerRef: React.RefObject<T>, popoverRef: React.RefObject<P>) {
-  const ownerDocument = getOwnerDocument(triggerRef.current)!;
+	const ownerDocument = getOwnerDocument(triggerRef.current)!;
 
-  function handleKeyDown(event: KeyboardEvent) {
-    if (
-      event.key === "Tab" &&
-      popoverRef.current &&
-      tabbable(popoverRef.current).length === 0
-    ) {
-      return;
-    }
+	function handleKeyDown(event: KeyboardEvent) {
+		if (
+			event.key === "Tab" &&
+			popoverRef.current &&
+			tabbable(popoverRef.current).length === 0
+		) {
+			return;
+		}
 
-    if (event.key === "Tab" && event.shiftKey) {
-      if (shiftTabbedFromElementAfterTrigger(event)) {
-        focusLastTabbableInPopover(event);
-      } else if (shiftTabbedOutOfPopover(event)) {
-        focusTriggerRef(event);
-      } else if (shiftTabbedToBrowserChrome(event)) {
-        disableTabbablesInPopover();
-      }
-    } else if (event.key === "Tab") {
-      if (tabbedFromTriggerToPopover()) {
-        focusFirstPopoverTabbable(event);
-      } else if (tabbedOutOfPopover()) {
-        focusTabbableAfterTrigger(event);
-      } else if (tabbedToBrowserChrome(event)) {
-        disableTabbablesInPopover();
-      }
-    }
-  }
+		if (event.key === "Tab" && event.shiftKey) {
+			if (shiftTabbedFromElementAfterTrigger(event)) {
+				focusLastTabbableInPopover(event);
+			} else if (shiftTabbedOutOfPopover(event)) {
+				focusTriggerRef(event);
+			} else if (shiftTabbedToBrowserChrome(event)) {
+				disableTabbablesInPopover();
+			}
+		} else if (event.key === "Tab") {
+			if (tabbedFromTriggerToPopover()) {
+				focusFirstPopoverTabbable(event);
+			} else if (tabbedOutOfPopover()) {
+				focusTabbableAfterTrigger(event);
+			} else if (tabbedToBrowserChrome(event)) {
+				disableTabbablesInPopover();
+			}
+		}
+	}
 
-  React.useEffect(() => {
-    ownerDocument.addEventListener("keydown", handleKeyDown);
-    return () => {
-      ownerDocument.removeEventListener("keydown", handleKeyDown);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+	React.useEffect(() => {
+		ownerDocument.addEventListener("keydown", handleKeyDown);
+		return () => {
+			ownerDocument.removeEventListener("keydown", handleKeyDown);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-  function getElementAfterTrigger() {
-    const elements = tabbable(ownerDocument as any);
-    const targetIndex =
-      elements && triggerRef.current
-        ? elements.indexOf(triggerRef.current)
-        : -1;
-    const elementAfterTrigger = elements && elements[targetIndex + 1];
-    return popoverRef.current &&
-      popoverRef.current.contains(elementAfterTrigger || null)
-      ? false
-      : elementAfterTrigger;
-  }
+	function getElementAfterTrigger() {
+		const elements = tabbable(ownerDocument as any);
+		const targetIndex =
+			elements && triggerRef.current
+				? elements.indexOf(triggerRef.current)
+				: -1;
+		const elementAfterTrigger = elements && elements[targetIndex + 1];
+		return popoverRef.current &&
+			popoverRef.current.contains(elementAfterTrigger || null)
+			? false
+			: elementAfterTrigger;
+	}
 
-  function tabbedFromTriggerToPopover() {
-    return triggerRef.current
-      ? triggerRef.current === ownerDocument.activeElement
-      : false;
-  }
+	function tabbedFromTriggerToPopover() {
+		return triggerRef.current
+			? triggerRef.current === ownerDocument.activeElement
+			: false;
+	}
 
-  function focusFirstPopoverTabbable(event: KeyboardEvent) {
-    const elements = popoverRef.current && tabbable(popoverRef.current);
-    if (elements && elements[0]) {
-      event.preventDefault();
-      elements[0].focus();
-    }
-  }
+	function focusFirstPopoverTabbable(event: KeyboardEvent) {
+		const elements = popoverRef.current && tabbable(popoverRef.current);
+		if (elements && elements[0]) {
+			event.preventDefault();
+			elements[0].focus();
+		}
+	}
 
-  function tabbedOutOfPopover() {
-    const inPopover = popoverRef.current
-      ? popoverRef.current.contains(ownerDocument.activeElement || null)
-      : false;
-    if (inPopover) {
-      const elements = popoverRef.current && tabbable(popoverRef.current);
-      return Boolean(
-        elements &&
-          elements[elements.length - 1] === ownerDocument.activeElement
-      );
-    }
-    return false;
-  }
+	function tabbedOutOfPopover() {
+		const inPopover = popoverRef.current
+			? popoverRef.current.contains(ownerDocument.activeElement || null)
+			: false;
+		if (inPopover) {
+			const elements = popoverRef.current && tabbable(popoverRef.current);
+			return Boolean(
+				elements &&
+					elements[elements.length - 1] === ownerDocument.activeElement
+			);
+		}
+		return false;
+	}
 
-  function focusTabbableAfterTrigger(event: KeyboardEvent) {
-    const elementAfterTrigger = getElementAfterTrigger();
-    if (elementAfterTrigger) {
-      event.preventDefault();
-      elementAfterTrigger.focus();
-    }
-  }
+	function focusTabbableAfterTrigger(event: KeyboardEvent) {
+		const elementAfterTrigger = getElementAfterTrigger();
+		if (elementAfterTrigger) {
+			event.preventDefault();
+			elementAfterTrigger.focus();
+		}
+	}
 
-  function shiftTabbedFromElementAfterTrigger(event: KeyboardEvent) {
-    if (!event.shiftKey) return;
-    const elementAfterTrigger = getElementAfterTrigger();
-    return event.target === elementAfterTrigger;
-  }
+	function shiftTabbedFromElementAfterTrigger(event: KeyboardEvent) {
+		if (!event.shiftKey) return;
+		const elementAfterTrigger = getElementAfterTrigger();
+		return event.target === elementAfterTrigger;
+	}
 
-  function focusLastTabbableInPopover(event: KeyboardEvent) {
-    const elements = popoverRef.current && tabbable(popoverRef.current);
-    const last = elements && elements[elements.length - 1];
-    if (last) {
-      event.preventDefault();
-      last.focus();
-    }
-  }
+	function focusLastTabbableInPopover(event: KeyboardEvent) {
+		const elements = popoverRef.current && tabbable(popoverRef.current);
+		const last = elements && elements[elements.length - 1];
+		if (last) {
+			event.preventDefault();
+			last.focus();
+		}
+	}
 
-  function shiftTabbedOutOfPopover(event: KeyboardEvent) {
-    const elements = popoverRef.current && tabbable(popoverRef.current);
-    if (elements) {
-      return elements.length === 0 ? false : event.target === elements[0];
-    }
-    return false;
-  }
+	function shiftTabbedOutOfPopover(event: KeyboardEvent) {
+		const elements = popoverRef.current && tabbable(popoverRef.current);
+		if (elements) {
+			return elements.length === 0 ? false : event.target === elements[0];
+		}
+		return false;
+	}
 
-  function focusTriggerRef(event: KeyboardEvent) {
-    event.preventDefault();
-    triggerRef.current?.focus();
-  }
+	function focusTriggerRef(event: KeyboardEvent) {
+		event.preventDefault();
+		triggerRef.current?.focus();
+	}
 
-  function tabbedToBrowserChrome(event: KeyboardEvent) {
-    const elements = popoverRef.current
-      ? tabbable(ownerDocument as any).filter(
-          (element) => !popoverRef.current!.contains(element)
-        )
-      : null;
-    return elements ? event.target === elements[elements.length - 1] : false;
-  }
+	function tabbedToBrowserChrome(event: KeyboardEvent) {
+		const elements = popoverRef.current
+			? tabbable(ownerDocument as any).filter(
+					(element) => !popoverRef.current!.contains(element)
+			  )
+			: null;
+		return elements ? event.target === elements[elements.length - 1] : false;
+	}
 
-  function shiftTabbedToBrowserChrome(event: KeyboardEvent) {
-    // we're assuming the popover will never contain the first tabbable
-    // element, and it better not, because the trigger needs to be tabbable!
-    return event.target === tabbable(ownerDocument as any)[0];
-  }
+	function shiftTabbedToBrowserChrome(event: KeyboardEvent) {
+		// we're assuming the popover will never contain the first tabbable
+		// element, and it better not, because the trigger needs to be tabbable!
+		return event.target === tabbable(ownerDocument as any)[0];
+	}
 
-  let restoreTabIndexTuplés: [HTMLElement | SVGElement, number][] = [];
+	let restoreTabIndexTuplés: [HTMLElement | SVGElement, number][] = [];
 
-  function disableTabbablesInPopover() {
-    const elements = popoverRef.current && tabbable(popoverRef.current);
-    if (elements) {
-      elements.forEach((element) => {
-        restoreTabIndexTuplés.push([element, element.tabIndex]);
-        element.tabIndex = -1;
-      });
-      ownerDocument.addEventListener("focusin", enableTabbablesInPopover);
-    }
-  }
+	function disableTabbablesInPopover() {
+		const elements = popoverRef.current && tabbable(popoverRef.current);
+		if (elements) {
+			elements.forEach((element) => {
+				restoreTabIndexTuplés.push([element, element.tabIndex]);
+				element.tabIndex = -1;
+			});
+			ownerDocument.addEventListener("focusin", enableTabbablesInPopover);
+		}
+	}
 
-  function enableTabbablesInPopover() {
-    ownerDocument.removeEventListener("focusin", enableTabbablesInPopover);
-    restoreTabIndexTuplés.forEach(([element, tabIndex]) => {
-      element.tabIndex = tabIndex;
-    });
-  }
+	function enableTabbablesInPopover() {
+		ownerDocument.removeEventListener("focusin", enableTabbablesInPopover);
+		restoreTabIndexTuplés.forEach(([element, tabIndex]) => {
+			element.tabIndex = tabIndex;
+		});
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types
 
 type Position = (
-  targetRect?: PRect | null,
-  popoverRect?: PRect | null,
-  ...unstable_observableNodes: PossibleNode[]
+	targetRect?: PRect | null,
+	popoverRect?: PRect | null,
+	...unstable_observableNodes: PossibleNode[]
 ) => React.CSSProperties;
 
 type PossibleNode = null | undefined | HTMLElement | SVGElement;
@@ -371,9 +371,9 @@ type PossibleNode = null | undefined | HTMLElement | SVGElement;
 
 export type { PopoverProps, Position };
 export {
-  getCollisions,
-  Popover,
-  positionDefault,
-  positionMatchWidth,
-  positionRight,
+	getCollisions,
+	Popover,
+	positionDefault,
+	positionMatchWidth,
+	positionRight,
 };

@@ -11,5 +11,5 @@ export { Example as WithCustomSelectDataTs } from "./with-custom-select-data.exa
 export { Example as WithUsecomboboxcontextHookTS } from "./with-usecomboboxcontext-hook.example";
 
 export default {
-  title: "Combobox",
+	title: "Combobox",
 };

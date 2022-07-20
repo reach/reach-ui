@@ -5,7 +5,7 @@ import "@reach/slider/styles.css";
 let name = "Contained Handle";
 
 function Example() {
-  return <Slider handleAlignment={SLIDER_HANDLE_ALIGN_CONTAIN}></Slider>;
+	return <Slider handleAlignment={SLIDER_HANDLE_ALIGN_CONTAIN}></Slider>;
 }
 
 Example.storyName = name;

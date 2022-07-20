@@ -6,16 +6,16 @@ import { getOwnerWindow } from "./owner-document";
  * @param element
  */
 export function getScrollPosition(element?: HTMLElement | null | undefined) {
-  let ownerWindow = getOwnerWindow(element);
-  if (!ownerWindow) {
-    return {
-      scrollX: 0,
-      scrollY: 0,
-    };
-  }
+	let ownerWindow = getOwnerWindow(element);
+	if (!ownerWindow) {
+		return {
+			scrollX: 0,
+			scrollY: 0,
+		};
+	}
 
-  return {
-    scrollX: ownerWindow.scrollX,
-    scrollY: ownerWindow.scrollY,
-  };
+	return {
+		scrollX: ownerWindow.scrollX,
+		scrollY: ownerWindow.scrollY,
+	};
 }

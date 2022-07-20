@@ -25,17 +25,17 @@ import type { RenderOptions, RenderResult } from "./types";
  * @param query The getter function returned from RTL's render method
  */
 export function withMarkup(query: Query) {
-  return (text: string): HTMLElement | null =>
-    query((content, node) => {
-      if (!node) {
-        return false;
-      }
-      const hasText = (node: Element) => node.textContent === text;
-      const childrenDontHaveText = Array.from(node.children).every(
-        (child) => !hasText(child as HTMLElement)
-      );
-      return hasText(node) && childrenDontHaveText;
-    });
+	return (text: string): HTMLElement | null =>
+		query((content, node) => {
+			if (!node) {
+				return false;
+			}
+			const hasText = (node: Element) => node.textContent === text;
+			const childrenDontHaveText = Array.from(node.children).every(
+				(child) => !hasText(child as HTMLElement)
+			);
+			return hasText(node) && childrenDontHaveText;
+		});
 }
 
 /**
@@ -44,43 +44,43 @@ export function withMarkup(query: Query) {
  * @param key
  */
 export function keyType(element: HTMLElement | Document, key: string) {
-  fireEvent.keyDown(element, { key });
-  fireEvent.keyUp(element, { key });
+	fireEvent.keyDown(element, { key });
+	fireEvent.keyUp(element, { key });
 }
 
 export function render<
-  P extends React.HTMLAttributes<T>,
-  T extends HTMLElement
+	P extends React.HTMLAttributes<T>,
+	T extends HTMLElement
 >(
-  element: React.ReactElement<any>,
-  options: RenderOptions = {}
+	element: React.ReactElement<any>,
+	options: RenderOptions = {}
 ): RenderResult<P, T> {
-  let { baseElement, strict = false } = options;
-  let result = tlRender(element, {
-    baseElement,
-    wrapper: strict ? React.StrictMode : React.Fragment,
-  }) as unknown as RenderResult<P, T>;
+	let { baseElement, strict = false } = options;
+	let result = tlRender(element, {
+		baseElement,
+		wrapper: strict ? React.StrictMode : React.Fragment,
+	}) as unknown as RenderResult<P, T>;
 
-  // These handy functions courtesy of https://github.com/mui-org/material-ui
-  result.setProps = function setProps(props: P) {
-    result.rerender(React.cloneElement(element, props));
-    return result;
-  } as any;
+	// These handy functions courtesy of https://github.com/mui-org/material-ui
+	result.setProps = function setProps(props: P) {
+		result.rerender(React.cloneElement(element, props));
+		return result;
+	} as any;
 
-  result.forceUpdate = function forceUpdate() {
-    result.rerender(
-      React.cloneElement(element, {
-        "data-force-update": String(Math.random()),
-      })
-    );
-    return result;
-  };
+	result.forceUpdate = function forceUpdate() {
+		result.rerender(
+			React.cloneElement(element, {
+				"data-force-update": String(Math.random()),
+			})
+		);
+		return result;
+	};
 
-  return result;
+	return result;
 }
 
 export async function wait(time: number) {
-  return await new Promise<void>((res) => setTimeout(res, time));
+	return await new Promise<void>((res) => setTimeout(res, time));
 }
 
 /**
@@ -92,35 +92,35 @@ export async function wait(time: number) {
  * @param element
  */
 export function simulateMouseClick(element: HTMLElement) {
-  fireEvent.pointerDown(element, { pointerType: "mouse" });
-  fireEvent.mouseDown(element);
-  fireEvent.pointerUp(element, { pointerType: "mouse" });
-  fireEvent.mouseUp(element);
-  fireEvent.click(element);
+	fireEvent.pointerDown(element, { pointerType: "mouse" });
+	fireEvent.mouseDown(element);
+	fireEvent.pointerUp(element, { pointerType: "mouse" });
+	fireEvent.mouseUp(element);
+	fireEvent.click(element);
 }
 
 export function simulateSpaceKeyClick(
-  element: HTMLElement,
-  opts?: { fireClick?: boolean }
+	element: HTMLElement,
+	opts?: { fireClick?: boolean }
 ) {
-  let { fireClick } = opts || {};
-  fireEvent.keyDown(element, { key: " " });
-  fireEvent.keyUp(element, { key: " " });
-  if (fireClick) {
-    fireEvent.click(element);
-  }
+	let { fireClick } = opts || {};
+	fireEvent.keyDown(element, { key: " " });
+	fireEvent.keyUp(element, { key: " " });
+	if (fireClick) {
+		fireEvent.click(element);
+	}
 }
 
 export function simulateEnterKeyClick(
-  element: HTMLElement,
-  opts?: { fireClick?: boolean }
+	element: HTMLElement,
+	opts?: { fireClick?: boolean }
 ) {
-  let { fireClick } = opts || {};
-  fireEvent.keyDown(element, { key: "Enter" });
-  fireEvent.keyUp(element, { key: "Enter" });
-  if (fireClick) {
-    fireEvent.click(element);
-  }
+	let { fireClick } = opts || {};
+	fireEvent.keyDown(element, { key: "Enter" });
+	fireEvent.keyUp(element, { key: "Enter" });
+	if (fireClick) {
+		fireEvent.click(element);
+	}
 }
 
 type Query = (f: MatcherFunction) => HTMLElement | null;

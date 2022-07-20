@@ -3,61 +3,61 @@ const path = require("path");
 const { defineConfig } = require("tsup");
 
 function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
-  entry = Array.isArray(entry) ? entry : [entry];
-  external = [...new Set(["react", "react-dom"]), ...external];
-  let banner = createBanner(packageName, packageVersion);
-  return defineConfig([
-    // cjs.dev.js
-    {
-      entry,
-      format: "cjs",
-      sourcemap: true,
-      outExtension: getOutExtension("dev"),
-      external,
-      banner: { js: banner },
-      define: {
-        __DEV__: "true",
-      },
-      target: "es2016",
-    },
+	entry = Array.isArray(entry) ? entry : [entry];
+	external = [...new Set(["react", "react-dom"]), ...external];
+	let banner = createBanner(packageName, packageVersion);
+	return defineConfig([
+		// cjs.dev.js
+		{
+			entry,
+			format: "cjs",
+			sourcemap: true,
+			outExtension: getOutExtension("dev"),
+			external,
+			banner: { js: banner },
+			define: {
+				__DEV__: "true",
+			},
+			target: "es2016",
+		},
 
-    // cjs.prod.js
-    {
-      entry,
-      format: "cjs",
-      minify: true,
-      minifySyntax: true,
-      outExtension: getOutExtension("prod"),
-      external,
-      pure: ["warning"],
-      // @ts-ignore
-      drop: ["console"],
-      define: {
-        __DEV__: "false",
-      },
-      target: "es2016",
-    },
+		// cjs.prod.js
+		{
+			entry,
+			format: "cjs",
+			minify: true,
+			minifySyntax: true,
+			outExtension: getOutExtension("prod"),
+			external,
+			pure: ["warning"],
+			// @ts-ignore
+			drop: ["console"],
+			define: {
+				__DEV__: "false",
+			},
+			target: "es2016",
+		},
 
-    // esm
-    {
-      entry,
-      dts: { banner },
-      format: "esm",
-      external,
-      banner: { js: banner },
-      define: {
-        __DEV__: "true",
-      },
-      target: "es2020",
-    },
-  ]);
+		// esm
+		{
+			entry,
+			dts: { banner },
+			format: "esm",
+			external,
+			banner: { js: banner },
+			define: {
+				__DEV__: "true",
+			},
+			target: "es2020",
+		},
+	]);
 }
 
 /**
  * @param {"dev" | "prod"} env
  */
 function getOutExtension(env) {
-  return ({ format }) => ({ js: `.${format}.${env}.js` });
+	return ({ format }) => ({ js: `.${format}.${env}.js` });
 }
 
 /**
@@ -65,7 +65,7 @@ function getOutExtension(env) {
  * @param {string} version
  */
 function createBanner(packageName, version) {
-  return `/**
+	return `/**
   * ${packageName} v${version}
   *
   * Copyright (c) React Training
@@ -79,15 +79,15 @@ function createBanner(packageName, version) {
 }
 
 function getPackageInfo(packageRoot) {
-  let packageJson = fs.readFileSync(
-    path.join(packageRoot, "package.json"),
-    "utf8"
-  );
-  let { version, name } = JSON.parse(packageJson);
-  return { version, name };
+	let packageJson = fs.readFileSync(
+		path.join(packageRoot, "package.json"),
+		"utf8"
+	);
+	let { version, name } = JSON.parse(packageJson);
+	return { version, name };
 }
 
 module.exports = {
-  getTsupConfig,
-  getPackageInfo,
+	getTsupConfig,
+	getPackageInfo,
 };

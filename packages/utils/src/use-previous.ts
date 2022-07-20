@@ -6,9 +6,9 @@ import { useRef, useEffect } from "react";
  * @param value
  */
 export function usePrevious<ValueType = any>(value: ValueType) {
-  const ref = useRef<ValueType | null>(null);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
+	const ref = useRef<ValueType | null>(null);
+	useEffect(() => {
+		ref.current = value;
+	}, [value]);
+	return ref.current;
 }

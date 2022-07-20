@@ -9,14 +9,14 @@ import { render, cleanup } from "@reach-internal/test/utils";
 afterEach(cleanup);
 
 describe("<VisuallyHidden />", () => {
-  describe("rendering", () => {
-    it("renders as any HTML element", async () => {
-      let hiddenMessage = "Hidden Message";
-      let { getByText } = render(
-        <VisuallyHidden as="div">{hiddenMessage}</VisuallyHidden>
-      );
-      let visuallyHidden = getByText(hiddenMessage);
-      expect(visuallyHidden.tagName).toBe("DIV");
-    });
-  });
+	describe("rendering", () => {
+		it("renders as any HTML element", async () => {
+			let hiddenMessage = "Hidden Message";
+			let { getByText } = render(
+				<VisuallyHidden as="div">{hiddenMessage}</VisuallyHidden>
+			);
+			let visuallyHidden = getByText(hiddenMessage);
+			expect(visuallyHidden.tagName).toBe("DIV");
+		});
+	});
 });

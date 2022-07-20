@@ -8,15 +8,15 @@ expect.extend(axeMatchers);
 expect.extend(domMatchers);
 
 beforeAll(() => {
-  vi.mock("@reach/auto-id", () => {
-    return {
-      useId: (fallback: string) => fallback || "REACH-ID",
-    };
-  });
+	vi.mock("@reach/auto-id", () => {
+		return {
+			useId: (fallback: string) => fallback || "REACH-ID",
+		};
+	});
 
-  vi.mock("@reach/rect", () => {
-    return {
-      useRect: () => ({ height: 1, width: 1, x: 0, y: 0 }),
-    };
-  });
+	vi.mock("@reach/rect", () => {
+		return {
+			useRect: () => ({ height: 1, width: 1, x: 0, y: 0 }),
+		};
+	});
 });
