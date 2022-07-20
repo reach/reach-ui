@@ -28,8 +28,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./src/disclosure.tsx",
+  "types": "./src/disclosure.tsx",
   "files": [
     "CHANGELOG.md",
     "LICENSE",

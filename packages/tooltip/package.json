@@ -12,6 +12,9 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/tooltip"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@reach/auto-id": "workspace:*",
     "@reach/portal": "workspace:*",
@@ -31,8 +34,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./src/tooltip.tsx",
+  "types": "./src/tooltip.tsx",
   "files": [
     "CHANGELOG.md",
     "LICENSE",

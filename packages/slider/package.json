@@ -12,6 +12,9 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/slider"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@reach/auto-id": "workspace:*",
     "@reach/utils": "workspace:*"
@@ -28,8 +31,8 @@
     "react": "^16.9.0 || 17.x",
     "react-dom": "^16.9.0 || 17.x"
   },
-  "main": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./src/slider.tsx",
+  "types": "./src/slider.tsx",
   "files": [
     "CHANGELOG.md",
     "LICENSE",

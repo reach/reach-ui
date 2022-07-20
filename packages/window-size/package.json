@@ -12,6 +12,9 @@
     "url": "git+https://github.com/reach/reach-ui.git",
     "directory": "packages/window-size"
   },
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@reach/utils": "workspace:*"
   },
@@ -27,8 +30,8 @@
     "react": "^16.8.0 || 17.x",
     "react-dom": "^16.8.0 || 17.x"
   },
-  "main": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./src/window-size.tsx",
+  "types": "./src/window-size.tsx",
   "files": [
     "CHANGELOG.md",
     "LICENSE",

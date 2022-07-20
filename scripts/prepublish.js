@@ -26,8 +26,7 @@ async function main() {
       continue;
     }
 
-    let fileNameBase = `index`;
-    // let fileNameBase = `reach-${pkg}`;
+    let fileNameBase = pkg;
 
     pkgJson.main = `./dist/${fileNameBase}.cjs.js`;
     pkgJson.module = `./dist/${fileNameBase}.mjs`;

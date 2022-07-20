@@ -8,13 +8,7 @@ import {
   simulateSpaceKeyClick,
   simulateEnterKeyClick,
 } from "@reach-internal/test/utils";
-import {
-  Menu,
-  MenuList,
-  MenuButton,
-  MenuItem,
-  MenuLink,
-} from "@reach/menu-button";
+import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);
@@ -217,76 +211,6 @@ function renderTestMenu() {
     },
     get items() {
       return [screen.getByText("Download"), screen.getByText("Create a Copy")];
-    },
-    selectCallbacks: [cb1, cb2],
-  };
-}
-
-function renderTestMenuWithLinks() {
-  let cb1 = vi.fn();
-  let cb2 = vi.fn();
-  let { getByRole, container } = render(
-    <Menu>
-      <MenuButton>
-        Navigation <span aria-hidden="true">▾</span>
-      </MenuButton>
-      <MenuList data-testid="list">
-        <MenuLink href="/" onSelect={cb1}>
-          Home
-        </MenuLink>
-        <MenuLink href="/about" onSelect={cb2}>
-          About
-        </MenuLink>
-      </MenuList>
-    </Menu>
-  );
-  return {
-    container,
-    get root() {
-      return document.body;
-    },
-    get button() {
-      return getByRole("button");
-    },
-    get list() {
-      return screen.getByTestId("list");
-    },
-    get items() {
-      return [screen.getByText("Home"), screen.getByText("About")];
-    },
-    selectCallbacks: [cb1, cb2],
-  };
-}
-
-function renderTestMenuWithLinksAndItems() {
-  let cb1 = vi.fn();
-  let cb2 = vi.fn();
-  let { getByRole, container } = render(
-    <Menu>
-      <MenuButton>
-        Actions and Links <span aria-hidden="true">▾</span>
-      </MenuButton>
-      <MenuList data-testid="list">
-        <MenuItem onSelect={cb1}>Download</MenuItem>
-        <MenuLink href="/about" onSelect={cb2}>
-          About
-        </MenuLink>
-      </MenuList>
-    </Menu>
-  );
-  return {
-    container,
-    get root() {
-      return document.body;
-    },
-    get button() {
-      return getByRole("button");
-    },
-    get list() {
-      return screen.getByTestId("list");
-    },
-    get items() {
-      return [screen.getByText("Home"), screen.getByText("About")];
     },
     selectCallbacks: [cb1, cb2],
   };
