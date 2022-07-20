@@ -2,4 +2,4 @@ packages:
   - "packages/*"
   - "internal/*"
   - "playground"
-  - "playground2"
+  - "website-remix"
