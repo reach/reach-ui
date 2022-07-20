@@ -15,8 +15,8 @@ A couple notes on using tooltips:
 _Touch Events_: Touch events are currently not supported. There's not a lot of research or examples of these types of tooltips on mobile. We have some ideas but need to validate them first before implementing. Please adjust your interfaces on mobile to account for this.
 
 ```jsx
-import Tooltip, { useTooltip, TooltipPopup } from "@reach/tooltip";
-import VisuallyHidden from "@reach/visually-hidden";
+import { Tooltip, useTooltip, TooltipPopup } from "@reach/tooltip";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import "@reach/tooltip/styles.css";
 
 function Example() {

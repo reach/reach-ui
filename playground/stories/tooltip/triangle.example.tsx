@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useTooltip, TooltipPopup } from "@reach/tooltip";
 import type { Position } from "@reach/tooltip";
-import Portal from "@reach/portal";
+import { Portal } from "@reach/portal";
 import "@reach/tooltip/styles.css";
 
 let name = "Triangle";

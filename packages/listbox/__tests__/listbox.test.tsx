@@ -1,3 +1,6 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import {
   cleanup,
@@ -6,6 +9,7 @@ import {
   fireEvent,
   keyType,
 } from "@reach-internal/test/utils";
+import type { ListboxProps } from "@reach/listbox";
 import {
   Listbox,
   ListboxButton,
@@ -13,9 +17,8 @@ import {
   ListboxPopover,
   ListboxOption,
   ListboxList,
-  ListboxProps,
 } from "@reach/listbox";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { spy } from "sinon";
 import { afterEach, describe, expect, it, vi } from "vitest";
 

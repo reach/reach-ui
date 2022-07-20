@@ -4,7 +4,7 @@
 
 ```jsx
 import * as React from "react";
-import Popover, { positionDefault } from "@reach/popover";
+import { Popover, positionDefault } from "@reach/popover";
 
 function Example() {
   const ref = React.useRef(null);

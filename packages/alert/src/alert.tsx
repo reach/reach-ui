@@ -213,4 +213,3 @@ type RegionKeys = {
 
 export type { AlertProps };
 export { Alert };
-export default Alert;

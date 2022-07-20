@@ -207,6 +207,5 @@ type PRect = Partial<DOMRect> & {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default Rect;
 export type { PRect, UseRectOptions, RectProps };
 export { Rect, useRect };

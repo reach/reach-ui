@@ -1,3 +1,6 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import {
   cleanup,
@@ -6,7 +9,7 @@ import {
   act,
   screen,
 } from "@reach-internal/test/utils";
-import Tooltip, { LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
+import { Tooltip, LEAVE_TIMEOUT, MOUSE_REST_TIMEOUT } from "@reach/tooltip";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(cleanup);

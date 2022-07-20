@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import Link from "gatsby-link";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import Logo from "./Logo";
 import { useMatchMedia } from "./MatchMedia";

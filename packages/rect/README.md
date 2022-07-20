@@ -7,7 +7,7 @@
 Measures DOM elements (aka. bounding client rect). See also [Element.getBoundingClientRect()](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect)
 
 ```jsx
-import Rect, { useRect } from "@reach/rect";
+import { Rect, useRect } from "@reach/rect";
 
 function Example() {
   const ref = React.useRef();

@@ -62,4 +62,3 @@ interface VisuallyHiddenProps {
 
 export type { VisuallyHiddenProps };
 export { VisuallyHidden };
-export default VisuallyHidden;

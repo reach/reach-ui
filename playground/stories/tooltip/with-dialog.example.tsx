@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import * as React from "react";
 import { Dialog } from "@reach/dialog";
-import Tooltip from "@reach/tooltip";
+import { Tooltip } from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 
 let name = "With Dialog";

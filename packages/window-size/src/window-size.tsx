@@ -75,6 +75,5 @@ type TWindowSize = {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default WindowSize;
 export type { TWindowSize, WindowSizeProps };
 export { useWindowSize, WindowSize };

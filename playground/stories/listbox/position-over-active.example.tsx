@@ -10,7 +10,7 @@ import {
 import type { ListboxPopoverProps } from "@reach/listbox";
 import type { Position } from "@reach/popover";
 import { getCollisions } from "@reach/popover";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import { Taco } from "./common";
 import "@reach/listbox/styles.css";

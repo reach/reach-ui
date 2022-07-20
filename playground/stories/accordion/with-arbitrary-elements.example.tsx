@@ -6,7 +6,7 @@ import {
   AccordionPanel,
 } from "@reach/accordion";
 import { action } from "@storybook/addon-actions";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
 import "@reach/accordion/styles.css";
 import "@reach/menu-button/styles.css";

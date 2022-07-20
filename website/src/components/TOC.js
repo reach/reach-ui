@@ -1,5 +1,5 @@
 import * as React from "react";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 
 export function TOC({ children, label = "Table of Contents", ...props }) {
   return (

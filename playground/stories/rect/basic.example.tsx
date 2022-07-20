@@ -1,5 +1,5 @@
 import * as React from "react";
-import Rect from "@reach/rect";
+import { Rect } from "@reach/rect";
 
 let name = "Basic";
 

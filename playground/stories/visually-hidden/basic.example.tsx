@@ -1,5 +1,5 @@
 import * as React from "react";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 
 let name = "Basic (TS)";
 

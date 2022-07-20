@@ -463,4 +463,3 @@ export type {
   DialogProps,
 };
 export { DialogWrapper, Dialog, DialogContent, DialogInner, DialogOverlay };
-export default Dialog;

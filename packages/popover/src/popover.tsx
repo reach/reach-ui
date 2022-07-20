@@ -369,7 +369,6 @@ type PossibleNode = null | undefined | HTMLElement | SVGElement;
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default Popover;
 export type { PopoverProps, Position };
 export {
   getCollisions,

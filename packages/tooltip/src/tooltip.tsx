@@ -838,7 +838,6 @@ type PRect = Partial<DOMRect> & {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default Tooltip;
 export type {
   Position,
   TooltipContentProps,

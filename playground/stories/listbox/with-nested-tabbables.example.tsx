@@ -1,5 +1,5 @@
 import * as React from "react";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { Listbox, ListboxOption } from "@reach/listbox";
 import { action } from "@storybook/addon-actions";
 import { Taco } from "./common";

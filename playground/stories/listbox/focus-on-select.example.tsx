@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Listbox, ListboxOption } from "@reach/listbox";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import { Tag, Taco } from "./common";
 import "@reach/listbox/styles.css";

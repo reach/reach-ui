@@ -130,6 +130,5 @@ Portal.displayName = "Portal";
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default Portal;
 export type { PortalProps };
 export { Portal };

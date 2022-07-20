@@ -1,3 +1,6 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import { axe } from "vitest-axe";
 import type { AxeCore } from "vitest-axe";

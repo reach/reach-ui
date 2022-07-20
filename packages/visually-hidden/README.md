@@ -9,7 +9,7 @@ Provides text for screen readers that is visually hidden. It is the logical oppo
 In the following example, screen readers will announce "Save" and will ignore the icon; the browser displays the icon and ignores the text.
 
 ```jsx
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 
 function Example() {
   return (

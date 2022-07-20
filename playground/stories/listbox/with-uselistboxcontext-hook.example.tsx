@@ -8,7 +8,7 @@ import {
   useListboxContext,
 } from "@reach/listbox";
 import type { ListboxButtonProps } from "@reach/listbox";
-import VisuallyHidden from "@reach/visually-hidden";
+import { VisuallyHidden } from "@reach/visually-hidden";
 import { action } from "@storybook/addon-actions";
 import { Taco } from "./common";
 import "@reach/listbox/styles.css";

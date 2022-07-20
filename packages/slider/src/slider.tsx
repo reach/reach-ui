@@ -1192,7 +1192,6 @@ type SliderChildrenRender = (props: {
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 
-export default Slider;
 export type {
   SliderAlignment,
   SliderHandleProps,
