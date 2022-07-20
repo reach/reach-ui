@@ -15,7 +15,7 @@ import {
   useComboboxContext,
 } from "@reach/combobox";
 import { matchSorter } from "match-sorter";
-import cities from "../examples/cities";
+import cities from "./cities";
 import { afterEach, describe, expect, it } from "vitest";
 
 afterEach(cleanup);

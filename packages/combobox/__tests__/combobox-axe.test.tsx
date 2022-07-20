@@ -10,7 +10,7 @@ import {
   ComboboxPopover,
 } from "@reach/combobox";
 import { matchSorter } from "match-sorter";
-import cities from "../examples/cities";
+import cities from "./cities";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 
