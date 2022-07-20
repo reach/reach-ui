@@ -1,3 +1,22 @@
 {
-  "extends": ["chance", "chance/react", "chance/typescript"]
+  "extends": ["chance", "chance/react", "chance/typescript"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": [
+          "warn",
+          {
+            "disallowTypeAnnotations": false
+          }
+        ]
+      }
+    },
+    {
+      "files": ["*.test.ts", "*.test.tsx"],
+      "rules": {
+        "react/display-name": "off"
+      }
+    }
+  ]
 }

@@ -1,3 +1,6 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import { cleanup, render, fireEvent, act } from "@reach-internal/test/utils";
 import {

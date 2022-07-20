@@ -1,8 +1,11 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import { render, cleanup } from "@reach-internal/test/utils";
 import { vi, it, expect, describe, afterEach } from "vitest";
 
-const { useId } = await vi.importActual<typeof import("../src/index")>(
+const { useId } = await vi.importActual<typeof import("../src/auto-id")>(
   "@reach/auto-id"
 );
 

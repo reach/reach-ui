@@ -1,3 +1,6 @@
+/// <reference types="vitest-axe/extend-expect" />
+/// <reference types="vitest-dom/extend-expect" />
+
 import * as React from "react";
 import { render, fireEvent, cleanup } from "@reach-internal/test/utils";
 import {
@@ -238,7 +241,7 @@ describe("<Accordion />", () => {
 });
 
 function renderTestAccordion(wrapper?: React.ComponentType<any>) {
-  let Outer = wrapper || Accordion;
+  let Outer = (wrapper as any) || Accordion;
   let rendered = render(
     <Outer data-testid="wrapper">
       <AccordionItem data-testid="item1">
