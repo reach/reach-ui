@@ -18,6 +18,7 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       define: {
         __DEV__: "true",
       },
+      target: "es2016",
     },
 
     // cjs.prod.js
@@ -34,12 +35,13 @@ function getTsupConfig(entry, { packageName, packageVersion, external = [] }) {
       define: {
         __DEV__: "false",
       },
+      target: "es2016",
     },
 
     // esm
     {
       entry,
-      dts: { banner, only: true },
+      dts: { banner },
       format: "esm",
       external,
       banner: { js: banner },
