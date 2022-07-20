@@ -44,6 +44,7 @@ async function createSymlink(pkg, opts = {}) {
   }
 
   let symlinkPath = path.join(PACKAGE_DIR, pkg, "examples");
+  srcPath = path.relative(symlinkPath, srcPath);
   if (removeFirst && (await directoryExists(symlinkPath))) {
     await fsp.rm(symlinkPath, { recursive: true });
     await fsp.symlink(srcPath, symlinkPath, "dir");
