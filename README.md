@@ -15,16 +15,16 @@ Then, run these commands:
 ```
 git clone git@github.com:reach/reach-ui.git
 cd reach-ui
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 ## Root Repo Scripts:
 
 ```sh
-yarn build        # builds all packages
-yarn start        # starts storybook server
-yarn test         # runs tests in all packages
+pnpm build        # builds all packages
+pnpm dev        # starts storybook server
+pnpm test         # runs tests in all packages
 ```
 
 ## Running / Writing Examples
@@ -32,7 +32,7 @@ yarn test         # runs tests in all packages
 First do the steps in "Getting started", then start the Storybook server:
 
 ```
-yarn start
+pnpm dev
 ```
 
 Next, put a file in `packages/<component-dir>/examples/<name>.example.js` and make it look like this:
@@ -65,20 +65,20 @@ Now you can edit the files in `packages/*` and storybook will automatically relo
 First do the steps in "Getting Started", then:
 
 ```
-yarn test
+pnpm test
 ```
 
 Or if you want to run the tests as you edit files:
 
 ```
-yarn test --watch
+pnpm test --watch
 ```
 
 Often you'll want to just test the component you're working on:
 
 ```
 cd packages/<component-path>
-yarn test --watch
+pnpm test --watch
 ```
 
 ## Development Plans
@@ -106,9 +106,9 @@ The components to be built come from the the [Aria Practices Design Patterns and
 | 🛠      | Toggletip      |
 | ✅     | Tooltip        |
 
-## Releases
+## Releases [DEPRECATED]
 
-This is our current release process. It's not perfect, but it has almost the right balance of manual + automation for me. We might be able to put some of this in a script...
+This is (was?) our current release process. It's not perfect, but it has almost the right balance of manual + automation for me. We might be able to put some of this in a script...
 
 ```sh
 # First, run the build locally and make sure there are no problems
