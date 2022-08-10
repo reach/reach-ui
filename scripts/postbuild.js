@@ -28,8 +28,8 @@ async function main() {
 			);
 			continue;
 		}
-		// let fileNameBase = `index`;
-		let fileNameBase = pkg;
+		let fileNameBase = `index`;
+		// let fileNameBase = pkg;
 		let cjsEntry = `"use strict";
 
 if (process.env.NODE_ENV === "production") {

@@ -30,8 +30,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/auto-id.ts",
-	"types": "./src/auto-id.ts",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

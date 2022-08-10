@@ -28,8 +28,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/alert.tsx",
-	"types": "./src/alert.tsx",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

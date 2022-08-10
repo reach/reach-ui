@@ -27,8 +27,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/descendants.tsx",
-	"types": "./src/descendants.tsx",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

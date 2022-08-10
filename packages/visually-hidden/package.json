@@ -30,8 +30,8 @@
 		"react": "^16.8.0 || 17.x || 18.x",
 		"react-dom": "^16.8.0 || 17.x || 18.x"
 	},
-	"main": "./src/visually-hidden.tsx",
-	"types": "./src/visually-hidden.tsx",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",
