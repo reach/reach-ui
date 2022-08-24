@@ -22,7 +22,25 @@ afterEach(cleanup);
 describe("<Dialog />", () => {
 	let clock: SinonFakeTimers;
 	beforeEach(() => {
-		clock = useFakeTimers();
+		// toFake is default value
+		// from https://github.com/sinonjs/fake-timers#var-clock--faketimersinstallconfig
+		// excluded `performance` (for working react-dom@16)
+		clock = useFakeTimers({
+			toFake: [
+				"setTimeout",
+				"clearTimeout",
+				"setImmediate",
+				"clearImmediate",
+				"setInterval",
+				"clearInterval",
+				"Date",
+				"requestAnimationFrame",
+				"cancelAnimationFrame",
+				"requestIdleCallback",
+				"cancelIdleCallback",
+				"hrtime",
+			],
+		});
 	});
 	afterEach(() => {
 		clock.restore();
