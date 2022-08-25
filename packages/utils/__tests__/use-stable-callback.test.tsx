@@ -14,9 +14,10 @@ describe("useStableCallback", () => {
 			useEffect(stableCallback, [stableCallback]);
 		});
 
-		expect(mock).toHaveBeenCalledOnce();
+		const calledTimesBeforeRerender = mock.mock.calls.length;
 		rerender();
-		expect(mock).toHaveBeenCalledOnce();
+		const calledTimesAfterRerender = mock.mock.calls.length;
+		expect(calledTimesBeforeRerender).toBe(calledTimesAfterRerender);
 	});
 });
 
@@ -29,8 +30,9 @@ describe("useStableLayoutCallback", () => {
 			useEffect(stableCallback, [stableCallback]);
 		});
 
-		expect(mock).toHaveBeenCalledOnce();
+		const calledTimesBeforeRerender = mock.mock.calls.length;
 		rerender();
-		expect(mock).toHaveBeenCalledOnce();
+		const calledTimesAfterRerender = mock.mock.calls.length;
+		expect(calledTimesBeforeRerender).toBe(calledTimesAfterRerender);
 	});
 });
