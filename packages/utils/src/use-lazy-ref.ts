@@ -1,14 +1,14 @@
 import { useRef } from "react";
 import type * as React from "react";
 
-export function useLazyRef<F extends (...args: any[]) => any>(
-	fn: F
-): React.MutableRefObject<ReturnType<F>> {
+export function useLazyRef<ValueType>(
+	fn: () => ValueType
+): React.MutableRefObject<ValueType> {
 	let isSet = useRef(false);
-	let ref = useRef<any>();
+	let ref = useRef<ValueType>();
 	if (!isSet.current) {
 		isSet.current = true;
 		ref.current = fn();
 	}
-	return ref;
+	return ref as React.MutableRefObject<ValueType>;
 }
