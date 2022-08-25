@@ -7,7 +7,7 @@ import { usePrevious } from "@reach/utils";
 
 afterEach(cleanup);
 
-describe.only("usePrevious", () => {
+describe("usePrevious", () => {
 	it("should return previous value", async () => {
 		const Test = () => {
 			const [state, setState] = React.useState("foo");
