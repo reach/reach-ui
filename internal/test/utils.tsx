@@ -1,10 +1,7 @@
 import * as React from "react";
-import { act } from "react-dom/test-utils";
 import type { MatcherFunction } from "@testing-library/react";
 import { render as tlRender, fireEvent } from "@testing-library/react";
 import { renderHook as tlRenderHook } from "@testing-library/react-hooks";
-import { fireEvent as fireDomEvent } from "@testing-library/dom";
-import userEvent from "@testing-library/user-event";
 import type {
 	RenderHookOptions,
 	RenderHookResult,
@@ -142,7 +139,10 @@ export function simulateEnterKeyClick(
 
 type Query = (f: MatcherFunction) => HTMLElement | null;
 
-export { cleanup as cleanupHooks } from "@testing-library/react-hooks";
-export { cleanup, fireEvent, screen } from "@testing-library/react";
-export { act, userEvent, fireDomEvent };
+export {
+	cleanup as cleanupHooks,
+	act as actHooks,
+} from "@testing-library/react-hooks";
+export { cleanup, fireEvent, screen, act } from "@testing-library/react";
+export * as userEvent from "@testing-library/user-event";
 export type { RenderOptions, RenderResult };
