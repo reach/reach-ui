@@ -2,9 +2,15 @@ import * as React from "react";
 import { act } from "react-dom/test-utils";
 import type { MatcherFunction } from "@testing-library/react";
 import { render as tlRender, fireEvent } from "@testing-library/react";
+import { renderHook as tlRenderHook } from "@testing-library/react-hooks";
 import { fireEvent as fireDomEvent } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
-import type { RenderOptions, RenderResult } from "./types";
+import type {
+	RenderHookOptions,
+	RenderHookResult,
+	RenderOptions,
+	RenderResult,
+} from "./types";
 
 /**
  * This function is useful if you want to query a DOM element by its text
@@ -79,6 +85,17 @@ export function render<
 	return result;
 }
 
+export function renderHook<TProps, TResult>(
+	callback: (props: TProps) => TResult,
+	options: RenderHookOptions<TProps> = {}
+): RenderHookResult<TResult, TProps> {
+	const { strict = false, ...restOptions } = options;
+	return tlRenderHook(callback, {
+		...restOptions,
+		wrapper: strict ? React.StrictMode : React.Fragment,
+	});
+}
+
 export async function wait(time: number) {
 	return await new Promise<void>((res) => setTimeout(res, time));
 }
@@ -125,6 +142,7 @@ export function simulateEnterKeyClick(
 
 type Query = (f: MatcherFunction) => HTMLElement | null;
 
-export * from "@testing-library/react";
+export { cleanup as cleanupHooks } from "@testing-library/react-hooks";
+export { cleanup, fireEvent, screen } from "@testing-library/react";
 export { act, userEvent, fireDomEvent };
 export type { RenderOptions, RenderResult };
