@@ -144,5 +144,5 @@ export {
 	act as actHooks,
 } from "@testing-library/react-hooks";
 export { cleanup, fireEvent, screen, act } from "@testing-library/react";
-export * as userEvent from "@testing-library/user-event";
+export { default as userEvent } from "@testing-library/user-event";
 export type { RenderOptions, RenderResult };
