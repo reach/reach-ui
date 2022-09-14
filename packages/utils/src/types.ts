@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 
 /**
  * React.Ref uses the readonly type `React.RefObject` instead of

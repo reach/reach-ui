@@ -4,7 +4,8 @@
 
 import * as React from "react";
 import { Portal } from "@reach/portal";
-import { useRect, PRect } from "@reach/rect";
+import type { PRect } from "@reach/rect";
+import { useRect } from "@reach/rect";
 import { getOwnerDocument, useComposedRefs } from "@reach/utils";
 import type { Polymorphic } from "@reach/utils";
 import { tabbable } from "tabbable";
