@@ -204,6 +204,14 @@ function useDropdownTrigger({
 			});
 		}
 	}, [triggerId, dispatch, id]);
+	React.useEffect(() => {
+		if (id == null) {
+			dispatch({
+				type: SET_BUTTON_ID,
+				payload: makeId("menu-button", dropdownId),
+			});
+		}
+	}, [dropdownId, dispatch, id]);
 
 	function handleKeyDown(event: React.KeyboardEvent) {
 		switch (event.key) {
