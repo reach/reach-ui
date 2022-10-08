@@ -111,23 +111,29 @@ The components to be built come from the the [Aria Practices Design Patterns and
 This is (was?) our current release process. It's not perfect, but it has almost the right balance of manual + automation for me. We might be able to put some of this in a script...
 
 ```sh
-# First, run the build locally and make sure there are no problems
-# and that all the tests pass:
-$ yarn build
-$ yarn test
-
-# If you aren't already on the main branch, be sure to check it out
-# and merge release changes from `develop`
 $ git checkout main
-$ git merge develop
+$ git pull origin main
+$ git checkout dev
+$ git pull origin dev
+$ git checkout -b release-<version>
+$ git merge main
 
-# Generate the changelog and copy it somewhere for later. We'll
-# automate this part eventually, but for now you can get the changelog
-# with:
-$ yarn changes
+# Resolve any merge conflicts and commit if necessary
+
+# Run the build locally and make sure there are no problems
+$ pnpm build
+$ pnpm test
+
+# Check out the `main` branch and merge release changes from `dev`
+$ git checkout main
+$ git pull origin main
+$ git merge dev
+
+# Write the changelog based on commits. We'll automate this part
+# eventually, but for now this is manual.
 
 # Then create a new version and git tag locally. Don't push yet!
-$ yarn ver [version]
+$ pnpm ver [version]
 
 # Take a look around and make sure everything is as you'd expect.
 # You can inspect everything from the commit that lerna made with:
