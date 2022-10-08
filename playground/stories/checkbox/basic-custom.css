@@ -50,3 +50,7 @@
 .example [data-reach-custom-checkbox][data-custom-checkmarks]::after {
 	display: none;
 }
+
+.example label:not(:first-of-type) {
+	margin-left: 1rem;
+}

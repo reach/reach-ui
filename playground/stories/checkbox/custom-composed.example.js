@@ -30,9 +30,9 @@ function MyCheckbox(props) {
 					height: "60%",
 					top: "50%",
 					left: "50%",
-					transform: `translate(-50%, -50%) scaleX(${
-						!!checked ? 1 : 0
-					}) scaleY(${checked === true ? 1 : checked === "mixed" ? 0.4 : 0})`,
+					transform: `translate(-50%, -50%) scaleX(${checked ? 1 : 0}) scaleY(${
+						checked === true ? 1 : checked === "mixed" ? 0.4 : 0
+					})`,
 					transition: "transform 200ms ease-out, background 200ms ease-out",
 					zIndex: 1,
 					background:
