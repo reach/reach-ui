@@ -15,6 +15,7 @@ import { Portal } from "@reach/portal";
 import type { PortalProps } from "@reach/portal";
 import {
 	composeEventHandlers,
+	createContext,
 	getOwnerDocument,
 	noop,
 	useCheckStyles,
@@ -26,6 +27,21 @@ import { RemoveScroll } from "react-remove-scroll";
 
 declare const __DEV__: boolean;
 
+enum DialogState {
+	Opening = "opening",
+	Open = "open",
+	Closing = "closing",
+	Closed = "closed",
+}
+
+interface DialogContextValue {
+	isOpen: boolean;
+}
+const [DialogContextProvider, useDialogContext] =
+	createContext<DialogContextValue>("DialogContext", {
+		isOpen: false,
+	});
+
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -34,8 +50,6 @@ declare const __DEV__: boolean;
  * Low-level component if you need direct access to the portaled dialog wrapper.
  *
  * Note: You must render a `DialogInner` inside.
- *
- * @see Docs https://reach.tech/dialog#dialogwrapper
  */
 function DialogWrapper({
 	isOpen = true,
@@ -60,20 +74,22 @@ function DialogWrapper({
 		}
 	}, [isOpen]);
 
-	return isOpen ? (
-		<Portal data-reach-dialog-wrapper="" {...props}>
-			{children}
+	return (
+		<Portal
+			data-reach-dialog-wrapper=""
+			data-state={isOpen ? DialogState.Open : DialogState.Closed}
+			{...props}
+		>
+			<DialogContextProvider isOpen={isOpen}>{children}</DialogContextProvider>
 		</Portal>
-	) : null;
+	);
 }
 
-DialogWrapper.displayName = "DialogWrapper";
+DialogWrapper.displayName = "unstable_DialogWrapper";
 
 interface DialogWrapperProps extends PortalProps {
 	/**
 	 * Controls whether or not the dialog is open.
-	 *
-	 * @see Docs https://reach.tech/dialog#dialogwrapper-isopen
 	 */
 	isOpen?: boolean;
 }
@@ -93,8 +109,10 @@ const DialogInner = React.forwardRef(function DialogInner(
 	{
 		allowPinchZoom,
 		as: Comp = "div",
-		dangerouslyBypassFocusLock = false,
-		dangerouslyBypassScrollLock = false,
+		dangerouslyBypassFocusLock,
+
+		// TODO: Consider removing in favor of `lockScroll`, default to `true`.
+		dangerouslyBypassScrollLock,
 		initialFocusRef,
 		onClick,
 		onDismiss = noop,
@@ -105,6 +123,7 @@ const DialogInner = React.forwardRef(function DialogInner(
 	},
 	forwardedRef
 ) {
+	let { isOpen } = useDialogContext("DialogInner");
 	let lockFocusAcrossFramesIsDefined =
 		unstable_lockFocusAcrossFrames !== undefined;
 
@@ -158,17 +177,26 @@ const DialogInner = React.forwardRef(function DialogInner(
 			autoFocus
 			returnFocus
 			onActivation={activateFocusLock}
-			disabled={dangerouslyBypassFocusLock}
+			disabled={
+				dangerouslyBypassFocusLock != null
+					? dangerouslyBypassFocusLock
+					: !isOpen
+			}
 			crossFrame={unstable_lockFocusAcrossFrames ?? true}
 		>
 			<RemoveScroll
 				allowPinchZoom={allowPinchZoom}
-				enabled={!dangerouslyBypassScrollLock}
+				enabled={
+					dangerouslyBypassScrollLock != null
+						? !dangerouslyBypassScrollLock
+						: isOpen
+				}
 			>
 				<Comp
 					{...props}
 					ref={ref}
 					data-reach-dialog-inner=""
+					data-state={isOpen ? DialogState.Open : DialogState.Closed}
 					/*
 					 * We can ignore the `no-static-element-interactions` warning here
 					 * because our overlay is only designed to capture any outside
@@ -201,7 +229,7 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
 	{ as: Comp = "div", isOpen = true, ...props },
 	forwardedRef
 ) {
-	return (
+	return isOpen ? (
 		<DialogWrapper isOpen={isOpen}>
 			<DialogInner
 				data-reach-dialog-overlay=""
@@ -210,7 +238,7 @@ const DialogOverlay = React.forwardRef(function DialogOverlay(
 				{...props}
 			/>
 		</DialogWrapper>
-	);
+	) : null;
 }) as Polymorphic.ForwardRefComponent<"div", DialogOverlayProps>;
 
 DialogOverlay.displayName = "DialogOverlay";
@@ -276,6 +304,7 @@ const DialogContent = React.forwardRef(function DialogContent(
 	{ as: Comp = "div", onClick, onKeyDown, ...props },
 	forwardedRef
 ) {
+	let { isOpen } = useDialogContext("DialogContent");
 	return (
 		<Comp
 			aria-modal="true"
@@ -284,6 +313,7 @@ const DialogContent = React.forwardRef(function DialogContent(
 			{...props}
 			ref={forwardedRef}
 			data-reach-dialog-content=""
+			data-state={isOpen ? DialogState.Open : DialogState.Closed}
 			onClick={composeEventHandlers(onClick, (event) => {
 				event.stopPropagation();
 			})}
@@ -456,10 +486,16 @@ function createAriaHider(dialogNode: HTMLElement) {
 // Exports
 
 export type {
-	DialogWrapperProps,
+	DialogWrapperProps as unstable_DialogWrapperProps,
 	DialogContentProps,
 	DialogOverlayProps,
 	DialogOverlayProps as DialogInnerProps,
 	DialogProps,
 };
-export { DialogWrapper, Dialog, DialogContent, DialogInner, DialogOverlay };
+export {
+	DialogWrapper as unstable_DialogWrapper,
+	Dialog,
+	DialogContent,
+	DialogInner,
+	DialogOverlay,
+};
