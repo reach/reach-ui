@@ -33,7 +33,7 @@
 
 import * as React from "react";
 import {
-	createNamedContext,
+	createContext,
 	isFunction,
 	useCheckStyles,
 	useComposedRefs,
@@ -42,7 +42,6 @@ import {
 import type { Polymorphic } from "@reach/utils";
 import {
 	internal_checkedPropToStateValue as checkedPropToStateValue,
-	internal_useControlledSwitchWarning as useControlledSwitchWarning,
 	useMixedCheckbox,
 } from "./mixed";
 
@@ -50,13 +49,10 @@ import type { MixedOrBool, UseMixedCheckboxProps } from "./mixed";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CustomCheckboxContext = createNamedContext(
+const [CustomCheckboxContextProvider, useCustomCheckboxContext] = createContext(
 	"CustomCheckboxContext",
 	{} as CustomCheckboxContextValue
 );
-function useCustomCheckboxContext() {
-	return React.useContext(CustomCheckboxContext);
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -112,11 +108,10 @@ const CustomCheckboxContainer = React.forwardRef(
 			setFocused,
 		};
 
-		useControlledSwitchWarning(controlledChecked, "checked", __componentName);
 		useCheckStyles("checkbox");
 
 		return (
-			<CustomCheckboxContext.Provider value={context}>
+			<CustomCheckboxContextProvider {...context}>
 				<Comp
 					{...props}
 					ref={forwardedRef}
@@ -127,13 +122,13 @@ const CustomCheckboxContainer = React.forwardRef(
 				>
 					{isFunction(children)
 						? children({
-								checked: inputProps["aria-checked"],
+								checked: stateData.checked,
 								inputRef,
 								focused,
 						  })
 						: children}
 				</Comp>
-			</CustomCheckboxContext.Provider>
+			</CustomCheckboxContextProvider>
 		);
 	}
 ) as Polymorphic.ForwardRefComponent<"span", CustomCheckboxContainerProps>;
@@ -213,8 +208,9 @@ const CustomCheckboxInput = React.forwardRef(function CustomCheckboxInput(
 	{ as: Comp = "input", onBlur, onFocus, ...props },
 	forwardedRef
 ) {
-	let { focused, inputProps, inputRef, setFocused } =
-		useCustomCheckboxContext();
+	let { focused, inputProps, inputRef, setFocused } = useCustomCheckboxContext(
+		"CustomCheckboxInput"
+	);
 
 	let ref = useComposedRefs(forwardedRef, inputRef);
 	let mounted = React.useRef(true);
