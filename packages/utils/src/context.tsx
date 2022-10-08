@@ -15,11 +15,11 @@ export function createNamedContext<ContextValueType>(
 type ContextProvider<T> = React.FC<React.PropsWithChildren<T>>;
 
 export function createContext<ContextValueType extends object | null>(
-	rootName: string,
+	rootComponentName: string,
 	defaultContext?: ContextValueType
 ): [
 	ContextProvider<ContextValueType>,
-	(childName: string) => ContextValueType
+	(callerComponentName: string) => ContextValueType
 ] {
 	let Ctx = React.createContext<ContextValueType | undefined>(defaultContext);
 
@@ -33,7 +33,7 @@ export function createContext<ContextValueType extends object | null>(
 		return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 	}
 
-	function useContext(childName: string) {
+	function useContext(callerComponentName: string) {
 		let context = React.useContext(Ctx);
 		if (context) {
 			return context;
@@ -42,11 +42,11 @@ export function createContext<ContextValueType extends object | null>(
 			return defaultContext;
 		}
 		throw Error(
-			`${childName} must be rendered inside of a ${rootName} component.`
+			`${callerComponentName} must be rendered inside of a ${rootComponentName} component.`
 		);
 	}
 
-	Ctx.displayName = `${rootName}Context`;
-	Provider.displayName = `${rootName}Provider`;
+	Ctx.displayName = `${rootComponentName}Context`;
+	Provider.displayName = `${rootComponentName}Provider`;
 	return [Provider, useContext];
 }
