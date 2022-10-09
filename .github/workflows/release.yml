@@ -1,0 +1,64 @@
+name: 🕊 Release
+on:
+  push:
+    branches:
+      - release
+      - "release-*"
+      - "!release-experimental"
+      - "!release-experimental-*"
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  CI: true
+
+jobs:
+  release:
+    name: Release
+    if: github.repository == 'reach/reach-ui'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+
+      - name: Build Packages
+        run: pnpm build
+
+      - name: Setup npm auth
+        run: |
+          echo "registry=https://registry.npmjs.org" >> ~/.npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+
+        # This action has two responsibilities. The first time the workflow runs
+        # (initial push to a `release-*` branch) it will create a new branch and
+        # then open a PR with the related changes for the new version. After the
+        # PR is merged, the workflow will run again and this action will build +
+        # publish to npm.
+      - name: PR / Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          commit: "chore: Update version for release"
+          title: "chore: Update version for release"
+          publish: pnpm release
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
