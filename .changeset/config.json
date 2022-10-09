@@ -1,0 +1,37 @@
+{
+	"$schema": "https://unpkg.com/@changesets/config@2.0.0/schema.json",
+	"changelog": ["@remix-run/changelog-github", { "repo": "reach/reach-ui" }],
+	"commit": false,
+	"fixed": [
+		[
+			"@reach/accordion",
+			"@reach/alert",
+			"@reach/alert-dialog",
+			"@reach/auto-id",
+			"@reach/checkbox",
+			"@reach/combobox",
+			"@reach/descendants",
+			"@reach/dialog",
+			"@reach/disclosure",
+			"@reach/dropdown",
+			"@reach/listbox",
+			"@reach/machine",
+			"@reach/menu-button",
+			"@reach/popover",
+			"@reach/portal",
+			"@reach/rect",
+			"@reach/skip-nav",
+			"@reach/slider",
+			"@reach/tabs",
+			"@reach/tooltip",
+			"@reach/utils",
+			"@reach/visually-hidden",
+			"@reach/window-size"
+		]
+	],
+	"linked": [],
+	"access": "public",
+	"baseBranch": "dev",
+	"updateInternalDependencies": "patch",
+	"ignore": []
+}

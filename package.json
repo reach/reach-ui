@@ -15,9 +15,13 @@
 		"test": "vitest",
 		"lint": "eslint packages",
 		"format": "prettier --write '**/*.{js,jsx,ts,tsx,md,mdx,json,css,scss}'",
-		"dev": "pnpm --filter reach-storybook start"
+		"dev": "pnpm --filter reach-storybook start",
+		"release": "node scripts/prepublish.js && changeset publish",
+		"changeset": "changeset",
+		"version": "changeset version"
 	},
 	"dependencies": {
+		"@changesets/cli": "^2.25.0",
 		"@reach-internal/test": "workspace:*",
 		"@reach-internal/tsconfig": "workspace:*",
 		"@reach/accordion": "workspace:*",
@@ -43,6 +47,7 @@
 		"@reach/utils": "workspace:*",
 		"@reach/visually-hidden": "workspace:*",
 		"@reach/window-size": "workspace:*",
+		"@remix-run/changelog-github": "^0.0.5",
 		"@testing-library/dom": "^8.16.0",
 		"@testing-library/react": "^12.1.5",
 		"@testing-library/react-13": "npm:@testing-library/react@^13.3.0",
