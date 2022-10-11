@@ -1,5 +1,12 @@
 # @reach/descendants
 
+## 0.18.0-pre.3
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/utils@0.18.0-pre.3`
+
 ## 0.18.0-pre.2
 
 ### Patch Changes

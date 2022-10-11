@@ -1,5 +1,16 @@
 # @reach/tooltip
 
+## 0.18.0-pre.3
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/auto-id@0.18.0-pre.3`
+  - `@reach/portal@0.18.0-pre.3`
+  - `@reach/rect@0.18.0-pre.3`
+  - `@reach/utils@0.18.0-pre.3`
+  - `@reach/visually-hidden@0.18.0-pre.3`
+
 ## 0.18.0-pre.2
 
 ### Patch Changes
