@@ -1,6 +1,6 @@
 {
 	"name": "@reach/listbox",
-	"version": "0.18.0-pre.0",
+	"version": "0.18.0-pre.1",
 	"description": "Accessible React listbox input.",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",

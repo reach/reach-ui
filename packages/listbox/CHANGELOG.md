@@ -1,5 +1,20 @@
 # @reach/listbox
 
+## 0.18.0-pre.1
+
+### Minor Changes
+
+- The output directory structure has changed slightly. Module files are now named `reach-<pkg>.mjs` instead of `reach-<pkg>.esm.js`. ([`6e40773f`](https://github.com/reach/reach-ui/commit/6e40773fc0f430dba9029fee57b526a7eb25827e))
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/auto-id@0.18.0-pre.1`
+  - `@reach/descendants@0.18.0-pre.1`
+  - `@reach/machine@0.18.0-pre.1`
+  - `@reach/popover@0.18.0-pre.1`
+  - `@reach/utils@0.18.0-pre.1`
+
 ## 0.18.0-pre.0
 
 ### Minor Changes

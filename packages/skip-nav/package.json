@@ -1,6 +1,6 @@
 {
 	"name": "@reach/skip-nav",
-	"version": "0.18.0-pre.0",
+	"version": "0.18.0-pre.1",
 	"description": "Skip navigation links for screen reader and keyboard users.",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",
