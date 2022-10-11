@@ -31,8 +31,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./src/reach-rect.tsx",
+	"types": "./src/reach-rect.tsx",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

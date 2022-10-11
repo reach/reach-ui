@@ -1,7 +1,7 @@
 import { assign } from "@reach/machine";
 import { getOwnerDocument } from "@reach/utils";
 
-import type { ListboxDescendant, ListboxValue } from "./listbox";
+import type { ListboxDescendant, ListboxValue } from "./reach-listbox";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 
 ////////////////////////////////////////////////////////////////////////////////

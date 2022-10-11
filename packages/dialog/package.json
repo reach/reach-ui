@@ -33,8 +33,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./src/reach-dialog.tsx",
+	"types": "./src/reach-dialog.tsx",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

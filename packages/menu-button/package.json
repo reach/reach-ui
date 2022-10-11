@@ -34,8 +34,8 @@
 		"react-dom": "^16.8.0 || 17.x",
 		"react-is": "^16.8.0 || 17.x"
 	},
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./src/reach-menu-button.tsx",
+	"types": "./src/reach-menu-button.tsx",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

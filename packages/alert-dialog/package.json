@@ -30,8 +30,8 @@
 		"react": "^16.8.0 || 17.x",
 		"react-dom": "^16.8.0 || 17.x"
 	},
-	"main": "./src/index.ts",
-	"types": "./src/index.ts",
+	"main": "./src/reach-alert-dialog.tsx",
+	"types": "./src/reach-alert-dialog.tsx",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",
