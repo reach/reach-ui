@@ -54,6 +54,8 @@
  * server hydration and never again, SO BACK OFF ALRIGHT?
  */
 
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import * as React from "react";
 import { useIsomorphicLayoutEffect as useLayoutEffect } from "@reach/utils";
 
@@ -63,7 +65,12 @@ function genId() {
 	return ++id;
 }
 
-/* eslint-disable react-hooks/rules-of-hooks */
+// Workaround for https://github.com/webpack/webpack/issues/14814
+// https://github.com/eps1lon/material-ui/blob/8d5f135b4d7a58253a99ab56dce4ac8de61f5dc1/packages/mui-utils/src/useId.ts#L21
+const maybeReactUseId: undefined | (() => string) = (React as any)[
+	// eslint-disable-next-line no-useless-concat
+	"useId" + ""
+];
 
 /**
  * useId
@@ -87,13 +94,9 @@ function useId(
 function useId(): string | undefined;
 
 function useId(providedId?: number | string | undefined | null) {
-	// TODO: Remove error flag when updating internal deps to React 18. None of
-	// our tricks will play well with concurrent rendering anyway.
-	// @ts-expect-error
-	if (typeof React.useId === "function") {
-		// @ts-expect-error
-		let id = React.useId(providedId);
-		return providedId != null ? providedId : id;
+	if (maybeReactUseId !== undefined) {
+		let generatedId = maybeReactUseId();
+		return providedId ?? generatedId;
 	}
 
 	// If this instance isn't part of the initial render, we don't have to do the
