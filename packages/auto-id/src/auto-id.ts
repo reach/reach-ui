@@ -87,15 +87,6 @@ function useId(
 function useId(): string | undefined;
 
 function useId(providedId?: number | string | undefined | null) {
-	// TODO: Remove error flag when updating internal deps to React 18. None of
-	// our tricks will play well with concurrent rendering anyway.
-	// @ts-expect-error
-	if (typeof React.useId === "function") {
-		// @ts-expect-error
-		let id = React.useId(providedId);
-		return providedId != null ? providedId : id;
-	}
-
 	// If this instance isn't part of the initial render, we don't have to do the
 	// double render/patch-up dance. We can just generate the ID and return it.
 	let initialId = providedId ?? (serverHandoffComplete ? genId() : null);

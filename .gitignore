@@ -12,6 +12,9 @@ node_modules
 .env
 coverage
 
+# storybook
+/playground/storybook-static
+
 # website
 /website-deploy-key
 /website-deploy-key.pub
