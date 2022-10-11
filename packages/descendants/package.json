@@ -1,6 +1,6 @@
 {
 	"name": "@reach/descendants",
-	"version": "0.17.0",
+	"version": "0.18.0-pre.0",
 	"description": "A descendant index solution for better accessibility support in compound components",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",

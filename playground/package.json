@@ -1,7 +1,7 @@
 {
 	"name": "reach-storybook",
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.0.1-pre.0",
 	"description": "",
 	"scripts": {
 		"start": "export NODE_OPTIONS=--openssl-legacy-provider && start-storybook -p 9001 -c .storybook --ci",

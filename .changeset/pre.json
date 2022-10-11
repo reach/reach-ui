@@ -30,5 +30,16 @@
     "@reach/window-size": "0.17.0",
     "reach-storybook": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "curly-lobsters-do",
+    "great-seahorses-dream",
+    "heavy-actors-perform",
+    "lemon-feet-listen",
+    "light-ways-laugh",
+    "neat-dolphins-own",
+    "red-jeans-deliver",
+    "red-toys-rhyme",
+    "spicy-jeans-join",
+    "tall-planets-share"
+  ]
 }
