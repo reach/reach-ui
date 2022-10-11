@@ -1,5 +1,13 @@
 # @reach/auto-id
 
+## 0.18.0-pre.2
+
+### Patch Changes
+
+- Fix buggy fallback implementation for React 18 ([`78afc322`](https://github.com/reach/reach-ui/commit/78afc3227a94281ff872019524480837950d0d92))
+- Updated dependencies:
+  - `@reach/utils@0.18.0-pre.2`
+
 ## 0.18.0-pre.1
 
 ### Minor Changes
