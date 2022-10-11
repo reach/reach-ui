@@ -1,6 +1,6 @@
 {
 	"name": "@reach/auto-id",
-	"version": "0.18.0-pre.1",
+	"version": "0.18.0-pre.2",
 	"description": "Autogenerate IDs to facilitate WAI-ARIA and server rendering.",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",
