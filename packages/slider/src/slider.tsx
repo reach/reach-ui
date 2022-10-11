@@ -292,9 +292,12 @@ const SliderInput = React.forwardRef(function SliderInput(
 
 	let { ref: x, ...handleDimensions } = useDimensions(handleRef);
 
+	defaultValue = defaultValue || min;
+	let defaultValueRef = React.useRef(defaultValue);
+	let isControlledRef = React.useRef(controlledValue !== undefined);
 	let [_value, setValue] = useControlledState({
 		controlledValue,
-		defaultValue: defaultValue || min,
+		defaultValue,
 		calledFrom: "SliderInput",
 	});
 	let value = clamp(_value, min, max);
@@ -614,6 +617,32 @@ const SliderInput = React.forwardRef(function SliderInput(
 		};
 	}, [addStartListener]);
 
+	// If the slider is used in a form we'll need an input field to capture the
+	// value. We'll assume this when the component is given a form field name (A
+	// `name` prop doesn't really make sense in any other context).
+	let shouldRenderInput = name != null;
+	let inputRef = React.useRef<HTMLInputElement | null>(null);
+
+	// If a form is reset, we'll need to manually reset the input value since we
+	// are controlling it internally.
+	React.useEffect(() => {
+		let isControlled = isControlledRef.current;
+		let defaultValue = defaultValueRef.current;
+		let inputElement = inputRef.current;
+		let form = inputElement?.form;
+
+		if (!shouldRenderInput || !form || isControlled) return;
+
+		function handleReset(event: Event) {
+			setValue(defaultValue);
+		}
+
+		form.addEventListener("reset", handleReset);
+		return () => {
+			form?.removeEventListener("reset", handleReset);
+		};
+	}, [setValue, shouldRenderInput]);
+
 	useCheckStyles("slider");
 
 	return (
@@ -659,18 +688,15 @@ const SliderInput = React.forwardRef(function SliderInput(
 							valueText: ariaValueText, // TODO: Remove in 1.0
 					  })
 					: children}
-				{name && (
-					// If the slider is used in a form we'll need an input field to
-					// capture the value. We'll assume this when the component is given a
-					// form field name (A `name` prop doesn't really make sense in any
-					// other context).
+				{shouldRenderInput ? (
 					<input
 						type="hidden"
 						value={value}
 						name={name}
 						id={id && makeId("input", id)}
+						ref={inputRef}
 					/>
-				)}
+				) : null}
 			</Comp>
 		</SliderProvider>
 	);
