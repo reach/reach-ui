@@ -1,6 +1,6 @@
 {
 	"name": "@reach/machine",
-	"version": "0.18.0-pre.2",
+	"version": "0.18.0-pre.3",
 	"description": "State machine utilities for the Reach UI library.",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",
