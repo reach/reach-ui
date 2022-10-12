@@ -13,6 +13,7 @@
 		"build": "tsup"
 	},
 	"dependencies": {
+		"@reach/polymorphic": "workspace:*",
 		"@reach/utils": "workspace:*",
 		"@reach/visually-hidden": "workspace:*"
 	},

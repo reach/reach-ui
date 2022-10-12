@@ -13,6 +13,7 @@
 		"directory": "packages/popover"
 	},
 	"dependencies": {
+		"@reach/polymorphic": "workspace:*",
 		"@reach/portal": "workspace:*",
 		"@reach/rect": "workspace:*",
 		"@reach/utils": "workspace:*",

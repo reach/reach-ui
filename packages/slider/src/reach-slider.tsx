@@ -38,7 +38,7 @@ import {
 	useIsomorphicLayoutEffect as useLayoutEffect,
 	useStableLayoutCallback,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 
 declare const __DEV__: boolean;
 

@@ -42,7 +42,7 @@ import {
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import { useId } from "@reach/auto-id";
 
 const TabsDescendantsContext = createDescendantContext<TabDescendant>(

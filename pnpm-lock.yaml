@@ -183,6 +183,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/descendants': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -190,6 +191,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/descendants': link:../descendants
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -204,12 +206,14 @@ importers:
       '@reach-internal/dev': workspace:*
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       '@reach/visually-hidden': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       tsup: ^6.1.3
     dependencies:
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
       '@reach/visually-hidden': link:../visually-hidden
     devDependencies:
@@ -227,6 +231,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/dialog': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -235,6 +240,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/dialog': link:../dialog
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
       tiny-invariant: 1.2.0
     devDependencies:
@@ -271,6 +277,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/machine': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -278,6 +285,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/machine': link:../machine
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -294,6 +302,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/descendants': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/popover': workspace:*
       '@reach/portal': workspace:*
       '@reach/utils': workspace:*
@@ -305,6 +314,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/descendants': link:../descendants
+      '@reach/polymorphic': link:../polymorphic
       '@reach/popover': link:../popover
       '@reach/portal': link:../portal
       '@reach/utils': link:../utils
@@ -342,6 +352,7 @@ importers:
       '@reach-internal/dev': workspace:*
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/portal': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
@@ -350,6 +361,7 @@ importers:
       react-remove-scroll: 2.4.3
       tsup: ^6.1.3
     dependencies:
+      '@reach/polymorphic': link:../polymorphic
       '@reach/portal': link:../portal
       '@reach/utils': link:../utils
       react-focus-lock: 2.5.2_react@17.0.2
@@ -368,12 +380,14 @@ importers:
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       tsup: ^6.1.3
     dependencies:
       '@reach/auto-id': link:../auto-id
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -390,6 +404,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/descendants': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/popover': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
@@ -398,6 +413,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/descendants': link:../descendants
+      '@reach/polymorphic': link:../polymorphic
       '@reach/popover': link:../popover
       '@reach/utils': link:../utils
     devDependencies:
@@ -416,6 +432,7 @@ importers:
       '@reach/auto-id': workspace:*
       '@reach/descendants': workspace:*
       '@reach/machine': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/popover': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
@@ -426,6 +443,7 @@ importers:
       '@reach/auto-id': link:../auto-id
       '@reach/descendants': link:../descendants
       '@reach/machine': link:../machine
+      '@reach/polymorphic': link:../polymorphic
       '@reach/popover': link:../popover
       '@reach/utils': link:../utils
       tiny-invariant: 1.2.0
@@ -464,6 +482,7 @@ importers:
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
       '@reach/dropdown': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/popover': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
@@ -472,6 +491,7 @@ importers:
       tsup: ^6.1.3
     dependencies:
       '@reach/dropdown': link:../dropdown
+      '@reach/polymorphic': link:../polymorphic
       '@reach/popover': link:../popover
       '@reach/utils': link:../utils
     devDependencies:
@@ -483,11 +503,24 @@ importers:
       react-is: 17.0.2
       tsup: 6.1.3
 
+  packages/polymorphic:
+    specifiers:
+      '@reach-internal/dev': workspace:*
+      '@reach-internal/tsconfig': workspace:*
+      react: ^17.0.2
+      tsup: ^6.1.3
+    devDependencies:
+      '@reach-internal/dev': link:../../internal/dev
+      '@reach-internal/tsconfig': link:../../internal/tsconfig
+      react: 17.0.2
+      tsup: 6.1.3
+
   packages/popover:
     specifiers:
       '@reach-internal/dev': workspace:*
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/portal': workspace:*
       '@reach/rect': workspace:*
       '@reach/utils': workspace:*
@@ -496,6 +529,7 @@ importers:
       tabbable: ^5.3.3
       tsup: ^6.1.3
     dependencies:
+      '@reach/polymorphic': link:../polymorphic
       '@reach/portal': link:../portal
       '@reach/rect': link:../rect
       '@reach/utils': link:../utils
@@ -553,11 +587,13 @@ importers:
       '@reach-internal/dev': workspace:*
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       tsup: ^6.1.3
     dependencies:
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -573,12 +609,14 @@ importers:
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       tsup: ^6.1.3
     dependencies:
       '@reach/auto-id': link:../auto-id
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -595,6 +633,7 @@ importers:
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
       '@reach/descendants': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/utils': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -602,6 +641,7 @@ importers:
     dependencies:
       '@reach/auto-id': link:../auto-id
       '@reach/descendants': link:../descendants
+      '@reach/polymorphic': link:../polymorphic
       '@reach/utils': link:../utils
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
@@ -617,6 +657,7 @@ importers:
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
       '@reach/auto-id': workspace:*
+      '@reach/polymorphic': workspace:*
       '@reach/portal': workspace:*
       '@reach/rect': workspace:*
       '@reach/utils': workspace:*
@@ -626,6 +667,7 @@ importers:
       tsup: ^6.1.3
     dependencies:
       '@reach/auto-id': link:../auto-id
+      '@reach/polymorphic': link:../polymorphic
       '@reach/portal': link:../portal
       '@reach/rect': link:../rect
       '@reach/utils': link:../utils
@@ -659,12 +701,12 @@ importers:
       '@reach-internal/dev': workspace:*
       '@reach-internal/test': workspace:*
       '@reach-internal/tsconfig': workspace:*
-      '@reach/utils': workspace:*
+      '@reach/polymorphic': workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       tsup: ^6.1.3
     dependencies:
-      '@reach/utils': link:../utils
+      '@reach/polymorphic': link:../polymorphic
     devDependencies:
       '@reach-internal/dev': link:../../internal/dev
       '@reach-internal/test': link:../../internal/test

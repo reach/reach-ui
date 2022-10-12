@@ -19,6 +19,7 @@
 		"@reach/auto-id": "workspace:*",
 		"@reach/descendants": "workspace:*",
 		"@reach/machine": "workspace:*",
+		"@reach/polymorphic": "workspace:*",
 		"@reach/popover": "workspace:*",
 		"@reach/utils": "workspace:*",
 		"tiny-invariant": "^1.2.0"

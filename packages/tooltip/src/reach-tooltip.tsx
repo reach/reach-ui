@@ -50,7 +50,7 @@ import {
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import { Portal } from "@reach/portal";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { useRect } from "@reach/rect";

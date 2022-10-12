@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@reach/auto-id": "workspace:*",
 		"@reach/machine": "workspace:*",
+		"@reach/polymorphic": "workspace:*",
 		"@reach/utils": "workspace:*"
 	},
 	"devDependencies": {

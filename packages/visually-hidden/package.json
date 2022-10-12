@@ -16,7 +16,7 @@
 		"build": "tsup"
 	},
 	"dependencies": {
-		"@reach/utils": "workspace:*"
+		"@reach/polymorphic": "workspace:*"
 	},
 	"devDependencies": {
 		"@reach-internal/dev": "workspace:*",

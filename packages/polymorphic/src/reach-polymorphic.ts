@@ -6,6 +6,8 @@
 
 import type * as React from "react";
 
+declare const __DEV__: boolean;
+
 type Merge<P1 = {}, P2 = {}> = Omit<P1, keyof P2> & P2;
 
 /**
@@ -68,6 +70,15 @@ interface MemoComponent<IntrinsicElementString, OwnProps = {}>
 			: never
 	): React.ReactElement | null;
 }
+
+/** @internal */
+export default () => {
+	if (__DEV__) {
+		throw new Error(
+			"@reach/polymorphic is a package for internal utility types and should not be used directly."
+		);
+	}
+};
 
 export type {
 	ForwardRefComponent,

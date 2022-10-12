@@ -24,7 +24,7 @@ import {
 	useStatefulRefValue,
 	makeId,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 
 import type { Descendant } from "@reach/descendants";
 import type { Position } from "@reach/popover";

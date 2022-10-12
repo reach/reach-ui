@@ -39,7 +39,7 @@ import {
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import {
 	internal_checkedPropToStateValue as checkedPropToStateValue,
 	useMixedCheckbox,

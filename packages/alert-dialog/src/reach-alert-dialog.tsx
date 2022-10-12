@@ -39,7 +39,7 @@ import {
 	makeId,
 	useComposedRefs,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import invariant from "tiny-invariant";
 
 import type { DialogProps, DialogContentProps } from "@reach/dialog";

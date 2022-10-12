@@ -31,7 +31,7 @@ import {
 	useStatefulRefValue,
 	useUpdateEffect,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import {
 	createDescendantContext,
 	DescendantProvider,

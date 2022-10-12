@@ -22,7 +22,7 @@ import {
 	useDropdownContext,
 } from "@reach/dropdown";
 import { noop, useCheckStyles } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import { isFragment } from "react-is";
 
 import type { Position } from "@reach/popover";

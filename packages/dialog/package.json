@@ -16,6 +16,7 @@
 		"build": "tsup"
 	},
 	"dependencies": {
+		"@reach/polymorphic": "workspace:*",
 		"@reach/portal": "workspace:*",
 		"@reach/utils": "workspace:*",
 		"react-focus-lock": "2.5.2",

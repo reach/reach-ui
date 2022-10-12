@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@reach/dropdown": "workspace:*",
+		"@reach/polymorphic": "workspace:*",
 		"@reach/popover": "workspace:*",
 		"@reach/utils": "workspace:*"
 	},

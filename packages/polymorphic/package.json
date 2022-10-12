@@ -1,38 +1,29 @@
 {
-	"name": "@reach/alert-dialog",
+	"name": "@reach/polymorphic",
 	"version": "0.18.0-pre.3",
-	"description": "Accessible React Alert Dialog.",
+	"description": "Internal utility types for polymorphism in Reach UI.",
 	"author": "React Training <hello@reacttraining.com>",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/reach/reach-ui.git",
-		"directory": "packages/alert-dialog"
+		"directory": "packages/polymorphic"
 	},
 	"scripts": {
 		"build": "tsup"
 	},
-	"dependencies": {
-		"@reach/auto-id": "workspace:*",
-		"@reach/dialog": "workspace:*",
-		"@reach/polymorphic": "workspace:*",
-		"@reach/utils": "workspace:*",
-		"tiny-invariant": "^1.2.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@reach-internal/dev": "workspace:*",
-		"@reach-internal/test": "workspace:*",
 		"@reach-internal/tsconfig": "workspace:*",
 		"react": "^17.0.2",
-		"react-dom": "^17.0.2",
 		"tsup": "^6.1.3"
 	},
 	"peerDependencies": {
-		"react": "^16.8.0 || 17.x",
-		"react-dom": "^16.8.0 || 17.x"
+		"react": "^16.8.0 || 17.x"
 	},
-	"main": "./src/reach-alert-dialog.tsx",
-	"types": "./src/reach-alert-dialog.tsx",
+	"main": "./src/reach-polymorphic.ts",
+	"types": "./src/reach-polymorphic.ts",
 	"files": [
 		"CHANGELOG.md",
 		"LICENSE",

@@ -18,6 +18,7 @@
 	"dependencies": {
 		"@reach/auto-id": "workspace:*",
 		"@reach/descendants": "workspace:*",
+		"@reach/polymorphic": "workspace:*",
 		"@reach/popover": "workspace:*",
 		"@reach/utils": "workspace:*"
 	},

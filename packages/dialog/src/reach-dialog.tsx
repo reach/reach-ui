@@ -21,7 +21,7 @@ import {
 	useCheckStyles,
 	useComposedRefs,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import FocusLock from "react-focus-lock";
 import { RemoveScroll } from "react-remove-scroll";
 

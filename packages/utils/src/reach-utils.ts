@@ -1,5 +1,3 @@
-import type * as Polymorphic from "./polymorphic";
-
 export * from "./can-use-dom";
 export * from "./clone-valid-element";
 export * from "./compose-event-handlers";
@@ -27,5 +25,3 @@ export * from "./use-stable-callback";
 export * from "./use-stateful-ref-value";
 export * from "./use-update-effect";
 export * from "./types";
-
-export type { Polymorphic };

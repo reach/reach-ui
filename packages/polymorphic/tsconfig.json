@@ -1,0 +1,8 @@
+{
+	"extends": "@reach-internal/tsconfig/react-library.json",
+	"include": ["."],
+	"exclude": ["node_modules", "dist", "__tests__", "examples"],
+	"compilerOptions": {
+		"stripInternal": true
+	}
+}

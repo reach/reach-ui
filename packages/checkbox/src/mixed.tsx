@@ -37,7 +37,7 @@ import {
 	useIsomorphicLayoutEffect,
 	useComposedRefs,
 } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import { assign, useCreateMachine, useMachine } from "@reach/machine";
 import type { MachineEventWithRefs, StateMachine } from "@reach/machine";
 

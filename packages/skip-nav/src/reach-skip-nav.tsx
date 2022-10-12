@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCheckStyles } from "@reach/utils";
-import type { Polymorphic } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 
 // The user may want to provide their own ID (maybe there are multiple nav
 // menus on a page a use might want to skip at various points in tabbing?).

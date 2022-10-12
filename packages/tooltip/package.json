@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@reach/auto-id": "workspace:*",
+		"@reach/polymorphic": "workspace:*",
 		"@reach/portal": "workspace:*",
 		"@reach/rect": "workspace:*",
 		"@reach/utils": "workspace:*",
