@@ -10,7 +10,12 @@ const alias = packages.reduce((memo, pkg) => {
 		packagesDir,
 		`${pkg}/styles.css`
 	);
-	memo[`@reach/${pkg}`] = path.join(packagesDir, `${pkg}/src`);
+	let pkgJson = require(path.join(packagesDir, `${pkg}/package.json`));
+	if (pkgJson.main) {
+		memo[`@reach/${pkg}`] = path.join(packagesDir, pkg, pkgJson.main);
+	} else {
+		memo[`@reach/${pkg}`] = path.join(packagesDir, pkg, "src");
+	}
 	return memo;
 }, {});
 
