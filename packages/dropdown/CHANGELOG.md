@@ -1,5 +1,16 @@
 # @reach/dropdown
 
+## 0.18.0-pre.5
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/auto-id@0.18.0-pre.5`
+  - `@reach/descendants@0.18.0-pre.5`
+  - `@reach/polymorphic@0.18.0-pre.5`
+  - `@reach/popover@0.18.0-pre.5`
+  - `@reach/utils@0.18.0-pre.5`
+
 ## 0.18.0-pre.4
 
 ### Minor Changes
