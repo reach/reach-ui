@@ -1,5 +1,14 @@
 # @reach/alert
 
+## 0.18.0-pre.4
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/utils@0.18.0-pre.4`
+  - `@reach/polymorphic@0.18.0-pre.4`
+  - `@reach/visually-hidden@0.18.0-pre.4`
+
 ## 0.18.0-pre.3
 
 ### Patch Changes
