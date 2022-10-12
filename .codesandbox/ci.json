@@ -1,6 +1,0 @@
-{
-	"buildCommand": "build",
-	"sandboxes": ["/.codesandbox/templates/reach-ui"],
-	"node": "16",
-	"packages": ["packages/*"]
-}

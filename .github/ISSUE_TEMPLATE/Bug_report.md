@@ -15,7 +15,7 @@ about: Create a report to help make Reach UI better
 
 ### Reproducible example
 
-[CodeSandbox Template](https://codesandbox.io/s/reach-ui-template-xonfs)
+<!-- A link to a *minimal* reproducable example. -->
 
 ### Suggested solution(s)
 

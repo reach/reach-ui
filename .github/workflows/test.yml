@@ -7,7 +7,6 @@ on:
       - dev
   pull_request:
     paths-ignore:
-      - ".codesandbox/**"
       - "playground/**"
       - "scripts/**"
       - "website/**"
