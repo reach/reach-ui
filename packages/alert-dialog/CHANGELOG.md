@@ -1,5 +1,19 @@
 # @reach/alert-dialog
 
+## 0.18.0-pre.4
+
+### Minor Changes
+
+- We no longer check that our internal styles are included by looking for a defined CSS custom property. You can still include our base styles as before, but this removes the need to define `--reach-<pkg>` in your own stylesheets to silence dev warnings. ([`69df3a03`](https://github.com/reach/reach-ui/commit/69df3a038d12c0e731778c9ac6e18ba6f81fbb49))
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/utils@0.18.0-pre.4`
+  - `@reach/polymorphic@0.18.0-pre.4`
+  - `@reach/dialog@0.18.0-pre.4`
+  - `@reach/auto-id@0.18.0-pre.4`
+
 ## 0.18.0-pre.3
 
 ### Patch Changes
