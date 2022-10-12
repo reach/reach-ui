@@ -51,7 +51,8 @@ import {
 	useStableCallback,
 	useStatefulRefValue,
 } from "@reach/utils";
-import type { Polymorphic, DistributiveOmit } from "@reach/utils";
+import type { DistributiveOmit } from "@reach/utils";
+import type * as Polymorphic from "@reach/polymorphic";
 import { useMachine, useCreateMachine } from "@reach/machine";
 import type { StateMachine } from "@reach/machine";
 import {
