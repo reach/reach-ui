@@ -1,5 +1,18 @@
 # @reach/combobox
 
+## 0.18.0-pre.5
+
+### Patch Changes
+
+- Fix bug that prevents caret from moving up/down on keypress events in a combobox rendered as textarea ([`9e1f2e64`](https://github.com/reach/reach-ui/commit/9e1f2e649c180a967bc22aca124c56542363f3d5))
+- Updated dependencies:
+  - `@reach/auto-id@0.18.0-pre.5`
+  - `@reach/descendants@0.18.0-pre.5`
+  - `@reach/polymorphic@0.18.0-pre.5`
+  - `@reach/popover@0.18.0-pre.5`
+  - `@reach/portal@0.18.0-pre.5`
+  - `@reach/utils@0.18.0-pre.5`
+
 ## 0.18.0-pre.4
 
 ### Minor Changes

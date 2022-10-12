@@ -32,6 +32,7 @@
     "@reach/polymorphic": "0.18.0-pre.3"
   },
   "changesets": [
+    "chilled-bobcats-yell",
     "curly-lobsters-do",
     "great-seahorses-dream",
     "heavy-actors-perform",
