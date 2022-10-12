@@ -1,5 +1,34 @@
 # reach-storybook
 
+## 0.0.1-pre.5
+
+### Patch Changes
+
+- Updated dependencies:
+  - `@reach/combobox@0.18.0-pre.5`
+  - `@reach/accordion@0.18.0-pre.5`
+  - `@reach/alert@0.18.0-pre.5`
+  - `@reach/alert-dialog@0.18.0-pre.5`
+  - `@reach/auto-id@0.18.0-pre.5`
+  - `@reach/checkbox@0.18.0-pre.5`
+  - `@reach/descendants@0.18.0-pre.5`
+  - `@reach/dialog@0.18.0-pre.5`
+  - `@reach/disclosure@0.18.0-pre.5`
+  - `@reach/dropdown@0.18.0-pre.5`
+  - `@reach/listbox@0.18.0-pre.5`
+  - `@reach/machine@0.18.0-pre.5`
+  - `@reach/menu-button@0.18.0-pre.5`
+  - `@reach/popover@0.18.0-pre.5`
+  - `@reach/portal@0.18.0-pre.5`
+  - `@reach/rect@0.18.0-pre.5`
+  - `@reach/skip-nav@0.18.0-pre.5`
+  - `@reach/slider@0.18.0-pre.5`
+  - `@reach/tabs@0.18.0-pre.5`
+  - `@reach/tooltip@0.18.0-pre.5`
+  - `@reach/utils@0.18.0-pre.5`
+  - `@reach/visually-hidden@0.18.0-pre.5`
+  - `@reach/window-size@0.18.0-pre.5`
+
 ## 0.0.1-pre.4
 
 ### Patch Changes

@@ -1,5 +1,7 @@
 # @reach/utils
 
+## 0.18.0-pre.5
+
 ## 0.18.0-pre.4
 
 ### Minor Changes
