@@ -21,7 +21,7 @@ import {
 	useDropdownTrigger,
 	useDropdownContext,
 } from "@reach/dropdown";
-import { noop, useCheckStyles } from "@reach/utils";
+import { noop } from "@reach/utils";
 import type * as Polymorphic from "@reach/polymorphic";
 import { isFragment } from "react-is";
 
@@ -40,7 +40,6 @@ declare const __DEV__: boolean;
  */
 const Menu = React.forwardRef(
 	({ as: Comp = React.Fragment, id, children, ...rest }, forwardedRef) => {
-		useCheckStyles("menu-button");
 		let parentIsFragment = React.useMemo(() => {
 			try {
 				// To test if the component renders a fragment we need to actually

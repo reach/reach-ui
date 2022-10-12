@@ -3,63 +3,6 @@ import { useRef, useEffect } from "react";
 
 declare const __DEV__: boolean;
 
-let checkedPkgs: { [key: string]: boolean } = {};
-
-/**
- * When in dev mode, checks that styles for a given `@reach` package are loaded.
- *
- * @param packageName Name of the package to check.
- * @example checkStyles("dialog") will check for styles for @reach/dialog
- */
-export function checkStyles(packageName: string): void {
-	if (__DEV__) {
-		// only check once per package
-		if (checkedPkgs[packageName]) return;
-		checkedPkgs[packageName] = true;
-
-		if (
-			parseInt(
-				window
-					.getComputedStyle(document.body)
-					.getPropertyValue(`--reach-${packageName}`),
-				10
-			) !== 1
-		) {
-			console.warn(
-				`@reach/${packageName} styles not found. If you are using a bundler like webpack or parcel include this in the entry file of your app before any of your own styles:
-
-      import "@reach/${packageName}/styles.css";
-
-    Otherwise you'll need to include them some other way:
-
-      <link rel="stylesheet" type="text/css" href="node_modules/@reach/${packageName}/styles.css" />
-
-    For more information visit https://ui.reach.tech/styling.
-    `
-			);
-		}
-	}
-}
-
-/**
- * When in dev mode, checks that styles for a given `@reach` package are loaded.
- *
- * @param packageName Name of the package to check.
- * @example useCheckStyles("dialog") will check for styles for @reach/dialog
- */
-export function useCheckStyles(packageName: string): void {
-	if (__DEV__) {
-		let warned = useRef(false);
-		useEffect(() => {
-			if (!warned.current) {
-				warned.current = true;
-				checkStyles(packageName);
-			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, []);
-	}
-}
-
 /**
  * Logs a warning in dev mode when a component switches from controlled to
  * uncontrolled, or vice versa

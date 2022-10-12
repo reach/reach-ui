@@ -8,42 +8,16 @@ import SEO from "../components/SEO";
 # Styling
 
 [Including Base Styles](#including-base-styles) -
-[Overriding and Adding New Styles](#overriding--adding-new-styles)
+[Overriding and Adding New Styles](#overriding--adding-new-styles) -
+[CSS Selectors](#css-selectors)
 
 Styling a Reach component feels similar to styling any native element. There are no themes and you don't have to prescribe to any specific approach to styling. There are some basic styles to make the components usable off-the-shelf, but you can override and add to them with stylesheets, styled components, emotion, glamor, whatever you want.
 
-# Including Base Styles
+## Including Base Styles
 
-Reach UI uses stylesheets for the components' base styles. You must include these styles in your app for the components to work properly.
+Reach UI uses stylesheets for the components' base styles. You should include [or copy] these styles in your app for the components to work properly.
 
-## Automatically Including Styles
-
-A webpack plugin is in development that will automatically bundle the styles so you don't have to.
-
-## Skip including styles
-
-Normally, you'll receive a warning when you forget to include the matching CSS file. If you're implementing all styles yourself, you can disable this warning by setting a root CSS variable matching the package name to 1.
-
-**Please tread carefully** - in most cases, the styles you import are better to override than remove completely.
-
-Here's an example:
-
-```css
-:root {
-	--reach-dialog: 1;
-}
-```
-
-If you still see the warning when running tests in Jest, you can skip them by mocking the function that checks the styles.
-
-```js
-jest.mock("@reach/utils", () => ({
-	...jest.requireActual("@reach/utils"),
-	checkStyles: jest.fn(),
-}));
-```
-
-## Using a Bundler (webpack, parcel, etc.)
+### Using a Bundler (webpack, parcel, etc.)
 
 If you are using a module bundler like webpack or parcel, you can import them where you import the component.
 
@@ -59,7 +33,7 @@ import "@reach/menu-button/styles.css";
 
 You will need to configure the [webpack CSS](https://webpack.js.org/loaders/css-loader) loader if you haven't already. Parcel requires no configuration.
 
-## Not Using a Bundler
+### Not Using a Bundler
 
 If you’re not using a bundler you can find the styles at:
 
@@ -75,7 +49,7 @@ Include those files however you include the rest of your stylesheets. Alternativ
 />
 ```
 
-# Overriding &amp; Adding New Styles
+## Overriding &amp; Adding New Styles
 
 You should be able to style Reach UI components like any other element in your app. If not, report a bug!
 

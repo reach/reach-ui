@@ -18,7 +18,6 @@ import {
 	createContext,
 	getOwnerDocument,
 	noop,
-	useCheckStyles,
 	useComposedRefs,
 } from "@reach/utils";
 import type * as Polymorphic from "@reach/polymorphic";
@@ -56,8 +55,6 @@ function DialogWrapper({
 	children,
 	...props
 }: DialogWrapperProps) {
-	useCheckStyles("dialog");
-
 	// We want to ignore the immediate focus of a tooltip so it doesn't pop
 	// up again when the menu closes, only pops up when focus returns again
 	// to the tooltip (like native OS tooltips).

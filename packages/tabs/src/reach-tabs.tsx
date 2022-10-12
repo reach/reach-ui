@@ -34,11 +34,9 @@ import {
 	useIsomorphicLayoutEffect as useLayoutEffect,
 	createContext,
 	isBoolean,
-	isNumber,
 	isFunction,
 	makeId,
 	noop,
-	useCheckStyles,
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
@@ -140,8 +138,6 @@ const Tabs = React.forwardRef(
 			},
 			[keyboardActivation, onChange, setSelectedIndex, tabs]
 		);
-
-		useCheckStyles("tabs");
 
 		return (
 			<DescendantProvider

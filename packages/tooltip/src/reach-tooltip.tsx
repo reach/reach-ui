@@ -46,7 +46,6 @@ import {
 	getDocumentDimensions,
 	getOwnerDocument,
 	makeId,
-	useCheckStyles,
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
@@ -272,8 +271,6 @@ function useTooltip<ElementType extends HTMLElement | SVGElement>({
 			setIsVisible(isTooltipVisible(id));
 		});
 	}, [id]);
-
-	useCheckStyles("tooltip");
 
 	React.useEffect(() => {
 		let ownerDocument = getOwnerDocument(ownRef.current)!;

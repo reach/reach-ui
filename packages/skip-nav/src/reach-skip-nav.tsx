@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useCheckStyles } from "@reach/utils";
 import type * as Polymorphic from "@reach/polymorphic";
 
 // The user may want to provide their own ID (maybe there are multiple nav
@@ -20,7 +19,6 @@ const SkipNavLink = React.forwardRef(function SkipNavLink(
 	forwardedRef
 ) {
 	let id = contentId || defaultId;
-	useCheckStyles("skip-nav");
 	return (
 		<Comp
 			{...props}

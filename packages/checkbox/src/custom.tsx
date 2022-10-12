@@ -35,7 +35,6 @@ import * as React from "react";
 import {
 	createContext,
 	isFunction,
-	useCheckStyles,
 	useComposedRefs,
 	composeEventHandlers,
 } from "@reach/utils";
@@ -107,8 +106,6 @@ const CustomCheckboxContainer = React.forwardRef(
 			inputRef,
 			setFocused,
 		};
-
-		useCheckStyles("checkbox");
 
 		return (
 			<CustomCheckboxContextProvider {...context}>

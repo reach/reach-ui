@@ -25,7 +25,6 @@ import {
 	isFunction,
 	makeId,
 	noop,
-	useCheckStyles,
 	useComposedRefs,
 	useIsomorphicLayoutEffect as useLayoutEffect,
 	useStatefulRefValue,
@@ -339,8 +338,6 @@ export const Combobox = React.forwardRef(
 			transition,
 			isControlledRef,
 		};
-
-		useCheckStyles("combobox");
 
 		return (
 			<DescendantProvider

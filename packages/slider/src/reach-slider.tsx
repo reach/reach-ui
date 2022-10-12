@@ -34,7 +34,6 @@ import {
 	noop,
 	useComposedRefs,
 	useControlledState,
-	useCheckStyles,
 	useIsomorphicLayoutEffect as useLayoutEffect,
 	useStableLayoutCallback,
 } from "@reach/utils";
@@ -642,8 +641,6 @@ const SliderInput = React.forwardRef(function SliderInput(
 			form?.removeEventListener("reset", handleReset);
 		};
 	}, [setValue, shouldRenderInput]);
-
-	useCheckStyles("slider");
 
 	return (
 		<SliderProvider

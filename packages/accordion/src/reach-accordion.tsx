@@ -13,7 +13,6 @@ import {
 	createContext,
 	makeId,
 	noop,
-	useCheckStyles,
 	useComposedRefs,
 	useControlledState,
 	composeEventHandlers,
@@ -138,8 +137,6 @@ const Accordion = React.forwardRef(function Accordion(
 		},
 		[collapsible, multiple, onChange, setOpenPanels]
 	);
-
-	useCheckStyles("accordion");
 
 	return (
 		<DescendantProvider

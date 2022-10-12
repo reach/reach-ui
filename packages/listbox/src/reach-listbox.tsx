@@ -45,7 +45,6 @@ import {
 	isRightClick,
 	isString,
 	makeId,
-	useCheckStyles,
 	useComposedRefs,
 	useControlledSwitchWarning,
 	useIsomorphicLayoutEffect as useLayoutEffect,
@@ -288,8 +287,6 @@ const ListboxInput = React.forwardRef(function ListboxInput(
 			form?.removeEventListener("reset", handleReset);
 		};
 	}, [inputRef, isControlled, send]);
-
-	useCheckStyles("listbox");
 
 	return (
 		<Comp
