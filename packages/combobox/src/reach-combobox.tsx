@@ -1038,6 +1038,7 @@ function useKeyDown() {
 		transition,
 		autocompletePropRef,
 		persistSelectionRef,
+		inputRef,
 		isControlledRef,
 	} = React.useContext(ComboboxContext);
 
@@ -1093,20 +1094,32 @@ function useKeyDown() {
 			return options[options.length - 1];
 		}
 
+		// In standard inputs, ArrowUp/ArrowDown will expand the options list in the
+		// IDLE state and prevent the browser's default behavior (mostly just
+		// scrolling the page). When the input is rendered as a textarea and has a
+		// value containing more than one line, we don't want to do that.
+		// ArrowUp/ArrowDown should move the caret up/dowm in multiline situations.
+		let textareaHasMultilineValue =
+			inputRef.current?.tagName.toUpperCase() === "TEXTAREA" &&
+			inputRef.current.value.includes(`\n`);
+
 		switch (event.key) {
 			case "ArrowDown":
-				// Don't scroll the page
-				event.preventDefault();
 				if (!options || !options.length) {
 					return;
 				}
 
 				if (state === IDLE) {
+					if (textareaHasMultilineValue) {
+						return;
+					}
 					// Opening a closed list
+					event.preventDefault();
 					transition(NAVIGATE, {
 						persistSelection: persistSelectionRef.current,
 					});
 				} else {
+					event.preventDefault();
 					let next = getNextOption();
 					transition(NAVIGATE, { value: next ? next.value : null });
 				}
@@ -1114,18 +1127,21 @@ function useKeyDown() {
 
 			// A lot of duplicate code with ArrowDown up next, I'm already over it.
 			case "ArrowUp":
-				// Don't scroll the page
-				event.preventDefault();
-				if (!options || options.length === 0) {
+				if (!options || !options.length) {
 					return;
 				}
 
 				if (state === IDLE) {
+					if (textareaHasMultilineValue) {
+						return;
+					}
 					// Opening a closed list
+					event.preventDefault();
 					transition(NAVIGATE, {
 						persistSelection: persistSelectionRef.current,
 					});
 				} else {
+					event.preventDefault();
 					let prev = getPreviousOption();
 					transition(NAVIGATE, { value: prev ? prev.value : null });
 				}
