@@ -11,16 +11,10 @@ import "@reach/combobox/styles.css";
 
 let name = "Basic";
 
-function showOpts<R>(
-	results: R[],
-	render: (props: { result: R; index: number }) => React.ReactNode
-) {
-	return results.slice(0, 10).map((result, index) => render({ result, index }));
-}
-
 function MyCombobox() {
 	let [term, setTerm] = React.useState("");
 	let results = useCityMatch(term);
+	console.log(results);
 
 	return (
 		<div>
@@ -33,8 +27,11 @@ function MyCombobox() {
 				{results ? (
 					<ComboboxPopover portal={false}>
 						<ComboboxList data-testid="list" as="ul">
-							{showOpts(results, ({ result, index }) => (
-								<ComboboxOption as="li" key={index} value={result.city} />
+							{results.slice(0, 10).map((result, index) => (
+								<ComboboxOption
+									key={index}
+									value={`${result.city}, ${result.state}`}
+								/>
 							))}
 						</ComboboxList>
 					</ComboboxPopover>
@@ -50,16 +47,3 @@ function Example() {
 
 Example.storyName = name;
 export { Example };
-
-////////////////////////////////////////////////////////////////////////////////
-
-const inputStyle = {
-	width: 400,
-	fontSize: "100%",
-	padding: "0.33rem",
-};
-
-const popupStyle = {
-	boxShadow: "0px 2px 6px hsla(0, 0%, 0%, 0.15)",
-	border: "none",
-};
