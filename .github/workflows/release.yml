@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
+          node-version: 18
 
       - name: Install dependencies
         uses: pnpm/action-setup@v2.2.2
