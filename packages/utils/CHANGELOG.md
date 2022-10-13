@@ -1,30 +1,16 @@
-# @reach/utils
+# `@reach/utils`
 
-## 0.18.0-pre.5
+## 0.18.0
 
-## 0.18.0-pre.4
+### BREAKING Changes
 
-### Minor Changes
-
-- Removed the `useCheckStyles` export ([`69df3a03`](https://github.com/reach/reach-ui/commit/69df3a038d12c0e731778c9ac6e18ba6f81fbb49))
-- All `Polymorphic` types that were previously exported from `@reach/utils` have been moved to a separate package `@reach/polymorphic`. As `@reach/utils` is an internal package, this [breaking] change should not affect you [if you listened to us and did not use the package directly]. ([`e0f6dab0`](https://github.com/reach/reach-ui/commit/e0f6dab0c018a95d921bbeef0433bcb3a23365ee))
-
-## 0.18.0-pre.3
-
-## 0.18.0-pre.2
-
-## 0.18.0-pre.1
+- All default exports have been removed. Replace all default imports with the appropriate documented named export.
+- The output directory structure has changed slightly. Module files are now named `reach-<pkg>.mjs` instead of `reach-<pkg>.esm.js`.
+- Removed the `useCheckStyles` export
+- All `Polymorphic` types that were previously exported from `@reach/utils` have been moved to a separate package `@reach/polymorphic`. As `@reach/utils` is an internal package, this [breaking] change should not affect you [if you listened to us and did not use the package directly].
 
 ### Minor Changes
 
-- The output directory structure has changed slightly. Module files are now named `reach-<pkg>.mjs` instead of `reach-<pkg>.esm.js`. ([`6e40773f`](https://github.com/reach/reach-ui/commit/6e40773fc0f430dba9029fee57b526a7eb25827e))
-
-## 0.18.0-pre.0
-
-### Minor Changes
-
-- We have simplified our build setup to remove a boatload of dependencies. Build output for all packages may look slightly different, though functionally packages that don't have explicit changes marked in the release notes have not changed. ([`c2a1794b`](https://github.com/reach/reach-ui/commit/c2a1794b6818822080f428a1cbe2cec2b4a0a218))
+- We have simplified our build setup to remove a boatload of dependencies. Build output for all packages may look slightly different, though functionally packages that don't have explicit changes marked in the release notes have not changed.
 
   This may affect you if you use `patch-package` to modify output code. If you need support for legacy browsers, the new bundle may not transpile the same ECMA features as before. In that case you may want to transpile Reach packages directly.
-
-- All default exports have been removed. Replace all default imports with the appropriate documented named export. ([`79319a75`](https://github.com/reach/reach-ui/commit/79319a75a639db398c62ca3296896894eb3e539e))
