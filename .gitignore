@@ -15,6 +15,5 @@ coverage
 # website
 /website-deploy-key
 /website-deploy-key.pub
-/website/public/
 /__git
 /test
