@@ -1,0 +1,33 @@
+{
+	"extends": ["chance", "chance/react", "chance/typescript"],
+	"rules": {
+		"jsx-a11y/anchor-has-content": [
+			"warn",
+			{ "components": ["Link", "NavLink"] }
+		],
+		"jsx-a11y/anchor-is-valid": [
+			"warn",
+			{ "aspects": ["noHref", "invalidHref"] }
+		],
+		"react/react-in-jsx-scope": "off"
+	},
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx"],
+			"rules": {
+				"@typescript-eslint/consistent-type-imports": [
+					"warn",
+					{
+						"disallowTypeAnnotations": false
+					}
+				]
+			}
+		},
+		{
+			"files": ["*.test.ts", "*.test.tsx"],
+			"rules": {
+				"react/display-name": "off"
+			}
+		}
+	]
+}

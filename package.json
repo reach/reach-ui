@@ -10,12 +10,14 @@
 	"scripts": {
 		"preinstall": "npx -y only-allow pnpm",
 		"build": "turbo run build --filter=@reach/* && node scripts/postbuild.js",
+		"build:website": "pnpm --filter reach-website build",
 		"test:react-16": "USE_REACT_16=true vitest",
 		"test:react-18": "USE_REACT_18=true vitest",
 		"test": "vitest",
 		"lint": "eslint packages",
 		"format": "prettier --write '**/*.{js,jsx,ts,tsx,md,mdx,json,css,scss}'",
 		"dev": "pnpm --filter reach-storybook start",
+		"dev:website": "pnpm --filter reach-website dev",
 		"release": "node scripts/prepublish.js && changeset publish",
 		"changeset": "changeset",
 		"version": "changeset version"
@@ -69,7 +71,7 @@
 		"css": "^3.0.0",
 		"css.escape": "^1.5.1",
 		"dom-accessibility-api": "^0.5.14",
-		"eslint": "^8.19.0",
+		"eslint": "^8.23.1",
 		"eslint-config-chance": "^2.0.2",
 		"eslint-import-resolver-node": "^0.3.6",
 		"eslint-import-resolver-typescript": "^3.1.5",
