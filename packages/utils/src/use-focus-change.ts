@@ -22,20 +22,24 @@ export function useFocusChange(
 		lastActiveElement.current = ownerDocument.activeElement;
 
 		function onChange(event: FocusEvent) {
-			if (lastActiveElement.current !== ownerDocument.activeElement) {
-				handleChange(
-					ownerDocument.activeElement,
-					lastActiveElement.current,
-					event
-				);
-				lastActiveElement.current = ownerDocument.activeElement;
+			if (
+				when === "focus" &&
+				lastActiveElement.current === ownerDocument.activeElement
+			) {
+				return;
 			}
+			handleChange(
+				ownerDocument.activeElement,
+				lastActiveElement.current,
+				event
+			);
+			lastActiveElement.current = ownerDocument.activeElement;
 		}
 
 		ownerDocument.addEventListener(when, onChange, true);
 
 		return () => {
-			ownerDocument.removeEventListener(when, onChange);
+			ownerDocument.removeEventListener(when, onChange, true);
 		};
 	}, [when, handleChange, ownerDocument]);
 }
