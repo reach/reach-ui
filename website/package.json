@@ -35,15 +35,16 @@
 		"@reach/utils": "workspace:*",
 		"@reach/visually-hidden": "workspace:*",
 		"@reach/window-size": "workspace:*",
-		"@remix-run/node": "^1.7.2",
-		"@remix-run/react": "^1.7.2",
-		"@remix-run/serve": "^1.7.2",
+		"@remix-run/node": "1.7.2",
+		"@remix-run/react": "1.7.2",
+		"@remix-run/serve": "1.7.2",
 		"isbot": "^3.5.4",
+		"match-sorter": "^6.3.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	},
 	"devDependencies": {
-		"@remix-run/dev": "^1.7.2",
+		"@remix-run/dev": "1.7.2",
 		"@types/react": "^17.0.47",
 		"@types/react-dom": "^17.0.17",
 		"typescript": "^4.7.4"

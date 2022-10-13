@@ -101,5 +101,10 @@
 		"vitest-axe": "0.0.7",
 		"vitest-dom": "0.0.4",
 		"vitest-tsconfig-paths": "^3.4.1"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@remix-run/dev@1.7.2": "patches/@remix-run__dev@1.7.2.patch"
+		}
 	}
 }

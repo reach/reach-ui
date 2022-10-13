@@ -1,0 +1,20 @@
+diff --git a/dist/compiler.js b/dist/compiler.js
+index b1cf495c3bc4ee202d4d833911773ecd26fb6bc1..62fa4f15ddcc8e1b359f66093910a05163982110 100644
+--- a/dist/compiler.js
++++ b/dist/compiler.js
+@@ -335,6 +335,7 @@ async function createBrowserBuild(config, options) {
+     assetNames: "_assets/[name]-[hash]",
+     publicPath: config.publicPath,
+     define: {
++      __DEV__: JSON.stringify(options.mode) === "development",
+       "process.env.NODE_ENV": JSON.stringify(options.mode),
+       "process.env.REMIX_DEV_SERVER_WS_PORT": JSON.stringify(config.devServerPort)
+     },
+@@ -402,6 +403,7 @@ function createServerBuild(config, options, assetsManifestPromiseRef) {
+     assetNames: "_assets/[name]-[hash]",
+     publicPath: config.publicPath,
+     define: {
++      __DEV__: JSON.stringify(options.mode) === "development",
+       "process.env.NODE_ENV": JSON.stringify(options.mode),
+       "process.env.REMIX_DEV_SERVER_WS_PORT": JSON.stringify(config.devServerPort)
+     },
