@@ -5,7 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#menubutton
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/menu-button
 ---
 
-import { AsPropWarning } from "./ui/as-prop-warning";
 import { Pipe } from "./ui/pipe";
 
 An accessible dropdown menu for the common dropdown menu button design pattern.
@@ -77,11 +76,11 @@ The wrapper component for the other components.
 
 #### Menu Props
 
-| Prop                         | Type                          | Required |
-| ---------------------------- | ----------------------------- | -------- |
-| [`as`](#menu-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#menu-children) | `node`                        | false    |
-| [`id`](#menu-id)             | `string`                      | false    |
+| Prop                         | Type                    | Required |
+| ---------------------------- | ----------------------- | -------- |
+| [`as`](#menu-as)             | `string` \| `Component` | false    |
+| [`children`](#menu-children) | `node`                  | false    |
+| [`id`](#menu-id)             | `string`                | false    |
 
 ##### Menu `as`
 
@@ -89,7 +88,15 @@ The wrapper component for the other components.
 
 A string representing an HTML element or a React component that will tell the `Menu` what underlying element to render. Defaults to `React.Fragment`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### Menu `children`
 
@@ -216,7 +223,15 @@ Any props not listed above will be spread onto the underlying button element. Yo
 
 A string representing an HTML element or a React component that will tell the `MenuButton` what underlying element to render. Defaults to `button`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### MenuButton `children`
 
@@ -446,13 +461,13 @@ function Example() {
 
 #### MenuItem Props
 
-| Prop                                     | Type                          | Required |
-| ---------------------------------------- | ----------------------------- | -------- |
-| [element props](#menuitem-element-props) |                               |          |
-| [`as`](#menuitem-as)                     | `string` <Pipe /> `Component` | false    |
-| [`children`](#menuitem-children)         | `node`                        | false    |
-| [`disabled`](#menuitem-disabled)         | `boolean`                     | false    |
-| [`onSelect`](#menuitem-onselect)         | `func`                        | true     |
+| Prop                                     | Type                    | Required |
+| ---------------------------------------- | ----------------------- | -------- |
+| [element props](#menuitem-element-props) |                         |          |
+| [`as`](#menuitem-as)                     | `string` \| `Component` | false    |
+| [`children`](#menuitem-children)         | `node`                  | false    |
+| [`disabled`](#menuitem-disabled)         | `boolean`               | false    |
+| [`onSelect`](#menuitem-onselect)         | `func`                  | true     |
 
 ##### MenuItem element props
 
@@ -607,13 +622,13 @@ To change the styles of a highlighted menu item, use this pseudo-pseudo selector
 
 #### MenuLink Props
 
-| Prop                                     | Type                          | Required |
-| ---------------------------------------- | ----------------------------- | -------- |
-| [element props](#menulink-element-props) |                               |          |
-| [`as`](#menulink-as)                     | `string` <Pipe /> `Component` | false    |
-| [`children`](#menulink-children)         | `node`                        | false    |
-| [`disabled`](#menulink-disabled)         | `boolean`                     | false    |
-| [`onSelect`](#menulink-onselect)         | `func`                        | false    |
+| Prop                                     | Type                    | Required |
+| ---------------------------------------- | ----------------------- | -------- |
+| [element props](#menulink-element-props) |                         |          |
+| [`as`](#menulink-as)                     | `string` \| `Component` | false    |
+| [`children`](#menulink-children)         | `node`                  | false    |
+| [`disabled`](#menulink-disabled)         | `boolean`               | false    |
+| [`onSelect`](#menulink-onselect)         | `func`                  | false    |
 
 ##### MenuLink element props
 
@@ -635,7 +650,7 @@ All props are spread to the underlying element
 
 A string representing an HTML element or a React component that will tell the `MenuLink` what underlying element to render. Defaults to `a`.
 
-While `MenuLink` should always render an HTML anchor tag, this is useful to pass a styled component or if you are using a router and need to use its `Link` component.
+While `MenuLink` should always render an HTML anchor tag, this is useful to pass a link component from your design system, or if you are using a router and need to use its `Link` component.
 
 ```jsx
 import { Link } from "react-router";
@@ -651,12 +666,7 @@ import { Link } from "react-router";
 </Menu>;
 ```
 
-Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t it won't work because we will not be able to manage focus on the element the component renders.
-
-```jsx
-import { Link } from "gatsby";
-<MenuLink as={GatsbyLink} to="/somewhere" />;
-```
+Additionally, if other routers' `Link` component uses the `React.forwardRef` API, you can pass them in as well. If they don’t, some functionality won't work because we will not be able to manage focus on the element rendered by the component.
 
 ##### MenuLink `children`
 

@@ -3,8 +3,6 @@ title: VisuallyHidden
 description: React component to provide visually hidden text for screen readers
 ---
 
-import { AsPropWarning } from "./ui/as-prop-warning";
-
 - Source: https://github.com/reach/reach-ui/tree/main/packages/visually-hidden
 - Origin: https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
 - Further reading: https://a11yproject.com/posts/how-to-hide-content/
@@ -42,10 +40,10 @@ import { VisuallyHidden } from "@reach/visually-hidden";
 
 #### VisuallyHidden Props
 
-| Prop                                   | Type                          | Required |
-| -------------------------------------- | ----------------------------- | -------- |
-| [`as`](#visuallyhidden-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#visuallyhidden-children) | `node`                        | true     |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#visuallyhidden-as)             | `string` \| `Component` | false    |
+| [`children`](#visuallyhidden-children) | `node`                  | true     |
 
 ##### VisuallyHidden `as`
 
@@ -53,7 +51,15 @@ import { VisuallyHidden } from "@reach/visually-hidden";
 
 A string representing an HTML element or a React component that will tell the `VisuallyHidden` what element to render. Defaults to `span`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### VisuallyHidden `children`
 

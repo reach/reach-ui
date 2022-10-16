@@ -5,9 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#disclosure
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/disclosure
 ---
 
-import { AsPropWarning } from "./ui/as-prop-warning";
-import { Pipe } from "./ui/pipe";
-
 A disclosure is a button that controls the visibility of a panel of content. When the content inside the panel is hidden, it is often styled as a typical push button with a right-pointing arrow or triangle to hint that activating the button will display additional content. When the content is visible, the arrow or triangle typically points down.
 
 If you have a group of disclosures that stack vertically and exist within the same logical context, you may want to use [`@reach/accordion`](/accordion) instead.
@@ -84,13 +81,13 @@ return (
 
 #### Disclosure Props
 
-| Prop                                     | Type                       | Required |
-| ---------------------------------------- | -------------------------- | -------- |
-| [`children`](#disclosure-children)       | `node`                     | true     |
-| [`defaultOpen`](#disclosure-defaultopen) | `boolean`                  | false    |
-| [`id`](#disclosure-id)                   | `string` <Pipe /> `number` | false    |
-| [`onChange`](#disclosure-onchange)       | `func`                     | false    |
-| [`open`](#disclosure-open)               | `boolean`                  | false    |
+| Prop                                     | Type                 | Required |
+| ---------------------------------------- | -------------------- | -------- |
+| [`children`](#disclosure-children)       | `node`               | true     |
+| [`defaultOpen`](#disclosure-defaultopen) | `boolean`            | false    |
+| [`id`](#disclosure-id)                   | `string` \| `number` | false    |
+| [`onChange`](#disclosure-onchange)       | `func`               | false    |
+| [`open`](#disclosure-open)               | `boolean`            | false    |
 
 ##### Disclosure `children`
 
@@ -194,10 +191,10 @@ Please see the [styling guide](/styling).
 
 #### DisclosureButton Props
 
-| Prop                                     | Type                          | Required |
-| ---------------------------------------- | ----------------------------- | -------- |
-| [`as`](#disclosurebutton-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#disclosurebutton-children) | `node`                        | true     |
+| Prop                                     | Type                    | Required |
+| ---------------------------------------- | ----------------------- | -------- |
+| [`as`](#disclosurebutton-as)             | `string` \| `Component` | false    |
+| [`children`](#disclosurebutton-children) | `node`                  | true     |
 
 ##### DisclosureButton `as`
 
@@ -205,7 +202,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `DisclosureButton` what element to render. Defaults to `button`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### DisclosureButton `children`
 
@@ -234,10 +239,10 @@ Please see the [styling guide](/styling).
 
 #### DisclosurePanel Props
 
-| Prop                                    | Type                          | Required |
-| --------------------------------------- | ----------------------------- | -------- |
-| [`as`](#disclosurepanel-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#disclosurepanel-children) | `node`                        | true     |
+| Prop                                    | Type                    | Required |
+| --------------------------------------- | ----------------------- | -------- |
+| [`as`](#disclosurepanel-as)             | `string` \| `Component` | false    |
+| [`children`](#disclosurepanel-children) | `node`                  | true     |
 
 ##### DisclosurePanel `as`
 
@@ -245,7 +250,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `DisclosurePanel` what element to render. Defaults to `div`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### DisclosurePanel `children`
 

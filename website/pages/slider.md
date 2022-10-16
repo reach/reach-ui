@@ -5,9 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#slider
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/slider
 ---
 
-import { Note } from "./ui/note";
-import { Pipe } from "./ui/pipe";
-
 A UI input component where the user selects a value from within a given range. A Slider has a handle that can be moved along a track to change its value. When the user's mouse or focus is on the Slider's handle, the value can be incremented with keyboard controls.
 
 Sliders are composed by an outer `Slider` component with a `SliderTrack` child component. `SliderTrack` can accept `SliderRange`, `SliderMarker` and `SliderHandle` components as children.
@@ -121,21 +118,21 @@ Please see the [styling guide](/styling).
 
 #### Slider Props
 
-| Prop                                           | Type                                 | Required | Default        |
-| ---------------------------------------------- | ------------------------------------ | -------- | -------------- |
-| [`children`](#slider-children)                 | `node`                               | true     |                |
-| [`defaultValue`](#slider-defaultvalue)         | `number`                             | false    |                |
-| [`disabled`](#slider-disabled)                 | `boolean`                            | false    |                |
-| [`getAriaLabel`](#slider-getarialabel)         | `func`                               | false    |                |
-| [`getAriaValueText`](#slider-getariavaluetext) | `func`                               | false    |                |
-| [`handleAlignment`](#slider-handlealignment)   | `"center"` <Pipe /> `"contain"`      | false    | `"center"`     |
-| [`max`](#slider-max)                           | `number`                             | false    | `100`          |
-| [`min`](#slider-min)                           | `number`                             | false    | `0`            |
-| [`name`](#slider-name)                         | `string`                             | false    |                |
-| [`onChange`](#slider-onchange)                 | `func`                               | false    |                |
-| [`orientation`](#slider-orientation)           | `"horizontal"` <Pipe /> `"vertical"` | false    | `"horizontal"` |
-| [`step`](#slider-step)                         | `number`                             | false    | `1`            |
-| [`value`](#slider-value)                       | `number`                             | false    |                |
+| Prop                                           | Type                           | Required | Default        |
+| ---------------------------------------------- | ------------------------------ | -------- | -------------- |
+| [`children`](#slider-children)                 | `node`                         | true     |                |
+| [`defaultValue`](#slider-defaultvalue)         | `number`                       | false    |                |
+| [`disabled`](#slider-disabled)                 | `boolean`                      | false    |                |
+| [`getAriaLabel`](#slider-getarialabel)         | `func`                         | false    |                |
+| [`getAriaValueText`](#slider-getariavaluetext) | `func`                         | false    |                |
+| [`handleAlignment`](#slider-handlealignment)   | `"center"` \| `"contain"`      | false    | `"center"`     |
+| [`max`](#slider-max)                           | `number`                       | false    | `100`          |
+| [`min`](#slider-min)                           | `number`                       | false    | `0`            |
+| [`name`](#slider-name)                         | `string`                       | false    |                |
+| [`onChange`](#slider-onchange)                 | `func`                         | false    |                |
+| [`orientation`](#slider-orientation)           | `"horizontal"` \| `"vertical"` | false    | `"horizontal"` |
+| [`step`](#slider-step)                         | `number`                       | false    | `1`            |
+| [`value`](#slider-value)                       | `number`                       | false    |                |
 
 ##### Slider `children`
 
@@ -278,7 +275,7 @@ Please see the [styling guide](/styling).
 
 The (typically) highlighted portion of the track that represents the space between the slider's `min` value and its current value.
 
-<Note>
+<div class="Note">
 	<p>
 		<strong>NOTE:</strong> This component was named{" "}
 		<code>SliderTrackHighlight</code> in a previous version of Reach UI. That
@@ -286,7 +283,7 @@ The (typically) highlighted portion of the track that represents the space betwe
 		projects to replace <code>SliderTrackHighlight</code> with{" "}
 		<code>SliderRange</code>.
 	</p>
-</Note>
+</div>
 
 #### SliderRange CSS Selectors
 

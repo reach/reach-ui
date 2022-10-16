@@ -5,9 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#accordion
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/accordion
 ---
 
-import { AsPropWarning } from "./ui/as-prop-warning";
-import { Pipe } from "./ui/pipe";
-
 An accordion is a vertically stacked group of collapsible sections. An accordion is composed of grouped buttons and panels. When a user selects an accordion button, its corresponding panel should switch between 'open' and 'collapsed' states.
 
 Accordions follow many consistent patterns but do allow for some variability in behavior. For example, some accordions only allow one panel to be open at a time, where others may allow multiple or all panels to be open simultaneously. Similarly, many accordions will allow all panels to be simultaneously collapsed, while others may require one panel to be open at all times.
@@ -326,16 +323,16 @@ return (
 
 #### Accordion Props
 
-| Prop                                      | Type                          | Required |
-| ----------------------------------------- | ----------------------------- | -------- |
-| [`as`](#accordion-as)                     | `string` <Pipe /> `Component` | false    |
-| [`children`](#accordion-children)         | `node`                        | true     |
-| [`collapsible`](#accordion-collapsible)   | `boolean`                     | false    |
-| [`defaultIndex`](#accordion-defaultindex) | `number` <Pipe /> `number[]`  | false    |
-| [`index`](#accordion-index)               | `number` <Pipe /> `number[]`  | false    |
-| [`multiple`](#accordion-multiple)         | `boolean`                     | false    |
-| [`onChange`](#accordion-onchange)         | `func`                        | false    |
-| [`readOnly`](#accordion-readonly)         | `boolean`                     | false    |
+| Prop                                      | Type                    | Required |
+| ----------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordion-as)                     | `string` \| `Component` | false    |
+| [`children`](#accordion-children)         | `node`                  | true     |
+| [`collapsible`](#accordion-collapsible)   | `boolean`               | false    |
+| [`defaultIndex`](#accordion-defaultindex) | `number` \| `number[]`  | false    |
+| [`index`](#accordion-index)               | `number` \| `number[]`  | false    |
+| [`multiple`](#accordion-multiple)         | `boolean`               | false    |
+| [`onChange`](#accordion-onchange)         | `func`                  | false    |
+| [`readOnly`](#accordion-readonly)         | `boolean`               | false    |
 
 ##### Accordion `as`
 
@@ -343,7 +340,15 @@ return (
 
 A string representing an HTML element or a React component that will tell the `Accordion` what element to render. Defaults to `div`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### Accordion `children`
 
@@ -481,11 +486,11 @@ Please see the [styling guide](/styling).
 
 #### AccordionItem Props
 
-| Prop                                  | Type                          | Required |
-| ------------------------------------- | ----------------------------- | -------- |
-| [`as`](#accordionitem-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#accordionitem-children) | `node`                        | true     |
-| [`disabled`](#accordionitem-disabled) | `boolean`                     | false    |
+| Prop                                  | Type                    | Required |
+| ------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionitem-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionitem-children) | `node`                  | true     |
+| [`disabled`](#accordionitem-disabled) | `boolean`               | false    |
 
 ##### AccordionItem `as`
 
@@ -493,7 +498,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionItem` what element to render. Defaults to `div`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### AccordionItem `children`
 
@@ -546,10 +559,10 @@ Please see the [styling guide](/styling).
 
 #### AccordionButton Props
 
-| Prop                                    | Type                          | Required |
-| --------------------------------------- | ----------------------------- | -------- |
-| [`as`](#accordionbutton-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#accordionbutton-children) | `node`                        | true     |
+| Prop                                    | Type                    | Required |
+| --------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionbutton-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionbutton-children) | `node`                  | true     |
 
 ##### AccordionButton `as`
 
@@ -557,7 +570,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionButton` what element to render. Defaults to `button`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### AccordionButton `children`
 
@@ -688,10 +709,10 @@ Please see the [styling guide](/styling).
 
 #### AccordionPanel Props
 
-| Prop                                   | Type                          | Required |
-| -------------------------------------- | ----------------------------- | -------- |
-| [`as`](#accordionpanel-as)             | `string` <Pipe /> `Component` | false    |
-| [`children`](#accordionpanel-children) | `node`                        | true     |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#accordionpanel-as)             | `string` \| `Component` | false    |
+| [`children`](#accordionpanel-children) | `node`                  | true     |
 
 ##### AccordionPanel `as`
 
@@ -699,7 +720,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `AccordionPanel` what element to render. Defaults to `div`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### AccordionPanel `children`
 

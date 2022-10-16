@@ -5,9 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#combobox
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/combobox
 ---
 
-import { AsPropWarning } from "./ui/as-prop-warning";
-import { Pipe } from "./ui/pipe";
-
 Accessible combobox (autocomplete or autosuggest) component for React.
 
 A combobox is the combination of an `<input type="text"/>` and a list. The list is designed to help the user arrive at a value, but the value does not necessarily have to come from that list. Don't think of it like a `<select/>`, but more of an `<input type="text"/>` with some suggestions. You can, however, validate that the value comes from the list, that's up to your app.
@@ -437,12 +434,12 @@ Please see the [styling guide](/styling).
 
 #### Combobox Props
 
-| Prop                                   | Type                          | Required |
-| -------------------------------------- | ----------------------------- | -------- |
-| [`as`](#combobox-as)                   | `string` <Pipe /> `Component` | false    |
-| [`children`](#combobox-children)       | `node` <Pipe /> `func`        | false    |
-| [`openOnFocus`](#combobox-openonfocus) | `boolean`                     | false    |
-| [`onSelect`](#combobox-onselect)       | `func`                        | false    |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#combobox-as)                   | `string` \| `Component` | false    |
+| [`children`](#combobox-children)       | `node` \| `func`        | false    |
+| [`openOnFocus`](#combobox-openonfocus) | `boolean`               | false    |
+| [`onSelect`](#combobox-onselect)       | `func`                  | false    |
 
 ##### Combobox `as`
 
@@ -450,7 +447,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `div`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### Combobox `children`
 
@@ -500,11 +505,11 @@ Please see the [styling guide](/styling).
 
 #### ComboboxInput Props
 
-| Prop                                          | Type                          | Required |
-| --------------------------------------------- | ----------------------------- | -------- |
-| [`as`](#comboboxinput-as)                     | `string` <Pipe /> `Component` | false    |
-| [selectOnClick](#comboboxinput-selectonclick) | `boolean`                     | false    |
-| [autocomplete](#comboboxinput-autocomplete)   | `boolean`                     | false    |
+| Prop                                          | Type                    | Required |
+| --------------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxinput-as)                     | `string` \| `Component` | false    |
+| [selectOnClick](#comboboxinput-selectonclick) | `boolean`               | false    |
+| [autocomplete](#comboboxinput-autocomplete)   | `boolean`               | false    |
 
 ##### ComboboxInput `as`
 
@@ -587,10 +592,10 @@ Please see the [styling guide](/styling).
 
 #### ComboboxList Props
 
-| Prop                                                 | Type                          | Required |
-| ---------------------------------------------------- | ----------------------------- | -------- |
-| [`as`](#comboboxlist-as)                             | `string` <Pipe /> `Component` | false    |
-| [`persistSelection`](#comboboxlist-persistselection) | `boolean`                     | false    |
+| Prop                                                 | Type                    | Required |
+| ---------------------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxlist-as)                             | `string` \| `Component` | false    |
+| [`persistSelection`](#comboboxlist-persistselection) | `boolean`               | false    |
 
 ##### ComboboxList `as`
 
@@ -598,7 +603,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `ComboboxList` what element to render. Defaults to `ul`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### ComboboxList `persistSelection`
 
@@ -631,11 +644,11 @@ Please see the [styling guide](/styling).
 
 #### ComboboxOption Props
 
-| Prop                                   | Type                          | Required |
-| -------------------------------------- | ----------------------------- | -------- |
-| [`as`](#comboboxoption-as)             | `string` <Pipe /> `Component` | false    |
-| [`value`](#comboboxoption-value)       | `string`                      | true     |
-| [`children`](#comboboxoption-children) | `node`                        | false    |
+| Prop                                   | Type                    | Required |
+| -------------------------------------- | ----------------------- | -------- |
+| [`as`](#comboboxoption-as)             | `string` \| `Component` | false    |
+| [`value`](#comboboxoption-value)       | `string`                | true     |
+| [`children`](#comboboxoption-children) | `node`                  | false    |
 
 ##### ComboboxOption `as`
 
@@ -643,7 +656,15 @@ Please see the [styling guide](/styling).
 
 A string representing an HTML element or a React component that will tell the `ComboboxOption` what element to render. Defaults to `li`.
 
-<AsPropWarning />
+<div class="Note">
+	<p>
+		<strong>NOTE:</strong> Many semantic elements, such as <code>button</code>{" "}
+		elements, have meaning to assistive devices and browsers that provide
+		context for the user and, in many cases, provide or restrict interactive
+		behaviors. Use caution when overriding our defaults and make sure that the
+		element you choose to render provides the same experience for all users.
+	</p>
+</div>
 
 ##### ComboboxOption `value`
 

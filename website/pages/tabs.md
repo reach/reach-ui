@@ -5,8 +5,6 @@ patternUrl: https://www.w3.org/TR/wai-aria-practices-1.2/#tabpanel
 sourceUrl: https://github.com/reach/reach-ui/tree/main/packages/tabs
 ---
 
-import { Pipe } from "./ui/pipe";
-
 An accessible tabs component.
 
 The `Tab` and `TabPanel` elements are associated by their order in the tree. None of the components are empty wrappers, each is associated with a real DOM element in the document, giving you maximum control over styling and composition.
@@ -74,16 +72,16 @@ Please see the [styling guide](/styling).
 
 #### Tabs Props
 
-| Prop                                             | Type                               | Required | Default        |
-| ------------------------------------------------ | ---------------------------------- | -------- | -------------- |
-| [`as`](#tabs-as)                                 | `string` <Pipe /> `Component`      | false    | `"div"`        |
-| [`children`](#tabs-children)                     | `node`                             | true     |                |
-| [`defaultIndex`](#tabs-defaultindex)             | `number`                           | false    |                |
-| [`index`](#tabs-index)                           | `number`                           | false    |                |
-| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` <Pipe /> `"manual"`)      | false    | `"auto`        |
-| [`onChange`](#tabs-onchange)                     | `func`                             | false    |                |
-| [`orientation`](#tabs-orientation)               | `"horizontal"`<Pipe />`"vertical"` | false    | `"horizontal"` |
-| [`div` props](#tabs-div-props)                   |                                    | false    |                |
+| Prop                                             | Type                         | Required | Default        |
+| ------------------------------------------------ | ---------------------------- | -------- | -------------- |
+| [`as`](#tabs-as)                                 | `string` \| `Component`      | false    | `"div"`        |
+| [`children`](#tabs-children)                     | `node`                       | true     |                |
+| [`defaultIndex`](#tabs-defaultindex)             | `number`                     | false    |                |
+| [`index`](#tabs-index)                           | `number`                     | false    |                |
+| [`keyboardActivation`](#tabs-keyboardactivation) | `"auto"` \| `"manual"`)      | false    | `"auto`        |
+| [`onChange`](#tabs-onchange)                     | `func`                       | false    |                |
+| [`orientation`](#tabs-orientation)               | `"horizontal"`\|`"vertical"` | false    | `"horizontal"` |
+| [`div` props](#tabs-div-props)                   |                              | false    |                |
 
 ##### Tabs `as`
 
@@ -360,11 +358,11 @@ Please see the [styling guide](/styling).
 
 #### TabList Props
 
-| Prop                              | Type                          | Required | Default |
-| --------------------------------- | ----------------------------- | -------- | ------- |
-| [`as`](#tablist-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
-| [`children`](#tablist-children)   | node                          | true     |         |
-| [`div` props](#tablist-div-props) |                               |          |         |
+| Prop                              | Type                    | Required | Default |
+| --------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tablist-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tablist-children)   | node                    | true     |         |
+| [`div` props](#tablist-div-props) |                         |          |         |
 
 ##### TabList `children`
 
@@ -434,11 +432,11 @@ Please see the [styling guide](/styling).
 
 #### TabPanels Props
 
-| Prop                                | Type                          | Required | Default |
-| ----------------------------------- | ----------------------------- | -------- | ------- |
-| [`as`](#tabpanels-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
-| [`children`](#tabpanels-children)   | `node`                        | true     |         |
-| [`div` props](#tabpanels-div-props) |                               |          |         |
+| Prop                                | Type                    | Required | Default |
+| ----------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tabpanels-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tabpanels-children)   | `node`                  | true     |         |
+| [`div` props](#tabpanels-div-props) |                         |          |         |
 
 ##### TabPanels `as`
 
@@ -512,12 +510,12 @@ Please see the [styling guide](/styling).
 
 #### Tab Props
 
-| Prop                                | Type                          | Required | Default    |
-| ----------------------------------- | ----------------------------- | -------- | ---------- |
-| [`as`](#tab-as)                     | `string` <Pipe /> `Component` | false    | `"button"` |
-| [`children`](#tab-children)         | node                          | true     |            |
-| [`disabled`](#tab-disabled)         | boolean                       | false    | `false`    |
-| [`button` props](#tab-button-props) |                               |          |            |
+| Prop                                | Type                    | Required | Default    |
+| ----------------------------------- | ----------------------- | -------- | ---------- |
+| [`as`](#tab-as)                     | `string` \| `Component` | false    | `"button"` |
+| [`children`](#tab-children)         | node                    | true     |            |
+| [`disabled`](#tab-disabled)         | boolean                 | false    | `false`    |
+| [`button` props](#tab-button-props) |                         |          |            |
 
 ##### Tab `as`
 
@@ -578,11 +576,11 @@ Please see the [styling guide](/styling).
 
 #### TabPanel Props
 
-| Prop                               | Type                          | Required | Default |
-| ---------------------------------- | ----------------------------- | -------- | ------- |
-| [`as`](#tabpanel-as)               | `string` <Pipe /> `Component` | false    | `"div"` |
-| [`children`](#tabpanel-children)   | `node`                        | false    |         |
-| [`div` props](#tabpanel-div-props) |                               |          |         |
+| Prop                               | Type                    | Required | Default |
+| ---------------------------------- | ----------------------- | -------- | ------- |
+| [`as`](#tabpanel-as)               | `string` \| `Component` | false    | `"div"` |
+| [`children`](#tabpanel-children)   | `node`                  | false    |         |
+| [`div` props](#tabpanel-div-props) |                         |          |         |
 
 ##### TabPanel `as`
 
