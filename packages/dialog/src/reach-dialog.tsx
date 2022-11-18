@@ -116,6 +116,7 @@ const DialogInner = React.forwardRef(function DialogInner(
 		onKeyDown,
 		onMouseDown,
 		unstable_lockFocusAcrossFrames,
+		disableEventCapturing,
 		...props
 	},
 	forwardedRef
@@ -188,6 +189,7 @@ const DialogInner = React.forwardRef(function DialogInner(
 						? !dangerouslyBypassScrollLock
 						: isOpen
 				}
+				noIsolation={disableEventCapturing}
 			>
 				<Comp
 					{...props}
@@ -429,6 +431,16 @@ interface DialogProps {
 	 * @deprecated
 	 */
 	unstable_lockFocusAcrossFrames?: boolean;
+
+	/**
+	 * By default, when the dialog is open, outer events are captured (see
+	 * `noIsolation` option in react-remove-scroll:
+	 * https://github.com/theKashey/react-remove-scroll#usage). Event capturing
+	 * is React friendly and unlikely be a problem. But if you are rendering
+	 * inside a shadow DOM container, you may want to disable event capturing.
+	 *
+	 */
+	disableEventCapturing?: boolean;
 }
 
 Dialog.displayName = "Dialog";
