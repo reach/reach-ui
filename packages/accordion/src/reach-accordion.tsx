@@ -199,7 +199,7 @@ interface AccordionProps {
 	 *
 	 * @see Docs https://reach.tech/accordion#accordion-onchange
 	 */
-	onChange?(index?: number): void;
+	onChange?(index: number): void;
 	/**
 	 * Whether or not an uncontrolled accordion is read-only or controllable by a
 	 * user interaction.
