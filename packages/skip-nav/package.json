@@ -27,8 +27,8 @@
 		"tsup": "^6.1.3"
 	},
 	"peerDependencies": {
-		"react": "^16.8.0 || 17.x",
-		"react-dom": "^16.8.0 || 17.x"
+		"react": "^16.8.0 || 17.x || 18.x",
+		"react-dom": "^16.8.0 || 17.x || 18.x"
 	},
 	"main": "./src/reach-skip-nav.tsx",
 	"types": "./src/reach-skip-nav.tsx",
