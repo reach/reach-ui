@@ -1,3 +1,5 @@
+> Reach-UI is currently not maintained! See [this issue](https://github.com/reach/reach-ui/issues/972)
+
 # Welcome to Reach UI Development ♿️
 
 Thanks for getting involved with Reach UI development!
