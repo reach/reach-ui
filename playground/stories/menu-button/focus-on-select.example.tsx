@@ -48,7 +48,7 @@ function Example() {
 			<a
 				href="https://google.com"
 				target="_blank"
-				rel="noopener noreferrer"
+				rel="noreferrer"
 				ref={linkRef}
 				onFocus={() => setLinkText("Focused! ")}
 				onBlur={() => setLinkText("")}

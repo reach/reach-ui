@@ -116,7 +116,7 @@ function listboxLostFocus(data: ListboxStateData, event: ListboxEvent) {
 			ownerDocument?.activeElement !== list &&
 			popover &&
 			!popover.contains(
-				(relatedTarget as Element) || ownerDocument?.activeElement
+				(relatedTarget as Element) || ownerDocument?.activeElement,
 			)
 		);
 	}
@@ -238,7 +238,7 @@ function submitForm(data: ListboxStateData, event: any) {
 	let { hiddenInput } = event.refs;
 	if (hiddenInput && hiddenInput.form) {
 		let submitButton = hiddenInput.form.querySelector(
-			"button:not([type]),[type='submit']"
+			"button:not([type]),[type='submit']",
 		);
 		submitButton && (submitButton as any).click();
 	}
@@ -360,11 +360,6 @@ export const createMachineDefinition = ({
 				[ListboxEvents.ClearNavSelection]: {
 					actions: [clearNavigationValue, focusList],
 				},
-				[ListboxEvents.KeyDownEnter]: {
-					target: ListboxStates.Idle,
-					actions: [assignValue, clearTypeahead, focusButton, selectOption],
-					cond: optionIsSelectable,
-				},
 				[ListboxEvents.KeyDownSpace]: {
 					target: ListboxStates.Idle,
 					actions: [assignValue, clearTypeahead, focusButton, selectOption],
@@ -416,6 +411,11 @@ export const createMachineDefinition = ({
 						actions: clearTypeahead,
 					},
 				],
+				// [ListboxEvents.KeyDownEnter]: {
+				// 	target: ListboxStates.Idle,
+				// 	actions: [assignValue, clearTypeahead, focusButton, selectOption],
+				// 	cond: optionIsSelectable,
+				// },
 				[ListboxEvents.KeyDownEnter]: ListboxStates.Interacting,
 				[ListboxEvents.Blur]: [
 					{
@@ -840,14 +840,14 @@ function findOptionFromTypeahead(options: ListboxDescendant[], string = "") {
 		(option) =>
 			!option.disabled &&
 			option.label &&
-			option.label.toLowerCase().startsWith(string.toLowerCase())
+			option.label.toLowerCase().startsWith(string.toLowerCase()),
 	);
 	return found || null;
 }
 
 function findOptionFromValue(
 	value: string | null | undefined,
-	options: ListboxDescendant[]
+	options: ListboxDescendant[],
 ) {
 	return value ? options.find((option) => option.value === value) : undefined;
 }

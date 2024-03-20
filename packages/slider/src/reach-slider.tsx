@@ -77,7 +77,7 @@ const [SliderProvider, useSliderContext] =
  */
 const Slider = React.forwardRef(function Slider(
 	{ children, ...props },
-	forwardedRef
+	forwardedRef,
 ) {
 	return (
 		<SliderInput
@@ -187,7 +187,7 @@ interface SliderProps {
 			min?: number;
 			max?: number;
 			handlePosition?: string;
-		}
+		},
 	): void;
 
 	// We use native DOM events for the slider since they are global
@@ -261,7 +261,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 		__componentName = "SliderInput",
 		...rest
 	},
-	forwardedRef
+	forwardedRef,
 ) {
 	if (__DEV__) {
 		let depecratedPropIsSet = !!DEPRECATED_getValueText;
@@ -269,7 +269,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 		React.useEffect(() => {
 			if (depecratedPropIsSet) {
 				console.warn(
-					"The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead."
+					"The `getValueText` prop in @reach/slider is deprecated. Please use `getAriaValueText` instead.",
 				);
 			}
 		}, [depecratedPropIsSet]);
@@ -325,7 +325,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 		onChangeRef.current = onChange;
 	}, [onChange]);
 	let updateValue = React.useCallback(
-		function updateValue(newValue) {
+		function updateValue(newValue: number) {
 			setValue(newValue);
 			if (onChangeRef.current) {
 				// Prevent onChange from recreating the function
@@ -338,7 +338,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 				});
 			}
 		},
-		[max, min, setValue]
+		[max, min, setValue],
 	);
 
 	let getNewValueFromEvent = React.useCallback(
@@ -350,7 +350,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 				max,
 			});
 		},
-		[max, min, orientation, step]
+		[max, min, orientation, step],
 	);
 
 	// https://www.w3.org/TR/wai-aria-practices-1.2/#slider_kbd_interaction
@@ -400,7 +400,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 		newValue = clamp(
 			step ? roundValueToStep(newValue, step, min) : newValue,
 			min,
-			max
+			max,
 		);
 		updateValue(newValue);
 	});
@@ -408,8 +408,8 @@ const SliderInput = React.forwardRef(function SliderInput(
 	let ariaValueText = DEPRECATED_getValueText
 		? DEPRECATED_getValueText(value)
 		: getAriaValueText
-		? getAriaValueText(value)
-		: ariaValueTextProp;
+			? getAriaValueText(value)
+			: ariaValueTextProp;
 
 	let rangeStyle = { [isVertical ? "height" : "width"]: `${trackPercent}%` };
 
@@ -443,7 +443,16 @@ const SliderInput = React.forwardRef(function SliderInput(
 		appEvents.current.onTouchMove = onTouchMove;
 		appEvents.current.onPointerDown = onPointerDown;
 		appEvents.current.onPointerUp = onPointerUp;
-	}, [onMouseMove, onMouseDown, onMouseUp, onTouchStart, onTouchEnd, onTouchMove, onPointerDown, onPointerUp]);
+	}, [
+		onMouseMove,
+		onMouseDown,
+		onMouseUp,
+		onTouchStart,
+		onTouchEnd,
+		onTouchMove,
+		onPointerDown,
+		onPointerUp,
+	]);
 
 	let handleSlideStart = useStableLayoutCallback((event: SomePointerEvent) => {
 		if (isRightClick(event)) return;
@@ -526,11 +535,11 @@ const SliderInput = React.forwardRef(function SliderInput(
 		let ownerDocument = getOwnerDocument(sliderRef.current)!;
 		let touchListener = composeEventHandlers(
 			appEvents.current.onTouchMove,
-			handlePointerMove
+			handlePointerMove,
 		);
 		let mouseListener = composeEventHandlers(
 			appEvents.current.onMouseMove,
-			handlePointerMove
+			handlePointerMove,
 		);
 		ownerDocument.addEventListener("touchmove", touchListener);
 		ownerDocument.addEventListener("mousemove", mouseListener);
@@ -545,15 +554,15 @@ const SliderInput = React.forwardRef(function SliderInput(
 		let ownerWindow = ownerDocument.defaultView || window;
 		let pointerListener = composeEventHandlers(
 			appEvents.current.onPointerUp,
-			releasePointerCapture
+			releasePointerCapture,
 		);
 		let touchListener = composeEventHandlers(
 			appEvents.current.onTouchEnd,
-			handleSlideStop
+			handleSlideStop,
 		);
 		let mouseListener = composeEventHandlers(
 			appEvents.current.onMouseUp,
-			handleSlideStop
+			handleSlideStop,
 		);
 		if ("PointerEvent" in ownerWindow) {
 			ownerDocument.addEventListener("pointerup", pointerListener);
@@ -582,15 +591,15 @@ const SliderInput = React.forwardRef(function SliderInput(
 		let ownerWindow = ownerDocument.defaultView || window;
 		let touchListener = composeEventHandlers(
 			appEvents.current.onTouchStart,
-			handleSlideStart
+			handleSlideStart,
 		);
 		let mouseListener = composeEventHandlers(
 			appEvents.current.onMouseDown,
-			handleSlideStart
+			handleSlideStart,
 		);
 		let pointerListener = composeEventHandlers(
 			appEvents.current.onPointerDown,
-			setPointerCapture
+			setPointerCapture,
 		);
 		sliderElement.addEventListener("touchstart", touchListener);
 		sliderElement.addEventListener("mousedown", mouseListener);
@@ -683,7 +692,7 @@ const SliderInput = React.forwardRef(function SliderInput(
 							value,
 							ariaValueText,
 							valueText: ariaValueText, // TODO: Remove in 1.0
-					  })
+						})
 					: children}
 				{shouldRenderInput ? (
 					<input
@@ -728,7 +737,7 @@ SliderInput.displayName = "SliderInput";
  */
 const SliderTrackImpl = React.forwardRef(function SliderTrack(
 	{ as: Comp = "div", children, style = {}, ...props },
-	forwardedRef
+	forwardedRef,
 ) {
 	const { disabled, orientation, trackRef } = useSliderContext("SliderTrack");
 	const ref = useComposedRefs(trackRef, forwardedRef);
@@ -782,7 +791,7 @@ SliderTrack.displayName = "SliderTrack";
  */
 const SliderRangeImpl = React.forwardRef(function SliderRange(
 	{ as: Comp = "div", children, style = {}, ...props },
-	forwardedRef
+	forwardedRef,
 ) {
 	let { disabled, orientation, rangeStyle } = useSliderContext("SliderRange");
 	return (
@@ -811,7 +820,7 @@ const SliderTrackHighlightImpl = React.forwardRef(
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			React.useEffect(() => {
 				console.warn(
-					"`SliderTrackHighlight` has been deprecated in favor of `SliderRange` and will be dropped from a future version of Reach UI."
+					"`SliderTrackHighlight` has been deprecated in favor of `SliderRange` and will be dropped from a future version of Reach UI.",
 				);
 			}, []);
 		}
@@ -822,7 +831,7 @@ const SliderTrackHighlightImpl = React.forwardRef(
 				ref={ref}
 			/>
 		);
-	}
+	},
 ) as Polymorphic.ForwardRefComponent<"div", SliderRangeProps>;
 
 SliderTrackHighlightImpl.displayName = "SliderTrackHighlight";
@@ -837,7 +846,7 @@ export interface SliderTrackHighlightProps extends SliderRangeProps {}
  * @alias SliderRange
  */
 export const SliderTrackHighlight = React.memo(
-	SliderTrackHighlightImpl
+	SliderTrackHighlightImpl,
 ) as Polymorphic.MemoComponent<"div", SliderRangeProps>;
 
 /**
@@ -870,7 +879,7 @@ const SliderHandleImpl = React.forwardRef(function SliderHandle(
 		onKeyDown,
 		...props
 	},
-	forwardedRef
+	forwardedRef,
 ) {
 	const {
 		ariaLabel,
@@ -974,7 +983,7 @@ SliderHandle.displayName = "SliderHandle";
  */
 const SliderMarkerImpl = React.forwardRef(function SliderMarker(
 	{ as: Comp = "div", children, style = {}, value, ...props },
-	forwardedRef
+	forwardedRef,
 ) {
 	const {
 		disabled,
@@ -992,8 +1001,8 @@ const SliderMarkerImpl = React.forwardRef(function SliderMarker(
 		value < sliderValue
 			? "under-value"
 			: value === sliderValue
-			? "at-value"
-			: "over-value";
+				? "at-value"
+				: "over-value";
 
 	return inRange ? (
 		<Comp
@@ -1108,7 +1117,7 @@ function getNewValue(
 		min: number;
 		max: number;
 		step?: number;
-	}
+	},
 ) {
 	let { orientation, min, max, step } = props;
 
@@ -1125,7 +1134,7 @@ function getNewValue(
 	return clamp(
 		step ? roundValueToStep(newValue, step, min) : newValue,
 		min,
-		max
+		max,
 	);
 }
 
