@@ -6,9 +6,9 @@
 	"dependencies": {},
 	"devDependencies": {
 		"@reach-internal/tsconfig": "workspace:*",
-		"tsup": "^6.1.3"
+		"tsup": "^8.0.2"
 	},
 	"peerDependencies": {
-		"tsup": "^6.1.3"
+		"tsup": "^8.0.2"
 	}
 }

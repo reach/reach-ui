@@ -23,13 +23,13 @@
 		"@reach-internal/dev": "workspace:*",
 		"@reach-internal/test": "workspace:*",
 		"@reach-internal/tsconfig": "workspace:*",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2",
-		"tsup": "^6.1.3"
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"tsup": "^8.0.2"
 	},
 	"peerDependencies": {
-		"react": "^16.8.0 || 17.x",
-		"react-dom": "^16.8.0 || 17.x"
+		"react": "17.x || 18.x",
+		"react-dom": "17.x || 18.x"
 	},
 	"main": "./src/reach-popover.tsx",
 	"types": "./src/reach-popover.tsx",

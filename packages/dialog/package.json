@@ -19,20 +19,20 @@
 		"@reach/polymorphic": "workspace:*",
 		"@reach/portal": "workspace:*",
 		"@reach/utils": "workspace:*",
-		"react-focus-lock": "2.5.2",
-		"react-remove-scroll": "2.4.3"
+		"react-focus-lock": "^2.11.2",
+		"react-remove-scroll": "^2.5.9"
 	},
 	"devDependencies": {
 		"@reach-internal/dev": "workspace:*",
 		"@reach-internal/test": "workspace:*",
 		"@reach-internal/tsconfig": "workspace:*",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2",
-		"tsup": "^6.1.3"
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"tsup": "^8.0.2"
 	},
 	"peerDependencies": {
-		"react": "^16.8.0 || 17.x",
-		"react-dom": "^16.8.0 || 17.x"
+		"react": "17.x || 18.x",
+		"react-dom": "17.x || 18.x"
 	},
 	"main": "./src/reach-dialog.tsx",
 	"types": "./src/reach-dialog.tsx",

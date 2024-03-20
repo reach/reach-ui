@@ -6,7 +6,7 @@ import { axe } from "vitest-axe";
 import { render, cleanup } from "@reach-internal/test/utils";
 import { vi, it, expect, describe, afterEach } from "vitest";
 
-const { useId } = await vi.importActual<typeof import("../src/auto-id")>(
+const { useId } = await vi.importActual<typeof import("../src/reach-auto-id")>(
 	"@reach/auto-id"
 );
 
