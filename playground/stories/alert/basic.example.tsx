@@ -2,20 +2,22 @@ import * as React from "react";
 import { Alert } from "@reach/alert";
 import { VisuallyHidden } from "@reach/visually-hidden";
 import { usePrevious } from "@reach/utils";
+import type { AlertStory, AlertStoryArgs } from "./index.story.js";
 
 const MESSAGE_TIMEOUT = 5000;
 
-let name = "Basic (TS)";
-
-function Example() {
+const Example = (args: AlertStoryArgs) => {
 	const [state, dispatch] = React.useReducer(reducer, initialState);
 	const { messages, messageCount, bestFriendIsOnline } = state;
 	const interval = React.useRef<any>(null);
 
 	React.useEffect(() => {
-		interval.current = setInterval(() => {
-			dispatch({ type: "TOGGLE_BEST_FRIEND" });
-		}, getRandomInt(6000, 10000));
+		interval.current = setInterval(
+			() => {
+				dispatch({ type: "TOGGLE_BEST_FRIEND" });
+			},
+			getRandomInt(6000, 10000),
+		);
 		return () => clearInterval(interval.current);
 	}, []);
 
@@ -63,10 +65,13 @@ function Example() {
 			</div>
 		</div>
 	);
-}
+};
 
-Example.storyName = name;
-export { Example };
+const story: AlertStory = {
+	render: Example,
+	name: "Basic",
+};
+export default story;
 
 ////////////////////////////////////////////////////////////////////////////////
 

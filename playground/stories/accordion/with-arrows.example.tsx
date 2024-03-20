@@ -6,42 +6,40 @@ import {
 	AccordionButton,
 	AccordionPanel,
 } from "@reach/accordion";
-import styled from "styled-components";
+import styles from "./with-arrows.module.css";
+import cx from "clsx";
 
 let name = "With Arrows";
 
 function Example() {
 	const [activeItem, setActiveItem] = React.useState<number | undefined>();
 	return (
-		<StyledAccordion
-			index={activeItem}
-			onChange={(index) => setActiveItem(index)}
-		>
-			<StyledItem>
+		<Accordion index={activeItem} onChange={(index) => setActiveItem(index)}>
+			<AccordionItem className={styles.item}>
 				<ArrowButton active={activeItem === 0}>ABCs</ArrowButton>
-				<StyledPanel>
+				<AccordionPanel className={styles.panel}>
 					Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
 					pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
 					congue gravida malesuada proin scelerisque luctus est convallis.
-				</StyledPanel>
-			</StyledItem>
-			<StyledItem>
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem className={styles.item}>
 				<ArrowButton active={activeItem === 1}>Easy As</ArrowButton>
-				<StyledPanel>
+				<AccordionPanel className={styles.panel}>
 					Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
 					pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
 					congue gravida malesuada proin scelerisque luctus est convallis.
-				</StyledPanel>
-			</StyledItem>
-			<StyledItem>
+				</AccordionPanel>
+			</AccordionItem>
+			<AccordionItem className={styles.item}>
 				<ArrowButton active={activeItem === 2}>123s</ArrowButton>
-				<StyledPanel>
+				<AccordionPanel className={styles.panel}>
 					Ante rhoncus facilisis iaculis nostra faucibus vehicula ac consectetur
 					pretium, lacus nunc consequat id viverra facilisi ligula eleifend,
 					congue gravida malesuada proin scelerisque luctus est convallis.
-				</StyledPanel>
-			</StyledItem>
-		</StyledAccordion>
+				</AccordionPanel>
+			</AccordionItem>
+		</Accordion>
 	);
 }
 
@@ -50,22 +48,18 @@ export { Example };
 
 function ArrowButton({ children, active, ...props }: ArrowButtonProps) {
 	return (
-		<StyledHeader {...props}>
-			<span
-				style={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-				}}
-			>
-				<StyledHeading>
-					<StyledButton>{children}</StyledButton>
-				</StyledHeading>
-				<StyledArrowWrapper>
-					<StyledIcon active={active} aria-hidden />
-				</StyledArrowWrapper>
-			</span>
-		</StyledHeader>
+		<div className={styles.header} {...props}>
+			<div className={styles.headerInner}>
+				<h3 className={styles.heading}>
+					<AccordionButton className={styles.button}>
+						{children}
+					</AccordionButton>
+				</h3>
+				<div className={styles.arrowWrapper}>
+					<ArrowIcon active={active} aria-hidden />
+				</div>
+			</div>
+		</div>
 	);
 }
 
@@ -74,6 +68,7 @@ function ArrowIcon({ active, ...props }: ArrowIconProps) {
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 451.847 451.847"
+			className={cx(styles.icon, active && styles.active)}
 			{...props}
 		>
 			<path
@@ -84,69 +79,6 @@ function ArrowIcon({ active, ...props }: ArrowIconProps) {
 		</svg>
 	);
 }
-
-const StyledButton = styled(AccordionButton)`
-	display: block;
-	width: 100%;
-	appearance: none;
-	background: 0;
-	border: 0;
-	text-align: inherit;
-	font: inherit;
-	font-size: 16px;
-	font-weight: bolder;
-	color: inherit;
-	box-shadow: none;
-	padding: 0.675em 0.875em;
-`;
-
-const StyledHeader = styled.div`
-	width: 100%;
-	background: linear-gradient(to bottom, darkslategray, slategray);
-	color: white;
-
-	&[data-disabled] {
-		color: rgba(255, 255, 255, 0.5);
-	}
-`;
-
-const StyledPanel = styled(AccordionPanel)`
-	padding: 0.875em;
-`;
-
-const StyledItem = styled(AccordionItem)`
-	background: #ffffff;
-	border: 1px solid lightsteelblue;
-	margin-bottom: 1rem;
-	box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.25);
-	border-radius: 6px;
-	overflow: hidden;
-`;
-
-const StyledAccordion = styled(Accordion)``;
-
-const StyledHeading = styled.h3`
-	display: block;
-	width: 100%;
-	font: inherit;
-	margin: 0;
-`;
-
-const StyledArrowWrapper = styled.div`
-	padding: 0.675em 0.875em;
-`;
-
-const StyledIcon = styled(ArrowIcon)`
-	width: 1rem;
-	height: 1rem;
-	transition: ${(props) => (props.active ? "600" : "500")}ms transform ease-out;
-	transform: rotate(${(props) => (props.active ? "2.5turn" : "0")});
-	fill: #fff;
-
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
-`;
 
 type ArrowButtonProps = React.ComponentPropsWithoutRef<"div"> & {
 	active: boolean;

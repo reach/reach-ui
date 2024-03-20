@@ -8,18 +8,9 @@ import {
 	MenuItem,
 } from "@reach/menu-button";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import styled from "styled-components";
 import "@reach/menu-button/styles.css";
 
 let name = "With React Router Links + Styled Components";
-
-/*
- * When combining StyledComponents with a Router's Link component, users will
- * need to use `MenuLink` directly and pass a styled(Link) into the `as` prop.
- * This is because styled components also has an `as` prop, so using
- * `<StyledLink as={Link}>` is seen as an escape hatch by SC, so
- * `styled(MenuLink)` disregards the MenuLink argument.
- */
 
 function Example() {
 	return (
@@ -37,18 +28,6 @@ export { Example };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const StyledItem = styled(MenuItem)`
-	&[data-selected] {
-		background: crimson;
-	}
-`;
-
-const StyledLink = styled(Link)`
-	&[data-selected] {
-		background: crimson;
-	}
-`;
-
 function Home() {
 	return (
 		<div>
@@ -58,13 +37,11 @@ function Home() {
 					Actions <span aria-hidden="true">▾</span>
 				</MenuButton>
 				<MenuList>
-					<StyledItem onSelect={action("Mark as Draft")}>
-						Mark as Draft
-					</StyledItem>
-					<MenuLink as={StyledLink} to="/settings">
+					<MenuItem onSelect={action("Mark as Draft")}>Mark as Draft</MenuItem>
+					<MenuLink as={Link} to="/settings">
 						View Settings
 					</MenuLink>
-					<StyledItem onSelect={action("Delete")}>Delete</StyledItem>
+					<MenuItem onSelect={action("Delete")}>Delete</MenuItem>
 				</MenuList>
 			</Menu>
 		</div>

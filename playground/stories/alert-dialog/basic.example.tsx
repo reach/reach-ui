@@ -4,10 +4,9 @@ import {
 	AlertDialogLabel,
 	AlertDialogDescription,
 } from "@reach/alert-dialog";
+import type { AlertDialogStory, AlertDialogStoryArgs } from "./index.story.js";
 
-let name = "Example";
-
-function Example() {
+function Example(args: AlertDialogStoryArgs) {
 	const close = React.useRef(null);
 	const [showDialog, setShowDialog] = React.useState(false);
 	return (
@@ -31,5 +30,8 @@ function Example() {
 	);
 }
 
-Example.storyName = name;
-export { Example };
+const story: AlertDialogStory = {
+	render: Example,
+	name: "Basic",
+};
+export default story;
