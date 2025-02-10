@@ -14,6 +14,7 @@ if (reactVersion === 16) {
 		"react-dom": "react-dom-18",
 		"react-is": "react-is-18",
 		"@testing-library/react": "@testing-library/react-13",
+		"@testing-library/react-hooks": "@testing-library/react-13",
 	};
 }
 
