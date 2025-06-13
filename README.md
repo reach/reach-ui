@@ -2,7 +2,7 @@
 >
 > ## Deprecated
 >
-> Reach-UI is currently not maintained! See [this issue](https://github.com/reach/reach-ui/issues/972)
+> Reach-UI is currently not maintained! For more information, please see [this issue](https://github.com/reach/reach-ui/issues/972).
 >
 > We recommend considering alternatives like [Radix UI](https://www.radix-ui.com/primitives), [Ariakit](https://ariakit.org/), or [React Aria](https://react-spectrum.adobe.com/react-aria/index.html). If you're currently using Reach-UI, you can either fork the project, stay on your current version, or migrate to another library.
 
