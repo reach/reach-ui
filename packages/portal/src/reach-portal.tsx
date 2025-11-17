@@ -71,6 +71,7 @@ const PortalImpl: React.FC<PortalProps> = ({
 		return () => {
 			if (portalNode.current && body) {
 				body.removeChild(portalNode.current);
+				portalNode.current = null;
 			}
 		};
 	}, [type, forceUpdate, containerRef]);
