@@ -28,6 +28,31 @@ afterEach(cleanup);
 //       when mounted.
 
 describe("<Listbox />", () => {
+	it("ignores an option after becoming disabled while open", () => {
+		const onChange = vi.fn();
+		const options = (
+			<>
+				<ListboxOption value="apple">Apple</ListboxOption>
+				<ListboxOption value="orange">Orange</ListboxOption>
+			</>
+		);
+		const { getByRole, rerender } = render(
+			<Listbox defaultValue="apple" onChange={onChange}>
+				{options}
+			</Listbox>
+		);
+		fireMouseClick(getByRole("button"));
+		const option = getByRole("option", { name: "Orange" });
+		rerender(
+			<Listbox defaultValue="apple" onChange={onChange} disabled>
+				{options}
+			</Listbox>
+		);
+		fireMouseClick(option);
+		expect(onChange).not.toHaveBeenCalled();
+		expect(getByRole("button").textContent).toContain("Apple");
+	});
+
 	describe("rendering", () => {
 		it("should mount the component", () => {
 			let { queryByRole } = render(

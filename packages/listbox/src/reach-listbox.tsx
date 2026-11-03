@@ -895,7 +895,7 @@ const ListboxOption = React.forwardRef(function ListboxOption(
 	{
 		as: Comp = "li",
 		children,
-		disabled,
+		disabled: disabledProp,
 		index: indexProp,
 		label: labelProp,
 		onClick,
@@ -911,6 +911,7 @@ const ListboxOption = React.forwardRef(function ListboxOption(
 	forwardedRef
 ) {
 	let {
+		disabled: listboxDisabled,
 		highlightedOptionRef,
 		selectedOptionRef,
 		send,
@@ -919,6 +920,8 @@ const ListboxOption = React.forwardRef(function ListboxOption(
 		state,
 		stateData: { value: listboxValue, navigationValue },
 	} = React.useContext(ListboxContext);
+
+	let disabled = disabledProp || listboxDisabled;
 
 	let [labelState, setLabel] = React.useState(labelProp);
 	let label = labelProp || labelState || "";
